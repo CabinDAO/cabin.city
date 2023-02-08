@@ -1,0 +1,9 @@
+# Dependencies
+node_modules
+
+# next.js
+.next
+out
+
+# File system files
+.DS_Store
