@@ -7,3 +7,14 @@ out
 
 # File system files
 .DS_Store
+
+# local env files
+.env*.local
+.env.forge
+.env
+
+# logs
+*.log
+
+# typescript
+*.tsbuildinfo

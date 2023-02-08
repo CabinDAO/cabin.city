@@ -1,0 +1,15 @@
+{
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "next",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:storybook/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "import/prefer-default-export": "off",
+    "semi": ["error", "never"],
+    "@typescript-eslint/semi": ["error", "never"]
+  }
+}

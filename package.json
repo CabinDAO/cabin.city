@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "format": "prettier --write .",
+    "lint": "npm run lint:types && npm run lint:eslint && npm run lint:next",
+    "lint:eslint": "eslint . --ext=.tsx,.ts",
+    "lint:next": "next lint",
+    "lint:types": "tsc --noEmit",
+    "lint:contracts": "forge fmt --check",
+    "lint:contracts:fix": "forge fmt",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -32,6 +38,11 @@
     "@storybook/manager-webpack5": "^6.5.16",
     "@storybook/react": "^6.5.16",
     "@storybook/testing-library": "^0.0.13",
-    "babel-loader": "^8.3.0"
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "babel-loader": "^8.3.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-storybook": "^0.6.10",
+    "prettier": "^2.8.4"
   }
 }
