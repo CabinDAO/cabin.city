@@ -1,0 +1,129 @@
+type Query {
+  accountByAddress(address: String!): Account
+    @resolver(name: "account_by_address")
+  syncAttemptByKeyAndStatus(
+    key: String!
+    status: BlockSyncAttemptStatus!
+  ): BlockSyncAttempt
+  syncAttemptsByKey(key: String!): [BlockSyncAttempt!]!
+  allAccounts: [Account!]!
+  allHats: [Hat!]!
+}
+
+type Mutation {
+  clearSyncAttempts(key: String!): Boolean!
+    @resolver(name: "clear_sync_attempts")
+}
+
+type Profile {
+  createdAt: Time!
+  name: String!
+  email: String!
+  ens: String
+  bio: String
+  avatarUrl: String
+  roles: [ProfileRole!]!
+  citizenshipStatus: CitizenshipStatus
+  contactFields: [ProfileContactField!]!
+  account: Account! @relation # Should not be null until if/when email-only sign in is implemented
+}
+
+type ProfileRole @embedded {
+  role: ProfileRoleType!
+  level: ProfileRoleLevelType!
+}
+
+enum ProfileRoleType {
+  Caretaker
+  Builder
+  Gatherer
+  Naturalist
+  Creator
+  Resident
+}
+
+enum ProfileRoleLevelType {
+  Apprentice
+  Member
+  TopHat
+}
+
+enum CitizenshipStatus {
+  VouchRequested
+  Vouched
+  Verified
+}
+
+type ProfileContactField @embedded {
+  type: ProfileContactFieldType!
+  value: String!
+}
+
+enum ProfileContactFieldType {
+  Email
+  Twitter
+  Discord
+  Telegram
+  Github
+  Website
+  Other
+}
+
+type Account {
+  address: String! @index(name: "account_by_address_casefold")
+  profile: Profile @relation # Null if the user has not created their profile yet
+  cabinTokenBalance: String
+  hats: [Hat!]! @relation
+  badges: [OtterspaceBadge!]! @relation
+}
+
+type Hat {
+  hatId: String! @unique
+  details: String!
+  imageUri: String
+  level: Int!
+  wearers: [Account!]! @relation
+}
+
+type OtterspaceBadge {
+  badgeId: String! @unique
+  account: Account! @relation
+  spec: OtterspaceBadgeSpec! @relation
+}
+
+type OtterspaceBadgeSpec {
+  specId: String! @unique
+  name: String!
+  description: String!
+  image: String!
+  badges: [OtterspaceBadge!]! @relation
+}
+
+type Activity {
+  key: String! @unique # The unique key supports idempotency
+  timestamp: String!
+  type: ActivityType!
+  profileRoleAdded: ProfileRoleType
+  transactionId: String
+  profile: Profile! @relation
+}
+
+enum ActivityType {
+  ProfileCreated
+  ProfileRoleAdded
+  ProfileBadgeAdded
+}
+
+type BlockSyncAttempt {
+  key: String!
+  fromBlockId: String!
+  toBlockId: String!
+  failedAttemptCount: Int
+  status: BlockSyncAttemptStatus!
+}
+
+enum BlockSyncAttemptStatus {
+  Pending
+  Successful
+  Failed
+}

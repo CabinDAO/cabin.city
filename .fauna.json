@@ -1,0 +1,5 @@
+{
+  "envPath": ".env.fauna.local",
+  "schemaPath": "fauna/schema.gql",
+  "codegen": true
+}

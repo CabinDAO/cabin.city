@@ -28,7 +28,10 @@ cp .env.example .env
 
 ### Setup database
 
-TBD
+1. Create a database following the [quick start](https://docs.fauna.com/fauna/current/learn/quick_start/quick_start).
+2. From your database dashboard, go to `Security` -> `New Key` to create a new key with the `Admin` role.
+3. Copy the key into the value for the `FGU_SECRET` in `.env.fauna.local`.
+4. Run `npm run fauna` to initialize resources in your database.
 
 ### Run the development server:
 
