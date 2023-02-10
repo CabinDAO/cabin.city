@@ -9,7 +9,31 @@ export default createGlobalStyle`
     font-size: 62.5%; /* base 10px */
     overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
-    background-color: ${theme.colors.yellow200};
+  }
+
+  body {
+    --background-grid-color: #e8d6bb;
+    --background-fill-color: #fce9cb;
+    /* Vertical lines */
+    background-color: var(--background-fill-color);
+    background-image:
+      linear-gradient(
+        to right,
+        var(--background-grid-color) 0,
+        var(--background-grid-color) 1px,
+        transparent 1px,
+        transparent 100%
+      ),
+      linear-gradient(
+        to bottom,
+        var(--background-grid-color) 0,
+        var(--background-grid-color) 1px,
+        transparent 1px,
+        transparent 100%
+      )
+    ;
+    background-position: 100px 0, 0 0;
+    background-size: 2.886rem 2.886rem, 2.886rem 2.886rem;
   }
 
   body {
