@@ -425,7 +425,6 @@ export type PartialUpdateProfileInput = {
   createdAt?: InputMaybe<Scalars['Time']>;
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
-  ens?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
   avatarUrl?: InputMaybe<Scalars['String']>;
   roles?: InputMaybe<Array<PartialUpdateProfileRoleInput>>;
@@ -461,7 +460,6 @@ export type ProfileInput = {
   createdAt: Scalars['Time'];
   name: Scalars['String'];
   email: Scalars['String'];
-  ens?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
   avatarUrl?: InputMaybe<Scalars['String']>;
   roles: Array<ProfileRoleInput>;
@@ -646,7 +644,6 @@ export type Profile = {
   avatarUrl?: Maybe<Scalars['String']>;
   /** The document's ID. */
   _id: Scalars['ID'];
-  ens?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   citizenshipStatus?: Maybe<CitizenshipStatus>;
   roles: Array<ProfileRole>;

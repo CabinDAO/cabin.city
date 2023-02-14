@@ -14,8 +14,6 @@ const Container = styled.div`
   gap: 4.8rem;
 `
 
-const TitleContainer = styled.div``
-
 const Main = styled.main`
   display: flex;
 `

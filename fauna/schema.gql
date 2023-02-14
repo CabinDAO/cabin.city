@@ -19,7 +19,6 @@ type Profile {
   createdAt: Time!
   name: String!
   email: String!
-  ens: String
   bio: String
   avatarUrl: String
   roles: [ProfileRole!]!
@@ -29,6 +28,7 @@ type Profile {
 }
 
 type ProfileRole @embedded {
+  hatId: String # Null if the role is not associated with a hat (e.g. Apprentice role)
   role: ProfileRoleType!
   level: ProfileRoleLevelType!
 }
@@ -116,8 +116,8 @@ enum ActivityType {
 
 type BlockSyncAttempt {
   key: String!
-  fromBlockId: String!
-  toBlockId: String!
+  startBlock: String!
+  endBlock: String!
   failedAttemptCount: Int
   status: BlockSyncAttemptStatus!
 }
