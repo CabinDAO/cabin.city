@@ -8,11 +8,14 @@ type Query {
   syncAttemptsByKey(key: String!): [BlockSyncAttempt!]!
   allAccounts: [Account!]!
   allHats: [Hat!]!
+  allActivities: [Activity!]! @resolver(name: "all_activities", paginated: true)
 }
 
 type Mutation {
   clearSyncAttempts(key: String!): Boolean!
     @resolver(name: "clear_sync_attempts")
+
+  createProfile(data: ProfileInput!): Profile! @resolver(name: "create_profile")
 }
 
 type Profile {
@@ -25,6 +28,12 @@ type Profile {
   citizenshipStatus: CitizenshipStatus
   contactFields: [ProfileContactField!]!
   account: Account! @relation # Should not be null until if/when email-only sign in is implemented
+}
+
+input ProfileInput {
+  address: String!
+  name: String!
+  email: String!
 }
 
 type ProfileRole @embedded {
@@ -101,11 +110,20 @@ type OtterspaceBadgeSpec {
 
 type Activity {
   key: String! @unique # The unique key supports idempotency
-  timestamp: String!
+  timestamp: Time!
   type: ActivityType!
   profileRoleAdded: ProfileRoleType
   transactionId: String
   profile: Profile! @relation
+  metadata: ActivityMetadata
+}
+
+type ActivityMetadata @embedded {
+  # ProfileBadgeAdded
+  badgeId: String
+
+  # ProfileRoleAdded
+  profileRole: ProfileRole
 }
 
 enum ActivityType {

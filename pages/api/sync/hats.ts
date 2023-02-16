@@ -1,6 +1,6 @@
 import { HatToAdd } from '@/fauna/lib/AddHats'
 import { HatToRemove } from '@/fauna/lib/RemoveHats'
-import { NewActivity } from '@/fauna/lib/UpsertActivities'
+import { AddressActivity } from '@/fauna/lib/UpsertActivities'
 import { GetHatsEventsDocument } from '@/generated/gql/hats/graphql'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { syncHatRoles } from '@/lib/fauna-server/syncHatRoles'
@@ -42,7 +42,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
 
   const hatsToAdd: HatToAdd[] = []
   const hatsToRemove: HatToRemove[] = []
-  const activities: NewActivity[] = []
+  const activities: AddressActivity[] = []
 
   data.hatsEvents.forEach((e) => {
     switch (e.__typename) {
@@ -61,15 +61,17 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
         })
 
         activities.push({
-          key: e.transactionID,
           address: e.wearer.id,
-          type: ActivityType.ProfileRoleAdded,
-          transactionId: e.transactionID,
-          timestamp: e.timestamp,
-          blockNumber: e.blockNumber.toString(),
-          metadata: {
-            hatId: e.hat.id,
-            profileRole,
+          activity: {
+            key: e.transactionID,
+
+            type: ActivityType.ProfileRoleAdded,
+            transactionId: e.transactionID,
+            timestamp: e.timestamp,
+            blockNumber: e.blockNumber.toString(),
+            metadata: {
+              profileRole,
+            },
           },
         })
         break

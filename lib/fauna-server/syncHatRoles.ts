@@ -1,7 +1,7 @@
 import { AddHats, HatToAdd } from '@/fauna/lib/AddHats'
 import { CompleteSyncAttempt } from '@/fauna/lib/CompleteSyncAttempt'
 import { HatToRemove, RemoveHats } from '@/fauna/lib/RemoveHats'
-import { NewActivity, UpsertActivities } from '@/fauna/lib/UpsertActivities'
+import { AddressActivity, UpsertActivities } from '@/fauna/lib/UpsertActivities'
 import { query as q, Expr } from 'faunadb'
 import { faunaServerClient } from './faunaServerClient'
 
@@ -9,7 +9,7 @@ export const syncHatRoles = async (
   syncAttemptRef: Expr,
   hatsToAdd: HatToAdd[],
   hatsToRemove: HatToRemove[],
-  activities: NewActivity[]
+  activities: AddressActivity[]
 ) => {
   return faunaServerClient.query(
     q.Do(

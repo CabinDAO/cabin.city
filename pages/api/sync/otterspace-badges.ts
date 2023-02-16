@@ -1,4 +1,4 @@
-import { NewActivity } from '@/fauna/lib/UpsertActivities'
+import { AddressActivity } from '@/fauna/lib/UpsertActivities'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { syncBadges } from '@/lib/fauna-server/syncBadges'
 import { otterspaceClient } from '@/lib/otterspace/otterspace/otterspaceClient'
@@ -54,15 +54,17 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
 
   const activities = data.badges.map((b) => {
     return {
-      key: b.id,
       address: b.owner,
-      type: ActivityType.ProfileBadgeAdded,
-      timestamp: b.createdAt.toString(),
-      metadata: {
-        badgeId: b.id,
+      activity: {
+        key: b.id,
+        type: ActivityType.ProfileBadgeAdded,
+        timestamp: b.createdAt.toString(),
+        metadata: {
+          badgeId: b.id,
+        },
       },
     }
-  }) as NewActivity[]
+  }) as AddressActivity[]
 
   await syncBadges(ref, badgesToAdd, activities)
 }

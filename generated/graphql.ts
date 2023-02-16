@@ -56,11 +56,18 @@ export type AccountProfileRelation = {
 /** 'Activity' input values */
 export type ActivityInput = {
   key: Scalars['String'];
-  timestamp: Scalars['String'];
+  timestamp: Scalars['Time'];
   type: ActivityType;
   profileRoleAdded?: InputMaybe<ProfileRoleType>;
   transactionId?: InputMaybe<Scalars['String']>;
   profile?: InputMaybe<ActivityProfileRelation>;
+  metadata?: InputMaybe<ActivityMetadataInput>;
+};
+
+/** 'ActivityMetadata' input values */
+export type ActivityMetadataInput = {
+  badgeId?: InputMaybe<Scalars['String']>;
+  profileRole?: InputMaybe<ProfileRoleInput>;
 };
 
 /** Allow manipulating the relationship between the types 'Activity' and 'Profile' using the field 'Activity.profile'. */
@@ -74,8 +81,8 @@ export type ActivityProfileRelation = {
 /** 'BlockSyncAttempt' input values */
 export type BlockSyncAttemptInput = {
   key: Scalars['String'];
-  fromBlockId: Scalars['String'];
-  toBlockId: Scalars['String'];
+  startBlock: Scalars['String'];
+  endBlock: Scalars['String'];
   failedAttemptCount?: InputMaybe<Scalars['Int']>;
   status: BlockSyncAttemptStatus;
 };
@@ -140,7 +147,6 @@ export type Mutation = {
   /** Create a new document in the collection of 'BlockSyncAttempt' */
   createBlockSyncAttempt: BlockSyncAttempt;
   clearSyncAttempts: Scalars['Boolean'];
-  /** Create a new document in the collection of 'Profile' */
   createProfile: Profile;
   /** Create a new document in the collection of 'OtterspaceBadgeSpec' */
   createOtterspaceBadgeSpec: OtterspaceBadgeSpec;
@@ -373,18 +379,25 @@ export type PartialUpdateAccountInput = {
 /** 'Activity' input values */
 export type PartialUpdateActivityInput = {
   key?: InputMaybe<Scalars['String']>;
-  timestamp?: InputMaybe<Scalars['String']>;
+  timestamp?: InputMaybe<Scalars['Time']>;
   type?: InputMaybe<ActivityType>;
   profileRoleAdded?: InputMaybe<ProfileRoleType>;
   transactionId?: InputMaybe<Scalars['String']>;
   profile?: InputMaybe<ActivityProfileRelation>;
+  metadata?: InputMaybe<PartialUpdateActivityMetadataInput>;
+};
+
+/** 'ActivityMetadata' input values */
+export type PartialUpdateActivityMetadataInput = {
+  badgeId?: InputMaybe<Scalars['String']>;
+  profileRole?: InputMaybe<PartialUpdateProfileRoleInput>;
 };
 
 /** 'BlockSyncAttempt' input values */
 export type PartialUpdateBlockSyncAttemptInput = {
   key?: InputMaybe<Scalars['String']>;
-  fromBlockId?: InputMaybe<Scalars['String']>;
-  toBlockId?: InputMaybe<Scalars['String']>;
+  startBlock?: InputMaybe<Scalars['String']>;
+  endBlock?: InputMaybe<Scalars['String']>;
   failedAttemptCount?: InputMaybe<Scalars['Int']>;
   status?: InputMaybe<BlockSyncAttemptStatus>;
 };
@@ -435,6 +448,7 @@ export type PartialUpdateProfileInput = {
 
 /** 'ProfileRole' input values */
 export type PartialUpdateProfileRoleInput = {
+  hatId?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<ProfileRoleType>;
   level?: InputMaybe<ProfileRoleLevelType>;
 };
@@ -455,21 +469,15 @@ export type ProfileContactFieldInput = {
   value: Scalars['String'];
 };
 
-/** 'Profile' input values */
 export type ProfileInput = {
-  createdAt: Scalars['Time'];
+  address: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
-  bio?: InputMaybe<Scalars['String']>;
-  avatarUrl?: InputMaybe<Scalars['String']>;
-  roles: Array<ProfileRoleInput>;
-  citizenshipStatus?: InputMaybe<CitizenshipStatus>;
-  contactFields: Array<ProfileContactFieldInput>;
-  account?: InputMaybe<ProfileAccountRelation>;
 };
 
 /** 'ProfileRole' input values */
 export type ProfileRoleInput = {
+  hatId?: InputMaybe<Scalars['String']>;
   role: ProfileRoleType;
   level: ProfileRoleLevelType;
 };
@@ -512,16 +520,23 @@ export type AccountPage = {
 
 export type Activity = {
   __typename?: 'Activity';
-  timestamp: Scalars['String'];
+  timestamp: Scalars['Time'];
   /** The document's ID. */
   _id: Scalars['ID'];
   profileRoleAdded?: Maybe<ProfileRoleType>;
   key: Scalars['String'];
   profile: Profile;
+  metadata?: Maybe<ActivityMetadata>;
   type: ActivityType;
   transactionId?: Maybe<Scalars['String']>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
+};
+
+export type ActivityMetadata = {
+  __typename?: 'ActivityMetadata';
+  badgeId?: Maybe<Scalars['String']>;
+  profileRole?: Maybe<ProfileRole>;
 };
 
 export enum ActivityType {
@@ -532,13 +547,13 @@ export enum ActivityType {
 
 export type BlockSyncAttempt = {
   __typename?: 'BlockSyncAttempt';
-  fromBlockId: Scalars['String'];
   /** The document's ID. */
   _id: Scalars['ID'];
   failedAttemptCount?: Maybe<Scalars['Int']>;
   key: Scalars['String'];
   status: BlockSyncAttemptStatus;
-  toBlockId: Scalars['String'];
+  endBlock: Scalars['String'];
+  startBlock: Scalars['String'];
   /** The document's timestamp. */
   _ts: Scalars['Long'];
 };
@@ -672,6 +687,7 @@ export enum ProfileContactFieldType {
 
 export type ProfileRole = {
   __typename?: 'ProfileRole';
+  hatId?: Maybe<Scalars['String']>;
   role: ProfileRoleType;
   level: ProfileRoleLevelType;
 };
@@ -708,6 +724,7 @@ export type Query = {
   syncAttemptsByKey: BlockSyncAttemptPage;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
+  allActivities: QueryAllActivitiesPage;
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
@@ -763,6 +780,12 @@ export type QueryFindOtterspaceBadgeSpecByIdArgs = {
 };
 
 
+export type QueryAllActivitiesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryAllAccountsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -777,4 +800,15 @@ export type QueryFindAccountByIdArgs = {
 export type QueryAllHatsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Activity'. */
+export type QueryAllActivitiesPage = {
+  __typename?: 'QueryAllActivitiesPage';
+  /** The elements of type 'Activity' in this page. */
+  data: Array<Maybe<Activity>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
 };
