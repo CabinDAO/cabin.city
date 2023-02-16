@@ -14,5 +14,5 @@ export const Default = Template.bind({})
 
 Default.args = {
   title: 'Cabin Activity',
-  icon: 'neighborhoods',
+  icon: 'logo-cabin',
 }

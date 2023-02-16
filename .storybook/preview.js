@@ -1,6 +1,7 @@
 import * as NextImage from "next/image";
 import { addDecorator } from '@storybook/react'
 import { ThemeProvider } from 'styled-components'
+import { RouterContext } from "next/dist/shared/lib/router-context";
 
 import theme from '../styles/theme'
 import GlobalStyles from '../styles/global'
@@ -20,6 +21,9 @@ Object.defineProperty(NextImage, "default", {
 });
 
 export const parameters = {
+  nextRouter: {
+    Provider: RouterContext.Provider,
+  },
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
     matchers: {

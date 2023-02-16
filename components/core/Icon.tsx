@@ -72,13 +72,13 @@ const IconWrap = styled.span<IconWrapProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 10rem;
+  height: 10rem;
   ${({ $size }) =>
     $size
       ? css`
-          svg {
-            width: ${$size}rem;
-            height: ${$size}rem;
-          }
+          width: ${$size}rem;
+          height: ${$size}rem;
         `
       : ''}
 

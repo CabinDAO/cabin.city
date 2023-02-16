@@ -12,6 +12,6 @@ const Template: ComponentStory<typeof IconsList> = (args) => (
 
 export const Icons = Template.bind({})
 Icons.args = {
-  size: 2.4,
+  size: 3.4,
   color: 'green900',
 }

@@ -32,6 +32,7 @@ const h2Styles = css`
   font-size: 1.6rem;
   font-weight: 600;
   line-height: 2.1rem;
+  text-transform: uppercase;
 `
 
 const h3Styles = css`
