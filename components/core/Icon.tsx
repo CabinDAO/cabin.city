@@ -28,9 +28,11 @@ import personSvg from './svg/person.svg'
 import profileSvg from './svg/profile.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
+import searchSvg from './svg/search.svg'
 import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
+import upArrowSvg from './svg/up-arrow.svg'
 
 export const IconSvgs = {
   'back-arrow': backArrowSvg,
@@ -58,9 +60,11 @@ export const IconSvgs = {
   profile: profileSvg,
   race: raceSvg,
   resident: residentSvg,
+  search: searchSvg,
   stay: staySvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
+  'up-arrow': upArrowSvg,
 }
 
 export type IconName = keyof typeof IconSvgs

@@ -17,6 +17,15 @@ const nextConfig = {
     })
     return config
   },
+  // TODO: We need to check if we need to restrict certain domains
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig
