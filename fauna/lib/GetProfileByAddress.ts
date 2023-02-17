@@ -7,7 +7,7 @@ export const GetProfileByAddress = (addressExpr: ExprVal) => {
       account: GetAccountByAddress(addressExpr),
       profileRef: q.Match(
         q.Index('account_profile_by_account'),
-        q.Select(['ref'], q.Var('account'))
+        q.Select(['ref'], q.Var('account'), null)
       ),
     },
     q.If(q.IsEmpty(q.Var('profileRef')), null, q.Get(q.Var('profileRef')))

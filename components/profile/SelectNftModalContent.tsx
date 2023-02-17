@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { OwnedNft } from 'alchemy-sdk'
 
 interface SelectNftModalContentProps {
-  nfts: OwnedNft[]
+  nfts: OwnedNft[] | null
   aboutOpen: boolean
   onSelect: (avatarUrl: string) => void
 }
@@ -44,7 +44,7 @@ export const SelectNftModalContent = ({
         explanation={explanation}
       />
     )
-  } else if (nfts.length === 0) {
+  } else if (nfts?.length === 0) {
     const explanation = (
       <Caption>
         Pieces that you own will be shown here for you to select. NFTs can be
@@ -58,11 +58,13 @@ export const SelectNftModalContent = ({
         explanation={explanation}
       />
     )
-  } else {
+  } else if (!!nfts) {
     return (
       <ModalContent>
         <SearchNft onSelect={onSelect} nfts={nfts} />
       </ModalContent>
     )
   }
+
+  return null
 }

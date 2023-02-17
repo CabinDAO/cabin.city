@@ -1,6 +1,5 @@
 import { DataContainer } from '@/components/core/DataContainer'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import styled from 'styled-components'
 
 export default {
   title: 'Core/DataContainer',
@@ -10,16 +9,6 @@ export default {
 const Template: ComponentStory<typeof DataContainer> = (args) => (
   <DataContainer {...args} />
 )
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 10rem;
-  padding: 1rem;
-  height: 10rem;
-`
 
 export const Default = Template.bind({})
 

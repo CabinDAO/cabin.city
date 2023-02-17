@@ -1,4 +1,6 @@
 type Query {
+  me: Profile! @resolver(name: "me")
+
   accountByAddress(address: String!): Account
     @resolver(name: "account_by_address")
   syncAttemptByKeyAndStatus(
@@ -7,6 +9,7 @@ type Query {
   ): BlockSyncAttempt
   syncAttemptsByKey(key: String!): [BlockSyncAttempt!]!
   allAccounts: [Account!]!
+  allProfiles: [Profile!]!
   allHats: [Hat!]!
   allActivities: [Activity!]! @resolver(name: "all_activities", paginated: true)
 }

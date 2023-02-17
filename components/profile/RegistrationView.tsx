@@ -2,57 +2,56 @@ import { OnboardingLayout } from '../layouts/OnboardingLayout'
 import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
-import { useEffect, useState } from 'react'
-import { OwnedNft } from 'alchemy-sdk'
-import { getAlchemySdk } from '@/lib/alchemy'
+import { useAccount } from 'wagmi'
+import Router from 'next/router'
+import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
+import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 
 export interface RegistrationParams {
   email: string
   displayName: string
-  avatarUrl: string
+  avatarUrl: string | undefined
 }
 
 export const RegistrationView = () => {
-  const [nfts, setNfts] = useState<OwnedNft[]>([])
-  const [loadedNfts, setLoadedNfts] = useState(false)
+  const { address } = useAccount()
+  const { signAuthMessage } = useSignAuthMessage()
 
-  useEffect(() => {
-    if (loadedNfts) return
+  const handleSubmit = async (params: RegistrationParams) => {
+    const { email, displayName: name } = params
 
-    //  TODO: Use current connected address
-    const alchemy = getAlchemySdk('goerli')
+    if (!address) throw new Error('No address found')
 
-    // TODO: Use current connected network
-    alchemy.nft
-      .getNftsForOwner('0x6107E341e1F93aF3E32fdE1a104BD39FbAD1e30e')
-      .then((nfts) => {
-        console.log(nfts.ownedNfts) // TODO: Remove
-        setNfts(nfts.ownedNfts.filter((nft) => nft.media.length > 0))
-        setLoadedNfts(true)
-      })
-      .catch((err) => {
-        console.error(err)
-        setLoadedNfts(true)
-      })
-    return () => {
-      setLoadedNfts(false)
+    const { message, signature } = await signAuthMessage(address)
+
+    const createProfileBody: CreateProfileBody = {
+      message,
+      signature,
+      name,
+      email,
     }
-  }, [loadedNfts])
 
-  const handleRegistration = ({
-    email,
-    displayName,
-    avatarUrl,
-  }: RegistrationParams) => {
-    // TODO: Wire up into CreateProfile mutation
-    console.log(email, displayName, avatarUrl)
+    const resp = await fetch('/api/auth/create-profile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(createProfileBody),
+    })
+
+    if (!resp.ok) {
+      throw new Error('Unable to create profile')
+    }
+
+    const json = await resp.json()
+    Router.push(`/profile/${json.profileId}`)
   }
 
   return (
     <OnboardingLayout>
       <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
       <ContentCard shape="notch">
-        <RegistrationForm nfts={nfts} onSubmit={handleRegistration} />
+        <RegistrationForm onSubmit={handleSubmit} />
       </ContentCard>
     </OnboardingLayout>
   )

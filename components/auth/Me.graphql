@@ -1,0 +1,18 @@
+# This is a globally used query to get the current user.
+# It should be kept as light as possible, limited to the top-level fields only.
+query Me {
+  me {
+    ...Me
+  }
+}
+
+fragment Me on Profile {
+  _id
+  name
+  email
+  avatarUrl
+  account {
+    _id
+    address
+  }
+}

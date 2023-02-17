@@ -32,6 +32,9 @@ cp .env.example .env
 2. From your database dashboard, go to `Security` -> `New Key` to create a new key with the `Admin` role.
 3. Copy the key into the value for the `FGU_SECRET` in `.env.fauna.local`.
 4. Run `npm run fauna` to initialize resources in your database.
+5. Go to `Security` -> `New Key` again to create a new key with the `public` role.
+6. Copy the key into the value for the `NEXT_PUBLIC_FAUNA_CLIENT_KEY` in `.env.local`.
+7. Create a key with the `Server` role and copy it into the value for `FAUNA_SERVER_SECRET` in `.env.local`
 
 ### Run the development server:
 

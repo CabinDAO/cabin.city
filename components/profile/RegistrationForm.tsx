@@ -1,4 +1,3 @@
-import { OwnedNft } from 'alchemy-sdk'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
@@ -43,11 +42,10 @@ const SubmitButton = styled(Button)`
 const MAX_DISPLAY_NAME_LENGTH = 48
 
 interface RegistrationFormProps {
-  onSubmit: ({ email, displayName, avatarUrl }: RegistrationParams) => void
-  nfts: OwnedNft[]
+  onSubmit: (params: RegistrationParams) => void
 }
 
-export const RegistrationForm = ({ onSubmit, nfts }: RegistrationFormProps) => {
+export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
@@ -56,7 +54,7 @@ export const RegistrationForm = ({ onSubmit, nfts }: RegistrationFormProps) => {
   const [displayError, setDisplayError] = useState(false)
 
   const handleClick = () => {
-    showModal(() => <SelectNftModal nfts={nfts} onSelect={onAvatarSelected} />)
+    showModal(() => <SelectNftModal onSelect={onAvatarSelected} />)
   }
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +68,9 @@ export const RegistrationForm = ({ onSubmit, nfts }: RegistrationFormProps) => {
     setEmail(e.target.value)
   }
 
-  const handleOnSubmit = () => {
+  const handleSubmit = () => {
     setDisplayError(true)
-    onSubmit({ email, displayName, avatarUrl: avatarUrl || '' })
+    onSubmit({ email, displayName, avatarUrl })
   }
 
   const onAvatarSelected = (avatarUrl: string) => {
@@ -107,7 +105,7 @@ export const RegistrationForm = ({ onSubmit, nfts }: RegistrationFormProps) => {
           onChange={onEmailChange}
         />
       </InputGroup>
-      <SubmitButton onClick={handleOnSubmit} variant="primary">
+      <SubmitButton onClick={handleSubmit} variant="primary">
         Continue
       </SubmitButton>
     </Container>

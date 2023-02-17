@@ -1,8 +1,11 @@
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -685,6 +688,17 @@ export enum ProfileContactFieldType {
   Other = 'Other'
 }
 
+/** The pagination object for elements of type 'Profile'. */
+export type ProfilePage = {
+  __typename?: 'ProfilePage';
+  /** The elements of type 'Profile' in this page. */
+  data: Array<Maybe<Profile>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
 export type ProfileRole = {
   __typename?: 'ProfileRole';
   hatId?: Maybe<Scalars['String']>;
@@ -722,6 +736,8 @@ export type Query = {
   findHatByID?: Maybe<Hat>;
   syncAttemptByKeyAndStatus?: Maybe<BlockSyncAttempt>;
   syncAttemptsByKey: BlockSyncAttemptPage;
+  allProfiles: ProfilePage;
+  me: Profile;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
   allActivities: QueryAllActivitiesPage;
@@ -775,6 +791,12 @@ export type QuerySyncAttemptsByKeyArgs = {
 };
 
 
+export type QueryAllProfilesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryFindOtterspaceBadgeSpecByIdArgs = {
   id: Scalars['ID'];
 };
@@ -812,3 +834,57 @@ export type QueryAllActivitiesPage = {
   /** A cursor for elements coming before the current page. */
   before?: Maybe<Scalars['String']>;
 };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string } } };
+
+export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string } };
+
+export const MeFragmentDoc = gql`
+    fragment Me on Profile {
+  _id
+  name
+  email
+  avatarUrl
+  account {
+    _id
+    address
+  }
+}
+    `;
+export const MeDocument = gql`
+    query Me {
+  me {
+    ...Me
+  }
+}
+    ${MeFragmentDoc}`;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;

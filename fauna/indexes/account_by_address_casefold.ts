@@ -19,6 +19,7 @@ const accountByAddressCasefold: IndexResource = {
       binding: 'addressCasefold',
     },
   ],
+  unique: true,
 }
 
 export default accountByAddressCasefold

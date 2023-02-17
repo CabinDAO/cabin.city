@@ -18,6 +18,7 @@ export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
 export const getAlchemySdk = (network: ethers.providers.Networkish) => {
   switch (network) {
     case 'goerli':
+    case 'Goerli':
       return new Alchemy({
         apiKey: process.env.NEXT_PUBLIC_ALCHEMY_GOERLI_API_KEY,
       })
