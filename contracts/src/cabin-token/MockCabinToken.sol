@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity 0.8.6;
+pragma solidity 0.8.17;
 
-import "./Ownable.sol";
+import "./CabinOwnable.sol";
 import "./ICabinToken.sol";
 
 /**
@@ -11,7 +11,7 @@ import "./ICabinToken.sol";
  * 🌐 a DAO retreat & residency program
  * 🌆 an experiment in decentralized cities
  */
-contract MockCabinToken is Ownable, ICabinToken {
+contract MockCabinToken is CabinOwnable, ICabinToken {
     // ============ Constants ============
 
     // There is an initial supply of 1m tokens, each with 18 decimals,
@@ -37,7 +37,7 @@ contract MockCabinToken is Ownable, ICabinToken {
 
     // ============ Constructor ============
 
-    constructor(address owner_) Ownable(owner_) {
+    constructor(address owner_) CabinOwnable(owner_) {
         DOMAIN_SEPARATOR = keccak256(
             abi.encode(
                 keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"),

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity 0.8.6;
+pragma solidity 0.8.17;
 
 interface IOwnableEvents {
     event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
 }
 
-contract Ownable is IOwnableEvents {
+contract CabinOwnable is IOwnableEvents {
     address public owner;
     address private nextOwner;
 

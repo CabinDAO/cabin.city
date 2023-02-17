@@ -1,0 +1,16 @@
+# !/bin/bash
+
+echo "Reading vars from .env.forge"
+source .env.forge
+
+CABIN_TOKEN_ADDRESS=$1
+echo "CABIN_TOKEN_ADDRESS: $CABIN_TOKEN_ADDRESS"
+
+LOCK_ADDRESS=$2
+echo "LOCK_ADDRESS: $LOCK_ADDRESS"
+
+forge create --rpc-url $RPC_URL \
+  --private-key $SCRIPT_PRIVATE_KEY contracts/src/CabinUnlockHooks.sol:CabinUnlockHooks \
+  --etherscan-api-key $ETHERSCAN_API_KEY \
+  --constructor-args $CABIN_TOKEN_ADDRESS $LOCK_ADDRESS \
+  --verify
