@@ -67,6 +67,22 @@ const captionBoldStyles = css`
   line-height: 1.6rem;
 `
 
+export const inputFieldStyles = css`
+  ${headerSharedStyles}
+  font-family: ${fonts.primary};
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.7rem;
+`
+
+export const formLabelStyles = css`
+  ${headerSharedStyles}
+  font-family: ${fonts.secondary};
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
+`
+
 export const H1 = styled.h1`
   ${h1Styles}
 `

@@ -7,6 +7,7 @@ import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import checkSvg from './svg/check.svg'
+import chevronDownSvg from './svg/chevron-down.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
 import creatorSvg from './svg/creator.svg'
@@ -36,6 +37,7 @@ export const IconSvgs = {
   builder: builderSvg,
   caretaker: caretakerSvg,
   check: checkSvg,
+  'chevron-down': chevronDownSvg,
   citizen: citizenSvg,
   close: closeSvg,
   creator: creatorSvg,

@@ -56,6 +56,7 @@ const theme = {
     red300: '#EBB5A6',
     red200: '#F6DACD',
     red100: '#FBEDE6',
+    white: '#FFFFFF',
   },
 }
 
