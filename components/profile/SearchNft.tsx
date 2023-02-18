@@ -57,7 +57,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
     }
 
     const results = nfts.filter((nft) =>
-      nft.title.toLocaleLowerCase().includes(value)
+      nft.title.toLocaleLowerCase().includes(value.toLocaleLowerCase())
     )
     setSearchResults(results)
   }

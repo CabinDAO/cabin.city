@@ -25,7 +25,6 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
     alchemy.nft
       .getNftsForOwner('0x6107E341e1F93aF3E32fdE1a104BD39FbAD1e30e') // TODO: address
       .then((nfts) => {
-        console.log(nfts.ownedNfts) // TODO: Remove
         setNfts(nfts.ownedNfts.filter((nft) => nft.media.length > 0))
       })
       .catch((err) => {
