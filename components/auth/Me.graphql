@@ -15,4 +15,15 @@ fragment Me on Profile {
     _id
     address
   }
+  trackingEvents {
+    data {
+      ...TrackingEvent
+    }
+  }
+}
+
+fragment TrackingEvent on TrackingEvent {
+  _id
+  key
+  count
 }

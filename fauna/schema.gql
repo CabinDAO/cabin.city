@@ -17,8 +17,9 @@ type Query {
 type Mutation {
   clearSyncAttempts(key: String!): Boolean!
     @resolver(name: "clear_sync_attempts")
-
   createProfile(data: ProfileInput!): Profile! @resolver(name: "create_profile")
+  logTrackingEvent(key: String!): TrackingEvent!
+    @resolver(name: "log_tracking_event")
 }
 
 type Profile {
@@ -31,6 +32,7 @@ type Profile {
   citizenshipStatus: CitizenshipStatus
   contactFields: [ProfileContactField!]!
   account: Account! @relation # Should not be null until if/when email-only sign in is implemented
+  trackingEvents: [TrackingEvent!]! @relation
 }
 
 input ProfileInput {
@@ -79,6 +81,12 @@ enum ProfileContactFieldType {
   Github
   Website
   Other
+}
+
+type TrackingEvent {
+  key: String!
+  count: Int!
+  profile: Profile! @relation
 }
 
 type Account {

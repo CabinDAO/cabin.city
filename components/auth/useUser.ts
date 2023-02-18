@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Router from 'next/router'
 import { useAccount } from 'wagmi'
 import { addressMatch } from '@/utils/address-match'
-import { MeFragment, useMeLazyQuery } from '@/generated/graphql'
+import { useMeQuery } from '@/generated/graphql'
 
 /*
   This hook is used to fetch the current user from the server.
@@ -17,43 +17,23 @@ import { MeFragment, useMeLazyQuery } from '@/generated/graphql'
   - `MeFragment` if the user is logged in
 */
 export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
-  const [user, setUser] = useState<MeFragment | null>()
-  const [getMe] = useMeLazyQuery()
+  const { data, loading } = useMeQuery()
   const { address } = useAccount()
 
+  const me = data?.me
+
   useEffect(() => {
-    let isSubscribed = true
-
-    ;(async () => {
-      try {
-        const { data, error } = await getMe()
-        if (error) {
-          console.error(error)
-        } else {
-          const me = data?.me
-
-          if (me && !addressMatch(me.account.address, address ?? '0x0')) {
-            Router.push('/logout')
-          }
-
-          // If redirectTo is set, redirect if the user was not found.
-          if (redirectTo && !me) {
-            Router.push(redirectTo)
-          } else if (redirectToIfFound && me) {
-            Router.push(redirectToIfFound)
-          } else if (isSubscribed) {
-            setUser(me)
-          }
-        }
-      } catch (err) {
-        console.error(err)
-      }
-    })()
-
-    return () => {
-      isSubscribed = false
+    if (me && !addressMatch(me.account.address, address ?? '0x0')) {
+      Router.push('/logout')
     }
-  }, [redirectTo, redirectToIfFound, getMe, setUser, address])
 
-  return { user }
+    // If redirectTo is set, redirect if the user was not found.
+    if (redirectTo && !loading && !me) {
+      Router.push(redirectTo)
+    } else if (redirectToIfFound && me) {
+      Router.push(redirectToIfFound)
+    }
+  }, [redirectTo, redirectToIfFound, address, me, loading])
+
+  return { user: me, isUserLoading: loading }
 }

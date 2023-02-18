@@ -125,10 +125,14 @@ export type Mutation = {
   deleteHat?: Maybe<Hat>;
   /** Partially updates an existing document in the collection of 'Activity'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateActivity?: Maybe<Activity>;
+  /** Delete an existing document in the collection of 'TrackingEvent' */
+  deleteTrackingEvent?: Maybe<TrackingEvent>;
   /** Partially updates an existing document in the collection of 'OtterspaceBadgeSpec'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
   /** Update an existing document in the collection of 'OtterspaceBadge' */
   updateOtterspaceBadge?: Maybe<OtterspaceBadge>;
+  /** Partially updates an existing document in the collection of 'TrackingEvent'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateTrackingEvent?: Maybe<TrackingEvent>;
   /** Create a new document in the collection of 'OtterspaceBadge' */
   createOtterspaceBadge: OtterspaceBadge;
   /** Delete an existing document in the collection of 'Account' */
@@ -137,6 +141,10 @@ export type Mutation = {
   updateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
   /** Partially updates an existing document in the collection of 'BlockSyncAttempt'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
+  /** Create a new document in the collection of 'TrackingEvent' */
+  createTrackingEvent: TrackingEvent;
+  /** Update an existing document in the collection of 'TrackingEvent' */
+  updateTrackingEvent?: Maybe<TrackingEvent>;
   /** Update an existing document in the collection of 'Account' */
   updateAccount?: Maybe<Account>;
   /** Update an existing document in the collection of 'Hat' */
@@ -165,6 +173,7 @@ export type Mutation = {
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   /** Update an existing document in the collection of 'Profile' */
   updateProfile?: Maybe<Profile>;
+  logTrackingEvent: TrackingEvent;
   /** Delete an existing document in the collection of 'Activity' */
   deleteActivity?: Maybe<Activity>;
 };
@@ -208,6 +217,11 @@ export type MutationPartialUpdateActivityArgs = {
 };
 
 
+export type MutationDeleteTrackingEventArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationPartialUpdateOtterspaceBadgeSpecArgs = {
   id: Scalars['ID'];
   data: PartialUpdateOtterspaceBadgeSpecInput;
@@ -217,6 +231,12 @@ export type MutationPartialUpdateOtterspaceBadgeSpecArgs = {
 export type MutationUpdateOtterspaceBadgeArgs = {
   id: Scalars['ID'];
   data: OtterspaceBadgeInput;
+};
+
+
+export type MutationPartialUpdateTrackingEventArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateTrackingEventInput;
 };
 
 
@@ -239,6 +259,17 @@ export type MutationUpdateOtterspaceBadgeSpecArgs = {
 export type MutationPartialUpdateBlockSyncAttemptArgs = {
   id: Scalars['ID'];
   data: PartialUpdateBlockSyncAttemptInput;
+};
+
+
+export type MutationCreateTrackingEventArgs = {
+  data: TrackingEventInput;
+};
+
+
+export type MutationUpdateTrackingEventArgs = {
+  id: Scalars['ID'];
+  data: TrackingEventInput;
 };
 
 
@@ -321,6 +352,11 @@ export type MutationDeleteBlockSyncAttemptArgs = {
 export type MutationUpdateProfileArgs = {
   id: Scalars['ID'];
   data: ProfileInput;
+};
+
+
+export type MutationLogTrackingEventArgs = {
+  key: Scalars['String'];
 };
 
 
@@ -447,6 +483,7 @@ export type PartialUpdateProfileInput = {
   citizenshipStatus?: InputMaybe<CitizenshipStatus>;
   contactFields?: InputMaybe<Array<PartialUpdateProfileContactFieldInput>>;
   account?: InputMaybe<ProfileAccountRelation>;
+  trackingEvents?: InputMaybe<ProfileTrackingEventsRelation>;
 };
 
 /** 'ProfileRole' input values */
@@ -454,6 +491,13 @@ export type PartialUpdateProfileRoleInput = {
   hatId?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<ProfileRoleType>;
   level?: InputMaybe<ProfileRoleLevelType>;
+};
+
+/** 'TrackingEvent' input values */
+export type PartialUpdateTrackingEventInput = {
+  key?: InputMaybe<Scalars['String']>;
+  count?: InputMaybe<Scalars['Int']>;
+  profile?: InputMaybe<TrackingEventProfileRelation>;
 };
 
 /** Allow manipulating the relationship between the types 'Profile' and 'Account' using the field 'Profile.account'. */
@@ -483,6 +527,31 @@ export type ProfileRoleInput = {
   hatId?: InputMaybe<Scalars['String']>;
   role: ProfileRoleType;
   level: ProfileRoleLevelType;
+};
+
+/** Allow manipulating the relationship between the types 'Profile' and 'TrackingEvent'. */
+export type ProfileTrackingEventsRelation = {
+  /** Create one or more documents of type 'TrackingEvent' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<TrackingEventInput>>>;
+  /** Connect one or more documents of type 'TrackingEvent' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'TrackingEvent' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
+/** 'TrackingEvent' input values */
+export type TrackingEventInput = {
+  key: Scalars['String'];
+  count: Scalars['Int'];
+  profile?: InputMaybe<TrackingEventProfileRelation>;
+};
+
+/** Allow manipulating the relationship between the types 'TrackingEvent' and 'Profile' using the field 'TrackingEvent.profile'. */
+export type TrackingEventProfileRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
 };
 
 export type Account = {
@@ -657,6 +726,7 @@ export type OtterspaceBadgeSpecBadgesArgs = {
 
 export type Profile = {
   __typename?: 'Profile';
+  trackingEvents: TrackingEventPage;
   name: Scalars['String'];
   email: Scalars['String'];
   avatarUrl?: Maybe<Scalars['String']>;
@@ -670,6 +740,12 @@ export type Profile = {
   contactFields: Array<ProfileContactField>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
+};
+
+
+export type ProfileTrackingEventsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
 };
 
 export type ProfileContactField = {
@@ -729,6 +805,8 @@ export type Query = {
   findProfileByID?: Maybe<Profile>;
   /** Find a document from the collection of 'BlockSyncAttempt' by its id. */
   findBlockSyncAttemptByID?: Maybe<BlockSyncAttempt>;
+  /** Find a document from the collection of 'TrackingEvent' by its id. */
+  findTrackingEventByID?: Maybe<TrackingEvent>;
   accountByAddress?: Maybe<Account>;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
@@ -759,6 +837,11 @@ export type QueryFindProfileByIdArgs = {
 
 
 export type QueryFindBlockSyncAttemptByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryFindTrackingEventByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -835,13 +918,51 @@ export type QueryAllActivitiesPage = {
   before?: Maybe<Scalars['String']>;
 };
 
+export type TrackingEvent = {
+  __typename?: 'TrackingEvent';
+  count: Scalars['Int'];
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  key: Scalars['String'];
+  profile: Profile;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'TrackingEvent'. */
+export type TrackingEventPage = {
+  __typename?: 'TrackingEventPage';
+  /** The elements of type 'TrackingEvent' in this page. */
+  data: Array<Maybe<TrackingEvent>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } } };
 
-export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string } };
+export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } };
 
+export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
+
+export type LogTrackingEventMutationVariables = Exact<{
+  key: Scalars['String'];
+}>;
+
+
+export type LogTrackingEventMutation = { __typename?: 'Mutation', logTrackingEvent: { __typename?: 'TrackingEvent', _id: string, key: string, count: number } };
+
+export const TrackingEventFragmentDoc = gql`
+    fragment TrackingEvent on TrackingEvent {
+  _id
+  key
+  count
+}
+    `;
 export const MeFragmentDoc = gql`
     fragment Me on Profile {
   _id
@@ -852,8 +973,13 @@ export const MeFragmentDoc = gql`
     _id
     address
   }
+  trackingEvents {
+    data {
+      ...TrackingEvent
+    }
+  }
 }
-    `;
+    ${TrackingEventFragmentDoc}`;
 export const MeDocument = gql`
     query Me {
   me {
@@ -888,3 +1014,36 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const LogTrackingEventDocument = gql`
+    mutation LogTrackingEvent($key: String!) {
+  logTrackingEvent(key: $key) {
+    ...TrackingEvent
+  }
+}
+    ${TrackingEventFragmentDoc}`;
+export type LogTrackingEventMutationFn = Apollo.MutationFunction<LogTrackingEventMutation, LogTrackingEventMutationVariables>;
+
+/**
+ * __useLogTrackingEventMutation__
+ *
+ * To run a mutation, you first call `useLogTrackingEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogTrackingEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logTrackingEventMutation, { data, loading, error }] = useLogTrackingEventMutation({
+ *   variables: {
+ *      key: // value for 'key'
+ *   },
+ * });
+ */
+export function useLogTrackingEventMutation(baseOptions?: Apollo.MutationHookOptions<LogTrackingEventMutation, LogTrackingEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogTrackingEventMutation, LogTrackingEventMutationVariables>(LogTrackingEventDocument, options);
+      }
+export type LogTrackingEventMutationHookResult = ReturnType<typeof useLogTrackingEventMutation>;
+export type LogTrackingEventMutationResult = Apollo.MutationResult<LogTrackingEventMutation>;
+export type LogTrackingEventMutationOptions = Apollo.BaseMutationOptions<LogTrackingEventMutation, LogTrackingEventMutationVariables>;

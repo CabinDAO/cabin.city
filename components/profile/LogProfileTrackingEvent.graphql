@@ -1,0 +1,5 @@
+mutation LogTrackingEvent($key: String!) {
+  logTrackingEvent(key: $key) {
+    ...TrackingEvent
+  }
+}

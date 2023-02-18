@@ -4,17 +4,12 @@ import { query as q } from 'faunadb'
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
   privileges: [
+    /* Collections */
     {
       resource: q.Collection('Account'),
       actions: {
         read: true,
         write: true,
-      },
-    },
-    {
-      resource: q.Function('me'),
-      actions: {
-        call: true,
       },
     },
     {
@@ -56,6 +51,15 @@ const authenticatedProfileRole: RoleResource = {
       },
     },
     {
+      resource: q.Collection('TrackingEvent'),
+      actions: {
+        create: true,
+        write: true,
+        read: true,
+      },
+    },
+    /* Indexes */
+    {
       resource: q.Index('account_badges_by_account'),
       actions: {
         read: true,
@@ -89,6 +93,31 @@ const authenticatedProfileRole: RoleResource = {
       resource: q.Index('account_profile_by_account'),
       actions: {
         read: true,
+      },
+    },
+    {
+      resource: q.Index('tracking_events_by_key_and_profile'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profile_trackingEvents_by_profile'),
+      actions: {
+        read: true,
+      },
+    },
+    /* Functions */
+    {
+      resource: q.Function('me'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('log_tracking_event'),
+      actions: {
+        call: true,
       },
     },
   ],
