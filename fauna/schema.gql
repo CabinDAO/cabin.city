@@ -27,7 +27,7 @@ type Profile {
   name: String!
   email: String!
   bio: String
-  avatarUrl: String
+  avatar: ProfileAvatar
   roles: [ProfileRole!]!
   citizenshipStatus: CitizenshipStatus
   contactFields: [ProfileContactField!]!
@@ -35,10 +35,29 @@ type Profile {
   trackingEvents: [TrackingEvent!]! @relation
 }
 
+type ProfileAvatar @embedded {
+  url: String!
+
+  # NFT Metadata
+  contractAddress: String
+  title: String
+  tokenId: String
+  tokenUri: String
+}
+
 input ProfileInput {
   address: String!
   name: String!
   email: String!
+  avatar: ProfileAvatarInput
+}
+
+input ProfileAvatarInput {
+  url: String!
+  contractAddress: String
+  title: String
+  tokenId: String
+  tokenUri: String
 }
 
 type ProfileRole @embedded {

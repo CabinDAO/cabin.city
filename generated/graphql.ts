@@ -466,6 +466,15 @@ export type PartialUpdateOtterspaceBadgeSpecInput = {
   badges?: InputMaybe<OtterspaceBadgeSpecBadgesRelation>;
 };
 
+/** 'ProfileAvatar' input values */
+export type PartialUpdateProfileAvatarInput = {
+  url?: InputMaybe<Scalars['String']>;
+  contractAddress?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  tokenId?: InputMaybe<Scalars['String']>;
+  tokenUri?: InputMaybe<Scalars['String']>;
+};
+
 /** 'ProfileContactField' input values */
 export type PartialUpdateProfileContactFieldInput = {
   type?: InputMaybe<ProfileContactFieldType>;
@@ -478,7 +487,7 @@ export type PartialUpdateProfileInput = {
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
-  avatarUrl?: InputMaybe<Scalars['String']>;
+  avatar?: InputMaybe<PartialUpdateProfileAvatarInput>;
   roles?: InputMaybe<Array<PartialUpdateProfileRoleInput>>;
   citizenshipStatus?: InputMaybe<CitizenshipStatus>;
   contactFields?: InputMaybe<Array<PartialUpdateProfileContactFieldInput>>;
@@ -510,6 +519,14 @@ export type ProfileAccountRelation = {
   disconnect?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type ProfileAvatarInput = {
+  url: Scalars['String'];
+  contractAddress?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  tokenId?: InputMaybe<Scalars['String']>;
+  tokenUri?: InputMaybe<Scalars['String']>;
+};
+
 /** 'ProfileContactField' input values */
 export type ProfileContactFieldInput = {
   type: ProfileContactFieldType;
@@ -520,6 +537,7 @@ export type ProfileInput = {
   address: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
+  avatar?: InputMaybe<ProfileAvatarInput>;
 };
 
 /** 'ProfileRole' input values */
@@ -728,8 +746,8 @@ export type Profile = {
   __typename?: 'Profile';
   trackingEvents: TrackingEventPage;
   name: Scalars['String'];
+  avatar?: Maybe<ProfileAvatar>;
   email: Scalars['String'];
-  avatarUrl?: Maybe<Scalars['String']>;
   /** The document's ID. */
   _id: Scalars['ID'];
   bio?: Maybe<Scalars['String']>;
@@ -746,6 +764,15 @@ export type Profile = {
 export type ProfileTrackingEventsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+export type ProfileAvatar = {
+  __typename?: 'ProfileAvatar';
+  url: Scalars['String'];
+  contractAddress?: Maybe<Scalars['String']>;
+  tokenId?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  tokenUri?: Maybe<Scalars['String']>;
 };
 
 export type ProfileContactField = {
@@ -943,9 +970,9 @@ export type TrackingEventPage = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } } };
 
-export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatarUrl?: string | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } };
+export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } };
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
@@ -968,7 +995,9 @@ export const MeFragmentDoc = gql`
   _id
   name
   email
-  avatarUrl
+  avatar {
+    url
+  }
   account {
     _id
     address

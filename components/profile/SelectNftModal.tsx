@@ -8,7 +8,7 @@ import { ModalTitle } from '../core/modals/ModalTitle'
 import { SelectNftModalContent } from './SelectNftModalContent'
 
 interface SelectNftModalProps {
-  onSelect: (avatarUrl: string) => void
+  onSelect: (nft: OwnedNft) => void
 }
 
 export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {

@@ -10,7 +10,9 @@ fragment Me on Profile {
   _id
   name
   email
-  avatarUrl
+  avatar {
+    url
+  }
   account {
     _id
     address

@@ -5,12 +5,14 @@ import { CreateProfile, CreateProfileInput } from '@/fauna/lib/CreateProfile'
 import { validateSessionMessage } from '@/lib/next-server/siwe'
 import { SiweMessage } from 'siwe'
 import { ironOptions } from '@/lib/next-server/iron-options'
+import { ProfileAvatarInput } from '@/generated/graphql'
 
 export interface CreateProfileBody {
   message: SiweMessage
   signature: string
   name: string
   email: string
+  avatar: ProfileAvatarInput | undefined
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -31,6 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         address: validatedMessage.address,
         name: body.name,
         email: body.email,
+        avatar: body.avatar,
       })
       const profileId = profile.ref.id
       res.send({ profileId })

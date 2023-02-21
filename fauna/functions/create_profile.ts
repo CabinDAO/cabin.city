@@ -11,6 +11,7 @@ const createProfile: FunctionResource = {
         address: q.Select(['address'], q.Var('data')),
         name: q.Select(['name'], q.Var('data')),
         email: q.Select(['email'], q.Var('data')),
+        avatar: q.Select(['avatar'], q.Var('data')),
       })
     )
   ),

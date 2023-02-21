@@ -6,11 +6,12 @@ import { useAccount } from 'wagmi'
 import Router from 'next/router'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { CreateProfileBody } from '@/pages/api/auth/create-profile'
+import { ProfileAvatarInput } from '@/generated/graphql'
 
 export interface RegistrationParams {
   email: string
   displayName: string
-  avatarUrl: string | undefined
+  avatar: ProfileAvatarInput | undefined
 }
 
 export const RegistrationView = () => {
@@ -18,7 +19,7 @@ export const RegistrationView = () => {
   const { signAuthMessage } = useSignAuthMessage()
 
   const handleSubmit = async (params: RegistrationParams) => {
-    const { email, displayName: name } = params
+    const { email, displayName: name, avatar } = params
 
     if (!address) throw new Error('No address found')
 
@@ -29,6 +30,7 @@ export const RegistrationView = () => {
       signature,
       name,
       email,
+      avatar,
     }
 
     const resp = await fetch('/api/auth/create-profile', {

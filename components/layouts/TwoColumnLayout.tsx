@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { IconName } from '../core/Icon'
-import { Navbar } from '../core/Navbar'
 import { TitleCard } from '../core/TitleCard'
+import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { MainContent, NavbarContainer } from './common.styles'
 
 interface LayoutProps {
@@ -33,7 +33,7 @@ export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
   return (
     <Container>
       <NavbarContainer>
-        <Navbar />
+        <ProfileNavbar />
       </NavbarContainer>
       <MainContent>
         <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />

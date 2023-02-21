@@ -1,5 +1,5 @@
 import { Expr, query as q } from 'faunadb'
-import { ActivityType } from '../../generated/graphql'
+import { ActivityType, ProfileAvatarInput } from '../../generated/graphql'
 import { SafeString } from './SafeString'
 import { UpsertAccount } from './UpsertAccount'
 import { UpsertActivity } from './UpsertActivity'
@@ -8,6 +8,7 @@ export interface CreateProfileInput {
   address: string | Expr
   name: string | Expr
   email: string | Expr
+  avatar?: ProfileAvatarInput | undefined | Expr
 }
 
 export const CreateProfile = (input: CreateProfileInput) => {
@@ -20,6 +21,7 @@ export const CreateProfile = (input: CreateProfileInput) => {
           createdAt: q.Now(),
           name: SafeString(input.name),
           email: SafeString(input.email),
+          avatar: input.avatar,
           roles: [],
           contactFields: [],
         },

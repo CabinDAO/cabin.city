@@ -40,7 +40,7 @@ const NftImage = styled.div`
 
 interface SearchNftsProps {
   nfts: OwnedNft[]
-  onSelect: (avatarUrl: string) => void
+  onSelect: (nft: OwnedNft) => void
 }
 
 export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
@@ -62,8 +62,8 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
     setSearchResults(results)
   }
 
-  const handleSearchResultClick = (avatarUrl: string) => {
-    onSelect(avatarUrl)
+  const handleSearchResultClick = (nft: OwnedNft) => {
+    onSelect(nft)
   }
 
   return (
@@ -77,23 +77,23 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
         />
       </div>
       <SearchResults>
-        {searchResults.map((nft) => (
-          <SearchResult
-            key={nft.title}
-            onClick={() =>
-              handleSearchResultClick(nft.media[0].thumbnail || '')
-            }
-          >
-            <NftImage key={nft.title}>
-              <AutofitImage
-                key={nft.title}
-                src={nft.media[0].thumbnail || ''}
-                alt={nft.title}
-              />
-            </NftImage>
-            <CaptionBold>{nft.title}</CaptionBold>
-          </SearchResult>
-        ))}
+        {searchResults.map((nft) => {
+          return (
+            <SearchResult
+              key={nft.title}
+              onClick={() => handleSearchResultClick(nft)}
+            >
+              <NftImage key={nft.title}>
+                <AutofitImage
+                  key={nft.title}
+                  src={nft.media[0].thumbnail || ''}
+                  alt={nft.title}
+                />
+              </NftImage>
+              <CaptionBold>{nft.title}</CaptionBold>
+            </SearchResult>
+          )
+        })}
       </SearchResults>
     </Container>
   )

@@ -44,9 +44,12 @@ const NeighborhoodsItemGroup = styled.div`
   gap: 2.7rem;
 `
 
-export const Navbar = () => {
-  // TODO: resolve my profile ID
-  const profileId = 123
+interface NavbarProps {
+  profileId: string
+  avatarUrl?: string
+}
+
+export const Navbar = (props: NavbarProps) => {
   return (
     <Container>
       <StyledNotch />
@@ -60,8 +63,8 @@ export const Navbar = () => {
       </NeighborhoodsItemGroup>
       <Divider />
       <SingleMenuItem>
-        <Link href={`/profile/${profileId}`}>
-          <Avatar size={3.2} />
+        <Link href={`/profile/${props.profileId}`}>
+          <Avatar src={props.avatarUrl} size={3.2} />
         </Link>
       </SingleMenuItem>
     </Container>

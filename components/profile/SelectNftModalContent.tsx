@@ -8,7 +8,7 @@ import { OwnedNft } from 'alchemy-sdk'
 interface SelectNftModalContentProps {
   nfts: OwnedNft[] | null
   aboutOpen: boolean
-  onSelect: (avatarUrl: string) => void
+  onSelect: (nft: OwnedNft) => void
 }
 
 const AboutExplainer = styled.div`

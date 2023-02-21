@@ -1,3 +1,5 @@
+import { ProfileAvatarInput } from '@/generated/graphql'
+import { OwnedNft } from 'alchemy-sdk'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
@@ -48,13 +50,13 @@ interface RegistrationFormProps {
 export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
+  const [avatar, setAvatar] = useState<ProfileAvatarInput | undefined>()
 
   const { showModal, hideModal } = useModal()
   const [displayError, setDisplayError] = useState(false)
 
-  const handleClick = () => {
-    showModal(() => <SelectNftModal onSelect={onAvatarSelected} />)
+  const openSelectNftModal = () => {
+    showModal(() => <SelectNftModal onSelect={onNftSelected} />)
   }
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,21 +72,43 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
 
   const handleSubmit = () => {
     setDisplayError(true)
-    onSubmit({ email, displayName, avatarUrl })
+    onSubmit({ email, displayName, avatar })
   }
 
-  const onAvatarSelected = (avatarUrl: string) => {
-    setAvatarUrl(avatarUrl)
+  const onNftSelected = (nft: OwnedNft) => {
+    const url = nft.media[0]?.thumbnail
+
+    if (!url) {
+      throw new Error('NFT does not have a media URL')
+    }
+    setAvatar({
+      url,
+      contractAddress: nft.contract.address,
+      title: nft.title,
+      tokenId: nft.tokenId,
+      tokenUri: nft.tokenUri?.raw,
+    })
     hideModal()
   }
 
   return (
     <Container>
       <AvatarSetup>
-        <Avatar onClick={handleClick} size={8.8} hoverShadow src={avatarUrl} />
-        <Button variant="tertiary" onClick={() => setAvatarUrl(undefined)}>
-          Remove
-        </Button>
+        <Avatar
+          onClick={openSelectNftModal}
+          size={8.8}
+          hoverShadow
+          src={avatar?.url}
+        />
+        {avatar ? (
+          <Button variant="tertiary" onClick={() => setAvatar(undefined)}>
+            Remove
+          </Button>
+        ) : (
+          <Button variant="tertiary" onClick={openSelectNftModal}>
+            Choose avatar
+          </Button>
+        )}
       </AvatarSetup>
       <InputGroup>
         <InputText
