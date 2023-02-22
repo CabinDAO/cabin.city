@@ -13,3 +13,5 @@ export const formatValue = (value: number) => {
 
   return parseFloat(scaled.toFixed(2)) + suffix
 }
+
+export const pxToRem = (px: number) => `${px / 10}`
