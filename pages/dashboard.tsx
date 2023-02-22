@@ -1,7 +1,7 @@
 import { DashboardView } from '@/components/dashboard/DashboardView'
 
 const DashboardPage = () => {
-  return <DashboardView></DashboardView>
+  return <DashboardView />
 }
 
 export default DashboardPage

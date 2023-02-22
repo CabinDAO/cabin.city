@@ -1,0 +1,25 @@
+query GetActivities($size: Int, $cursor: String) {
+  allActivities(_size: $size, _cursor: $cursor) {
+    data {
+      ...Activity
+    }
+    after
+  }
+}
+
+fragment Activity on Activity {
+  _id
+  timestamp
+  profile {
+    _id
+    name
+    citizenshipStatus
+    roles {
+      role
+      level
+    }
+    avatar {
+      url
+    }
+  }
+}

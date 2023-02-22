@@ -1,6 +1,6 @@
 import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
 import { DataContainer } from '../core/DataContainer'
-import { Feed } from './Feed'
+import { ActivityList } from './ActivityList'
 
 export const DashboardView = () => {
   const dashboardItems = [
@@ -20,7 +20,7 @@ export const DashboardView = () => {
 
   return (
     <TwoColumnLayout title="Cabin Activity">
-      <Feed />
+      <ActivityList />
       <DataContainer title="Dashboard" items={dashboardItems} />
     </TwoColumnLayout>
   )

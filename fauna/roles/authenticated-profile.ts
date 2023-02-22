@@ -107,6 +107,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('activities_sorted_by_timestamp'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -116,6 +122,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('log_tracking_event'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('all_activities'),
       actions: {
         call: true,
       },
