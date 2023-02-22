@@ -1,5 +1,5 @@
 import Icon, { IconName, IconSvgs } from '@/components/core/Icon'
-import { Body } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import { ColorName } from '@/styles/theme'
 import styled from 'styled-components'
 
@@ -31,7 +31,7 @@ const IconsList = ({ size, color }: IconListProps) => {
       {iconList.map((i) => (
         <IconContainer key={i}>
           <Icon name={i as IconName} size={size} color={color} />
-          <Body>{i}</Body>
+          <Body1>{i}</Body1>
         </IconContainer>
       ))}
     </Container>

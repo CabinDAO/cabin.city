@@ -1,6 +1,6 @@
 import { ContentCard } from './ContentCard'
 import styled from 'styled-components'
-import { Caption, CaptionBold, H2 } from './Typography'
+import { Caption, H3 } from './Typography'
 import { formatValue } from '@/utils/display-utils'
 
 const StyledContainer = styled(ContentCard)`
@@ -52,13 +52,13 @@ export const DataContainer = ({ title, items }: DataContainerProps) => {
     <StyledContainer shadow shape="notch" notchSize={1}>
       <InnerContainer>
         <Title>
-          <H2>{title}</H2>
+          <H3>{title}</H3>
         </Title>
         <ItemsContainer>
           {items.map((item) => (
             <ItemRow key={item.name}>
               <Caption>{item.name}</Caption>
-              <CaptionBold>{formatValue(item.value)}</CaptionBold>
+              <Caption emphasized>{formatValue(item.value)}</Caption>
             </ItemRow>
           ))}
         </ItemsContainer>

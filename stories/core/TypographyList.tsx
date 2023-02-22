@@ -1,12 +1,18 @@
 import { ColorName } from '@/styles/theme'
 import styled from 'styled-components'
 import {
-  Body,
+  Body1,
   H1,
   H2,
   H3,
   Caption,
-  CaptionBold,
+  H4,
+  H5,
+  H6,
+  Subline1,
+  Subline2,
+  Body2,
+  Overline,
 } from '@/components/core/Typography'
 
 const Container = styled.div`
@@ -31,28 +37,64 @@ const TypographyList = ({ $color }: TypographyListProps) => {
   return (
     <Container>
       <TypographyRow>
-        <Body>H1</Body>
+        <Body1>H1 emphasized</Body1>
+        <H1 emphasized $color={$color}>
+          {'Welcome to Cabin'}
+        </H1>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>H1</Body1>
         <H1 $color={$color}>{'Cabin Activity'}</H1>
       </TypographyRow>
       <TypographyRow>
-        <Body>H2</Body>
-        <H2 $color={$color}>{'DASHBOARD'}</H2>
+        <Body1>H2</Body1>
+        <H2 $color={$color}>{'Dashboard'}</H2>
       </TypographyRow>
       <TypographyRow>
-        <Body>H3</Body>
+        <Body1>H3</Body1>
         <H3 $color={$color}>{'Jane Doe'}</H3>
       </TypographyRow>
       <TypographyRow>
-        <Body>Body</Body>
-        <Body $color={$color}>{'Leveled up to a Member Builder'}</Body>
+        <Body1>H4</Body1>
+        <H4 $color={$color}>{'Welcome to Cabin'}</H4>
       </TypographyRow>
       <TypographyRow>
-        <Body>Caption</Body>
+        <Body1>H5</Body1>
+        <H5 $color={$color}>{'Welcome to Cabin'}</H5>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>H6</Body1>
+        <H6 $color={$color}>{'Welcome to Cabin'}</H6>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Subline1</Body1>
+        <Subline1 $color={$color}>{'Welcome to Cabin'}</Subline1>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Subline2</Body1>
+        <Subline2 $color={$color}>{'Welcome to Cabin'}</Subline2>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Body1</Body1>
+        <Body1 $color={$color}>{'Leveled up to a Member Builder'}</Body1>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Body2</Body1>
+        <Body2 $color={$color}>{'Welcome to Cabin'}</Body2>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Caption</Body1>
         <Caption $color={$color}>{'10 hours ago'}</Caption>
       </TypographyRow>
       <TypographyRow>
-        <Body>Caption Bold</Body>
-        <CaptionBold $color={$color}>{'10.4K'}</CaptionBold>
+        <Body1>Caption emphasized</Body1>
+        <Caption emphasized $color={$color}>
+          {'10.4K'}
+        </Caption>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>Overline</Body1>
+        <Overline $color={$color}>{'Welcome to Cabin'}</Overline>
       </TypographyRow>
     </Container>
   )

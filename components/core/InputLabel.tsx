@@ -1,15 +1,11 @@
 import styled from 'styled-components'
-import { Caption, formLabelStyles } from './Typography'
+import { Caption, Subline1 } from './Typography'
 
 const InputDescriptionContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-`
-
-const InputLabelContainer = styled.div`
-  ${formLabelStyles}
 `
 
 const InputHelperText = styled(Caption)`
@@ -27,11 +23,7 @@ export const InputLabel = ({
   helperText,
 }: InputLabelProps) => (
   <InputDescriptionContainer>
-    {label && (
-      <InputLabelContainer>{`${label} ${
-        required ? '*' : ''
-      }`}</InputLabelContainer>
-    )}
+    {label && <Subline1>{`${label} ${required ? '*' : ''}`}</Subline1>}
     {helperText && <InputHelperText>{helperText}</InputHelperText>}
   </InputDescriptionContainer>
 )

@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
-import { formLabelStyles } from './Typography'
+import { buttonStyles } from './Typography'
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary'
 
@@ -9,7 +9,7 @@ interface StyledButtonProps {
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
-  ${formLabelStyles}
+  ${buttonStyles}
   cursor: pointer;
   display: flex;
   flex-direction: row;

@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { UserRejectedRequestError } from 'wagmi'
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
@@ -7,7 +6,7 @@ import { NoSsr } from '../core/NoSsr'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
-import { Body, H1, H2 } from '../core/Typography'
+import { Body1, H1, H3 } from '../core/Typography'
 import { Button } from '../core/Button'
 import { Circle } from '../core/Circle'
 import Icon from '../core/Icon'
@@ -24,7 +23,7 @@ export const Login = () => {
               source="/images/welcome-logo.png"
             />
             <H1>Welcome to Cabin</H1>
-            <Body>Discover, build & explore within the Cabin network</Body>
+            <Body1>Discover, build & explore within the Cabin network</Body1>
             <ConnectKitButton.Custom>
               {({ show, address, isConnected }) => (
                 <SignInButton
@@ -36,7 +35,7 @@ export const Login = () => {
             </ConnectKitButton.Custom>
             <CabinCityLink href="https://cabin.city">
               <Icon name="back-arrow" size={1.6} />
-              <H2>Back to cabin.city</H2>
+              <H3>Back to cabin.city</H3>
             </CabinCityLink>
           </LoginContentContainer>
         </ContentCard>

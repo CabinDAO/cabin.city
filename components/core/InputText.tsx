@@ -7,10 +7,10 @@ import {
 } from 'react'
 import styled from 'styled-components'
 import { InputBase } from './InputBase'
-import { inputFieldStyles } from './Typography'
+import { subline2Styles } from './Typography'
 
 const StyledInput = styled.input`
-  ${inputFieldStyles}
+  ${subline2Styles}
   display: block;
   width: 100%;
   outline: none;

@@ -3,7 +3,7 @@ import { InputText } from '../core/InputText'
 import Icon from '../core/Icon'
 import { AutofitImage } from '../core/AutofitImage'
 import { MutableRefObject, useRef, useState } from 'react'
-import { CaptionBold } from '../core/Typography'
+import { Caption } from '../core/Typography'
 import { ScrollToTop } from '../core/ScrollToTop'
 import { OwnedNft } from 'alchemy-sdk'
 
@@ -90,7 +90,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
                   alt={nft.title}
                 />
               </NftImage>
-              <CaptionBold>{nft.title}</CaptionBold>
+              <Caption emphasized>{nft.title}</Caption>
             </SearchResult>
           )
         })}

@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useUser } from '../auth/useUser'
 import { TitleCard } from '../core/TitleCard'
-import { Body } from '../core/Typography'
+import { Body1 } from '../core/Typography'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 
 export const ProfileView = ({}) => {
@@ -16,9 +16,9 @@ export const ProfileView = ({}) => {
   return (
     <SingleColumnLayout>
       <TitleCard title={`Profile #${profileId} is coming`} icon="profile" />
-      <Body>{user?.name}</Body>
-      <Body>{user?.email}</Body>
-      <Body>{user?.account.address}</Body>
+      <Body1>{user?.name}</Body1>
+      <Body1>{user?.email}</Body1>
+      <Body1>{user?.account.address}</Body1>
     </SingleColumnLayout>
   )
 }

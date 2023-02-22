@@ -6,7 +6,7 @@ import {
   modalContentHorizontalPadding,
   modalContentVerticalPadding,
 } from '../modals/modal.styles'
-import { H2 } from '../Typography'
+import { H3 } from '../Typography'
 
 const Container = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ export const ModalTitle = (props: ModalTitleProps) => {
   return (
     <Container>
       <div>{theStartAdornment}</div>
-      <H2>{text}</H2>
+      <H3>{text}</H3>
       <div>{endAdornment}</div>
     </Container>
   )

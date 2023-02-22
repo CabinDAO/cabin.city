@@ -1,5 +1,5 @@
 import { useUser } from '@/components/auth/useUser'
-import { Body, H1 } from '@/components/core/Typography'
+import { Body1, H1 } from '@/components/core/Typography'
 import { OnboardingLayout } from '@/components/layouts/OnboardingLayout'
 import { useLogTrackingEventMutation } from '@/generated/graphql'
 
@@ -27,9 +27,9 @@ const TrackingEventsDemo = () => {
       <button onClick={handleButtonClick}>Click me</button>
       <H1>Your Tracking Events</H1>
       {user.trackingEvents.data.map((event) => (
-        <Body key={event?._id}>
+        <Body1 key={event?._id}>
           {event?.key}: {event?.count}
-        </Body>
+        </Body1>
       ))}
     </OnboardingLayout>
   )

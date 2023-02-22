@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { Body } from './Typography'
+import { Body1 } from './Typography'
 
 type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 type TooltipAlign = 'start' | 'center' | 'end'
@@ -194,7 +194,7 @@ const Tooltip = ({
         offset={offset}
       >
         <TooltipContainer paragraph={paragraph} width={width}>
-          <Body $color="yellow100">{tooltip}</Body>
+          <Body1 $color="yellow100">{tooltip}</Body1>
         </TooltipContainer>
       </TooltipPosition>
     </Wrapper>

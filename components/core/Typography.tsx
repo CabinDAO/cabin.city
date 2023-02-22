@@ -5,79 +5,125 @@ interface TypographyProps {
   $color?: ColorName
 }
 
-const fonts = {
-  primary: 'Inter',
-  secondary: 'IBM Plex Mono',
+interface EmphasizableTypographyProps extends TypographyProps {
+  emphasized?: boolean
 }
 
-const headerSharedStyles = css<TypographyProps>`
-  font-family: ${fonts.primary};
-  font-weight: 600;
+const fonts = {
+  inter: 'Inter',
+  ibmPlexMono: 'IBM Plex Mono',
+}
+
+const typographySharedStyles = css<TypographyProps>`
   font-style: normal;
   margin: 0;
   color: ${(props) =>
     props.$color ? props.theme.colors[props.$color] : theme.colors.green900};
 `
 
-const h1Styles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.secondary};
-  font-size: 2.4rem;
-  line-height: 3.1rem;
+export const h1Styles = css<EmphasizableTypographyProps>`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
+  font-size: ${({ emphasized }) => (emphasized ? '3.2rem' : '2.4rem')};
+  line-height: 3.12rem;
 `
 
-const h2Styles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.secondary};
-  font-size: 1.6rem;
+export const h2Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
-  line-height: 2.1rem;
+  font-size: 2rem;
+  line-height: 2.6rem;
+`
+
+export const h3Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.08rem;
   text-transform: uppercase;
 `
 
-const h3Styles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.primary};
-  font-size: 1.6rem;
+export const h4Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
   font-weight: 700;
-  line-height: 1.9rem;
-`
-
-const bodyStyles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.primary};
-  font-weight: 500;
   font-size: 1.6rem;
-  line-height: 1.9rem;
+  line-height: 1.936rem;
 `
 
-const captionStyles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.primary};
-  font-weight: 400;
-  font-size: 1.3rem;
-  line-height: 1.6rem;
+export const h5Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 2.08rem;
 `
 
-const captionBoldStyles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.primary};
+export const h6Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
   font-weight: 500;
   font-size: 1.3rem;
-  line-height: 1.6rem;
+  line-height: 1.573rem;
 `
 
-export const inputFieldStyles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.primary};
+export const subline1Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 1.82rem;
+`
+
+export const subline2Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
   font-weight: 400;
   font-size: 1.4rem;
   line-height: 1.7rem;
 `
 
-export const formLabelStyles = css`
-  ${headerSharedStyles}
-  font-family: ${fonts.secondary};
+export const body1Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
+  font-weight: 500;
+  font-size: 1.6rem;
+  line-height: 1.9rem;
+`
+
+export const body2Styles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.95rem;
+  opacity: 0.75;
+`
+
+export const captionStyles = css<EmphasizableTypographyProps>`
+  ${typographySharedStyles}
+  font-family: ${fonts.inter};
+  font-weight: ${({ emphasized }) => (emphasized ? '500' : '400')};
+  font-size: 1.3rem;
+  line-height: 1.6rem;
+  opacity: ${({ emphasized }) => (emphasized ? 'inherit' : '0.75')};
+`
+
+export const overlineStyles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.7rem;
+  text-transform: uppercase;
+`
+
+export const buttonStyles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
   font-size: 1.4rem;
   line-height: 1.8rem;
@@ -95,14 +141,38 @@ export const H3 = styled.h3`
   ${h3Styles}
 `
 
-export const Body = styled.p`
-  ${bodyStyles}
+export const H4 = styled.h4`
+  ${h4Styles}
+`
+
+export const H5 = styled.h5`
+  ${h5Styles}
+`
+
+export const H6 = styled.h6`
+  ${h6Styles}
+`
+
+export const Subline1 = styled.h6`
+  ${subline1Styles}
+`
+
+export const Subline2 = styled.h6`
+  ${subline2Styles}
+`
+
+export const Body1 = styled.p`
+  ${body1Styles}
+`
+
+export const Body2 = styled.p`
+  ${body2Styles}
 `
 
 export const Caption = styled.p`
   ${captionStyles}
 `
 
-export const CaptionBold = styled.p`
-  ${captionBoldStyles}
+export const Overline = styled.p`
+  ${overlineStyles}
 `

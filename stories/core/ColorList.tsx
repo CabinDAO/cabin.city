@@ -1,4 +1,4 @@
-import { Body, H3 } from '@/components/core/Typography'
+import { Body1, H3 } from '@/components/core/Typography'
 import theme, { availableColors } from '@/styles/theme'
 import styled from 'styled-components'
 
@@ -80,7 +80,7 @@ const ColorPaletteCard = ({ color }: ColorPaletteCardProps) => (
     <Color color={color} />
     <ColorInfo>
       <H3>{theme.colors[color as keyof typeof theme.colors]}</H3>
-      <Body>{color}</Body>
+      <Body1>{color}</Body1>
     </ColorInfo>
   </ColorCard>
 )
