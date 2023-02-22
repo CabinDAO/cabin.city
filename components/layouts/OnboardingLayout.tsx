@@ -10,10 +10,10 @@ const Container = styled.div`
   flex-direction: column;
   min-height: 100vh;
   min-width: 100vw;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   gap: 4.8rem;
-  padding: 4rem;
+  padding: 0 1.6rem;
 `
 
 export const OnboardingLayout = ({ children }: LayoutProps) => {

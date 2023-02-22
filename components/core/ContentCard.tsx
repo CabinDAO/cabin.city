@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { Notch } from './Notch'
+import { notch } from '../layouts/common.styles'
 
 type ContainerShape = 'default' | 'notch' | 'curve'
 type ContainerFillType = 'outline' | 'soft' | 'hard'
@@ -13,23 +13,16 @@ interface ContainerProps {
   notchSize?: number
 }
 
-const StyledNotch = styled(Notch)`
-  display: none;
-`
-
 const BaseContainer = styled.div<ContainerProps>`
+  position: relative;
   display: flex;
   background-color: ${({ theme }) => theme.colors.yellow200};
   width: 100%;
 
-  ${({ shape }) => {
+  ${({ shape, notchSize }) => {
     switch (shape) {
       case 'notch':
-        return css`
-          ${StyledNotch} {
-            display: flex;
-          }
-        `
+        return notch(notchSize)
       case 'curve':
         return css`
           border-bottom-right-radius: 4.8rem;
@@ -65,13 +58,23 @@ const BaseContainer = styled.div<ContainerProps>`
     `}
 `
 
+const Notch = styled.div<{ notchSize: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: ${(props) => props.notchSize}rem};
+  height: ${(props) => props.notchSize}rem};
+  background-color: black;
+  border: solid 1px black;
+`
+
 export const ContentCard = ({
   children,
   shadow,
   shape,
   fillType,
   className,
-  notchSize,
+  notchSize = 1.6,
 }: ContainerProps) => {
   return (
     <BaseContainer
@@ -79,9 +82,12 @@ export const ContentCard = ({
       shadow={!!shadow}
       shape={shape ?? 'default'}
       fillType={fillType ?? 'outline'}
+      notchSize={notchSize}
     >
-      <StyledNotch size={notchSize} />
-      {children}
+      <>
+        {shape === 'notch' ? <Notch notchSize={notchSize} /> : null}
+        {children}
+      </>
     </BaseContainer>
   )
 }

@@ -1,27 +1,67 @@
+import Image from 'next/image'
 import { UserRejectedRequestError } from 'wagmi'
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
 import { ConnectKitButton } from 'connectkit'
 import { NoSsr } from '../core/NoSsr'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
+import { ContentCard } from '../core/ContentCard'
+import styled from 'styled-components'
+import { Body, H1, H2 } from '../core/Typography'
+import { Button } from '../core/Button'
+import { Circle } from '../core/Circle'
+import Icon from '../core/Icon'
 
 export const Login = () => {
   return (
     <NoSsr>
-      <ConnectKitButton.Custom>
-        {({ show, address, isConnected }) => (
-          <>
-            <SignInButton
-              onClick={show}
-              address={address}
-              isConnected={isConnected}
+      <LoginContainer>
+        <ContentCard shadow shape="notch">
+          <LoginContentContainer>
+            <Circle
+              size={6.4}
+              shadowMode="always"
+              source="/images/welcome-logo.png"
             />
-          </>
-        )}
-      </ConnectKitButton.Custom>
+            <H1>Welcome to Cabin</H1>
+            <Body>Discover, build & explore within the Cabin network</Body>
+            <ConnectKitButton.Custom>
+              {({ show, address, isConnected }) => (
+                <SignInButton
+                  onClick={show}
+                  address={address}
+                  isConnected={isConnected}
+                />
+              )}
+            </ConnectKitButton.Custom>
+            <CabinCityLink href="https://cabin.city">
+              <Icon name="back-arrow" size={1.6} />
+              <H2>Back to cabin.city</H2>
+            </CabinCityLink>
+          </LoginContentContainer>
+        </ContentCard>
+      </LoginContainer>
     </NoSsr>
   )
 }
+
+const LoginContainer = styled.div`
+  margin: 3.2rem;
+`
+
+const LoginContentContainer = styled.div`
+  padding: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
+`
+
+const CabinCityLink = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+`
 
 class SignVerificationError extends Error {}
 
@@ -151,11 +191,7 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
   // 4. Forward appropriately
   useEffect(() => {
     if (loginState.status === LoginStatus.FORWARDING) {
-      Router.push(
-        loginState.profileId
-          ? `/profile/${loginState.profileId}`
-          : '/registration'
-      )
+      Router.push(loginState.profileId ? '/dashboard' : '/registration')
     }
   }, [loginState.status, loginState.profileId])
 
@@ -169,13 +205,5 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
     }
   }
 
-  return (
-    <button
-      // variant="primary"
-      // leadingIcon="currency-ethereum"
-      onClick={handleClick}
-    >
-      Sign in with Ethereum
-    </button>
-  )
+  return <Button onClick={handleClick}>Sign in with Ethereum</Button>
 }

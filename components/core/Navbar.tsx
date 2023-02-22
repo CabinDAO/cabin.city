@@ -1,14 +1,8 @@
 import Link from 'next/link'
 import styled from 'styled-components'
+import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
-import { Notch } from './Notch'
-
-const StyledNotch = styled(Notch)`
-  width: 1.2rem;
-  height: 1rem;
-  margin-bottom: -1rem;
-`
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -27,6 +21,7 @@ const Container = styled.nav`
   border: 0.1rem solid ${({ theme }) => theme.colors.green900};
   border-bottom-right-radius: 2.5rem;
   box-shadow: 0.8rem 0.8rem 0rem ${({ theme }) => theme.colors.yellow900};
+  ${notch(1)}
 `
 
 const Divider = styled.div`
@@ -52,7 +47,6 @@ interface NavbarProps {
 export const Navbar = (props: NavbarProps) => {
   return (
     <Container>
-      <StyledNotch />
       <SingleMenuItem>
         <MenuItemLink menuItem={'home'} />
       </SingleMenuItem>

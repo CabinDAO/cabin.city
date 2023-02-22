@@ -59,13 +59,15 @@ const Modal = ({
     return () => {
       document.body.style.overflow = 'auto'
     }
-  })
+  }, [active])
 
   return (
     <Wrapper active={active}>
-      <ClickAway onClickAway={hideOnClickAway && active ? onClose : null}>
-        <Content {...props}>{children}</Content>
-      </ClickAway>
+      {active && (
+        <ClickAway onClickAway={hideOnClickAway && active ? onClose : null}>
+          <Content {...props}>{children}</Content>
+        </ClickAway>
+      )}
     </Wrapper>
   )
 }

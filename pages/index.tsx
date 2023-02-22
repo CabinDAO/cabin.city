@@ -1,12 +1,21 @@
-import { Login } from '@/components/auth/Login'
-import { H1 } from '@/components/core/Typography'
-import { OnboardingLayout } from '@/components/layouts/OnboardingLayout'
+import { useUser } from '@/components/auth/useUser'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  return (
-    <OnboardingLayout>
-      <H1>Welcome to Cabin Census</H1>
-      <Login />
-    </OnboardingLayout>
-  )
+  const router = useRouter()
+  const { user, isUserLoading } = useUser()
+
+  useEffect(() => {
+    if (!isUserLoading) {
+      if (user) {
+        router.push('/dashboard')
+      } else {
+        router.push('/login')
+      }
+    }
+  }, [isUserLoading, user, router])
+
+  // TODO: Add loading state
+  return null
 }
