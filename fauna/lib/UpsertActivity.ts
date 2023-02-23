@@ -10,7 +10,7 @@ import { ToTimestamp } from './ToTimestamp'
 
 export interface UpsertActivityInput {
   key: string | Expr
-  timestamp: string | Expr
+  timestamp: string | Expr // String in epoch seconds or equivalent expression
   type: ActivityType
   profileRoleAdded?: ProfileRoleType
   transactionId?: string

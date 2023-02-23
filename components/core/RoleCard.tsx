@@ -1,8 +1,7 @@
-import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { range } from '@/utils/array'
 import { pxToRem } from '@/utils/display-utils'
-import { LevelInfo, levelInfoFromType } from '@/utils/levels'
-import { roleInfoFromType } from '@/utils/roles'
+import { LevelInfo } from '@/utils/levels'
+import { RoleInfo } from '@/utils/roles'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { ContentCard } from './ContentCard'
@@ -11,8 +10,8 @@ import IconButton from './IconButton'
 import { Body2, Caption, H3 } from './Typography'
 
 export interface RoleCardProps {
-  roleType: ProfileRoleType
-  levelType: ProfileRoleLevelType
+  roleInfo: RoleInfo
+  levelInfo: LevelInfo
   externalUrl?: string // This will be undefined if the role is not tied to a hat/token
 }
 
@@ -21,8 +20,7 @@ const IMAGE_SIZE_PX = 232
 const MAX_CONTAINER_WIDTH_PX = IMAGE_SIZE_PX + INNER_CONTAINER_PADDING_PX * 2
 
 export const RoleCard = (props: RoleCardProps) => {
-  const roleInfo = roleInfoFromType(props.roleType)
-  const levelInfo = levelInfoFromType(props.levelType)
+  const { roleInfo, levelInfo } = props
 
   return (
     <StyledContentCard shape="notch">

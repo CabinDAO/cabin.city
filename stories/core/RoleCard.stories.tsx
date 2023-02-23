@@ -1,5 +1,7 @@
 import { RoleCard } from '@/components/core/RoleCard'
 import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
+import { levelInfoFromType } from '@/utils/levels'
+import { roleInfoFromType } from '@/utils/roles'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
@@ -7,49 +9,49 @@ export default {
   component: RoleCard,
 } as ComponentMeta<typeof RoleCard>
 
-const Template: ComponentStory<typeof RoleCard> = (args) => (
-  <RoleCard {...args} />
-)
+const Template: ComponentStory<typeof RoleCard> = (args) => {
+  return <RoleCard {...args} />
+}
 
 export const BuilderApprentice = Template.bind({})
 BuilderApprentice.args = {
-  roleType: ProfileRoleType.Builder,
-  levelType: ProfileRoleLevelType.Apprentice,
+  roleInfo: roleInfoFromType(ProfileRoleType.Builder),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Apprentice),
 }
 
 export const ExternalUrl = Template.bind({})
 ExternalUrl.args = {
-  roleType: ProfileRoleType.Builder,
-  levelType: ProfileRoleLevelType.Apprentice,
+  roleInfo: roleInfoFromType(ProfileRoleType.Builder),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Apprentice),
   externalUrl: 'https://goerli.etherscan.io',
 }
 
 export const BuilderMember = Template.bind({})
 BuilderMember.args = {
-  roleType: ProfileRoleType.Builder,
-  levelType: ProfileRoleLevelType.Member,
+  roleInfo: roleInfoFromType(ProfileRoleType.Builder),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Member),
 }
 
 export const BuilderTopHat = Template.bind({})
 BuilderTopHat.args = {
-  roleType: ProfileRoleType.Builder,
-  levelType: ProfileRoleLevelType.TopHat,
+  roleInfo: roleInfoFromType(ProfileRoleType.Builder),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.TopHat),
 }
 
 export const NaturalistApprentice = Template.bind({})
 NaturalistApprentice.args = {
-  roleType: ProfileRoleType.Naturalist,
-  levelType: ProfileRoleLevelType.Apprentice,
+  roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Apprentice),
 }
 
 export const NaturalistMember = Template.bind({})
 NaturalistMember.args = {
-  roleType: ProfileRoleType.Naturalist,
-  levelType: ProfileRoleLevelType.Member,
+  roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Member),
 }
 
 export const NaturalistTopHat = Template.bind({})
 NaturalistTopHat.args = {
-  roleType: ProfileRoleType.Naturalist,
-  levelType: ProfileRoleLevelType.TopHat,
+  roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.TopHat),
 }

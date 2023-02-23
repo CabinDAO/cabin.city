@@ -95,34 +95,44 @@ interface PositionProps {
   offset?: number
 }
 
+// Disabling animation for now since the offsets are incorrect
+//
+// const TooltipPosition = styled.div<PositionProps>`
+//   position: absolute;
+//   ${(props) => setTooltipPosition(props.position, props.align, props.offset)}
+//   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+//   animation: ${(props) =>
+//     props.show
+//       ? 'fade-in 0.3s ease-in-out forwards'
+//       : 'fade-out 0.3s ease-in-out forwards'};
+//   @keyframes fade-in {
+//     0% {
+//       opacity: 0;
+//       transform: translate(120%, -50%);
+//     }
+//     100% {
+//       opacity: 1;
+//       transform: translate(100%, -50%);
+//     }
+//   }
+//   @keyframes fade-out {
+//     0% {
+//       opacity: 1;
+//       transform: translate(100%, -50%);
+//     }
+//     100% {
+//       opacity: 0;
+//       transform: translate(120%, -50%);
+//     }
+//   }
+// `
+
 const TooltipPosition = styled.div<PositionProps>`
   position: absolute;
   ${(props) => setTooltipPosition(props.position, props.align, props.offset)}
-  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-  animation: ${(props) =>
-    props.show
-      ? 'fade-in 0.3s ease-in-out forwards'
-      : 'fade-out 0.3s ease-in-out forwards'};
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-      transform: translate(120%, -50%);
-    }
-    100% {
-      opacity: 1;
-      transform: translate(100%, -50%);
-    }
-  }
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-      transform: translate(100%, -50%);
-    }
-    100% {
-      opacity: 0;
-      transform: translate(120%, -50%);
-    }
-  }
+  transition: all 300ms ease;
+  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
+  opacity: ${(props) => (props.show ? '1' : '0')};
 `
 
 interface TooltipContainerProps {

@@ -10,6 +10,14 @@ query GetActivities($size: Int, $cursor: String) {
 fragment Activity on Activity {
   _id
   timestamp
+  type
+  metadata {
+    badgeId
+    profileRole {
+      role
+      level
+    }
+  }
   profile {
     _id
     name
