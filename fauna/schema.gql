@@ -27,6 +27,7 @@ type Profile {
   name: String!
   email: String!
   bio: String
+  location: String
   avatar: ProfileAvatar
   roles: [ProfileRole!]!
   citizenshipStatus: CitizenshipStatus
@@ -94,12 +95,13 @@ type ProfileContactField @embedded {
 
 enum ProfileContactFieldType {
   Email
-  Twitter
   Discord
+  Twitter
+  Instagram
+  LinkedIn
   Telegram
-  Github
+  Lens
   Website
-  Other
 }
 
 type TrackingEvent {

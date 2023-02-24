@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { MainContent } from './common.styles'
+import { FixedWidthMainContent } from './common.styles'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -19,7 +19,7 @@ const Container = styled.div`
 export const OnboardingLayout = ({ children }: LayoutProps) => {
   return (
     <Container>
-      <MainContent>{children}</MainContent>
+      <FixedWidthMainContent>{children}</FixedWidthMainContent>
     </Container>
   )
 }

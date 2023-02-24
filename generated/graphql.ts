@@ -487,6 +487,7 @@ export type PartialUpdateProfileInput = {
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
   avatar?: InputMaybe<PartialUpdateProfileAvatarInput>;
   roles?: InputMaybe<Array<PartialUpdateProfileRoleInput>>;
   citizenshipStatus?: InputMaybe<CitizenshipStatus>;
@@ -747,6 +748,7 @@ export type Profile = {
   trackingEvents: TrackingEventPage;
   name: Scalars['String'];
   avatar?: Maybe<ProfileAvatar>;
+  location?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   /** The document's ID. */
   _id: Scalars['ID'];
@@ -783,12 +785,13 @@ export type ProfileContactField = {
 
 export enum ProfileContactFieldType {
   Email = 'Email',
-  Twitter = 'Twitter',
   Discord = 'Discord',
+  Twitter = 'Twitter',
+  Instagram = 'Instagram',
+  LinkedIn = 'LinkedIn',
   Telegram = 'Telegram',
-  Github = 'Github',
-  Website = 'Website',
-  Other = 'Other'
+  Lens = 'Lens',
+  Website = 'Website'
 }
 
 /** The pagination object for elements of type 'Profile'. */
@@ -970,9 +973,9 @@ export type TrackingEventPage = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } };
 
-export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> } };
+export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> };
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
@@ -993,6 +996,17 @@ export type LogTrackingEventMutationVariables = Exact<{
 
 export type LogTrackingEventMutation = { __typename?: 'Mutation', logTrackingEvent: { __typename?: 'TrackingEvent', _id: string, key: string, count: number } };
 
+export type UpdateProfileMutationVariables = Exact<{
+  id: Scalars['ID'];
+  roles?: InputMaybe<Array<PartialUpdateProfileRoleInput> | PartialUpdateProfileRoleInput>;
+  bio?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  contactFields?: InputMaybe<Array<PartialUpdateProfileContactFieldInput> | PartialUpdateProfileContactFieldInput>;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
+
 export const TrackingEventFragmentDoc = gql`
     fragment TrackingEvent on TrackingEvent {
   _id
@@ -1005,6 +1019,13 @@ export const MeFragmentDoc = gql`
   _id
   name
   email
+  bio
+  location
+  roles {
+    role
+    level
+    hatId
+  }
   avatar {
     url
   }
@@ -1016,6 +1037,10 @@ export const MeFragmentDoc = gql`
     data {
       ...TrackingEvent
     }
+  }
+  contactFields {
+    type
+    value
   }
 }
     ${TrackingEventFragmentDoc}`;
@@ -1151,3 +1176,43 @@ export function useLogTrackingEventMutation(baseOptions?: Apollo.MutationHookOpt
 export type LogTrackingEventMutationHookResult = ReturnType<typeof useLogTrackingEventMutation>;
 export type LogTrackingEventMutationResult = Apollo.MutationResult<LogTrackingEventMutation>;
 export type LogTrackingEventMutationOptions = Apollo.BaseMutationOptions<LogTrackingEventMutation, LogTrackingEventMutationVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($id: ID!, $roles: [PartialUpdateProfileRoleInput!], $bio: String, $location: String, $contactFields: [PartialUpdateProfileContactFieldInput!]) {
+  partialUpdateProfile(
+    id: $id
+    data: {roles: $roles, bio: $bio, location: $location, contactFields: $contactFields}
+  ) {
+    ...Me
+  }
+}
+    ${MeFragmentDoc}`;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      roles: // value for 'roles'
+ *      bio: // value for 'bio'
+ *      location: // value for 'location'
+ *      contactFields: // value for 'contactFields'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;

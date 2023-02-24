@@ -2,13 +2,7 @@ import styled from 'styled-components'
 import { IconName } from '../core/Icon'
 import { TitleCard } from '../core/TitleCard'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
-import { MainContent, NavbarContainer } from './common.styles'
-
-interface LayoutProps {
-  children: React.ReactNode
-  title: string
-  iconName?: IconName
-}
+import { FixedWidthMainContent, NavbarContainer } from './common.styles'
 
 const Container = styled.div`
   display: flex;
@@ -29,16 +23,22 @@ const ColumnsContainer = styled.div`
   height: auto;
 `
 
+interface LayoutProps {
+  children: React.ReactNode
+  title: string
+  iconName?: IconName
+}
+
 export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
   return (
     <Container>
       <NavbarContainer>
         <ProfileNavbar />
       </NavbarContainer>
-      <MainContent>
+      <FixedWidthMainContent>
         <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />
         <ColumnsContainer>{children}</ColumnsContainer>
-      </MainContent>
+      </FixedWidthMainContent>
     </Container>
   )
 }

@@ -2,7 +2,7 @@ import { HTMLAttributes } from 'react'
 import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary'
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link'
 
 interface StyledButtonProps {
   variant: ButtonVariant
@@ -57,6 +57,17 @@ const StyledButton = styled.button<StyledButtonProps>`
             background-color: ${({ theme }) => theme.colors.yellow100};
             border: solid 0.1rem ${({ theme }) => theme.colors.yellow900};
             margin-bottom: 0;
+          }
+        `
+      case 'link':
+        return css`
+          background-color: transparent;
+          color: ${({ theme }) => theme.colors.green900};
+          border: none;
+
+          &:hover {
+            background-color: ${({ theme }) => theme.colors.yellow100};
+            border: none;
           }
         `
       default:

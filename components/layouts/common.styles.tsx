@@ -6,9 +6,12 @@ export const MainContent = styled.main`
   align-self: center;
   justify-content: center;
   align-items: center;
-  min-width: 60vw;
   gap: 4.8rem;
   height: 100%;
+`
+
+export const FixedWidthMainContent = styled(MainContent)`
+  width: 60vw;
 `
 
 export const NavbarContainer = styled.div`

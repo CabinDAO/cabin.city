@@ -24,3 +24,9 @@ Tertiary.args = {
   children: 'Button',
   variant: 'tertiary',
 }
+
+export const Link = Template.bind({})
+Link.args = {
+  children: 'Button',
+  variant: 'link',
+}

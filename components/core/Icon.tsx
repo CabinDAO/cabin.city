@@ -8,6 +8,7 @@ import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import checkSvg from './svg/check.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
+import chevronRightSvg from './svg/chevron-right.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
 import creatorSvg from './svg/creator.svg'
@@ -32,6 +33,7 @@ import searchSvg from './svg/search.svg'
 import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
+import trashSvg from './svg/trash.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 
 export const IconSvgs = {
@@ -40,6 +42,7 @@ export const IconSvgs = {
   caretaker: caretakerSvg,
   check: checkSvg,
   'chevron-down': chevronDownSvg,
+  'chevron-right': chevronRightSvg,
   citizen: citizenSvg,
   close: closeSvg,
   creator: creatorSvg,
@@ -64,6 +67,7 @@ export const IconSvgs = {
   stay: staySvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
+  trash: trashSvg,
   'up-arrow': upArrowSvg,
 }
 

@@ -1,0 +1,19 @@
+mutation UpdateProfile(
+  $id: ID!
+  $roles: [PartialUpdateProfileRoleInput!]
+  $bio: String
+  $location: String
+  $contactFields: [PartialUpdateProfileContactFieldInput!]
+) {
+  partialUpdateProfile(
+    id: $id
+    data: {
+      roles: $roles
+      bio: $bio
+      location: $location
+      contactFields: $contactFields
+    }
+  ) {
+    ...Me
+  }
+}

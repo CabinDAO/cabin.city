@@ -1,18 +1,55 @@
+import { useLogTrackingEventMutation } from '@/generated/graphql'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { TitleCard } from '../core/TitleCard'
-import { OnboardingLayout } from '../layouts/OnboardingLayout'
+import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { StepConfig, steps } from './setup/step-configuration'
 
 export const SetupProfileView = ({}) => {
   const router = useRouter()
+  const [logTrackingEvent] = useLogTrackingEventMutation()
   const { id: profileId } = router.query
 
-  if (!profileId) {
+  const [currentStep, setCurrentStep] = useState<StepConfig>(steps[0])
+
+  const handleNext = () => {
+    resolveTransitionStep(steps[steps.indexOf(currentStep) + 1])
+  }
+
+  const handleBack = () => {
+    resolveTransitionStep(steps[steps.indexOf(currentStep) - 1])
+  }
+
+  const resolveTransitionStep = (targetStep: StepConfig) => {
+    const isLastStep = steps.indexOf(currentStep) === steps.length - 1
+
+    if (targetStep) {
+      setCurrentStep(targetStep)
+    } else if (isLastStep) {
+      logTrackingEvent({
+        variables: {
+          key: 'profile_setup_finished',
+        },
+      })
+
+      router.push('/profile/[id]', `/profile/${profileId}`)
+    }
+  }
+
+  if (!profileId || !currentStep) {
     return null
   }
 
+  const CurrentComponent = currentStep.component
+
   return (
-    <OnboardingLayout>
-      <TitleCard title={`Profile #${profileId} is coming`} icon="profile" />
-    </OnboardingLayout>
+    <SingleColumnLayout>
+      <TitleCard title="Profile setup" icon="close" />
+      <CurrentComponent
+        name={currentStep.name}
+        onNext={handleNext}
+        onBack={handleBack}
+      />
+    </SingleColumnLayout>
   )
 }

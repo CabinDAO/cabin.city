@@ -1,4 +1,4 @@
-import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
+import { ProfileRoleLevelType } from '@/generated/graphql'
 
 export interface LevelInfo {
   name: string

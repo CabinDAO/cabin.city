@@ -25,7 +25,7 @@ const Container = styled.div<ContainerProps>`
   ${(props) =>
     props.filled &&
     `
-    background: ${props.theme.colors.primary050};
+    background: ${props.theme.colors.white};
     color: ${
       props.disabled ? props.theme.colors.red600 : props.theme.colors.yellow900
     };

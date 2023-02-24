@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
-import { useUser } from '../auth/useUser'
-import { TitleCard } from '../core/TitleCard'
-import { Body1 } from '../core/Typography'
+import { ProfileProgressCard } from '../core/ProfileProgressCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import styled from 'styled-components'
+import { useUser } from '../auth/useUser'
+import { getCountForEvent } from '@/utils/events'
 
 export const ProfileView = ({}) => {
   const router = useRouter()
@@ -13,12 +14,22 @@ export const ProfileView = ({}) => {
     return null
   }
 
+  const complete = getCountForEvent(user, 'profile_setup_finished')
+
   return (
     <SingleColumnLayout>
-      <TitleCard title={`Profile #${profileId} is coming`} icon="profile" />
-      <Body1>{user?.name}</Body1>
-      <Body1>{user?.email}</Body1>
-      <Body1>{user?.account.address}</Body1>
+      <InnerContainer>
+        {user?._id === profileId && (
+          <ProfileProgressCard
+            progress={complete ? 100 : 25}
+            profileId={profileId as string}
+          />
+        )}
+      </InnerContainer>
     </SingleColumnLayout>
   )
 }
+
+const InnerContainer = styled.div`
+  min-width: 60vw;
+`

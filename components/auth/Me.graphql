@@ -10,6 +10,13 @@ fragment Me on Profile {
   _id
   name
   email
+  bio
+  location
+  roles {
+    role
+    level
+    hatId
+  }
   avatar {
     url
   }
@@ -21,6 +28,10 @@ fragment Me on Profile {
     data {
       ...TrackingEvent
     }
+  }
+  contactFields {
+    type
+    value
   }
 }
 

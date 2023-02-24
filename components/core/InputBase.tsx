@@ -35,6 +35,7 @@ const ChildrenContainer = styled.div`
   flex-direction: row;
   align-items: center;
   flex: 1;
+  padding: 0.2rem;
   overflow: scroll;
   height: 100%;
   scrollbar-width: none;

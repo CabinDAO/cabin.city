@@ -9,7 +9,7 @@ export interface RoleInfo {
   backgroundImagePath: string
 }
 
-const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
+export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
   [ProfileRoleType.Builder]: {
     name: 'Builder',
     description:
