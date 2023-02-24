@@ -1,20 +1,23 @@
 import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
 import { DataContainer } from '../core/DataContainer'
 import { ActivityList } from './ActivityList'
+import { useGetActivitySummaryQuery } from '@/generated/graphql'
 
 export const DashboardView = () => {
+  const { data } = useGetActivitySummaryQuery()
+
   const dashboardItems = [
     {
       name: 'Members',
-      value: 18000,
+      value: data?.profilesCount ?? 0,
     },
     {
       name: 'Token Holders',
-      value: 10040,
+      value: data?.tokenHoldersCount ?? 0,
     },
     {
       name: 'Citizens',
-      value: 2700,
+      value: data?.citizensCount ?? 0,
     },
   ]
 

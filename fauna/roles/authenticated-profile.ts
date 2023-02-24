@@ -114,6 +114,18 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('accounts_with_cabin_token_balance'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_by_citizenship_status'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -129,6 +141,24 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('all_activities'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('profiles_count'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('token_holders_count'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('profiles_by_citizenship_status_count'),
       actions: {
         call: true,
       },

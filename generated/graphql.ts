@@ -831,6 +831,7 @@ export type Query = {
   __typename?: 'Query';
   /** Find a document from the collection of 'OtterspaceBadge' by its id. */
   findOtterspaceBadgeByID?: Maybe<OtterspaceBadge>;
+  citizensCount: Scalars['Int'];
   /** Find a document from the collection of 'Profile' by its id. */
   findProfileByID?: Maybe<Profile>;
   /** Find a document from the collection of 'BlockSyncAttempt' by its id. */
@@ -840,6 +841,7 @@ export type Query = {
   accountByAddress?: Maybe<Account>;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
+  profilesCount: Scalars['Int'];
   /** Find a document from the collection of 'Hat' by its id. */
   findHatByID?: Maybe<Hat>;
   syncAttemptByKeyAndStatus?: Maybe<BlockSyncAttempt>;
@@ -852,12 +854,18 @@ export type Query = {
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
+  tokenHoldersCount: Scalars['Int'];
   allHats: HatPage;
 };
 
 
 export type QueryFindOtterspaceBadgeByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryCitizensCountArgs = {
+  status: CitizenshipStatus;
 };
 
 
@@ -988,6 +996,11 @@ export type GetActivitiesQueryVariables = Exact<{
 export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badgeId?: string | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
 
 export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badgeId?: string | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+
+export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetActivitySummaryQuery = { __typename?: 'Query', profilesCount: number, tokenHoldersCount: number, citizensCount: number };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1143,6 +1156,40 @@ export function useGetActivitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetActivitiesQueryHookResult = ReturnType<typeof useGetActivitiesQuery>;
 export type GetActivitiesLazyQueryHookResult = ReturnType<typeof useGetActivitiesLazyQuery>;
 export type GetActivitiesQueryResult = Apollo.QueryResult<GetActivitiesQuery, GetActivitiesQueryVariables>;
+export const GetActivitySummaryDocument = gql`
+    query GetActivitySummary {
+  profilesCount
+  tokenHoldersCount
+  citizensCount(status: Verified)
+}
+    `;
+
+/**
+ * __useGetActivitySummaryQuery__
+ *
+ * To run a query within a React component, call `useGetActivitySummaryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetActivitySummaryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetActivitySummaryQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetActivitySummaryQuery(baseOptions?: Apollo.QueryHookOptions<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>(GetActivitySummaryDocument, options);
+      }
+export function useGetActivitySummaryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>(GetActivitySummaryDocument, options);
+        }
+export type GetActivitySummaryQueryHookResult = ReturnType<typeof useGetActivitySummaryQuery>;
+export type GetActivitySummaryLazyQueryHookResult = ReturnType<typeof useGetActivitySummaryLazyQuery>;
+export type GetActivitySummaryQueryResult = Apollo.QueryResult<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>;
 export const LogTrackingEventDocument = gql`
     mutation LogTrackingEvent($key: String!) {
   logTrackingEvent(key: $key) {
