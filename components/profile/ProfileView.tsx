@@ -31,5 +31,5 @@ export const ProfileView = ({}) => {
 }
 
 const InnerContainer = styled.div`
-  min-width: 60vw;
+  width: 100%;
 `

@@ -8,6 +8,7 @@ export const MainContent = styled.main`
   align-items: center;
   gap: 4.8rem;
   height: 100%;
+  width: 84rem;
 `
 
 export const FixedWidthMainContent = styled(MainContent)`
