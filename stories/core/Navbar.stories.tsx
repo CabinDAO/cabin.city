@@ -6,8 +6,10 @@ export default {
   component: Navbar,
 } as ComponentMeta<typeof Navbar>
 
-const Template: ComponentStory<typeof Navbar> = () => <Navbar profileId="123" />
+const Template: ComponentStory<typeof Navbar> = (args) => <Navbar {...args} />
 
 export const Default = Template.bind({})
 
-Default.args = {}
+Default.args = {
+  profileId: '123',
+}

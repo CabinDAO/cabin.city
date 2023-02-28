@@ -16,6 +16,7 @@ const Container = styled.div`
   gap: 4.8rem;
   padding: 4rem;
 `
+
 export const SingleColumnLayout = ({ children }: LayoutProps) => {
   return (
     <Container>

@@ -1,15 +1,14 @@
 import { ReactNode, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { Body1 } from './Typography'
+import { Subline1 } from './Typography'
 
-type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
-type TooltipAlign = 'start' | 'center' | 'end'
+export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
+export type TooltipAlign = 'start' | 'center' | 'end'
 
 const Wrapper = styled.div`
   position: relative;
   display: flex;
   align-items: flex-start;
-  z-index: 1;
 `
 
 const ChildWrapper = styled.div`
@@ -20,7 +19,8 @@ const ChildWrapper = styled.div`
 const setTooltipPosition = (
   position: TooltipPosition,
   align: TooltipAlign,
-  offset = 1.2
+  offset = 1.2,
+  animate = false
 ) => {
   if (position === 'bottom') {
     if (align === 'center') {
@@ -28,6 +28,12 @@ const setTooltipPosition = (
         left: 50%;
         bottom: -${offset}rem;
         transform: translate(-50%, 100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: -50, yPercentage: 120 },
+          end: { xPercentage: -50, yPercentage: 100 },
+          position,
+        })}
       `
     }
     if (align === 'start') {
@@ -35,6 +41,12 @@ const setTooltipPosition = (
         left: 4.8rem;
         bottom: -${offset}rem;
         transform: translate(-100%, 100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: -120, yPercentage: 120 },
+          end: { xPercentage: -100, yPercentage: 100 },
+          position,
+        })}
       `
     }
     if (align === 'end') {
@@ -42,6 +54,12 @@ const setTooltipPosition = (
         right: 4.8rem;
         bottom: -${offset}rem;
         transform: translate(100%, 100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: 100, yPercentage: 120 },
+          end: { xPercentage: 100, yPercentage: 100 },
+          position,
+        })}
       `
     }
   }
@@ -52,6 +70,12 @@ const setTooltipPosition = (
         left: 50%;
         top: -${offset}rem;
         transform: translate(-50%, -100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: -50, yPercentage: -120 },
+          end: { xPercentage: -50, yPercentage: -100 },
+          position,
+        })}
       `
     }
     if (align === 'start') {
@@ -59,6 +83,12 @@ const setTooltipPosition = (
         left: 4.8rem;
         top: -${offset}rem;
         transform: translate(-100%, -100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: -120, yPercentage: -120 },
+          end: { xPercentage: -100, yPercentage: -100 },
+          position,
+        })}
       `
     }
     if (align === 'end') {
@@ -66,6 +96,12 @@ const setTooltipPosition = (
         right: 4.8rem;
         top: -${offset}rem;
         transform: translate(100%, -100%);
+        ${animate &&
+        animation({
+          start: { xPercentage: 100, yPercentage: -120 },
+          end: { xPercentage: 100, yPercentage: -100 },
+          position,
+        })}
       `
     }
   }
@@ -75,6 +111,12 @@ const setTooltipPosition = (
       left: -${offset}rem;
       top: 50%;
       transform: translate(-100%, -50%);
+      ${animate &&
+      animation({
+        start: { xPercentage: -120, yPercentage: -50 },
+        end: { xPercentage: -100, yPercentage: -50 },
+        position,
+      })}
     `
   }
 
@@ -83,6 +125,12 @@ const setTooltipPosition = (
       right: -${offset}rem;
       top: 50%;
       transform: translate(100%, -50%);
+      ${animate &&
+      animation({
+        start: { xPercentage: 120, yPercentage: -50 },
+        end: { xPercentage: 100, yPercentage: -50 },
+        position,
+      })}
     `
   }
   return null
@@ -93,46 +141,63 @@ interface PositionProps {
   align: TooltipAlign
   show?: boolean
   offset?: number
+  animate: boolean
 }
 
-// Disabling animation for now since the offsets are incorrect
-//
-// const TooltipPosition = styled.div<PositionProps>`
-//   position: absolute;
-//   ${(props) => setTooltipPosition(props.position, props.align, props.offset)}
-//   visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-//   animation: ${(props) =>
-//     props.show
-//       ? 'fade-in 0.3s ease-in-out forwards'
-//       : 'fade-out 0.3s ease-in-out forwards'};
-//   @keyframes fade-in {
-//     0% {
-//       opacity: 0;
-//       transform: translate(120%, -50%);
-//     }
-//     100% {
-//       opacity: 1;
-//       transform: translate(100%, -50%);
-//     }
-//   }
-//   @keyframes fade-out {
-//     0% {
-//       opacity: 1;
-//       transform: translate(100%, -50%);
-//     }
-//     100% {
-//       opacity: 0;
-//       transform: translate(120%, -50%);
-//     }
-//   }
-// `
-
 const TooltipPosition = styled.div<PositionProps>`
+  ${(props) => !props.animate && `transition: all 300ms ease;`}
   position: absolute;
-  ${(props) => setTooltipPosition(props.position, props.align, props.offset)}
-  transition: all 300ms ease;
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.show ? '1' : '0')};
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+  ${(props) => !props.animate && `opacity: ${props.show ? 1 : 0};`}
+  ${(props) =>
+    props.animate
+      ? `animation: ${
+          props.show
+            ? `fade-in-${props.position}`
+            : `fade-out-${props.position}`
+        } 0.3s ease-in-out forwards`
+      : null};
+  ${(props) =>
+    setTooltipPosition(
+      props.position,
+      props.align,
+      props.offset,
+      props.animate
+    )}
+`
+
+interface Coordinate {
+  xPercentage: number
+  yPercentage: number
+}
+
+interface AnimationProps {
+  start: Coordinate
+  end: Coordinate
+  position: TooltipPosition
+}
+
+const animation = ({ start, end, position }: AnimationProps) => css`
+  @keyframes fade-in-${position} {
+    0% {
+      opacity: 0;
+      transform: translate(${start.xPercentage}%, ${start.yPercentage}%);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(${end.xPercentage}%, ${end.yPercentage}%);
+    }
+  }
+  @keyframes fade-out-${position} {
+    0% {
+      opacity: 1;
+      transform: translate(${end.xPercentage}%, ${end.yPercentage}%);
+    }
+    100% {
+      opacity: 0;
+      transform: translate(${start.xPercentage}%, ${start.yPercentage}%);
+    }
+  }
 `
 
 interface TooltipContainerProps {
@@ -142,10 +207,10 @@ interface TooltipContainerProps {
 
 const TooltipContainer = styled.div<TooltipContainerProps>`
   background: ${({ theme }) => theme.colors.yellow900};
+  border-radius: 8px 0px;
   color: ${({ theme }) => theme.colors.yellow100};
   --tip-color: ${({ theme }) => theme.colors.yellow900};
-  border-radius: 1.6rem;
-  padding: 1.2rem 1.6rem;
+  padding: 0.7rem 1.6rem;
   white-space: ${({ paragraph }) => (paragraph ? 'pre-line' : 'nowrap')};
   width: ${({ paragraph, width }) =>
     paragraph && width ? `${width}rem` : 'auto'};
@@ -162,9 +227,10 @@ interface TooltipProps {
   hidden?: boolean
   offset?: number
   children: ReactNode
+  animate?: boolean
 }
 
-const Tooltip = ({
+export const Tooltip = ({
   tooltip,
   open,
   position = 'bottom',
@@ -174,6 +240,7 @@ const Tooltip = ({
   hidden,
   offset,
   children,
+  animate = false,
 }: TooltipProps) => {
   const [show, setShow] = useState(open)
 
@@ -198,17 +265,16 @@ const Tooltip = ({
         {children}
       </ChildWrapper>
       <TooltipPosition
+        animate={animate}
         show={show && !hidden}
         position={position}
         align={align}
         offset={offset}
       >
         <TooltipContainer paragraph={paragraph} width={width}>
-          <Body1 $color="yellow100">{tooltip}</Body1>
+          <Subline1 $color="yellow100">{tooltip}</Subline1>
         </TooltipContainer>
       </TooltipPosition>
     </Wrapper>
   )
 }
-
-export default Tooltip

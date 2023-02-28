@@ -22,13 +22,14 @@ export const NavbarContainer = styled.div`
 `
 
 // Applies a square notch to the top left corner of the element
+// 400% is used to ensure the parent element has some space to overflow - the extra space does not affect the elements around it
 export const notch = (size = 1.6) => css`
   clip-path: polygon(
     0% ${size}rem,
     ${size}rem ${size}rem,
     ${size}rem 0%,
-    100% 0%,
-    100% 100%,
-    0% 100%
+    400% 0%,
+    400% 400%,
+    0% 400%
   );
 `

@@ -3,7 +3,7 @@ import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 import { RoleInfo } from '@/utils/roles'
 import styled from 'styled-components'
 import Icon from './Icon'
-import Tooltip from './Tooltip'
+import { Tooltip } from './Tooltip'
 
 const ICON_SIZE = 1.2
 interface ProfileIconsProps {
