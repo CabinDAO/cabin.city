@@ -1,6 +1,5 @@
 import { CompleteSyncAttempt } from '@/fauna/lib/CompleteSyncAttempt'
 import { UpsertAccount } from '@/fauna/lib/UpsertAccount'
-import { AddressActivity, UpsertActivities } from '@/fauna/lib/UpsertActivities'
 import { UpsertBadge, UpsertBadgeFields } from '@/fauna/lib/UpsertBadge'
 import {
   UpsertBadgeSpec,
@@ -18,8 +17,7 @@ export interface BadgeToAdd {
 
 export const syncBadges = async (
   syncAttemptRef: Expr,
-  badgesToAdd: BadgeToAdd[],
-  activities: AddressActivity[]
+  badgesToAdd: BadgeToAdd[]
 ) => {
   return faunaServerClient.query(
     q.Do(
@@ -36,7 +34,6 @@ export const syncBadges = async (
           )
         )
       ),
-      UpsertActivities(activities),
       CompleteSyncAttempt(syncAttemptRef)
     )
   )

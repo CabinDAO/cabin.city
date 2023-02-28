@@ -12,7 +12,15 @@ fragment Activity on Activity {
   timestamp
   type
   metadata {
-    badgeId
+    badge {
+      _id
+      badgeId
+      spec {
+        name
+        description
+        image
+      }
+    }
     profileRole {
       role
       level

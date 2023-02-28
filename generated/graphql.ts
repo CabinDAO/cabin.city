@@ -67,9 +67,19 @@ export type ActivityInput = {
   metadata?: InputMaybe<ActivityMetadataInput>;
 };
 
+/** Allow manipulating the relationship between the types 'ActivityMetadata' and 'OtterspaceBadge' using the field 'ActivityMetadata.badge'. */
+export type ActivityMetadataBadgeRelation = {
+  /** Create a document of type 'OtterspaceBadge' and associate it with the current document. */
+  create?: InputMaybe<OtterspaceBadgeInput>;
+  /** Connect a document of type 'OtterspaceBadge' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+  /** If true, disconnects this document from 'OtterspaceBadge' */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** 'ActivityMetadata' input values */
 export type ActivityMetadataInput = {
-  badgeId?: InputMaybe<Scalars['String']>;
+  badge?: InputMaybe<Scalars['ID']>;
   profileRole?: InputMaybe<ProfileRoleInput>;
 };
 
@@ -375,6 +385,7 @@ export type OtterspaceBadgeAccountRelation = {
 /** 'OtterspaceBadge' input values */
 export type OtterspaceBadgeInput = {
   badgeId: Scalars['String'];
+  createdAt: Scalars['Time'];
   account?: InputMaybe<OtterspaceBadgeAccountRelation>;
   spec?: InputMaybe<OtterspaceBadgeSpecRelation>;
 };
@@ -428,7 +439,7 @@ export type PartialUpdateActivityInput = {
 
 /** 'ActivityMetadata' input values */
 export type PartialUpdateActivityMetadataInput = {
-  badgeId?: InputMaybe<Scalars['String']>;
+  badge?: InputMaybe<Scalars['ID']>;
   profileRole?: InputMaybe<PartialUpdateProfileRoleInput>;
 };
 
@@ -453,6 +464,7 @@ export type PartialUpdateHatInput = {
 /** 'OtterspaceBadge' input values */
 export type PartialUpdateOtterspaceBadgeInput = {
   badgeId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['Time']>;
   account?: InputMaybe<OtterspaceBadgeAccountRelation>;
   spec?: InputMaybe<OtterspaceBadgeSpecRelation>;
 };
@@ -626,7 +638,7 @@ export type Activity = {
 
 export type ActivityMetadata = {
   __typename?: 'ActivityMetadata';
-  badgeId?: Maybe<Scalars['String']>;
+  badge?: Maybe<OtterspaceBadge>;
   profileRole?: Maybe<ProfileRole>;
 };
 
@@ -706,6 +718,7 @@ export type OtterspaceBadge = {
   __typename?: 'OtterspaceBadge';
   /** The document's ID. */
   _id: Scalars['ID'];
+  createdAt: Scalars['Time'];
   spec: OtterspaceBadgeSpec;
   badgeId: Scalars['String'];
   account: Account;
@@ -993,9 +1006,9 @@ export type GetActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badgeId?: string | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
+export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
 
-export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badgeId?: string | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
 
 export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1070,7 +1083,15 @@ export const ActivityFragmentDoc = gql`
   timestamp
   type
   metadata {
-    badgeId
+    badge {
+      _id
+      badgeId
+      spec {
+        name
+        description
+        image
+      }
+    }
     profileRole {
       role
       level

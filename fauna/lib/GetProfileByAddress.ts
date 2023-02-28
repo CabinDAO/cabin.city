@@ -1,15 +1,12 @@
 import { ExprVal, query as q } from 'faunadb'
-import { GetAccountByAddress } from './GetAccountByAddress'
+import { AccountRefByAddress } from './AccountRefByAddress'
+import { GetProfileByAccountRef } from './GetProfileByAccountRef'
 
 export const GetProfileByAddress = (addressExpr: ExprVal) => {
   return q.Let(
     {
-      account: GetAccountByAddress(addressExpr),
-      profileRef: q.Match(
-        q.Index('account_profile_by_account'),
-        q.Select(['ref'], q.Var('account'), null)
-      ),
+      accountRef: AccountRefByAddress(addressExpr),
     },
-    q.If(q.IsEmpty(q.Var('profileRef')), null, q.Get(q.Var('profileRef')))
+    GetProfileByAccountRef(q.Var('accountRef'))
   )
 }

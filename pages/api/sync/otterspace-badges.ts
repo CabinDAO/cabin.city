@@ -1,4 +1,3 @@
-import { AddressActivity } from '@/fauna/lib/UpsertActivities'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { syncBadges } from '@/lib/fauna-server/syncBadges'
 import { otterspaceClient } from '@/lib/otterspace/otterspace/otterspaceClient'
@@ -6,7 +5,6 @@ import { otterspaceConfig } from '@/lib/protocol-config'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { BigNumber } from 'ethers'
 import { GetBadgesDocument } from 'generated/gql/otterspace/graphql'
-import { ActivityType } from 'generated/graphql'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const OTTERSPACE_SYNC_KEY = 'Otterspace'
@@ -42,6 +40,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
       address: b.owner,
       badge: {
         badgeId: b.id,
+        createdAt: b.createdAt.toString(),
       },
       spec: {
         specId: b.spec.id,
@@ -52,19 +51,5 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
     }
   })
 
-  const activities = data.badges.map((b) => {
-    return {
-      address: b.owner,
-      activity: {
-        key: b.id,
-        type: ActivityType.ProfileBadgeAdded,
-        timestamp: b.createdAt.toString(),
-        metadata: {
-          badgeId: b.id,
-        },
-      },
-    }
-  }) as AddressActivity[]
-
-  await syncBadges(ref, badgesToAdd, activities)
+  await syncBadges(ref, badgesToAdd)
 }

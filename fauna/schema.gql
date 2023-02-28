@@ -133,6 +133,7 @@ type Hat {
 
 type OtterspaceBadge {
   badgeId: String! @unique
+  createdAt: Time!
   account: Account! @relation
   spec: OtterspaceBadgeSpec! @relation
 }
@@ -157,7 +158,7 @@ type Activity {
 
 type ActivityMetadata @embedded {
   # ProfileBadgeAdded
-  badgeId: String
+  badge: OtterspaceBadge
 
   # ProfileRoleAdded
   profileRole: ProfileRole

@@ -13,12 +13,7 @@ export const UpsertActivities = (addressActivities: AddressActivity[]) => {
       {
         profile: GetProfileByAddress(addressActivity.address),
       },
-      q.If(
-        q.IsNull(q.Var('profile')),
-        // Profile does not exist, skip activity
-        null,
-        UpsertActivity(q.Var('profile'), addressActivity.activity)
-      )
+      UpsertActivity(q.Var('profile'), addressActivity.activity)
     )
   )
 }

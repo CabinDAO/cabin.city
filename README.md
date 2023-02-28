@@ -59,3 +59,17 @@ Storybook is used to document and develop UI components. To run storybook:
 ```bash
 npm run storybook
 ```
+
+## Fauna Database
+
+### Clear all documents in a collection
+
+```typescript
+// Change `OtterspaceBadge` to the collection you want to clear
+q.Map(
+  q.Paginate(q.Documents(q.Collection('OtterspaceBadge')), {
+    size: 9999,
+  }),
+  q.Lambda(['ref'], q.Delete(q.Var('ref')))
+)
+```

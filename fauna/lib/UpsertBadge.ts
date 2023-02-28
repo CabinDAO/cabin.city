@@ -1,13 +1,19 @@
-import { ExprVal, query as q } from 'faunadb'
+import { Expr, ExprVal, query as q } from 'faunadb'
+import { SelectRef } from 'faunadb-fql-lib'
+import { ActivityType } from '../../generated/graphql'
+import { GetProfileByAccountRef } from './GetProfileByAccountRef'
+import { ToTimestamp } from './ToTimestamp'
+import { UpsertActivity } from './UpsertActivity'
 
 export interface UpsertBadgeFields {
   badgeId: string
+  createdAt: string
 }
 
 export const UpsertBadge = (
   badge: UpsertBadgeFields,
   specExpr: ExprVal,
-  accountRefExpr: ExprVal
+  accountRefExpr: Expr
 ) => {
   return q.Let(
     {
@@ -18,13 +24,28 @@ export const UpsertBadge = (
     },
     q.If(
       q.IsEmpty(q.Var('badgeMatch')),
-      q.Create(q.Collection('OtterspaceBadge'), {
-        data: {
-          badgeId: badge.badgeId,
-          account: accountRefExpr,
-          spec: specExpr,
+      q.Let(
+        {
+          badge: q.Create(q.Collection('OtterspaceBadge'), {
+            data: {
+              badgeId: badge.badgeId,
+              createdAt: ToTimestamp(badge.createdAt),
+              account: accountRefExpr,
+              spec: specExpr,
+            },
+          }),
+          profile: GetProfileByAccountRef(accountRefExpr),
         },
-      }),
+        UpsertActivity(q.Var('profile'), {
+          key: badge.badgeId,
+          type: ActivityType.ProfileBadgeAdded,
+          timestamp: q.Select(['data', 'createdAt'], q.Var('badge')),
+          metadata: {
+            badge: SelectRef(q.Var('badge')),
+          },
+        })
+      ),
+
       null // Do nothing if the badge already exists
     )
   )
