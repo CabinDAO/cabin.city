@@ -25,81 +25,94 @@ export const h1Styles = css<EmphasizableTypographyProps>`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
-  font-size: ${({ emphasized }) => (emphasized ? '3.2rem' : '2.4rem')};
-  line-height: 3.12rem;
+  line-height: 1.3;
+
+  font-size: ${({ emphasized }) => (emphasized ? '2.4rem' : '2rem')};
+
+  ${theme.bp.md} {
+    font-size: ${({ emphasized }) => (emphasized ? '3.2rem' : '2rem')};
+  }
+
+  ${theme.bp.lg} {
+    font-size: ${({ emphasized }) => (emphasized ? '3.2rem' : '2.4rem')};
+  }
 `
 
 export const h2Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
+  line-height: 1.3;
   font-size: 2rem;
-  line-height: 2.6rem;
 `
 
 export const h3Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
-  font-weight: 600;
-  font-size: 1.6rem;
-  line-height: 2.08rem;
   text-transform: uppercase;
+  font-weight: 600;
+  line-height: 1.3;
+  font-size: 1.6rem;
 `
 
 export const h4Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: 700;
+  line-height: 1.21;
   font-size: 1.6rem;
-  line-height: 1.936rem;
 `
 
 export const h5Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
-  font-size: 1.6rem;
-  line-height: 2.08rem;
+  line-height: 1.3;
+  font-size: 1.3rem;
+
+  ${theme.bp.lg} {
+    font-size: 1.6rem;
+  }
 `
 
 export const h6Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: 500;
+  line-height: 1.21;
   font-size: 1.3rem;
-  line-height: 1.573rem;
 `
 
 export const subline1Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
+  line-height: 1.3;
   font-size: 1.4rem;
-  line-height: 1.82rem;
 `
 
 export const subline2Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: 400;
+  line-height: 1.21;
   font-size: 1.4rem;
-  line-height: 1.7rem;
 `
 
 export const body1Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: 500;
+  line-height: 1.3;
   font-size: 1.6rem;
-  line-height: 1.9rem;
 `
 
 export const body2Styles = css`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: 400;
+  line-height: 1.5;
   font-size: 1.3rem;
-  line-height: 1.95rem;
   opacity: 0.75;
 `
 
@@ -107,8 +120,8 @@ export const captionStyles = css<EmphasizableTypographyProps>`
   ${typographySharedStyles}
   font-family: ${fonts.inter};
   font-weight: ${({ emphasized }) => (emphasized ? '500' : '400')};
+  line-height: 1.23;
   font-size: 1.3rem;
-  line-height: 1.6rem;
   opacity: ${({ emphasized }) => (emphasized ? 'inherit' : '0.75')};
 `
 
@@ -116,8 +129,8 @@ export const overlineStyles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
+  line-height: 1.3;
   font-size: 1.3rem;
-  line-height: 1.7rem;
   text-transform: uppercase;
 `
 
@@ -125,8 +138,8 @@ export const buttonStyles = css`
   ${typographySharedStyles}
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
+  line-height: 1.3;
   font-size: 1.4rem;
-  line-height: 1.8rem;
 `
 
 export const H1 = styled.h1`
