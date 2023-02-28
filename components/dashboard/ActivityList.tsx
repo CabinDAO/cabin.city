@@ -4,13 +4,6 @@ import { ActivityFragment, useGetActivitiesQuery } from '@/generated/graphql'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Post } from '../core/post/Post'
 
-const InnerContainer = styled.div`
-  margin: 2.6rem;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
-
 export const ActivityList = () => {
   const { data, fetchMore } = useGetActivitiesQuery({
     variables: {
@@ -62,3 +55,9 @@ const ActivityPost = (props: ActivityPostProps) => {
 
   return <Post activity={activity} baseDate={baseDate} />
 }
+
+const InnerContainer = styled.div`
+  margin: 2.6rem;
+  display: flex;
+  flex-direction: column;
+`

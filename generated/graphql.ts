@@ -1002,6 +1002,13 @@ export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetActivitySummaryQuery = { __typename?: 'Query', profilesCount: number, tokenHoldersCount: number, citizensCount: number };
 
+export type GetProfilesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProfilesQuery = { __typename?: 'Query', allProfiles: { __typename?: 'ProfilePage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null> } };
+
+export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } };
+
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
@@ -1080,6 +1087,26 @@ export const ActivityFragmentDoc = gql`
     avatar {
       url
     }
+  }
+}
+    `;
+export const ProfileFragmentDoc = gql`
+    fragment Profile on Profile {
+  _id
+  createdAt
+  name
+  avatar {
+    url
+  }
+  roles {
+    role
+    level
+  }
+  citizenshipStatus
+  bio
+  account {
+    _id
+    cabinTokenBalance
   }
 }
     `;
@@ -1190,6 +1217,42 @@ export function useGetActivitySummaryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetActivitySummaryQueryHookResult = ReturnType<typeof useGetActivitySummaryQuery>;
 export type GetActivitySummaryLazyQueryHookResult = ReturnType<typeof useGetActivitySummaryLazyQuery>;
 export type GetActivitySummaryQueryResult = Apollo.QueryResult<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>;
+export const GetProfilesDocument = gql`
+    query GetProfiles {
+  allProfiles {
+    data {
+      ...Profile
+    }
+  }
+}
+    ${ProfileFragmentDoc}`;
+
+/**
+ * __useGetProfilesQuery__
+ *
+ * To run a query within a React component, call `useGetProfilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfilesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProfilesQuery(baseOptions?: Apollo.QueryHookOptions<GetProfilesQuery, GetProfilesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfilesQuery, GetProfilesQueryVariables>(GetProfilesDocument, options);
+      }
+export function useGetProfilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfilesQuery, GetProfilesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfilesQuery, GetProfilesQueryVariables>(GetProfilesDocument, options);
+        }
+export type GetProfilesQueryHookResult = ReturnType<typeof useGetProfilesQuery>;
+export type GetProfilesLazyQueryHookResult = ReturnType<typeof useGetProfilesLazyQuery>;
+export type GetProfilesQueryResult = Apollo.QueryResult<GetProfilesQuery, GetProfilesQueryVariables>;
 export const LogTrackingEventDocument = gql`
     mutation LogTrackingEvent($key: String!) {
   logTrackingEvent(key: $key) {

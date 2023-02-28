@@ -15,7 +15,6 @@ interface ContainerProps {
 
 const BaseContainer = styled.div<ContainerProps>`
   position: relative;
-  display: flex;
   background-color: ${({ theme }) => theme.colors.yellow200};
   width: 100%;
 

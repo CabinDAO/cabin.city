@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "fauna": "fgu",
+    "fauna:gen": "fgu --data --codegen",
     "format": "prettier --write .",
     "lint": "npm run lint:types && npm run lint:eslint && npm run lint:next",
     "lint:eslint": "eslint . --ext=.tsx,.ts",
