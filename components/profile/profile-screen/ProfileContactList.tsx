@@ -1,8 +1,8 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { formatContactField } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { CopyText } from '../core/CopyToClipboard'
-import { Caption } from '../core/Typography'
+import { CopyText } from '../../core/CopyToClipboard'
+import { Caption } from '../../core/Typography'
 
 interface ProfileContactListProps {
   contactFields: GetProfileByIdFragment['contactFields']

@@ -1,13 +1,13 @@
-import { ProfileProgressCard } from '@/components/core/ProfileProgressCard'
+import { ProfileProgressCardSection } from '@/components/profile/profile-screen/ProfileProgressCardSection'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'Core/ProfileProgressCard',
-  component: ProfileProgressCard,
-} as ComponentMeta<typeof ProfileProgressCard>
+  title: 'Core/ProfileProgressCardSection',
+  component: ProfileProgressCardSection,
+} as ComponentMeta<typeof ProfileProgressCardSection>
 
-const Template: ComponentStory<typeof ProfileProgressCard> = (args) => (
-  <ProfileProgressCard {...args} />
+const Template: ComponentStory<typeof ProfileProgressCardSection> = (args) => (
+  <ProfileProgressCardSection {...args} />
 )
 
 export const Default = Template.bind({})

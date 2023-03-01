@@ -1,11 +1,11 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { Avatar } from '../core/Avatar'
-import { ContentCard } from '../core/ContentCard'
-import { CopyText } from '../core/CopyToClipboard'
-import { H1, Subline2 } from '../core/Typography'
-import useEns from '../hooks/useEns'
+import { Avatar } from '../../core/Avatar'
+import { ContentCard } from '../../core/ContentCard'
+import { CopyText } from '../../core/CopyToClipboard'
+import { H1, Subline2 } from '../../core/Typography'
+import useEns from '../../hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
 
 interface ProfileHeaderProps {
@@ -13,7 +13,7 @@ interface ProfileHeaderProps {
   isOwnProfile?: boolean
 }
 
-export const ProfileHeader = ({
+export const ProfileHeaderSection = ({
   profile,
   isOwnProfile = false,
 }: ProfileHeaderProps) => {

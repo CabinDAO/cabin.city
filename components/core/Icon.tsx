@@ -6,6 +6,7 @@ import { ColorName } from '../../styles/theme'
 import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
+import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronRightSvg from './svg/chevron-right.svg'
@@ -36,11 +37,13 @@ import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
 import trashSvg from './svg/trash.svg'
 import upArrowSvg from './svg/up-arrow.svg'
+import upRightArrowSvg from './svg/up-right-arrow.svg'
 
 export const IconSvgs = {
   'back-arrow': backArrowSvg,
   builder: builderSvg,
   caretaker: caretakerSvg,
+  'card-heart': cardHeartSvg,
   check: checkSvg,
   'chevron-down': chevronDownSvg,
   'chevron-right': chevronRightSvg,
@@ -71,6 +74,7 @@ export const IconSvgs = {
   'thumb-up': thumbUpSvg,
   trash: trashSvg,
   'up-arrow': upArrowSvg,
+  'up-right-arrow': upRightArrowSvg,
 }
 
 export type IconName = keyof typeof IconSvgs

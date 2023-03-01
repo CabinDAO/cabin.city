@@ -1,10 +1,10 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { monthYearFormat } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { ContentCard } from '../core/ContentCard'
-import { Divider } from '../core/Divider'
-import Icon, { IconName } from '../core/Icon'
-import { Body2, Caption, H3 } from '../core/Typography'
+import { ContentCard } from '../../core/ContentCard'
+import { Divider } from '../../core/Divider'
+import Icon, { IconName } from '../../core/Icon'
+import { Body2, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
 
 interface ProfileAboutSectionProps {

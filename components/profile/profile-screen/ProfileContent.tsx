@@ -1,10 +1,11 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { getCountForEvent } from '@/utils/events'
-import { useUser } from '../auth/useUser'
-import { ProfileProgressCard } from '../core/ProfileProgressCard'
-import { ProfileInnerContainer } from './profile.styles'
+import { useUser } from '../../auth/useUser'
+import { ProfileProgressCardSection } from './ProfileProgressCardSection'
+import { ProfileInnerContainer } from '../profile.styles'
 import { ProfileAboutSection } from './ProfileAboutSection'
-import { ProfileHeader } from './ProfileHeader'
+import { ProfileHeaderSection } from './ProfileHeaderSection'
+import { ProfileRolesSection } from './ProfileRolesSection'
 
 interface ProfileContentProps {
   profile: GetProfileByIdFragment
@@ -17,14 +18,15 @@ export const ProfileContent = ({ profile }: ProfileContentProps) => {
 
   return (
     <ProfileInnerContainer>
-      <ProfileHeader profile={profile} isOwnProfile={isOwnProfile} />
+      <ProfileHeaderSection profile={profile} isOwnProfile={isOwnProfile} />
       {isOwnProfile && (
-        <ProfileProgressCard
+        <ProfileProgressCardSection
           progress={complete ? 100 : 25}
           profileId={profile._id}
         />
       )}
       <ProfileAboutSection profile={profile} />
+      <ProfileRolesSection profile={profile} />
     </ProfileInnerContainer>
   )
 }

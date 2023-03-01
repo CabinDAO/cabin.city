@@ -1,7 +1,7 @@
 import { MeFragment, GetProfileByIdFragment } from '@/generated/graphql'
 import { useRouter } from 'next/router'
-import { Button } from '../core/Button'
-import Icon from '../core/Icon'
+import { Button } from '../../core/Button'
+import Icon from '../../core/Icon'
 
 interface ProfileHeaderButtonProps {
   profile: MeFragment | GetProfileByIdFragment | undefined | null

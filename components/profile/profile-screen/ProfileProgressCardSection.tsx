@@ -1,9 +1,9 @@
-import { ContentCard } from './ContentCard'
+import { ContentCard } from '../../core/ContentCard'
 import styled from 'styled-components'
-import { H2, Overline } from './Typography'
-import { ProgressBar } from './ProgressBar'
+import { H2, Overline } from '../../core/Typography'
+import { ProgressBar } from '../../core/ProgressBar'
 import { ColorName } from '@/styles/theme'
-import Icon from './Icon'
+import Icon from '../../core/Icon'
 import { useRouter } from 'next/router'
 
 const InnerContainer = styled.div`
@@ -53,7 +53,7 @@ interface ProfileProgressCardProps {
   profileId: string
 }
 
-export const ProfileProgressCard = ({
+export const ProfileProgressCardSection = ({
   progress,
   profileId,
 }: ProfileProgressCardProps) => {
