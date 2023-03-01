@@ -1,7 +1,7 @@
 import { InputText } from '@/components/core/InputText'
 import { useState } from 'react'
 import { SetupStepForm } from './SetupStepForm'
-import { StepProps } from './step-configuration'
+import { contactFieldDisplayNameMapping, StepProps } from './step-configuration'
 import styled from 'styled-components'
 import { Dropdown } from '@/components/core/Dropdown'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
@@ -98,7 +98,9 @@ export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
                 />
                 <InputText
                   label={
-                    fieldNameMapping[contact.type as ProfileContactFieldType]
+                    contactFieldDisplayNameMapping[
+                      contact.type as ProfileContactFieldType
+                    ]
                   }
                   value={contact.value}
                   onChange={(e) => handleInputTextChange(e.target.value, index)}
@@ -153,17 +155,6 @@ const ContactTypePair = styled.div`
   width: 100%;
   gap: 2.4rem;
 `
-
-const fieldNameMapping = {
-  [ProfileContactFieldType.Email]: 'Email',
-  [ProfileContactFieldType.Discord]: 'Discord Username',
-  [ProfileContactFieldType.Twitter]: 'Twitter Username',
-  [ProfileContactFieldType.Instagram]: 'Instagram Username',
-  [ProfileContactFieldType.LinkedIn]: 'Linkedin Username',
-  [ProfileContactFieldType.Telegram]: 'Telegram Username',
-  [ProfileContactFieldType.Lens]: 'Lens URL',
-  [ProfileContactFieldType.Website]: 'Website URL',
-}
 
 const contactOptions = Object.values(ProfileContactFieldType).map(
   (type) =>

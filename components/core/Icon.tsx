@@ -11,6 +11,7 @@ import chevronDownSvg from './svg/chevron-down.svg'
 import chevronRightSvg from './svg/chevron-right.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
+import copySvg from './svg/copy.svg'
 import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
@@ -45,6 +46,7 @@ export const IconSvgs = {
   'chevron-right': chevronRightSvg,
   citizen: citizenSvg,
   close: closeSvg,
+  copy: copySvg,
   creator: creatorSvg,
   dashboard: dashboardSvg,
   date: dateSvg,

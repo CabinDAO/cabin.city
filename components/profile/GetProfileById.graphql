@@ -4,6 +4,7 @@ fragment GetProfileById on Profile {
   email
   bio
   location
+  createdAt
   roles {
     role
     level

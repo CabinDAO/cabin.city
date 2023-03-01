@@ -3,6 +3,7 @@ import { getCountForEvent } from '@/utils/events'
 import { useUser } from '../auth/useUser'
 import { ProfileProgressCard } from '../core/ProfileProgressCard'
 import { ProfileInnerContainer } from './profile.styles'
+import { ProfileAboutSection } from './ProfileAboutSection'
 import { ProfileHeader } from './ProfileHeader'
 
 interface ProfileContentProps {
@@ -23,6 +24,7 @@ export const ProfileContent = ({ profile }: ProfileContentProps) => {
           profileId={profile._id}
         />
       )}
+      <ProfileAboutSection profile={profile} />
     </ProfileInnerContainer>
   )
 }

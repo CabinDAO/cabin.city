@@ -1,3 +1,4 @@
+import { ProfileContactFieldType } from '@/generated/graphql'
 import { AboutStep } from './AboutStep'
 import { ContactStep } from './ContactStep'
 import { RoleStep } from './RoleStep'
@@ -27,3 +28,14 @@ export const steps: StepConfig[] = [
     component: ContactStep,
   },
 ]
+
+export const contactFieldDisplayNameMapping = {
+  [ProfileContactFieldType.Email]: 'Email',
+  [ProfileContactFieldType.Discord]: 'Discord Username',
+  [ProfileContactFieldType.Twitter]: 'Twitter Username',
+  [ProfileContactFieldType.Instagram]: 'Instagram Username',
+  [ProfileContactFieldType.LinkedIn]: 'Linkedin Username',
+  [ProfileContactFieldType.Telegram]: 'Telegram Username',
+  [ProfileContactFieldType.Lens]: 'Lens URL',
+  [ProfileContactFieldType.Website]: 'Website URL',
+}

@@ -12,6 +12,7 @@ fragment Me on Profile {
   email
   bio
   location
+  createdAt
   roles {
     role
     level
