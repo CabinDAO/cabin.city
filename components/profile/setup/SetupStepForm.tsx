@@ -4,39 +4,6 @@ import { ContentCard } from '../../core/ContentCard'
 import { H3 } from '../../core/Typography'
 import { steps } from './step-configuration'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  gap: 1.6rem;
-`
-
-const StepIndicator = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-`
-
-const FormContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: center;
-  margin: 2.4rem;
-  gap: 2.4rem;
-`
-
-const ButtonGroup = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.6rem;
-`
-
 interface SetupStepFormProps {
   onNext?: VoidFunction
   onBack?: VoidFunction
@@ -83,3 +50,36 @@ export const SetupStepForm = ({
     </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1.6rem;
+`
+
+const StepIndicator = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+`
+
+const FormContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 2.4rem;
+  gap: 2.4rem;
+`
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1.6rem;
+`

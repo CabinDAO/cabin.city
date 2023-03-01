@@ -125,7 +125,7 @@ export const SetupStepContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  width: 83rem;
+  width: 100%;
   gap: 2.4rem;
 `
 
