@@ -1,0 +1,30 @@
+fragment GetProfileById on Profile {
+  _id
+  name
+  email
+  bio
+  location
+  roles {
+    role
+    level
+    hatId
+  }
+  avatar {
+    url
+  }
+  account {
+    _id
+    address
+    cabinTokenBalance
+  }
+  contactFields {
+    type
+    value
+  }
+}
+
+query GetProfileById($id: ID!) {
+  findProfileByID(id: $id) {
+    ...GetProfileById
+  }
+}

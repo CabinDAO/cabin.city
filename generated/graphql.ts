@@ -1022,6 +1022,15 @@ export type GetProfilesQuery = { __typename?: 'Query', allProfiles: { __typename
 
 export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } };
 
+export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, cabinTokenBalance?: string | null }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> };
+
+export type GetProfileByIdQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, cabinTokenBalance?: string | null }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
+
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
 }>;
@@ -1128,6 +1137,32 @@ export const ProfileFragmentDoc = gql`
   account {
     _id
     cabinTokenBalance
+  }
+}
+    `;
+export const GetProfileByIdFragmentDoc = gql`
+    fragment GetProfileById on Profile {
+  _id
+  name
+  email
+  bio
+  location
+  roles {
+    role
+    level
+    hatId
+  }
+  avatar {
+    url
+  }
+  account {
+    _id
+    address
+    cabinTokenBalance
+  }
+  contactFields {
+    type
+    value
   }
 }
     `;
@@ -1274,6 +1309,41 @@ export function useGetProfilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProfilesQueryHookResult = ReturnType<typeof useGetProfilesQuery>;
 export type GetProfilesLazyQueryHookResult = ReturnType<typeof useGetProfilesLazyQuery>;
 export type GetProfilesQueryResult = Apollo.QueryResult<GetProfilesQuery, GetProfilesQueryVariables>;
+export const GetProfileByIdDocument = gql`
+    query GetProfileById($id: ID!) {
+  findProfileByID(id: $id) {
+    ...GetProfileById
+  }
+}
+    ${GetProfileByIdFragmentDoc}`;
+
+/**
+ * __useGetProfileByIdQuery__
+ *
+ * To run a query within a React component, call `useGetProfileByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProfileByIdQuery(baseOptions: Apollo.QueryHookOptions<GetProfileByIdQuery, GetProfileByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileByIdQuery, GetProfileByIdQueryVariables>(GetProfileByIdDocument, options);
+      }
+export function useGetProfileByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileByIdQuery, GetProfileByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileByIdQuery, GetProfileByIdQueryVariables>(GetProfileByIdDocument, options);
+        }
+export type GetProfileByIdQueryHookResult = ReturnType<typeof useGetProfileByIdQuery>;
+export type GetProfileByIdLazyQueryHookResult = ReturnType<typeof useGetProfileByIdLazyQuery>;
+export type GetProfileByIdQueryResult = Apollo.QueryResult<GetProfileByIdQuery, GetProfileByIdQueryVariables>;
 export const LogTrackingEventDocument = gql`
     mutation LogTrackingEvent($key: String!) {
   logTrackingEvent(key: $key) {

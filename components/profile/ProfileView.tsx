@@ -1,35 +1,28 @@
 import { useRouter } from 'next/router'
-import { ProfileProgressCard } from '../core/ProfileProgressCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import styled from 'styled-components'
-import { useUser } from '../auth/useUser'
-import { getCountForEvent } from '@/utils/events'
+import { useGetProfileByIdQuery } from '@/generated/graphql'
+import { ProfileContent } from './ProfileContent'
 
-export const ProfileView = ({}) => {
+export const ProfileView = () => {
   const router = useRouter()
-  const { user } = useUser()
   const { id: profileId } = router.query
 
-  if (!profileId) {
+  const { data, loading: loadingProfile } = useGetProfileByIdQuery({
+    variables: { id: profileId as string },
+  })
+
+  const profile = data?.findProfileByID
+
+  if (loadingProfile) {
+    return null
+  } else if (!profile) {
+    router.push('/race')
     return null
   }
 
-  const complete = getCountForEvent(user, 'profile_setup_finished')
-
   return (
     <SingleColumnLayout>
-      <InnerContainer>
-        {user?._id === profileId && (
-          <ProfileProgressCard
-            progress={complete ? 100 : 25}
-            profileId={profileId as string}
-          />
-        )}
-      </InnerContainer>
+      <ProfileContent profile={profile} />
     </SingleColumnLayout>
   )
 }
-
-const InnerContainer = styled.div`
-  width: 100%;
-`

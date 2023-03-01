@@ -139,7 +139,7 @@ export const buttonStyles = css`
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
   line-height: 1.3;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 `
 
 export const H1 = styled.h1`

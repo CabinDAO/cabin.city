@@ -80,15 +80,18 @@ interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode
   variant?: ButtonVariant
   onClick?: () => void
+  startAdornment?: React.ReactNode
 }
 export const Button = ({
   children,
   variant = 'primary',
+  startAdornment,
   onClick,
   ...props
 }: ButtonProps) => {
   return (
     <StyledButton type="button" variant={variant} onClick={onClick} {...props}>
+      {startAdornment}
       {children}
     </StyledButton>
   )
