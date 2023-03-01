@@ -36,7 +36,9 @@ export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
 
   const handleNext = async () => {
     await updateProfile({
-      contactFields: contactList,
+      data: {
+        contactFields: contactList,
+      },
     })
 
     onNext()

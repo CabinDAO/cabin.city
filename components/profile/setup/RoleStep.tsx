@@ -2,12 +2,7 @@ import { SetupStepForm } from './SetupStepForm'
 import { StepProps } from './step-configuration'
 import styled from 'styled-components'
 import { Subline1 } from '@/components/core/Typography'
-import {
-  ProfileRole,
-  ProfileRoleInput,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-} from '@/generated/graphql'
+import { ProfileRole, ProfileRoleType } from '@/generated/graphql'
 import { RoleChip } from '@/components/core/RoleChip'
 import { useState } from 'react'
 import { useUser } from '@/components/auth/useUser'
@@ -34,27 +29,8 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
   const { updateProfile } = useUpdateProfile()
 
   const handleNext = async () => {
-    const selectRolesInputs = selectedRoles.map(
-      (role) =>
-        ({
-          role,
-          level: ProfileRoleLevelType.Apprentice,
-          hatId: null,
-        } as ProfileRoleInput)
-    )
-    const onChainRoleInputs = onChainRoles.map((role) => ({
-      role: role.role,
-      level: role.level,
-      hatId: role.hatId,
-    })) as ProfileRoleInput[]
-
-    // TODO: Atomic update - https://app.dework.xyz/indiedao/cabin-census?taskId=0ae386bb-bc50-439b-937e-f23f7f46f5b3
-    const newRoles = onChainRoleInputs.concat(
-      selectRolesInputs
-    ) as ProfileRoleInput[]
-
     await updateProfile({
-      roles: newRoles,
+      roleTypes: selectedRoles,
     })
 
     onNext()

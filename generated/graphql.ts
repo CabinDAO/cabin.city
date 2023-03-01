@@ -181,8 +181,8 @@ export type Mutation = {
   createHat: Hat;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
-  /** Update an existing document in the collection of 'Profile' */
-  updateProfile?: Maybe<Profile>;
+  setMyRoles: Profile;
+  updateProfile: Profile;
   logTrackingEvent: TrackingEvent;
   /** Delete an existing document in the collection of 'Activity' */
   deleteActivity?: Maybe<Activity>;
@@ -359,9 +359,15 @@ export type MutationDeleteBlockSyncAttemptArgs = {
 };
 
 
+export type MutationSetMyRolesArgs = {
+  roles: Array<ProfileRoleType>;
+};
+
+
 export type MutationUpdateProfileArgs = {
   id: Scalars['ID'];
-  data: ProfileInput;
+  data?: InputMaybe<UpdateProfileInput>;
+  roleTypes?: InputMaybe<Array<ProfileRoleType>>;
 };
 
 
@@ -540,7 +546,6 @@ export type ProfileAvatarInput = {
   tokenUri?: InputMaybe<Scalars['String']>;
 };
 
-/** 'ProfileContactField' input values */
 export type ProfileContactFieldInput = {
   type: ProfileContactFieldType;
   value: Scalars['String'];
@@ -583,6 +588,13 @@ export type TrackingEventProfileRelation = {
   create?: InputMaybe<ProfileInput>;
   /** Connect a document of type 'Profile' with the current document using its ID. */
   connect?: InputMaybe<Scalars['ID']>;
+};
+
+export type UpdateProfileInput = {
+  bio?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['String']>;
+  roleTypes?: InputMaybe<Array<ProfileRoleType>>;
+  contactFields?: InputMaybe<Array<ProfileContactFieldInput>>;
 };
 
 export type Account = {
@@ -1040,14 +1052,12 @@ export type LogTrackingEventMutation = { __typename?: 'Mutation', logTrackingEve
 
 export type UpdateProfileMutationVariables = Exact<{
   id: Scalars['ID'];
-  roles?: InputMaybe<Array<PartialUpdateProfileRoleInput> | PartialUpdateProfileRoleInput>;
-  bio?: InputMaybe<Scalars['String']>;
-  location?: InputMaybe<Scalars['String']>;
-  contactFields?: InputMaybe<Array<PartialUpdateProfileContactFieldInput> | PartialUpdateProfileContactFieldInput>;
+  data?: InputMaybe<UpdateProfileInput>;
+  roleTypes?: InputMaybe<Array<ProfileRoleType> | ProfileRoleType>;
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } };
 
 export const TrackingEventFragmentDoc = gql`
     fragment TrackingEvent on TrackingEvent {
@@ -1380,11 +1390,8 @@ export type LogTrackingEventMutationHookResult = ReturnType<typeof useLogTrackin
 export type LogTrackingEventMutationResult = Apollo.MutationResult<LogTrackingEventMutation>;
 export type LogTrackingEventMutationOptions = Apollo.BaseMutationOptions<LogTrackingEventMutation, LogTrackingEventMutationVariables>;
 export const UpdateProfileDocument = gql`
-    mutation UpdateProfile($id: ID!, $roles: [PartialUpdateProfileRoleInput!], $bio: String, $location: String, $contactFields: [PartialUpdateProfileContactFieldInput!]) {
-  partialUpdateProfile(
-    id: $id
-    data: {roles: $roles, bio: $bio, location: $location, contactFields: $contactFields}
-  ) {
+    mutation UpdateProfile($id: ID!, $data: UpdateProfileInput, $roleTypes: [ProfileRoleType!]) {
+  updateProfile(id: $id, data: $data, roleTypes: $roleTypes) {
     ...Me
   }
 }
@@ -1405,10 +1412,8 @@ export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutat
  * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
  *   variables: {
  *      id: // value for 'id'
- *      roles: // value for 'roles'
- *      bio: // value for 'bio'
- *      location: // value for 'location'
- *      contactFields: // value for 'contactFields'
+ *      data: // value for 'data'
+ *      roleTypes: // value for 'roleTypes'
  *   },
  * });
  */

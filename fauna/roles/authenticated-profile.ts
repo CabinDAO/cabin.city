@@ -169,6 +169,12 @@ const authenticatedProfileRole: RoleResource = {
         call: true,
       },
     },
+    {
+      resource: q.Function('update_profile'),
+      actions: {
+        call: true,
+      },
+    },
   ],
   membership: [
     {

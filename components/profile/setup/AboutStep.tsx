@@ -32,8 +32,10 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
 
   const handleNext = async () => {
     await updateProfile({
-      bio,
-      location,
+      data: {
+        bio,
+        location,
+      },
     })
 
     onNext()

@@ -25,6 +25,11 @@ type Mutation {
   createProfile(data: ProfileInput!): Profile! @resolver(name: "create_profile")
   logTrackingEvent(key: String!): TrackingEvent!
     @resolver(name: "log_tracking_event")
+  updateProfile(
+    id: ID!
+    data: UpdateProfileInput
+    roleTypes: [ProfileRoleType!]
+  ): Profile! @resolver(name: "update_profile")
 }
 
 type Profile {
@@ -107,6 +112,18 @@ enum ProfileContactFieldType {
   Telegram
   Lens
   Website
+}
+
+input UpdateProfileInput {
+  bio: String
+  location: String
+  roleTypes: [ProfileRoleType!]
+  contactFields: [ProfileContactFieldInput!]
+}
+
+input ProfileContactFieldInput {
+  type: ProfileContactFieldType!
+  value: String!
 }
 
 type TrackingEvent {
