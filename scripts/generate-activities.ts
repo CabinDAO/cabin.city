@@ -15,25 +15,10 @@ const range = Array.from({ length: 100 }, (x, i) => i)
 const address = '0x5685f4d3d59Ef81beEac49f80B785290F9F2ec5c'
 const activities: AddressActivity[] = range.map((i) => {
   const timestamp = getUnixTime(new Date()).toString()
-  const randomActivityType = Math.floor(Math.random() * 3)
-
-  // ProfileBadgeAdded
-  if (randomActivityType === 0) {
-    return {
-      address,
-      activity: {
-        key: `ProfileBadgeAdded|${i}`,
-        type: ActivityType.ProfileBadgeAdded,
-        timestamp,
-        metadata: {
-          badgeId: 'badge-1',
-        },
-      },
-    }
-  }
+  const randomActivityType = Math.floor(Math.random() * 2)
 
   // ProfileRoleAdded
-  if (randomActivityType === 1) {
+  if (randomActivityType === 0) {
     const randomRoleIndex = Math.floor(Math.random() * 6)
     const roleType = Object.values(ProfileRoleType)[randomRoleIndex]
 

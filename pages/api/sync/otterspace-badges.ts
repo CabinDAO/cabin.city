@@ -51,5 +51,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
     }
   })
 
+  console.log({ badgesToAdd })
+
   await syncBadges(ref, badgesToAdd)
 }

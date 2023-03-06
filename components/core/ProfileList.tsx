@@ -15,15 +15,21 @@ export const ProfileList = (props: ProfileListProps) => {
 
   return (
     <ContentCard>
-      <HeaderContainer>
-        <Overline>{`${formattedTotal} Results`}</Overline>
-      </HeaderContainer>
-      <Container>{children}</Container>
+      <Container>
+        <HeaderContainer>
+          <Overline>{`${formattedTotal} Results`}</Overline>
+        </HeaderContainer>
+        <InnerContainer>{children}</InnerContainer>
+      </Container>
     </ContentCard>
   )
 }
 
 const Container = styled.div`
+  width: 100%;
+`
+
+const InnerContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
