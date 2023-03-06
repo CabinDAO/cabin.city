@@ -48,7 +48,6 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
   gap: 2.4rem;
 `
@@ -56,7 +55,7 @@ const Container = styled.div`
 const RolesList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, auto);
-  align-items: center;
+  align-items: flex-start;
   column-gap: 2.4rem;
   row-gap: 2.4rem;
   width: 100%;

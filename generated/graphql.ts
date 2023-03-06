@@ -181,7 +181,6 @@ export type Mutation = {
   createHat: Hat;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
-  setMyRoles: Profile;
   updateProfile: Profile;
   logTrackingEvent: TrackingEvent;
   /** Delete an existing document in the collection of 'Activity' */
@@ -356,11 +355,6 @@ export type MutationCreateHatArgs = {
 
 export type MutationDeleteBlockSyncAttemptArgs = {
   id: Scalars['ID'];
-};
-
-
-export type MutationSetMyRolesArgs = {
-  roles: Array<ProfileRoleType>;
 };
 
 
