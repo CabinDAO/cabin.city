@@ -5,7 +5,7 @@ import { RoleStep } from './RoleStep'
 
 export type StepConfig = {
   name: string
-  component: ({ onBack, onNext }: StepProps) => JSX.Element
+  component: ({ onBack, onNext }: StepProps) => JSX.Element | null
 }
 
 export type StepProps = {

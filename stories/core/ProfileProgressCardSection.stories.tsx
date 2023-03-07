@@ -1,4 +1,4 @@
-import { ProfileProgressCardSection } from '@/components/profile/profile-screen/ProfileProgressCardSection'
+import { ProfileProgressCardSection } from '@/components/profile/view-profile/ProfileProgressCardSection'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {

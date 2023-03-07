@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useGetProfileByIdQuery } from '@/generated/graphql'
-import { ProfileContent } from './profile-screen/ProfileContent'
+import { ProfileContent } from './view-profile/ProfileContent'
 
 export const ProfileView = () => {
   const router = useRouter()

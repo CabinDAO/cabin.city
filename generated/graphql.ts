@@ -585,10 +585,12 @@ export type TrackingEventProfileRelation = {
 };
 
 export type UpdateProfileInput = {
+  name?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
   location?: InputMaybe<Scalars['String']>;
-  roleTypes?: InputMaybe<Array<ProfileRoleType>>;
   contactFields?: InputMaybe<Array<ProfileContactFieldInput>>;
+  avatar?: InputMaybe<ProfileAvatarInput>;
 };
 
 export type Account = {

@@ -1,7 +1,7 @@
-import { ProfileView } from '@/components/profile/ProfileView'
+import { EditProfileView } from '@/components/profile/EditProfileView'
 
 const EditPage = () => {
-  return <ProfileView></ProfileView>
+  return <EditProfileView></EditProfileView>
 }
 
 export default EditPage

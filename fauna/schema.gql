@@ -115,10 +115,12 @@ enum ProfileContactFieldType {
 }
 
 input UpdateProfileInput {
+  name: String
+  email: String
   bio: String
   location: String
-  roleTypes: [ProfileRoleType!]
   contactFields: [ProfileContactFieldInput!]
+  avatar: ProfileAvatarInput
 }
 
 input ProfileContactFieldInput {

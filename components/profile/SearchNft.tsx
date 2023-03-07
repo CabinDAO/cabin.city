@@ -80,12 +80,11 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
         {searchResults.map((nft) => {
           return (
             <SearchResult
-              key={nft.title}
+              key={nft.tokenId}
               onClick={() => handleSearchResultClick(nft)}
             >
-              <NftImage key={nft.title}>
+              <NftImage>
                 <AutofitImage
-                  key={nft.title}
                   src={nft.media[0].thumbnail || ''}
                   alt={nft.title}
                 />

@@ -1,4 +1,4 @@
-import { ProfileEmptyStateSection } from '@/components/profile/profile-screen/ProfileEmptyStateSection'
+import { ProfileEmptyStateSection } from '@/components/profile/view-profile/ProfileEmptyStateSection'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
