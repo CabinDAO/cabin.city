@@ -1,14 +1,18 @@
+import { ColorName } from '@/styles/theme'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { Caption } from './Typography'
 
-const Container = styled.div<{ maxHeight?: number }>`
+const Container = styled.div<{
+  maxHeight?: number
+  backgroundColor: ColorName
+}>`
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: 0.8rem 0;
   gap: 1.2rem;
-  background: ${(props) => props.theme.colors.white};
+  background: ${(props) => props.theme.colors[props.backgroundColor]};
   border: 1px solid ${(props) => props.theme.colors.yellow900};
   overflow: hidden;
   height: 100%;
@@ -40,7 +44,7 @@ export const MenuSectionTitle = ({ title }: MenuSectionTitleProps) => (
 
 interface MenuPopupProps {
   open: boolean
-  items: number
+  fullWidth?: boolean
 }
 
 export const MenuPopup = styled.div<MenuPopupProps>`
@@ -48,7 +52,7 @@ export const MenuPopup = styled.div<MenuPopupProps>`
   z-index: 100;
   left: 0rem;
   top: calc(100% + 0.4rem);
-  width: 100%;
+  width: ${(props) => (props.fullWidth ? '100%' : 'auto')};
   ${(props) => !props.open && 'overflow: hidden;'}
   transition: max-height 100ms linear;
   max-height: ${(props) => (props.open ? `50vh` : '0')};
@@ -57,12 +61,14 @@ export const MenuPopup = styled.div<MenuPopupProps>`
 interface MenuProps {
   children: ReactNode
   maxHeight?: number
+  backgroundColor?: ColorName
 }
 
-export const Menu = ({ children, maxHeight }: MenuProps) => {
+export const Menu = (props: MenuProps) => {
+  const backgroundColor = props.backgroundColor ?? 'white'
   return (
-    <Container maxHeight={maxHeight} onClick={() => console.log('hi')}>
-      {children}
+    <Container maxHeight={props.maxHeight} backgroundColor={backgroundColor}>
+      {props.children}
     </Container>
   )
 }

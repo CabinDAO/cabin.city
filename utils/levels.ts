@@ -25,3 +25,10 @@ export const levelInfoFromType = (
 ): LevelInfo => {
   return LevelInfoByType[levelType]
 }
+
+export const allLevels = Object.values(ProfileRoleLevelType).map(
+  (levelType) => ({
+    ...levelInfoFromType(levelType),
+    levelType,
+  })
+)

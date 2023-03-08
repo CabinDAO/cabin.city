@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import useDropdownLogic, { SelectOption } from '../hooks/useDropdownLogic'
+import { ChevronButton } from './ChevronButton'
 import ClickAway from './ClickAway'
 import Icon from './Icon'
 import { InputBase } from './InputBase'
@@ -17,15 +18,6 @@ const StyledSelect = styled.div`
   outline: none;
   height: 1.6rem;
   display: block;
-`
-
-interface ChevronButtonProps {
-  open?: boolean
-}
-
-const ChevronButton = styled.div<ChevronButtonProps>`
-  cursor: pointer;
-  transform: rotate(${(props) => (props.open ? 180 : 0)}deg);
 `
 
 interface DropdownProps {
@@ -100,7 +92,7 @@ export const Dropdown = ({
             )}
           </StyledSelect>
         </InputBase>
-        <MenuPopup open={open && !disabled} items={options.length}>
+        <MenuPopup open={open && !disabled} fullWidth>
           <Menu maxHeight={menuMaxHeight}>
             <MenuSection>
               {options.map((opt, idx) => {

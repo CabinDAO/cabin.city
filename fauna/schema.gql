@@ -13,10 +13,13 @@ type Query {
   allHats: [Hat!]!
   allActivities: [Activity!]! @resolver(name: "all_activities", paginated: true)
 
-  profilesCount: Int! @resolver(name: "profiles_count")
+  profilesCount(input: GetProfilesInput): Int! @resolver(name: "profiles_count")
   tokenHoldersCount: Int! @resolver(name: "token_holders_count")
   citizensCount(status: CitizenshipStatus!): Int!
     @resolver(name: "profiles_by_citizenship_status_count")
+
+  getProfiles(input: GetProfilesInput!): [Profile!]!
+    @resolver(name: "get_profiles", paginated: true)
 }
 
 type Mutation {
@@ -126,6 +129,18 @@ input UpdateProfileInput {
 input ProfileContactFieldInput {
   type: ProfileContactFieldType!
   value: String!
+}
+
+input GetProfilesInput @embedded {
+  sort: ProfileSortType
+  roleTypes: [ProfileRoleType!]!
+  levelTypes: [ProfileRoleLevelType!]!
+  citizenshipStatuses: [CitizenshipStatus!]!
+}
+
+enum ProfileSortType {
+  CreatedAtAsc
+  CreatedAtDesc
 }
 
 type TrackingEvent {

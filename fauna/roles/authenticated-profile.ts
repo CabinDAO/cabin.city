@@ -132,6 +132,30 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('profiles_sort_by_createdAt_asc'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_sort_by_createdAt_desc'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_by_role'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_by_level'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -158,6 +182,12 @@ const authenticatedProfileRole: RoleResource = {
       },
     },
     {
+      resource: q.Function('account_by_address'),
+      actions: {
+        call: true,
+      },
+    },
+    {
       resource: q.Function('token_holders_count'),
       actions: {
         call: true,
@@ -171,6 +201,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('update_profile'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('get_profiles'),
       actions: {
         call: true,
       },

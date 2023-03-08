@@ -692,6 +692,13 @@ export enum CitizenshipStatus {
   Verified = 'Verified'
 }
 
+export type GetProfilesInput = {
+  sort?: InputMaybe<ProfileSortType>;
+  roleTypes: Array<ProfileRoleType>;
+  levelTypes: Array<ProfileRoleLevelType>;
+  citizenshipStatuses: Array<CitizenshipStatus>;
+};
+
 export type Hat = {
   __typename?: 'Hat';
   /** The document's ID. */
@@ -848,6 +855,11 @@ export enum ProfileRoleType {
   Resident = 'Resident'
 }
 
+export enum ProfileSortType {
+  CreatedAtAsc = 'CreatedAtAsc',
+  CreatedAtDesc = 'CreatedAtDesc'
+}
+
 export type Query = {
   __typename?: 'Query';
   /** Find a document from the collection of 'OtterspaceBadge' by its id. */
@@ -860,6 +872,7 @@ export type Query = {
   /** Find a document from the collection of 'TrackingEvent' by its id. */
   findTrackingEventByID?: Maybe<TrackingEvent>;
   accountByAddress?: Maybe<Account>;
+  getProfiles: QueryGetProfilesPage;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
   profilesCount: Scalars['Int'];
@@ -910,8 +923,20 @@ export type QueryAccountByAddressArgs = {
 };
 
 
+export type QueryGetProfilesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+  input: GetProfilesInput;
+};
+
+
 export type QueryFindActivityByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryProfilesCountArgs = {
+  input?: InputMaybe<GetProfilesInput>;
 };
 
 
@@ -977,6 +1002,17 @@ export type QueryAllActivitiesPage = {
   before?: Maybe<Scalars['String']>;
 };
 
+/** The pagination object for elements of type 'Profile'. */
+export type QueryGetProfilesPage = {
+  __typename?: 'QueryGetProfilesPage';
+  /** The elements of type 'Profile' in this page. */
+  data: Array<Maybe<Profile>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
 export type TrackingEvent = {
   __typename?: 'TrackingEvent';
   count: Scalars['Int'];
@@ -1023,10 +1059,19 @@ export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetActivitySummaryQuery = { __typename?: 'Query', profilesCount: number, tokenHoldersCount: number, citizensCount: number };
 
-export type GetProfilesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetProfileByAddressQueryVariables = Exact<{
+  address: Scalars['String'];
+}>;
 
 
-export type GetProfilesQuery = { __typename?: 'Query', allProfiles: { __typename?: 'ProfilePage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null> } };
+export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null } | null };
+
+export type GetProfilesQueryVariables = Exact<{
+  input: GetProfilesInput;
+}>;
+
+
+export type GetProfilesQuery = { __typename?: 'Query', profilesCount: number, getProfiles: { __typename?: 'QueryGetProfilesPage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null> } };
 
 export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } };
 
@@ -1281,13 +1326,52 @@ export function useGetActivitySummaryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetActivitySummaryQueryHookResult = ReturnType<typeof useGetActivitySummaryQuery>;
 export type GetActivitySummaryLazyQueryHookResult = ReturnType<typeof useGetActivitySummaryLazyQuery>;
 export type GetActivitySummaryQueryResult = Apollo.QueryResult<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>;
+export const GetProfileByAddressDocument = gql`
+    query GetProfileByAddress($address: String!) {
+  accountByAddress(address: $address) {
+    _id
+    profile {
+      ...Profile
+    }
+  }
+}
+    ${ProfileFragmentDoc}`;
+
+/**
+ * __useGetProfileByAddressQuery__
+ *
+ * To run a query within a React component, call `useGetProfileByAddressQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileByAddressQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileByAddressQuery({
+ *   variables: {
+ *      address: // value for 'address'
+ *   },
+ * });
+ */
+export function useGetProfileByAddressQuery(baseOptions: Apollo.QueryHookOptions<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>(GetProfileByAddressDocument, options);
+      }
+export function useGetProfileByAddressLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>(GetProfileByAddressDocument, options);
+        }
+export type GetProfileByAddressQueryHookResult = ReturnType<typeof useGetProfileByAddressQuery>;
+export type GetProfileByAddressLazyQueryHookResult = ReturnType<typeof useGetProfileByAddressLazyQuery>;
+export type GetProfileByAddressQueryResult = Apollo.QueryResult<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>;
 export const GetProfilesDocument = gql`
-    query GetProfiles {
-  allProfiles {
+    query GetProfiles($input: GetProfilesInput!) {
+  getProfiles(input: $input) {
     data {
       ...Profile
     }
   }
+  profilesCount(input: $input)
 }
     ${ProfileFragmentDoc}`;
 
@@ -1303,10 +1387,11 @@ export const GetProfilesDocument = gql`
  * @example
  * const { data, loading, error } = useGetProfilesQuery({
  *   variables: {
+ *      input: // value for 'input'
  *   },
  * });
  */
-export function useGetProfilesQuery(baseOptions?: Apollo.QueryHookOptions<GetProfilesQuery, GetProfilesQueryVariables>) {
+export function useGetProfilesQuery(baseOptions: Apollo.QueryHookOptions<GetProfilesQuery, GetProfilesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetProfilesQuery, GetProfilesQueryVariables>(GetProfilesDocument, options);
       }

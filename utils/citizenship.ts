@@ -27,3 +27,10 @@ export const citizenshipInfoFromStatus = (
   if (!status) return null
   return CitizenshipInfoByStatus[status]
 }
+
+export const allCitizenshipStatuses = Object.values(CitizenshipStatus).map(
+  (citizenshipStatus) => ({
+    ...citizenshipInfoFromStatus(citizenshipStatus),
+    citizenshipStatus,
+  })
+)

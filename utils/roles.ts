@@ -62,3 +62,8 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
 export const roleInfoFromType = (roleType: ProfileRoleType): RoleInfo => {
   return RoleInfoByType[roleType]
 }
+
+export const allRoles = Object.values(ProfileRoleType).map((roleType) => ({
+  ...roleInfoFromType(roleType),
+  roleType,
+}))

@@ -1,0 +1,18 @@
+fragment Profile on Profile {
+  _id
+  createdAt
+  name
+  avatar {
+    url
+  }
+  roles {
+    role
+    level
+  }
+  citizenshipStatus
+  bio
+  account {
+    _id
+    cabinTokenBalance
+  }
+}
