@@ -58,6 +58,9 @@ const theme = {
     red100: '#FBEDE6',
     white: '#FFFFFF',
   },
+  border: {
+    light: '1px solid rgba(29, 42, 42, 0.12)',
+  },
 }
 
 export const availableColors = Object.keys(theme.colors)

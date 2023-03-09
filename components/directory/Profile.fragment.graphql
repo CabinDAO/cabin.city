@@ -11,8 +11,5 @@ fragment Profile on Profile {
   }
   citizenshipStatus
   bio
-  account {
-    _id
-    cabinTokenBalance
-  }
+  cabinTokenBalanceInt
 }

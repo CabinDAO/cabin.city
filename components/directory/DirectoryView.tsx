@@ -3,6 +3,7 @@ import {
   ProfileFragment,
   ProfileRoleLevelType,
   ProfileRoleType,
+  ProfileSortType,
   useGetProfileByAddressLazyQuery,
   useGetProfilesQuery,
 } from '@/generated/graphql'
@@ -19,8 +20,10 @@ import { InputText } from '../core/InputText'
 import { NoWrap } from '../core/NoWrap'
 import { ProfileList } from '../core/ProfileList'
 import { ProfileListItem } from '../core/ProfileListItem'
+import { Sort, SortField, SortOption } from '../core/Sort'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { DIRECTORY_SORT_FIELDS } from './directory-sort'
 
 export const DirectoryView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -33,10 +36,18 @@ export const DirectoryView = () => {
     useState<ProfileFragment | null>(null)
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [totalProfiles, setTotalProfiles] = useState<number>(0)
+  const [profileSortType, setProfileSortType] = useState<ProfileSortType>(
+    ProfileSortType.CreatedAtDesc
+  )
 
   const { data } = useGetProfilesQuery({
     variables: {
-      input: { roleTypes, levelTypes, citizenshipStatuses },
+      input: {
+        roleTypes,
+        levelTypes,
+        citizenshipStatuses,
+        sort: profileSortType,
+      },
     },
   })
 
@@ -112,6 +123,10 @@ export const DirectoryView = () => {
     setCitizenshipStatuses([])
   }
 
+  const handleSort = (option: SortOption<ProfileSortType>) => {
+    setProfileSortType(option.key)
+  }
+
   return (
     <SingleColumnLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
@@ -144,7 +159,16 @@ export const DirectoryView = () => {
           <NoWrap>Clear all</NoWrap>
         </Button>
       </FilterContainer>
-      <ProfileList total={totalProfiles}>
+      <ProfileList
+        total={totalProfiles}
+        sortComponent={
+          <Sort
+            fields={DIRECTORY_SORT_FIELDS}
+            selectedOption={profileSortType}
+            onSelectOption={handleSort}
+          />
+        }
+      >
         {profiles.map((profile) => (
           <ProfileListItem key={profile._id} profile={profile} />
         ))}

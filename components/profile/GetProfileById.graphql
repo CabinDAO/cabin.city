@@ -5,6 +5,7 @@ fragment GetProfileById on Profile {
   bio
   location
   createdAt
+  cabinTokenBalanceInt
   roles {
     role
     level
@@ -16,7 +17,6 @@ fragment GetProfileById on Profile {
   account {
     _id
     address
-    cabinTokenBalance
   }
   contactFields {
     type

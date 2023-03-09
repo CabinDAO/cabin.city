@@ -11,6 +11,7 @@ type Query {
   allAccounts: [Account!]!
   allProfiles: [Profile!]!
   allHats: [Hat!]!
+  allBadges: [OtterspaceBadge!]!
   allActivities: [Activity!]! @resolver(name: "all_activities", paginated: true)
 
   profilesCount(input: GetProfilesInput): Int! @resolver(name: "profiles_count")
@@ -47,6 +48,9 @@ type Profile {
   contactFields: [ProfileContactField!]!
   account: Account! @relation # Should not be null until if/when email-only sign in is implemented
   trackingEvents: [TrackingEvent!]! @relation
+  # Rounded balance with 0 decimals to support display and sorting
+  cabinTokenBalanceInt: Int!
+  badgeCount: Int!
 }
 
 type ProfileAvatar @embedded {
@@ -141,6 +145,10 @@ input GetProfilesInput @embedded {
 enum ProfileSortType {
   CreatedAtAsc
   CreatedAtDesc
+  CabinBalanceAsc
+  CabinBalanceDesc
+  BadgeCountAsc
+  BadgeCountDesc
 }
 
 type TrackingEvent {
@@ -152,6 +160,7 @@ type TrackingEvent {
 type Account {
   address: String! @index(name: "account_by_address_casefold")
   profile: Profile @relation # Null if the user has not created their profile yet
+  # Raw token balance with 18 decimals
   cabinTokenBalance: String
   hats: [Hat!]! @relation
   badges: [OtterspaceBadge!]! @relation

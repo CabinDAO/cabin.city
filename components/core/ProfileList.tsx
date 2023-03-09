@@ -1,15 +1,17 @@
 import { formatValue } from '@/utils/display-utils'
+import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { ContentCard } from './ContentCard'
 import { Overline } from './Typography'
 
 interface ProfileListProps {
   total: number
-  children: React.ReactNode
+  children: ReactNode
+  sortComponent?: ReactNode
 }
 
 export const ProfileList = (props: ProfileListProps) => {
-  const { total, children } = props
+  const { total, children, sortComponent } = props
 
   const formattedTotal = formatValue(total)
 
@@ -18,6 +20,7 @@ export const ProfileList = (props: ProfileListProps) => {
       <Container>
         <HeaderContainer>
           <Overline>{`${formattedTotal} Results`}</Overline>
+          {sortComponent}
         </HeaderContainer>
         <InnerContainer>{children}</InnerContainer>
       </Container>

@@ -27,7 +27,7 @@ export const ProfileHeaderSection = ({
             <H1>{profile?.name}</H1>
             <BalanceAddressContainer>
               <Subline2>{`${
-                profile?.account?.cabinTokenBalance ?? 0
+                profile?.cabinTokenBalanceInt ?? 0
               } ₡ABIN`}</Subline2>
               <Subline2>·</Subline2>
               <CopyText text={ens ?? profile?.account?.address ?? ''}>

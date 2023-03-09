@@ -13,7 +13,7 @@ export const getCabinTokenBalances = async (
           balance: q.If(
             q.IsNull(q.Var('account')),
             null,
-            q.Select(['data', 'cabinTokenBalance'], q.Var('account'))
+            q.Select(['data', 'cabinTokenBalance'], q.Var('account'), null)
           ),
         },
         {

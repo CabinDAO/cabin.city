@@ -2,6 +2,7 @@ import { Expr, ExprVal, query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
 import { ActivityType } from '../../generated/graphql'
 import { GetProfileByAccountRef } from './GetProfileByAccountRef'
+import { SyncProfileBadgeCount } from './SyncProfileBadgeCount'
 import { ToTimestamp } from './ToTimestamp'
 import { UpsertActivity } from './UpsertActivity'
 
@@ -36,14 +37,17 @@ export const UpsertBadge = (
           }),
           profile: GetProfileByAccountRef(accountRefExpr),
         },
-        UpsertActivity(q.Var('profile'), {
-          key: badge.badgeId,
-          type: ActivityType.ProfileBadgeAdded,
-          timestamp: q.Select(['data', 'createdAt'], q.Var('badge')),
-          metadata: {
-            badge: SelectRef(q.Var('badge')),
-          },
-        })
+        q.Do(
+          SyncProfileBadgeCount(q.Var('profile'), accountRefExpr),
+          UpsertActivity(q.Var('profile'), {
+            key: badge.badgeId,
+            type: ActivityType.ProfileBadgeAdded,
+            timestamp: q.Select(['data', 'createdAt'], q.Var('badge')),
+            metadata: {
+              badge: SelectRef(q.Var('badge')),
+            },
+          })
+        )
       ),
 
       null // Do nothing if the badge already exists

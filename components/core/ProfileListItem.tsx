@@ -30,9 +30,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
               roleInfos={roleInfos}
             />
           </NameContainer>
-          <Caption>
-            {formatCabinTokenString(profile.account.cabinTokenBalance)} ₡ABIN
-          </Caption>
+          <Caption>{profile.cabinTokenBalanceInt ?? 0} ₡ABIN</Caption>
           <Body2>{profile.bio}</Body2>
         </InfoContainer>
       </AvatarContainer>
@@ -55,7 +53,7 @@ const ContainerLink = styled(Link)`
   }
 
   &:not(:last-child) {
-    border-bottom: 1px solid rgba(29, 42, 42, 0.12);
+    border-bottom: ${(props) => props.theme.border.light};
     padding-bottom: 1.8rem;
   }
 `

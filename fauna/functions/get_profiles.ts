@@ -3,6 +3,7 @@ import { FunctionResource } from 'fauna-gql-upload'
 import { PaginatedMatch } from '../lib/PaginatedMatch'
 import { ProfileSortType } from '../../generated/graphql'
 import { GetProfilesMatch } from '../lib/GetProfilesMatch'
+import { GetProfilesSortIndex } from '../lib/GetProfilesSortIndex'
 
 const getProfiles: FunctionResource = {
   name: 'get_profiles',
@@ -16,11 +17,7 @@ const getProfiles: FunctionResource = {
             q.Var('input'),
             ProfileSortType.CreatedAtDesc
           ),
-          sortIndex: q.If(
-            q.Equals(q.Var('sort'), ProfileSortType.CreatedAtAsc),
-            q.Index('profiles_sort_by_createdAt_asc'),
-            q.Index('profiles_sort_by_createdAt_desc')
-          ),
+          sortIndex: GetProfilesSortIndex(q.Var('sort')),
         },
         PaginatedMatch(
           q.Join(GetProfilesMatch(q.Var('input')), q.Var('sortIndex')),

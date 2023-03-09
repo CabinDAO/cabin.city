@@ -506,6 +506,8 @@ export type PartialUpdateProfileInput = {
   contactFields?: InputMaybe<Array<PartialUpdateProfileContactFieldInput>>;
   account?: InputMaybe<ProfileAccountRelation>;
   trackingEvents?: InputMaybe<ProfileTrackingEventsRelation>;
+  cabinTokenBalanceInt?: InputMaybe<Scalars['Int']>;
+  badgeCount?: InputMaybe<Scalars['Int']>;
 };
 
 /** 'ProfileRole' input values */
@@ -780,11 +782,13 @@ export type Profile = {
   email: Scalars['String'];
   /** The document's ID. */
   _id: Scalars['ID'];
+  cabinTokenBalanceInt: Scalars['Int'];
   bio?: Maybe<Scalars['String']>;
   citizenshipStatus?: Maybe<CitizenshipStatus>;
   roles: Array<ProfileRole>;
   createdAt: Scalars['Time'];
   account: Account;
+  badgeCount: Scalars['Int'];
   contactFields: Array<ProfileContactField>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
@@ -857,7 +861,11 @@ export enum ProfileRoleType {
 
 export enum ProfileSortType {
   CreatedAtAsc = 'CreatedAtAsc',
-  CreatedAtDesc = 'CreatedAtDesc'
+  CreatedAtDesc = 'CreatedAtDesc',
+  CabinBalanceAsc = 'CabinBalanceAsc',
+  CabinBalanceDesc = 'CabinBalanceDesc',
+  BadgeCountAsc = 'BadgeCountAsc',
+  BadgeCountDesc = 'BadgeCountDesc'
 }
 
 export type Query = {
@@ -888,6 +896,7 @@ export type Query = {
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
+  allBadges: OtterspaceBadgePage;
   tokenHoldersCount: Scalars['Int'];
   allHats: HatPage;
 };
@@ -986,6 +995,12 @@ export type QueryFindAccountByIdArgs = {
 };
 
 
+export type QueryAllBadgesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryAllHatsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -1064,25 +1079,25 @@ export type GetProfileByAddressQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null } | null };
+export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null } | null };
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'Query', profilesCount: number, getProfiles: { __typename?: 'QueryGetProfilesPage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } } | null> } };
+export type GetProfilesQuery = { __typename?: 'Query', profilesCount: number, getProfiles: { __typename?: 'QueryGetProfilesPage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
 
-export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, account: { __typename?: 'Account', _id: string, cabinTokenBalance?: string | null } };
+export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
-export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, cabinTokenBalance?: string | null }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> };
+export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, cabinTokenBalance?: string | null }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1186,10 +1201,7 @@ export const ProfileFragmentDoc = gql`
   }
   citizenshipStatus
   bio
-  account {
-    _id
-    cabinTokenBalance
-  }
+  cabinTokenBalanceInt
 }
     `;
 export const GetProfileByIdFragmentDoc = gql`
@@ -1200,6 +1212,7 @@ export const GetProfileByIdFragmentDoc = gql`
   bio
   location
   createdAt
+  cabinTokenBalanceInt
   roles {
     role
     level
@@ -1211,7 +1224,6 @@ export const GetProfileByIdFragmentDoc = gql`
   account {
     _id
     address
-    cabinTokenBalance
   }
   contactFields {
     type

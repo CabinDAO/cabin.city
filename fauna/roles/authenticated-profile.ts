@@ -145,6 +145,31 @@ const authenticatedProfileRole: RoleResource = {
       },
     },
     {
+      resource: q.Index('profiles_sort_by_cabinBalance_asc'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_sort_by_cabinBalance_desc'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_sort_by_badgeCount_asc'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profiles_sort_by_badgeCount_desc'),
+      actions: {
+        read: true,
+      },
+    },
+
+    {
       resource: q.Index('profiles_by_role'),
       actions: {
         read: true,
