@@ -1,6 +1,6 @@
-import { Expr, query as q } from 'faunadb'
+import { Expr, ExprVal, query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
-import { ActivityMetadata, ActivityType } from '../../generated/graphql'
+import { ActivityType, ProfileRole } from '../../generated/graphql'
 import { RefFromSet } from './RefFromSet'
 import { ToTimestamp } from './ToTimestamp'
 
@@ -10,7 +10,12 @@ export interface UpsertActivityInput {
   type: ActivityType
   transactionId?: string
   blockNumber?: string
-  metadata?: ActivityMetadata
+  metadata?: UpsertActivityMetadataInput
+}
+
+interface UpsertActivityMetadataInput {
+  badge?: ExprVal
+  profileRole?: ProfileRole | null
 }
 
 export const UpsertActivity = (profile: Expr, input: UpsertActivityInput) => {

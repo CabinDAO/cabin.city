@@ -1,5 +1,4 @@
 import { ProfileFragment } from '@/generated/graphql'
-import { formatCabinTokenString } from '@/lib/cabin-token'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import Link from 'next/link'

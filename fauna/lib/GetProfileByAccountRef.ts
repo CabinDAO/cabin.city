@@ -1,6 +1,6 @@
-import { Expr, query as q } from 'faunadb'
+import { ExprVal, query as q } from 'faunadb'
 
-export const GetProfileByAccountRef = (accountRef: Expr) => {
+export const GetProfileByAccountRef = (accountRef: ExprVal) => {
   return q.Let(
     {
       profileRef: q.Match(q.Index('account_profile_by_account'), accountRef),

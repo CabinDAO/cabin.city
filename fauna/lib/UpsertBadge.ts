@@ -1,4 +1,4 @@
-import { Expr, ExprVal, query as q } from 'faunadb'
+import { ExprVal, query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
 import { ActivityType } from '../../generated/graphql'
 import { GetProfileByAccountRef } from './GetProfileByAccountRef'
@@ -14,7 +14,7 @@ export interface UpsertBadgeFields {
 export const UpsertBadge = (
   badge: UpsertBadgeFields,
   specExpr: ExprVal,
-  accountRefExpr: Expr
+  accountRefExpr: ExprVal
 ) => {
   return q.Let(
     {

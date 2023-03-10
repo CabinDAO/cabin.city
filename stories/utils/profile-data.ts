@@ -23,4 +23,5 @@ export const DEFAULT_PROFILE_PROPS = {
     cabinTokenBalance: '20000000000000000000',
   },
   bio: 'I’m a construction enthusiast with a heart for nature.',
+  cabinTokenBalanceInt: 20,
 }

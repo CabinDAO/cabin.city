@@ -2,9 +2,9 @@
 pragma solidity 0.8.17;
 
 import "openzeppelin-contracts/access/Ownable.sol";
-import "unlock/contracts/interfaces/hooks/ILockKeyPurchasehook.sol";
-import "unlock/contracts/interfaces/hooks/ILockValidKeyHook.sol";
-import "unlock/contracts/interfaces/IPublicLock.sol";
+import "./unlock/ILockKeyPurchasehook.sol";
+import "./unlock/ILockValidKeyHook.sol";
+import "./unlock/IPublicLock.sol";
 import "./cabin-token/ICabinToken.sol";
 
 // TODO: Later - Remove

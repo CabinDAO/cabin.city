@@ -1,10 +1,10 @@
-import { Expr, query as q } from 'faunadb'
+import { Expr, ExprVal, query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
 import { CountAccountBadges } from './CountAccountBadges'
 
 export const SyncProfileBadgeCount = (
   profileExpr: Expr,
-  accountRefExpr: Expr
+  accountRefExpr: ExprVal
 ) => {
   return q.If(
     q.IsNull(profileExpr),
