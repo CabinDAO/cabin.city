@@ -41,8 +41,8 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
             {currentBadges.map((badge) => (
               <Badge
                 key={badge?.spec._id}
-                badgeId={badge?._id ?? ''}
-                name={`${badge?.spec._id} -  ${badge?.spec.name}` ?? ''}
+                badgeId={badge?.badgeId ?? ''}
+                name={badge?.spec.name ?? ''}
                 src={badge?.spec.image ?? ''}
               />
             ))}
