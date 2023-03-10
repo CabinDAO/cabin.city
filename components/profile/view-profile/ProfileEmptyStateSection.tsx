@@ -8,14 +8,14 @@ interface ProfileEmptyStateProps {
   icon: IconName
   title: string
   description: string
-  onCTAClick: () => void
+  href: string
 }
 
 export const ProfileEmptyStateSection = ({
   icon,
   title,
   description,
-  onCTAClick,
+  href,
 }: ProfileEmptyStateProps) => {
   return (
     <CabinGradientCard>
@@ -26,13 +26,14 @@ export const ProfileEmptyStateSection = ({
         <DescriptionContainer>
           <H2>{title}</H2>
           <Body2>{description}</Body2>
-          <Button
-            variant="link"
-            endAdornment={<Icon name="up-right-arrow" size={0.9} />}
-            onClick={onCTAClick}
-          >
-            <Overline>Learn More</Overline>
-          </Button>
+          <a href={href} target="_blank" rel="noreferrer">
+            <Button
+              variant="link"
+              endAdornment={<Icon name="up-right-arrow" size={0.9} />}
+            >
+              <Overline>Learn More</Overline>
+            </Button>
+          </a>
         </DescriptionContainer>
       </InnerContainer>
     </CabinGradientCard>

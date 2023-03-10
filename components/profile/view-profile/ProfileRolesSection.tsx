@@ -5,19 +5,12 @@ import styled from 'styled-components'
 import { RoleCard } from '@/components/core/RoleCard'
 import { H3 } from '@/components/core/Typography'
 import { ProfileEmptyStateSection } from './ProfileEmptyStateSection'
-import { useRouter } from 'next/router'
 
 interface ProfileRolesProps {
   profile: GetProfileByIdFragment
 }
 
 export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
-  const router = useRouter()
-
-  const handleCTAClick = () => {
-    router.push(`/profile/${profile._id}/setup`)
-  }
-
   if (profile.roles.length) {
     return (
       <Container>
@@ -39,7 +32,7 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
         icon="card-heart"
         title="Choose your interests"
         description="Level them up over time"
-        onCTAClick={handleCTAClick}
+        href="https://cabin.city"
       />
     )
   }

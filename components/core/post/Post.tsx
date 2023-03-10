@@ -11,10 +11,11 @@ import { getPostSlots } from './post-slots'
 export interface PostProps {
   activity: ActivityFragment
   baseDate: Date
+  excludeProfile?: boolean
 }
 
 export const Post = (props: PostProps) => {
-  const { activity } = props
+  const { activity, excludeProfile } = props
   const { profile } = activity
 
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.role))
@@ -23,14 +24,16 @@ export const Post = (props: PostProps) => {
 
   return (
     <Container>
-      <ProfileContainer>
-        <Avatar src={profile.avatar?.url} />
-        <ProfileName>{profile.name}</ProfileName>
-        <ProfileIcons
-          citizenshipStatus={citizenshipStatus}
-          roleInfos={roleInfos}
-        />
-      </ProfileContainer>
+      {!excludeProfile && (
+        <ProfileContainer>
+          <Avatar src={profile.avatar?.url} />
+          <ProfileName>{profile.name}</ProfileName>
+          <ProfileIcons
+            citizenshipStatus={citizenshipStatus}
+            roleInfos={roleInfos}
+          />
+        </ProfileContainer>
+      )}
       {Content && <Content {...props} />}
       <ActivityDate {...props} />
       {Media && <Media {...props} />}

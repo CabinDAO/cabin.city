@@ -181,6 +181,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('activities_by_profile'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -232,6 +238,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('get_profiles'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('get_activities_by_profile'),
       actions: {
         call: true,
       },

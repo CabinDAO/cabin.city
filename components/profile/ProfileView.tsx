@@ -12,6 +12,7 @@ export const ProfileView = () => {
   })
 
   const profile = data?.findProfileByID
+  const activities = data?.activitiesByProfile?.data
 
   if (loadingProfile) {
     return null
@@ -22,7 +23,7 @@ export const ProfileView = () => {
 
   return (
     <SingleColumnLayout>
-      <ProfileContent profile={profile} />
+      <ProfileContent profile={profile} activities={activities} />
     </SingleColumnLayout>
   )
 }

@@ -21,6 +21,8 @@ type Query {
 
   getProfiles(input: GetProfilesInput!): [Profile!]!
     @resolver(name: "get_profiles", paginated: true)
+  activitiesByProfile(profileId: ID!): [Activity!]!
+    @resolver(name: "get_activities_by_profile", paginated: true)
 }
 
 type Mutation {

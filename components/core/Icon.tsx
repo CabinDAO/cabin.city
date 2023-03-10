@@ -9,6 +9,7 @@ import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
+import chevronLeftSvg from './svg/chevron-left.svg'
 import chevronRightSvg from './svg/chevron-right.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
@@ -46,6 +47,7 @@ export const IconSvgs = {
   'card-heart': cardHeartSvg,
   check: checkSvg,
   'chevron-down': chevronDownSvg,
+  'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,
   citizen: citizenSvg,
   close: closeSvg,

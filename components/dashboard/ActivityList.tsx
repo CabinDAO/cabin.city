@@ -34,26 +34,12 @@ export const ActivityList = () => {
           loader="..."
         >
           {activities?.map((activity) => (
-            <ActivityPost
-              key={activity._id}
-              activity={activity}
-              baseDate={baseDate}
-            />
+            <Post key={activity._id} activity={activity} baseDate={baseDate} />
           ))}
         </InfiniteScroll>
       </InnerContainer>
     </ContentCard>
   )
-}
-
-interface ActivityPostProps {
-  activity: ActivityFragment
-  baseDate: Date
-}
-const ActivityPost = (props: ActivityPostProps) => {
-  const { activity, baseDate } = props
-
-  return <Post activity={activity} baseDate={baseDate} />
 }
 
 const InnerContainer = styled.div`

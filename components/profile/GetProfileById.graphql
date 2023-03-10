@@ -17,6 +17,18 @@ fragment GetProfileById on Profile {
   account {
     _id
     address
+    badges {
+      data {
+        _id
+        badgeId
+        spec {
+          _id
+          name
+          description
+          image
+        }
+      }
+    }
   }
   contactFields {
     type
@@ -27,5 +39,10 @@ fragment GetProfileById on Profile {
 query GetProfileById($id: ID!) {
   findProfileByID(id: $id) {
     ...GetProfileById
+  }
+  activitiesByProfile(profileId: $id, _size: 2) {
+    data {
+      ...Activity
+    }
   }
 }
