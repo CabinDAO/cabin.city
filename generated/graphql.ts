@@ -1083,10 +1083,19 @@ export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
+  size?: InputMaybe<Scalars['Int']>;
+  cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'Query', profilesCount: number, getProfiles: { __typename?: 'QueryGetProfilesPage', data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
+export type GetProfilesQuery = { __typename?: 'Query', getProfiles: { __typename?: 'QueryGetProfilesPage', after?: string | null, data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
+
+export type GetProfilesCountQueryVariables = Exact<{
+  input: GetProfilesInput;
+}>;
+
+
+export type GetProfilesCountQuery = { __typename?: 'Query', profilesCount: number };
 
 export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
@@ -1377,13 +1386,13 @@ export type GetProfileByAddressQueryHookResult = ReturnType<typeof useGetProfile
 export type GetProfileByAddressLazyQueryHookResult = ReturnType<typeof useGetProfileByAddressLazyQuery>;
 export type GetProfileByAddressQueryResult = Apollo.QueryResult<GetProfileByAddressQuery, GetProfileByAddressQueryVariables>;
 export const GetProfilesDocument = gql`
-    query GetProfiles($input: GetProfilesInput!) {
-  getProfiles(input: $input) {
+    query GetProfiles($input: GetProfilesInput!, $size: Int, $cursor: String) {
+  getProfiles(input: $input, _size: $size, _cursor: $cursor) {
     data {
       ...Profile
     }
+    after
   }
-  profilesCount(input: $input)
 }
     ${ProfileFragmentDoc}`;
 
@@ -1400,6 +1409,8 @@ export const GetProfilesDocument = gql`
  * const { data, loading, error } = useGetProfilesQuery({
  *   variables: {
  *      input: // value for 'input'
+ *      size: // value for 'size'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
@@ -1414,6 +1425,39 @@ export function useGetProfilesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetProfilesQueryHookResult = ReturnType<typeof useGetProfilesQuery>;
 export type GetProfilesLazyQueryHookResult = ReturnType<typeof useGetProfilesLazyQuery>;
 export type GetProfilesQueryResult = Apollo.QueryResult<GetProfilesQuery, GetProfilesQueryVariables>;
+export const GetProfilesCountDocument = gql`
+    query GetProfilesCount($input: GetProfilesInput!) {
+  profilesCount(input: $input)
+}
+    `;
+
+/**
+ * __useGetProfilesCountQuery__
+ *
+ * To run a query within a React component, call `useGetProfilesCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfilesCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfilesCountQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetProfilesCountQuery(baseOptions: Apollo.QueryHookOptions<GetProfilesCountQuery, GetProfilesCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfilesCountQuery, GetProfilesCountQueryVariables>(GetProfilesCountDocument, options);
+      }
+export function useGetProfilesCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfilesCountQuery, GetProfilesCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfilesCountQuery, GetProfilesCountQueryVariables>(GetProfilesCountDocument, options);
+        }
+export type GetProfilesCountQueryHookResult = ReturnType<typeof useGetProfilesCountQuery>;
+export type GetProfilesCountLazyQueryHookResult = ReturnType<typeof useGetProfilesCountLazyQuery>;
+export type GetProfilesCountQueryResult = Apollo.QueryResult<GetProfilesCountQuery, GetProfilesCountQueryVariables>;
 export const GetProfileByIdDocument = gql`
     query GetProfileById($id: ID!) {
   findProfileByID(id: $id) {

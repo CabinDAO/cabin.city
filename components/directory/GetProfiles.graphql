@@ -1,8 +1,8 @@
-query GetProfiles($input: GetProfilesInput!) {
-  getProfiles(input: $input) {
+query GetProfiles($input: GetProfilesInput!, $size: Int, $cursor: String) {
+  getProfiles(input: $input, _size: $size, _cursor: $cursor) {
     data {
       ...Profile
     }
+    after
   }
-  profilesCount(input: $input)
 }

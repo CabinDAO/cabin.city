@@ -5,13 +5,14 @@ import {
   ProfileRoleType,
   ProfileSortType,
   useGetProfileByAddressLazyQuery,
+  useGetProfilesCountQuery,
   useGetProfilesQuery,
 } from '@/generated/graphql'
 import { resolveAddressOrName } from '@/lib/ens'
 import { allCitizenshipStatuses } from '@/utils/citizenship'
 import { allLevels } from '@/utils/levels'
 import { allRoles } from '@/utils/roles'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
 import { Filter } from '../core/Filter'
@@ -20,10 +21,11 @@ import { InputText } from '../core/InputText'
 import { NoWrap } from '../core/NoWrap'
 import { ProfileList } from '../core/ProfileList'
 import { ProfileListItem } from '../core/ProfileListItem'
-import { Sort, SortField, SortOption } from '../core/Sort'
+import { Sort, SortOption } from '../core/Sort'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { DIRECTORY_SORT_FIELDS } from './directory-sort'
+import InfiniteScroll from 'react-infinite-scroll-component'
 
 export const DirectoryView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -40,15 +42,24 @@ export const DirectoryView = () => {
     ProfileSortType.CreatedAtDesc
   )
 
-  const { data } = useGetProfilesQuery({
+  const input = useMemo(() => {
+    return {
+      roleTypes,
+      levelTypes,
+      citizenshipStatuses,
+      sort: profileSortType,
+    }
+  }, [roleTypes, levelTypes, citizenshipStatuses, profileSortType])
+
+  const { data, fetchMore } = useGetProfilesQuery({
     variables: {
-      input: {
-        roleTypes,
-        levelTypes,
-        citizenshipStatuses,
-        sort: profileSortType,
-      },
+      input,
+      size: 20,
     },
+  })
+
+  const { data: profilesCountData } = useGetProfilesCountQuery({
+    variables: { input },
   })
 
   const [getProfileByAddress] = useGetProfileByAddressLazyQuery()
@@ -79,9 +90,12 @@ export const DirectoryView = () => {
       setProfiles(
         data.getProfiles.data.filter((a): a is ProfileFragment => !!a) ?? []
       )
-      setTotalProfiles(data.profilesCount)
+      setTotalProfiles(profilesCountData?.profilesCount ?? 0)
     }
-  }, [data, addressMatchProfile])
+  }, [data, addressMatchProfile, profilesCountData])
+
+  const hasMore = !!data?.getProfiles?.after
+  const dataLength = profiles.length
 
   const roleOptions = allRoles.map((role) => ({
     label: role.name,
@@ -169,9 +183,22 @@ export const DirectoryView = () => {
           />
         }
       >
-        {profiles.map((profile) => (
-          <ProfileListItem key={profile._id} profile={profile} />
-        ))}
+        <InfiniteScroll
+          hasMore={!!hasMore}
+          dataLength={dataLength}
+          next={() => {
+            return fetchMore({
+              variables: {
+                cursor: data?.getProfiles?.after,
+              },
+            })
+          }}
+          loader="..."
+        >
+          {profiles.map((profile) => (
+            <ProfileListItem key={profile._id} profile={profile} />
+          ))}
+        </InfiniteScroll>
       </ProfileList>
     </SingleColumnLayout>
   )

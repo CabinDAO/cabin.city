@@ -33,6 +33,15 @@ export const apolloClient = new ApolloClient({
               }
             },
           },
+          getProfiles: {
+            keyArgs: ['input'],
+            merge(existing, incoming) {
+              return {
+                ...incoming,
+                data: [...(existing?.data ?? []), ...incoming.data],
+              }
+            },
+          },
         },
       },
     },
