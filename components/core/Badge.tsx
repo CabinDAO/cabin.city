@@ -1,3 +1,4 @@
+import { getImageUrl } from '@/lib/image'
 import { getOtterSpaceOpenseaUrl } from '@/utils/opensea'
 import Image from 'next/image'
 import styled from 'styled-components'
@@ -14,10 +15,17 @@ interface BadgeProps {
 const IMAGE_SIZE = 176
 
 export const Badge = ({ name, src, badgeId }: BadgeProps) => {
+  const imageUrl = getImageUrl(src)
+
   return (
     <BadgeContainer>
       <ImageContainer>
-        <Image src={src} width={IMAGE_SIZE} height={IMAGE_SIZE} alt={name} />
+        <Image
+          src={imageUrl}
+          width={IMAGE_SIZE}
+          height={IMAGE_SIZE}
+          alt={name}
+        />
       </ImageContainer>
       <NameContainer>
         <NoWrap>

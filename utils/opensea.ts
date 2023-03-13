@@ -1,6 +1,8 @@
+import { tokenIdFromBadgeId } from '@/lib/otterspace/otterspace-utils'
 import { otterspaceConfig } from 'lib/protocol-config'
 
-export const getOtterSpaceOpenseaUrl = (tokenId: string) => {
+export const getOtterSpaceOpenseaUrl = (badgeId: string) => {
+  const tokenId = tokenIdFromBadgeId(badgeId)
   return `${getOpenSeaNetworkUrl(otterspaceConfig.networkName)}/${
     otterspaceConfig.contractAddress
   }/${tokenId}`
