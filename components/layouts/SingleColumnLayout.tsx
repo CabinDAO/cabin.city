@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import { useClientMediaRender } from '../hooks/useClientMediaRender'
+import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { MainContent, NavbarContainer } from './common.styles'
 
@@ -18,12 +20,20 @@ const Container = styled.div`
 `
 
 export const SingleColumnLayout = ({ children }: LayoutProps) => {
+  const { isMobile } = useClientMediaRender()
+
   return (
-    <Container>
-      <NavbarContainer>
-        <ProfileNavbar />
-      </NavbarContainer>
-      <MainContent>{children}</MainContent>
-    </Container>
+    <>
+      <Container>
+        <MainContent>{children}</MainContent>
+      </Container>
+      {isMobile ? (
+        <MobileFloatingMenu />
+      ) : (
+        <NavbarContainer>
+          <ProfileNavbar />
+        </NavbarContainer>
+      )}
+    </>
   )
 }

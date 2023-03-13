@@ -11,7 +11,7 @@ export const MenuItemLink = ({ menuItem }: MenuItemLinkProps) => {
 
   return (
     <Tooltip
-      tooltip={menuItemConfig.tooltipText ?? ''}
+      tooltip={menuItemConfig.displayText ?? ''}
       position="right"
       animate
     >

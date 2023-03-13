@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import { IconName } from '../core/Icon'
 import { TitleCard } from '../core/TitleCard'
+import { useClientMediaRender } from '../hooks/useClientMediaRender'
+import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
 
@@ -30,15 +32,23 @@ interface LayoutProps {
 }
 
 export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
+  const { isMobile } = useClientMediaRender()
+
   return (
-    <Container>
-      <NavbarContainer>
-        <ProfileNavbar />
-      </NavbarContainer>
-      <FixedWidthMainContent>
-        <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />
-        <ColumnsContainer>{children}</ColumnsContainer>
-      </FixedWidthMainContent>
-    </Container>
+    <>
+      <Container>
+        <FixedWidthMainContent>
+          <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />
+          <ColumnsContainer>{children}</ColumnsContainer>
+          {isMobile ? (
+            <MobileFloatingMenu />
+          ) : (
+            <NavbarContainer>
+              <ProfileNavbar />
+            </NavbarContainer>
+          )}
+        </FixedWidthMainContent>
+      </Container>
+    </>
   )
 }

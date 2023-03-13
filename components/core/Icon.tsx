@@ -26,6 +26,7 @@ import infoSvg from './svg/info.svg'
 import locationSvg from './svg/location.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
 import membersSvg from './svg/members.svg'
+import menuSvg from './svg/menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
 import personSvg from './svg/person.svg'
@@ -33,6 +34,7 @@ import profileSvg from './svg/profile.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
 import searchSvg from './svg/search.svg'
+import signOutSvg from './svg/sign-out.svg'
 import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
@@ -64,6 +66,7 @@ export const IconSvgs = {
   location: locationSvg,
   'logo-cabin': logoCabinSvg,
   members: membersSvg,
+  menu: menuSvg,
   naturalist: naturalistSvg,
   neighborhoods: neighborhoodsSvg,
   person: personSvg,
@@ -71,6 +74,7 @@ export const IconSvgs = {
   race: raceSvg,
   resident: residentSvg,
   search: searchSvg,
+  'sign-out': signOutSvg,
   stay: staySvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
