@@ -1,6 +1,6 @@
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { syncBadges } from '@/lib/fauna-server/syncBadges'
-import { otterspaceClient } from '@/lib/otterspace/otterspace/otterspaceClient'
+import { otterspaceClient } from '@/lib/otterspace/otterspaceClient'
 import { otterspaceConfig } from '@/lib/protocol-config'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { BigNumber } from 'ethers'

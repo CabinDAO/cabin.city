@@ -10,12 +10,20 @@ export interface Env {
   NEXT_PUBLIC_POLYGON_ALCHEMY_ID: string
   NEXT_PUBLIC_OPTIMISM_ALCHEMY_ID: string
   NEXT_PUBLIC_USE_TESTNETS: boolean
+  NEXT_PUBLIC_CITIZENSHIP_LOCK_ADDRESS: string
+  NEXT_PUBLIC_CITIZENSHIP_LOCK_CHAIN_ID: string
 }
 
 declare global {
   namespace NodeJS {
     // eslint-disable-next-line @typescript-eslint/no-empty-interface
     interface ProcessEnv extends EnvDict {}
+  }
+
+  interface Window {
+    unlockProtocol: {
+      loadCheckoutModal: (config?: unknown) => void
+    }
   }
 }
 

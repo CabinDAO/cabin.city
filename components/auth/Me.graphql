@@ -13,6 +13,7 @@ fragment Me on Profile {
   bio
   location
   createdAt
+  citizenshipStatus
   roles {
     role
     level
