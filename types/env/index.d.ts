@@ -12,6 +12,8 @@ export interface Env {
   NEXT_PUBLIC_USE_TESTNETS: boolean
   NEXT_PUBLIC_CITIZENSHIP_LOCK_ADDRESS: string
   NEXT_PUBLIC_CITIZENSHIP_LOCK_CHAIN_ID: string
+  NEXT_PUBLIC_VERCEL_URL: string
+  SIGNER_PRIVATE_KEY: string
 }
 
 declare global {

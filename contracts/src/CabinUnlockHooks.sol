@@ -1,44 +1,57 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity 0.8.17;
+pragma solidity ^0.8.19;
 
 import "openzeppelin-contracts/access/Ownable.sol";
-import "./unlock/ILockKeyPurchasehook.sol";
-import "./unlock/ILockValidKeyHook.sol";
+import "openzeppelin-contracts/utils/cryptography/ECDSA.sol";
+import "./unlock/ILockKeyPurchaseHook.sol";
 import "./unlock/IPublicLock.sol";
-import "./cabin-token/ICabinToken.sol";
 
-// TODO: Later - Remove
-import "forge-std/console.sol";
+contract CabinUnlockHooks is Ownable, ILockKeyPurchaseHook {
+    using ECDSA for bytes32;
 
-contract CabinUnlockHooks is Ownable, ILockKeyPurchaseHook, ILockValidKeyHook {
     error NoVoucher();
     error EmptyBytesArray();
+    error InvalidSignature();
 
-    ICabinToken public cabinToken;
+    event SetCabinTokensRequiredForDiscount(uint256 amount);
+    event SetSignerAddress(address signerAddress);
+
     IPublicLock public lock;
+    address public signerAddress;
 
     uint256 public cabinTokensRequiredForDiscount = 1000 * 1 ether;
 
-    // TODO: Confirm this default amount
-    uint256 public cabinTokenPurchaseBonus = 100 * 1 ether;
-
-    constructor(address cabinTokenAddress_, address lockAddress_) {
-        cabinToken = ICabinToken(cabinTokenAddress_);
+    constructor(address lockAddress_, address signerAddress_) {
         lock = IPublicLock(lockAddress_);
+        signerAddress = signerAddress_;
     }
 
     function setCabinTokensRequiredForDiscount(uint256 cabinTokensRequiredForDiscount_) external onlyOwner {
         cabinTokensRequiredForDiscount = cabinTokensRequiredForDiscount_;
+        emit SetCabinTokensRequiredForDiscount(cabinTokensRequiredForDiscount_);
+    }
+
+    function setSignerAddress(address signerAddress_) external onlyOwner {
+        signerAddress = signerAddress_;
+        emit SetSignerAddress(signerAddress_);
     }
 
     // ILockKeyPurchaseHook
 
-    function keyPurchasePrice(address, address recipient, address, bytes calldata)
+    function keyPurchasePrice(address, address recipient, address, bytes calldata data)
         external
         view
         returns (uint256 minKeyPrice)
     {
-        if (cabinToken.balanceOf(recipient) >= cabinTokensRequiredForDiscount) {
+        (bytes memory payload, bytes memory signature) = abi.decode(data, (bytes, bytes));
+
+        if (!_verifySignature(keccak256(abi.encode("CabinUnlockData", recipient, block.chainid)), signature)) {
+            revert InvalidSignature();
+        }
+
+        (, uint256 cabinBalance) = abi.decode(payload, (bool, uint256));
+
+        if (cabinBalance >= cabinTokensRequiredForDiscount) {
             return 0;
         }
 
@@ -51,42 +64,30 @@ contract CabinUnlockHooks is Ownable, ILockKeyPurchaseHook, ILockValidKeyHook {
         address recipient,
         address, // referrer
         bytes calldata data,
-        uint256 minKeyPrice,
+        uint256, // minKeyPrice,
         uint256 // pricePaid
-    ) external {
+    ) external view {
         if (data.length == 0) {
             revert EmptyBytesArray();
         }
 
-        (bool hasVoucher) = abi.decode(data, (bool));
+        (bytes memory payload, bytes memory signature) = abi.decode(data, (bytes, bytes));
+        (bool hasVoucher,) = abi.decode(payload, (bool, uint256));
+        _verifySignature(keccak256(abi.encode("CabinUnlockData", recipient, block.chainid)), signature);
+
         if (!hasVoucher) {
             revert NoVoucher();
         }
-
-        // TODO: Maybe check that this equals the `PublicLock` `keyPrice`?
-        if (minKeyPrice > 0 && cabinToken.balanceOf(address(this)) >= cabinTokenPurchaseBonus) {
-            cabinToken.transfer(recipient, cabinTokenPurchaseBonus);
-        }
     }
 
-    // ILockValidKeyHook
+    function _verifySignature(bytes32 hash, bytes memory signature) internal view returns (bool) {
+        bytes32 signedHash = hash.toEthSignedMessageHash();
+        (address signedHashAddress, ECDSA.RecoverError error) = signedHash.tryRecover(signature);
 
-    function hasValidKey(
-        address, //lockAddress
-        address keyOwner,
-        uint256, // expirationTimestamp
-        bool isValidKey
-    ) external view returns (bool) {
-        if (isValidKey) {
-            return true;
+        if (error == ECDSA.RecoverError.NoError) {
+            return signedHashAddress == signerAddress;
+        } else {
+            return false;
         }
-
-        // TODO: Determine if we want to invalidate the key immediately or only after it expires.
-        // TODO: What if they previously paid but now have enough CABIN, does it stay valid forever?
-        // TODO: `keyOwner` - who is this if they key was granted/gifted by someone else?
-
-        // If we check `balanceOf` here:
-        //  those who received a free membership from >= 1000 CABIN will have invalid tokens after the expiration period passes
-        return lock.totalKeys(keyOwner) > 0 && cabinToken.balanceOf(keyOwner) >= cabinTokensRequiredForDiscount;
     }
 }

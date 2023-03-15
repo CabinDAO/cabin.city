@@ -1,22 +1,60 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.17;
+pragma solidity ^0.8.19;
 
 import "forge-std/Test.sol";
+import "forge-std/console.sol";
 import "../src/CabinUnlockHooks.sol";
 import "../src/cabin-token/MockCabinToken.sol";
 import "./support/MockPublicLock.sol";
+import "./support/Signer.sol";
 
 contract CabinUnlockHooksTest is Test {
     address OWNER = makeAddr("owner");
+    uint256 SIGNER_PRIVATE_KEY = 0xB0B;
+    address SIGNER_ADDRESS;
+    uint256 FAKE_SIGNER_PRIVATE_KEY = 0xB0C;
+    address FAKE_SIGNER_ADDRESS;
+
+    Signer _signer;
+    Signer _fakeSigner;
     CabinUnlockHooks _hooks;
-    ICabinToken _cabinToken;
     MockPublicLock _lock;
 
     function setUp() public {
-        _cabinToken = new MockCabinToken(OWNER);
+        vm.chainId(5); // Goerli
+        SIGNER_ADDRESS = vm.addr(SIGNER_PRIVATE_KEY);
+        _signer = new Signer(vm, SIGNER_ADDRESS, SIGNER_PRIVATE_KEY);
 
+        FAKE_SIGNER_ADDRESS = vm.addr(FAKE_SIGNER_PRIVATE_KEY);
+        _fakeSigner = new Signer(vm, FAKE_SIGNER_ADDRESS, FAKE_SIGNER_PRIVATE_KEY);
+
+        vm.prank(OWNER);
         _lock = new MockPublicLock();
-        _hooks = new CabinUnlockHooks(address(_cabinToken), address(_lock));
+
+        vm.prank(OWNER);
+        _hooks = new CabinUnlockHooks(address(_lock), SIGNER_ADDRESS);
+    }
+
+    function _buildData(address recipient, bool hasVoucher, uint256 cabinBalance)
+        internal
+        view
+        returns (bytes memory)
+    {
+        return _buildDataWithSigner(recipient, hasVoucher, cabinBalance, _signer);
+    }
+
+    function _buildDataWithSigner(address recipient, bool hasVoucher, uint256 cabinBalance, Signer signer)
+        internal
+        view
+        returns (bytes memory)
+    {
+        bytes memory payload = abi.encode(hasVoucher, cabinBalance);
+        bytes memory digest = abi.encode("CabinUnlockData", recipient, block.chainid);
+        bytes32 hashed = keccak256(digest);
+
+        bytes memory signature = signer.sign(hashed);
+
+        return abi.encode(payload, signature);
     }
 
     function testDefaults() public {
@@ -27,67 +65,74 @@ contract CabinUnlockHooksTest is Test {
         address from = makeAddr("from");
         address recipient = makeAddr("recipient");
         address referrer = makeAddr("referrer");
-        uint256 price = _hooks.keyPurchasePrice(from, recipient, referrer, new bytes(0));
+        uint256 price = _hooks.keyPurchasePrice(from, recipient, referrer, _buildData(recipient, true, 0));
         assertEq(price, 209_000000);
     }
 
     function testKeyPurchasePriceRecipientHolds1000CabinTokens() public {
         address from = makeAddr("from");
-        address recipient = makeAddr("recipient");
+        // address recipient = makeAddr("recipient");
+        address recipient = 0x5685f4d3d59Ef81beEac49f80B785290F9F2ec5c;
         address referrer = makeAddr("referrer");
 
-        vm.prank(OWNER);
-        _cabinToken.transfer(recipient, 1000 * 1 ether);
+        bool hasVoucher = true;
+        uint256 cabinBalance = 1000 * 1 ether;
+        bytes memory data = _buildData(recipient, hasVoucher, cabinBalance);
+        console.log("data:");
+        console.logBytes(data);
 
-        uint256 price = _hooks.keyPurchasePrice(from, recipient, referrer, new bytes(0));
+        uint256 price = _hooks.keyPurchasePrice(from, recipient, referrer, data);
         assertEq(price, 0);
     }
 
-    function testOnKeyPurchaseRecipientHoldsZeroCabinIsGrantedCabinTokens() public {
+    function testKeyPurchasePriceRecipientDoesNotMatchSignatureRecipientReverts() public {
         address from = makeAddr("from");
         address recipient = makeAddr("recipient");
+        address otherRecipient = makeAddr("otherRecipient");
         address referrer = makeAddr("referrer");
 
-        uint256 tokenId = 1;
-        uint256 minKeyPrice = 209_000000;
-        uint256 pricePaid = minKeyPrice;
-
-        // Ensure contract has enough cabin tokens
-        vm.prank(OWNER);
-        _cabinToken.transfer(address(_hooks), 100 * 1 ether);
-
         bool hasVoucher = true;
-        bytes memory data = abi.encode(hasVoucher);
+        uint256 cabinBalance = 1000 * 1 ether;
+        bytes memory data = _buildData(otherRecipient, hasVoucher, cabinBalance);
 
-        _hooks.onKeyPurchase(tokenId, from, recipient, referrer, data, minKeyPrice, pricePaid);
-
-        assertEq(_cabinToken.balanceOf(recipient), 100 * 1 ether);
+        vm.expectRevert(CabinUnlockHooks.InvalidSignature.selector);
+        _hooks.keyPurchasePrice(from, recipient, referrer, data);
     }
 
-    function testOnKeyPurchaseContractHasNoFunds() public {
+    function testKeyPurchasePriceRecipientSignedByFakeSignerReverts() public {
         address from = makeAddr("from");
         address recipient = makeAddr("recipient");
         address referrer = makeAddr("referrer");
 
-        uint256 tokenId = 1;
-        uint256 minKeyPrice = 209_000000;
-        uint256 pricePaid = minKeyPrice;
+        bool hasVoucher = true;
+        uint256 cabinBalance = 1000 * 1 ether;
+        bytes memory data = _buildDataWithSigner(recipient, hasVoucher, cabinBalance, _fakeSigner);
+
+        vm.expectRevert(CabinUnlockHooks.InvalidSignature.selector);
+        _hooks.keyPurchasePrice(from, recipient, referrer, data);
+    }
+
+    function testKeyPurchasePriceRecipientHolds999CabinTokens() public {
+        address from = makeAddr("from");
+        address recipient = makeAddr("recipient");
+        address referrer = makeAddr("referrer");
 
         bool hasVoucher = true;
-        bytes memory data = abi.encode(hasVoucher);
+        uint256 cabinBalance = 999 * 1 ether;
+        bytes memory data = _buildData(recipient, hasVoucher, cabinBalance);
 
-        _hooks.onKeyPurchase(tokenId, from, recipient, referrer, data, minKeyPrice, pricePaid);
-
-        assertEq(_cabinToken.balanceOf(recipient), 0);
+        uint256 price = _hooks.keyPurchasePrice(from, recipient, referrer, data);
+        assertEq(price, 209_000000);
     }
 
     function testOnKeyPurchaseContractWithVoucher() public {
         bool hasVoucher = true;
-        bytes memory data = abi.encode(hasVoucher);
-
+        uint256 cabinBalance = 0;
         address from = makeAddr("from");
         address recipient = makeAddr("recipient");
         address referrer = makeAddr("referrer");
+
+        bytes memory data = _buildData(recipient, hasVoucher, cabinBalance);
 
         uint256 tokenId = 1;
         uint256 minKeyPrice = 209_000000;
@@ -98,11 +143,12 @@ contract CabinUnlockHooksTest is Test {
 
     function testOnKeyPurchaseContractNoVoucherReverts() public {
         bool hasVoucher = false;
-        bytes memory data = abi.encode(hasVoucher);
-
+        uint256 cabinBalance = 0;
         address from = makeAddr("from");
         address recipient = makeAddr("recipient");
         address referrer = makeAddr("referrer");
+
+        bytes memory data = _buildData(recipient, hasVoucher, cabinBalance);
 
         uint256 tokenId = 1;
         uint256 minKeyPrice = 209_000000;
@@ -126,61 +172,37 @@ contract CabinUnlockHooksTest is Test {
         _hooks.onKeyPurchase(tokenId, from, recipient, referrer, emptyData, minKeyPrice, pricePaid);
     }
 
-    function testHasValidKeyIsValidKeyIsFalseReturnsFalse() public {
-        address lockAddress = makeAddr("lockAddress");
-        address keyOwner = makeAddr("keyOwner");
-        uint256 expirationTimestamp = 0;
-        bool isValidKey = false;
+    function testSetCabinTokensRequiredForDiscountNotOwnerReverts() public {
+        uint256 newCabinTokensRequiredForDiscount = 2000 * 1 ether;
 
-        bool hasValidKey = _hooks.hasValidKey(lockAddress, keyOwner, expirationTimestamp, isValidKey);
-
-        assertEq(hasValidKey, false);
+        vm.prank(makeAddr("notOwner"));
+        vm.expectRevert("Ownable: caller is not the owner");
+        _hooks.setCabinTokensRequiredForDiscount(newCabinTokensRequiredForDiscount);
     }
 
-    function testHasValidKeyIsValidKeyIsTrueReturnsTrue() public {
-        address lockAddress = makeAddr("lockAddress");
-        address keyOwner = makeAddr("keyOwner");
-        uint256 expirationTimestamp = 0;
-        bool isValidKey = true;
-
-        bool hasValidKey = _hooks.hasValidKey(lockAddress, keyOwner, expirationTimestamp, isValidKey);
-
-        assertEq(hasValidKey, true);
-    }
-
-    function testHasValidKeyHas1000CabinTokensButZeroKeys() public {
-        address lockAddress = makeAddr("lockAddress");
-        address keyOwner = makeAddr("keyOwner");
-        uint256 expirationTimestamp = 0;
-        bool isValidKey = false;
+    function testSetCabinTokensRequiredForDiscount() public {
+        uint256 newCabinTokensRequiredForDiscount = 2000 * 1 ether;
 
         vm.prank(OWNER);
-        _cabinToken.transfer(keyOwner, 1000 * 1 ether);
+        _hooks.setCabinTokensRequiredForDiscount(newCabinTokensRequiredForDiscount);
 
-        bool hasValidKey = _hooks.hasValidKey(lockAddress, keyOwner, expirationTimestamp, isValidKey);
-
-        // The hook contract will pass isValidKey as false
-        // The keyOwner also will not have a balance (no token/key purchased)
-        // So the key is not valid
-        assertEq(hasValidKey, false);
+        assertEq(_hooks.cabinTokensRequiredForDiscount(), newCabinTokensRequiredForDiscount);
     }
 
-    function testHasValidKeyHas1000CabinTokensAndOneExpiredKey() public {
-        address lockAddress = makeAddr("lockAddress");
-        address keyOwner = makeAddr("keyOwner");
-        uint256 expirationTimestamp = 0;
-        bool isValidKey = false;
+    function testSetSignerAddress() public {
+        address newSignerAddress = makeAddr("newSigner");
 
         vm.prank(OWNER);
-        _cabinToken.transfer(keyOwner, 1000 * 1 ether);
+        _hooks.setSignerAddress(newSignerAddress);
 
-        _lock.setTotalKeys(keyOwner, 1);
+        assertEq(_hooks.signerAddress(), newSignerAddress);
+    }
 
-        bool hasValidKey = _hooks.hasValidKey(lockAddress, keyOwner, expirationTimestamp, isValidKey);
+    function testSetSignerAddressNotOwnerReverts() public {
+        address newSignerAddress = makeAddr("newSigner");
 
-        // The hook contract will pass isValidKey as false (expired)
-        // The keyOwner also will have a key from a previous purchase
-        // So the key is valid
-        assertEq(hasValidKey, true);
+        vm.prank(makeAddr("notOwner"));
+        vm.expectRevert("Ownable: caller is not the owner");
+        _hooks.setSignerAddress(newSignerAddress);
     }
 }

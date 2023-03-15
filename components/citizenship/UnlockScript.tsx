@@ -18,6 +18,7 @@ export const UnlockScript = () => {
           skipRecipient: true,
           title: 'Cabin Citizenship',
           icon: '',
+          dataBuilder:"https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder"
         };
 
       (function(d, s) {

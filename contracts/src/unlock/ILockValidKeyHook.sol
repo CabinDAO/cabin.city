@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.17 <0.9.0;
+pragma solidity ^0.8.19;
 
 /**
  * @notice Functions to be implemented by a hasValidKey Hook.
