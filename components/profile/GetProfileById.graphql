@@ -5,6 +5,7 @@ fragment GetProfileById on Profile {
   bio
   location
   createdAt
+  citizenshipStatus
   cabinTokenBalanceInt
   roles {
     role

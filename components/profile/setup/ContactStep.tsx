@@ -9,7 +9,7 @@ import { useUser } from '@/components/auth/useUser'
 export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useUser()
   const [contactList, setContactList] = useState<ProfileContactField[]>([])
-  const { updateProfile } = useUpdateProfile()
+  const { updateProfile } = useUpdateProfile(user?._id)
 
   const handleNext = async () => {
     await updateProfile({

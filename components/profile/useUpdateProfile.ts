@@ -3,22 +3,20 @@ import {
   UpdateProfileInput,
   useUpdateProfileMutation,
 } from '@/generated/graphql'
-import { useUser } from '../auth/useUser'
 
 interface UpdateProfileProps {
   data?: UpdateProfileInput
   roleTypes?: ProfileRoleType[]
 }
 
-export function useUpdateProfile() {
-  const { user } = useUser()
+export function useUpdateProfile(profileId: string | undefined) {
   const [updateProfileMutation] = useUpdateProfileMutation()
 
   const updateProfile = async (props: UpdateProfileProps) => {
-    if (user) {
+    if (profileId) {
       const { data } = await updateProfileMutation({
         variables: {
-          id: user._id,
+          id: profileId,
           data: props.data,
           roleTypes: props.roleTypes,
         },

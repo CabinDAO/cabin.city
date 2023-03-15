@@ -24,7 +24,7 @@ export const formatValue = (value: number) => {
 export const pxToRem = (px: number) => `${px / 10}`
 
 export const shortenedAddress = (address: string | undefined) =>
-  address ? `${address.slice(0, 6)}...${address.slice(-4)}` : null
+  address ? `${address.slice(0, 4)}...${address.slice(-4)}` : null
 
 export const monthYearFormat = (dateISOString: string) =>
   format(new Date(dateISOString), 'MMMM yyyy', { locale: enUS })

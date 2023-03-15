@@ -1,3 +1,4 @@
+import Icon from '@/components/core/Icon'
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
@@ -7,6 +8,8 @@ import { CopyText } from '../../core/CopyToClipboard'
 import { H1, Subline2 } from '../../core/Typography'
 import useEns from '../../hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
+
+import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 
 interface ProfileHeaderProps {
   profile: GetProfileByIdFragment | undefined | null
@@ -18,13 +21,21 @@ export const ProfileHeaderSection = ({
   isOwnProfile = false,
 }: ProfileHeaderProps) => {
   const { ens } = useEns(profile?.account?.address)
+
+  const iconName = citizenshipInfoFromStatus(
+    profile?.citizenshipStatus
+  )?.iconName
+
   return (
     <ContentCard shadow>
       <Container>
         <ProfileSummary>
           <Avatar size={8.8} src={profile?.avatar?.url} />
           <ProfileInfoContainer>
-            <H1>{profile?.name}</H1>
+            <CitizenContainer>
+              <H1>{profile?.name}</H1>
+              {iconName && <Icon name={iconName} size={1.4} />}
+            </CitizenContainer>
             <BalanceAddressContainer>
               <Subline2>{`${
                 profile?.cabinTokenBalanceInt ?? 0
@@ -51,6 +62,14 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 1.6rem 2.4rem;
   width: 100%;
+`
+
+const CitizenContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: center;
 `
 
 const BalanceAddressContainer = styled.div`

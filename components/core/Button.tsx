@@ -19,6 +19,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   outline: 0;
   border: none;
   padding: 1.5rem 2.4rem;
+  white-space: nowrap;
 
   // Shared for primary and secondary
   border-width: 0.1rem 0.4rem 0.4rem 0.1rem;

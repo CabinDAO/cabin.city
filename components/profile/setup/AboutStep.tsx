@@ -9,7 +9,7 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useUser()
   const [bio, setBio] = useState(user?.bio ?? '')
   const [location, setLocation] = useState(user?.location ?? '')
-  const { updateProfile } = useUpdateProfile()
+  const { updateProfile } = useUpdateProfile(user?._id)
 
   const handleNext = async () => {
     await updateProfile({

@@ -26,7 +26,7 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
     currentRoles.map((cr) => cr.role)
   )
 
-  const { updateProfile } = useUpdateProfile()
+  const { updateProfile } = useUpdateProfile(user?._id)
 
   const handleNext = async () => {
     await updateProfile({

@@ -8,6 +8,7 @@ import { ProfileHeaderSection } from './ProfileHeaderSection'
 import { ProfileRolesSection } from './ProfileRolesSection'
 import { ProfilePassportsSection } from './ProfilePassportsSection'
 import { ProfileActivitiesSection } from './ProfileActivitiesSection'
+import { ProfileCitizenSection } from './ProfileCitizenSection'
 
 interface ProfileContentProps {
   profile: GetProfileByIdFragment
@@ -32,6 +33,7 @@ export const ProfileContent = ({
         />
       )}
       <ProfileAboutSection profile={profile} />
+      <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
       <ProfileRolesSection profile={profile} />
       <ProfilePassportsSection profile={profile} />
       <ProfileActivitiesSection activities={activities} />

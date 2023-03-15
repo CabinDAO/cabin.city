@@ -1,7 +1,14 @@
-import { MeFragment, GetProfileByIdFragment } from '@/generated/graphql'
+import { useUser } from '@/components/auth/useUser'
+import { useModal } from '@/components/hooks/useModal'
+import {
+  MeFragment,
+  GetProfileByIdFragment,
+  CitizenshipStatus,
+} from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { Button } from '../../core/Button'
 import Icon from '../../core/Icon'
+import { VouchModal } from './VouchModal'
 
 interface ProfileHeaderButtonProps {
   profile: MeFragment | GetProfileByIdFragment | undefined | null
@@ -13,12 +20,16 @@ export const ProfileHeaderButton = ({
   isOwnProfile,
 }: ProfileHeaderButtonProps) => {
   const router = useRouter()
+  const { user } = useUser()
+  const { showModal } = useModal()
 
   const handleProfileHeaderButtonClick = () => {
     if (isOwnProfile) {
       router.push(`/profile/${profile?._id}/edit`)
-    } else {
-      // TODO: Add vouch logic
+    } else if (profile) {
+      showModal(() => (
+        <VouchModal profile={profile as GetProfileByIdFragment} />
+      ))
     }
   }
   if (isOwnProfile) {
@@ -27,7 +38,10 @@ export const ProfileHeaderButton = ({
         Edit Profile
       </Button>
     )
-  } else {
+  } else if (
+    profile?.citizenshipStatus === CitizenshipStatus.VouchRequested &&
+    user?.citizenshipStatus === CitizenshipStatus.Verified
+  ) {
     return (
       <Button
         variant="tertiary"
@@ -37,5 +51,7 @@ export const ProfileHeaderButton = ({
         Vouch
       </Button>
     )
+  } else {
+    return null
   }
 }
