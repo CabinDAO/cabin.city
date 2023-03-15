@@ -20,11 +20,12 @@ const ProgressContainer = styled.div<ProgressContainerProps>`
 
 interface ProgressBarProps {
   progress: number
+  className?: string
 }
 
-export const ProgressBar = ({ progress }: ProgressBarProps) => {
+export const ProgressBar = ({ progress, className }: ProgressBarProps) => {
   return (
-    <Container>
+    <Container className={className}>
       <ProgressContainer progress={progress} />
     </Container>
   )

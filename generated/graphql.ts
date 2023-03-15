@@ -1143,12 +1143,13 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } };
 
-export type VouchProfileMutationVariables = Exact<{
+export type UpdateProfileCitizenshipStatusMutationVariables = Exact<{
   id: Scalars['ID'];
+  citizenshipStatus?: InputMaybe<CitizenshipStatus>;
 }>;
 
 
-export type VouchProfileMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
+export type UpdateProfileCitizenshipStatusMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }> } | null };
 
 export const TrackingEventFragmentDoc = gql`
     fragment TrackingEvent on TrackingEvent {
@@ -1607,36 +1608,37 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
-export const VouchProfileDocument = gql`
-    mutation vouchProfile($id: ID!) {
-  partialUpdateProfile(id: $id, data: {citizenshipStatus: Vouched}) {
+export const UpdateProfileCitizenshipStatusDocument = gql`
+    mutation updateProfileCitizenshipStatus($id: ID!, $citizenshipStatus: CitizenshipStatus) {
+  partialUpdateProfile(id: $id, data: {citizenshipStatus: $citizenshipStatus}) {
     ...GetProfileById
   }
 }
     ${GetProfileByIdFragmentDoc}`;
-export type VouchProfileMutationFn = Apollo.MutationFunction<VouchProfileMutation, VouchProfileMutationVariables>;
+export type UpdateProfileCitizenshipStatusMutationFn = Apollo.MutationFunction<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>;
 
 /**
- * __useVouchProfileMutation__
+ * __useUpdateProfileCitizenshipStatusMutation__
  *
- * To run a mutation, you first call `useVouchProfileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useVouchProfileMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateProfileCitizenshipStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileCitizenshipStatusMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [vouchProfileMutation, { data, loading, error }] = useVouchProfileMutation({
+ * const [updateProfileCitizenshipStatusMutation, { data, loading, error }] = useUpdateProfileCitizenshipStatusMutation({
  *   variables: {
  *      id: // value for 'id'
+ *      citizenshipStatus: // value for 'citizenshipStatus'
  *   },
  * });
  */
-export function useVouchProfileMutation(baseOptions?: Apollo.MutationHookOptions<VouchProfileMutation, VouchProfileMutationVariables>) {
+export function useUpdateProfileCitizenshipStatusMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<VouchProfileMutation, VouchProfileMutationVariables>(VouchProfileDocument, options);
+        return Apollo.useMutation<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>(UpdateProfileCitizenshipStatusDocument, options);
       }
-export type VouchProfileMutationHookResult = ReturnType<typeof useVouchProfileMutation>;
-export type VouchProfileMutationResult = Apollo.MutationResult<VouchProfileMutation>;
-export type VouchProfileMutationOptions = Apollo.BaseMutationOptions<VouchProfileMutation, VouchProfileMutationVariables>;
+export type UpdateProfileCitizenshipStatusMutationHookResult = ReturnType<typeof useUpdateProfileCitizenshipStatusMutation>;
+export type UpdateProfileCitizenshipStatusMutationResult = Apollo.MutationResult<UpdateProfileCitizenshipStatusMutation>;
+export type UpdateProfileCitizenshipStatusMutationOptions = Apollo.BaseMutationOptions<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>;

@@ -1,23 +1,51 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { useUser } from '../auth/useUser'
-import { Body1 } from '../core/Typography'
-import { CitizenshipStatus } from '@/generated/graphql'
-import { Button } from '../core/Button'
+import {
+  CitizenshipStatus,
+  useUpdateProfileCitizenshipStatusMutation,
+} from '@/generated/graphql'
+import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 
 export const CitizenshipView = () => {
   const { user } = useUser({ redirectTo: '/login' })
+  const [updateProfileCitizenshipStatus] =
+    useUpdateProfileCitizenshipStatusMutation()
 
   const handleMint = () => {
     window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
   }
 
+  const toggleSignal = () => {
+    if (!user) return
+
+    if (user?.citizenshipStatus === CitizenshipStatus.VouchRequested) {
+      updateProfileCitizenshipStatus({
+        variables: {
+          id: user._id,
+          citizenshipStatus: null,
+        },
+      })
+    } else {
+      updateProfileCitizenshipStatus({
+        variables: {
+          id: user._id,
+          citizenshipStatus: CitizenshipStatus.VouchRequested,
+        },
+      })
+    }
+  }
+
   return (
     <SingleColumnLayout>
       <TitleCard title="Citizenship" icon="back-arrow" />
-      <Body1>{`Citizenship status: ${user?.citizenshipStatus}`}</Body1>
-      {user?.citizenshipStatus === CitizenshipStatus.Vouched && (
-        <Button onClick={handleMint}>Mint now</Button>
+
+      {user && user?.citizenshipStatus !== CitizenshipStatus.Verified && (
+        <CitizenshipStatusBar
+          onMint={handleMint}
+          onSignal={toggleSignal}
+          status={user?.citizenshipStatus}
+        />
       )}
     </SingleColumnLayout>
   )

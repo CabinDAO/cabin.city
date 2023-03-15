@@ -1,0 +1,11 @@
+mutation updateProfileCitizenshipStatus(
+  $id: ID!
+  $citizenshipStatus: CitizenshipStatus
+) {
+  partialUpdateProfile(
+    id: $id
+    data: { citizenshipStatus: $citizenshipStatus }
+  ) {
+    ...GetProfileById
+  }
+}

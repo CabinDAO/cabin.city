@@ -1,5 +1,0 @@
-mutation vouchProfile($id: ID!) {
-  partialUpdateProfile(id: $id, data: { citizenshipStatus: Vouched }) {
-    ...GetProfileById
-  }
-}

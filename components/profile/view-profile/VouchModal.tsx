@@ -7,7 +7,7 @@ import { Button } from '@/components/core/Button'
 import {
   CitizenshipStatus,
   GetProfileByIdFragment,
-  useVouchProfileMutation,
+  useUpdateProfileCitizenshipStatusMutation,
 } from '@/generated/graphql'
 import { useState } from 'react'
 
@@ -17,12 +17,14 @@ interface VouchModalProps {
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
   const [vouched, setVouched] = useState(false)
-  const [vouchProfile] = useVouchProfileMutation()
+  const [updateProfileCitizenshipStatus] =
+    useUpdateProfileCitizenshipStatusMutation()
 
   const onVouch = async () => {
-    const result = await vouchProfile({
+    const result = await updateProfileCitizenshipStatus({
       variables: {
         id: profile._id,
+        citizenshipStatus: CitizenshipStatus.Vouched,
       },
     })
 
