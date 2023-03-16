@@ -2,5 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { CabinToken } from "./CabinToken";
+export type { PublicLock } from "./PublicLock";
 export * as factories from "./factories";
 export { CabinToken__factory } from "./factories/CabinToken__factory";
+export { PublicLock__factory } from "./factories/PublicLock__factory";

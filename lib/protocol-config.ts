@@ -73,6 +73,24 @@ export const cabinTokenConfig: CabinTokenConfig = getConfig({
   },
 })
 
+interface UnlockConfig {
+  networkName: string
+  chainId: number
+  contractAddress: string
+}
+export const unlockConfig: UnlockConfig = getConfig({
+  dev: {
+    networkName: 'goerli',
+    chainId: 5,
+    contractAddress: '0xAAae475e2e1D92Ffd4a103A72FDc9f5301896e28',
+  },
+  prod: {
+    networkName: 'optimism',
+    chainId: 10,
+    contractAddress: '', // TODO: Add prod address
+  },
+})
+
 interface GetConfigArgs<T> extends Record<string, T> {
   dev: T
   prod: T

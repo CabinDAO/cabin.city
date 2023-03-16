@@ -17,7 +17,7 @@ import { useMeQuery } from '@/generated/graphql'
   - `MeFragment` if the user is logged in
 */
 export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
-  const { data, loading } = useMeQuery()
+  const { data, loading, refetch } = useMeQuery()
   const { address } = useAccount()
 
   const me = data?.me
@@ -35,5 +35,5 @@ export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
     }
   }, [redirectTo, redirectToIfFound, address, me, loading])
 
-  return { user: me, isUserLoading: loading }
+  return { user: me, isUserLoading: loading, refetchUser: refetch }
 }

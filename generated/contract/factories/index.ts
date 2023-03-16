@@ -2,3 +2,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export { CabinToken__factory } from "./CabinToken__factory";
+export { PublicLock__factory } from "./PublicLock__factory";
