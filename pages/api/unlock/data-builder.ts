@@ -2,7 +2,7 @@ import { CabinToken__factory } from '@/generated/contract'
 import { CitizenshipStatus } from '@/generated/graphql'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { getProfileByAddress } from '@/lib/fauna-server/getProfileByAddress'
-import { cabinTokenConfig } from '@/lib/protocol-config'
+import { cabinTokenConfig, unlockConfig } from '@/lib/protocol-config'
 import { BigNumber, ethers } from 'ethers'
 import { defaultAbiCoder } from 'ethers/lib/utils'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -35,9 +35,7 @@ export default async function handler(
     [hasVoucher, cabinBalance]
   )
 
-  const chainId = BigNumber.from(
-    process.env.NEXT_PUBLIC_CITIZENSHIP_LOCK_CHAIN_ID
-  )
+  const chainId = BigNumber.from(unlockConfig.chainId)
 
   const digest = defaultAbiCoder.encode(
     ['string', 'address', 'uint256'],

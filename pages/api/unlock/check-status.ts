@@ -42,6 +42,16 @@ async function handler(
           res.json({ updated: true })
           return
         }
+      } else {
+        // If the user has a Verified key, but no longer has a valid key, set the status to Vouched.
+        const profile = await setCitizenshipStatus(
+          address,
+          CitizenshipStatus.Vouched
+        )
+        if (profile) {
+          res.json({ updated: true })
+          return
+        }
       }
 
       res.send({ updated: false })

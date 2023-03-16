@@ -24,14 +24,25 @@ export const setCitizenshipStatus = async (
         ),
       },
       q.If(
-        q.Not(q.Equals(q.Var('currentStatus'), status)),
-        q.Update(SelectRef(q.Var('profile')), {
-          data: {
-            citizenshipStatus: status,
-          },
-        }),
+        q.Equals(q.Var('currentStatus'), status),
         // Status already matches, do nothing
-        null
+        null,
+        // Only update if the new status is Verified or if the current status is Verified and the new status is Vouched
+        q.If(
+          q.Or(
+            q.Equals(status, CitizenshipStatus.Verified),
+            q.And(
+              q.Equals(q.Var('currentStatus'), CitizenshipStatus.Verified),
+              q.Equals(status, CitizenshipStatus.Vouched)
+            )
+          ),
+          q.Update(SelectRef(q.Var('profile')), {
+            data: {
+              citizenshipStatus: status,
+            },
+          }),
+          null
+        )
       )
     )
   )
