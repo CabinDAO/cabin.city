@@ -36,6 +36,7 @@ type Mutation {
     data: UpdateProfileInput
     roleTypes: [ProfileRoleType!]
   ): Profile! @resolver(name: "update_profile")
+  vouchProfile(id: ID!): Profile! @resolver(name: "vouch_profile")
 }
 
 type Profile {
@@ -53,6 +54,7 @@ type Profile {
   # Rounded balance with 0 decimals to support display and sorting
   cabinTokenBalanceInt: Int!
   badgeCount: Int!
+  vouchedBy: Profile
 }
 
 type ProfileAvatar @embedded {

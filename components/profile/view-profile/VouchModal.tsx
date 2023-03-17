@@ -7,7 +7,8 @@ import { Button } from '@/components/core/Button'
 import {
   CitizenshipStatus,
   GetProfileByIdFragment,
-  useUpdateProfileCitizenshipStatusMutation,
+  useUnvouchProfileMutation,
+  useVouchProfileMutation,
 } from '@/generated/graphql'
 import { useState } from 'react'
 
@@ -17,22 +18,34 @@ interface VouchModalProps {
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
   const [vouched, setVouched] = useState(false)
-  const [updateProfileCitizenshipStatus] =
-    useUpdateProfileCitizenshipStatusMutation()
+  const [vouchProfile] = useVouchProfileMutation()
+  const [unvouchProfile] = useUnvouchProfileMutation()
 
   const onVouch = async () => {
-    const result = await updateProfileCitizenshipStatus({
+    const result = await vouchProfile({
       variables: {
         id: profile._id,
-        citizenshipStatus: CitizenshipStatus.Vouched,
       },
     })
 
     if (
-      result.data?.partialUpdateProfile?.citizenshipStatus ===
-      CitizenshipStatus.Vouched
+      result.data?.vouchProfile?.citizenshipStatus === CitizenshipStatus.Vouched
     ) {
       setVouched(true)
+    }
+  }
+
+  const onUnvouch = async () => {
+    const result = await unvouchProfile({
+      variables: {
+        id: profile._id,
+      },
+    })
+    if (
+      result.data?.partialUpdateProfile?.citizenshipStatus ===
+      CitizenshipStatus.VouchRequested
+    ) {
+      setVouched(false)
     }
   }
 
@@ -54,6 +67,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
         {vouched ? (
           <VouchButton
             startAdornment={<Icon name="check" size={1.7} />}
+            onClick={onUnvouch}
             variant="tertiary"
           >
             Vouched for

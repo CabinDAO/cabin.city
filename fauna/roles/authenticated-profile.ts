@@ -248,6 +248,12 @@ const authenticatedProfileRole: RoleResource = {
         call: true,
       },
     },
+    {
+      resource: q.Function('vouch_profile'),
+      actions: {
+        call: true,
+      },
+    },
   ],
   membership: [
     {
