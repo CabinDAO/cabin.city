@@ -4,26 +4,18 @@ import Script from 'next/script'
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
 import { useUser } from '../auth/useUser'
+import { useCitizenship } from '../hooks/useCitizenship'
 
 // https://docs.unlock-protocol.com/tools/paywall/#user-info
 export const UnlockScript = () => {
-  const { user, refetchUser } = useUser()
-
-  const checkStatus = useCallback(async () => {
-    const resp = await fetch('/api/unlock/check-status')
-    if (resp.ok) {
-      const { updated } = await resp.json()
-      if (updated) {
-        console.log('Status updated. Refetching user...')
-        await refetchUser()
-      }
-    }
-  }, [refetchUser])
+  const { user } = useUser()
+  const { checkStatus } = useCitizenship()
 
   // Called when the Unlock lib emits status events
   const handleStatus = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
+      console.info('Unlock state', e.detail.state)
       if (
         e.detail.state === 'unlocked' &&
         user?.citizenshipStatus !== CitizenshipStatus.Verified
@@ -64,7 +56,7 @@ export const UnlockScript = () => {
           dataBuilder:"https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder",
           pessimistic: true,
           skipRecipient: true,
-          title: 'Cabin Citizenship'
+          title: 'Cabin Citizenship',
         };
 
       (function(d, s) {

@@ -6,6 +6,7 @@ import { MutableRefObject, useRef, useState } from 'react'
 import { Caption } from '../core/Typography'
 import { ScrollToTop } from '../core/ScrollToTop'
 import { OwnedNft } from 'alchemy-sdk'
+import { getImageUrlFromNft } from '@/lib/image'
 
 const Container = styled.div`
   display: flex;
@@ -84,10 +85,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
               onClick={() => handleSearchResultClick(nft)}
             >
               <NftImage>
-                <AutofitImage
-                  src={nft.media[0].thumbnail || ''}
-                  alt={nft.title}
-                />
+                <AutofitImage src={getImageUrlFromNft(nft)} alt={nft.title} />
               </NftImage>
               <Caption emphasized>{nft.title}</Caption>
             </SearchResult>

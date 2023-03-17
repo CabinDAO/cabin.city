@@ -1,4 +1,4 @@
-import { UnlockScript } from '@/components/citizenship/UnlockScript'
+import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
 import { apolloClient } from '@/lib/apollo/apollo-client'
 import { wagmiClient } from '@/lib/wagmi/wagmi-client'
@@ -27,10 +27,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <WagmiConfig client={wagmiClient}>
           <ConnectKitProvider>
             <ApolloProvider client={apolloClient}>
-              <UnlockScript />
-              <ModalProvider>
-                <Component {...pageProps} />
-              </ModalProvider>
+              <CitizenshipProvider>
+                <ModalProvider>
+                  <Component {...pageProps} />
+                </ModalProvider>
+              </CitizenshipProvider>
             </ApolloProvider>
           </ConnectKitProvider>
         </WagmiConfig>

@@ -20,7 +20,8 @@ export const setCitizenshipStatus = async (
         profile: GetProfileByAddress(address),
         currentStatus: q.Select(
           ['data', 'citizenshipStatus'],
-          q.Var('profile')
+          q.Var('profile'),
+          null
         ),
       },
       q.If(

@@ -6,6 +6,13 @@ export const GetAccountByAddress = (addressExpr: ExprVal) => {
     {
       accountRef: AccountRefByAddress(addressExpr),
     },
-    q.If(q.Exists(q.Var('accountRef')), q.Get(q.Var('accountRef')), null)
+    q.If(
+      q.And(
+        q.Not(q.IsNull(q.Var('accountRef'))),
+        q.Exists(q.Var('accountRef'))
+      ),
+      q.Get(q.Var('accountRef')),
+      null
+    )
   )
 }

@@ -1,4 +1,5 @@
 import { ProfileAvatarInput } from '@/generated/graphql'
+import { getImageUrlFromNft } from '@/lib/image'
 import { OwnedNft } from 'alchemy-sdk'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
@@ -18,7 +19,7 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
   }
 
   const handleNftSelect = (nft: OwnedNft) => {
-    const url = nft.media[0]?.thumbnail
+    const url = getImageUrlFromNft(nft)
 
     if (!url) {
       throw new Error('NFT does not have a media URL')

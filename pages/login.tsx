@@ -4,10 +4,8 @@ import OnboardingFrameSvg from '@/components/core/svg/onboarding-frame.svg'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useRouter } from 'next/router'
 
-export default function Home() {
-  const router = useRouter()
+export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -16,7 +14,7 @@ export default function Home() {
         setIsLoading(false)
       }, 500)
     }
-  }, [isLoading, router])
+  }, [isLoading])
 
   return (
     <OnboardingLayout>
