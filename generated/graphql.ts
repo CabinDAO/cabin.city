@@ -1286,7 +1286,7 @@ export type LogTrackingEventMutationVariables = Exact<{
 }>;
 
 
-export type LogTrackingEventMutation = { __typename?: 'Mutation', logTrackingEvent: { __typename?: 'TrackingEvent', _id: string, key: string, count: number } };
+export type LogTrackingEventMutation = { __typename?: 'Mutation', logTrackingEvent: { __typename?: 'TrackingEvent', _id: string, key: string, count: number, profile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } } };
 
 export type UpdateProfileMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1752,9 +1752,13 @@ export const LogTrackingEventDocument = gql`
     mutation LogTrackingEvent($key: String!) {
   logTrackingEvent(key: $key) {
     ...TrackingEvent
+    profile {
+      ...Me
+    }
   }
 }
-    ${TrackingEventFragmentDoc}`;
+    ${TrackingEventFragmentDoc}
+${MeFragmentDoc}`;
 export type LogTrackingEventMutationFn = Apollo.MutationFunction<LogTrackingEventMutation, LogTrackingEventMutationVariables>;
 
 /**
