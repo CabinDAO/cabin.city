@@ -3,12 +3,11 @@ import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { shortenedAddress } from '@/utils/display-utils'
-import Icon from '@/components/core/Icon'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { unlockConfig } from '@/lib/protocol-config'
-import { getUnlockOpenseaUrl } from '@/utils/opensea'
+import Link from 'next/link'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
@@ -35,16 +34,11 @@ export const ProfileVerifiedCitizenship = ({
         />
         <NFTDataContainer>
           <ImageBackground src={DEFAULT_NFT_IMAGE} />
-          <StyledAnchor
-            href={getUnlockOpenseaUrl(profile.citizenshipMetadata?.tokenId)}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <Link href="/citizenship">
             <H1 emphasized $color="yellow100">
               Cabin Citizen #{profile.citizenshipMetadata?.tokenId}
             </H1>
-            <Icon color="yellow100" name="up-right-arrow" size={1.4} />
-          </StyledAnchor>
+          </Link>
           <Subline2 $color="yellow100">
             Minted{' '}
             {format(
@@ -119,13 +113,4 @@ const NFTDataContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 0.4rem;
-`
-
-const StyledAnchor = styled.a`
-  display: flex;
-  flex-direction: row;
-  gap: 0.69rem;
-  align-items: center;
-  justify-content: flex-start;
-  cursor: pointer;
 `
