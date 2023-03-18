@@ -35,6 +35,14 @@ fragment Me on Profile {
     type
     value
   }
+  vouchedBy {
+    _id
+    name
+  }
+  citizenshipMetadata {
+    tokenId
+    mintedAt
+  }
 }
 
 fragment TrackingEvent on TrackingEvent {

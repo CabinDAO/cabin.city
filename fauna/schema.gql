@@ -55,6 +55,12 @@ type Profile {
   cabinTokenBalanceInt: Int!
   badgeCount: Int!
   vouchedBy: Profile
+  citizenshipMetadata: CitizenshipMetadata
+}
+
+type CitizenshipMetadata @embedded {
+  tokenId: String!
+  mintedAt: Time!
 }
 
 type ProfileAvatar @embedded {

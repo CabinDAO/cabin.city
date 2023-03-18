@@ -6,6 +6,7 @@ import {
   useUpdateProfileCitizenshipStatusMutation,
 } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
+import { CitizenNFTContainer } from './CitizenNFTContainer'
 
 export const CitizenshipView = () => {
   const { user } = useUser({ redirectTo: '/login' })
@@ -47,6 +48,7 @@ export const CitizenshipView = () => {
           status={user?.citizenshipStatus}
         />
       )}
+      <CitizenNFTContainer />
     </SingleColumnLayout>
   )
 }

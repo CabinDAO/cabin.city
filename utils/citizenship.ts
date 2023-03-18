@@ -2,6 +2,16 @@ import { IconName } from '@/components/core/Icon'
 import { CitizenshipStatus } from '@/generated/graphql'
 
 export const DEFAULT_CTA_TEXT = 'Get started'
+export const MONTHLY_PRICE_IN_USD = 20
+
+export const DEFAULT_NFT_IMAGE = '/images/test-nft.png'
+
+export interface UnlockNFT {
+  tokenId: string
+  mintedDate: Date
+  expirationDate: Date
+  image: string
+}
 
 export interface CitizenshipInfo {
   text: string

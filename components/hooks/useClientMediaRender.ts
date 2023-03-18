@@ -4,7 +4,7 @@ import { useMedia } from 'react-use'
 
 export const useClientMediaRender = () => {
   const [isMobile, setIsMobile] = useState(false)
-  const desktop = useMedia(queries.lg)
+  const desktop = useMedia(queries.lg, true)
 
   useEffect(() => {
     setIsMobile(!desktop)

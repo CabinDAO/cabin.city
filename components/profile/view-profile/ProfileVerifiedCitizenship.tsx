@@ -6,6 +6,9 @@ import { shortenedAddress } from '@/utils/display-utils'
 import Icon from '@/components/core/Icon'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
+import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
+import { unlockConfig } from '@/lib/protocol-config'
+import { getUnlockOpenseaUrl } from '@/utils/opensea'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
@@ -14,12 +17,8 @@ interface ProfileVerifiedCitizenshipProps {
 export const ProfileVerifiedCitizenship = ({
   profile,
 }: ProfileVerifiedCitizenshipProps) => {
-  // TODO: Replace with real link
-  const mockNft = {
-    tokenId: '123',
-    contractAddress: '0xAAae475e2e1D92Ffd4a103A72FDc9f5301896e28',
-    mintedDate: new Date(),
-    image: '/images/test-nft.png',
+  if (!profile.citizenshipMetadata) {
+    return null
   }
 
   return (
@@ -29,28 +28,35 @@ export const ProfileVerifiedCitizenship = ({
       </TitleContainer>
       <NFTContainer>
         <StyledImage
-          alt={mockNft.tokenId}
-          src={mockNft.image}
+          alt={profile.citizenshipMetadata?.tokenId}
+          src={DEFAULT_NFT_IMAGE}
           width={96}
           height={96}
         />
         <NFTDataContainer>
-          <ImageBackground src={mockNft.image} />
+          <ImageBackground src={DEFAULT_NFT_IMAGE} />
           <StyledAnchor
-            href="https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/123"
+            href={getUnlockOpenseaUrl(profile.citizenshipMetadata?.tokenId)}
             target="_blank"
             rel="noreferrer"
           >
             <H1 emphasized $color="yellow100">
-              Cabin Citizen #{mockNft.tokenId}
+              Cabin Citizen #{profile.citizenshipMetadata?.tokenId}
             </H1>
             <Icon color="yellow100" name="up-right-arrow" size={1.4} />
           </StyledAnchor>
           <Subline2 $color="yellow100">
-            Minted {format(mockNft.mintedDate, 'MM/dd/yyyy', { locale: enUS })}
+            Minted{' '}
+            {format(
+              new Date(profile.citizenshipMetadata?.mintedAt),
+              'MM/dd/yyyy',
+              {
+                locale: enUS,
+              }
+            )}
           </Subline2>
           <Subline2 $color="yellow100">
-            Address {shortenedAddress(mockNft.contractAddress)}
+            Address {shortenedAddress(unlockConfig.contractAddress)}
           </Subline2>
         </NFTDataContainer>
       </NFTContainer>

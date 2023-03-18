@@ -34,9 +34,12 @@ async function handler(
       const hasValidKey = await lockContract.getHasValidKey(address)
 
       if (hasValidKey) {
+        const tokenId = await lockContract.tokenOfOwnerByIndex(address, 0)
+
         const profile = await setCitizenshipStatus(
           address,
-          CitizenshipStatus.Verified
+          CitizenshipStatus.Verified,
+          tokenId.toString()
         )
         if (profile) {
           res.json({ updated: true })

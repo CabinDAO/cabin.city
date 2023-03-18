@@ -12,8 +12,12 @@ import { faunaServerClient } from './faunaServerClient'
  */
 export const setCitizenshipStatus = async (
   address: string,
-  status: CitizenshipStatus
+  status: CitizenshipStatus,
+  tokenId: string | null = null
 ) => {
+  const citizenshipMintedAt =
+    status === CitizenshipStatus.Verified ? q.Now() : null
+
   return faunaServerClient.query(
     q.Let(
       {
@@ -40,6 +44,10 @@ export const setCitizenshipStatus = async (
           q.Update(SelectRef(q.Var('profile')), {
             data: {
               citizenshipStatus: status,
+              citizenshipMetadata: {
+                tokenId,
+                mintedAt: citizenshipMintedAt,
+              },
             },
           }),
           null
