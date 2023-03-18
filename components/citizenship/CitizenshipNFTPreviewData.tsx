@@ -10,6 +10,8 @@ export const CitizenshipNFTPreviewData = () => {
 
   if (!user) return null
 
+  const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+
   return (
     <Container>
       <H3>Details</H3>
@@ -25,13 +27,13 @@ export const CitizenshipNFTPreviewData = () => {
         <Body2>for holders of 1,000 ₡ABIN</Body2>
       </CabinHolderDisclaimer>
       <HorizontalDivider />
-      {user.vouchedBy && (
+      {vouchedBy && (
         <NFTDataList
           fieldNames={['Vouched for by']}
           values={[
             {
-              value: user.vouchedBy?.name || '',
-              url: `/profile/${user.vouchedBy?._id}`,
+              value: vouchedBy.name || '',
+              url: `/profile/${vouchedBy._id}`,
             },
           ]}
         />

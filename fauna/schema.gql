@@ -37,6 +37,7 @@ type Mutation {
     roleTypes: [ProfileRoleType!]
   ): Profile! @resolver(name: "update_profile")
   vouchProfile(id: ID!): Profile! @resolver(name: "vouch_profile")
+  unvouchProfile(id: ID!): Profile! @resolver(name: "unvouch_profile")
 }
 
 type Profile {
@@ -54,8 +55,14 @@ type Profile {
   # Rounded balance with 0 decimals to support display and sorting
   cabinTokenBalanceInt: Int!
   badgeCount: Int!
-  vouchedBy: Profile
+  givenVouches: [ProfileVouch!] @relation(name: "givenVouches")
+  receivedVouches: [ProfileVouch!] @relation(name: "receivedVouches")
   citizenshipMetadata: CitizenshipMetadata
+}
+
+type ProfileVouch {
+  voucher: Profile! @relation(name: "givenVouches")
+  vouchee: Profile! @relation(name: "receivedVouches")
 }
 
 type CitizenshipMetadata @embedded {

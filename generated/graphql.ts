@@ -137,8 +137,11 @@ export type Mutation = {
   updateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   /** Create a new document in the collection of 'Activity' */
   createActivity: Activity;
+  /** Update an existing document in the collection of 'ProfileVouch' */
+  updateProfileVouch?: Maybe<ProfileVouch>;
   /** Delete an existing document in the collection of 'Hat' */
   deleteHat?: Maybe<Hat>;
+  unvouchProfile: Profile;
   /** Partially updates an existing document in the collection of 'Activity'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateActivity?: Maybe<Activity>;
   /** Delete an existing document in the collection of 'TrackingEvent' */
@@ -155,6 +158,8 @@ export type Mutation = {
   deleteAccount?: Maybe<Account>;
   /** Update an existing document in the collection of 'OtterspaceBadgeSpec' */
   updateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
+  /** Delete an existing document in the collection of 'ProfileVouch' */
+  deleteProfileVouch?: Maybe<ProfileVouch>;
   /** Partially updates an existing document in the collection of 'BlockSyncAttempt'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   /** Create a new document in the collection of 'TrackingEvent' */
@@ -167,6 +172,8 @@ export type Mutation = {
   updateHat?: Maybe<Hat>;
   /** Partially updates an existing document in the collection of 'Profile'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateProfile?: Maybe<Profile>;
+  /** Partially updates an existing document in the collection of 'ProfileVouch'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateProfileVouch?: Maybe<ProfileVouch>;
   /** Update an existing document in the collection of 'Activity' */
   updateActivity?: Maybe<Activity>;
   /** Partially updates an existing document in the collection of 'Hat'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
@@ -189,6 +196,8 @@ export type Mutation = {
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   vouchProfile: Profile;
   updateProfile: Profile;
+  /** Create a new document in the collection of 'ProfileVouch' */
+  createProfileVouch: ProfileVouch;
   logTrackingEvent: TrackingEvent;
   /** Delete an existing document in the collection of 'Activity' */
   deleteActivity?: Maybe<Activity>;
@@ -222,7 +231,18 @@ export type MutationCreateActivityArgs = {
 };
 
 
+export type MutationUpdateProfileVouchArgs = {
+  id: Scalars['ID'];
+  data: ProfileVouchInput;
+};
+
+
 export type MutationDeleteHatArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUnvouchProfileArgs = {
   id: Scalars['ID'];
 };
 
@@ -272,6 +292,11 @@ export type MutationUpdateOtterspaceBadgeSpecArgs = {
 };
 
 
+export type MutationDeleteProfileVouchArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationPartialUpdateBlockSyncAttemptArgs = {
   id: Scalars['ID'];
   data: PartialUpdateBlockSyncAttemptInput;
@@ -304,6 +329,12 @@ export type MutationUpdateHatArgs = {
 export type MutationPartialUpdateProfileArgs = {
   id: Scalars['ID'];
   data: PartialUpdateProfileInput;
+};
+
+
+export type MutationPartialUpdateProfileVouchArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateProfileVouchInput;
 };
 
 
@@ -374,6 +405,11 @@ export type MutationUpdateProfileArgs = {
   id: Scalars['ID'];
   data?: InputMaybe<UpdateProfileInput>;
   roleTypes?: InputMaybe<Array<ProfileRoleType>>;
+};
+
+
+export type MutationCreateProfileVouchArgs = {
+  data: ProfileVouchInput;
 };
 
 
@@ -526,7 +562,8 @@ export type PartialUpdateProfileInput = {
   trackingEvents?: InputMaybe<ProfileTrackingEventsRelation>;
   cabinTokenBalanceInt?: InputMaybe<Scalars['Int']>;
   badgeCount?: InputMaybe<Scalars['Int']>;
-  vouchedBy?: InputMaybe<ProfileVouchedByRelation>;
+  givenVouches?: InputMaybe<ProfileGivenVouchesRelation>;
+  receivedVouches?: InputMaybe<ProfileReceivedVouchesRelation>;
   citizenshipMetadata?: InputMaybe<PartialUpdateCitizenshipMetadataInput>;
 };
 
@@ -535,6 +572,12 @@ export type PartialUpdateProfileRoleInput = {
   hatId?: InputMaybe<Scalars['String']>;
   role?: InputMaybe<ProfileRoleType>;
   level?: InputMaybe<ProfileRoleLevelType>;
+};
+
+/** 'ProfileVouch' input values */
+export type PartialUpdateProfileVouchInput = {
+  voucher?: InputMaybe<ProfileVouchVoucherRelation>;
+  vouchee?: InputMaybe<ProfileVouchVoucheeRelation>;
 };
 
 /** 'TrackingEvent' input values */
@@ -567,11 +610,31 @@ export type ProfileContactFieldInput = {
   value: Scalars['String'];
 };
 
+/** Allow manipulating the relationship between the types 'Profile' and 'ProfileVouch'. */
+export type ProfileGivenVouchesRelation = {
+  /** Create one or more documents of type 'ProfileVouch' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<ProfileVouchInput>>>;
+  /** Connect one or more documents of type 'ProfileVouch' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'ProfileVouch' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
 export type ProfileInput = {
   address: Scalars['String'];
   name: Scalars['String'];
   email: Scalars['String'];
   avatar?: InputMaybe<ProfileAvatarInput>;
+};
+
+/** Allow manipulating the relationship between the types 'Profile' and 'ProfileVouch'. */
+export type ProfileReceivedVouchesRelation = {
+  /** Create one or more documents of type 'ProfileVouch' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<ProfileVouchInput>>>;
+  /** Connect one or more documents of type 'ProfileVouch' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'ProfileVouch' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 /** 'ProfileRole' input values */
@@ -591,14 +654,26 @@ export type ProfileTrackingEventsRelation = {
   disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
-/** Allow manipulating the relationship between the types 'Profile' and 'Profile' using the field 'Profile.vouchedBy'. */
-export type ProfileVouchedByRelation = {
+/** 'ProfileVouch' input values */
+export type ProfileVouchInput = {
+  voucher?: InputMaybe<ProfileVouchVoucherRelation>;
+  vouchee?: InputMaybe<ProfileVouchVoucheeRelation>;
+};
+
+/** Allow manipulating the relationship between the types 'ProfileVouch' and 'Profile' using the field 'ProfileVouch.vouchee'. */
+export type ProfileVouchVoucheeRelation = {
   /** Create a document of type 'Profile' and associate it with the current document. */
   create?: InputMaybe<ProfileInput>;
   /** Connect a document of type 'Profile' with the current document using its ID. */
   connect?: InputMaybe<Scalars['ID']>;
-  /** If true, disconnects this document from 'Profile' */
-  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Allow manipulating the relationship between the types 'ProfileVouch' and 'Profile' using the field 'ProfileVouch.voucher'. */
+export type ProfileVouchVoucherRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
 };
 
 /** 'TrackingEvent' input values */
@@ -813,13 +888,14 @@ export type Profile = {
   __typename?: 'Profile';
   trackingEvents: TrackingEventPage;
   name: Scalars['String'];
-  vouchedBy?: Maybe<Profile>;
+  givenVouches: ProfileVouchPage;
   avatar?: Maybe<ProfileAvatar>;
   location?: Maybe<Scalars['String']>;
   email: Scalars['String'];
   /** The document's ID. */
   _id: Scalars['ID'];
   cabinTokenBalanceInt: Scalars['Int'];
+  receivedVouches: ProfileVouchPage;
   bio?: Maybe<Scalars['String']>;
   citizenshipStatus?: Maybe<CitizenshipStatus>;
   roles: Array<ProfileRole>;
@@ -834,6 +910,18 @@ export type Profile = {
 
 
 export type ProfileTrackingEventsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ProfileGivenVouchesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ProfileReceivedVouchesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
 };
@@ -906,10 +994,33 @@ export enum ProfileSortType {
   BadgeCountDesc = 'BadgeCountDesc'
 }
 
+export type ProfileVouch = {
+  __typename?: 'ProfileVouch';
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+  voucher: Profile;
+  vouchee: Profile;
+};
+
+/** The pagination object for elements of type 'ProfileVouch'. */
+export type ProfileVouchPage = {
+  __typename?: 'ProfileVouchPage';
+  /** The elements of type 'ProfileVouch' in this page. */
+  data: Array<Maybe<ProfileVouch>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Find a document from the collection of 'OtterspaceBadge' by its id. */
   findOtterspaceBadgeByID?: Maybe<OtterspaceBadge>;
+  /** Find a document from the collection of 'ProfileVouch' by its id. */
+  findProfileVouchByID?: Maybe<ProfileVouch>;
   citizensCount: Scalars['Int'];
   /** Find a document from the collection of 'Profile' by its id. */
   findProfileByID?: Maybe<Profile>;
@@ -942,6 +1053,11 @@ export type Query = {
 
 
 export type QueryFindOtterspaceBadgeByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryFindProfileVouchByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -1110,9 +1226,9 @@ export type TrackingEventPage = {
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
 
-export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
+export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
@@ -1156,14 +1272,14 @@ export type GetProfilesCountQuery = { __typename?: 'Query', profilesCount: numbe
 
 export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
-export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
+export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
 export type GetProfileByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1179,14 +1295,14 @@ export type UpdateProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
 
 export type UnvouchProfileMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type UnvouchProfileMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null };
+export type UnvouchProfileMutation = { __typename?: 'Mutation', unvouchProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
 
 export type UpdateProfileCitizenshipStatusMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -1194,14 +1310,14 @@ export type UpdateProfileCitizenshipStatusMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileCitizenshipStatusMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null };
+export type UpdateProfileCitizenshipStatusMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null };
 
 export type VouchProfileMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type VouchProfileMutation = { __typename?: 'Mutation', vouchProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, vouchedBy?: { __typename?: 'Profile', _id: string, name: string } | null, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
+export type VouchProfileMutation = { __typename?: 'Mutation', vouchProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
 
 export const TrackingEventFragmentDoc = gql`
     fragment TrackingEvent on TrackingEvent {
@@ -1240,9 +1356,21 @@ export const MeFragmentDoc = gql`
     type
     value
   }
-  vouchedBy {
-    _id
-    name
+  receivedVouches {
+    data {
+      voucher {
+        _id
+        name
+      }
+    }
+  }
+  givenVouches {
+    data {
+      vouchee {
+        _id
+        name
+      }
+    }
   }
   citizenshipMetadata {
     tokenId
@@ -1339,9 +1467,21 @@ export const GetProfileByIdFragmentDoc = gql`
     type
     value
   }
-  vouchedBy {
-    _id
-    name
+  receivedVouches {
+    data {
+      voucher {
+        _id
+        name
+      }
+    }
+  }
+  givenVouches {
+    data {
+      vouchee {
+        _id
+        name
+      }
+    }
   }
   citizenshipMetadata {
     tokenId
@@ -1678,10 +1818,7 @@ export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMut
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const UnvouchProfileDocument = gql`
     mutation UnvouchProfile($id: ID!) {
-  partialUpdateProfile(
-    id: $id
-    data: {citizenshipStatus: VouchRequested, vouchedBy: {disconnect: true}}
-  ) {
+  unvouchProfile(id: $id) {
     ...GetProfileById
   }
 }

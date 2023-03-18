@@ -1,8 +1,5 @@
 mutation UnvouchProfile($id: ID!) {
-  partialUpdateProfile(
-    id: $id
-    data: { citizenshipStatus: VouchRequested, vouchedBy: { disconnect: true } }
-  ) {
+  unvouchProfile(id: $id) {
     ...GetProfileById
   }
 }

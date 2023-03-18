@@ -35,9 +35,21 @@ fragment GetProfileById on Profile {
     type
     value
   }
-  vouchedBy {
-    _id
-    name
+  receivedVouches {
+    data {
+      voucher {
+        _id
+        name
+      }
+    }
+  }
+  givenVouches {
+    data {
+      vouchee {
+        _id
+        name
+      }
+    }
   }
   citizenshipMetadata {
     tokenId

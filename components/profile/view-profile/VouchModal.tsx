@@ -42,7 +42,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
       },
     })
     if (
-      result.data?.partialUpdateProfile?.citizenshipStatus ===
+      result.data?.unvouchProfile?.citizenshipStatus ===
       CitizenshipStatus.VouchRequested
     ) {
       setVouched(false)

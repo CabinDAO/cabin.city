@@ -21,6 +21,15 @@ const authenticatedProfileRole: RoleResource = {
       },
     },
     {
+      resource: q.Collection('ProfileVouch'),
+      actions: {
+        read: true,
+        create: true,
+        write: true,
+        delete: true,
+      },
+    },
+    {
       resource: q.Collection('account_hats'),
       actions: {
         read: true,
@@ -187,6 +196,30 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('unique_profile_vouches'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('profile_vouches_by_vouchee'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('receivedVouches_by_profile'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('givenVouches_by_profile'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -250,6 +283,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('vouch_profile'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('unvouch_profile'),
       actions: {
         call: true,
       },

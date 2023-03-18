@@ -23,10 +23,12 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
 
   const expiredNft = nft.expirationDate < new Date()
 
+  const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+
   nftData = {
     'Vouched for by': {
-      value: user?.vouchedBy?.name || '',
-      url: `/profile/${user.vouchedBy?._id}`,
+      value: vouchedBy?.name || '',
+      url: `/profile/${vouchedBy?._id}`,
     },
     Type: { value: 'Cabin Citizenship' },
     Status: { value: expiredNft ? 'Expired' : user.citizenshipStatus },
