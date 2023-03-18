@@ -3,11 +3,13 @@ import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { shortenedAddress } from '@/utils/display-utils'
+import Icon from '@/components/core/Icon'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { unlockConfig } from '@/lib/protocol-config'
-import Link from 'next/link'
+import { getUnlockOpenseaUrl } from '@/utils/opensea'
+import { useRouter } from 'next/router'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
@@ -16,8 +18,18 @@ interface ProfileVerifiedCitizenshipProps {
 export const ProfileVerifiedCitizenship = ({
   profile,
 }: ProfileVerifiedCitizenshipProps) => {
+  const router = useRouter()
+
   if (!profile.citizenshipMetadata) {
     return null
+  }
+
+  const onCardClick = () => {
+    router.push('/citizenship')
+  }
+
+  const onAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.stopPropagation()
   }
 
   return (
@@ -25,7 +37,7 @@ export const ProfileVerifiedCitizenship = ({
       <TitleContainer>
         <H3>Citizenship</H3>
       </TitleContainer>
-      <NFTContainer>
+      <NFTContainer onClick={onCardClick}>
         <StyledImage
           alt={profile.citizenshipMetadata?.tokenId}
           src={DEFAULT_NFT_IMAGE}
@@ -34,11 +46,17 @@ export const ProfileVerifiedCitizenship = ({
         />
         <NFTDataContainer>
           <ImageBackground src={DEFAULT_NFT_IMAGE} />
-          <Link href="/citizenship">
+          <NFTNameContainer>
             <H1 emphasized $color="yellow100">
-              Cabin Citizen #{profile.citizenshipMetadata?.tokenId}
+              Cabin Citizen #{profile.citizenshipMetadata.tokenId}
             </H1>
-          </Link>
+            <a
+              onClick={onAnchorClick}
+              href={getUnlockOpenseaUrl(profile.citizenshipMetadata.tokenId)}
+            >
+              <Icon color="yellow100" name="up-right-arrow" size={1.4} />
+            </a>
+          </NFTNameContainer>
           <Subline2 $color="yellow100">
             Minted{' '}
             {format(
@@ -87,6 +105,7 @@ const NFTContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.green800};
   padding: 2.4rem;
   gap: 2.4rem;
+  cursor: pointer;
 `
 
 interface ImageBackgroundProps {
@@ -113,4 +132,13 @@ const NFTDataContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 0.4rem;
+`
+
+const NFTNameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.69rem;
+  align-items: center;
+  justify-content: flex-start;
+  cursor: pointer;
 `
