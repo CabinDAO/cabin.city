@@ -70,7 +70,7 @@ Since this app is dependent on data coming from outside sources, it is sometimes
    `bin/run_script reset-db.ts`
 2. Create one or more profiles by going through onboarding
 3. To be able to test citizenship flows, you need to have one account that already has a citizenship NFT. You can do this via Airdrop via Unlock.
-4. To test the Citizenship/Unlock moda locally, run ngrok update the `NEXT_PUBLIC_VERCEL_URL` environment variable
+4. To test the Citizenship/Unlock moda locally, run ngrok and update the `NEXT_PUBLIC_VERCEL_URL` environment variable
    `ngrok http 3000`
 
 ### Clear all documents in a collection

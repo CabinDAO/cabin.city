@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import styled from 'styled-components'
 
 interface ImageProps {
@@ -8,11 +7,11 @@ interface ImageProps {
   height?: number
 }
 
-const StyledImage = styled(Image)`
+const StyledImage = styled.img`
   width: 100%;
   height: 100%;
 `
 
 export const AutofitImage = ({ src, alt }: ImageProps) => {
-  return <StyledImage src={src} alt={alt} fill />
+  return <StyledImage src={src} alt={alt} />
 }

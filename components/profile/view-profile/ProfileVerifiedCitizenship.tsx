@@ -3,13 +3,13 @@ import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { shortenedAddress } from '@/utils/display-utils'
-import Icon from '@/components/core/Icon'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getUnlockOpenseaUrl } from '@/utils/opensea'
 import { useRouter } from 'next/router'
+import Icon from '@/components/core/Icon'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
