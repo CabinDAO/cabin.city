@@ -1,8 +1,12 @@
 import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
-import { ActivityFragment, useGetActivitiesQuery } from '@/generated/graphql'
+import {
+  ActivityItemFragment,
+  useGetActivitiesQuery,
+} from '@/generated/graphql'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Post } from '../core/post/Post'
+import { useActivityReactions } from './useActivityReactions'
 
 export const ActivityList = () => {
   const { data, fetchMore } = useGetActivitiesQuery({
@@ -11,11 +15,13 @@ export const ActivityList = () => {
     },
   })
 
-  const activities = data?.allActivities.data.filter(
-    (a): a is ActivityFragment => !!a
+  const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
+
+  const activityItems = data?.allActivities.data.filter(
+    (a): a is ActivityItemFragment => !!a
   )
   const hasMore = !!data?.allActivities?.after
-  const dataLength = activities?.length ?? 0
+  const dataLength = activityItems?.length ?? 0
   const baseDate = new Date()
 
   return (
@@ -33,8 +39,14 @@ export const ActivityList = () => {
           }}
           loader="..."
         >
-          {activities?.map((activity) => (
-            <Post key={activity._id} activity={activity} baseDate={baseDate} />
+          {activityItems?.map((activityItem) => (
+            <Post
+              key={activityItem.activity._id}
+              activityItem={activityItem}
+              baseDate={baseDate}
+              onLike={() => handleLikeActivity(activityItem)}
+              onUnlike={() => handleUnlikeActivity(activityItem)}
+            />
           ))}
         </InfiniteScroll>
       </InnerContainer>

@@ -7,31 +7,38 @@ import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
 const ProfileRoleAddedContent = (props: PostProps) => {
-  const { activity } = props
+  const { activityItem } = props
 
-  if (!activity.metadata?.profileRole) {
+  if (!activityItem.activity.metadata?.profileRole) {
     console.error('ProfileRoleAdded activity without metadata.profileRole')
     return null
   }
-  const roleInfo = roleInfoFromType(activity.metadata.profileRole.role)
+  const roleInfo = roleInfoFromType(
+    activityItem.activity.metadata.profileRole.role
+  )
 
   return (
     <Body1>
-      Leveled up to {activity.metadata.profileRole.level} {roleInfo.name}
+      Leveled up to {activityItem.activity.metadata.profileRole.level}{' '}
+      {roleInfo.name}
     </Body1>
   )
 }
 
 const ProfileRoleAddedMedia = (props: PostProps) => {
-  const { activity } = props
+  const { activityItem } = props
 
-  if (!activity.metadata?.profileRole) {
+  if (!activityItem.activity.metadata?.profileRole) {
     console.error('ProfileRoleAdded activity without metadata.profileRole')
     return null
   }
 
-  const roleInfo = roleInfoFromType(activity.metadata.profileRole.role)
-  const levelInfo = levelInfoFromType(activity.metadata.profileRole.level)
+  const roleInfo = roleInfoFromType(
+    activityItem.activity.metadata.profileRole.role
+  )
+  const levelInfo = levelInfoFromType(
+    activityItem.activity.metadata.profileRole.level
+  )
 
   return (
     <RoleCardBackdrop roleInfo={roleInfo}>

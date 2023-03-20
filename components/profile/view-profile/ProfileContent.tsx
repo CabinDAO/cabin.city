@@ -1,4 +1,7 @@
-import { ActivityFragment, GetProfileByIdFragment } from '@/generated/graphql'
+import {
+  ActivityItemFragment,
+  GetProfileByIdFragment,
+} from '@/generated/graphql'
 import { getCountForEvent } from '@/utils/events'
 import { useUser } from '../../auth/useUser'
 import { ProfileProgressCardSection } from './ProfileProgressCardSection'
@@ -12,12 +15,12 @@ import { ProfileCitizenSection } from './ProfileCitizenSection'
 
 interface ProfileContentProps {
   profile: GetProfileByIdFragment
-  activities: (ActivityFragment | null)[] | undefined
+  activityItems: ActivityItemFragment[]
 }
 
 export const ProfileContent = ({
   profile,
-  activities,
+  activityItems,
 }: ProfileContentProps) => {
   const { user: myProfile } = useUser()
   const complete = getCountForEvent(myProfile, 'profile_setup_finished')
@@ -36,7 +39,7 @@ export const ProfileContent = ({
       <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
       <ProfileRolesSection profile={profile} />
       <ProfilePassportsSection profile={profile} />
-      <ProfileActivitiesSection activities={activities} />
+      <ProfileActivitiesSection activityItems={activityItems} />
     </ProfileInnerContainer>
   )
 }

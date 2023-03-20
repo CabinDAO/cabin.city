@@ -1,6 +1,9 @@
 import { useRouter } from 'next/router'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { useGetProfileByIdQuery } from '@/generated/graphql'
+import {
+  ActivityItemFragment,
+  useGetProfileByIdQuery,
+} from '@/generated/graphql'
 import { ProfileContent } from './view-profile/ProfileContent'
 
 export const ProfileView = () => {
@@ -12,7 +15,10 @@ export const ProfileView = () => {
   })
 
   const profile = data?.findProfileByID
-  const activities = data?.activitiesByProfile?.data
+  const activityItems =
+    data?.activitiesByProfile?.data.filter(
+      (a): a is ActivityItemFragment => !!a
+    ) ?? []
 
   if (loadingProfile) {
     return null
@@ -23,7 +29,7 @@ export const ProfileView = () => {
 
   return (
     <SingleColumnLayout>
-      <ProfileContent profile={profile} activities={activities} />
+      <ProfileContent profile={profile} activityItems={activityItems} />
     </SingleColumnLayout>
   )
 }

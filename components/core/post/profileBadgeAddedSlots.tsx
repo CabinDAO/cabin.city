@@ -5,8 +5,8 @@ import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
 const ProfileBadgeAddedContent = (props: PostProps) => {
-  const { activity } = props
-  const badge = activity.metadata?.badge
+  const { activityItem } = props
+  const badge = activityItem.activity.metadata?.badge
 
   if (!badge) {
     console.error('ProfileBadgeAdded activity without metadata.badge')
@@ -17,8 +17,8 @@ const ProfileBadgeAddedContent = (props: PostProps) => {
 }
 
 const ProfileBadgeAddedMedia = (props: PostProps) => {
-  const { activity } = props
-  const badge = activity.metadata?.badge
+  const { activityItem } = props
+  const badge = activityItem.activity.metadata?.badge
 
   if (!badge) {
     console.error('ProfileBadgeAdded activity without metadata.badge')

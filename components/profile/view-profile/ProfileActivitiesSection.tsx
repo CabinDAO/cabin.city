@@ -2,22 +2,20 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { Post } from '@/components/core/post/Post'
 import { H3 } from '@/components/core/Typography'
-import { ActivityFragment } from '@/generated/graphql'
+import { useActivityReactions } from '@/components/dashboard/useActivityReactions'
+import { ActivityItemFragment } from '@/generated/graphql'
 import styled from 'styled-components'
 
 interface ProfileActivitiesSectionProps {
-  activities: (ActivityFragment | null)[] | undefined
+  activityItems: ActivityItemFragment[]
 }
 
 export const ProfileActivitiesSection = ({
-  activities,
+  activityItems,
 }: ProfileActivitiesSectionProps) => {
-  const truthyActivities = activities?.filter((a): a is ActivityFragment => !!a)
   const baseDate = new Date()
 
-  if (!truthyActivities) {
-    return null
-  }
+  const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 
   return (
     <StyledContentCard shape="notch">
@@ -26,12 +24,14 @@ export const ProfileActivitiesSection = ({
       </SectionTitle>
       <StyledDivider />
       <InnerContainer>
-        {truthyActivities.map((activity) => (
+        {activityItems.map((activityItem) => (
           <Post
             excludeProfile
-            key={activity._id}
-            activity={activity}
+            key={activityItem.activity._id}
+            activityItem={activityItem}
             baseDate={baseDate}
+            onLike={() => handleLikeActivity(activityItem)}
+            onUnlike={() => handleUnlikeActivity(activityItem)}
           />
         ))}
       </InnerContainer>

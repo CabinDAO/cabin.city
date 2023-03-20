@@ -19,7 +19,9 @@ export interface PostSlots {
 }
 
 export const getPostSlots = (props: PostProps): PostSlots => {
-  const { activity } = props
+  const { activityItem } = props
+  const { activity } = activityItem
+
   if (activity.type === ActivityType.ProfileCreated) {
     return profileCreatedSlots
   }

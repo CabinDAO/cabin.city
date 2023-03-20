@@ -56,6 +56,13 @@ export type AccountProfileRelation = {
   connect?: InputMaybe<Scalars['ID']>;
 };
 
+/** 'ActivitiesResult' input values */
+export type ActivitiesResultInput = {
+  data: Array<ActivityItemInput>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+};
+
 /** 'Activity' input values */
 export type ActivityInput = {
   key: Scalars['String'];
@@ -65,6 +72,23 @@ export type ActivityInput = {
   transactionId?: InputMaybe<Scalars['String']>;
   profile?: InputMaybe<ActivityProfileRelation>;
   metadata?: InputMaybe<ActivityMetadataInput>;
+  reactions?: InputMaybe<ActivityReactionsRelation>;
+  reactedByProfile?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Allow manipulating the relationship between the types 'ActivityItem' and 'Activity' using the field 'ActivityItem.activity'. */
+export type ActivityItemActivityRelation = {
+  /** Create a document of type 'Activity' and associate it with the current document. */
+  create?: InputMaybe<ActivityInput>;
+  /** Connect a document of type 'Activity' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** 'ActivityItem' input values */
+export type ActivityItemInput = {
+  activity: Scalars['ID'];
+  reactionCount: Scalars['Int'];
+  hasReactionByMe: Scalars['Boolean'];
 };
 
 /** Allow manipulating the relationship between the types 'ActivityMetadata' and 'OtterspaceBadge' using the field 'ActivityMetadata.badge'. */
@@ -89,6 +113,38 @@ export type ActivityProfileRelation = {
   create?: InputMaybe<ProfileInput>;
   /** Connect a document of type 'Profile' with the current document using its ID. */
   connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'ActivityReaction' and 'Activity' using the field 'ActivityReaction.activity'. */
+export type ActivityReactionActivityRelation = {
+  /** Create a document of type 'Activity' and associate it with the current document. */
+  create?: InputMaybe<ActivityInput>;
+  /** Connect a document of type 'Activity' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** 'ActivityReaction' input values */
+export type ActivityReactionInput = {
+  profile?: InputMaybe<ActivityReactionProfileRelation>;
+  activity?: InputMaybe<ActivityReactionActivityRelation>;
+};
+
+/** Allow manipulating the relationship between the types 'ActivityReaction' and 'Profile' using the field 'ActivityReaction.profile'. */
+export type ActivityReactionProfileRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'Activity' and 'ActivityReaction'. */
+export type ActivityReactionsRelation = {
+  /** Create one or more documents of type 'ActivityReaction' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<ActivityReactionInput>>>;
+  /** Connect one or more documents of type 'ActivityReaction' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'ActivityReaction' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 /** 'BlockSyncAttempt' input values */
@@ -144,6 +200,8 @@ export type Mutation = {
   unvouchProfile: Profile;
   /** Partially updates an existing document in the collection of 'Activity'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateActivity?: Maybe<Activity>;
+  /** Create a new document in the collection of 'ActivityReaction' */
+  createActivityReaction: ActivityReaction;
   /** Delete an existing document in the collection of 'TrackingEvent' */
   deleteTrackingEvent?: Maybe<TrackingEvent>;
   /** Partially updates an existing document in the collection of 'OtterspaceBadgeSpec'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
@@ -156,14 +214,21 @@ export type Mutation = {
   createOtterspaceBadge: OtterspaceBadge;
   /** Delete an existing document in the collection of 'Account' */
   deleteAccount?: Maybe<Account>;
+  /** Update an existing document in the collection of 'ActivityReaction' */
+  updateActivityReaction?: Maybe<ActivityReaction>;
   /** Update an existing document in the collection of 'OtterspaceBadgeSpec' */
   updateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
+  /** Delete an existing document in the collection of 'ActivityReaction' */
+  deleteActivityReaction?: Maybe<ActivityReaction>;
+  /** Partially updates an existing document in the collection of 'ActivityReaction'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateActivityReaction?: Maybe<ActivityReaction>;
   /** Delete an existing document in the collection of 'ProfileVouch' */
   deleteProfileVouch?: Maybe<ProfileVouch>;
   /** Partially updates an existing document in the collection of 'BlockSyncAttempt'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   /** Create a new document in the collection of 'TrackingEvent' */
   createTrackingEvent: TrackingEvent;
+  unlikeActivity: ActivityReaction;
   /** Update an existing document in the collection of 'TrackingEvent' */
   updateTrackingEvent?: Maybe<TrackingEvent>;
   /** Update an existing document in the collection of 'Account' */
@@ -192,6 +257,7 @@ export type Mutation = {
   partialUpdateOtterspaceBadge?: Maybe<OtterspaceBadge>;
   /** Create a new document in the collection of 'Hat' */
   createHat: Hat;
+  likeActivity: ActivityReaction;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   vouchProfile: Profile;
@@ -253,6 +319,11 @@ export type MutationPartialUpdateActivityArgs = {
 };
 
 
+export type MutationCreateActivityReactionArgs = {
+  data: ActivityReactionInput;
+};
+
+
 export type MutationDeleteTrackingEventArgs = {
   id: Scalars['ID'];
 };
@@ -286,9 +357,26 @@ export type MutationDeleteAccountArgs = {
 };
 
 
+export type MutationUpdateActivityReactionArgs = {
+  id: Scalars['ID'];
+  data: ActivityReactionInput;
+};
+
+
 export type MutationUpdateOtterspaceBadgeSpecArgs = {
   id: Scalars['ID'];
   data: OtterspaceBadgeSpecInput;
+};
+
+
+export type MutationDeleteActivityReactionArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationPartialUpdateActivityReactionArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateActivityReactionInput;
 };
 
 
@@ -305,6 +393,11 @@ export type MutationPartialUpdateBlockSyncAttemptArgs = {
 
 export type MutationCreateTrackingEventArgs = {
   data: TrackingEventInput;
+};
+
+
+export type MutationUnlikeActivityArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -391,6 +484,11 @@ export type MutationCreateHatArgs = {
 };
 
 
+export type MutationLikeActivityArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationDeleteBlockSyncAttemptArgs = {
   id: Scalars['ID'];
 };
@@ -474,6 +572,13 @@ export type PartialUpdateAccountInput = {
   badges?: InputMaybe<AccountBadgesRelation>;
 };
 
+/** 'ActivitiesResult' input values */
+export type PartialUpdateActivitiesResultInput = {
+  data?: InputMaybe<Array<PartialUpdateActivityItemInput>>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+};
+
 /** 'Activity' input values */
 export type PartialUpdateActivityInput = {
   key?: InputMaybe<Scalars['String']>;
@@ -483,12 +588,27 @@ export type PartialUpdateActivityInput = {
   transactionId?: InputMaybe<Scalars['String']>;
   profile?: InputMaybe<ActivityProfileRelation>;
   metadata?: InputMaybe<PartialUpdateActivityMetadataInput>;
+  reactions?: InputMaybe<ActivityReactionsRelation>;
+  reactedByProfile?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** 'ActivityItem' input values */
+export type PartialUpdateActivityItemInput = {
+  activity?: InputMaybe<Scalars['ID']>;
+  reactionCount?: InputMaybe<Scalars['Int']>;
+  hasReactionByMe?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** 'ActivityMetadata' input values */
 export type PartialUpdateActivityMetadataInput = {
   badge?: InputMaybe<Scalars['ID']>;
   profileRole?: InputMaybe<PartialUpdateProfileRoleInput>;
+};
+
+/** 'ActivityReaction' input values */
+export type PartialUpdateActivityReactionInput = {
+  profile?: InputMaybe<ActivityReactionProfileRelation>;
+  activity?: InputMaybe<ActivityReactionActivityRelation>;
 };
 
 /** 'BlockSyncAttempt' input values */
@@ -736,14 +856,23 @@ export type AccountPage = {
   before?: Maybe<Scalars['String']>;
 };
 
+export type ActivitiesResult = {
+  __typename?: 'ActivitiesResult';
+  data: Array<ActivityItem>;
+  after?: Maybe<Scalars['String']>;
+  before?: Maybe<Scalars['String']>;
+};
+
 export type Activity = {
   __typename?: 'Activity';
   timestamp: Scalars['Time'];
   /** The document's ID. */
   _id: Scalars['ID'];
+  reactions: ActivityReactionPage;
   profileRoleAdded?: Maybe<ProfileRoleType>;
   key: Scalars['String'];
   profile: Profile;
+  reactedByProfile?: Maybe<Scalars['Boolean']>;
   metadata?: Maybe<ActivityMetadata>;
   type: ActivityType;
   transactionId?: Maybe<Scalars['String']>;
@@ -751,10 +880,49 @@ export type Activity = {
   _ts: Scalars['Long'];
 };
 
+
+export type ActivityReactionsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ActivityReactedByProfileArgs = {
+  profileId: Scalars['ID'];
+};
+
+export type ActivityItem = {
+  __typename?: 'ActivityItem';
+  activity: Activity;
+  reactionCount: Scalars['Int'];
+  hasReactionByMe: Scalars['Boolean'];
+};
+
 export type ActivityMetadata = {
   __typename?: 'ActivityMetadata';
   badge?: Maybe<OtterspaceBadge>;
   profileRole?: Maybe<ProfileRole>;
+};
+
+export type ActivityReaction = {
+  __typename?: 'ActivityReaction';
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+  profile: Profile;
+  activity: Activity;
+};
+
+/** The pagination object for elements of type 'ActivityReaction'. */
+export type ActivityReactionPage = {
+  __typename?: 'ActivityReactionPage';
+  /** The elements of type 'ActivityReaction' in this page. */
+  data: Array<Maybe<ActivityReaction>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
 };
 
 export enum ActivityType {
@@ -1041,12 +1209,14 @@ export type Query = {
   me: Profile;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
-  allActivities: QueryAllActivitiesPage;
-  activitiesByProfile: QueryActivitiesByProfilePage;
+  allActivities: ActivitiesResult;
+  activitiesByProfile?: Maybe<ActivitiesResult>;
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
   allBadges: OtterspaceBadgePage;
+  /** Find a document from the collection of 'ActivityReaction' by its id. */
+  findActivityReactionByID?: Maybe<ActivityReaction>;
   tokenHoldersCount: Scalars['Int'];
   allHats: HatPage;
 };
@@ -1134,15 +1304,17 @@ export type QueryFindOtterspaceBadgeSpecByIdArgs = {
 
 
 export type QueryAllActivitiesArgs = {
-  _size?: InputMaybe<Scalars['Int']>;
-  _cursor?: InputMaybe<Scalars['String']>;
+  size?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
 };
 
 
 export type QueryActivitiesByProfileArgs = {
-  _size?: InputMaybe<Scalars['Int']>;
-  _cursor?: InputMaybe<Scalars['String']>;
   profileId: Scalars['ID'];
+  size?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1163,31 +1335,14 @@ export type QueryAllBadgesArgs = {
 };
 
 
+export type QueryFindActivityReactionByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryAllHatsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
-};
-
-/** The pagination object for elements of type 'Activity'. */
-export type QueryActivitiesByProfilePage = {
-  __typename?: 'QueryActivitiesByProfilePage';
-  /** The elements of type 'Activity' in this page. */
-  data: Array<Maybe<Activity>>;
-  /** A cursor for elements coming after the current page. */
-  after?: Maybe<Scalars['String']>;
-  /** A cursor for elements coming before the current page. */
-  before?: Maybe<Scalars['String']>;
-};
-
-/** The pagination object for elements of type 'Activity'. */
-export type QueryAllActivitiesPage = {
-  __typename?: 'QueryAllActivitiesPage';
-  /** The elements of type 'Activity' in this page. */
-  data: Array<Maybe<Activity>>;
-  /** A cursor for elements coming after the current page. */
-  after?: Maybe<Scalars['String']>;
-  /** A cursor for elements coming before the current page. */
-  before?: Maybe<Scalars['String']>;
 };
 
 /** The pagination object for elements of type 'Profile'. */
@@ -1232,20 +1387,36 @@ export type MeFragment = { __typename?: 'Profile', _id: string, name: string, em
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
+export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+
+export type ActivityItemFragment = { __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+
 export type GetActivitiesQueryVariables = Exact<{
   size?: InputMaybe<Scalars['Int']>;
-  cursor?: InputMaybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
-
-export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'ActivitiesResult', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } };
 
 export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetActivitySummaryQuery = { __typename?: 'Query', profilesCount: number, tokenHoldersCount: number, citizensCount: number };
+
+export type LikeActivityMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type LikeActivityMutation = { __typename?: 'Mutation', likeActivity: { __typename?: 'ActivityReaction', _id: string } };
+
+export type UnlikeActivityMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UnlikeActivityMutation = { __typename?: 'Mutation', unlikeActivity: { __typename?: 'ActivityReaction', _id: string } };
 
 export type GetProfileByAddressQueryVariables = Exact<{
   address: Scalars['String'];
@@ -1279,7 +1450,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile?: { __typename?: 'ActivitiesResult', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } | null };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1412,6 +1583,15 @@ export const ActivityFragmentDoc = gql`
   }
 }
     `;
+export const ActivityItemFragmentDoc = gql`
+    fragment ActivityItem on ActivityItem {
+  activity {
+    ...Activity
+  }
+  reactionCount
+  hasReactionByMe
+}
+    ${ActivityFragmentDoc}`;
 export const ProfileFragmentDoc = gql`
     fragment Profile on Profile {
   _id
@@ -1524,15 +1704,15 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const GetActivitiesDocument = gql`
-    query GetActivities($size: Int, $cursor: String) {
-  allActivities(_size: $size, _cursor: $cursor) {
+    query GetActivities($size: Int, $after: String) {
+  allActivities(size: $size, after: $after) {
     data {
-      ...Activity
+      ...ActivityItem
     }
     after
   }
 }
-    ${ActivityFragmentDoc}`;
+    ${ActivityItemFragmentDoc}`;
 
 /**
  * __useGetActivitiesQuery__
@@ -1547,7 +1727,7 @@ export const GetActivitiesDocument = gql`
  * const { data, loading, error } = useGetActivitiesQuery({
  *   variables: {
  *      size: // value for 'size'
- *      cursor: // value for 'cursor'
+ *      after: // value for 'after'
  *   },
  * });
  */
@@ -1596,6 +1776,72 @@ export function useGetActivitySummaryLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetActivitySummaryQueryHookResult = ReturnType<typeof useGetActivitySummaryQuery>;
 export type GetActivitySummaryLazyQueryHookResult = ReturnType<typeof useGetActivitySummaryLazyQuery>;
 export type GetActivitySummaryQueryResult = Apollo.QueryResult<GetActivitySummaryQuery, GetActivitySummaryQueryVariables>;
+export const LikeActivityDocument = gql`
+    mutation LikeActivity($id: ID!) {
+  likeActivity(id: $id) {
+    _id
+  }
+}
+    `;
+export type LikeActivityMutationFn = Apollo.MutationFunction<LikeActivityMutation, LikeActivityMutationVariables>;
+
+/**
+ * __useLikeActivityMutation__
+ *
+ * To run a mutation, you first call `useLikeActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likeActivityMutation, { data, loading, error }] = useLikeActivityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLikeActivityMutation(baseOptions?: Apollo.MutationHookOptions<LikeActivityMutation, LikeActivityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikeActivityMutation, LikeActivityMutationVariables>(LikeActivityDocument, options);
+      }
+export type LikeActivityMutationHookResult = ReturnType<typeof useLikeActivityMutation>;
+export type LikeActivityMutationResult = Apollo.MutationResult<LikeActivityMutation>;
+export type LikeActivityMutationOptions = Apollo.BaseMutationOptions<LikeActivityMutation, LikeActivityMutationVariables>;
+export const UnlikeActivityDocument = gql`
+    mutation UnlikeActivity($id: ID!) {
+  unlikeActivity(id: $id) {
+    _id
+  }
+}
+    `;
+export type UnlikeActivityMutationFn = Apollo.MutationFunction<UnlikeActivityMutation, UnlikeActivityMutationVariables>;
+
+/**
+ * __useUnlikeActivityMutation__
+ *
+ * To run a mutation, you first call `useUnlikeActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlikeActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlikeActivityMutation, { data, loading, error }] = useUnlikeActivityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUnlikeActivityMutation(baseOptions?: Apollo.MutationHookOptions<UnlikeActivityMutation, UnlikeActivityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlikeActivityMutation, UnlikeActivityMutationVariables>(UnlikeActivityDocument, options);
+      }
+export type UnlikeActivityMutationHookResult = ReturnType<typeof useUnlikeActivityMutation>;
+export type UnlikeActivityMutationResult = Apollo.MutationResult<UnlikeActivityMutation>;
+export type UnlikeActivityMutationOptions = Apollo.BaseMutationOptions<UnlikeActivityMutation, UnlikeActivityMutationVariables>;
 export const GetProfileByAddressDocument = gql`
     query GetProfileByAddress($address: String!) {
   accountByAddress(address: $address) {
@@ -1712,14 +1958,14 @@ export const GetProfileByIdDocument = gql`
   findProfileByID(id: $id) {
     ...GetProfileById
   }
-  activitiesByProfile(profileId: $id, _size: 2) {
+  activitiesByProfile(profileId: $id, size: 2) {
     data {
-      ...Activity
+      ...ActivityItem
     }
   }
 }
     ${GetProfileByIdFragmentDoc}
-${ActivityFragmentDoc}`;
+${ActivityItemFragmentDoc}`;
 
 /**
  * __useGetProfileByIdQuery__

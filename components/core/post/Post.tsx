@@ -1,22 +1,24 @@
-import { ActivityFragment } from '@/generated/graphql'
+import { ActivityItemFragment } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
 import styled from 'styled-components'
 import { Avatar } from '../Avatar'
-import Icon from '../Icon'
+import IconButton from '../IconButton'
 import { ProfileIcons } from '../ProfileIcons'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
 
 export interface PostProps {
-  activity: ActivityFragment
+  activityItem: ActivityItemFragment
   baseDate: Date
   excludeProfile?: boolean
+  onLike?: () => void
+  onUnlike?: () => void
 }
 
 export const Post = (props: PostProps) => {
-  const { activity, excludeProfile } = props
-  const { profile } = activity
+  const { activityItem, excludeProfile, onLike, onUnlike } = props
+  const { profile } = activityItem.activity
 
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.role))
   const citizenshipStatus = profile.citizenshipStatus
@@ -39,8 +41,17 @@ export const Post = (props: PostProps) => {
       {Media && <Media {...props} />}
       {/* TODO: Hydrate with real data */}
       <ReactionsContainer>
-        <Icon name="heart-outline" size={2} />
-        <Caption>0</Caption>
+        {activityItem.hasReactionByMe ? (
+          <IconButton
+            icon="heart-solid"
+            size={2}
+            color="red600"
+            onClick={onUnlike}
+          />
+        ) : (
+          <IconButton icon="heart-outline" size={2} onClick={onLike} />
+        )}
+        <Caption>{activityItem.reactionCount}</Caption>
       </ReactionsContainer>
     </Container>
   )
@@ -79,6 +90,9 @@ const ReactionsContainer = styled.div`
 
 const ActivityDate = (props: PostProps) => (
   <div>
-    {formatDistance(parseISO(props.activity.timestamp), props.baseDate)}
+    {formatDistance(
+      parseISO(props.activityItem.activity.timestamp),
+      props.baseDate
+    )}
   </div>
 )

@@ -43,6 +43,14 @@ const authenticatedProfileRole: RoleResource = {
       },
     },
     {
+      resource: q.Collection('ActivityReaction'),
+      actions: {
+        read: true,
+        create: true,
+        delete: true,
+      },
+    },
+    {
       resource: q.Collection('Hat'),
       actions: {
         read: true,
@@ -119,6 +127,18 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Index('activities_sorted_by_timestamp'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('activityReaction_activity_by_activity'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('activityReaction_by_activity_and_profile'),
       actions: {
         read: true,
       },
@@ -289,6 +309,18 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('unvouch_profile'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('like_activity'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('unlike_activity'),
       actions: {
         call: true,
       },

@@ -1,0 +1,32 @@
+fragment Activity on Activity {
+  _id
+  timestamp
+  type
+  metadata {
+    badge {
+      _id
+      badgeId
+      spec {
+        name
+        description
+        image
+      }
+    }
+    profileRole {
+      role
+      level
+    }
+  }
+  profile {
+    _id
+    name
+    citizenshipStatus
+    roles {
+      role
+      level
+    }
+    avatar {
+      url
+    }
+  }
+}

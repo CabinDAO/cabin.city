@@ -17,21 +17,25 @@ const Template: ComponentStory<typeof Post> = (args) => <Post {...args} />
 
 export const ProfileCreated = Template.bind({})
 ProfileCreated.args = {
-  activity: {
-    _id: '123',
-    timestamp: subHours(new Date(), 1).toISOString(),
-    type: ActivityType.ProfileCreated,
-    profile: {
+  activityItem: {
+    hasReactionByMe: false,
+    reactionCount: 0,
+    activity: {
       _id: '123',
-      name: 'Jaylon Kenter',
-      roles: [
-        {
-          role: ProfileRoleType.Builder,
-          level: ProfileRoleLevelType.Apprentice,
+      timestamp: subHours(new Date(), 1).toISOString(),
+      type: ActivityType.ProfileCreated,
+      profile: {
+        _id: '123',
+        name: 'Jaylon Kenter',
+        roles: [
+          {
+            role: ProfileRoleType.Builder,
+            level: ProfileRoleLevelType.Apprentice,
+          },
+        ],
+        avatar: {
+          url: 'https://fastly.picsum.photos/id/278/200/200.jpg?hmac=ttIZUII9b-qTWIpyIHChMPIA802dHskBJGR2EAa-Ywc',
         },
-      ],
-      avatar: {
-        url: 'https://fastly.picsum.photos/id/278/200/200.jpg?hmac=ttIZUII9b-qTWIpyIHChMPIA802dHskBJGR2EAa-Ywc',
       },
     },
   },
@@ -40,44 +44,48 @@ ProfileCreated.args = {
 
 export const LeveledUpToBuilderMember = Template.bind({})
 LeveledUpToBuilderMember.args = {
-  activity: {
-    _id: '123',
-    timestamp: subHours(new Date(), 1).toISOString(),
-    type: ActivityType.ProfileRoleAdded,
-    metadata: {
-      profileRole: {
-        role: ProfileRoleType.Builder,
-        level: ProfileRoleLevelType.Member,
-      },
-    },
-    profile: {
+  activityItem: {
+    hasReactionByMe: true,
+    reactionCount: 1,
+    activity: {
       _id: '123',
-      name: 'Jaylon Kenter',
-      citizenshipStatus: CitizenshipStatus.Verified,
-      roles: [
-        {
+      timestamp: subHours(new Date(), 1).toISOString(),
+      type: ActivityType.ProfileRoleAdded,
+      metadata: {
+        profileRole: {
           role: ProfileRoleType.Builder,
           level: ProfileRoleLevelType.Member,
         },
-        {
-          role: ProfileRoleType.Naturalist,
-          level: ProfileRoleLevelType.Apprentice,
+      },
+      profile: {
+        _id: '123',
+        name: 'Jaylon Kenter',
+        citizenshipStatus: CitizenshipStatus.Verified,
+        roles: [
+          {
+            role: ProfileRoleType.Builder,
+            level: ProfileRoleLevelType.Member,
+          },
+          {
+            role: ProfileRoleType.Naturalist,
+            level: ProfileRoleLevelType.Apprentice,
+          },
+          {
+            role: ProfileRoleType.Caretaker,
+            level: ProfileRoleLevelType.TopHat,
+          },
+          {
+            role: ProfileRoleType.Gatherer,
+            level: ProfileRoleLevelType.Member,
+          },
+          {
+            role: ProfileRoleType.Creator,
+            level: ProfileRoleLevelType.Member,
+          },
+        ],
+        avatar: {
+          url: 'https://fastly.picsum.photos/id/278/200/200.jpg?hmac=ttIZUII9b-qTWIpyIHChMPIA802dHskBJGR2EAa-Ywc',
         },
-        {
-          role: ProfileRoleType.Caretaker,
-          level: ProfileRoleLevelType.TopHat,
-        },
-        {
-          role: ProfileRoleType.Gatherer,
-          level: ProfileRoleLevelType.Member,
-        },
-        {
-          role: ProfileRoleType.Creator,
-          level: ProfileRoleLevelType.Member,
-        },
-      ],
-      avatar: {
-        url: 'https://fastly.picsum.photos/id/278/200/200.jpg?hmac=ttIZUII9b-qTWIpyIHChMPIA802dHskBJGR2EAa-Ywc',
       },
     },
   },
