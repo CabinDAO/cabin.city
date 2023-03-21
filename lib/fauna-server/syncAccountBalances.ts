@@ -1,6 +1,6 @@
 import { CompleteSyncAttempt } from '@/fauna/lib/CompleteSyncAttempt'
 import { GetProfileByAccountRef } from '@/fauna/lib/GetProfileByAccountRef'
-import { SyncProfileCabinTokenbalance } from '@/fauna/lib/SyncProfileCabinTokenBalance'
+import { SyncProfileCabinTokenBalance } from '@/fauna/lib/SyncProfileCabinTokenBalance'
 import { UpsertAccount } from '@/fauna/lib/UpsertAccount'
 import { query as q, Expr } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
@@ -24,7 +24,10 @@ export const syncAccountBalances = async (
                 cabinTokenBalance: accountBalance.balance,
               },
             }),
-            SyncProfileCabinTokenbalance(q.Var('profile'), q.Var('account'))
+            SyncProfileCabinTokenBalance(
+              q.Var('profile'),
+              accountBalance.balance
+            )
           )
         )
       ),

@@ -98,5 +98,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
     })
   )
 
+  console.info({ newBalances })
+
   await syncAccountBalances(ref, newBalances)
 }
