@@ -93,7 +93,7 @@ The sync jobs that support this app are somewhat complicated so we're documentin
 
 ### How synchronization works
 
-Each sync job is run periodically on its own cron schedule.
+Each sync job is run periodically on its own cron schedule. See `vercel.json` for cron configuration.
 
 A sync job is invoked by calling its respective endpoint, e.g. `/api/sync/cabin-token`.
 
