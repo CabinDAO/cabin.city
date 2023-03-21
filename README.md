@@ -2,6 +2,8 @@
 
 The Census is Cabin’s membership directory.
 
+Dev environment: https://cabin-census-dev.vercel.app/
+
 ## Setup
 
 ### Dependencies
