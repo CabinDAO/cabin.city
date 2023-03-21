@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-      "path": "/api/sync/cabin-token",
-      "schedule": "* * * * *"
-    }
-  ]
-}
