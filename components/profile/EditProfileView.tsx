@@ -15,10 +15,9 @@ export const EditProfileView = () => {
   const router = useRouter()
   const { user } = useUser({ redirectTo: '/login' })
   const [updateProfile] = useUpdateProfileMutation()
-  const [editProfileInput, setEditProfileInput] =
-    useState<UpdateProfileInput | null>({
-      avatar: user?.avatar,
-    })
+  const [editProfileInput, setEditProfileInput] = useState<UpdateProfileInput>(
+    {}
+  )
   const [roleTypes, setRoleTypes] = useState<ProfileRoleType[] | null>(null)
 
   const handleSubmit = async () => {

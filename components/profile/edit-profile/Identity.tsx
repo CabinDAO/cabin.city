@@ -11,6 +11,9 @@ export const Identity = ({
   user,
 }: UpdateProfileProps) => {
   const [displayError, setDisplayError] = useState(false)
+  const avatar = editProfileInput?.hasOwnProperty('avatar')
+    ? editProfileInput.avatar
+    : user?.avatar
   const email = editProfileInput?.email ?? user?.email
   const name = editProfileInput?.name ?? user?.name
 
@@ -28,7 +31,7 @@ export const Identity = ({
   return (
     <AboutContainer>
       <AvatarSetup
-        avatar={editProfileInput?.avatar}
+        avatar={avatar}
         onNftSelected={(avatar) => onChange({ ...editProfileInput, avatar })}
       />
       <InputGroup>
