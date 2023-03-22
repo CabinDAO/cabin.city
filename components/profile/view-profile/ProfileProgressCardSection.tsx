@@ -5,27 +5,44 @@ import { ProgressBar } from '../../core/ProgressBar'
 import { ColorName } from '@/styles/theme'
 import Icon from '../../core/Icon'
 import { useRouter } from 'next/router'
+import { MeFragment, useLogTrackingEventMutation } from '@/generated/graphql'
+import { hasEventOccurred, TrackingEvent } from '@/lib/tracking-events'
 
 interface ProfileProgressCardProps {
   progress: number
   profileId: string
+  me: MeFragment
 }
 
 export const ProfileProgressCardSection = ({
   progress,
   profileId,
+  me,
 }: ProfileProgressCardProps) => {
   const router = useRouter()
+  const [logTrackingEvent] = useLogTrackingEventMutation()
 
-  const handleCTAClick = () => {
-    if (complete) {
-      // Dismiss
-    } else {
-      router.push(`/profile/${profileId}/setup`)
-    }
-  }
+  if (!me) return null
 
   const complete = progress === 100
+  const hasDismissed = hasEventOccurred(
+    me,
+    TrackingEvent.profile_setup_dismissed
+  )
+
+  if (hasDismissed) return null
+
+  const handleSetupClick = () => {
+    router.push(`/profile/${profileId}/setup`)
+  }
+
+  const handleDismissClick = () => {
+    logTrackingEvent({
+      variables: {
+        key: TrackingEvent.profile_setup_dismissed,
+      },
+    })
+  }
 
   return (
     <ContentCard fillType="hard" notchSize={1.6} shape="notch">
@@ -35,14 +52,17 @@ export const ProfileProgressCardSection = ({
             <H2 $color="yellow100">Profile progress</H2>
             <H2 $color="yellow100">{progress}% Complete</H2>
           </ProfileProgressData>
-          <LinkContainer color="yellow100" onClick={handleCTAClick}>
-            <Overline>{complete ? 'Dismiss' : 'Setup profile'}</Overline>
-            <Icon
-              name={complete ? 'close' : 'chevron-right'}
-              size={1.4}
-              color="yellow100"
-            />
-          </LinkContainer>
+          {!complete ? (
+            <LinkContainer color="yellow100" onClick={handleSetupClick}>
+              <Overline>Setup profile</Overline>
+              <Icon name="chevron-right" size={1.4} color="yellow100" />
+            </LinkContainer>
+          ) : (
+            <LinkContainer color="yellow100" onClick={handleDismissClick}>
+              <Overline>Dismiss</Overline>
+              <Icon name="close" size={1.4} color="yellow100" />
+            </LinkContainer>
+          )}
         </ProfileCompletionData>
         <ProgressBar progress={progress} />
       </InnerContainer>

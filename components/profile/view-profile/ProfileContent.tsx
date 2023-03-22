@@ -2,7 +2,6 @@ import {
   ActivityItemFragment,
   GetProfileByIdFragment,
 } from '@/generated/graphql'
-import { getCountForEvent } from '@/utils/events'
 import { useUser } from '../../auth/useUser'
 import { ProfileProgressCardSection } from './ProfileProgressCardSection'
 import { ProfileInnerContainer } from '../profile.styles'
@@ -12,6 +11,7 @@ import { ProfileRolesSection } from './ProfileRolesSection'
 import { ProfilePassportsSection } from './ProfilePassportsSection'
 import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
+import { hasEventOccurred, TrackingEvent } from '@/lib/tracking-events'
 
 interface ProfileContentProps {
   profile: GetProfileByIdFragment
@@ -22,9 +22,11 @@ export const ProfileContent = ({
   profile,
   activityItems,
 }: ProfileContentProps) => {
-  const { user: myProfile } = useUser()
-  const complete = getCountForEvent(myProfile, 'profile_setup_finished')
-  const isOwnProfile = myProfile?._id === profile._id
+  const { user: me } = useUser()
+  if (!me) return null
+
+  const complete = hasEventOccurred(me, TrackingEvent.profile_setup_finished)
+  const isOwnProfile = me?._id === profile._id
 
   return (
     <ProfileInnerContainer>
@@ -33,6 +35,7 @@ export const ProfileContent = ({
         <ProfileProgressCardSection
           progress={complete ? 100 : 25}
           profileId={profile._id}
+          me={me}
         />
       )}
       <ProfileAboutSection profile={profile} />

@@ -1,4 +1,5 @@
 import { useLogTrackingEventMutation } from '@/generated/graphql'
+import { TrackingEvent } from '@/lib/tracking-events'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { TitleCard } from '../core/TitleCard'
@@ -28,7 +29,7 @@ export const SetupProfileView = ({}) => {
     } else if (isLastStep) {
       logTrackingEvent({
         variables: {
-          key: 'profile_setup_finished',
+          key: TrackingEvent.profile_setup_finished,
         },
       })
 
