@@ -244,6 +244,9 @@ type ActivityMetadata @embedded {
 
   # ProfileRoleAdded
   profileRole: ProfileRole
+
+  # VerifiedCitizenship
+  citizenshipTokenId: String
 }
 
 type ActivityReaction {
@@ -255,6 +258,7 @@ enum ActivityType {
   ProfileCreated
   ProfileRoleAdded
   ProfileBadgeAdded
+  VerifiedCitizenship
 }
 
 type BlockSyncAttempt {

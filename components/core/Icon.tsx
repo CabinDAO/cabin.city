@@ -8,6 +8,7 @@ import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
+import checkStarSvg from './svg/check-star.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronLeftSvg from './svg/chevron-left.svg'
 import chevronRightSvg from './svg/chevron-right.svg'
@@ -48,6 +49,7 @@ export const IconSvgs = {
   caretaker: caretakerSvg,
   'card-heart': cardHeartSvg,
   check: checkSvg,
+  'check-star': checkStarSvg,
   'chevron-down': chevronDownSvg,
   'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,

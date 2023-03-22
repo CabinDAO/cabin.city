@@ -16,6 +16,7 @@ fragment Activity on Activity {
       role
       level
     }
+    citizenshipTokenId
   }
   profile {
     _id

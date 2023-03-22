@@ -16,6 +16,7 @@ export interface UpsertActivityInput {
 interface UpsertActivityMetadataInput {
   badge?: ExprVal
   profileRole?: ProfileRole | null
+  citizenshipTokenId?: string | null
 }
 
 export const UpsertActivity = (profile: Expr, input: UpsertActivityInput) => {

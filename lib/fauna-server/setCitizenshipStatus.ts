@@ -1,5 +1,6 @@
 import { GetProfileByAddress } from '@/fauna/lib/GetProfileByAddress'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { UpsertActivity } from '@/fauna/lib/UpsertActivity'
+import { ActivityType, CitizenshipStatus } from '@/generated/graphql'
 import { query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
 import { faunaServerClient } from './faunaServerClient'
@@ -41,15 +42,32 @@ export const setCitizenshipStatus = async (
               q.Equals(status, CitizenshipStatus.Vouched)
             )
           ),
-          q.Update(SelectRef(q.Var('profile')), {
-            data: {
-              citizenshipStatus: status,
-              citizenshipMetadata: {
-                tokenId,
-                mintedAt: citizenshipMintedAt,
+          q.Do(
+            q.Update(SelectRef(q.Var('profile')), {
+              data: {
+                citizenshipStatus: status,
+                citizenshipMetadata: {
+                  tokenId,
+                  mintedAt: citizenshipMintedAt,
+                },
               },
-            },
-          }),
+            }),
+            q.If(
+              q.Equals(status, CitizenshipStatus.Verified),
+              UpsertActivity(q.Var('profile'), {
+                key: q.Format(
+                  'VerifiedCitizenship|%s',
+                  q.Select(['ref', 'id'], q.Var('profile'))
+                ),
+                timestamp: q.Now(),
+                type: ActivityType.VerifiedCitizenship,
+                metadata: {
+                  citizenshipTokenId: tokenId,
+                },
+              }),
+              null
+            )
+          ),
           null
         )
       )
