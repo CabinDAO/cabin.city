@@ -11,14 +11,7 @@ query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {
     blockNumber
     timestamp
     hat {
-      id
-      prettyId
-      details
-      imageUri
-      level
-      tree {
-        id
-      }
+      ...Hat
     }
 
     ... on HatMintedEvent {

@@ -1,6 +1,10 @@
 import { Expr, query as q } from 'faunadb'
 import { SelectRef } from 'faunadb-fql-lib'
-import { ActivityType, ProfileAvatarInput } from '../../generated/graphql'
+import {
+  ActivityType,
+  ProfileAvatarInput,
+  ProfileRole,
+} from '../../generated/graphql'
 import { CountAccountBadges } from './CountAccountBadges'
 import { SafeString } from './SafeString'
 import { TruncateBigNumber } from './TruncateBigNumber'
@@ -11,6 +15,7 @@ export interface CreateProfileInput {
   address: string | Expr
   name: string | Expr
   email: string | Expr
+  roles: ProfileRole[] | Expr
   avatar?: ProfileAvatarInput | undefined | Expr
 }
 
@@ -34,7 +39,7 @@ export const CreateProfile = (input: CreateProfileInput) => {
           name: SafeString(input.name),
           email: SafeString(input.email),
           avatar: input.avatar,
-          roles: [],
+          roles: input.roles,
           contactFields: [],
           cabinTokenBalanceInt: q.Var('cabinTokenBalanceInt'),
           badgeCount: q.Var('badgeCount'),

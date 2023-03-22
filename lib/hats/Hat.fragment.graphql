@@ -1,0 +1,10 @@
+fragment Hat on Hat {
+  id
+  prettyId
+  details
+  imageUri
+  level
+  tree {
+    id
+  }
+}

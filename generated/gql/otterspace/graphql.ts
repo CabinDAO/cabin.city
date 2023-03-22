@@ -44,19 +44,19 @@ export type BadgeSpec = {
 };
 
 
-export type BadgeSpecBadgesArgs = {
+export type BadgeSpecbadgesArgs = {
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Badge_OrderBy>;
+  orderBy?: InputMaybe<Badge_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Badge_Filter>;
+  where?: InputMaybe<Badge_filter>;
 };
 
-export type BadgeSpec_Filter = {
+export type BadgeSpec_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<BadgeSpec_Filter>>>;
-  badges_?: InputMaybe<Badge_Filter>;
+  and?: InputMaybe<Array<InputMaybe<BadgeSpec_filter>>>;
+  badges_?: InputMaybe<Badge_filter>;
   createdAt?: InputMaybe<Scalars['Int']>;
   createdAt_gt?: InputMaybe<Scalars['Int']>;
   createdAt_gte?: InputMaybe<Scalars['Int']>;
@@ -106,7 +106,7 @@ export type BadgeSpec_Filter = {
   id_starts_with?: InputMaybe<Scalars['String']>;
   id_starts_with_nocase?: InputMaybe<Scalars['String']>;
   metadata?: InputMaybe<Scalars['String']>;
-  metadata_?: InputMaybe<SpecMetadata_Filter>;
+  metadata_?: InputMaybe<SpecMetadata_filter>;
   metadata_contains?: InputMaybe<Scalars['String']>;
   metadata_contains_nocase?: InputMaybe<Scalars['String']>;
   metadata_ends_with?: InputMaybe<Scalars['String']>;
@@ -126,9 +126,9 @@ export type BadgeSpec_Filter = {
   metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   metadata_starts_with?: InputMaybe<Scalars['String']>;
   metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  or?: InputMaybe<Array<InputMaybe<BadgeSpec_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<BadgeSpec_filter>>>;
   raft?: InputMaybe<Scalars['String']>;
-  raft_?: InputMaybe<Raft_Filter>;
+  raft_?: InputMaybe<Raft_filter>;
   raft_contains?: InputMaybe<Scalars['String']>;
   raft_contains_nocase?: InputMaybe<Scalars['String']>;
   raft_ends_with?: InputMaybe<Scalars['String']>;
@@ -198,22 +198,35 @@ export type BadgeSpec_Filter = {
   uri_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
-export enum BadgeSpec_OrderBy {
-  Badges = 'badges',
-  CreatedAt = 'createdAt',
-  CreatedBy = 'createdBy',
-  Id = 'id',
-  Metadata = 'metadata',
-  Raft = 'raft',
-  SpecUri = 'specUri',
-  TotalBadgesCount = 'totalBadgesCount',
-  Uri = 'uri'
+export enum BadgeSpec_orderBy {
+  badges = 'badges',
+  createdAt = 'createdAt',
+  createdBy = 'createdBy',
+  id = 'id',
+  metadata = 'metadata',
+  metadata__description = 'metadata__description',
+  metadata__expiresAt = 'metadata__expiresAt',
+  metadata__id = 'metadata__id',
+  metadata__image = 'metadata__image',
+  metadata__name = 'metadata__name',
+  raft = 'raft',
+  raft__createdAt = 'raft__createdAt',
+  raft__createdBy = 'raft__createdBy',
+  raft__id = 'raft__id',
+  raft__owner = 'raft__owner',
+  raft__tokenId = 'raft__tokenId',
+  raft__totalBadgesCount = 'raft__totalBadgesCount',
+  raft__totalSpecsCount = 'raft__totalSpecsCount',
+  raft__uri = 'raft__uri',
+  specUri = 'specUri',
+  totalBadgesCount = 'totalBadgesCount',
+  uri = 'uri'
 }
 
-export type Badge_Filter = {
+export type Badge_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<Badge_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<Badge_filter>>>;
   createdAt?: InputMaybe<Scalars['Int']>;
   createdAt_gt?: InputMaybe<Scalars['Int']>;
   createdAt_gte?: InputMaybe<Scalars['Int']>;
@@ -252,7 +265,7 @@ export type Badge_Filter = {
   id_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   id_starts_with?: InputMaybe<Scalars['String']>;
   id_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  or?: InputMaybe<Array<InputMaybe<Badge_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Badge_filter>>>;
   owner?: InputMaybe<Scalars['Bytes']>;
   owner_contains?: InputMaybe<Scalars['Bytes']>;
   owner_gt?: InputMaybe<Scalars['Bytes']>;
@@ -264,7 +277,7 @@ export type Badge_Filter = {
   owner_not_contains?: InputMaybe<Scalars['Bytes']>;
   owner_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   spec?: InputMaybe<Scalars['String']>;
-  spec_?: InputMaybe<BadgeSpec_Filter>;
+  spec_?: InputMaybe<BadgeSpec_filter>;
   spec_contains?: InputMaybe<Scalars['String']>;
   spec_contains_nocase?: InputMaybe<Scalars['String']>;
   spec_ends_with?: InputMaybe<Scalars['String']>;
@@ -354,23 +367,29 @@ export type Badge_Filter = {
   status_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
-export enum Badge_OrderBy {
-  CreatedAt = 'createdAt',
-  From = 'from',
-  Id = 'id',
-  Owner = 'owner',
-  Spec = 'spec',
-  Status = 'status',
-  StatusReason = 'statusReason',
-  StatusUpdatedAt = 'statusUpdatedAt',
-  StatusUpdatedBy = 'statusUpdatedBy'
+export enum Badge_orderBy {
+  createdAt = 'createdAt',
+  from = 'from',
+  id = 'id',
+  owner = 'owner',
+  spec = 'spec',
+  spec__createdAt = 'spec__createdAt',
+  spec__createdBy = 'spec__createdBy',
+  spec__id = 'spec__id',
+  spec__specUri = 'spec__specUri',
+  spec__totalBadgesCount = 'spec__totalBadgesCount',
+  spec__uri = 'spec__uri',
+  status = 'status',
+  statusReason = 'statusReason',
+  statusUpdatedAt = 'statusUpdatedAt',
+  statusUpdatedBy = 'statusUpdatedBy'
 }
 
 export type BlockChangedFilter = {
   number_gte: Scalars['Int'];
 };
 
-export type Block_Height = {
+export type Block_height = {
   hash?: InputMaybe<Scalars['Bytes']>;
   number?: InputMaybe<Scalars['Int']>;
   number_gte?: InputMaybe<Scalars['Int']>;
@@ -378,8 +397,8 @@ export type Block_Height = {
 
 /** Defines the order direction, either ascending or descending */
 export enum OrderDirection {
-  Asc = 'asc',
-  Desc = 'desc'
+  asc = 'asc',
+  desc = 'desc'
 }
 
 export type Query = {
@@ -397,84 +416,84 @@ export type Query = {
 };
 
 
-export type Query_MetaArgs = {
-  block?: InputMaybe<Block_Height>;
+export type Query_metaArgs = {
+  block?: InputMaybe<Block_height>;
 };
 
 
-export type QueryBadgeArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QuerybadgeArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryBadgeSpecArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QuerybadgeSpecArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryBadgeSpecsArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QuerybadgeSpecsArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BadgeSpec_OrderBy>;
+  orderBy?: InputMaybe<BadgeSpec_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<BadgeSpec_Filter>;
+  where?: InputMaybe<BadgeSpec_filter>;
 };
 
 
-export type QueryBadgesArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QuerybadgesArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Badge_OrderBy>;
+  orderBy?: InputMaybe<Badge_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Badge_Filter>;
+  where?: InputMaybe<Badge_filter>;
 };
 
 
-export type QueryRaftArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QueryraftArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryRaftMetadataArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QueryraftMetadataArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RaftMetadata_OrderBy>;
+  orderBy?: InputMaybe<RaftMetadata_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<RaftMetadata_Filter>;
+  where?: InputMaybe<RaftMetadata_filter>;
 };
 
 
-export type QueryRaftsArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QueryraftsArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Raft_OrderBy>;
+  orderBy?: InputMaybe<Raft_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Raft_Filter>;
+  where?: InputMaybe<Raft_filter>;
 };
 
 
-export type QuerySpecMetadataArgs = {
-  block?: InputMaybe<Block_Height>;
+export type QueryspecMetadataArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SpecMetadata_OrderBy>;
+  orderBy?: InputMaybe<SpecMetadata_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<SpecMetadata_Filter>;
+  where?: InputMaybe<SpecMetadata_filter>;
 };
 
 export type Raft = {
@@ -492,12 +511,12 @@ export type Raft = {
 };
 
 
-export type RaftSpecsArgs = {
+export type RaftspecsArgs = {
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BadgeSpec_OrderBy>;
+  orderBy?: InputMaybe<BadgeSpec_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<BadgeSpec_Filter>;
+  where?: InputMaybe<BadgeSpec_filter>;
 };
 
 export type RaftMetadata = {
@@ -508,10 +527,10 @@ export type RaftMetadata = {
   name: Scalars['String'];
 };
 
-export type RaftMetadata_Filter = {
+export type RaftMetadata_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<RaftMetadata_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<RaftMetadata_filter>>>;
   description?: InputMaybe<Scalars['String']>;
   description_contains?: InputMaybe<Scalars['String']>;
   description_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -580,20 +599,20 @@ export type RaftMetadata_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  or?: InputMaybe<Array<InputMaybe<RaftMetadata_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<RaftMetadata_filter>>>;
 };
 
-export enum RaftMetadata_OrderBy {
-  Description = 'description',
-  Id = 'id',
-  Image = 'image',
-  Name = 'name'
+export enum RaftMetadata_orderBy {
+  description = 'description',
+  id = 'id',
+  image = 'image',
+  name = 'name'
 }
 
-export type Raft_Filter = {
+export type Raft_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<Raft_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<Raft_filter>>>;
   createdAt?: InputMaybe<Scalars['Int']>;
   createdAt_gt?: InputMaybe<Scalars['Int']>;
   createdAt_gte?: InputMaybe<Scalars['Int']>;
@@ -631,7 +650,7 @@ export type Raft_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   metadata?: InputMaybe<Scalars['String']>;
-  metadata_?: InputMaybe<RaftMetadata_Filter>;
+  metadata_?: InputMaybe<RaftMetadata_filter>;
   metadata_contains?: InputMaybe<Scalars['String']>;
   metadata_contains_nocase?: InputMaybe<Scalars['String']>;
   metadata_ends_with?: InputMaybe<Scalars['String']>;
@@ -651,7 +670,7 @@ export type Raft_Filter = {
   metadata_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   metadata_starts_with?: InputMaybe<Scalars['String']>;
   metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  or?: InputMaybe<Array<InputMaybe<Raft_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<Raft_filter>>>;
   owner?: InputMaybe<Scalars['Bytes']>;
   owner_contains?: InputMaybe<Scalars['Bytes']>;
   owner_gt?: InputMaybe<Scalars['Bytes']>;
@@ -662,7 +681,7 @@ export type Raft_Filter = {
   owner_not?: InputMaybe<Scalars['Bytes']>;
   owner_not_contains?: InputMaybe<Scalars['Bytes']>;
   owner_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  specs_?: InputMaybe<BadgeSpec_Filter>;
+  specs_?: InputMaybe<BadgeSpec_filter>;
   tokenId?: InputMaybe<Scalars['BigInt']>;
   tokenId_gt?: InputMaybe<Scalars['BigInt']>;
   tokenId_gte?: InputMaybe<Scalars['BigInt']>;
@@ -709,17 +728,21 @@ export type Raft_Filter = {
   uri_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
-export enum Raft_OrderBy {
-  CreatedAt = 'createdAt',
-  CreatedBy = 'createdBy',
-  Id = 'id',
-  Metadata = 'metadata',
-  Owner = 'owner',
-  Specs = 'specs',
-  TokenId = 'tokenId',
-  TotalBadgesCount = 'totalBadgesCount',
-  TotalSpecsCount = 'totalSpecsCount',
-  Uri = 'uri'
+export enum Raft_orderBy {
+  createdAt = 'createdAt',
+  createdBy = 'createdBy',
+  id = 'id',
+  metadata = 'metadata',
+  metadata__description = 'metadata__description',
+  metadata__id = 'metadata__id',
+  metadata__image = 'metadata__image',
+  metadata__name = 'metadata__name',
+  owner = 'owner',
+  specs = 'specs',
+  tokenId = 'tokenId',
+  totalBadgesCount = 'totalBadgesCount',
+  totalSpecsCount = 'totalSpecsCount',
+  uri = 'uri'
 }
 
 export type SpecMetadata = {
@@ -731,10 +754,10 @@ export type SpecMetadata = {
   name: Scalars['String'];
 };
 
-export type SpecMetadata_Filter = {
+export type SpecMetadata_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
-  and?: InputMaybe<Array<InputMaybe<SpecMetadata_Filter>>>;
+  and?: InputMaybe<Array<InputMaybe<SpecMetadata_filter>>>;
   description?: InputMaybe<Scalars['String']>;
   description_contains?: InputMaybe<Scalars['String']>;
   description_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -823,15 +846,15 @@ export type SpecMetadata_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  or?: InputMaybe<Array<InputMaybe<SpecMetadata_Filter>>>;
+  or?: InputMaybe<Array<InputMaybe<SpecMetadata_filter>>>;
 };
 
-export enum SpecMetadata_OrderBy {
-  Description = 'description',
-  ExpiresAt = 'expiresAt',
-  Id = 'id',
-  Image = 'image',
-  Name = 'name'
+export enum SpecMetadata_orderBy {
+  description = 'description',
+  expiresAt = 'expiresAt',
+  id = 'id',
+  image = 'image',
+  name = 'name'
 }
 
 export type Subscription = {
@@ -849,84 +872,84 @@ export type Subscription = {
 };
 
 
-export type Subscription_MetaArgs = {
-  block?: InputMaybe<Block_Height>;
+export type Subscription_metaArgs = {
+  block?: InputMaybe<Block_height>;
 };
 
 
-export type SubscriptionBadgeArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionbadgeArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionBadgeSpecArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionbadgeSpecArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionBadgeSpecsArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionbadgeSpecsArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BadgeSpec_OrderBy>;
+  orderBy?: InputMaybe<BadgeSpec_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<BadgeSpec_Filter>;
+  where?: InputMaybe<BadgeSpec_filter>;
 };
 
 
-export type SubscriptionBadgesArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionbadgesArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Badge_OrderBy>;
+  orderBy?: InputMaybe<Badge_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Badge_Filter>;
+  where?: InputMaybe<Badge_filter>;
 };
 
 
-export type SubscriptionRaftArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionraftArgs = {
+  block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionRaftMetadataArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionraftMetadataArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RaftMetadata_OrderBy>;
+  orderBy?: InputMaybe<RaftMetadata_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<RaftMetadata_Filter>;
+  where?: InputMaybe<RaftMetadata_filter>;
 };
 
 
-export type SubscriptionRaftsArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionraftsArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Raft_OrderBy>;
+  orderBy?: InputMaybe<Raft_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<Raft_Filter>;
+  where?: InputMaybe<Raft_filter>;
 };
 
 
-export type SubscriptionSpecMetadataArgs = {
-  block?: InputMaybe<Block_Height>;
+export type SubscriptionspecMetadataArgs = {
+  block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SpecMetadata_OrderBy>;
+  orderBy?: InputMaybe<SpecMetadata_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   subgraphError?: _SubgraphErrorPolicy_;
-  where?: InputMaybe<SpecMetadata_Filter>;
+  where?: InputMaybe<SpecMetadata_filter>;
 };
 
 export type _Block_ = {
@@ -958,9 +981,9 @@ export type _Meta_ = {
 
 export enum _SubgraphErrorPolicy_ {
   /** Data will be returned even if the subgraph has indexing errors */
-  Allow = 'allow',
+  allow = 'allow',
   /** If the subgraph has indexing errors, data will be omitted. The default. */
-  Deny = 'deny'
+  deny = 'deny'
 }
 
 export type GetBadgesQueryVariables = Exact<{
