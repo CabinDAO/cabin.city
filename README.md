@@ -137,3 +137,16 @@ Existing `Profile` with updated `badges`
 1. Create a new `Profile` that is associated with an `Account` that does not yet have `badges` or has `badges` that have recently been changed on-chain.
 2. Run `/sync/otterspace-badges` until the `Account` has the updated `badges`.
 3. Verify the `badgeCount` on the `Profile` matches the number of badges owned by the `Account`.
+
+## Deployment
+
+```bash
+# Login if not already logged in
+vercel login
+
+# Deploy to dev
+vercel
+
+# Deploy to prod
+vercel --prod
+```
