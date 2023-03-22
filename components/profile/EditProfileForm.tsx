@@ -63,10 +63,19 @@ const InnerContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 2.4rem;
+  padding: 1.6rem;
   gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding: 2.4rem;
+  }
 `
 
 const StyledButton = styled(Button)`
-  align-self: flex-end;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    align-self: flex-end;
+    width: auto;
+  }
 `

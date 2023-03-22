@@ -23,7 +23,7 @@ export const ProfileView = () => {
   if (loadingProfile) {
     return null
   } else if (!profile) {
-    router.push('/race')
+    router.push('/logout')
     return null
   }
 

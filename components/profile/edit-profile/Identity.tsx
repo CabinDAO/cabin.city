@@ -68,9 +68,14 @@ const AboutContainer = styled.div`
 
 const InputGroup = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  gap: 2.4rem;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    flex-direction: row;
+    gap: 2.4rem;
+  }
 `

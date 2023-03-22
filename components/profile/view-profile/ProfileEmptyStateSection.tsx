@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { CabinGradientCard } from '../../core/CabinGradientCard'
 import { Body2, H2, Overline } from '../../core/Typography'
 import { Button } from '../../core/Button'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface ProfileEmptyStateProps {
   icon: IconName
@@ -17,11 +18,17 @@ export const ProfileEmptyStateSection = ({
   description,
   href,
 }: ProfileEmptyStateProps) => {
+  const { deviceSize } = useDeviceSize()
+
   return (
     <CabinGradientCard>
       <InnerContainer>
         <Circle>
-          <Icon name={icon} color="yellow600" size={3.7} />
+          <Icon
+            name={icon}
+            color="yellow600"
+            size={deviceSize === 'desktop' ? 3.7 : 1.8}
+          />
         </Circle>
         <DescriptionContainer>
           <H2>{title}</H2>
@@ -47,17 +54,27 @@ const InnerContainer = styled.div`
   justify-content: center;
   padding: 4rem;
   width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.green900};
+
+  ${({ theme }) => theme.bp.lg} {
+    border: none;
+  }
 `
 
 const Circle = styled.div`
-  width: 9.6rem;
-  height: 9.6rem;
+  width: 4rem;
+  height: 4rem;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.yellow300};
   display: flex;
   justify-content: center;
   align-items: center;
   margin-bottom: 1.6rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 9.6rem;
+    height: 9.6rem;
+  }
 `
 
 const DescriptionContainer = styled.div`

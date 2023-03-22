@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { Button } from '../../core/Button'
 import Icon from '../../core/Icon'
 import { VouchModal } from './VouchModal'
+import styled from 'styled-components'
 
 interface ProfileHeaderButtonProps {
   profile: MeFragment | GetProfileByIdFragment | undefined | null
@@ -34,24 +35,34 @@ export const ProfileHeaderButton = ({
   }
   if (isOwnProfile) {
     return (
-      <Button variant="tertiary" onClick={handleProfileHeaderButtonClick}>
+      <StyledButton variant="tertiary" onClick={handleProfileHeaderButtonClick}>
         Edit Profile
-      </Button>
+      </StyledButton>
     )
   } else if (
     profile?.citizenshipStatus === CitizenshipStatus.VouchRequested &&
     user?.citizenshipStatus === CitizenshipStatus.Verified
   ) {
     return (
-      <Button
+      <StyledButton
         variant="tertiary"
         onClick={handleProfileHeaderButtonClick}
         startAdornment={<Icon name="thumb-up" size={1.7} />}
       >
         Vouch
-      </Button>
+      </StyledButton>
     )
   } else {
     return null
   }
 }
+
+const StyledButton = styled(Button)`
+  ${({ theme }) => theme.bp.md} {
+    margin-top: 0.8rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    margin-top: 0;
+  }
+`

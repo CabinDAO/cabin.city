@@ -6,48 +6,6 @@ import { ColorName } from '@/styles/theme'
 import Icon from '../../core/Icon'
 import { useRouter } from 'next/router'
 
-const InnerContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2.4rem;
-  gap: 2.4rem;
-  background-color: ${({ theme }) => theme.colors.green800};
-  width: 100%;
-`
-
-const ProfileCompletionData = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-`
-
-const ProfileProgressData = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-`
-
-interface LinkContainerProps {
-  color: ColorName
-}
-
-const LinkContainer = styled.div<LinkContainerProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.85rem;
-  cursor: pointer;
-
-  > * {
-    color: ${({ theme, color }) => theme.colors[color]};
-  }
-`
-
 interface ProfileProgressCardProps {
   progress: number
   profileId: string
@@ -91,3 +49,48 @@ export const ProfileProgressCardSection = ({
     </ContentCard>
   )
 }
+
+const InnerContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.4rem;
+  gap: 2.4rem;
+  background-color: ${({ theme }) => theme.colors.green800};
+  width: 100%;
+`
+
+const ProfileCompletionData = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+`
+
+const ProfileProgressData = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+`
+
+interface LinkContainerProps {
+  color: ColorName
+}
+
+const LinkContainer = styled.div<LinkContainerProps>`
+  display: flex;
+  flex-direction: row;
+  gap: 0.85rem;
+  cursor: pointer;
+
+  > * {
+    color: ${({ theme, color }) => theme.colors[color]};
+  }
+
+  ${Overline} {
+    white-space: nowrap;
+  }
+`

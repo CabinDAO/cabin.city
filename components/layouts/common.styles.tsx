@@ -6,19 +6,38 @@ export const MainContent = styled.main`
   align-self: center;
   justify-content: center;
   align-items: center;
-  gap: 4.8rem;
+  gap: 2.4rem;
   height: 100%;
-  width: 84rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4.8rem;
+    width: 84rem;
+    align-self: flex-start;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    align-self: center;
+  }
 `
 
 export const FixedWidthMainContent = styled(MainContent)`
-  width: 60vw;
+  width: 100%;
+  ${({ theme }) => theme.bp.lg} {
+    width: 84rem;
+  }
 `
 
 export const NavbarContainer = styled.div`
-  position: fixed;
-  top: 4rem;
-  left: 4rem;
+  ${({ theme }) => theme.bp.md} {
+    display: flex;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    position: fixed;
+    top: 4rem;
+    left: 4rem;
+  }
 `
 
 // Applies a square notch to the top left corner of the element

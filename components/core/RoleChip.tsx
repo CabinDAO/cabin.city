@@ -3,6 +3,8 @@ import { pxToRem } from '@/utils/display-utils'
 import { roleInfoFromType } from '@/utils/roles'
 import Image from 'next/image'
 import styled from 'styled-components'
+import { useDeviceSize } from '../hooks/useDeviceSize'
+import { AutofitImage } from './AutofitImage'
 import { Checkbox } from './Checkbox'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
@@ -25,17 +27,23 @@ export const RoleChip = ({
   disabled,
   onSelect,
 }: RoleChipProps) => {
+  const { deviceSize } = useDeviceSize()
   const roleInfo = roleInfoFromType(roleType)
+
   return (
     <StyledContentCard selected={selected}>
       <ContentContainer>
         <InnerContainer>
-          <Image
-            src={roleInfo.imagePath}
-            alt={roleInfo.name}
-            width={IMAGE_SIZE_PX}
-            height={IMAGE_SIZE_PX}
-          />
+          {deviceSize === 'desktop' ? (
+            <Image
+              src={roleInfo.imagePath}
+              alt={roleInfo.name}
+              width={IMAGE_SIZE_PX}
+              height={IMAGE_SIZE_PX}
+            />
+          ) : (
+            <AutofitImage src={roleInfo.imagePath} alt={roleInfo.name} />
+          )}
         </InnerContainer>
         <RoleDataContainer>
           <CheckboxContainer>
@@ -58,21 +66,31 @@ interface StyledContentCardProps {
 }
 
 const StyledContentCard = styled(ContentCard)<StyledContentCardProps>`
-  max-width: ${pxToRem(MAX_CONTAINER_WIDTH_PX)}rem;
+  max-width: 100%;
   background-color: ${({ theme, selected }) =>
     selected ? theme.colors.yellow300 : theme.colors.yellow200};
+
+  ${({ theme }) => theme.bp.lg} {
+    max-width: ${pxToRem(MAX_CONTAINER_WIDTH_PX)}rem;
+  }
 `
 
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100%;
 `
 
 const InnerContainer = styled.div`
   padding: ${pxToRem(INNER_CONTAINER_PADDING_PX)}rem;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 0.8rem;
+  height: 100%;
+
+  ${({ theme }) => theme.bp.lg} {
+    gap: 1.6rem;
+  }
 `
 
 const RoleDataContainer = styled.div`
@@ -81,8 +99,11 @@ const RoleDataContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-right: 1.6rem;
-  padding-bottom: 1.2rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    padding-right: 1.6rem;
+    padding-bottom: 1.2rem;
+  }
 `
 
 const CheckboxContainer = styled.div`

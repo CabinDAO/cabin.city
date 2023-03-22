@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useClientMediaRender } from '../hooks/useClientMediaRender'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { MainContent, NavbarContainer } from './common.styles'
@@ -15,18 +15,30 @@ const Container = styled.div`
   min-width: 100vw;
   justify-content: flex-start;
   align-items: center;
-  gap: 4.8rem;
-  padding: 4rem;
+
+  padding: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    padding: 2.4rem;
+    gap: 4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    gap: 2.4rem;
+    padding: 4rem;
+    flex-direction: column;
+  }
 `
 
 export const SingleColumnLayout = ({ children }: LayoutProps) => {
-  const { isMobile } = useClientMediaRender()
+  const { deviceSize } = useDeviceSize()
+  const isMobile = deviceSize === 'mobile'
 
   return (
-    <>
-      <Container>
-        <MainContent>{children}</MainContent>
-      </Container>
+    <Container>
+      <MainContent>{children}</MainContent>
       {isMobile ? (
         <MobileFloatingMenu />
       ) : (
@@ -34,6 +46,6 @@ export const SingleColumnLayout = ({ children }: LayoutProps) => {
           <ProfileNavbar />
         </NavbarContainer>
       )}
-    </>
+    </Container>
   )
 }

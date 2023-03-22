@@ -84,9 +84,9 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
 const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
     <WrapperContainer>
-      <ProfileDivisionSvg />
+      <ProfileDivisionSvg className="division" />
       {children}
-      <ProfileDivisionSvg />
+      <ProfileDivisionSvg className="division" />
     </WrapperContainer>
   )
 }
@@ -98,6 +98,16 @@ const WrapperContainer = styled.div`
   justify-content: center;
   gap: 2.4rem;
   width: 100%;
+
+  svg.division {
+    display: none;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    svg.division {
+      display: block;
+    }
+  }
 `
 
 const Container = styled.div`
@@ -110,14 +120,23 @@ const Container = styled.div`
 
 const PassportsPage = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(4, 1fr);
   align-items: center;
   justify-items: center;
   width: 100%;
-  grid-gap: 2.4rem;
+  grid-gap: 1.6rem;
   align-content: space-around;
   justify-content: space-between;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    grid-gap: 2.4rem;
+  }
 `
 
 const Pagination = styled.div`

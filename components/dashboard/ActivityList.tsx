@@ -55,8 +55,17 @@ export const ActivityList = () => {
 }
 
 const InnerContainer = styled.div`
-  margin: 2.6rem;
+  margin: 1.6rem;
+  margin-top: 3.2rem;
   display: flex;
   flex-direction: column;
   width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    margin: 2.4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    margin: 2.6rem;
+  }
 `

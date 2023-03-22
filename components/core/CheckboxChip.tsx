@@ -55,8 +55,8 @@ const Container = styled.div<ContainerProps>`
     border-width: 2px 1px 1px 2px;
   }
 
-  ${({ theme }) => theme.bp.lg} {
-    width: 18.9rem;
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
     flex-direction: column;
     gap: 1.9rem;
   }
@@ -70,7 +70,7 @@ const CheckboxContainer = styled.div`
   justify-content: center;
   gap: 1.6rem;
 
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     align-self: flex-start;
     gap: 0.8rem;
   }
@@ -85,7 +85,7 @@ const IconContainer = styled.div`
 
   --icon-color: ${({ theme }) => theme.colors.green900};
 
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     align-self: flex-end;
     --icon-color: ${({ theme }) => theme.colors.yellow600};
   }

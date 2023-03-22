@@ -29,9 +29,15 @@ export const ProfileContactList = ({
 }
 
 const ProfileListContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 6rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    display: flex;
+    flex-direction: row;
+    gap: 6rem;
+  }
 `
 
 const ContactFields = styled.div`

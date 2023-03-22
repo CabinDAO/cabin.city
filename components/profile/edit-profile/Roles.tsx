@@ -69,10 +69,15 @@ export const SetupStepContainer = styled.div`
 `
 
 const RoleGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  auto-flow: row;
-  column-gap: 1.6rem;
-  row-gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  gap: 0.8rem;
+
+  ${({ theme }) => theme.bp.md} {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    auto-flow: row;
+    grid-gap: 1.6rem;
+  }
 `

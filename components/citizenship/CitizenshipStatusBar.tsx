@@ -41,7 +41,7 @@ export const CitizenshipStatusBar = ({
                 icon="hand-wave"
               />
               <CitizenStatusStep
-                step={3}
+                step={2}
                 description="Receive vouch"
                 icon="thumb-up"
                 enabled={!!status}

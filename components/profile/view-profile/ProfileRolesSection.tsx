@@ -5,19 +5,23 @@ import styled from 'styled-components'
 import { RoleCard } from '@/components/core/RoleCard'
 import { H3 } from '@/components/core/Typography'
 import { ProfileEmptyStateSection } from './ProfileEmptyStateSection'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface ProfileRolesProps {
   profile: GetProfileByIdFragment
 }
 
 export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
+  const { deviceSize } = useDeviceSize()
+
   if (profile.roles.length) {
     return (
       <Container>
-        <H3>Roles</H3>
+        <H3>Role Cards</H3>
         <RolesList>
           {profile.roles.map((role) => (
             <RoleCard
+              variant={deviceSize === 'desktop' ? 'default' : 'horizontal'}
               key={role.role}
               roleInfo={roleInfoFromType(role.role)}
               levelInfo={levelInfoFromType(role.level)}
@@ -46,11 +50,19 @@ const Container = styled.div`
 `
 
 const RolesList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  align-items: flex-start;
-  column-gap: 2.4rem;
-  row-gap: 2.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   justify-items: center;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-gap: 2.4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+  }
 `

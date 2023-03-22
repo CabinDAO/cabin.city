@@ -1,7 +1,7 @@
 import { getImageUrl } from '@/lib/image'
 import { getOtterSpaceOpenseaUrl } from '@/utils/opensea'
-import Image from 'next/image'
 import styled from 'styled-components'
+import { AutofitNextImage } from './AutofitNextImage'
 import Icon from './Icon'
 import { NoWrap } from './NoWrap'
 import { H6 } from './Typography'
@@ -13,6 +13,8 @@ interface BadgeProps {
 }
 
 const IMAGE_SIZE = 176
+const MOBILE_IMAGE_SIZE = 148
+const TABLET_IMAGE_SIZE = 133
 
 export const Badge = ({ name, src, badgeId }: BadgeProps) => {
   const imageUrl = getImageUrl(src)
@@ -20,12 +22,7 @@ export const Badge = ({ name, src, badgeId }: BadgeProps) => {
   return (
     <BadgeContainer>
       <ImageContainer>
-        <Image
-          src={imageUrl}
-          width={IMAGE_SIZE}
-          height={IMAGE_SIZE}
-          alt={name}
-        />
+        <AutofitNextImage src={imageUrl} alt={name} />
       </ImageContainer>
       <NameContainer>
         <NoWrap>
@@ -46,21 +43,38 @@ export const Badge = ({ name, src, badgeId }: BadgeProps) => {
 const BadgeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: 0.8rem;
+  padding: 0.4rem;
   background-color: ${({ theme }) => theme.colors.yellow200};
   border: 1px solid ${({ theme }) => theme.colors.green900};
   width: min-content;
   gap: 1.2rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    padding: 0.8rem;
+  }
 `
 
 const ImageContainer = styled.div`
   border-radius: 0px 0px 48px 0px;
-  width: min-content;
-  height: min-content;
+  position: relative;
   display: flex;
   overflow: hidden;
+  width: ${MOBILE_IMAGE_SIZE}px;
+  height: ${MOBILE_IMAGE_SIZE}px;
+
+  ${({ theme }) => theme.bp.md} {
+    width: ${TABLET_IMAGE_SIZE}px;
+    height: ${TABLET_IMAGE_SIZE}px;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: min-content;
+    height: min-content;
+    width: ${IMAGE_SIZE}px;
+    height: ${IMAGE_SIZE}px;
+  }
 `
 
 const NameContainer = styled.div`
@@ -70,11 +84,16 @@ const NameContainer = styled.div`
   justify-content: space-between;
   width: 100%;
   text-overflow: ellipsis;
+  padding-bottom: 1rem;
 
   ${H6} {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: calc(${IMAGE_SIZE}px * 0.9);
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    padding: 0rem;
   }
 `

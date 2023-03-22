@@ -56,20 +56,24 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
         />
       </InputGroup>
       <SubmitButton onClick={handleSubmit} variant="primary">
-        Continue
+        Save
       </SubmitButton>
     </Container>
   )
 }
 
 const Container = styled.div`
-  margin: 3rem;
+  margin: 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
   gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    margin: 3rem;
+  }
 `
 const InputGroup = styled.div`
   display: flex;
@@ -82,4 +86,9 @@ const InputGroup = styled.div`
 
 const SubmitButton = styled(Button)`
   align-self: flex-end;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+  }
 `

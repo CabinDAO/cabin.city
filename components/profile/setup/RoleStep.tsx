@@ -72,16 +72,23 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
 export const SetupStepContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   width: 100%;
   gap: 1.6rem;
+
+  ${Subline1} {
+    align-self: flex-start;
+  }
 `
 
 const RoleGroup = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: auto auto;
   auto-flow: row;
-  column-gap: 1.6rem;
-  row-gap: 1.6rem;
+  grid-gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 `

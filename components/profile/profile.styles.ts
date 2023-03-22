@@ -1,8 +1,16 @@
 import styled from 'styled-components'
 
 export const ProfileInnerContainer = styled.div`
-  min-width: 60vw;
   display: flex;
   flex-direction: column;
-  gap: 4.8rem;
+  gap: 2.4rem;
+  width: 100vw;
+  padding: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4.8rem;
+    min-width: 60vw;
+    width: 100%;
+    padding: 0;
+  }
 `

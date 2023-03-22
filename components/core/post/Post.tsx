@@ -28,7 +28,7 @@ export const Post = (props: PostProps) => {
     <Container>
       {!excludeProfile && (
         <ProfileContainer>
-          <Avatar src={profile.avatar?.url} />
+          <Avatar src={profile.avatar?.url} size={3.2} />
           <ProfileName>{profile.name}</ProfileName>
           <ProfileIcons
             citizenshipStatus={citizenshipStatus}

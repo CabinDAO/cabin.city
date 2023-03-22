@@ -10,6 +10,7 @@ import useEns from '../../hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
 
 import { citizenshipInfoFromStatus } from '@/utils/citizenship'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface ProfileHeaderProps {
   profile: GetProfileByIdFragment | undefined | null
@@ -21,6 +22,7 @@ export const ProfileHeaderSection = ({
   isOwnProfile = false,
 }: ProfileHeaderProps) => {
   const { ens } = useEns(profile?.account?.address)
+  const { deviceSize } = useDeviceSize()
 
   const iconName = citizenshipInfoFromStatus(
     profile?.citizenshipStatus
@@ -30,7 +32,10 @@ export const ProfileHeaderSection = ({
     <ContentCard shadow>
       <Container>
         <ProfileSummary>
-          <Avatar size={8.8} src={profile?.avatar?.url} />
+          <Avatar
+            size={deviceSize === 'desktop' ? 8.8 : 6.4}
+            src={profile?.avatar?.url}
+          />
           <ProfileInfoContainer>
             <CitizenContainer>
               <H1>{profile?.name}</H1>
@@ -57,11 +62,24 @@ export const ProfileHeaderSection = ({
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.6rem 2.4rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
+  padding: 1.6rem 2.4rem;
+  padding-bottom: 2.2rem;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    gap: 0;
+    align-items: center;
+    padding-bottom: 1.6rem;
+  }
 `
 
 const CitizenContainer = styled.div`
@@ -82,10 +100,18 @@ const BalanceAddressContainer = styled.div`
 
 const ProfileSummary = styled.div`
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   gap: 1.6rem;
+  align-items: flex-start;
+
+  ${({ theme }) => theme.bp.md} {
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+  }
 `
 
 const ProfileInfoContainer = styled.div`

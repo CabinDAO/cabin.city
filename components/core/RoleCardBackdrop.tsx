@@ -6,6 +6,7 @@ export const RoleCardBackdrop = styled.div<{ roleInfo: RoleInfo }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 485px;
+  max-width: 100%;
   background: url(${(props) => props.roleInfo.backgroundImagePath}) no-repeat;
+  background-size: cover;
 `

@@ -82,4 +82,17 @@ const ButtonGroup = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.6rem;
+  width: 100%;
+
+  button {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+
+    button {
+      width: auto;
+    }
+  }
 `

@@ -11,6 +11,7 @@ interface ContainerProps {
   fillType?: ContainerFillType
   className?: string
   notchSize?: number
+  maxWidth?: string
 }
 
 const BaseContainer = styled.div<ContainerProps>`
@@ -56,6 +57,8 @@ const BaseContainer = styled.div<ContainerProps>`
     `
     box-shadow: 0.8rem 0.8rem 0rem ${theme.colors.yellow900};
     `}
+
+    ${({ maxWidth }) => maxWidth && `max-width: ${maxWidth}rem;`}
 `
 
 const Notch = styled.div<{ notchSize: number }>`
@@ -75,9 +78,11 @@ export const ContentCard = ({
   fillType,
   className,
   notchSize = 1.6,
+  maxWidth,
 }: ContainerProps) => {
   return (
     <BaseContainer
+      maxWidth={maxWidth}
       className={className}
       shadow={!!shadow}
       shape={shape ?? 'default'}
