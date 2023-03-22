@@ -1,8 +1,9 @@
-import Link from 'next/link'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
+import { ProfileNavMenu } from './navbar/ProfileNavMenu'
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -45,22 +46,28 @@ interface NavbarProps {
 }
 
 export const Navbar = (props: NavbarProps) => {
+  const [profileMenuVisible, setProfileMenuVisible] = useState(false)
   return (
-    <Container>
-      <SingleMenuItem>
-        <MenuItemLink menuItem={'home'} />
-      </SingleMenuItem>
-      <Divider />
-      <NeighborhoodsItemGroup>
-        <MenuItemLink menuItem={'members'} />
-        <MenuItemLink menuItem={'neighborhoods'} />
-      </NeighborhoodsItemGroup>
-      <Divider />
-      <SingleMenuItem>
-        <Link href={`/profile/${props.profileId}`}>
-          <Avatar src={props.avatarUrl} size={3.2} />
-        </Link>
-      </SingleMenuItem>
-    </Container>
+    <>
+      <Container>
+        <SingleMenuItem>
+          <MenuItemLink menuItem={'home'} />
+        </SingleMenuItem>
+        <Divider />
+        <NeighborhoodsItemGroup>
+          <MenuItemLink menuItem={'members'} />
+          <MenuItemLink menuItem={'neighborhoods'} />
+        </NeighborhoodsItemGroup>
+        <Divider />
+        <SingleMenuItem>
+          <Avatar
+            src={props.avatarUrl}
+            size={3.2}
+            onClick={() => setProfileMenuVisible(!profileMenuVisible)}
+          />
+        </SingleMenuItem>
+      </Container>
+      <ProfileNavMenu visible={profileMenuVisible} />
+    </>
   )
 }

@@ -1,8 +1,12 @@
 import styled from 'styled-components'
 
-export const Divider = styled.div`
+interface DividerProps {
+  opaque?: boolean
+}
+
+export const Divider = styled.div<DividerProps>`
   background-color: ${({ theme }) => theme.colors.green900};
-  opacity: 0.12;
+  opacity: ${({ opaque }) => (opaque ? 1 : 0.12)};
   flex-direction: row;
 `
 

@@ -157,7 +157,7 @@ const ImageBackground = styled.div<ImageBackgroundProps>`
   background-position: 17rem 17rem;
   filter: blur(0.4rem);
   -webkit-filter: blur(0.4rem);
-  z-index: 3;
+  transform: scale(1, 0.94);
 `
 
 const NFTDataContainer = styled.div`
