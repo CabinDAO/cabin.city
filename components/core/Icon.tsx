@@ -32,6 +32,7 @@ import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
 import personSvg from './svg/person.svg'
 import profileSvg from './svg/profile.svg'
+import profile2Svg from './svg/profile2.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
 import searchSvg from './svg/search.svg'
@@ -73,6 +74,7 @@ export const IconSvgs = {
   neighborhoods: neighborhoodsSvg,
   person: personSvg,
   profile: profileSvg,
+  profile2: profile2Svg,
   race: raceSvg,
   resident: residentSvg,
   search: searchSvg,

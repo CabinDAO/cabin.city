@@ -36,13 +36,32 @@ const InnerContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.6rem 4rem;
+  padding: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding: 1.6rem 2.4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    padding: 1.6rem 4rem;
+  }
 `
 
 const HeaderContainer = styled.div`
-  padding: 1.6rem 4rem;
+  padding: 0.4rem 4rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
+  padding: 0.4rem;
+  padding-left: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding-left: 2.4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    padding: 0rem 4rem;
+    padding-right: 1.6rem;
+  }
 `

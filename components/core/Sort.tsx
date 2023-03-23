@@ -72,7 +72,7 @@ export const Sort = <T extends string | number>(props: SortProps<T>) => {
         >
           <Overline>Sort</Overline>
         </Button>
-        <MenuPopup open={open}>
+        <SortMenuPop open={open}>
           <Menu backgroundColor="yellow100">
             <SortMenuSection>
               {fields.map((field) => (
@@ -87,7 +87,7 @@ export const Sort = <T extends string | number>(props: SortProps<T>) => {
               ))}
             </SortMenuSection>
           </Menu>
-        </MenuPopup>
+        </SortMenuPop>
       </Container>
     </ClickAway>
   )
@@ -172,4 +172,14 @@ const RadioButton = styled.input`
   width: 2.4rem;
   height: 2.4rem;
   accent-color: ${(props) => props.theme.colors.green900};
+`
+
+const SortMenuPop = styled(MenuPopup)`
+  left: -21rem;
+  top: calc(100% + 0.4rem);
+
+  ${({ theme }) => theme.bp.lg} {
+    left: 0rem;
+    top: calc(100% + 0.4rem);
+  }
 `

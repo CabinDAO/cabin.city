@@ -4,6 +4,7 @@ import { Button } from './Button'
 import { Checkbox } from './Checkbox'
 import { ChevronButton } from './ChevronButton'
 import ClickAway from './ClickAway'
+import { FilterCount } from './FilterCount'
 import Icon from './Icon'
 import { Menu, MenuPopup, MenuSection } from './Menu'
 import { H5 } from './Typography'
@@ -59,14 +60,18 @@ export const Filter = <T extends string | number>(props: FilterProps<T>) => {
           variant="tertiary"
           onClick={() => setOpen(!open)}
           endAdornment={
-            <ChevronButton role="button" open={open}>
-              <Icon name="chevron-down" size={1.4} />
+            <ChevronButton role="button" open={selections.length === 0 && open}>
+              {selections.length > 0 ? (
+                <FilterCount count={selections.length} />
+              ) : (
+                <Icon name="chevron-down" size={1.4} />
+              )}
             </ChevronButton>
           }
         >
           {label}
         </Button>
-        <MenuPopup open={open}>
+        <StyledMenuPop open={open}>
           <Menu backgroundColor="yellow100">
             <FilterMenuSection>
               <List>
@@ -85,7 +90,7 @@ export const Filter = <T extends string | number>(props: FilterProps<T>) => {
               <Button onClick={handleApply}>Apply</Button>
             </FilterMenuSection>
           </Menu>
-        </MenuPopup>
+        </StyledMenuPop>
       </Container>
     </ClickAway>
   )
@@ -93,6 +98,7 @@ export const Filter = <T extends string | number>(props: FilterProps<T>) => {
 
 const Container = styled.div`
   position: relative;
+  width: 100%;
 `
 
 const List = styled.div`
@@ -121,4 +127,13 @@ const ListOptionContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 1.6rem;
+  white-space: nowrap;
+`
+
+const StyledMenuPop = styled(MenuPopup)`
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+  }
 `

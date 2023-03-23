@@ -2,7 +2,7 @@ import { useUser } from '@/components/auth/useUser'
 import useEns from '@/components/hooks/useEns'
 import { shortenedAddress } from '@/utils/display-utils'
 import Link from 'next/link'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Avatar } from '../Avatar'
 import { HorizontalDivider } from '../Divider'
 import Icon from '../Icon'
@@ -57,7 +57,7 @@ const Container = styled.div`
   border-style: solid;
   width: 23.2rem;
   left: 10rem;
-  top: 8.5%;
+  top: 25rem;
 
   ${({ theme }) => theme.bp.lg} {
     left: 7.8rem;
@@ -65,14 +65,19 @@ const Container = styled.div`
   }
 `
 
-const ProfileLink = styled(Link)`
+const menuLinkStyles = css`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: flex-start;
+  padding: ${INNER_PADDING};
+  width: 100%;
+`
+
+const ProfileLink = styled(Link)`
+  ${menuLinkStyles}
   gap: 1.6rem;
   padding-bottom: 1.2rem;
-  padding: ${INNER_PADDING};
 `
 
 const Name = styled.div`
@@ -88,15 +93,9 @@ const ProfileMenuItemsContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 2.2rem;
-  padding: ${INNER_PADDING};
-  padding-top: 1.8rem;
 `
 
 const ProfileMenuItem = styled(Link)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+  ${menuLinkStyles}
   gap: 1.8rem;
 `

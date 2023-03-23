@@ -62,7 +62,7 @@ const StyledButton = styled.button<StyledButtonProps>`
         `
       case 'link':
         return css`
-          background-color: transparent;
+          background-color: ${({ theme }) => theme.colors.yellow200};
           color: ${({ theme }) => theme.colors.green900};
           border: none;
 
