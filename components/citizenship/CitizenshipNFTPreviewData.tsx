@@ -26,17 +26,20 @@ export const CitizenshipNFTPreviewData = () => {
         <H4>FREE</H4>
         <Body2>for holders of 1,000 ₡ABIN</Body2>
       </CabinHolderDisclaimer>
-      <HorizontalDivider />
+
       {vouchedBy && (
-        <NFTDataList
-          fieldNames={['Vouched for by']}
-          values={[
-            {
-              value: vouchedBy.name || '',
-              url: `/profile/${vouchedBy._id}`,
-            },
-          ]}
-        />
+        <>
+          <HorizontalDivider />
+          <NFTDataList
+            fieldNames={['Vouched for by']}
+            values={[
+              {
+                value: vouchedBy.name || '',
+                url: `/profile/${vouchedBy._id}`,
+              },
+            ]}
+          />
+        </>
       )}
     </Container>
   )

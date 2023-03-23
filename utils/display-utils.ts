@@ -45,3 +45,6 @@ export const formatContactField = (field: ProfileContactField) => {
     return field.value.includes('@') ? field.value : `@${field.value}`
   }
 }
+
+export const capitalize = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1)

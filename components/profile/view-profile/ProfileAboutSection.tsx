@@ -105,10 +105,6 @@ const AboutSubsection = styled.div`
   height: 100%;
   width: 100%;
 
-  ${({ theme }) => theme.bp.md} {
-    padding-bottom: 0;
-  }
-
   ${({ theme }) => theme.bp.lg} {
     max-width: 60%;
     padding: var(--children-padding);
@@ -123,6 +119,7 @@ const ContactContainer = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
+    padding-top: 0;
   }
 
   ${({ theme }) => theme.bp.lg} {

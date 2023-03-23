@@ -9,8 +9,12 @@ import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import Icon from '../core/Icon'
 import { unlockConfig } from '@/lib/protocol-config'
-import { shortenedAddress } from '@/utils/display-utils'
+import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
+
+const INNER_PADDING_PX = 24
+const IMAGE_SIZE_PX = 336
+const TABLET_IMAGE_SIZE_PX = 222
 
 export const CitizenNFTContainer = () => {
   const { activeNFT, loading } = useGetUnlockNFT()
@@ -23,7 +27,7 @@ export const CitizenNFTContainer = () => {
       url: `https://${unlockConfig.networkName}.etherscan.io/address/${unlockConfig.contractAddress}`,
       external: true,
     },
-    Blockchain: { value: unlockConfig.networkName ?? '' },
+    Blockchain: { value: capitalize(unlockConfig.networkName) ?? '' },
   }
 
   if (loading) {
@@ -73,12 +77,16 @@ export const CitizenNFTContainer = () => {
 }
 
 const StyledContentCard = styled(ContentCard)`
-  padding: 2.4rem;
+  padding: 2.4rem 1.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding: 2.4rem;
+  }
 `
 
 const DescriptionContainer = styled.div`
@@ -91,24 +99,46 @@ const DescriptionContainer = styled.div`
 
 const Section = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
 const NFTContainer = styled.div`
   display: flex;
-  padding: 3rem;
+  padding: ${pxToRem(INNER_PADDING_PX)}rem;
   background: url('/images/nft-background.png');
   align-items: center;
   justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    max-height: ${pxToRem(TABLET_IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    max-height: ${pxToRem(IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
+  }
 `
 
 const NftImage = styled.div`
   position: relative;
   display: flex;
-  border-radius: 0px 0px 64px 0px;
-  width: 33.6rem;
-  height: 33.6rem;
+  border-radius: 0 0 49rem 0;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 22.2rem;
+    height: 22.2rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 33.6rem;
+    height: 33.6rem;
+    border-radius: 0 0 64rem 0;
+  }
 `
 
 const StyledAnchor = styled.a`

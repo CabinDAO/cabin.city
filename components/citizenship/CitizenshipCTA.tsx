@@ -73,16 +73,39 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
 
 const CTAContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 2.4rem;
+
+  button {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    gap: 0;
+
+    button {
+      width: auto;
+    }
+  }
 `
 
 const CTADescription = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
-  max-width: 60%;
+  gap: 0.8rem;
+  max-width: 100%;
   align-items: flex-start;
   justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    max-width: 55%;
+    gap: 1.6rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    max-width: 60%;
+  }
 `

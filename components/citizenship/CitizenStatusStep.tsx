@@ -34,9 +34,14 @@ const Step = styled.div`
 const StepDescription = styled.div<{ enabled: boolean }>`
   display: flex;
   flex-direction: row;
-  gap: 0.45rem;
+  gap: 0.3rem;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 
   opacity: ${({ enabled }) => (enabled ? 1 : 0.75)};
+
+  ${({ theme }) => theme.bp.md} {
+    justify-content: center;
+    gap: 0.45rem;
+  }
 `

@@ -5,6 +5,7 @@ import { ProgressBar } from '../core/ProgressBar'
 import { CitizenStatusStep } from './CitizenStatusStep'
 import { CitizenshipStatus } from '@/generated/graphql'
 import { CitizenshipCTA } from './CitizenshipCTA'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 interface CitizenshipStatusBarProps {
   status: CitizenshipStatus | undefined | null
@@ -17,16 +18,18 @@ export const CitizenshipStatusBar = ({
   onMint,
   onSignal,
 }: CitizenshipStatusBarProps) => {
+  const { deviceSize } = useDeviceSize()
+
   const determineProgress = () => {
     switch (status) {
       case CitizenshipStatus.Verified:
         return 100
       case CitizenshipStatus.Vouched:
-        return 68
+        return deviceSize === 'mobile' ? 75 : 68
       case CitizenshipStatus.VouchRequested:
-        return 28
+        return deviceSize === 'mobile' ? 40 : 28
       default:
-        return 3
+        return deviceSize === 'mobile' ? 8 : 3
     }
   }
   return (
@@ -59,7 +62,10 @@ export const CitizenshipStatusBar = ({
                 }
               />
             </StepsContainer>
-            <StyledProgressBar progress={determineProgress()} />
+            <StyledProgressBar
+              progress={determineProgress()}
+              vertical={deviceSize === 'mobile'}
+            />
           </CitizenStatusProgress>
           <CitizenshipCTA
             status={status}
@@ -81,18 +87,32 @@ const InnerContainer = styled.div`
 
 const CitizenStatusProgress = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   gap: 1.6rem;
   width: 100%;
   align-items: flex-start;
   justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: column;
+  }
 `
 
 const StepsContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-between;
-  width: 85%;
+  width: 100%;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 85%;
+  }
 `
 
 const StyledProgressBar = styled(ProgressBar)`
