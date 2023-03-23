@@ -48,3 +48,6 @@ export const formatContactField = (field: ProfileContactField) => {
 
 export const capitalize = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1)
+
+export const truncate = (str: string, length: number) =>
+  str.length > length ? `${str.substring(0, length)}...` : str

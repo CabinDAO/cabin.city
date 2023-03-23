@@ -1,4 +1,5 @@
 import { ProfileFragment } from '@/generated/graphql'
+import { truncate } from '@/utils/display-utils'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import Link from 'next/link'
@@ -33,7 +34,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
             />
           </NameContainer>
           <Caption>{profile.cabinTokenBalanceInt ?? 0} ₡ABIN</Caption>
-          <Body2>{profile.bio}</Body2>
+          <StyledBody2>{truncate(profile.bio ?? '', 200)}</StyledBody2>
         </InfoContainer>
       </AvatarContainer>
       <CaptionContainer>
@@ -91,4 +92,19 @@ const NameContainer = styled.div`
   display: flex;
   gap: 0.4rem;
   align-items: center;
+`
+
+const StyledBody2 = styled(Body2)`
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  max-width: 25rem;
+  overflow: ellipsis;
+
+  ${({ theme }) => theme.bp.md} {
+    max-width: 40rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    max-width: 55rem;
+  }
 `

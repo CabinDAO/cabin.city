@@ -34,81 +34,51 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
 
   if (profile.account.badges.data.length) {
     return (
-      <Wrapper>
-        <Container>
-          <H3>Passport stamps</H3>
-          <PassportsPage>
-            {currentBadges.map((badge) => (
-              <Badge
-                key={badge?.spec._id}
-                badgeId={badge?.badgeId ?? ''}
-                name={badge?.spec.name ?? ''}
-                src={badge?.spec.image ?? ''}
-              />
-            ))}
-          </PassportsPage>
-          <Pagination>
-            <Overline>
-              {start + 1} - {end > count ? count : end} of {count}
-            </Overline>
-            <PageTurner>
-              <IconButton
-                icon="chevron-left"
-                size={1}
-                onClick={handleClickPrev}
-              />
-              <IconButton
-                icon="chevron-right"
-                size={1}
-                onClick={handleClickNext}
-              />
-            </PageTurner>
-          </Pagination>
-        </Container>
-      </Wrapper>
+      <Container>
+        <H3>Passport stamps</H3>
+        <PassportsPage>
+          {currentBadges.map((badge) => (
+            <Badge
+              key={badge?.spec._id}
+              badgeId={badge?.badgeId ?? ''}
+              name={badge?.spec.name ?? ''}
+              src={badge?.spec.image ?? ''}
+            />
+          ))}
+        </PassportsPage>
+        <Pagination>
+          <Overline>
+            {start + 1} - {end > count ? count : end} of {count}
+          </Overline>
+          <PageTurner>
+            <IconButton
+              icon="chevron-left"
+              size={1}
+              onClick={handleClickPrev}
+            />
+            <IconButton
+              icon="chevron-right"
+              size={1}
+              onClick={handleClickNext}
+            />
+          </PageTurner>
+        </Pagination>
+      </Container>
     )
   } else {
     return (
-      <Wrapper>
+      <Container>
+        <H3>Passport stamps</H3>
         <ProfileEmptyStateSection
           icon="card-heart"
           title="Collect Passport Stamps"
           description="Build your Cabin creds"
           href="https://cabin.city"
         />
-      </Wrapper>
+      </Container>
     )
   }
 }
-
-const Wrapper = ({ children }: { children: ReactNode }) => {
-  return (
-    <WrapperContainer>
-      <ProfileDivisionSvg className="division" />
-      {children}
-      <ProfileDivisionSvg className="division" />
-    </WrapperContainer>
-  )
-}
-
-const WrapperContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.4rem;
-  width: 100%;
-
-  svg.division {
-    display: none;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    svg.division {
-      display: block;
-    }
-  }
-`
 
 const Container = styled.div`
   display: flex;

@@ -1,12 +1,5 @@
-<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <g clip-path="url(#clip0_344_3475)">
-    <path
-      d="M20 4.8H5.8V3H4V21H5.8V13.8H20L18.2 9.3L20 4.8ZM14 9.3C14 10.29 13.19 11.1 12.2 11.1C11.21 11.1 10.4 10.29 10.4 9.3C10.4 8.31 11.21 7.5 12.2 7.5C13.19 7.5 14 8.31 14 9.3Z"
-      fill="var(--icon-color, #1D2B2A)" />
-  </g>
-  <defs>
-    <clipPath id="clip0_344_3475">
-      <rect width="100%" height="100%" fill="white" />
-    </clipPath>
-  </defs>
+<svg width="100%" height="100%" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M16 1.8H1.8V0H0V18H1.8V10.8H16L14.2 6.3L16 1.8ZM10 6.3C10 7.29 9.19 8.1 8.2 8.1C7.21 8.1 6.4 7.29 6.4 6.3C6.4 5.31 7.21 4.5 8.2 4.5C9.19 4.5 10 5.31 10 6.3Z"
+    fill="var(--icon-color, #1D2B2A)" />
 </svg>

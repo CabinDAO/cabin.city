@@ -72,6 +72,10 @@ const menuLinkStyles = css`
   justify-content: flex-start;
   padding: ${INNER_PADDING};
   width: 100%;
+
+  &:hover {
+    background-color: rgb(70, 89, 82);
+  }
 `
 
 const ProfileLink = styled(Link)`

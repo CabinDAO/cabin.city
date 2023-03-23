@@ -13,4 +13,5 @@ export const Default = Template.bind({})
 Default.args = {
   name: 'Builder',
   src: 'https://picsum.photos/176',
+  badgeId: '1',
 }

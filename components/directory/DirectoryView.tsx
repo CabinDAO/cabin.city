@@ -248,7 +248,6 @@ export const DirectoryView = () => {
 }
 
 const FilterContainer = styled.div`
-  margin-top: 2.4rem;
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
@@ -261,7 +260,6 @@ const FilterContainer = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
-    margin-top: 2.4rem;
   }
 `
 

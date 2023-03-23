@@ -114,7 +114,7 @@ const AboutSubsection = styled.div`
 const ContactContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: flex-start;
 
   ${({ theme }) => theme.bp.md} {

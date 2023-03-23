@@ -32,7 +32,6 @@ const BaseContainer = styled.div<{ variant: Variant }>`
               ${({ theme }) => theme.colors.yellow200} 30%,
               #deae6a0d 100%
             ),
-            url('/images/background.svg'), url('/images/background.svg'),
             url('/images/background.svg');
         `
       case 'right':

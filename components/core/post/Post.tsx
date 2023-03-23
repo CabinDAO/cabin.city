@@ -89,10 +89,10 @@ const ReactionsContainer = styled.div`
 `
 
 const ActivityDate = (props: PostProps) => (
-  <div>
+  <Caption>
     {formatDistance(
       parseISO(props.activityItem.activity.timestamp),
       props.baseDate
     )}
-  </div>
+  </Caption>
 )

@@ -64,5 +64,7 @@ const RolesList = styled.div`
   ${({ theme }) => theme.bp.lg} {
     display: grid;
     grid-template-columns: repeat(3, auto);
+    justify-items: flex-start;
+    align-items: flex-start;
   }
 `

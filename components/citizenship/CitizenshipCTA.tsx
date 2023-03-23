@@ -37,7 +37,7 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
         'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
       button: () => (
         <Button
-          startAdornment={<Icon name="thumb-up" size={1.4} />}
+          startAdornment={<Icon name="thumb-up-outline" size={1.4} />}
           variant="tertiary"
           onClick={onClick}
         >

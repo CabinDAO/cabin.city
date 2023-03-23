@@ -55,10 +55,6 @@ const InnerContainer = styled.div`
   padding: 4rem;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.green900};
-
-  ${({ theme }) => theme.bp.lg} {
-    border: none;
-  }
 `
 
 const Circle = styled.div`

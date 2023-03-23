@@ -118,6 +118,7 @@ const RoleDataContainer = styled.div<ContainerProps>`
   ${({ theme }) => theme.bp.lg} {
     max-width: 100%;
     gap: 1.6rem;
+    min-height: 9.5rem;
   }
 `
 
