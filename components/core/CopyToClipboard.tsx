@@ -1,21 +1,31 @@
+import { useState } from 'react'
 import styled from 'styled-components'
 import Icon from './Icon'
+import { Tooltip } from './Tooltip'
 
 interface CopyToClipboardProps {
   text: string
   children: React.ReactNode
 }
 
-export const CopyText = ({ text, children }: CopyToClipboardProps) => {
+export const CopyToClipboard = ({ text, children }: CopyToClipboardProps) => {
+  const [copied, setCopied] = useState(false)
+
   const handleCopyClick = () => {
     navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 2000)
   }
 
   return (
-    <Container onClick={handleCopyClick}>
-      {children}
-      <Icon name="copy" size={1.2} />
-    </Container>
+    <Tooltip tooltip="Copied" hidden={!copied} open={copied} position="top">
+      <Container onClick={handleCopyClick}>
+        {children}
+        <Icon name="copy" size={1.2} />
+      </Container>
+    </Tooltip>
   )
 }
 

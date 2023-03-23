@@ -1,7 +1,7 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import { formatContactField } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { CopyText } from '../../core/CopyToClipboard'
+import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { Caption } from '../../core/Typography'
 
 interface ProfileContactListProps {
@@ -19,9 +19,9 @@ export const ProfileContactList = ({
       </ContactFields>
       <ContactFields>
         {contactFields.map((field) => (
-          <CopyText key={field.type} text={field.value}>
+          <CopyToClipboard key={field.type} text={field.value}>
             <Caption emphasized>{formatContactField(field)}</Caption>
-          </CopyText>
+          </CopyToClipboard>
         ))}
       </ContactFields>
     </ProfileListContainer>

@@ -4,7 +4,7 @@ import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { Avatar } from '../../core/Avatar'
 import { ContentCard } from '../../core/ContentCard'
-import { CopyText } from '../../core/CopyToClipboard'
+import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { H1, Subline2 } from '../../core/Typography'
 import useEns from '../../hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
@@ -46,11 +46,11 @@ export const ProfileHeaderSection = ({
                 profile?.cabinTokenBalanceInt ?? 0
               } ₡ABIN`}</Subline2>
               <Subline2>·</Subline2>
-              <CopyText text={ens ?? profile?.account?.address ?? ''}>
+              <CopyToClipboard text={ens ?? profile?.account?.address ?? ''}>
                 <Subline2>
                   {ens ?? shortenedAddress(profile?.account?.address)}
                 </Subline2>
-              </CopyText>
+              </CopyToClipboard>
             </BalanceAddressContainer>
           </ProfileInfoContainer>
         </ProfileSummary>
