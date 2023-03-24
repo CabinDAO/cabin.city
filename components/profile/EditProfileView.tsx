@@ -10,6 +10,7 @@ import {
   ProfileRoleType,
 } from '@/generated/graphql'
 import { useRouter } from 'next/router'
+import { validateProfileInput } from './validations'
 
 export const EditProfileView = () => {
   const router = useRouter()
@@ -23,7 +24,7 @@ export const EditProfileView = () => {
   const handleSubmit = async () => {
     if (!editProfileInput) return
 
-    if (user) {
+    if (user && validateProfileInput(editProfileInput)) {
       await updateProfile({
         variables: {
           id: user._id,

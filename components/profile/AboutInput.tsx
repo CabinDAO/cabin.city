@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { InputText } from '../core/InputText'
 import { InputTextArea } from '../core/InputTextArea'
 import { MAX_BIO_LENGTH, MAX_LOCATION_LENGTH } from './constants'
+import { validBio, validLocation } from './validations'
 
 interface AboutInputProps {
   bio: string
@@ -17,12 +18,10 @@ export const AboutInput = ({
   onLocationChange,
 }: AboutInputProps) => {
   const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (e.target.value.length > MAX_BIO_LENGTH) return
     onBioChange(e.target.value)
   }
 
   const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > MAX_LOCATION_LENGTH) return
     onLocationChange(e.target.value)
   }
 
@@ -33,12 +32,14 @@ export const AboutInput = ({
         helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
         value={bio}
         onChange={handleBioChange}
+        error={!validBio(bio)}
       />
       <InputText
         label="Location"
         helperText={`${location.length}/${MAX_LOCATION_LENGTH}`}
         value={location}
         onChange={handleLocationChange}
+        error={!validLocation(location)}
       />
     </SetupStepContainer>
   )

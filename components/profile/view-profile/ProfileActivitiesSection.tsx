@@ -17,10 +17,14 @@ export const ProfileActivitiesSection = ({
 
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 
+  if (activityItems.length === 0) {
+    return null
+  }
+
   return (
     <StyledContentCard shape="notch">
       <SectionTitle>
-        <H3>Actitiy</H3>
+        <H3>Activity</H3>
       </SectionTitle>
       <StyledDivider />
       <InnerContainer>

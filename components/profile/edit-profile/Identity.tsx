@@ -1,8 +1,8 @@
 import { InputText } from '@/components/core/InputText'
-import { useState } from 'react'
 import styled from 'styled-components'
 import { AvatarSetup } from '../AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
+import { validEmail, validName } from '../validations'
 import { UpdateProfileProps } from './UpdateProfileProps'
 
 export const Identity = ({
@@ -10,7 +10,6 @@ export const Identity = ({
   onChange,
   user,
 }: UpdateProfileProps) => {
-  const [displayError, setDisplayError] = useState(false)
   const avatar = editProfileInput?.hasOwnProperty('avatar')
     ? editProfileInput.avatar
     : user?.avatar
@@ -18,13 +17,10 @@ export const Identity = ({
   const name = editProfileInput?.name ?? user?.name
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayError(false)
-    if (e.target.value.length > MAX_DISPLAY_NAME_LENGTH) return
     onChange({ ...editProfileInput, name: e.target.value })
   }
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayError(false)
     onChange({ ...editProfileInput, email: e.target.value })
   }
 
@@ -37,7 +33,7 @@ export const Identity = ({
       <InputGroup>
         <InputText
           id="displayName"
-          error={((displayError && name.length) ?? 0) === 0}
+          error={!validName(name)}
           required
           label="Display Name"
           value={name}
@@ -46,7 +42,7 @@ export const Identity = ({
         />
         <InputText
           id="email"
-          error={((displayError && email.length) ?? 0) === 0}
+          error={!validEmail(email)}
           required
           label="Email"
           value={email}

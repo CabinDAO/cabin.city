@@ -4,6 +4,7 @@ import { StepProps } from './step-configuration'
 import { useUser } from '@/components/auth/useUser'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { AboutInput } from '../AboutInput'
+import { validBio, validLocation } from '../validations'
 
 export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useUser()
@@ -12,6 +13,10 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { updateProfile } = useUpdateProfile(user?._id)
 
   const handleNext = async () => {
+    if (!validBio(bio) || !validLocation(location)) {
+      return
+    }
+
     await updateProfile({
       data: {
         bio,

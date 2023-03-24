@@ -45,7 +45,11 @@ export const SetupProfileView = ({}) => {
 
   return (
     <SingleColumnLayout>
-      <TitleCard title="Profile setup" icon="close" />
+      <TitleCard
+        title="Profile setup"
+        icon="close"
+        iconHref={`/profile/${profileId}`}
+      />
       <CurrentComponent
         name={currentStep.name}
         onNext={handleNext}

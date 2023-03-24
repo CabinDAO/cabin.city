@@ -6,6 +6,7 @@ import { InputText } from '../core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
+import { validEmail, validName } from './validations'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
@@ -19,7 +20,6 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayError(false)
-    if (e.target.value.length > MAX_DISPLAY_NAME_LENGTH) return
     setDisplayName(e.target.value)
   }
 
@@ -30,7 +30,9 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
 
   const handleSubmit = () => {
     setDisplayError(true)
-    onSubmit({ email, displayName, avatar })
+    if (validName(displayName) && validEmail(email)) {
+      onSubmit({ email, displayName, avatar })
+    }
   }
 
   return (
@@ -39,7 +41,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
       <InputGroup>
         <InputText
           id="displayName"
-          error={displayError && displayName.length === 0}
+          error={displayError && !validName(displayName)}
           required
           label="Display Name"
           value={displayName}
@@ -48,7 +50,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
         />
         <InputText
           id="email"
-          error={displayError && email.length === 0}
+          error={displayError && !validEmail(email)}
           required
           label="Email"
           value={email}

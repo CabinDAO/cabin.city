@@ -1,14 +1,47 @@
 import { BaseShadowCard } from './BaseShadowCard'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Icon, { IconName } from './Icon'
+import Link from 'next/link'
 
-const IconContainer = styled.div`
+interface IconCardProps {
+  icon: IconName
+  children: React.ReactNode
+  iconHref?: string
+}
+
+export const IconCard = ({ children, icon, iconHref }: IconCardProps) => {
+  return (
+    <BaseShadowCard>
+      {iconHref ? (
+        <LinkContainer href={iconHref ?? '/'}>
+          <Icon name={icon} size={1.8} />
+        </LinkContainer>
+      ) : (
+        <IconContainer>
+          <Icon name={icon} size={1.8} />
+        </IconContainer>
+      )}
+
+      <ContentContainer>{children}</ContentContainer>
+    </BaseShadowCard>
+  )
+}
+
+const iconContainerStyles = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 5.4rem;
   background-color: ${({ theme }) => theme.colors.yellow300};
+`
+
+const IconContainer = styled.div`
+  ${iconContainerStyles}
+`
+
+const LinkContainer = styled(Link)`
+  ${iconContainerStyles}
 `
 
 const ContentContainer = styled.div`
@@ -20,19 +53,3 @@ const ContentContainer = styled.div`
   width: 100%;
   text-align: left;
 `
-
-interface IconCardProps {
-  icon: IconName
-  children: React.ReactNode
-}
-
-export const IconCard = ({ children, icon }: IconCardProps) => {
-  return (
-    <BaseShadowCard>
-      <IconContainer>
-        <Icon name={icon} size={1.8} />
-      </IconContainer>
-      <ContentContainer>{children}</ContentContainer>
-    </BaseShadowCard>
-  )
-}
