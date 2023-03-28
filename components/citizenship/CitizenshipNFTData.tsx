@@ -44,10 +44,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
       <H1>Cabin Citizen #{nft?.tokenId}</H1>
       <DetailsContainer>
         <H3>Details</H3>
-        <NFTDataList
-          fieldNames={Object.keys(nftData)}
-          values={Object.values(nftData)}
-        />
+        <NFTDataList data={nftData} />
       </DetailsContainer>
       <UnlockCTAButton variant="secondary" onClick={handleMint}>
         {expiredNft ? 'Renew now' : 'Cancel citizenship'}

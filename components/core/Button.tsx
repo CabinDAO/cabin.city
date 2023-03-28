@@ -163,11 +163,11 @@ export const Button = ({
       initial={initial}
       whileTap={{
         ...tapAnimation,
-        transition: { duration: 0.2 },
+        transition: { duration: 0.1 },
       }}
       whileHover={{
         ...hoverAnimation,
-        transition: { duration: 0.2 },
+        transition: { duration: 0.25 },
       }}
       variant={variant}
       onClick={onClick}

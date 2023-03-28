@@ -1,6 +1,7 @@
 import { useUser } from '@/components/auth/useUser'
 import useEns from '@/components/hooks/useEns'
 import { shortenedAddress } from '@/utils/display-utils'
+import { motion } from 'framer-motion'
 import Link from 'next/link'
 import styled, { css } from 'styled-components'
 import { Avatar } from '../Avatar'
@@ -20,12 +21,26 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
   const { ens } = useEns(user?.account.address)
   const displayCaption = ens ?? shortenedAddress(user?.account.address)
 
-  if (!user || !visible) {
+  if (!user) {
     return null
   }
 
   return (
-    <Container>
+    <Container
+      initial={{
+        transform: 'translateX(4.8rem)',
+        opacity: 0,
+        pointerEvents: 'none',
+      }}
+      animate={{
+        transform: visible ? 'translateX(0%)' : 'translateX(4.8rem)',
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? 'all' : 'none',
+        transition: {
+          duration: 0.2,
+        },
+      }}
+    >
       <ProfileLink href={`/profile/${user._id}`}>
         <Avatar size={2.4} src={user.avatar?.url} />
         <Name>
@@ -48,7 +63,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
   )
 }
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   user-select: none;
   position: absolute;
   background-color: ${({ theme }) => theme.colors.green800};

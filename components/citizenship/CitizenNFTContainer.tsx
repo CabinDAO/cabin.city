@@ -17,7 +17,7 @@ const IMAGE_SIZE_PX = 336
 const TABLET_IMAGE_SIZE_PX = 222
 
 export const CitizenNFTContainer = () => {
-  const { activeNFT, loading } = useGetUnlockNFT()
+  const { activeNFT } = useGetUnlockNFT()
 
   const imageSrc = activeNFT?.image || DEFAULT_NFT_IMAGE
 
@@ -28,10 +28,6 @@ export const CitizenNFTContainer = () => {
       external: true,
     },
     Blockchain: { value: capitalize(unlockConfig.networkName) ?? '' },
-  }
-
-  if (loading) {
-    return null
   }
 
   return (
@@ -65,10 +61,7 @@ export const CitizenNFTContainer = () => {
         </DescriptionContainer>
         <DescriptionContainer>
           <H3>Contract Information</H3>
-          <NFTDataList
-            fieldNames={Object.keys(contractData)}
-            values={Object.values(contractData)}
-          />
+          <NFTDataList data={contractData} />
         </DescriptionContainer>
       </Section>
     </StyledContentCard>

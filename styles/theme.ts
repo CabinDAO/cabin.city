@@ -20,6 +20,7 @@ const theme = {
     landscape: `@media only screen and ${queries.landscape}`,
   },
   colors: {
+    twitter: '#1d9bf0',
     green900: '#1D2B2A',
     green800: '#324841',
     green700: '#06774C',

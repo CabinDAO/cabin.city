@@ -31,13 +31,12 @@ export const CitizenshipNFTPreviewData = () => {
         <>
           <HorizontalDivider />
           <NFTDataList
-            fieldNames={['Vouched for by']}
-            values={[
-              {
+            data={{
+              'Vouched for by': {
                 value: vouchedBy.name || '',
                 url: `/profile/${vouchedBy._id}`,
               },
-            ]}
+            }}
           />
         </>
       )}

@@ -1,13 +1,13 @@
-import { ProfileEmptyStateSection } from '@/components/profile/view-profile/ProfileEmptyStateSection'
+import { EmptyState } from '@/components/core/EmptyState'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'Core/ProfileEmptyStateSection',
-  component: ProfileEmptyStateSection,
-} as ComponentMeta<typeof ProfileEmptyStateSection>
+  title: 'Core/EmptyState',
+  component: EmptyState,
+} as ComponentMeta<typeof EmptyState>
 
-const Template: ComponentStory<typeof ProfileEmptyStateSection> = (args) => (
-  <ProfileEmptyStateSection {...args} />
+const Template: ComponentStory<typeof EmptyState> = (args) => (
+  <EmptyState {...args} />
 )
 
 export const Default = Template.bind({})

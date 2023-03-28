@@ -9,11 +9,15 @@ interface FieldValue {
 }
 
 interface NFTDataListProps {
-  fieldNames: string[]
-  values: FieldValue[]
+  data: Record<string, FieldValue>
 }
 
-export const NFTDataList = ({ fieldNames, values }: NFTDataListProps) => {
+export const NFTDataList = ({ data }: NFTDataListProps) => {
+  if (!data) return null
+
+  const fieldNames = Object.keys(data)
+  const values = Object.values(data)
+
   return (
     <DataContainer>
       <DataList>

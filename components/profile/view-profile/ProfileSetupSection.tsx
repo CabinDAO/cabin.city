@@ -175,7 +175,7 @@ const LinkContainer = styled.div<LinkContainerProps>`
 `
 
 const TwitterShare = styled(Button)`
-  background-color: #1d9bf0;
+  background-color: ${({ theme }) => theme.colors.twitter};
   align-self: flex-start;
   color: white;
 `

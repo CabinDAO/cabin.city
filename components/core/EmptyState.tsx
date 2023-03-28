@@ -1,11 +1,11 @@
-import Icon, { IconName } from '../../core/Icon'
+import Icon, { IconName } from './Icon'
 import styled from 'styled-components'
-import { CabinGradientCard } from '../../core/CabinGradientCard'
-import { Body2, H2, Overline } from '../../core/Typography'
+import { CabinGradientCard } from './CabinGradientCard'
+import { Body2, H2, Overline } from './Typography'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { AppLink } from '@/components/core/AppLink'
 
-interface ProfileEmptyStateProps {
+interface EmptyStateProps {
   icon: IconName
   title: string
   description: string
@@ -13,13 +13,13 @@ interface ProfileEmptyStateProps {
   customCta?: () => JSX.Element
 }
 
-export const ProfileEmptyStateSection = ({
+export const EmptyState = ({
   icon,
   title,
   description,
   href,
   customCta,
-}: ProfileEmptyStateProps) => {
+}: EmptyStateProps) => {
   const { deviceSize } = useDeviceSize()
 
   return (

@@ -4,7 +4,7 @@ import { roleInfoFromType } from '@/utils/roles'
 import styled from 'styled-components'
 import { RoleCard } from '@/components/core/RoleCard'
 import { H3 } from '@/components/core/Typography'
-import { ProfileEmptyStateSection } from './ProfileEmptyStateSection'
+import { EmptyState } from '../../core/EmptyState'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface ProfileRolesProps {
@@ -32,12 +32,15 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
     )
   } else {
     return (
-      <ProfileEmptyStateSection
-        icon="card-heart"
-        title="Choose your interests"
-        description="Level them up over time"
-        href="https://cabin.city"
-      />
+      <Container>
+        <H3>Role Cards</H3>
+        <EmptyState
+          icon="card-heart"
+          title="Choose your interests"
+          description="Level them up over time"
+          href="https://cabin.city"
+        />
+      </Container>
     )
   }
 }

@@ -30,6 +30,7 @@ import { ChevronButton } from '../core/ChevronButton'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { FilterCount } from '../core/FilterCount'
 import { ProfileListEmptyState } from '../core/ProfileListEmptyState'
+import { useUser } from '../auth/useUser'
 
 export const DirectoryView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -46,6 +47,7 @@ export const DirectoryView = () => {
     ProfileSortType.CreatedAtDesc
   )
   const { deviceSize } = useDeviceSize()
+  const { user } = useUser({ redirectTo: '/login' })
 
   const input = useMemo(() => {
     return {
@@ -156,6 +158,8 @@ export const DirectoryView = () => {
       (searchInput ? 1 : 0),
     [roleTypes, levelTypes, citizenshipStatuses, searchInput]
   )
+
+  if (!user) return null
 
   return (
     <SingleColumnLayout>

@@ -3,7 +3,7 @@ import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
 import { useAccount } from 'wagmi'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
@@ -16,12 +16,16 @@ export interface RegistrationParams {
 
 export const RegistrationView = () => {
   const { address } = useAccount()
+  const router = useRouter()
   const { signAuthMessage } = useSignAuthMessage()
 
   const handleSubmit = async (params: RegistrationParams) => {
     const { email, displayName: name, avatar } = params
 
-    if (!address) throw new Error('No address found')
+    if (!address) {
+      router.push('/login')
+      return
+    }
 
     const { message, signature } = await signAuthMessage(address)
 

@@ -1,7 +1,7 @@
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import styled from 'styled-components'
 import { H3, Overline } from '@/components/core/Typography'
-import { ProfileEmptyStateSection } from './ProfileEmptyStateSection'
+import { EmptyState } from '../../core/EmptyState'
 import { useState } from 'react'
 import { Badge } from '@/components/core/Badge'
 import IconButton from '@/components/core/IconButton'
@@ -68,8 +68,8 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
     return (
       <Container>
         <H3>Passport stamps</H3>
-        <ProfileEmptyStateSection
-          icon="card-heart"
+        <EmptyState
+          icon="stamp"
           title="Collect Passport Stamps"
           description="Build your Cabin creds"
           href="https://cabin.city"
