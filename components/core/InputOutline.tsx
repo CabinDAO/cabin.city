@@ -20,7 +20,7 @@ const Container = styled.div<ContainerProps>`
   background: ${(props) => props.theme.colors.white};
   color: ${(props) => props.theme.colors.yellow900};
   --icon-color: ${(props) => props.theme.colors.yellow900};
-  border: 1px solid ${(props) => props.theme.colors.yellow900};
+  box-shadow: inset 0 0 0 1px ${(props) => props.theme.colors.yellow900};
 
   ${(props) =>
     props.filled &&
@@ -29,14 +29,13 @@ const Container = styled.div<ContainerProps>`
     color: ${
       props.disabled ? props.theme.colors.red600 : props.theme.colors.yellow900
     };
-    border: 1px solid ${props.theme.colors.yellow900};
-    padding: 1.5rem;
+    box-shadow: inset 0 0 0 1px ${props.theme.colors.yellow900};
   `}
 
   ${(props) =>
     props.error &&
     `
-    border: 2px solid ${props.theme.colors.red600};
+    box-shadow: inset 0 0 0 2px ${props.theme.colors.red600};
     padding: 1.5rem;
   `}
 `

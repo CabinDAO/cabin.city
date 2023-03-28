@@ -1,30 +1,37 @@
 import Image from 'next/image'
 import styled from 'styled-components'
+import { ZoomInCard } from './ZoomInCard'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
 import { Overline } from './Typography'
 
-export const CitizenCard = () => {
+export interface CitizenCardProps {
+  hovered?: boolean
+}
+
+export const CitizenCard = ({ hovered }: CitizenCardProps) => {
   return (
     <CardBackdrop backgroundImagePath="/images/citizen-bg.png">
-      <ContentCard shape="notch" notchSize={1.6} maxWidth="27.1">
-        <ContentContainer>
-          <InnerContainer>
-            <Image
-              src="/images/citizen.png"
-              alt="Verified Citizen"
-              width={239}
-              height={329}
-            />
-            <VerifiedSection>
-              <VerifiedText>Verified Cabin Citizen</VerifiedText>
-              <VerifiedIconContainer>
-                <Icon name="check-star" size={1.6} color="green400" />
-              </VerifiedIconContainer>
-            </VerifiedSection>
-          </InnerContainer>
-        </ContentContainer>
-      </ContentCard>
+      <ZoomInCard hovered={hovered}>
+        <ContentCard shape="notch" notchSize={1.6} maxWidth="27.1">
+          <ContentContainer>
+            <InnerContainer>
+              <Image
+                src="/images/citizen.png"
+                alt="Verified Citizen"
+                width={239}
+                height={329}
+              />
+              <VerifiedSection>
+                <VerifiedText>Verified Cabin Citizen</VerifiedText>
+                <VerifiedIconContainer>
+                  <Icon name="check-star" size={1.6} color="green400" />
+                </VerifiedIconContainer>
+              </VerifiedSection>
+            </InnerContainer>
+          </ContentContainer>
+        </ContentCard>
+      </ZoomInCard>
     </CardBackdrop>
   )
 }

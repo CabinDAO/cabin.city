@@ -1,4 +1,5 @@
-import { HTMLAttributes } from 'react'
+import theme from '@/styles/theme'
+import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
 
@@ -8,9 +9,22 @@ interface StyledButtonProps {
   variant: ButtonVariant
 }
 
-const StyledButton = styled.button<StyledButtonProps>`
+const buildBoxShadow = ({
+  top = 0.2,
+  right = 0.2,
+  bottom = 0.2,
+  left = 0.2,
+}: BoxShadow) => {
+  return `inset 0 ${top}rem 0 0 ${theme.colors.green900},
+  inset 0 -${bottom}rem 0 0 ${theme.colors.green900},
+  inset -${right}rem 0 0 0 ${theme.colors.green900},
+  inset ${left}rem 0 0 0 ${theme.colors.green900}`
+}
+
+const StyledButton = styled(motion.button)<StyledButtonProps>`
   ${buttonStyles}
   cursor: pointer;
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -21,63 +35,61 @@ const StyledButton = styled.button<StyledButtonProps>`
   padding: 1.5rem 2.4rem;
   white-space: nowrap;
 
-  // Shared for primary and secondary
-  border-width: 0.1rem 0.4rem 0.4rem 0.1rem;
-  border-style: solid inset;
-  border-color: ${({ theme }) => theme.colors.green900};
-
   ${({ variant }) => {
     switch (variant) {
       case 'primary':
         return css`
+          box-shadow: ${buildBoxShadow({
+            top: 0.1,
+            right: 0.4,
+            bottom: 0.4,
+            left: 0.1,
+          })};
           background-color: ${({ theme }) => theme.colors.green400};
           color: ${({ theme }) => theme.colors.green900};
-          &:hover {
-            border-width: 0.4rem 0.1rem 0.1rem 0.4rem;
-            padding: 1.4rem 2.4rem;
-            margin-bottom: 0.2rem;
-          }
         `
       case 'secondary':
         return css`
+          box-shadow: ${buildBoxShadow({
+            top: 0.1,
+            right: 0.4,
+            bottom: 0.4,
+            left: 0.1,
+          })};
           background-color: ${({ theme }) => theme.colors.yellow100};
           color: ${({ theme }) => theme.colors.green900};
-          &:hover {
-            border-width: 0.4rem 0.1rem 0.1rem 0.4rem;
-            padding: 1.4rem 2.4rem;
-            margin-bottom: 0.2rem;
-          }
         `
       case 'tertiary':
         return css`
-          background-color: ${({ theme }) => theme.colors.yellow200};
-          color: #000;
+          color: ${({ theme }) => theme.colors.green900};
+          box-shadow: none;
           border: solid 0.1rem ${({ theme }) => theme.colors.yellow900};
+          transition: all 0.2s ease-in-out;
 
           &:hover {
-            background-color: ${({ theme }) => theme.colors.yellow100};
+            box-shadow: none;
             border: solid 0.1rem ${({ theme }) => theme.colors.yellow900};
             margin-bottom: 0;
           }
         `
       case 'link':
         return css`
-          background-color: ${({ theme }) => theme.colors.yellow200};
           color: ${({ theme }) => theme.colors.green900};
-          border: none;
+          box-shadow: none;
+          transition: all 0.2s ease-in-out;
 
           &:hover {
-            background-color: ${({ theme }) => theme.colors.yellow100};
+            box-shadow: none;
             border: none;
           }
         `
       default:
         return ''
     }
-  }}
+  }};
 `
 
-interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
   children: React.ReactNode
   variant?: ButtonVariant
   onClick?: () => void
@@ -92,11 +104,85 @@ export const Button = ({
   onClick,
   ...props
 }: ButtonProps) => {
+  let hoverAnimation = {}
+  let tapAnimation = {}
+  let initial = {}
+
+  switch (variant) {
+    case 'primary':
+    case 'secondary':
+      hoverAnimation = {
+        boxShadow: buildBoxShadow({}),
+      }
+      tapAnimation = {
+        boxShadow: buildBoxShadow({
+          top: 0.4,
+          right: 0.1,
+          bottom: 0.1,
+          left: 0.4,
+        }),
+      }
+      initial = {
+        boxShadow: buildBoxShadow({
+          top: 0.1,
+          right: 0.4,
+          bottom: 0.4,
+          left: 0.1,
+        }),
+      }
+      break
+    case 'tertiary':
+      hoverAnimation = {
+        backgroundColor: theme.colors.yellow200,
+      }
+      tapAnimation = {
+        backgroundColor: theme.colors.yellow100,
+      }
+      initial = {
+        backgroundColor: theme.colors.yellow100,
+      }
+      break
+    case 'link':
+      hoverAnimation = {
+        backgroundColor: theme.colors.yellow200,
+      }
+      tapAnimation = {
+        backgroundColor: theme.colors.yellow100,
+      }
+      initial = {
+        backgroundColor: theme.colors.yellow200,
+      }
+      break
+    default:
+      break
+  }
+
   return (
-    <StyledButton type="button" variant={variant} onClick={onClick} {...props}>
+    <StyledButton
+      key={variant}
+      initial={initial}
+      whileTap={{
+        ...tapAnimation,
+        transition: { duration: 0.2 },
+      }}
+      whileHover={{
+        ...hoverAnimation,
+        transition: { duration: 0.2 },
+      }}
+      variant={variant}
+      onClick={onClick}
+      {...props}
+    >
       {startAdornment}
       {children}
       {endAdornment}
     </StyledButton>
   )
+}
+
+interface BoxShadow {
+  top?: number
+  right?: number
+  bottom?: number
+  left?: number
 }

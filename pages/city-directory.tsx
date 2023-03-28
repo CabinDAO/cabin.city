@@ -1,7 +1,7 @@
 import { NeighborhoodsView } from '@/components/neighborhoods/NeighborhoodsView'
 
-const NeighborhoodsPage = () => {
+const CityDirectory = () => {
   return <NeighborhoodsView></NeighborhoodsView>
 }
 
-export default NeighborhoodsPage
+export default CityDirectory

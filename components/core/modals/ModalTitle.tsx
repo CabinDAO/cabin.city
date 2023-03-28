@@ -40,6 +40,12 @@ export const ModalTitle = (props: ModalTitleProps) => {
 const ModalTitleClose = () => {
   const { hideModal } = useModal()
   return (
-    <IconButton onClick={hideModal} size={2} color="green900" icon="close" />
+    <IconButton
+      animated
+      onClick={hideModal}
+      size={2}
+      color="green900"
+      icon="close"
+    />
   )
 }

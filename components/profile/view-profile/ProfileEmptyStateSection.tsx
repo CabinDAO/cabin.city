@@ -2,14 +2,15 @@ import Icon, { IconName } from '../../core/Icon'
 import styled from 'styled-components'
 import { CabinGradientCard } from '../../core/CabinGradientCard'
 import { Body2, H2, Overline } from '../../core/Typography'
-import { Button } from '../../core/Button'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { AppLink } from '@/components/core/AppLink'
 
 interface ProfileEmptyStateProps {
   icon: IconName
   title: string
   description: string
   href: string
+  customCta?: () => JSX.Element
 }
 
 export const ProfileEmptyStateSection = ({
@@ -17,6 +18,7 @@ export const ProfileEmptyStateSection = ({
   title,
   description,
   href,
+  customCta,
 }: ProfileEmptyStateProps) => {
   const { deviceSize } = useDeviceSize()
 
@@ -33,14 +35,13 @@ export const ProfileEmptyStateSection = ({
         <DescriptionContainer>
           <H2>{title}</H2>
           <Body2>{description}</Body2>
-          <a href={href} target="_blank" rel="noreferrer">
-            <Button
-              variant="link"
-              endAdornment={<Icon name="up-right-arrow" size={0.9} />}
-            >
+          {customCta ? (
+            customCta()
+          ) : (
+            <AppLink external location={href} iconSize={0.9}>
               <Overline>Learn More</Overline>
-            </Button>
-          </a>
+            </AppLink>
+          )}
         </DescriptionContainer>
       </InnerContainer>
     </CabinGradientCard>
@@ -80,4 +81,9 @@ const DescriptionContainer = styled.div`
   text-align: center;
   flex-direction: column;
   gap: 0.4rem;
+
+  button:last-child,
+  a:last-child {
+    margin-top: 1.2rem;
+  }
 `

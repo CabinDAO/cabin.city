@@ -9,8 +9,9 @@ import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getUnlockOpenseaUrl } from '@/utils/opensea'
 import Icon from '@/components/core/Icon'
-import Link from 'next/link'
 import { useUser } from '@/components/auth/useUser'
+import { AppLink } from '@/components/core/AppLink'
+import { useState } from 'react'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
@@ -21,6 +22,7 @@ export const ProfileVerifiedCitizenship = ({
 }: ProfileVerifiedCitizenshipProps) => {
   const { user } = useUser()
   const isOwnProfile = user?._id === profile._id
+  const [hovered, setHovered] = useState(false)
 
   if (!profile.citizenshipMetadata) {
     return null
@@ -31,17 +33,20 @@ export const ProfileVerifiedCitizenship = ({
       <TitleContainer>
         <H3>Citizenship</H3>
         {isOwnProfile && (
-          <Link href="/citizenship" passHref>
-            <ManageCTA>
-              <Overline>Manage</Overline>
-              <Icon name="chevron-right" size={0.7} />
-            </ManageCTA>
-          </Link>
+          <ManageCTA
+            iconSize={0.8}
+            iconName="chevron-right"
+            location="/citizenship"
+          >
+            <Overline>Manage</Overline>
+          </ManageCTA>
         )}
       </TitleContainer>
       <NFTContainer
         href={getUnlockOpenseaUrl(profile.citizenshipMetadata.tokenId)}
         target="_blank"
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
       >
         <StyledImage
           alt={profile.citizenshipMetadata?.tokenId}
@@ -61,7 +66,12 @@ export const ProfileVerifiedCitizenship = ({
               <H1 emphasized $color="yellow100">
                 #{profile.citizenshipMetadata.tokenId}
               </H1>
-              <Icon color="yellow100" name="up-right-arrow" size={1.4} />
+              <ExternalIcon
+                color="yellow100"
+                name="up-right-arrow"
+                size={1.4}
+                hovered={hovered}
+              />
             </TitleLine>
           </NFTNameContainer>
           <Subline2 $color="yellow100">
@@ -114,13 +124,8 @@ const TitleContainer = styled.div`
   justify-content: space-between;
 `
 
-const ManageCTA = styled.div`
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
+const ManageCTA = styled(AppLink)`
   gap: 0.89rem;
-  align-items: center;
-  justify-content: center;
 `
 
 const NFTContainer = styled.a`
@@ -183,4 +188,13 @@ const NFTNameContainer = styled.div`
     flex-direction: row;
     gap: 1.6rem;
   }
+`
+
+interface ExternalIconProps {
+  hovered: boolean
+}
+
+const ExternalIcon = styled(Icon)<ExternalIconProps>`
+  transition: transform 0.15s ease-in-out;
+  transform: ${({ hovered }) => (hovered ? 'translateX(0.3rem)' : 'none')};
 `

@@ -5,6 +5,7 @@ import { RoleInfo } from '@/utils/roles'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { DeviceSize, useDeviceSize } from '../hooks/useDeviceSize'
+import { ZoomInCard } from './ZoomInCard'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
 import IconButton from './IconButton'
@@ -23,6 +24,7 @@ export interface RoleCardProps {
   levelInfo: LevelInfo
   externalUrl?: string // This will be undefined if the role is not tied to a hat/token
   variant?: RoleCardVariant
+  hovered?: boolean
 }
 
 const PaddingSize: NumberConfigMap = {
@@ -56,6 +58,7 @@ export const RoleCard = ({
   levelInfo,
   externalUrl,
   variant = 'default',
+  hovered = false,
 }: RoleCardProps) => {
   const { deviceSize } = useDeviceSize()
   const imageSize = ImageSize[variant][deviceSize]
@@ -64,39 +67,41 @@ export const RoleCard = ({
     variant === 'default' ? pxToRem(imageSize + paddingSize * 2) : undefined
 
   return (
-    <ContentCard
-      shape="notch"
-      maxWidth={maxWidth}
-      notchSize={variant === 'horizontal' ? 1.6 : paddingSize / 10}
-    >
-      <ContentContainer>
-        <InnerContainer variant={variant} paddingSize={paddingSize}>
-          <Image
-            src={roleInfo.imagePath}
-            alt={roleInfo.name}
-            width={ImageSize[variant][deviceSize]}
-            height={ImageSize[variant][deviceSize]}
-          />
-          <RoleDataContainer variant={variant} paddingSize={paddingSize}>
-            <RoleNameContainer>
-              <H3>{roleInfo.name}</H3>
-              <Icon name={roleInfo.iconName} size={1.3} />
-              {externalUrl && (
-                <a href={externalUrl} target="_blank" rel="noreferrer">
-                  <IconButton icon="external-link" size={1.3} />
-                </a>
-              )}
-            </RoleNameContainer>
-            <Body2>{roleInfo.description}</Body2>
-          </RoleDataContainer>
-        </InnerContainer>
-        <LevelContainer variant={variant} paddingSize={paddingSize}>
-          <LevelLabelCaption>LEVEL</LevelLabelCaption>
-          <LevelBars levelInfo={levelInfo} />
-          <LevelCaption emphasized>{levelInfo.name}</LevelCaption>
-        </LevelContainer>
-      </ContentContainer>
-    </ContentCard>
+    <ZoomInCard hovered={hovered}>
+      <ContentCard
+        shape="notch"
+        maxWidth={maxWidth}
+        notchSize={variant === 'horizontal' ? 1.6 : paddingSize / 10}
+      >
+        <ContentContainer>
+          <InnerContainer variant={variant} paddingSize={paddingSize}>
+            <Image
+              src={roleInfo.imagePath}
+              alt={roleInfo.name}
+              width={ImageSize[variant][deviceSize]}
+              height={ImageSize[variant][deviceSize]}
+            />
+            <RoleDataContainer variant={variant} paddingSize={paddingSize}>
+              <RoleNameContainer>
+                <H3>{roleInfo.name}</H3>
+                <Icon name={roleInfo.iconName} size={1.3} />
+                {externalUrl && (
+                  <a href={externalUrl} target="_blank" rel="noreferrer">
+                    <IconButton icon="external-link" size={1.3} />
+                  </a>
+                )}
+              </RoleNameContainer>
+              <Body2>{roleInfo.description}</Body2>
+            </RoleDataContainer>
+          </InnerContainer>
+          <LevelContainer variant={variant} paddingSize={paddingSize}>
+            <LevelLabelCaption>LEVEL</LevelLabelCaption>
+            <LevelBars levelInfo={levelInfo} />
+            <LevelCaption emphasized>{levelInfo.name}</LevelCaption>
+          </LevelContainer>
+        </ContentContainer>
+      </ContentCard>
+    </ZoomInCard>
   )
 }
 

@@ -9,6 +9,8 @@ import { Checkbox } from './Checkbox'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
 import { H5 } from './Typography'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
 
 interface RoleChipProps {
   roleType: ProfileRoleType
@@ -29,21 +31,36 @@ export const RoleChip = ({
 }: RoleChipProps) => {
   const { deviceSize } = useDeviceSize()
   const roleInfo = roleInfoFromType(roleType)
+  const [isHovered, setHovered] = useState(false)
 
   return (
-    <StyledContentCard selected={selected}>
-      <ContentContainer>
+    <StyledContentCard selected={selected} hovered={isHovered}>
+      <ContentContainer
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
         <InnerContainer>
-          {deviceSize === 'desktop' ? (
-            <Image
-              src={roleInfo.imagePath}
-              alt={roleInfo.name}
-              width={IMAGE_SIZE_PX}
-              height={IMAGE_SIZE_PX}
-            />
-          ) : (
-            <AutofitImage src={roleInfo.imagePath} alt={roleInfo.name} />
-          )}
+          <OuterImageContainer>
+            <motion.div
+              animate={{
+                scale: isHovered ? 1.05 : 1,
+                transition: { duration: 0.3 },
+              }}
+              initial={false}
+              whileTap={{ scale: 1.05 }}
+            >
+              {deviceSize === 'desktop' ? (
+                <Image
+                  src={roleInfo.imagePath}
+                  alt={roleInfo.name}
+                  width={IMAGE_SIZE_PX}
+                  height={IMAGE_SIZE_PX}
+                />
+              ) : (
+                <AutofitImage src={roleInfo.imagePath} alt={roleInfo.name} />
+              )}
+            </motion.div>
+          </OuterImageContainer>
         </InnerContainer>
         <RoleDataContainer>
           <CheckboxContainer>
@@ -63,12 +80,22 @@ export const RoleChip = ({
 
 interface StyledContentCardProps {
   selected?: boolean
+  hovered?: boolean
 }
 
 const StyledContentCard = styled(ContentCard)<StyledContentCardProps>`
   max-width: 100%;
-  background-color: ${({ theme, selected }) =>
-    selected ? theme.colors.yellow300 : theme.colors.yellow200};
+
+  transition: background-color 0.3s ease-in-out;
+  background-color: ${({ theme, selected, hovered }) => {
+    if (hovered && !selected) {
+      return `rgba(254, 215, 162, 0.24)`
+    } else if (selected) {
+      return theme.colors.yellow300
+    } else {
+      return theme.colors.yellow200
+    }
+  }};
 
   ${({ theme }) => theme.bp.lg} {
     max-width: ${pxToRem(MAX_CONTAINER_WIDTH_PX)}rem;
@@ -86,11 +113,19 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  height: 100%;
+  overflow: hidden;
 
   ${({ theme }) => theme.bp.lg} {
     gap: 1.6rem;
   }
+`
+
+const OuterImageContainer = styled.div`
+  display: flex;
+  border-radius: 0 0 4.8rem 0;
+  overflow: hidden;
+  max-width: ${pxToRem(IMAGE_SIZE_PX)}rem;
+  max-height: ${pxToRem(IMAGE_SIZE_PX)}rem;
 `
 
 const RoleDataContainer = styled.div`

@@ -1,3 +1,4 @@
+import { AppLink } from '@/components/core/AppLink'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { Body2, H2, Overline } from '@/components/core/Typography'
@@ -42,10 +43,9 @@ export const ProfileUnverifiedCitizenship = ({
             A digital and physical passport to explore the Cabin network. Join
             the growing community today and unlock some epic benefits.
           </Body2>
-          <StyledAnchor href={href} target="_blank" rel="noreferrer">
+          <AppLink external location={href} iconSize={0.9}>
             <Overline>Learn More</Overline>
-            <Icon name="up-right-arrow" size={0.9} />
-          </StyledAnchor>
+          </AppLink>
         </DescriptionContainer>
       </InformationContainer>
       <StyledLink href={'/citizenship'}>
@@ -129,14 +129,6 @@ const Circle = styled.div`
   }
 `
 
-const StyledAnchor = styled.a`
-  display: flex;
-  flex-direction: row;
-  gap: 0.69rem;
-  align-items: center;
-  justify-content: flex-start;
-`
-
 const DescriptionContainer = styled.div`
   text-align: center;
   display: flex;
@@ -146,7 +138,7 @@ const DescriptionContainer = styled.div`
   gap: 0.4rem;
   max-width: 100%;
 
-  ${StyledAnchor} {
+  a {
     margin-top: 0.6rem;
   }
 

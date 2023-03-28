@@ -38,6 +38,7 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
         text="Choose Avatar"
         endAdornment={
           <IconButton
+            animated
             icon="info"
             color="green900"
             size={2}
@@ -47,6 +48,7 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
         {...(aboutOpen && {
           startAdornment: (
             <IconButton
+              animated
               icon="back-arrow"
               color="green900"
               size={2}

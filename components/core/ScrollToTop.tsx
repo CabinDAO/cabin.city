@@ -48,6 +48,7 @@ export const ScrollToTop = ({ scrollableRef }: ScrollToTopProps) => {
   return (
     <GoUpButton>
       <IconButton
+        animated
         icon="up-arrow"
         color="green900"
         size={2}

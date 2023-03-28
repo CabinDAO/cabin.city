@@ -21,6 +21,7 @@ export const Circle = styled.div<CircleProps>`
 
   // Based on Design, it corresponds to 6% of the size
   --shadow-size: ${({ size }) => size * 0.06}rem;
+  transition: box-shadow 0.2s ease-in-out;
 
   ${({ shadowMode, theme }) => {
     if (shadowMode === 'always') {

@@ -26,8 +26,8 @@ export const MenuItemsMap: Record<MenuItemOption, MenuItemConfig> = {
   },
   neighborhoods: {
     icon: 'neighborhoods',
-    path: '/neighborhoods',
-    displayText: 'Neighborhoods',
+    path: '/city-directory',
+    displayText: 'City Directory',
   },
   profile: {
     icon: 'profile',

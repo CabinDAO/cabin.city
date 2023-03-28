@@ -26,7 +26,7 @@ const ProfileRoleAddedContent = (props: PostProps) => {
 }
 
 const ProfileRoleAddedMedia = (props: PostProps) => {
-  const { activityItem } = props
+  const { activityItem, hovered } = props
 
   if (!activityItem.activity.metadata?.profileRole) {
     console.error('ProfileRoleAdded activity without metadata.profileRole')
@@ -42,7 +42,7 @@ const ProfileRoleAddedMedia = (props: PostProps) => {
 
   return (
     <RoleCardBackdrop roleInfo={roleInfo}>
-      <RoleCard roleInfo={roleInfo} levelInfo={levelInfo} />
+      <RoleCard hovered={hovered} roleInfo={roleInfo} levelInfo={levelInfo} />
     </RoleCardBackdrop>
   )
 }

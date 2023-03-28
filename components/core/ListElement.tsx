@@ -24,7 +24,7 @@ const Container = styled.div<ContainerProps>`
   color: ${(props) => props.theme.colors.yellow900};
   --icon-color: ${(props) => props.theme.colors.yellow900};
   :hover {
-    background: ${(props) => props.theme.colors.yellow900};
+    background: ${(props) => props.theme.colors.yellow100};
     color: ${(props) => props.theme.colors.yellow900};
     --icon-color: ${(props) => props.theme.colors.yellow900};
   }

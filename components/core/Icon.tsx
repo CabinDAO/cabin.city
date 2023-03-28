@@ -41,6 +41,7 @@ import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
 import trashSvg from './svg/trash.svg'
+import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
 
@@ -83,6 +84,7 @@ export const IconSvgs = {
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
   trash: trashSvg,
+  twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,
 }
@@ -92,6 +94,7 @@ export type IconName = keyof typeof IconSvgs
 interface IconWrapProps {
   $size?: number
   $color?: ColorName | undefined
+  className?: string
 }
 
 const IconWrap = styled.span<IconWrapProps>`
@@ -120,16 +123,17 @@ interface IconProps extends HTMLAttributes<HTMLSpanElement> {
   name: IconName
   size?: number
   color?: ColorName | undefined
+  className?: string
 }
 
-const Icon = ({ name, size, color, style }: IconProps) => {
+const Icon = ({ name, size, color, style, className }: IconProps) => {
   const IconComponent = IconSvgs[name]
   if (!IconComponent) {
     throw new Error(`There is no icon named: ${name}.`)
   }
 
   return (
-    <IconWrap style={style} $color={color} $size={size}>
+    <IconWrap className={className} style={style} $color={color} $size={size}>
       <IconComponent />
     </IconWrap>
   )

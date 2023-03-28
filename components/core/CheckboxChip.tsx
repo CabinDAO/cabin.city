@@ -50,9 +50,11 @@ const Container = styled.div<ContainerProps>`
   justify-content: space-between;
 
   width: 100%;
+  transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    border-width: 2px 1px 1px 2px;
+    ${({ selected }) =>
+      !selected && `background-color: rgba(254, 215, 162, 0.24);`}
   }
 
   ${({ theme }) => theme.bp.md} {

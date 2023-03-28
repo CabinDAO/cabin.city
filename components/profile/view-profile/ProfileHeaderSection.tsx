@@ -11,6 +11,7 @@ import { ProfileHeaderButton } from './ProfileHeaderButton'
 
 import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { Tooltip } from '@/components/core/Tooltip'
 
 interface ProfileHeaderProps {
   profile: GetProfileByIdFragment | undefined | null
@@ -24,9 +25,7 @@ export const ProfileHeaderSection = ({
   const { ens } = useEns(profile?.account?.address)
   const { deviceSize } = useDeviceSize()
 
-  const iconName = citizenshipInfoFromStatus(
-    profile?.citizenshipStatus
-  )?.iconName
+  const citizenship = citizenshipInfoFromStatus(profile?.citizenshipStatus)
 
   return (
     <ContentCard shadow>
@@ -39,7 +38,11 @@ export const ProfileHeaderSection = ({
           <ProfileInfoContainer>
             <CitizenContainer>
               <H1>{profile?.name}</H1>
-              {iconName && <Icon name={iconName} size={1.4} />}
+              {citizenship && (
+                <Tooltip tooltip={citizenship.text} animate position="top">
+                  <Icon name={citizenship.iconName} size={1.4} />
+                </Tooltip>
+              )}
             </CitizenContainer>
             <BalanceAddressContainer>
               <Subline2>{`${

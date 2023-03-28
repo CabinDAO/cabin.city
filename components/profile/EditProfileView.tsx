@@ -54,7 +54,11 @@ export const EditProfileView = () => {
 
   return (
     <SingleColumnLayout>
-      <TitleCard title="Edit profile" icon="close" />
+      <TitleCard
+        title="Edit profile"
+        icon="close"
+        iconHref={`/profile/${user._id}`}
+      />
       <ContentCard shape="notch">
         <EditProfileForm
           user={user}

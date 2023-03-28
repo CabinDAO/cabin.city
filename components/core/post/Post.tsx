@@ -1,6 +1,7 @@
 import { ActivityItemFragment } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '../Avatar'
 import IconButton from '../IconButton'
@@ -14,6 +15,7 @@ export interface PostProps {
   excludeProfile?: boolean
   onLike?: () => void
   onUnlike?: () => void
+  hovered?: boolean
 }
 
 export const Post = (props: PostProps) => {
@@ -23,9 +25,13 @@ export const Post = (props: PostProps) => {
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.role))
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <Container>
+    <Container
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
       {!excludeProfile && (
         <ProfileContainer>
           <Avatar src={profile.avatar?.url} size={3.2} />
@@ -36,9 +42,9 @@ export const Post = (props: PostProps) => {
           />
         </ProfileContainer>
       )}
-      {Content && <Content {...props} />}
+      {Content && <Content {...props} hovered={hovered} />}
       <ActivityDate {...props} />
-      {Media && <Media {...props} />}
+      {Media && <Media {...props} hovered={hovered} />}
       {/* TODO: Hydrate with real data */}
       <ReactionsContainer>
         {activityItem.hasReactionByMe ? (

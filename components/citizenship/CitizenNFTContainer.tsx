@@ -7,10 +7,10 @@ import { CitizenshipNFTPreviewData } from './CitizenshipNFTPreviewData'
 import { CitizenshipNFTData } from './CitizenshipNFTData'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
-import Icon from '../core/Icon'
 import { unlockConfig } from '@/lib/protocol-config'
 import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
+import { AppLink } from '../core/AppLink'
 
 const INNER_PADDING_PX = 24
 const IMAGE_SIZE_PX = 336
@@ -59,10 +59,9 @@ export const CitizenNFTContainer = () => {
             pellentesque aliquet, nisi lacus aliquet lorem, eget pulvinar magna
             justo eu erat. Suspendisse vel scelerisque ante.
           </Caption>
-          <StyledAnchor href={'/'} target="_blank" rel="noreferrer">
+          <AppLink external location="/" iconSize={0.9}>
             <Overline>Learn More</Overline>
-            <Icon name="up-right-arrow" size={0.9} />
-          </StyledAnchor>
+          </AppLink>
         </DescriptionContainer>
         <DescriptionContainer>
           <H3>Contract Information</H3>
@@ -139,12 +138,4 @@ const NftImage = styled.div`
     height: 33.6rem;
     border-radius: 0 0 64rem 0;
   }
-`
-
-const StyledAnchor = styled.a`
-  display: flex;
-  flex-direction: row;
-  gap: 0.69rem;
-  align-items: center;
-  justify-content: flex-start;
 `

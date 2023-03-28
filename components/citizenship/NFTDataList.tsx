@@ -1,7 +1,6 @@
 import { Caption } from '../core/Typography'
-import styled, { css } from 'styled-components'
-import Link from 'next/link'
-import Icon from '../core/Icon'
+import styled from 'styled-components'
+import { AppLink } from '../core/AppLink'
 
 interface FieldValue {
   value: string
@@ -31,26 +30,17 @@ export const NFTDataList = ({ fieldNames, values }: NFTDataListProps) => {
           )
 
           if (value.url) {
-            if (value.external) {
-              return (
-                <StyledAnchor
-                  key={value.value}
-                  href={value.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {displayValue()}
-                  <Icon name="up-right-arrow" size={0.7} />
-                </StyledAnchor>
-              )
-            } else {
-              return (
-                <StyledLink key={value.value} href={value.url}>
-                  {displayValue()}
-                  <Icon name="chevron-right" size={0.7} />
-                </StyledLink>
-              )
-            }
+            return (
+              <AppLink
+                external={value.external}
+                location={value.url}
+                key={value.value}
+                iconSize={0.7}
+                iconName={value.external ? 'up-right-arrow' : 'chevron-right'}
+              >
+                {displayValue()}
+              </AppLink>
+            )
           } else {
             return displayValue()
           }
@@ -66,22 +56,6 @@ const DataContainer = styled.div`
   grid-gap: 1.6rem;
   auto-flow: dense;
   width: 100%;
-`
-
-const linkStyles = css`
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  gap: 0.59rem;
-  justify-content: flex-start;
-`
-
-const StyledAnchor = styled.a`
-  ${linkStyles}
-`
-
-const StyledLink = styled(Link)`
-  ${linkStyles}
 `
 
 const DataList = styled.div`
