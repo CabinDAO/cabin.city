@@ -12,4 +12,5 @@ fragment Profile on Profile {
   citizenshipStatus
   bio
   cabinTokenBalanceInt
+  badgeCount
 }

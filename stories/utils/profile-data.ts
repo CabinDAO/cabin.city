@@ -24,4 +24,5 @@ export const DEFAULT_PROFILE_PROPS = {
   },
   bio: 'I’m a construction enthusiast with a heart for nature.',
   cabinTokenBalanceInt: 20,
+  badgeCount: 0,
 }

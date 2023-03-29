@@ -5,7 +5,6 @@ export const ProfileInnerContainer = styled.div`
   flex-direction: column;
   gap: 2.4rem;
   width: 100%;
-  padding: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {
     gap: 4.8rem;

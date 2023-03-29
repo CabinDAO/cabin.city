@@ -1427,7 +1427,7 @@ export type GetProfileByAddressQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null } | null };
+export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null } | null };
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
@@ -1436,7 +1436,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'Query', getProfiles: { __typename?: 'QueryGetProfilesPage', after?: string | null, data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
+export type GetProfilesQuery = { __typename?: 'Query', getProfiles: { __typename?: 'QueryGetProfilesPage', after?: string | null, data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
 
 export type GetProfilesCountQueryVariables = Exact<{
   input: GetProfilesInput;
@@ -1445,7 +1445,7 @@ export type GetProfilesCountQueryVariables = Exact<{
 
 export type GetProfilesCountQuery = { __typename?: 'Query', profilesCount: number };
 
-export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
+export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
@@ -1612,6 +1612,7 @@ export const ProfileFragmentDoc = gql`
   citizenshipStatus
   bio
   cabinTokenBalanceInt
+  badgeCount
 }
     `;
 export const GetProfileByIdFragmentDoc = gql`
