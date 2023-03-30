@@ -137,7 +137,13 @@ const Icon = ({ name, size, color, style, className }: IconProps) => {
   }
 
   return (
-    <IconWrap className={className} style={style} $color={color} $size={size}>
+    <IconWrap
+      key={size}
+      className={className}
+      style={style}
+      $color={color}
+      $size={size}
+    >
       <IconComponent />
     </IconWrap>
   )

@@ -94,15 +94,16 @@ const DescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   max-width: 95%;
+  text-align: center;
 `
 
 const VouchModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
   padding: 4rem;
   gap: 2.4rem;

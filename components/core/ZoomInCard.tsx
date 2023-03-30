@@ -31,4 +31,5 @@ export const ZoomInCard = ({
 const AnimatedContainer = styled(motion.div)`
   display: flex;
   justify-content: center;
+  width: 100%;
 `

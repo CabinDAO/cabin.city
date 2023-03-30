@@ -17,7 +17,7 @@ export const MenuItemLink = ({ menuItem }: MenuItemLinkProps) => {
     >
       <IconLink
         icon={menuItemConfig.icon}
-        size={3.2}
+        size={menuItemConfig.iconSize ?? 2.5}
         color={'green400'}
         href={menuItemConfig.path}
       />

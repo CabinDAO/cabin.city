@@ -1,6 +1,7 @@
 import { ActivityItemFragment } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
+import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '../Avatar'
@@ -33,7 +34,7 @@ export const Post = (props: PostProps) => {
       onMouseLeave={() => setHovered(false)}
     >
       {!excludeProfile && (
-        <ProfileContainer>
+        <ProfileContainer href={`/profile/${profile._id}`} passHref>
           <Avatar src={profile.avatar?.url} size={3.2} />
           <ProfileName>{profile.name}</ProfileName>
           <ProfileIcons
@@ -78,7 +79,7 @@ const Container = styled.div`
   }
 `
 
-const ProfileContainer = styled.div`
+const ProfileContainer = styled(Link)`
   display: flex;
   align-items: center;
 `

@@ -4,23 +4,28 @@ import { ZoomInCard } from './ZoomInCard'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
 import { Overline } from './Typography'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export interface CitizenCardProps {
   hovered?: boolean
 }
 
 export const CitizenCard = ({ hovered }: CitizenCardProps) => {
+  const { deviceSize } = useDeviceSize()
+
+  const imageHeight = deviceSize === 'mobile' ? 239 : 329
+
   return (
     <CardBackdrop backgroundImagePath="/images/citizen-bg.png">
       <ZoomInCard hovered={hovered}>
-        <ContentCard shape="notch" notchSize={1.6} maxWidth="27.1">
+        <StyledContentCard shape="notch" notchSize={1.6} maxWidth="27.1">
           <ContentContainer>
             <InnerContainer>
               <Image
                 src="/images/citizen.png"
                 alt="Verified Citizen"
-                width={239}
-                height={329}
+                width={imageHeight * 0.72}
+                height={imageHeight}
               />
               <VerifiedSection>
                 <VerifiedText>Verified Cabin Citizen</VerifiedText>
@@ -30,7 +35,7 @@ export const CitizenCard = ({ hovered }: CitizenCardProps) => {
               </VerifiedSection>
             </InnerContainer>
           </ContentContainer>
-        </ContentCard>
+        </StyledContentCard>
       </ZoomInCard>
     </CardBackdrop>
   )
@@ -39,7 +44,14 @@ export const CitizenCard = ({ hovered }: CitizenCardProps) => {
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+`
+
+const StyledContentCard = styled(ContentCard)`
+  width: min-content;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
+  }
 `
 
 const InnerContainer = styled.div`

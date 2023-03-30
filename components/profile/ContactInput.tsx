@@ -50,6 +50,7 @@ export const ContactInput = ({
         },
       ])
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleOnSelect = (value: SelectOption, position: number) => {
