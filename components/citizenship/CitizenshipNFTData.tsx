@@ -14,7 +14,8 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
   const { user } = useUser()
 
   const handleMint = () => {
-    window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+    // TODO: Uncomment when citizenship minting is enabled
+    // window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
   }
 
   if (!user || !nft) return null

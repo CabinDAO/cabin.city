@@ -25,6 +25,7 @@ import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import infoSvg from './svg/info.svg'
 import locationSvg from './svg/location.svg'
+import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
@@ -70,6 +71,7 @@ export const IconSvgs = {
   'heart-solid': heartSolidSvg,
   info: infoSvg,
   location: locationSvg,
+  lock: lockSvg,
   'logo-cabin': logoCabinSvg,
   members: membersSvg,
   menu: menuSvg,

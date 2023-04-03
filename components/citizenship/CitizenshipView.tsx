@@ -14,7 +14,8 @@ export const CitizenshipView = () => {
     useUpdateProfileCitizenshipStatusMutation()
 
   const handleMint = () => {
-    window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+    // TODO: Uncomment when citizenship minting is enabled
+    // window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
   }
 
   const toggleSignal = () => {
@@ -40,7 +41,7 @@ export const CitizenshipView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout>
+    <SingleColumnLayout displayLaunchBanner>
       <TitleCard title="Citizenship" icon="back-arrow" iconHref="/" />
 
       {user && user?.citizenshipStatus !== CitizenshipStatus.Verified && (

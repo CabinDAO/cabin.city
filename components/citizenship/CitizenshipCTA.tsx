@@ -47,12 +47,16 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
     }
   } else if (status === CitizenshipStatus.Vouched) {
     config = {
-      title: 'Citizenship eligible',
+      title: 'Citizenship eligible pending launch',
       description:
         'When you create a citizenship NFT, it becomes unalterable proof that serves as evidence of your citizenship. We’ll guide you through the steps.',
       button: () => (
-        <Button variant="primary" onClick={onClick}>
-          Mint now
+        <Button
+          variant="primary"
+          onClick={onClick}
+          endAdornment={<Icon name="lock" size={1.1} />}
+        >
+          Mint
         </Button>
       ),
     }
