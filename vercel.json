@@ -2,7 +2,15 @@
   "crons": [
     {
       "path": "/api/sync/cabin-token",
-      "schedule": "* * * * *"
+      "schedule": "1/10 * * * *"
+    },
+    {
+      "path": "/api/sync/hats",
+      "schedule": "2/10 * * * *"
+    },
+    {
+      "path": "/api/sync/otterspace-badges",
+      "schedule": "3/10 * * * *"
     }
   ]
 }
