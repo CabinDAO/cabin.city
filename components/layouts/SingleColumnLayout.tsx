@@ -39,7 +39,7 @@ const OuterContainer = styled.div`
   flex-direction: column;
   min-height: 100vh;
   min-width: 100vw;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 `
 
