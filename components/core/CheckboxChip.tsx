@@ -85,7 +85,7 @@ const IconContainer = styled.div`
   align-self: center;
   gap: 1.6rem;
 
-  --icon-color: ${({ theme }) => theme.colors.green900};
+  --icon-color: ${({ theme }) => theme.colors.yellow600};
 
   ${({ theme }) => theme.bp.md} {
     align-self: flex-end;
