@@ -982,6 +982,7 @@ export type GetProfilesInput = {
   roleTypes: Array<ProfileRoleType>;
   levelTypes: Array<ProfileRoleLevelType>;
   citizenshipStatuses: Array<CitizenshipStatus>;
+  searchQuery?: InputMaybe<Scalars['String']>;
 };
 
 export type Hat = {

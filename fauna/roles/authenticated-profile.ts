@@ -240,6 +240,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('profiles_by_name_ngram'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),

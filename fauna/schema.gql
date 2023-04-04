@@ -164,6 +164,7 @@ input GetProfilesInput @embedded {
   roleTypes: [ProfileRoleType!]!
   levelTypes: [ProfileRoleLevelType!]!
   citizenshipStatuses: [CitizenshipStatus!]!
+  searchQuery: String
 }
 
 enum ProfileSortType {

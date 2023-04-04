@@ -50,13 +50,17 @@ export const DirectoryView = () => {
   const { user } = useUser({ redirectTo: '/login' })
 
   const input = useMemo(() => {
+    // Only search if there are at least 3 characters
+    const searchQuery = searchInput.length >= 3 ? searchInput : ''
+
     return {
       roleTypes,
       levelTypes,
       citizenshipStatuses,
       sort: profileSortType,
+      searchQuery,
     }
-  }, [roleTypes, levelTypes, citizenshipStatuses, profileSortType])
+  }, [roleTypes, levelTypes, citizenshipStatuses, profileSortType, searchInput])
 
   const { data, fetchMore } = useGetProfilesQuery({
     variables: {
@@ -168,7 +172,7 @@ export const DirectoryView = () => {
         <SearchContainer>
           <StyledInputText
             value={searchInput}
-            placeholder="Search by eth address"
+            placeholder="Search by name or eth address"
             onChange={handleSearchInputChange}
             endAdornment={<Icon name="search" size={1.4} />}
           />

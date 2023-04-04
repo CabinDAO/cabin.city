@@ -48,6 +48,13 @@ const ProfilesByCitizenshipStatus = (citizenshipStatuses: Expr) =>
     q.Documents(q.Collection('Profile'))
   )
 
+const ProfilesByName = (searchQuery: Expr) =>
+  q.If(
+    q.And(q.Not(q.IsNull(searchQuery)), q.GT(q.Length(searchQuery), 0)),
+    q.Match(q.Index('profiles_by_name_ngram'), q.LowerCase(searchQuery)),
+    q.Documents(q.Collection('Profile'))
+  )
+
 // Returns a set reference that can be used for both paginated queries (get_profiles) and count queries (profiles_count)
 export const GetProfilesMatch = (input: ExprVal) => {
   return q.Let(
@@ -55,11 +62,13 @@ export const GetProfilesMatch = (input: ExprVal) => {
       roleTypes: q.Select(['roleTypes'], input, []),
       levelTypes: q.Select(['levelTypes'], input, []),
       citizenshipStatuses: q.Select(['citizenshipStatuses'], input, []),
+      searchQuery: q.Select(['searchQuery'], input, null),
     },
     q.Intersection(
       ProfilesByRoleType(q.Var('roleTypes')),
       ProfilesByLevelType(q.Var('levelTypes')),
-      ProfilesByCitizenshipStatus(q.Var('citizenshipStatuses'))
+      ProfilesByCitizenshipStatus(q.Var('citizenshipStatuses')),
+      ProfilesByName(q.Var('searchQuery'))
     )
   )
 }
