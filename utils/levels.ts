@@ -10,12 +10,12 @@ const LevelInfoByType: Record<ProfileRoleLevelType, LevelInfo> = {
     name: 'Apprentice',
     number: 1,
   },
-  [ProfileRoleLevelType.Member]: {
-    name: 'Member',
+  [ProfileRoleLevelType.Artisan]: {
+    name: 'Artisan',
     number: 2,
   },
-  [ProfileRoleLevelType.TopHat]: {
-    name: 'Top Hat',
+  [ProfileRoleLevelType.Custodian]: {
+    name: 'Custodian',
     number: 3,
   },
 }

@@ -41,8 +41,8 @@ export const getProfileRoleFromHat = (hat: GetProfileRoleHat) => {
 
   const level =
     split.length === 2
-      ? ProfileRoleLevelType.TopHat
-      : ProfileRoleLevelType.Member
+      ? ProfileRoleLevelType.Custodian
+      : ProfileRoleLevelType.Artisan
 
   return { hatId: hat.id, role, level }
 }

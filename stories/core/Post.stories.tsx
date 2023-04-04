@@ -54,7 +54,7 @@ LeveledUpToBuilderMember.args = {
       metadata: {
         profileRole: {
           role: ProfileRoleType.Builder,
-          level: ProfileRoleLevelType.Member,
+          level: ProfileRoleLevelType.Artisan,
         },
       },
       profile: {
@@ -64,7 +64,7 @@ LeveledUpToBuilderMember.args = {
         roles: [
           {
             role: ProfileRoleType.Builder,
-            level: ProfileRoleLevelType.Member,
+            level: ProfileRoleLevelType.Artisan,
           },
           {
             role: ProfileRoleType.Naturalist,
@@ -72,15 +72,15 @@ LeveledUpToBuilderMember.args = {
           },
           {
             role: ProfileRoleType.Caretaker,
-            level: ProfileRoleLevelType.TopHat,
+            level: ProfileRoleLevelType.Custodian,
           },
           {
             role: ProfileRoleType.Gatherer,
-            level: ProfileRoleLevelType.Member,
+            level: ProfileRoleLevelType.Artisan,
           },
           {
             role: ProfileRoleType.Creator,
-            level: ProfileRoleLevelType.Member,
+            level: ProfileRoleLevelType.Artisan,
           },
         ],
         avatar: {

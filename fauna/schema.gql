@@ -119,8 +119,8 @@ enum ProfileRoleType {
 
 enum ProfileRoleLevelType {
   Apprentice
-  Member
-  TopHat
+  Artisan
+  Custodian
 }
 
 enum CitizenshipStatus {

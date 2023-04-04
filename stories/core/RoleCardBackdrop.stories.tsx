@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof RoleCardBackdrop> = (args) => (
   <RoleCardBackdrop {...args}>
     <RoleCard
       roleInfo={args.roleInfo}
-      levelInfo={levelInfoFromType(ProfileRoleLevelType.Member)}
+      levelInfo={levelInfoFromType(ProfileRoleLevelType.Artisan)}
     />
   </RoleCardBackdrop>
 )

@@ -1144,8 +1144,8 @@ export type ProfileRole = {
 
 export enum ProfileRoleLevelType {
   Apprentice = 'Apprentice',
-  Member = 'Member',
-  TopHat = 'TopHat'
+  Artisan = 'Artisan',
+  Custodian = 'Custodian'
 }
 
 export enum ProfileRoleType {

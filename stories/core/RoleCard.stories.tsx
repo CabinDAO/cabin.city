@@ -29,13 +29,13 @@ ExternalUrl.args = {
 export const BuilderMember = Template.bind({})
 BuilderMember.args = {
   roleInfo: roleInfoFromType(ProfileRoleType.Builder),
-  levelInfo: levelInfoFromType(ProfileRoleLevelType.Member),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Artisan),
 }
 
-export const BuilderTopHat = Template.bind({})
-BuilderTopHat.args = {
+export const BuilderCustodian = Template.bind({})
+BuilderCustodian.args = {
   roleInfo: roleInfoFromType(ProfileRoleType.Builder),
-  levelInfo: levelInfoFromType(ProfileRoleLevelType.TopHat),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Custodian),
 }
 
 export const NaturalistApprentice = Template.bind({})
@@ -47,11 +47,11 @@ NaturalistApprentice.args = {
 export const NaturalistMember = Template.bind({})
 NaturalistMember.args = {
   roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
-  levelInfo: levelInfoFromType(ProfileRoleLevelType.Member),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Artisan),
 }
 
-export const NaturalistTopHat = Template.bind({})
-NaturalistTopHat.args = {
+export const NaturalistCustodian = Template.bind({})
+NaturalistCustodian.args = {
   roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
-  levelInfo: levelInfoFromType(ProfileRoleLevelType.TopHat),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Custodian),
 }

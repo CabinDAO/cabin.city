@@ -31,7 +31,7 @@ const activities: AddressActivity[] = range.map((i) => {
         metadata: {
           profileRole: {
             role: roleType,
-            level: ProfileRoleLevelType.Member,
+            level: ProfileRoleLevelType.Artisan,
           },
         },
       },

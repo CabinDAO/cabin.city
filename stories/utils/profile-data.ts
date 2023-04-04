@@ -14,7 +14,7 @@ export const DEFAULT_PROFILE_PROPS = {
   roles: [
     {
       role: ProfileRoleType.Builder,
-      level: ProfileRoleLevelType.Member,
+      level: ProfileRoleLevelType.Artisan,
     },
   ],
   citizenshipStatus: CitizenshipStatus.Verified,
