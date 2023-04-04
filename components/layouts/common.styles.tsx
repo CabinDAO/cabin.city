@@ -11,7 +11,6 @@ export const MainContent = styled.main`
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    gap: 4.8rem;
     width: 84rem;
     align-self: flex-start;
   }

@@ -24,7 +24,8 @@ const Container = styled.div<ContainerProps>`
   color: ${(props) => props.theme.colors.yellow900};
   --icon-color: ${(props) => props.theme.colors.yellow900};
   :hover {
-    background: ${(props) => props.theme.colors.yellow100};
+    background: ${(props) =>
+      props.theme.colors.yellow100}BF; // 75% opacity suffix
     color: ${(props) => props.theme.colors.yellow900};
     --icon-color: ${(props) => props.theme.colors.yellow900};
   }

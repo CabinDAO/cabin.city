@@ -58,6 +58,7 @@ export const Filter = <T extends string | number>(props: FilterProps<T>) => {
       <Container>
         <Button
           variant="tertiary"
+          isActive={open || selections.length > 0}
           onClick={() => setOpen(!open)}
           endAdornment={
             <ChevronButton role="button" open={selections.length === 0 && open}>
@@ -105,11 +106,16 @@ const List = styled.div`
   margin-bottom: 1.6rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    gap: 2rem;
+  }
 `
 
 const FilterMenuSection = styled(MenuSection)`
   padding: 1.6rem 2.4rem;
+  min-width: 25.6rem;
 `
 
 interface ListOptionProps {

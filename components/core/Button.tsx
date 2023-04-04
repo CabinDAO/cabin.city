@@ -7,6 +7,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link'
 
 interface StyledButtonProps {
   variant: ButtonVariant
+  isActive?: boolean
 }
 
 const buildBoxShadow = ({
@@ -35,7 +36,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
   padding: 1.5rem 2.4rem;
   white-space: nowrap;
 
-  ${({ variant }) => {
+  ${({ variant, isActive }) => {
     switch (variant) {
       case 'primary':
         return css`
@@ -63,6 +64,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
         return css`
           color: ${({ theme }) => theme.colors.green900};
           box-shadow: none;
+          background-color: ${({ theme }) => theme.colors.yellow200};
           border: solid 0.1rem ${({ theme }) => theme.colors.yellow900};
           transition: all 0.2s ease-in-out;
 
@@ -71,6 +73,11 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
             border: solid 0.1rem ${({ theme }) => theme.colors.yellow900};
             margin-bottom: 0;
           }
+
+          ${isActive &&
+          css`
+            background-color: ${({ theme }) => theme.colors.yellow100};
+          `}
         `
       case 'link':
         return css`
@@ -95,10 +102,12 @@ interface ButtonProps {
   onClick?: () => void
   startAdornment?: React.ReactNode
   endAdornment?: React.ReactNode
+  isActive?: boolean
 }
 export const Button = ({
   children,
   variant = 'primary',
+  isActive = false,
   startAdornment,
   endAdornment,
   onClick,
@@ -133,13 +142,15 @@ export const Button = ({
       break
     case 'tertiary':
       hoverAnimation = {
-        backgroundColor: theme.colors.yellow200,
+        backgroundColor: theme.colors.yellow100,
       }
       tapAnimation = {
         backgroundColor: theme.colors.yellow100,
       }
       initial = {
-        backgroundColor: theme.colors.yellow100,
+        backgroundColor: isActive
+          ? theme.colors.yellow100
+          : theme.colors.yellow200,
       }
       break
     case 'link':
@@ -159,7 +170,7 @@ export const Button = ({
 
   return (
     <StyledButton
-      key={variant}
+      key={variant + isActive}
       initial={initial}
       whileTap={{
         ...tapAnimation,

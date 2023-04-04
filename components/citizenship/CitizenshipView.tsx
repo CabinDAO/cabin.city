@@ -42,7 +42,11 @@ export const CitizenshipView = () => {
 
   return (
     <SingleColumnLayout displayLaunchBanner>
-      <TitleCard title="Citizenship" icon="back-arrow" iconHref="/" />
+      <TitleCard
+        title="Citizenship"
+        icon="back-arrow"
+        iconHref={`/profile/${user._id}`}
+      />
 
       {user && user?.citizenshipStatus !== CitizenshipStatus.Verified && (
         <CitizenshipStatusBar

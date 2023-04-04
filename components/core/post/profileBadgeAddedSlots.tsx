@@ -1,6 +1,7 @@
 import { getImageUrl } from '@/lib/image'
 import Image from 'next/image'
 import { Body1 } from '../Typography'
+import { CompactPostImage } from './CompactPostImage'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
@@ -17,7 +18,7 @@ const ProfileBadgeAddedContent = (props: PostProps) => {
 }
 
 const ProfileBadgeAddedMedia = (props: PostProps) => {
-  const { activityItem } = props
+  const { activityItem, variant } = props
   const badge = activityItem.activity.metadata?.badge
 
   if (!badge) {
@@ -29,7 +30,13 @@ const ProfileBadgeAddedMedia = (props: PostProps) => {
 
   const imageUrl = getImageUrl(badge.spec.image)
 
-  return <Image alt={badge.spec.name} src={imageUrl} width={100} height={100} />
+  if (variant === 'compact') {
+    return <CompactPostImage alt={badge.spec.name} imageUrl={imageUrl} />
+  } else {
+    return (
+      <Image alt={badge.spec.name} src={imageUrl} width={100} height={100} />
+    )
+  }
 }
 
 export const profileBadgeAddedSlots: PostSlots = {

@@ -3,6 +3,7 @@ import { roleInfoFromType } from '@/utils/roles'
 import { RoleCard } from '../RoleCard'
 import { RoleCardBackdrop } from '../RoleCardBackdrop'
 import { Body1 } from '../Typography'
+import { CompactPostImage } from './CompactPostImage'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
@@ -40,11 +41,17 @@ const ProfileRoleAddedMedia = (props: PostProps) => {
     activityItem.activity.metadata.profileRole.level
   )
 
-  return (
-    <RoleCardBackdrop roleInfo={roleInfo}>
-      <RoleCard hovered={hovered} roleInfo={roleInfo} levelInfo={levelInfo} />
-    </RoleCardBackdrop>
-  )
+  if (props.variant === 'compact') {
+    return (
+      <CompactPostImage alt={roleInfo.name} imageUrl={roleInfo.imagePath} />
+    )
+  } else {
+    return (
+      <RoleCardBackdrop roleInfo={roleInfo}>
+        <RoleCard hovered={hovered} roleInfo={roleInfo} levelInfo={levelInfo} />
+      </RoleCardBackdrop>
+    )
+  }
 }
 
 export const profileRoleAddedSlots: PostSlots = {

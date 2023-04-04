@@ -30,7 +30,7 @@ export const ProfileActivitiesSection = ({
       <InnerContainer>
         {activityItems.map((activityItem) => (
           <Post
-            excludeProfile
+            variant="compact"
             key={activityItem.activity._id}
             activityItem={activityItem}
             baseDate={baseDate}

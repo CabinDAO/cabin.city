@@ -175,6 +175,7 @@ export const DirectoryView = () => {
           {deviceSize !== 'desktop' && (
             <Button
               variant="tertiary"
+              isActive={filterCount > 0 || open}
               onClick={() => setOpen(!open)}
               endAdornment={
                 <ChevronButton role="button" open={filterCount === 0 && open}>
@@ -256,6 +257,7 @@ const FilterContainer = styled.div`
   flex-direction: column;
   gap: 2.4rem;
   width: 100%;
+  padding-top: 0.8rem;
 
   ${({ theme }) => theme.bp.md} {
     gap: 0.8rem;
@@ -264,6 +266,7 @@ const FilterContainer = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
+    padding-top: 2.4rem;
   }
 `
 

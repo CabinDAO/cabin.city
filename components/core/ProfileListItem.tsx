@@ -37,7 +37,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
             {profile.cabinTokenBalanceInt ?? 0} ₡ABIN &nbsp;·&nbsp;{' '}
             {profile.badgeCount} stamps
           </Caption>
-          <StyledBody2>{truncate(profile.bio ?? '', 200)}</StyledBody2>
+          <StyledBody2>{truncate(profile.bio ?? '', 90)}</StyledBody2>
         </InfoContainer>
       </AvatarContainer>
       <CaptionContainer>

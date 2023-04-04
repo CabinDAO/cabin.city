@@ -36,6 +36,7 @@ export const RoleChip = ({
   return (
     <StyledContentCard selected={selected} hovered={isHovered}>
       <ContentContainer
+        onClick={onSelect}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
@@ -85,6 +86,7 @@ interface StyledContentCardProps {
 
 const StyledContentCard = styled(ContentCard)<StyledContentCardProps>`
   max-width: 100%;
+  cursor: pointer;
 
   transition: background-color 0.3s ease-in-out;
   background-color: ${({ theme, selected, hovered }) => {

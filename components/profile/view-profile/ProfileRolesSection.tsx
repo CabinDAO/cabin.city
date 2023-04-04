@@ -6,10 +6,13 @@ import { RoleCard } from '@/components/core/RoleCard'
 import { H3 } from '@/components/core/Typography'
 import { EmptyState } from '../../core/EmptyState'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { pxToRem } from '@/utils/display-utils'
 
 interface ProfileRolesProps {
   profile: GetProfileByIdFragment
 }
+
+const ROLE_CARD_GAP = 24
 
 export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
   const { deviceSize } = useDeviceSize()
@@ -57,16 +60,19 @@ const RolesList = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  justify-items: center;
+  justify-items: flex-start;
   gap: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {
-    grid-gap: 2.4rem;
+    grid-gap: ${pxToRem(ROLE_CARD_GAP)}rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     display: grid;
-    grid-template-columns: repeat(3, auto);
+    grid-template-columns: repeat(
+      3,
+      calc((100% - (${pxToRem(ROLE_CARD_GAP)}rem * 2)) / 3)
+    );
     justify-items: flex-start;
     align-items: flex-start;
   }

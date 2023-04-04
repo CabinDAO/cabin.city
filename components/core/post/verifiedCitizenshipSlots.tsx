@@ -1,5 +1,6 @@
 import { CitizenCard } from '../CitizenCard'
 import { Body1 } from '../Typography'
+import { CompactPostImage } from './CompactPostImage'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
@@ -10,7 +11,13 @@ const VerifiedCitizenshipContent = (props: PostProps) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const VerifiedCitizenshipMedia = (props: PostProps) => {
-  return <CitizenCard hovered={props.hovered} />
+  if (props.variant === 'compact') {
+    return (
+      <CompactPostImage alt="Cabin Citizen" imageUrl="/images/citizen.png" />
+    )
+  } else {
+    return <CitizenCard hovered={props.hovered} />
+  }
 }
 
 export const verifiedCitizenshipSlots: PostSlots = {

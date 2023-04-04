@@ -24,6 +24,15 @@ export const EditProfileView = () => {
   const handleSubmit = async () => {
     if (!editProfileInput) return
 
+    if (
+      editProfileInput.hasOwnProperty('contactFields') &&
+      editProfileInput.contactFields
+    ) {
+      editProfileInput.contactFields = editProfileInput.contactFields.filter(
+        (contactField) => contactField.value !== ''
+      )
+    }
+
     if (user && validateProfileInput(editProfileInput)) {
       await updateProfile({
         variables: {

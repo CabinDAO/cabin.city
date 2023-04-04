@@ -12,9 +12,13 @@ export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
   const { updateProfile } = useUpdateProfile(user?._id)
 
   const handleNext = async () => {
+    const cleanUpContactList = contactList.filter(
+      (contact) => contact.value !== ''
+    )
+
     await updateProfile({
       data: {
-        contactFields: contactList,
+        contactFields: cleanUpContactList,
       },
     })
 
