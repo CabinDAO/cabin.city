@@ -1,14 +1,14 @@
-import { configureChains, goerli, mainnet } from '@wagmi/core'
+import { configureChains, goerli } from '@wagmi/core'
 import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
-import { polygon, polygonMumbai } from '@wagmi/chains'
+import { optimism, polygon, polygonMumbai } from '@wagmi/chains'
 import { getDefaultClient } from 'connectkit'
 import { createClient } from 'wagmi'
 
 const chains =
   process.env.NEXT_PUBLIC_USE_TESTNETS === 'true'
     ? [goerli, polygonMumbai]
-    : [mainnet, polygon]
+    : [optimism, polygon]
 
 const { provider, webSocketProvider } = configureChains(
   [...chains],
