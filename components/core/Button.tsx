@@ -94,6 +94,13 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
         return ''
     }
   }};
+
+  ${({ disabled }) =>
+    disabled &&
+    `
+      pointer-events: none;
+      opacity: 0.6;
+    `}
 `
 
 interface ButtonProps {
@@ -103,6 +110,7 @@ interface ButtonProps {
   startAdornment?: React.ReactNode
   endAdornment?: React.ReactNode
   isActive?: boolean
+  disabled?: boolean
 }
 export const Button = ({
   children,

@@ -30,3 +30,9 @@ Link.args = {
   children: 'Button',
   variant: 'link',
 }
+
+export const Disabled = Template.bind({})
+Disabled.args = {
+  children: 'Disabled',
+  disabled: true,
+}

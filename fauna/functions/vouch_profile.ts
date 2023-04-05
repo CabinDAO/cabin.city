@@ -10,29 +10,21 @@ const vouchProfile: FunctionResource = {
         {
           voucherProfileRef: q.CurrentIdentity(),
           profileRef: q.Ref(q.Collection('Profile'), q.Var('id')),
-          citizenshipStatus: q.Select(
-            ['data', 'citizenshipStatus'],
-            q.Get(q.Var('profileRef'))
-          ),
         },
-        q.If(
-          q.Equals(q.Var('citizenshipStatus'), 'VouchRequested'),
-          q.Let(
-            {
-              link: q.Create(q.Collection('ProfileVouch'), {
-                data: {
-                  voucher: q.Var('voucherProfileRef'),
-                  vouchee: q.Var('profileRef'),
-                },
-              }),
-            },
-            q.Update(q.Var('profileRef'), {
+        q.Let(
+          {
+            link: q.Create(q.Collection('ProfileVouch'), {
               data: {
-                citizenshipStatus: 'Vouched',
+                voucher: q.Var('voucherProfileRef'),
+                vouchee: q.Var('profileRef'),
               },
-            })
-          ),
-          q.Get(q.Var('profileRef'))
+            }),
+          },
+          q.Update(q.Var('profileRef'), {
+            data: {
+              citizenshipStatus: 'Vouched',
+            },
+          })
         )
       )
     )

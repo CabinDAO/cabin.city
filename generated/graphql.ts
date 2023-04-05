@@ -1209,6 +1209,7 @@ export type Query = {
   /** Find a document from the collection of 'Hat' by its id. */
   findHatByID?: Maybe<Hat>;
   syncAttemptByKeyAndStatus?: Maybe<BlockSyncAttempt>;
+  myVouchesThisYear: Scalars['Int'];
   syncAttemptsByKey: BlockSyncAttemptPage;
   allProfiles: ProfilePage;
   me: Profile;
@@ -1472,6 +1473,11 @@ export type UpdateProfileMutationVariables = Exact<{
 
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } };
+
+export type MyVouchesThisYearQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyVouchesThisYearQuery = { __typename?: 'Query', myVouchesThisYear: number };
 
 export type UnvouchProfileMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2073,6 +2079,38 @@ export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export const MyVouchesThisYearDocument = gql`
+    query MyVouchesThisYear {
+  myVouchesThisYear
+}
+    `;
+
+/**
+ * __useMyVouchesThisYearQuery__
+ *
+ * To run a query within a React component, call `useMyVouchesThisYearQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyVouchesThisYearQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyVouchesThisYearQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyVouchesThisYearQuery(baseOptions?: Apollo.QueryHookOptions<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>(MyVouchesThisYearDocument, options);
+      }
+export function useMyVouchesThisYearLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>(MyVouchesThisYearDocument, options);
+        }
+export type MyVouchesThisYearQueryHookResult = ReturnType<typeof useMyVouchesThisYearQuery>;
+export type MyVouchesThisYearLazyQueryHookResult = ReturnType<typeof useMyVouchesThisYearLazyQuery>;
+export type MyVouchesThisYearQueryResult = Apollo.QueryResult<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>;
 export const UnvouchProfileDocument = gql`
     mutation UnvouchProfile($id: ID!) {
   unvouchProfile(id: $id) {

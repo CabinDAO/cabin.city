@@ -28,6 +28,7 @@ type Query {
     after: String
     before: String
   ): ActivitiesResult @resolver(name: "get_activities_by_profile")
+  myVouchesThisYear: Int! @resolver(name: "my_vouches_this_year")
 }
 
 type Mutation {

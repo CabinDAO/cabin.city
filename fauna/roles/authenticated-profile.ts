@@ -246,6 +246,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('profile_vouches_by_voucher'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -327,6 +333,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('unlike_activity'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('my_vouches_this_year'),
       actions: {
         call: true,
       },

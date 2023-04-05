@@ -45,8 +45,11 @@ export const ProfileHeaderButton = ({
       </StyledButton>
     )
   } else if (
-    profile?.citizenshipStatus === CitizenshipStatus.VouchRequested &&
-    user.citizenshipStatus === CitizenshipStatus.Verified
+    user.citizenshipStatus === CitizenshipStatus.Verified &&
+    (!profile?.citizenshipStatus ||
+      ![CitizenshipStatus.Vouched, CitizenshipStatus.Verified].includes(
+        profile.citizenshipStatus
+      ))
   ) {
     return (
       <StyledButton
