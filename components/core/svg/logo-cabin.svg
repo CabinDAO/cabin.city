@@ -1,0 +1,5 @@
+<svg width="100%" height="100%" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" clip-rule="evenodd"
+    d="M0 11.6L16 0L32 11.6V32H17.9563V27.198H24.8008L16.0008 7.20039L7.20078 27.198H14.0452V32H0V11.6ZM14.0452 32V32.0004H17.9563V32H14.0452Z"
+    fill="var(--icon-color, #1D2B2A)" />
+</svg>

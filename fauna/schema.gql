@@ -1,0 +1,278 @@
+type Query {
+  me: Profile! @resolver(name: "me")
+
+  accountByAddress(address: String!): Account
+    @resolver(name: "account_by_address")
+  syncAttemptByKeyAndStatus(
+    key: String!
+    status: BlockSyncAttemptStatus!
+  ): BlockSyncAttempt
+  syncAttemptsByKey(key: String!): [BlockSyncAttempt!]!
+  allAccounts: [Account!]!
+  allProfiles: [Profile!]!
+  allHats: [Hat!]!
+  allBadges: [OtterspaceBadge!]!
+  allActivities(size: Int, after: String, before: String): ActivitiesResult!
+    @resolver(name: "all_activities")
+
+  profilesCount(input: GetProfilesInput): Int! @resolver(name: "profiles_count")
+  tokenHoldersCount: Int! @resolver(name: "token_holders_count")
+  citizensCount(status: CitizenshipStatus!): Int!
+    @resolver(name: "profiles_by_citizenship_status_count")
+
+  getProfiles(input: GetProfilesInput!): [Profile!]!
+    @resolver(name: "get_profiles", paginated: true)
+  activitiesByProfile(
+    profileId: ID!
+    size: Int
+    after: String
+    before: String
+  ): ActivitiesResult @resolver(name: "get_activities_by_profile")
+  myVouchesThisYear: Int! @resolver(name: "my_vouches_this_year")
+}
+
+type Mutation {
+  clearSyncAttempts(key: String!): Boolean!
+    @resolver(name: "clear_sync_attempts")
+  createProfile(data: ProfileInput!): Profile! @resolver(name: "create_profile")
+  logTrackingEvent(key: String!): TrackingEvent!
+    @resolver(name: "log_tracking_event")
+  updateProfile(
+    id: ID!
+    data: UpdateProfileInput
+    roleTypes: [ProfileRoleType!]
+  ): Profile! @resolver(name: "update_profile")
+  vouchProfile(id: ID!): Profile! @resolver(name: "vouch_profile")
+  unvouchProfile(id: ID!): Profile! @resolver(name: "unvouch_profile")
+  likeActivity(id: ID!): ActivityReaction! @resolver(name: "like_activity")
+  unlikeActivity(id: ID!): ActivityReaction! @resolver(name: "unlike_activity")
+}
+
+type Profile {
+  createdAt: Time!
+  name: String!
+  email: String!
+  bio: String
+  location: String
+  avatar: ProfileAvatar
+  roles: [ProfileRole!]!
+  citizenshipStatus: CitizenshipStatus
+  contactFields: [ProfileContactField!]!
+  account: Account! @relation # Should not be null until if/when email-only sign in is implemented
+  trackingEvents: [TrackingEvent!]! @relation
+  # Rounded balance with 0 decimals to support display and sorting
+  cabinTokenBalanceInt: Int!
+  badgeCount: Int!
+  givenVouches: [ProfileVouch!] @relation(name: "givenVouches")
+  receivedVouches: [ProfileVouch!] @relation(name: "receivedVouches")
+  citizenshipMetadata: CitizenshipMetadata
+}
+
+type ProfileVouch {
+  voucher: Profile! @relation(name: "givenVouches")
+  vouchee: Profile! @relation(name: "receivedVouches")
+}
+
+type CitizenshipMetadata @embedded {
+  tokenId: String!
+  mintedAt: Time!
+}
+
+type ProfileAvatar @embedded {
+  url: String!
+
+  # NFT Metadata
+  contractAddress: String
+  title: String
+  tokenId: String
+  tokenUri: String
+}
+
+input ProfileInput {
+  address: String!
+  name: String!
+  email: String!
+  avatar: ProfileAvatarInput
+}
+
+input ProfileAvatarInput {
+  url: String!
+  contractAddress: String
+  title: String
+  tokenId: String
+  tokenUri: String
+}
+
+type ProfileRole @embedded {
+  hatId: String # Null if the role is not associated with a hat (e.g. Apprentice role)
+  role: ProfileRoleType!
+  level: ProfileRoleLevelType!
+}
+
+enum ProfileRoleType {
+  Caretaker
+  Builder
+  Gatherer
+  Naturalist
+  Creator
+  Resident
+}
+
+enum ProfileRoleLevelType {
+  Apprentice
+  Artisan
+  Custodian
+}
+
+enum CitizenshipStatus {
+  VouchRequested
+  Vouched
+  Verified
+}
+
+type ProfileContactField @embedded {
+  type: ProfileContactFieldType!
+  value: String!
+}
+
+enum ProfileContactFieldType {
+  Email
+  Discord
+  Twitter
+  Instagram
+  LinkedIn
+  Telegram
+  Lens
+  Website
+}
+
+input UpdateProfileInput {
+  name: String
+  email: String
+  bio: String
+  location: String
+  contactFields: [ProfileContactFieldInput!]
+  avatar: ProfileAvatarInput
+}
+
+input ProfileContactFieldInput {
+  type: ProfileContactFieldType!
+  value: String!
+}
+
+input GetProfilesInput @embedded {
+  sort: ProfileSortType
+  roleTypes: [ProfileRoleType!]!
+  levelTypes: [ProfileRoleLevelType!]!
+  citizenshipStatuses: [CitizenshipStatus!]!
+  searchQuery: String
+}
+
+enum ProfileSortType {
+  CreatedAtAsc
+  CreatedAtDesc
+  CabinBalanceAsc
+  CabinBalanceDesc
+  BadgeCountAsc
+  BadgeCountDesc
+}
+
+type TrackingEvent {
+  key: String!
+  count: Int!
+  profile: Profile! @relation
+}
+
+type Account {
+  address: String! @index(name: "account_by_address_casefold")
+  profile: Profile @relation # Null if the user has not created their profile yet
+  # Raw token balance with 18 decimals
+  cabinTokenBalance: String
+  hats: [Hat!]! @relation
+  badges: [OtterspaceBadge!]! @relation
+}
+
+type Hat {
+  hatId: String! @unique
+  details: String!
+  imageUri: String
+  level: Int!
+  wearers: [Account!]! @relation
+}
+
+type OtterspaceBadge {
+  badgeId: String! @unique
+  createdAt: Time!
+  account: Account! @relation
+  spec: OtterspaceBadgeSpec! @relation
+}
+
+type OtterspaceBadgeSpec {
+  specId: String! @unique
+  name: String!
+  description: String!
+  image: String!
+  badges: [OtterspaceBadge!]! @relation
+}
+
+type Activity {
+  key: String! @unique # The unique key supports idempotency
+  timestamp: Time!
+  type: ActivityType!
+  profileRoleAdded: ProfileRoleType
+  transactionId: String
+  profile: Profile! @relation
+  metadata: ActivityMetadata
+  reactions: [ActivityReaction!]! @relation
+  reactedByProfile(profileId: ID!): Boolean
+    @resolver(name: "activity_reacted_by_profile")
+}
+
+type ActivitiesResult @embedded {
+  data: [ActivityItem!]!
+  after: String
+  before: String
+}
+
+type ActivityItem @embedded {
+  activity: Activity!
+  reactionCount: Int!
+  hasReactionByMe: Boolean!
+}
+
+type ActivityMetadata @embedded {
+  # ProfileBadgeAdded
+  badge: OtterspaceBadge
+
+  # ProfileRoleAdded
+  profileRole: ProfileRole
+
+  # VerifiedCitizenship
+  citizenshipTokenId: String
+}
+
+type ActivityReaction {
+  profile: Profile! @relation
+  activity: Activity! @relation
+}
+
+enum ActivityType {
+  ProfileCreated
+  ProfileRoleAdded
+  ProfileBadgeAdded
+  VerifiedCitizenship
+}
+
+type BlockSyncAttempt {
+  key: String!
+  startBlock: String!
+  endBlock: String!
+  failedAttemptCount: Int
+  status: BlockSyncAttemptStatus!
+}
+
+enum BlockSyncAttemptStatus {
+  Pending
+  Successful
+  Failed
+}

@@ -1,0 +1,12 @@
+# !/bin/bash
+
+# Example usage:
+#   bin/run_script reset-db.ts
+#   bin/run_script sync-until-done.ts http://localhost:3000/api/sync/hats
+
+echo "Reading vars from .env.local"
+source .env.local
+
+FAUNA_SERVER_SECRET="$FAUNA_SERVER_SECRET" \
+FAUNA_DB_HOST="$FAUNA_DB_HOST" \
+npx ts-node --skip-project scripts/$1 ${@:2}

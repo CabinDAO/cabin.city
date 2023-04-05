@@ -1,0 +1,5 @@
+<svg width="100%" height="100%" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M16 1.8H1.8V0H0V18H1.8V10.8H16L14.2 6.3L16 1.8ZM10 6.3C10 7.29 9.19 8.1 8.2 8.1C7.21 8.1 6.4 7.29 6.4 6.3C6.4 5.31 7.21 4.5 8.2 4.5C9.19 4.5 10 5.31 10 6.3Z"
+    fill="var(--icon-color, #1D2B2A)" />
+</svg>

@@ -1,0 +1,9 @@
+mutation UpdateProfile(
+  $id: ID!
+  $data: UpdateProfileInput
+  $roleTypes: [ProfileRoleType!]
+) {
+  updateProfile(id: $id, data: $data, roleTypes: $roleTypes) {
+    ...Me
+  }
+}

@@ -1,0 +1,29 @@
+query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {
+  hatsEvents(
+    where: {
+      tree: $treeId
+      blockNumber_gte: $startBlock
+      blockNumber_lte: $endBlock
+    }
+  ) {
+    id
+    transactionID
+    blockNumber
+    timestamp
+    hat {
+      ...Hat
+    }
+
+    ... on HatMintedEvent {
+      wearer {
+        id
+      }
+    }
+
+    ... on HatBurnedEvent {
+      wearer {
+        id
+      }
+    }
+  }
+}

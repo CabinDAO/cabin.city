@@ -1,0 +1,25 @@
+on:
+  push:
+    branches: [develop, main]
+
+name: fauna
+
+jobs:
+  test:
+    name: fauna
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm ci
+
+      - name: Run Fauna GraphQL Upload
+        env:
+          FGU_SECRET: ${{ github.ref_name == 'main' && secrets.FGU_SECRET_PROD || secrets.FGU_SECRET_DEV }}
+        run: npm run fauna

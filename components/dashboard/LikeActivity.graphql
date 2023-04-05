@@ -1,0 +1,5 @@
+mutation LikeActivity($id: ID!) {
+  likeActivity(id: $id) {
+    _id
+  }
+}

@@ -1,0 +1,5 @@
+query GetHatsByIds($ids: [ID!]) {
+  hats(where: { id_in: $ids }) {
+    ...Hat
+  }
+}

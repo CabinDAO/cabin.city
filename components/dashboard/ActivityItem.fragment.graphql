@@ -1,0 +1,7 @@
+fragment ActivityItem on ActivityItem {
+  activity {
+    ...Activity
+  }
+  reactionCount
+  hasReactionByMe
+}

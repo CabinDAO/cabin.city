@@ -1,0 +1,29 @@
+on: [push]
+
+name: lint
+
+jobs:
+  test:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm ci
+
+      - name: Run linter
+        run: npm run lint
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run contract linter
+        run: npm run lint:contracts

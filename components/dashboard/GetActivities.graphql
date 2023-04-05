@@ -1,0 +1,8 @@
+query GetActivities($size: Int, $after: String) {
+  allActivities(size: $size, after: $after) {
+    data {
+      ...ActivityItem
+    }
+    after
+  }
+}

@@ -1,0 +1,4 @@
+openzeppelin-contracts/=contracts/lib/openzeppelin-contracts/contracts/
+ds-test/=contracts/lib/forge-std/lib/ds-test/src/
+forge-std/=contracts/lib/forge-std/src/
+unlock/=contracts/lib/unlock/smart-contracts/
