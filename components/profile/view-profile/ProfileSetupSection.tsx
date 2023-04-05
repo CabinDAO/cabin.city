@@ -30,14 +30,7 @@ export const ProfileSetupSection = ({
     TrackingEvent.profile_setup_dismissed
   )
 
-  const hasShared = hasEventOccurred(me, TrackingEvent.profile_shared)
-
-  const hasDismissedShare = hasEventOccurred(
-    me,
-    TrackingEvent.profile_share_dismissed
-  )
-
-  if ((hasDismissed && hasDismissedShare) || hasShared) return null
+  if (hasDismissed) return null
 
   const handleSetupClick = () => {
     router.push(`/profile/${profileId}/setup`)
@@ -51,21 +44,7 @@ export const ProfileSetupSection = ({
     })
   }
 
-  const handleMaybeLaterClick = () => {
-    logTrackingEvent({
-      variables: {
-        key: TrackingEvent.profile_share_dismissed,
-      },
-    })
-  }
-
   const handleTwitterShareClick = () => {
-    logTrackingEvent({
-      variables: {
-        key: TrackingEvent.profile_shared,
-      },
-    })
-
     const text = encodeURIComponent(
       `I'm live on @creatorcabins Community Census`
     )
@@ -78,52 +57,37 @@ export const ProfileSetupSection = ({
       <InnerContainer>
         <ProfileCompletionData>
           <ProfileProgressData>
-            {hasDismissed ? (
-              <>
-                <H2 $color="yellow100">
-                  Spread the word that you’re a member!
-                </H2>
-                <Body2 $color="yellow100">
-                  Sharing about Cabin helps us connect with more online creators
-                  and grow our community
-                </Body2>
-              </>
-            ) : (
-              <>
-                <H2 $color="yellow100">Profile progress</H2>
-                <H2 $color="yellow100">{progress}% Complete</H2>
-              </>
-            )}
+            <H2 $color="yellow100">Profile progress</H2>
+            <H2 $color="yellow100">{progress}% Complete</H2>
           </ProfileProgressData>
           {complete ? (
-            <LinkContainer
-              color="yellow100"
-              onClick={
-                hasDismissed ? handleMaybeLaterClick : handleDismissClick
-              }
-            >
-              <Overline>{hasDismissed ? 'Maybe Later' : 'Dismiss'}</Overline>
+            <LinkContainer color="yellow100" onClick={handleDismissClick}>
+              <Overline>Dismiss</Overline>
               <Icon name="close" size={1.4} color="yellow100" />
             </LinkContainer>
           ) : (
-            <LinkContainer color="yellow100" onClick={handleSetupClick}>
-              <Overline>Setup profile</Overline>
-              <Icon name="chevron-right" color="yellow100" size={1.4} />
-            </LinkContainer>
+            <Button onClick={handleSetupClick}>Finish setup</Button>
           )}
         </ProfileCompletionData>
-        {hasDismissed ? (
-          <TwitterShare
-            startAdornment={
-              <Icon name="twitter" color="yellow100" size={1.6} />
-            }
-            onClick={handleTwitterShareClick}
-          >
-            Tweet
-          </TwitterShare>
-        ) : (
-          <ProgressBar progress={progress} />
-        )}
+        <ProgressBar progress={progress} />
+        {complete ? (
+          <TwitterShareSection>
+            <TwitterTextContainer>
+              <Body2 $color="yellow100">
+                Help Cabin connect with more online creators and grow our
+                community by sharing your experience.
+              </Body2>
+            </TwitterTextContainer>
+            <TwitterShareButton
+              startAdornment={
+                <Icon name="twitter" color="yellow100" size={1.6} />
+              }
+              onClick={handleTwitterShareClick}
+            >
+              Tweet
+            </TwitterShareButton>
+          </TwitterShareSection>
+        ) : null}
       </InnerContainer>
     </ContentCard>
   )
@@ -174,8 +138,38 @@ const LinkContainer = styled.div<LinkContainerProps>`
   }
 `
 
-const TwitterShare = styled(Button)`
+const TwitterTextContainer = styled.div`
+  max-width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    max-width: 60%;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    max-width: 40%;
+  }
+`
+
+const TwitterShareSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
+`
+
+const TwitterShareButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.twitter};
   align-self: flex-start;
   color: white;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+  }
 `
