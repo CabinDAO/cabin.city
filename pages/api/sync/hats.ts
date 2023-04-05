@@ -55,7 +55,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
             hatId: e.hat.id,
             details: e.hat.details,
             imageUri: e.hat.imageUri,
-            level: e.hat.level,
+            level: e.hat.levelAtLocalTree,
           },
           profileRole,
         })

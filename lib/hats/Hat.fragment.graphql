@@ -3,7 +3,7 @@ fragment Hat on Hat {
   prettyId
   details
   imageUri
-  level
+  levelAtLocalTree
   tree {
     id
   }

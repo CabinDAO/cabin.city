@@ -30,6 +30,7 @@ export type Block_height = {
 export type Hat = {
   __typename?: 'Hat';
   admin: Hat;
+  badStandings: Array<Wearer>;
   createdAt: Scalars['BigInt'];
   currentSupply: Scalars['BigInt'];
   details: Scalars['String'];
@@ -37,7 +38,8 @@ export type Hat = {
   events: Array<HatsEvent>;
   id: Scalars['ID'];
   imageUri: Scalars['String'];
-  level: Scalars['Int'];
+  levelAtLocalTree: Scalars['Int'];
+  linkedTrees: Array<Tree>;
   maxSupply: Scalars['BigInt'];
   mutable: Scalars['Boolean'];
   prettyId: Scalars['String'];
@@ -49,12 +51,30 @@ export type Hat = {
 };
 
 
+export type HatbadStandingsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Wearer_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Wearer_filter>;
+};
+
+
 export type HateventsArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<HatsEvent_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<HatsEvent_filter>;
+};
+
+
+export type HatlinkedTreesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Tree_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Tree_filter>;
 };
 
 
@@ -79,7 +99,6 @@ export type HatBurnedEvent = HatsEvent & {
   __typename?: 'HatBurnedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   id: Scalars['ID'];
   operator: Scalars['String'];
   timestamp: Scalars['BigInt'];
@@ -101,26 +120,6 @@ export type HatBurnedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hat_?: InputMaybe<Hat_filter>;
   hat_contains?: InputMaybe<Scalars['String']>;
   hat_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -235,14 +234,13 @@ export type HatBurnedEvent_filter = {
 export enum HatBurnedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
   hat__details = 'hat__details',
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -264,7 +262,6 @@ export type HatCreatedEvent = HatsEvent & {
   hat: Hat;
   hatDetails: Scalars['String'];
   hatEligibility: Scalars['String'];
-  hatId: Scalars['String'];
   hatImageUri: Scalars['String'];
   hatMaxSupply: Scalars['BigInt'];
   hatMutable: Scalars['Boolean'];
@@ -328,26 +325,6 @@ export type HatCreatedEvent_filter = {
   hatEligibility_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatEligibility_starts_with?: InputMaybe<Scalars['String']>;
   hatEligibility_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatImageUri?: InputMaybe<Scalars['String']>;
   hatImageUri_contains?: InputMaybe<Scalars['String']>;
   hatImageUri_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -475,7 +452,6 @@ export enum HatCreatedEvent_orderBy {
   hat = 'hat',
   hatDetails = 'hatDetails',
   hatEligibility = 'hatEligibility',
-  hatId = 'hatId',
   hatImageUri = 'hatImageUri',
   hatMaxSupply = 'hatMaxSupply',
   hatMutable = 'hatMutable',
@@ -486,7 +462,7 @@ export enum HatCreatedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -503,7 +479,6 @@ export type HatDetailsChangedEvent = HatsEvent & {
   __typename?: 'HatDetailsChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewDetails: Scalars['String'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -524,26 +499,6 @@ export type HatDetailsChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewDetails?: InputMaybe<Scalars['String']>;
   hatNewDetails_contains?: InputMaybe<Scalars['String']>;
   hatNewDetails_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -637,7 +592,6 @@ export type HatDetailsChangedEvent_filter = {
 export enum HatDetailsChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewDetails = 'hatNewDetails',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -645,7 +599,7 @@ export enum HatDetailsChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -662,7 +616,6 @@ export type HatEligibilityChangedEvent = HatsEvent & {
   __typename?: 'HatEligibilityChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewEligibility: Scalars['String'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -683,26 +636,6 @@ export type HatEligibilityChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewEligibility?: InputMaybe<Scalars['String']>;
   hatNewEligibility_contains?: InputMaybe<Scalars['String']>;
   hatNewEligibility_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -796,7 +729,6 @@ export type HatEligibilityChangedEvent_filter = {
 export enum HatEligibilityChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewEligibility = 'hatNewEligibility',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -804,7 +736,7 @@ export enum HatEligibilityChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -821,7 +753,6 @@ export type HatImageURIChangedEvent = HatsEvent & {
   __typename?: 'HatImageURIChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewImageURI: Scalars['String'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -842,26 +773,6 @@ export type HatImageURIChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewImageURI?: InputMaybe<Scalars['String']>;
   hatNewImageURI_contains?: InputMaybe<Scalars['String']>;
   hatNewImageURI_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -955,7 +866,6 @@ export type HatImageURIChangedEvent_filter = {
 export enum HatImageURIChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewImageURI = 'hatNewImageURI',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -963,7 +873,7 @@ export enum HatImageURIChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -980,7 +890,6 @@ export type HatMaxSupplyChangedEvent = HatsEvent & {
   __typename?: 'HatMaxSupplyChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewMaxSupply: Scalars['BigInt'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -1001,26 +910,6 @@ export type HatMaxSupplyChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewMaxSupply?: InputMaybe<Scalars['BigInt']>;
   hatNewMaxSupply_gt?: InputMaybe<Scalars['BigInt']>;
   hatNewMaxSupply_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1102,7 +991,6 @@ export type HatMaxSupplyChangedEvent_filter = {
 export enum HatMaxSupplyChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewMaxSupply = 'hatNewMaxSupply',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -1110,7 +998,7 @@ export enum HatMaxSupplyChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -1127,7 +1015,6 @@ export type HatMintedEvent = HatsEvent & {
   __typename?: 'HatMintedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   id: Scalars['ID'];
   operator: Scalars['String'];
   timestamp: Scalars['BigInt'];
@@ -1149,26 +1036,6 @@ export type HatMintedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hat_?: InputMaybe<Hat_filter>;
   hat_contains?: InputMaybe<Scalars['String']>;
   hat_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -1283,14 +1150,13 @@ export type HatMintedEvent_filter = {
 export enum HatMintedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
   hat__details = 'hat__details',
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -1310,7 +1176,6 @@ export type HatMutabilityChangedEvent = HatsEvent & {
   __typename?: 'HatMutabilityChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
   transactionID: Scalars['Bytes'];
@@ -1330,26 +1195,6 @@ export type HatMutabilityChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hat_?: InputMaybe<Hat_filter>;
   hat_contains?: InputMaybe<Scalars['String']>;
   hat_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -1423,14 +1268,13 @@ export type HatMutabilityChangedEvent_filter = {
 export enum HatMutabilityChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
   hat__details = 'hat__details',
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -1447,7 +1291,6 @@ export type HatStatusChangedEvent = HatsEvent & {
   __typename?: 'HatStatusChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewStatus: Scalars['Boolean'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -1468,26 +1311,6 @@ export type HatStatusChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewStatus?: InputMaybe<Scalars['Boolean']>;
   hatNewStatus_in?: InputMaybe<Array<Scalars['Boolean']>>;
   hatNewStatus_not?: InputMaybe<Scalars['Boolean']>;
@@ -1565,7 +1388,6 @@ export type HatStatusChangedEvent_filter = {
 export enum HatStatusChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewStatus = 'hatNewStatus',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -1573,7 +1395,7 @@ export enum HatStatusChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -1590,7 +1412,6 @@ export type HatToggleChangedEvent = HatsEvent & {
   __typename?: 'HatToggleChangedEvent';
   blockNumber: Scalars['Int'];
   hat: Hat;
-  hatId: Scalars['String'];
   hatNewToggle: Scalars['String'];
   id: Scalars['ID'];
   timestamp: Scalars['BigInt'];
@@ -1611,26 +1432,6 @@ export type HatToggleChangedEvent_filter = {
   blockNumber_not?: InputMaybe<Scalars['Int']>;
   blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
   hat?: InputMaybe<Scalars['String']>;
-  hatId?: InputMaybe<Scalars['String']>;
-  hatId_contains?: InputMaybe<Scalars['String']>;
-  hatId_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_gt?: InputMaybe<Scalars['String']>;
-  hatId_gte?: InputMaybe<Scalars['String']>;
-  hatId_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_lt?: InputMaybe<Scalars['String']>;
-  hatId_lte?: InputMaybe<Scalars['String']>;
-  hatId_not?: InputMaybe<Scalars['String']>;
-  hatId_not_contains?: InputMaybe<Scalars['String']>;
-  hatId_not_contains_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with?: InputMaybe<Scalars['String']>;
-  hatId_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_not_in?: InputMaybe<Array<Scalars['String']>>;
-  hatId_not_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  hatId_starts_with?: InputMaybe<Scalars['String']>;
-  hatId_starts_with_nocase?: InputMaybe<Scalars['String']>;
   hatNewToggle?: InputMaybe<Scalars['String']>;
   hatNewToggle_contains?: InputMaybe<Scalars['String']>;
   hatNewToggle_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -1724,7 +1525,6 @@ export type HatToggleChangedEvent_filter = {
 export enum HatToggleChangedEvent_orderBy {
   blockNumber = 'blockNumber',
   hat = 'hat',
-  hatId = 'hatId',
   hatNewToggle = 'hatNewToggle',
   hat__createdAt = 'hat__createdAt',
   hat__currentSupply = 'hat__currentSupply',
@@ -1732,7 +1532,7 @@ export enum HatToggleChangedEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -1770,6 +1570,13 @@ export type Hat_filter = {
   admin_starts_with?: InputMaybe<Scalars['String']>;
   admin_starts_with_nocase?: InputMaybe<Scalars['String']>;
   and?: InputMaybe<Array<InputMaybe<Hat_filter>>>;
+  badStandings?: InputMaybe<Array<Scalars['String']>>;
+  badStandings_?: InputMaybe<Wearer_filter>;
+  badStandings_contains?: InputMaybe<Array<Scalars['String']>>;
+  badStandings_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  badStandings_not?: InputMaybe<Array<Scalars['String']>>;
+  badStandings_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  badStandings_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   createdAt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1855,14 +1662,15 @@ export type Hat_filter = {
   imageUri_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   imageUri_starts_with?: InputMaybe<Scalars['String']>;
   imageUri_starts_with_nocase?: InputMaybe<Scalars['String']>;
-  level?: InputMaybe<Scalars['Int']>;
-  level_gt?: InputMaybe<Scalars['Int']>;
-  level_gte?: InputMaybe<Scalars['Int']>;
-  level_in?: InputMaybe<Array<Scalars['Int']>>;
-  level_lt?: InputMaybe<Scalars['Int']>;
-  level_lte?: InputMaybe<Scalars['Int']>;
-  level_not?: InputMaybe<Scalars['Int']>;
-  level_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  levelAtLocalTree?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_gt?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_gte?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_in?: InputMaybe<Array<Scalars['Int']>>;
+  levelAtLocalTree_lt?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_lte?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_not?: InputMaybe<Scalars['Int']>;
+  levelAtLocalTree_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  linkedTrees_?: InputMaybe<Tree_filter>;
   maxSupply?: InputMaybe<Scalars['BigInt']>;
   maxSupply_gt?: InputMaybe<Scalars['BigInt']>;
   maxSupply_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1959,12 +1767,13 @@ export enum Hat_orderBy {
   admin__eligibility = 'admin__eligibility',
   admin__id = 'admin__id',
   admin__imageUri = 'admin__imageUri',
-  admin__level = 'admin__level',
+  admin__levelAtLocalTree = 'admin__levelAtLocalTree',
   admin__maxSupply = 'admin__maxSupply',
   admin__mutable = 'admin__mutable',
   admin__prettyId = 'admin__prettyId',
   admin__status = 'admin__status',
   admin__toggle = 'admin__toggle',
+  badStandings = 'badStandings',
   createdAt = 'createdAt',
   currentSupply = 'currentSupply',
   details = 'details',
@@ -1972,7 +1781,8 @@ export enum Hat_orderBy {
   events = 'events',
   id = 'id',
   imageUri = 'imageUri',
-  level = 'level',
+  levelAtLocalTree = 'levelAtLocalTree',
+  linkedTrees = 'linkedTrees',
   maxSupply = 'maxSupply',
   mutable = 'mutable',
   prettyId = 'prettyId',
@@ -2085,7 +1895,7 @@ export enum HatsEvent_orderBy {
   hat__eligibility = 'hat__eligibility',
   hat__id = 'hat__id',
   hat__imageUri = 'hat__imageUri',
-  hat__level = 'hat__level',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
   hat__maxSupply = 'hat__maxSupply',
   hat__mutable = 'hat__mutable',
   hat__prettyId = 'hat__prettyId',
@@ -2132,9 +1942,15 @@ export type Query = {
   hats: Array<Hat>;
   hatsEvent?: Maybe<HatsEvent>;
   hatsEvents: Array<HatsEvent>;
+  topHatLinkRequestedEvent?: Maybe<TopHatLinkRequestedEvent>;
+  topHatLinkRequestedEvents: Array<TopHatLinkRequestedEvent>;
+  topHatLinkedEvent?: Maybe<TopHatLinkedEvent>;
+  topHatLinkedEvents: Array<TopHatLinkedEvent>;
   tree?: Maybe<Tree>;
   trees: Array<Tree>;
   wearer?: Maybe<Wearer>;
+  wearerStandingChangedEvent?: Maybe<WearerStandingChangedEvent>;
+  wearerStandingChangedEvents: Array<WearerStandingChangedEvent>;
   wearers: Array<Wearer>;
 };
 
@@ -2360,6 +2176,42 @@ export type QueryhatsEventsArgs = {
 };
 
 
+export type QuerytopHatLinkRequestedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytopHatLinkRequestedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TopHatLinkRequestedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<TopHatLinkRequestedEvent_filter>;
+};
+
+
+export type QuerytopHatLinkedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytopHatLinkedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TopHatLinkedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<TopHatLinkedEvent_filter>;
+};
+
+
 export type QuerytreeArgs = {
   block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
@@ -2382,6 +2234,24 @@ export type QuerywearerArgs = {
   block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
   subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerywearerStandingChangedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerywearerStandingChangedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WearerStandingChangedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WearerStandingChangedEvent_filter>;
 };
 
 
@@ -2423,9 +2293,15 @@ export type Subscription = {
   hats: Array<Hat>;
   hatsEvent?: Maybe<HatsEvent>;
   hatsEvents: Array<HatsEvent>;
+  topHatLinkRequestedEvent?: Maybe<TopHatLinkRequestedEvent>;
+  topHatLinkRequestedEvents: Array<TopHatLinkRequestedEvent>;
+  topHatLinkedEvent?: Maybe<TopHatLinkedEvent>;
+  topHatLinkedEvents: Array<TopHatLinkedEvent>;
   tree?: Maybe<Tree>;
   trees: Array<Tree>;
   wearer?: Maybe<Wearer>;
+  wearerStandingChangedEvent?: Maybe<WearerStandingChangedEvent>;
+  wearerStandingChangedEvents: Array<WearerStandingChangedEvent>;
   wearers: Array<Wearer>;
 };
 
@@ -2651,6 +2527,42 @@ export type SubscriptionhatsEventsArgs = {
 };
 
 
+export type SubscriptiontopHatLinkRequestedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontopHatLinkRequestedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TopHatLinkRequestedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<TopHatLinkRequestedEvent_filter>;
+};
+
+
+export type SubscriptiontopHatLinkedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontopHatLinkedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TopHatLinkedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<TopHatLinkedEvent_filter>;
+};
+
+
 export type SubscriptiontreeArgs = {
   block?: InputMaybe<Block_height>;
   id: Scalars['ID'];
@@ -2676,6 +2588,24 @@ export type SubscriptionwearerArgs = {
 };
 
 
+export type SubscriptionwearerStandingChangedEventArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionwearerStandingChangedEventsArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<WearerStandingChangedEvent_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<WearerStandingChangedEvent_filter>;
+};
+
+
 export type SubscriptionwearersArgs = {
   block?: InputMaybe<Block_height>;
   first?: InputMaybe<Scalars['Int']>;
@@ -2686,12 +2616,317 @@ export type SubscriptionwearersArgs = {
   where?: InputMaybe<Wearer_filter>;
 };
 
+export type TopHatLinkRequestedEvent = HatsEvent & {
+  __typename?: 'TopHatLinkRequestedEvent';
+  blockNumber: Scalars['Int'];
+  hat: Hat;
+  /** tree field is the tree that is being linked, hat field is the tree top hat */
+  id: Scalars['ID'];
+  newAdmin: Hat;
+  timestamp: Scalars['BigInt'];
+  transactionID: Scalars['Bytes'];
+  tree: Tree;
+};
+
+export type TopHatLinkRequestedEvent_filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<TopHatLinkRequestedEvent_filter>>>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  hat?: InputMaybe<Scalars['String']>;
+  hat_?: InputMaybe<Hat_filter>;
+  hat_contains?: InputMaybe<Scalars['String']>;
+  hat_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_ends_with?: InputMaybe<Scalars['String']>;
+  hat_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_gt?: InputMaybe<Scalars['String']>;
+  hat_gte?: InputMaybe<Scalars['String']>;
+  hat_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_lt?: InputMaybe<Scalars['String']>;
+  hat_lte?: InputMaybe<Scalars['String']>;
+  hat_not?: InputMaybe<Scalars['String']>;
+  hat_not_contains?: InputMaybe<Scalars['String']>;
+  hat_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_not_starts_with?: InputMaybe<Scalars['String']>;
+  hat_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_starts_with?: InputMaybe<Scalars['String']>;
+  hat_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  newAdmin?: InputMaybe<Scalars['String']>;
+  newAdmin_?: InputMaybe<Hat_filter>;
+  newAdmin_contains?: InputMaybe<Scalars['String']>;
+  newAdmin_contains_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_ends_with?: InputMaybe<Scalars['String']>;
+  newAdmin_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_gt?: InputMaybe<Scalars['String']>;
+  newAdmin_gte?: InputMaybe<Scalars['String']>;
+  newAdmin_in?: InputMaybe<Array<Scalars['String']>>;
+  newAdmin_lt?: InputMaybe<Scalars['String']>;
+  newAdmin_lte?: InputMaybe<Scalars['String']>;
+  newAdmin_not?: InputMaybe<Scalars['String']>;
+  newAdmin_not_contains?: InputMaybe<Scalars['String']>;
+  newAdmin_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_not_ends_with?: InputMaybe<Scalars['String']>;
+  newAdmin_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_not_in?: InputMaybe<Array<Scalars['String']>>;
+  newAdmin_not_starts_with?: InputMaybe<Scalars['String']>;
+  newAdmin_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_starts_with?: InputMaybe<Scalars['String']>;
+  newAdmin_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<TopHatLinkRequestedEvent_filter>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  tree?: InputMaybe<Scalars['String']>;
+  tree_?: InputMaybe<Tree_filter>;
+  tree_contains?: InputMaybe<Scalars['String']>;
+  tree_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_ends_with?: InputMaybe<Scalars['String']>;
+  tree_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_gt?: InputMaybe<Scalars['String']>;
+  tree_gte?: InputMaybe<Scalars['String']>;
+  tree_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_lt?: InputMaybe<Scalars['String']>;
+  tree_lte?: InputMaybe<Scalars['String']>;
+  tree_not?: InputMaybe<Scalars['String']>;
+  tree_not_contains?: InputMaybe<Scalars['String']>;
+  tree_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_not_starts_with?: InputMaybe<Scalars['String']>;
+  tree_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_starts_with?: InputMaybe<Scalars['String']>;
+  tree_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum TopHatLinkRequestedEvent_orderBy {
+  blockNumber = 'blockNumber',
+  hat = 'hat',
+  hat__createdAt = 'hat__createdAt',
+  hat__currentSupply = 'hat__currentSupply',
+  hat__details = 'hat__details',
+  hat__eligibility = 'hat__eligibility',
+  hat__id = 'hat__id',
+  hat__imageUri = 'hat__imageUri',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
+  hat__maxSupply = 'hat__maxSupply',
+  hat__mutable = 'hat__mutable',
+  hat__prettyId = 'hat__prettyId',
+  hat__status = 'hat__status',
+  hat__toggle = 'hat__toggle',
+  id = 'id',
+  newAdmin = 'newAdmin',
+  newAdmin__createdAt = 'newAdmin__createdAt',
+  newAdmin__currentSupply = 'newAdmin__currentSupply',
+  newAdmin__details = 'newAdmin__details',
+  newAdmin__eligibility = 'newAdmin__eligibility',
+  newAdmin__id = 'newAdmin__id',
+  newAdmin__imageUri = 'newAdmin__imageUri',
+  newAdmin__levelAtLocalTree = 'newAdmin__levelAtLocalTree',
+  newAdmin__maxSupply = 'newAdmin__maxSupply',
+  newAdmin__mutable = 'newAdmin__mutable',
+  newAdmin__prettyId = 'newAdmin__prettyId',
+  newAdmin__status = 'newAdmin__status',
+  newAdmin__toggle = 'newAdmin__toggle',
+  timestamp = 'timestamp',
+  transactionID = 'transactionID',
+  tree = 'tree',
+  tree__id = 'tree__id'
+}
+
+export type TopHatLinkedEvent = HatsEvent & {
+  __typename?: 'TopHatLinkedEvent';
+  blockNumber: Scalars['Int'];
+  hat: Hat;
+  /** tree field is the tree that is being linked, hat field is the tree top hat */
+  id: Scalars['ID'];
+  newAdmin: Hat;
+  timestamp: Scalars['BigInt'];
+  transactionID: Scalars['Bytes'];
+  tree: Tree;
+};
+
+export type TopHatLinkedEvent_filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<TopHatLinkedEvent_filter>>>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  hat?: InputMaybe<Scalars['String']>;
+  hat_?: InputMaybe<Hat_filter>;
+  hat_contains?: InputMaybe<Scalars['String']>;
+  hat_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_ends_with?: InputMaybe<Scalars['String']>;
+  hat_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_gt?: InputMaybe<Scalars['String']>;
+  hat_gte?: InputMaybe<Scalars['String']>;
+  hat_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_lt?: InputMaybe<Scalars['String']>;
+  hat_lte?: InputMaybe<Scalars['String']>;
+  hat_not?: InputMaybe<Scalars['String']>;
+  hat_not_contains?: InputMaybe<Scalars['String']>;
+  hat_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_not_starts_with?: InputMaybe<Scalars['String']>;
+  hat_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_starts_with?: InputMaybe<Scalars['String']>;
+  hat_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  newAdmin?: InputMaybe<Scalars['String']>;
+  newAdmin_?: InputMaybe<Hat_filter>;
+  newAdmin_contains?: InputMaybe<Scalars['String']>;
+  newAdmin_contains_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_ends_with?: InputMaybe<Scalars['String']>;
+  newAdmin_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_gt?: InputMaybe<Scalars['String']>;
+  newAdmin_gte?: InputMaybe<Scalars['String']>;
+  newAdmin_in?: InputMaybe<Array<Scalars['String']>>;
+  newAdmin_lt?: InputMaybe<Scalars['String']>;
+  newAdmin_lte?: InputMaybe<Scalars['String']>;
+  newAdmin_not?: InputMaybe<Scalars['String']>;
+  newAdmin_not_contains?: InputMaybe<Scalars['String']>;
+  newAdmin_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_not_ends_with?: InputMaybe<Scalars['String']>;
+  newAdmin_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_not_in?: InputMaybe<Array<Scalars['String']>>;
+  newAdmin_not_starts_with?: InputMaybe<Scalars['String']>;
+  newAdmin_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  newAdmin_starts_with?: InputMaybe<Scalars['String']>;
+  newAdmin_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<TopHatLinkedEvent_filter>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  tree?: InputMaybe<Scalars['String']>;
+  tree_?: InputMaybe<Tree_filter>;
+  tree_contains?: InputMaybe<Scalars['String']>;
+  tree_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_ends_with?: InputMaybe<Scalars['String']>;
+  tree_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_gt?: InputMaybe<Scalars['String']>;
+  tree_gte?: InputMaybe<Scalars['String']>;
+  tree_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_lt?: InputMaybe<Scalars['String']>;
+  tree_lte?: InputMaybe<Scalars['String']>;
+  tree_not?: InputMaybe<Scalars['String']>;
+  tree_not_contains?: InputMaybe<Scalars['String']>;
+  tree_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_not_starts_with?: InputMaybe<Scalars['String']>;
+  tree_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_starts_with?: InputMaybe<Scalars['String']>;
+  tree_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum TopHatLinkedEvent_orderBy {
+  blockNumber = 'blockNumber',
+  hat = 'hat',
+  hat__createdAt = 'hat__createdAt',
+  hat__currentSupply = 'hat__currentSupply',
+  hat__details = 'hat__details',
+  hat__eligibility = 'hat__eligibility',
+  hat__id = 'hat__id',
+  hat__imageUri = 'hat__imageUri',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
+  hat__maxSupply = 'hat__maxSupply',
+  hat__mutable = 'hat__mutable',
+  hat__prettyId = 'hat__prettyId',
+  hat__status = 'hat__status',
+  hat__toggle = 'hat__toggle',
+  id = 'id',
+  newAdmin = 'newAdmin',
+  newAdmin__createdAt = 'newAdmin__createdAt',
+  newAdmin__currentSupply = 'newAdmin__currentSupply',
+  newAdmin__details = 'newAdmin__details',
+  newAdmin__eligibility = 'newAdmin__eligibility',
+  newAdmin__id = 'newAdmin__id',
+  newAdmin__imageUri = 'newAdmin__imageUri',
+  newAdmin__levelAtLocalTree = 'newAdmin__levelAtLocalTree',
+  newAdmin__maxSupply = 'newAdmin__maxSupply',
+  newAdmin__mutable = 'newAdmin__mutable',
+  newAdmin__prettyId = 'newAdmin__prettyId',
+  newAdmin__status = 'newAdmin__status',
+  newAdmin__toggle = 'newAdmin__toggle',
+  timestamp = 'timestamp',
+  transactionID = 'transactionID',
+  tree = 'tree',
+  tree__id = 'tree__id'
+}
+
 export type Tree = {
   __typename?: 'Tree';
+  childOfTree?: Maybe<Tree>;
   events: Array<HatsEvent>;
   hats: Array<Hat>;
   /** Tree ID is its top hat domain - first 4 bytes of the top hat ID */
   id: Scalars['ID'];
+  linkedToHat?: Maybe<Hat>;
+  parentOfTrees: Array<Tree>;
 };
 
 
@@ -2712,10 +2947,40 @@ export type TreehatsArgs = {
   where?: InputMaybe<Hat_filter>;
 };
 
+
+export type TreeparentOfTreesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Tree_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Tree_filter>;
+};
+
 export type Tree_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
   and?: InputMaybe<Array<InputMaybe<Tree_filter>>>;
+  childOfTree?: InputMaybe<Scalars['String']>;
+  childOfTree_?: InputMaybe<Tree_filter>;
+  childOfTree_contains?: InputMaybe<Scalars['String']>;
+  childOfTree_contains_nocase?: InputMaybe<Scalars['String']>;
+  childOfTree_ends_with?: InputMaybe<Scalars['String']>;
+  childOfTree_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  childOfTree_gt?: InputMaybe<Scalars['String']>;
+  childOfTree_gte?: InputMaybe<Scalars['String']>;
+  childOfTree_in?: InputMaybe<Array<Scalars['String']>>;
+  childOfTree_lt?: InputMaybe<Scalars['String']>;
+  childOfTree_lte?: InputMaybe<Scalars['String']>;
+  childOfTree_not?: InputMaybe<Scalars['String']>;
+  childOfTree_not_contains?: InputMaybe<Scalars['String']>;
+  childOfTree_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  childOfTree_not_ends_with?: InputMaybe<Scalars['String']>;
+  childOfTree_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  childOfTree_not_in?: InputMaybe<Array<Scalars['String']>>;
+  childOfTree_not_starts_with?: InputMaybe<Scalars['String']>;
+  childOfTree_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  childOfTree_starts_with?: InputMaybe<Scalars['String']>;
+  childOfTree_starts_with_nocase?: InputMaybe<Scalars['String']>;
   events_?: InputMaybe<HatsEvent_filter>;
   hats_?: InputMaybe<Hat_filter>;
   id?: InputMaybe<Scalars['ID']>;
@@ -2726,13 +2991,51 @@ export type Tree_filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  linkedToHat?: InputMaybe<Scalars['String']>;
+  linkedToHat_?: InputMaybe<Hat_filter>;
+  linkedToHat_contains?: InputMaybe<Scalars['String']>;
+  linkedToHat_contains_nocase?: InputMaybe<Scalars['String']>;
+  linkedToHat_ends_with?: InputMaybe<Scalars['String']>;
+  linkedToHat_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  linkedToHat_gt?: InputMaybe<Scalars['String']>;
+  linkedToHat_gte?: InputMaybe<Scalars['String']>;
+  linkedToHat_in?: InputMaybe<Array<Scalars['String']>>;
+  linkedToHat_lt?: InputMaybe<Scalars['String']>;
+  linkedToHat_lte?: InputMaybe<Scalars['String']>;
+  linkedToHat_not?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_contains?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_ends_with?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_in?: InputMaybe<Array<Scalars['String']>>;
+  linkedToHat_not_starts_with?: InputMaybe<Scalars['String']>;
+  linkedToHat_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  linkedToHat_starts_with?: InputMaybe<Scalars['String']>;
+  linkedToHat_starts_with_nocase?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<InputMaybe<Tree_filter>>>;
+  parentOfTrees_?: InputMaybe<Tree_filter>;
 };
 
 export enum Tree_orderBy {
+  childOfTree = 'childOfTree',
+  childOfTree__id = 'childOfTree__id',
   events = 'events',
   hats = 'hats',
-  id = 'id'
+  id = 'id',
+  linkedToHat = 'linkedToHat',
+  linkedToHat__createdAt = 'linkedToHat__createdAt',
+  linkedToHat__currentSupply = 'linkedToHat__currentSupply',
+  linkedToHat__details = 'linkedToHat__details',
+  linkedToHat__eligibility = 'linkedToHat__eligibility',
+  linkedToHat__id = 'linkedToHat__id',
+  linkedToHat__imageUri = 'linkedToHat__imageUri',
+  linkedToHat__levelAtLocalTree = 'linkedToHat__levelAtLocalTree',
+  linkedToHat__maxSupply = 'linkedToHat__maxSupply',
+  linkedToHat__mutable = 'linkedToHat__mutable',
+  linkedToHat__prettyId = 'linkedToHat__prettyId',
+  linkedToHat__status = 'linkedToHat__status',
+  linkedToHat__toggle = 'linkedToHat__toggle',
+  parentOfTrees = 'parentOfTrees'
 }
 
 export type Wearer = {
@@ -2769,6 +3072,151 @@ export type WearermintEventArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<HatMintedEvent_filter>;
 };
+
+export type WearerStandingChangedEvent = HatsEvent & {
+  __typename?: 'WearerStandingChangedEvent';
+  blockNumber: Scalars['Int'];
+  hat: Hat;
+  id: Scalars['ID'];
+  timestamp: Scalars['BigInt'];
+  transactionID: Scalars['Bytes'];
+  tree: Tree;
+  wearer: Wearer;
+  wearerStanding: Scalars['Boolean'];
+};
+
+export type WearerStandingChangedEvent_filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<WearerStandingChangedEvent_filter>>>;
+  blockNumber?: InputMaybe<Scalars['Int']>;
+  blockNumber_gt?: InputMaybe<Scalars['Int']>;
+  blockNumber_gte?: InputMaybe<Scalars['Int']>;
+  blockNumber_in?: InputMaybe<Array<Scalars['Int']>>;
+  blockNumber_lt?: InputMaybe<Scalars['Int']>;
+  blockNumber_lte?: InputMaybe<Scalars['Int']>;
+  blockNumber_not?: InputMaybe<Scalars['Int']>;
+  blockNumber_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  hat?: InputMaybe<Scalars['String']>;
+  hat_?: InputMaybe<Hat_filter>;
+  hat_contains?: InputMaybe<Scalars['String']>;
+  hat_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_ends_with?: InputMaybe<Scalars['String']>;
+  hat_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_gt?: InputMaybe<Scalars['String']>;
+  hat_gte?: InputMaybe<Scalars['String']>;
+  hat_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_lt?: InputMaybe<Scalars['String']>;
+  hat_lte?: InputMaybe<Scalars['String']>;
+  hat_not?: InputMaybe<Scalars['String']>;
+  hat_not_contains?: InputMaybe<Scalars['String']>;
+  hat_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with?: InputMaybe<Scalars['String']>;
+  hat_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_not_in?: InputMaybe<Array<Scalars['String']>>;
+  hat_not_starts_with?: InputMaybe<Scalars['String']>;
+  hat_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  hat_starts_with?: InputMaybe<Scalars['String']>;
+  hat_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<WearerStandingChangedEvent_filter>>>;
+  timestamp?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not?: InputMaybe<Scalars['BigInt']>;
+  timestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  transactionID?: InputMaybe<Scalars['Bytes']>;
+  transactionID_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_gte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  transactionID_lt?: InputMaybe<Scalars['Bytes']>;
+  transactionID_lte?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_contains?: InputMaybe<Scalars['Bytes']>;
+  transactionID_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  tree?: InputMaybe<Scalars['String']>;
+  tree_?: InputMaybe<Tree_filter>;
+  tree_contains?: InputMaybe<Scalars['String']>;
+  tree_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_ends_with?: InputMaybe<Scalars['String']>;
+  tree_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_gt?: InputMaybe<Scalars['String']>;
+  tree_gte?: InputMaybe<Scalars['String']>;
+  tree_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_lt?: InputMaybe<Scalars['String']>;
+  tree_lte?: InputMaybe<Scalars['String']>;
+  tree_not?: InputMaybe<Scalars['String']>;
+  tree_not_contains?: InputMaybe<Scalars['String']>;
+  tree_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with?: InputMaybe<Scalars['String']>;
+  tree_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_not_in?: InputMaybe<Array<Scalars['String']>>;
+  tree_not_starts_with?: InputMaybe<Scalars['String']>;
+  tree_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  tree_starts_with?: InputMaybe<Scalars['String']>;
+  tree_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  wearer?: InputMaybe<Scalars['String']>;
+  wearerStanding?: InputMaybe<Scalars['Boolean']>;
+  wearerStanding_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  wearerStanding_not?: InputMaybe<Scalars['Boolean']>;
+  wearerStanding_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  wearer_?: InputMaybe<Wearer_filter>;
+  wearer_contains?: InputMaybe<Scalars['String']>;
+  wearer_contains_nocase?: InputMaybe<Scalars['String']>;
+  wearer_ends_with?: InputMaybe<Scalars['String']>;
+  wearer_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  wearer_gt?: InputMaybe<Scalars['String']>;
+  wearer_gte?: InputMaybe<Scalars['String']>;
+  wearer_in?: InputMaybe<Array<Scalars['String']>>;
+  wearer_lt?: InputMaybe<Scalars['String']>;
+  wearer_lte?: InputMaybe<Scalars['String']>;
+  wearer_not?: InputMaybe<Scalars['String']>;
+  wearer_not_contains?: InputMaybe<Scalars['String']>;
+  wearer_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  wearer_not_ends_with?: InputMaybe<Scalars['String']>;
+  wearer_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  wearer_not_in?: InputMaybe<Array<Scalars['String']>>;
+  wearer_not_starts_with?: InputMaybe<Scalars['String']>;
+  wearer_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  wearer_starts_with?: InputMaybe<Scalars['String']>;
+  wearer_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum WearerStandingChangedEvent_orderBy {
+  blockNumber = 'blockNumber',
+  hat = 'hat',
+  hat__createdAt = 'hat__createdAt',
+  hat__currentSupply = 'hat__currentSupply',
+  hat__details = 'hat__details',
+  hat__eligibility = 'hat__eligibility',
+  hat__id = 'hat__id',
+  hat__imageUri = 'hat__imageUri',
+  hat__levelAtLocalTree = 'hat__levelAtLocalTree',
+  hat__maxSupply = 'hat__maxSupply',
+  hat__mutable = 'hat__mutable',
+  hat__prettyId = 'hat__prettyId',
+  hat__status = 'hat__status',
+  hat__toggle = 'hat__toggle',
+  id = 'id',
+  timestamp = 'timestamp',
+  transactionID = 'transactionID',
+  tree = 'tree',
+  tree__id = 'tree__id',
+  wearer = 'wearer',
+  wearerStanding = 'wearerStanding',
+  wearer__id = 'wearer__id'
+}
 
 export type Wearer_filter = {
   /** Filter for the block changed event. */
@@ -2834,7 +3282,7 @@ export type GetHatsByIdsQueryVariables = Exact<{
 }>;
 
 
-export type GetHatsByIdsQuery = { __typename?: 'Query', hats: Array<{ __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } }> };
+export type GetHatsByIdsQuery = { __typename?: 'Query', hats: Array<{ __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } }> };
 
 export type GetHatsEventsQueryVariables = Exact<{
   treeId: Scalars['String'];
@@ -2843,10 +3291,10 @@ export type GetHatsEventsQueryVariables = Exact<{
 }>;
 
 
-export type GetHatsEventsQuery = { __typename?: 'Query', hatsEvents: Array<{ __typename?: 'HatBurnedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, wearer: { __typename?: 'Wearer', id: string }, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatCreatedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatDetailsChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatEligibilityChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatImageURIChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMaxSupplyChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMintedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, wearer: { __typename?: 'Wearer', id: string }, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMutabilityChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatStatusChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatToggleChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } } }> };
+export type GetHatsEventsQuery = { __typename?: 'Query', hatsEvents: Array<{ __typename?: 'HatBurnedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, wearer: { __typename?: 'Wearer', id: string }, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatCreatedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatDetailsChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatEligibilityChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatImageURIChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMaxSupplyChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMintedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, wearer: { __typename?: 'Wearer', id: string }, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatMutabilityChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatStatusChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'HatToggleChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'TopHatLinkRequestedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'TopHatLinkedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } } | { __typename?: 'WearerStandingChangedEvent', id: string, transactionID: any, blockNumber: number, timestamp: any, hat: { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } } }> };
 
-export type HatFragment = { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, level: number, tree: { __typename?: 'Tree', id: string } };
+export type HatFragment = { __typename?: 'Hat', id: string, prettyId: string, details: string, imageUri: string, levelAtLocalTree: number, tree: { __typename?: 'Tree', id: string } };
 
-export const HatFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Hat"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Hat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"prettyId"}},{"kind":"Field","name":{"kind":"Name","value":"details"}},{"kind":"Field","name":{"kind":"Name","value":"imageUri"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"tree"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<HatFragment, unknown>;
+export const HatFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Hat"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Hat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"prettyId"}},{"kind":"Field","name":{"kind":"Name","value":"details"}},{"kind":"Field","name":{"kind":"Name","value":"imageUri"}},{"kind":"Field","name":{"kind":"Name","value":"levelAtLocalTree"}},{"kind":"Field","name":{"kind":"Name","value":"tree"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<HatFragment, unknown>;
 export const GetHatsByIdsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHatsByIds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hats"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id_in"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Hat"}}]}}]}},...HatFragmentDoc.definitions]} as unknown as DocumentNode<GetHatsByIdsQuery, GetHatsByIdsQueryVariables>;
 export const GetHatsEventsDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHatsEvents"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"treeId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hatsEvents"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"tree"},"value":{"kind":"Variable","name":{"kind":"Name","value":"treeId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"blockNumber_gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"blockNumber_lte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"transactionID"}},{"kind":"Field","name":{"kind":"Name","value":"blockNumber"}},{"kind":"Field","name":{"kind":"Name","value":"timestamp"}},{"kind":"Field","name":{"kind":"Name","value":"hat"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Hat"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HatMintedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wearer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"HatBurnedEvent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"wearer"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}},...HatFragmentDoc.definitions]} as unknown as DocumentNode<GetHatsEventsQuery, GetHatsEventsQueryVariables>;
