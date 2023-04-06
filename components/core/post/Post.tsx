@@ -1,5 +1,5 @@
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { ActivityItemFragment } from '@/generated/graphql'
+import { ActivityItemFragment, ActivityType } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
 import Link from 'next/link'
@@ -10,6 +10,10 @@ import IconButton from '../IconButton'
 import { ProfileIcons } from '../ProfileIcons'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
+import { MoreMenu } from '../MoreMenu'
+import { useUser } from '@/components/auth/useUser'
+import { useModal } from '@/components/hooks/useModal'
+import { DeletePostModal } from './DeletePostModal'
 
 type PostVariant = 'full' | 'compact'
 export interface PostProps {
@@ -23,13 +27,22 @@ export interface PostProps {
 
 export const Post = (props: PostProps) => {
   const { activityItem, onLike, onUnlike, variant = 'full' } = props
-  const { profile } = activityItem.activity
+  const { profile, type } = activityItem.activity
 
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.role))
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
   const { deviceSize } = useDeviceSize()
+  const { user } = useUser()
+  const { showModal } = useModal()
+
+  const displayMoreMenu =
+    profile._id === user?._id && type === ActivityType.Text
+
+  const handleDeletePost = () => {
+    showModal(() => <DeletePostModal activityItem={activityItem} />)
+  }
 
   return (
     <Container
@@ -39,13 +52,28 @@ export const Post = (props: PostProps) => {
     >
       <ContentContainer>
         {variant === 'full' && (
-          <ProfileContainer href={`/profile/${profile._id}`} passHref>
-            <Avatar src={profile.avatar?.url} size={3.2} />
-            <ProfileName>{profile.name}</ProfileName>
-            <ProfileIcons
-              citizenshipStatus={citizenshipStatus}
-              roleInfos={roleInfos}
-            />
+          <ProfileContainer>
+            <LeftContainer href={`/profile/${profile._id}`} passHref>
+              <Avatar src={profile.avatar?.url} size={3.2} />
+              <ProfileName>{profile.name}</ProfileName>
+              <ProfileIcons
+                citizenshipStatus={citizenshipStatus}
+                roleInfos={roleInfos}
+              />
+            </LeftContainer>
+            {displayMoreMenu && (
+              <RightContainer>
+                <MoreMenu
+                  options={[
+                    {
+                      label: 'Delete post',
+                      icon: 'trash',
+                      onClick: handleDeletePost,
+                    },
+                  ]}
+                />
+              </RightContainer>
+            )}
           </ProfileContainer>
         )}
         {Content && <Content {...props} hovered={hovered} />}
@@ -107,9 +135,20 @@ const ContentContainer = styled.div`
   gap: 1.6rem;
 `
 
-const ProfileContainer = styled(Link)`
+const ProfileContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+
+const LeftContainer = styled(Link)`
   display: flex;
   align-items: center;
+`
+
+const RightContainer = styled.div`
+  position: relative;
 `
 
 const ProfileName = styled(H4)`

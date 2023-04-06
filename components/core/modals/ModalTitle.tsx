@@ -59,6 +59,7 @@ const AdornmentContainer = styled.div<AdornmentContainerProps>`
 const StyledH3 = styled(H3)`
   display: flex;
   align-items: center;
+  text-transform: none;
 `
 
 const Container = styled.div`

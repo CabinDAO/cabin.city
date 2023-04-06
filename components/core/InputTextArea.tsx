@@ -7,10 +7,15 @@ import {
 } from 'react'
 import styled from 'styled-components'
 import { InputBase } from './InputBase'
-import { subline2Styles } from './Typography'
+import { body1Styles, subline2Styles } from './Typography'
+import { HelperTextPosition, InputTextSize } from './input.types'
 
-const StyledInputTextArea = styled.textarea`
-  ${subline2Styles}
+interface StyledInputTextAreaProps {
+  textSize?: InputTextSize
+}
+
+const StyledInputTextArea = styled.textarea<StyledInputTextAreaProps>`
+  ${({ textSize }) => (textSize === 'medium' ? subline2Styles : body1Styles)}
   display: block;
   width: 100%;
   outline: none;
@@ -45,6 +50,8 @@ interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   endAdornment?: ReactNode
   helperText?: string
   onChange?: (_e: ChangeEvent<HTMLTextAreaElement>) => void
+  textSize?: InputTextSize
+  helperTextPosition?: HelperTextPosition
 }
 
 export const InputTextArea = ({
@@ -59,7 +66,9 @@ export const InputTextArea = ({
   message,
   endAdornment,
   helperText,
+  textSize = 'medium',
   onChange,
+  helperTextPosition = 'top',
   ...props
 }: InputTextProps) => {
   const inputRef = useRef() as MutableRefObject<HTMLTextAreaElement>
@@ -70,6 +79,7 @@ export const InputTextArea = ({
 
   return (
     <InputBase
+      helperTextPosition={helperTextPosition}
       id={id}
       label={label}
       required={required}
@@ -83,6 +93,7 @@ export const InputTextArea = ({
       onClick={handleOnParentClick}
     >
       <StyledInputTextArea
+        textSize={textSize}
         id={id}
         ref={inputRef}
         type="text"

@@ -66,6 +66,7 @@ export type ActivitiesResultInput = {
 /** 'Activity' input values */
 export type ActivityInput = {
   key: Scalars['String'];
+  text?: InputMaybe<Scalars['String']>;
   timestamp: Scalars['Time'];
   type: ActivityType;
   profileRoleAdded?: InputMaybe<ProfileRoleType>;
@@ -246,6 +247,7 @@ export type Mutation = {
   partialUpdateHat?: Maybe<Hat>;
   /** Create a new document in the collection of 'BlockSyncAttempt' */
   createBlockSyncAttempt: BlockSyncAttempt;
+  createTextActivity: Activity;
   clearSyncAttempts: Scalars['Boolean'];
   createProfile: Profile;
   /** Create a new document in the collection of 'OtterspaceBadgeSpec' */
@@ -449,6 +451,11 @@ export type MutationCreateBlockSyncAttemptArgs = {
 };
 
 
+export type MutationCreateTextActivityArgs = {
+  text: Scalars['String'];
+};
+
+
 export type MutationClearSyncAttemptsArgs = {
   key: Scalars['String'];
 };
@@ -583,6 +590,7 @@ export type PartialUpdateActivitiesResultInput = {
 /** 'Activity' input values */
 export type PartialUpdateActivityInput = {
   key?: InputMaybe<Scalars['String']>;
+  text?: InputMaybe<Scalars['String']>;
   timestamp?: InputMaybe<Scalars['Time']>;
   type?: InputMaybe<ActivityType>;
   profileRoleAdded?: InputMaybe<ProfileRoleType>;
@@ -871,6 +879,7 @@ export type Activity = {
   /** The document's ID. */
   _id: Scalars['ID'];
   reactions: ActivityReactionPage;
+  text?: Maybe<Scalars['String']>;
   profileRoleAdded?: Maybe<ProfileRoleType>;
   key: Scalars['String'];
   profile: Profile;
@@ -932,7 +941,8 @@ export enum ActivityType {
   ProfileCreated = 'ProfileCreated',
   ProfileRoleAdded = 'ProfileRoleAdded',
   ProfileBadgeAdded = 'ProfileBadgeAdded',
-  VerifiedCitizenship = 'VerifiedCitizenship'
+  VerifiedCitizenship = 'VerifiedCitizenship',
+  Text = 'Text'
 }
 
 export type BlockSyncAttempt = {
@@ -1393,9 +1403,23 @@ export type MeFragment = { __typename?: 'Profile', _id: string, name: string, em
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
-export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
 
-export type ActivityItemFragment = { __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+export type ActivityItemFragment = { __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+
+export type CreateTextActivityMutationVariables = Exact<{
+  text: Scalars['String'];
+}>;
+
+
+export type CreateTextActivityMutation = { __typename?: 'Mutation', createTextActivity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+
+export type DeleteActivityMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteActivityMutation = { __typename?: 'Mutation', deleteActivity?: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null };
 
 export type GetActivitiesQueryVariables = Exact<{
   size?: InputMaybe<Scalars['Int']>;
@@ -1403,7 +1427,7 @@ export type GetActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'ActivitiesResult', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } };
+export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'ActivitiesResult', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } };
 
 export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1456,7 +1480,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile?: { __typename?: 'ActivitiesResult', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile?: { __typename?: 'ActivitiesResult', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } | null };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1565,6 +1589,7 @@ export const ActivityFragmentDoc = gql`
   _id
   timestamp
   type
+  text
   metadata {
     badge {
       _id
@@ -1716,6 +1741,72 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const CreateTextActivityDocument = gql`
+    mutation CreateTextActivity($text: String!) {
+  createTextActivity(text: $text) {
+    ...Activity
+  }
+}
+    ${ActivityFragmentDoc}`;
+export type CreateTextActivityMutationFn = Apollo.MutationFunction<CreateTextActivityMutation, CreateTextActivityMutationVariables>;
+
+/**
+ * __useCreateTextActivityMutation__
+ *
+ * To run a mutation, you first call `useCreateTextActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTextActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTextActivityMutation, { data, loading, error }] = useCreateTextActivityMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *   },
+ * });
+ */
+export function useCreateTextActivityMutation(baseOptions?: Apollo.MutationHookOptions<CreateTextActivityMutation, CreateTextActivityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateTextActivityMutation, CreateTextActivityMutationVariables>(CreateTextActivityDocument, options);
+      }
+export type CreateTextActivityMutationHookResult = ReturnType<typeof useCreateTextActivityMutation>;
+export type CreateTextActivityMutationResult = Apollo.MutationResult<CreateTextActivityMutation>;
+export type CreateTextActivityMutationOptions = Apollo.BaseMutationOptions<CreateTextActivityMutation, CreateTextActivityMutationVariables>;
+export const DeleteActivityDocument = gql`
+    mutation DeleteActivity($id: ID!) {
+  deleteActivity(id: $id) {
+    ...Activity
+  }
+}
+    ${ActivityFragmentDoc}`;
+export type DeleteActivityMutationFn = Apollo.MutationFunction<DeleteActivityMutation, DeleteActivityMutationVariables>;
+
+/**
+ * __useDeleteActivityMutation__
+ *
+ * To run a mutation, you first call `useDeleteActivityMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteActivityMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteActivityMutation, { data, loading, error }] = useDeleteActivityMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteActivityMutation(baseOptions?: Apollo.MutationHookOptions<DeleteActivityMutation, DeleteActivityMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteActivityMutation, DeleteActivityMutationVariables>(DeleteActivityDocument, options);
+      }
+export type DeleteActivityMutationHookResult = ReturnType<typeof useDeleteActivityMutation>;
+export type DeleteActivityMutationResult = Apollo.MutationResult<DeleteActivityMutation>;
+export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<DeleteActivityMutation, DeleteActivityMutationVariables>;
 export const GetActivitiesDocument = gql`
     query GetActivities($size: Int, $after: String) {
   allActivities(size: $size, after: $after) {

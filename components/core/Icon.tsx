@@ -30,6 +30,7 @@ import logoCabinSvg from './svg/logo-cabin.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import mountainSvg from './svg/mountain.svg'
+import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
 import personSvg from './svg/person.svg'
@@ -76,6 +77,7 @@ export const IconSvgs = {
   members: membersSvg,
   menu: menuSvg,
   mountain: mountainSvg,
+  'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
   neighborhoods: neighborhoodsSvg,
   person: personSvg,

@@ -1,5 +1,6 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
+import { onlyMe } from './predicates/onlyMe'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
@@ -40,6 +41,7 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         read: true,
         create: true,
+        delete: onlyMe,
       },
     },
     {
@@ -252,6 +254,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('unique_Activity_key'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -339,6 +347,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('my_vouches_this_year'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('create_text_activity'),
       actions: {
         call: true,
       },

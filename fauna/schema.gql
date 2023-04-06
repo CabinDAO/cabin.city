@@ -46,6 +46,8 @@ type Mutation {
   unvouchProfile(id: ID!): Profile! @resolver(name: "unvouch_profile")
   likeActivity(id: ID!): ActivityReaction! @resolver(name: "like_activity")
   unlikeActivity(id: ID!): ActivityReaction! @resolver(name: "unlike_activity")
+  createTextActivity(text: String!): Activity!
+    @resolver(name: "create_text_activity")
 }
 
 type Profile {
@@ -217,6 +219,7 @@ type OtterspaceBadgeSpec {
 
 type Activity {
   key: String! @unique # The unique key supports idempotency
+  text: String
   timestamp: Time!
   type: ActivityType!
   profileRoleAdded: ProfileRoleType
@@ -261,6 +264,7 @@ enum ActivityType {
   ProfileRoleAdded
   ProfileBadgeAdded
   VerifiedCitizenship
+  Text
 }
 
 type BlockSyncAttempt {
