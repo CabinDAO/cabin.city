@@ -21,6 +21,11 @@ const MORE_MENU_ICON_SIZE = 16
 export const MoreMenu = ({ options }: MoreMenuProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleOnClick = (option: MenuOption) => {
+    option.onClick()
+    setIsOpen(false)
+  }
+
   return (
     <>
       <IconButton
@@ -32,7 +37,10 @@ export const MoreMenu = ({ options }: MoreMenuProps) => {
       {isOpen && (
         <MenuList>
           {options.map((option) => (
-            <MenuOption key={option.label} onClick={option.onClick}>
+            <MenuOption
+              key={option.label}
+              onClick={() => handleOnClick(option)}
+            >
               {option.icon && <Icon name={option.icon} size={1.2} />}
               <Caption emphasized>{option.label}</Caption>
             </MenuOption>
