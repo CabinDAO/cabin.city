@@ -56,13 +56,6 @@ export type AccountProfileRelation = {
   connect?: InputMaybe<Scalars['ID']>;
 };
 
-/** 'ActivitiesResult' input values */
-export type ActivitiesResultInput = {
-  data: Array<ActivityItemInput>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-};
-
 /** 'Activity' input values */
 export type ActivityInput = {
   key: Scalars['String'];
@@ -580,13 +573,6 @@ export type PartialUpdateAccountInput = {
   badges?: InputMaybe<AccountBadgesRelation>;
 };
 
-/** 'ActivitiesResult' input values */
-export type PartialUpdateActivitiesResultInput = {
-  data?: InputMaybe<Array<PartialUpdateActivityItemInput>>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-};
-
 /** 'Activity' input values */
 export type PartialUpdateActivityInput = {
   key?: InputMaybe<Scalars['String']>;
@@ -863,13 +849,6 @@ export type AccountPage = {
   /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
   /** A cursor for elements coming before the current page. */
-  before?: Maybe<Scalars['String']>;
-};
-
-export type ActivitiesResult = {
-  __typename?: 'ActivitiesResult';
-  data: Array<ActivityItem>;
-  after?: Maybe<Scalars['String']>;
   before?: Maybe<Scalars['String']>;
 };
 
@@ -1225,8 +1204,8 @@ export type Query = {
   me: Profile;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
-  allActivities: ActivitiesResult;
-  activitiesByProfile?: Maybe<ActivitiesResult>;
+  allActivities: QueryAllActivitiesPage;
+  activitiesByProfile: QueryActivitiesByProfilePage;
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
@@ -1320,17 +1299,15 @@ export type QueryFindOtterspaceBadgeSpecByIdArgs = {
 
 
 export type QueryAllActivitiesArgs = {
-  size?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
 };
 
 
 export type QueryActivitiesByProfileArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
   profileId: Scalars['ID'];
-  size?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1359,6 +1336,28 @@ export type QueryFindActivityReactionByIdArgs = {
 export type QueryAllHatsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'ActivityItem'. */
+export type QueryActivitiesByProfilePage = {
+  __typename?: 'QueryActivitiesByProfilePage';
+  /** The elements of type 'ActivityItem' in this page. */
+  data: Array<Maybe<ActivityItem>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'ActivityItem'. */
+export type QueryAllActivitiesPage = {
+  __typename?: 'QueryAllActivitiesPage';
+  /** The elements of type 'ActivityItem' in this page. */
+  data: Array<Maybe<ActivityItem>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
 };
 
 /** The pagination object for elements of type 'Profile'. */
@@ -1423,11 +1422,11 @@ export type DeleteActivityMutation = { __typename?: 'Mutation', deleteActivity?:
 
 export type GetActivitiesQueryVariables = Exact<{
   size?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
+  cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'ActivitiesResult', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } };
+export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
 
 export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1480,7 +1479,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile?: { __typename?: 'ActivitiesResult', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } }> } | null };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -1808,8 +1807,8 @@ export type DeleteActivityMutationHookResult = ReturnType<typeof useDeleteActivi
 export type DeleteActivityMutationResult = Apollo.MutationResult<DeleteActivityMutation>;
 export type DeleteActivityMutationOptions = Apollo.BaseMutationOptions<DeleteActivityMutation, DeleteActivityMutationVariables>;
 export const GetActivitiesDocument = gql`
-    query GetActivities($size: Int, $after: String) {
-  allActivities(size: $size, after: $after) {
+    query GetActivities($size: Int, $cursor: String) {
+  allActivities(_size: $size, _cursor: $cursor) {
     data {
       ...ActivityItem
     }
@@ -1831,7 +1830,7 @@ export const GetActivitiesDocument = gql`
  * const { data, loading, error } = useGetActivitiesQuery({
  *   variables: {
  *      size: // value for 'size'
- *      after: // value for 'after'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */
@@ -2062,7 +2061,7 @@ export const GetProfileByIdDocument = gql`
   findProfileByID(id: $id) {
     ...GetProfileById
   }
-  activitiesByProfile(profileId: $id, size: 2) {
+  activitiesByProfile(profileId: $id, _size: 2) {
     data {
       ...ActivityItem
     }

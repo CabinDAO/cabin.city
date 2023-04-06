@@ -1,5 +1,5 @@
-query GetActivities($size: Int, $after: String) {
-  allActivities(size: $size, after: $after) {
+query GetActivities($size: Int, $cursor: String) {
+  allActivities(_size: $size, _cursor: $cursor) {
     data {
       ...ActivityItem
     }
