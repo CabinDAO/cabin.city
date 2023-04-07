@@ -11,7 +11,7 @@ import Icon from '../core/Icon'
 import { InputText } from '../core/InputText'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { SelectOption } from '../hooks/useDropdownLogic'
-import { contactFieldDisplayNameMapping } from './setup/step-configuration'
+import { contactFieldDisplayNameMapping } from './setup-profile/step-configuration'
 
 const contactOptions = Object.values(ProfileContactFieldType).map(
   (type) =>
