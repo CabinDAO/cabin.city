@@ -9,9 +9,8 @@ import { SelectRef } from 'faunadb-fql-lib'
 export const ActivityPageToActivityItems = (page: Expr) => {
   return q.Let(
     {
-      activities: q.Select('data', page),
       activityItems: q.Map(
-        q.Var('activities'),
+        page,
         q.Lambda(
           'activity',
           q.Let(
@@ -42,10 +41,6 @@ export const ActivityPageToActivityItems = (page: Expr) => {
         )
       ),
     },
-    {
-      data: q.Var('activityItems'),
-      after: q.Select('after', page, null),
-      before: q.Select('before', page, null),
-    }
+    q.Var('activityItems')
   )
 }

@@ -13,9 +13,8 @@ interface CitizenshipNFTDataProps {
 export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
   const { user } = useUser()
 
-  const handleMint = () => {
-    // TODO: Uncomment when citizenship minting is enabled
-    // window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+  const handleManage = () => {
+    window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
   }
 
   if (!user || !nft) return null
@@ -47,8 +46,8 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
         <H3>Details</H3>
         <NFTDataList data={nftData} />
       </DetailsContainer>
-      <UnlockCTAButton variant="secondary" onClick={handleMint}>
-        {expiredNft ? 'Renew now' : 'Cancel citizenship'}
+      <UnlockCTAButton variant="secondary" onClick={handleManage}>
+        Manage
       </UnlockCTAButton>
     </Container>
   )

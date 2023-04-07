@@ -2,6 +2,7 @@ fragment Activity on Activity {
   _id
   timestamp
   type
+  text
   metadata {
     badge {
       _id

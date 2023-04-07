@@ -4,6 +4,7 @@ import { profileBadgeAddedSlots } from './profileBadgeAddedSlots'
 import { profileCreatedSlots } from './profileCreatedSlots'
 import { profileRoleAddedSlots } from './profileRoleAddedSlots'
 import { verifiedCitizenshipSlots } from './verifiedCitizenshipSlots'
+import { textSlots } from './textSlots'
 
 /*
   Slots allow us to specify both the content and media portions of a post, which vary based on the type of activity.
@@ -37,6 +38,10 @@ export const getPostSlots = (props: PostProps): PostSlots => {
 
   if (activity.type === ActivityType.VerifiedCitizenship) {
     return verifiedCitizenshipSlots
+  }
+
+  if (activity.type === ActivityType.Text) {
+    return textSlots
   }
 
   return {}

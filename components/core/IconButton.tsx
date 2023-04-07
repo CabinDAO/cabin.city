@@ -6,6 +6,7 @@ import { ZoomInCard } from './ZoomInCard'
 
 interface ButtonStyledProps {
   disabled?: boolean
+  addHoverState?: boolean
 }
 
 const ButtonStyled = styled.button<ButtonStyledProps>`
@@ -15,6 +16,15 @@ const ButtonStyled = styled.button<ButtonStyledProps>`
   align-items: center;
   justify-content: center;
   outline: 0;
+  ${({ addHoverState }) =>
+    addHoverState &&
+    `
+  padding: 0.4rem;
+    &:hover {
+      background:
+      rgba(254, 215, 162, 0.5);
+    }
+  `}
   border: none;
   background: transparent;
   ${(props) =>
@@ -32,6 +42,7 @@ interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   disabled?: boolean
   onClick?: () => void
   animated?: boolean
+  addHoverState?: boolean
 }
 
 const IconButton = ({ icon, ...props }: IconButtonProps) => {
@@ -40,6 +51,7 @@ const IconButton = ({ icon, ...props }: IconButtonProps) => {
 
   return (
     <ButtonStyled
+      addHoverState={props.addHoverState}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       type="button"

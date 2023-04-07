@@ -7,6 +7,8 @@ import Router, { useRouter } from 'next/router'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
+import { useModal } from '../hooks/useModal'
+import { ProfileErrorModal } from './ProfileErrorModal'
 
 export interface RegistrationParams {
   email: string
@@ -18,6 +20,7 @@ export const RegistrationView = () => {
   const { address } = useAccount()
   const router = useRouter()
   const { signAuthMessage } = useSignAuthMessage()
+  const { showModal } = useModal()
 
   const handleSubmit = async (params: RegistrationParams) => {
     const { email, displayName: name, avatar } = params
@@ -44,13 +47,13 @@ export const RegistrationView = () => {
       },
       body: JSON.stringify(createProfileBody),
     })
+    const json = await resp.json()
 
     if (!resp.ok) {
-      throw new Error('Unable to create profile')
+      showModal(() => <ProfileErrorModal error={json.error} />)
+    } else {
+      Router.push(`/profile/${json.profileId}`)
     }
-
-    const json = await resp.json()
-    Router.push(`/profile/${json.profileId}`)
   }
 
   return (

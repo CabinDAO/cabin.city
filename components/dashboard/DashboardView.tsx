@@ -3,10 +3,14 @@ import { DataContainer } from '../core/DataContainer'
 import { ActivityList } from './ActivityList'
 import { useGetActivitySummaryQuery } from '@/generated/graphql'
 import { useUser } from '../auth/useUser'
+import styled from 'styled-components'
+import { TextPost } from './TextPost'
+import { useTextActivity } from './useTextActivity'
 
 export const DashboardView = () => {
   const { user } = useUser({ redirectTo: '/login' })
   const { data } = useGetActivitySummaryQuery()
+  const { handleCreateTextActivity } = useTextActivity()
 
   const dashboardItems = [
     {
@@ -23,12 +27,28 @@ export const DashboardView = () => {
     },
   ]
 
+  const handleOnPost = (text: string) => {
+    handleCreateTextActivity(text)
+  }
+
   if (!user) return null
 
   return (
     <TwoColumnLayout title="Cabin Activity">
-      <ActivityList />
+      <ActivitiesContainer>
+        <TextPost onPost={handleOnPost} />
+        <ActivityList />
+      </ActivitiesContainer>
       <DataContainer title="Dashboard" items={dashboardItems} />
     </TwoColumnLayout>
   )
 }
+
+const ActivitiesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`

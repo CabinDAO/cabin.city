@@ -58,14 +58,10 @@ export const ProfileVerifiedCitizenship = ({
           <ImageBackground src={DEFAULT_NFT_IMAGE} />
           <NFTNameContainer>
             <TitleLine>
-              <H1 emphasized $color="yellow100">
-                Cabin Citizen
-              </H1>
+              <H1 $color="yellow100">Cabin Citizen</H1>
             </TitleLine>
             <TitleLine>
-              <H1 emphasized $color="yellow100">
-                #{profile.citizenshipMetadata.tokenId}
-              </H1>
+              <H1 $color="yellow100">#{profile.citizenshipMetadata.tokenId}</H1>
               <ExternalIcon
                 color="yellow100"
                 name="up-right-arrow"

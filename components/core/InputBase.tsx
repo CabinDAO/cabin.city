@@ -1,11 +1,70 @@
 import { InputHTMLAttributes, ReactNode } from 'react'
 import styled from 'styled-components'
 import { InputLabel } from './InputLabel'
-import InputOutline from './InputOutline'
+import { HelperTextPosition } from './input.types'
+import { Caption } from './Typography'
 
 interface ContainerProps {
   disabled?: boolean
   filled?: boolean
+}
+
+interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
+  id?: string
+  label?: string
+  info?: string
+  required?: boolean
+  filled?: boolean
+  focused?: boolean
+  error?: boolean
+  message?: string
+  endAdornment?: ReactNode
+  helperText?: string
+  disabled?: boolean
+  children: ReactNode
+  onClick?: () => void
+  helperTextPosition?: HelperTextPosition
+}
+export const InputBase = ({
+  label,
+  required = false,
+  filled,
+  focused,
+  error,
+  disabled,
+  endAdornment,
+  onClick,
+  children,
+  helperText,
+  helperTextPosition = 'top',
+}: InputBaseProps) => {
+  return (
+    <Container disabled={disabled} filled={filled} onClick={onClick}>
+      {label && (
+        <InputLabel
+          required={required}
+          label={label}
+          helperText={helperTextPosition === 'top' ? helperText : undefined}
+        />
+      )}
+      <InputOutline
+        filled={filled}
+        focused={focused}
+        error={error}
+        disabled={disabled}
+      >
+        <InputContent>
+          <ChildrenContainer>{children}</ChildrenContainer>
+          {endAdornment}
+        </InputContent>
+        {helperTextPosition === 'inset' && helperText ? (
+          <InsetHelperText>
+            <Caption>{helperText}</Caption>
+          </InsetHelperText>
+        ) : null}
+      </InputOutline>
+    </Container>
+  )
 }
 
 const Container = styled.div<ContainerProps>`
@@ -35,6 +94,7 @@ const ChildrenContainer = styled.div`
   flex-direction: row;
   align-items: center;
   flex: 1;
+  width: 100%;
   padding: 0.2rem;
   overflow: scroll;
   height: 100%;
@@ -45,49 +105,53 @@ const ChildrenContainer = styled.div`
   }
 `
 
-interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
-  id?: string
-  label?: string
-  info?: string
-  required?: boolean
+const InsetHelperText = styled.div`
+  display: flex;
+  align-self: flex-end;
+`
+
+const InputContent = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1.2rem;
+`
+interface InputOutlineProps {
   filled?: boolean
   focused?: boolean
   error?: boolean
-  message?: string
-  endAdornment?: ReactNode
-  helperText?: string
   disabled?: boolean
-  children: ReactNode
-  onClick?: () => void
 }
-export const InputBase = ({
-  label,
-  required = false,
-  filled,
-  focused,
-  error,
-  disabled,
-  endAdornment,
-  onClick,
-  children,
-  helperText,
-}: InputBaseProps) => {
-  return (
-    <Container disabled={disabled} filled={filled} onClick={onClick}>
-      {label && (
-        <InputLabel required={required} label={label} helperText={helperText} />
-      )}
-      <InputOutline
-        filled={filled}
-        focused={focused}
-        error={error}
-        disabled={disabled}
-      >
-        <ChildrenContainer>{children}</ChildrenContainer>
-        {endAdornment}
-      </InputOutline>
-    </Container>
-  )
-}
+
+const InputOutline = styled.div<InputOutlineProps>`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  outline: 0;
+
+  background: ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.yellow900};
+  --icon-color: ${(props) => props.theme.colors.yellow900};
+  box-shadow: inset 0 0 0 1px ${(props) => props.theme.colors.yellow900};
+
+  ${(props) =>
+    props.filled &&
+    `
+    background: ${props.theme.colors.white};
+    color: ${
+      props.disabled ? props.theme.colors.red600 : props.theme.colors.yellow900
+    };
+    box-shadow: inset 0 0 0 1px ${props.theme.colors.yellow900};
+  `}
+
+  ${(props) =>
+    props.error &&
+    `
+    box-shadow: inset 0 0 0 2px ${props.theme.colors.red600};
+    padding: 1.5rem;
+  `}
+`
 
 InputBase.displayName = 'InputBase'

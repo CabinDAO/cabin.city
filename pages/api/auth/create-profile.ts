@@ -11,6 +11,7 @@ import { GetAccountHats } from '@/fauna/lib/GetAccountHats'
 import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
 import { hatsClient } from '@/lib/hats/hatsClient'
 import { GetHatsByIdsDocument } from '@/generated/gql/hats/graphql'
+import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 
 export interface CreateProfileBody {
   message: SiweMessage
@@ -35,18 +36,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const body = req.body as CreateProfileBody
 
-      const roles = await _getProfileRolesForAccount(validatedMessage.address)
-      console.info('roles', roles)
+      try {
+        const roles = await _getProfileRolesForAccount(validatedMessage.address)
+        console.info('roles', roles)
 
-      const profile = await _createProfile({
-        address: validatedMessage.address,
-        name: body.name,
-        email: body.email,
-        roles,
-        avatar: body.avatar,
-      })
-      const profileId = profile.ref.id
-      res.send({ profileId })
+        const profile = await _createProfile({
+          address: validatedMessage.address,
+          name: body.name,
+          email: body.email,
+          roles,
+          avatar: body.avatar,
+        })
+        const profileId = profile.ref.id
+        res.send({ profileId })
+      } catch (err) {
+        const error = err as Error
+
+        const mappedError = FAUNA_ERROR_TO_MESSAGE_MAPPING[error.message]
+
+        if (mappedError) {
+          res.status(400).send({ error: mappedError })
+        } else {
+          console.error('Error creating profile', err)
+          res.status(500).send({ error: 'Error creating profile' })
+        }
+      }
       break
     default:
       res.setHeader('Allow', ['POST'])

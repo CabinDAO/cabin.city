@@ -11,6 +11,7 @@ export interface UpsertActivityInput {
   transactionId?: string
   blockNumber?: string
   metadata?: UpsertActivityMetadataInput
+  text?: string | Expr
 }
 
 interface UpsertActivityMetadataInput {

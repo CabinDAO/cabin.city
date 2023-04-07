@@ -61,7 +61,7 @@ query GetProfileById($id: ID!) {
   findProfileByID(id: $id) {
     ...GetProfileById
   }
-  activitiesByProfile(profileId: $id, size: 2) {
+  activitiesByProfile(profileId: $id, _size: 2) {
     data {
       ...ActivityItem
     }

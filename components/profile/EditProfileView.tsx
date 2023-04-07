@@ -11,6 +11,10 @@ import {
 } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { validateProfileInput } from './validations'
+import { ApolloError } from '@apollo/client'
+import { useModal } from '../hooks/useModal'
+import { ProfileErrorModal } from './ProfileErrorModal'
+import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 
 export const EditProfileView = () => {
   const router = useRouter()
@@ -20,6 +24,7 @@ export const EditProfileView = () => {
     {}
   )
   const [roleTypes, setRoleTypes] = useState<ProfileRoleType[] | null>(null)
+  const { showModal } = useModal()
 
   const handleSubmit = async () => {
     if (!editProfileInput) return
@@ -34,14 +39,37 @@ export const EditProfileView = () => {
     }
 
     if (user && validateProfileInput(editProfileInput)) {
-      await updateProfile({
-        variables: {
-          id: user._id,
-          data: editProfileInput,
-          roleTypes,
-        },
-      })
-      router.push(`/profile/${user._id}`)
+      try {
+        await updateProfile({
+          variables: {
+            id: user._id,
+            data: editProfileInput,
+            roleTypes,
+          },
+        })
+        router.push(`/profile/${user._id}`)
+      } catch (error: unknown) {
+        if (error instanceof ApolloError) {
+          const { graphQLErrors } = error
+          const [graphQLError] = graphQLErrors
+
+          if (graphQLError) {
+            const { extensions } = graphQLError
+            const mappedError =
+              FAUNA_ERROR_TO_MESSAGE_MAPPING[extensions?.code as string]
+
+            if (mappedError) {
+              showModal(() => <ProfileErrorModal error={mappedError} />)
+            } else {
+              showModal(() => (
+                <ProfileErrorModal error="Error updating profile" />
+              ))
+            }
+          }
+        } else {
+          showModal(() => <ProfileErrorModal error="Error updating profile" />)
+        }
+      }
     }
   }
 

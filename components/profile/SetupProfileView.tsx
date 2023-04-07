@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useUser } from '../auth/useUser'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { StepConfig, steps } from './setup/step-configuration'
+import { StepConfig, steps } from './setup-profile/step-configuration'
 
 export const SetupProfileView = ({}) => {
   const router = useRouter()

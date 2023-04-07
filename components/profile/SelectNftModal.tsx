@@ -20,7 +20,7 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
   useEffect(() => {
     if (!chain || !address) return
 
-    const alchemy = getAlchemySdk(chain)
+    const alchemy = getAlchemySdk()
 
     alchemy.nft
       .getNftsForOwner(address) // TODO: address

@@ -57,7 +57,6 @@ const BadgeContainer = styled.div`
 `
 
 const ImageContainer = styled.div`
-  border-radius: 0px 0px 48px 0px;
   position: relative;
   display: flex;
   overflow: hidden;
