@@ -76,6 +76,10 @@ Since this app is dependent on data coming from outside sources, it is sometimes
 4. To test the Citizenship/Unlock modal locally, run ngrok and update the `NEXT_PUBLIC_VERCEL_URL` environment variable
    `ngrok http 3000`
 
+### Troubleshooting
+
+Sometimes the Fauna GraphQL schema doesn't update correctly, e.g. when updating types for existing queries. The quick fix for this is usally to run `npm run fauna -- --mode replace`.
+
 ### Clear all documents in a collection
 
 ```typescript
