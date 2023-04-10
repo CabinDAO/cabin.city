@@ -2,7 +2,6 @@ import { Alchemy, Network } from 'alchemy-sdk'
 import { ethers } from 'ethers'
 
 export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
-  console.log({ network })
   switch (network) {
     case 'mainnet':
     case 'goerli':
