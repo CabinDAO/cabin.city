@@ -9,12 +9,6 @@ export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
         network,
         process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID
       )
-    case 'polygon':
-    case 'polygonMumbai':
-      return new ethers.providers.AlchemyProvider(
-        network,
-        process.env.NEXT_PUBLIC_POLYGON_ALCHEMY_ID
-      )
     case 'optimism':
       return new ethers.providers.AlchemyProvider(
         network,
