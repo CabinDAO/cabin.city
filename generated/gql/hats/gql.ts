@@ -14,7 +14,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  */
 const documents = {
     "query GetHatsByIds($ids: [ID!]) {\n  hats(where: {id_in: $ids}) {\n    ...Hat\n  }\n}": types.GetHatsByIdsDocument,
-    "query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}": types.GetHatsEventsDocument,
+    "query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    first: 1000\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}": types.GetHatsEventsDocument,
     "fragment Hat on Hat {\n  id\n  prettyId\n  details\n  imageUri\n  levelAtLocalTree\n  tree {\n    id\n  }\n}": types.HatFragmentDoc,
 };
 
@@ -39,7 +39,7 @@ export function gql(source: "query GetHatsByIds($ids: [ID!]) {\n  hats(where: {i
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}"): (typeof documents)["query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}"];
+export function gql(source: "query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    first: 1000\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}"): (typeof documents)["query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {\n  hatsEvents(\n    first: 1000\n    where: {tree: $treeId, blockNumber_gte: $startBlock, blockNumber_lte: $endBlock}\n  ) {\n    id\n    transactionID\n    blockNumber\n    timestamp\n    hat {\n      ...Hat\n    }\n    ... on HatMintedEvent {\n      wearer {\n        id\n      }\n    }\n    ... on HatBurnedEvent {\n      wearer {\n        id\n      }\n    }\n  }\n}"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
