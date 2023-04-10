@@ -86,5 +86,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
     }
   })
 
+  console.info({ hatsToAdd })
+
   await syncHatRoles(ref, hatsToAdd, hatsToRemove, activities)
 }

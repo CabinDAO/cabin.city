@@ -1,5 +1,4 @@
 import { ExprVal, query as q } from 'faunadb'
-import { Find } from 'faunadb-fql-lib'
 import { GetProfileByAddress } from './GetProfileByAddress'
 
 export const SetProfileRole = (
@@ -16,28 +15,28 @@ export const SetProfileRole = (
       null,
       q.Let(
         {
-          profileRoles: q.Select(['data', 'roles'], q.Var('profile')),
-          roleAlreadyExists: q.Not(
-            q.IsNull(
-              Find(
-                q.Var('profileRoles'),
-                q.Lambda('role', q.Equals(q.Var('role'), profileRoleExpr))
+          profileRoles: q.Select(['data', 'roles'], q.Var('profile'), []),
+          // Filter previous matching roles (e.g. the user already self selected an Apprentice role)
+          filteredProfileRoles: q.Filter(
+            q.Var('profileRoles'),
+            q.Lambda(
+              'profileRole',
+              q.Not(
+                q.Equals(
+                  q.Select(['role'], q.Var('profileRole')),
+                  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                  q.Select(['role'], profileRoleExpr!)
+                )
               )
             )
           ),
         },
-        q.If(
-          q.Var('roleAlreadyExists'),
-          // Role already exists, skip
-          null,
-          // Role does not exist, add it
-          q.Update(q.Select('ref', q.Var('profile')), {
-            data: {
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              roles: q.Append(profileRoleExpr!, q.Var('profileRoles')),
-            },
-          })
-        )
+        q.Update(q.Select('ref', q.Var('profile')), {
+          data: {
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            roles: q.Append(profileRoleExpr!, q.Var('filteredProfileRoles')),
+          },
+        })
       )
     )
   )

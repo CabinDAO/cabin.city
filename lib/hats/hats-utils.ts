@@ -1,11 +1,11 @@
 import { ProfileRoleLevelType, ProfileRoleType } from 'generated/graphql'
 
-const CARETAKER_ID = '01'
-const BUILDER_ID = '02'
-const GATHERER_ID = '03'
-const NATURALIST_ID = '04'
-const CREATOR_ID = '05'
-const RESIDENT_ID = '06'
+const CARETAKER_ID = '0001'
+const GATHERER_ID = '0002'
+const BUILDER_ID = '0003'
+const NATURALIST_ID = '0004'
+const CREATOR_ID = '0005'
+const RESIDENT_ID = '0006'
 
 const ID_TO_ROLE: Record<string, ProfileRoleType> = {
   [CARETAKER_ID]: ProfileRoleType.Caretaker,
@@ -24,8 +24,8 @@ interface GetProfileRoleHat {
 /*
     Examples:
         0x00000002: Cabin Top Hat
-        0x00000002.01: Caretaker Guild Custodian
-        0x00000002.01.01: Caretaker (Member)
+        0x00000002.0001: Caretaker Custodian
+        0x00000002.0001.0001: Caretaker Artisan
 */
 export const getProfileRoleFromHat = (hat: GetProfileRoleHat) => {
   const split = hat.prettyId.split('.')

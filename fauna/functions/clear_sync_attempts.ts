@@ -8,7 +8,9 @@ const clearSyncAttempts: FunctionResource = {
       ['key'],
       q.Do(
         q.Map(
-          q.Paginate(q.Match(q.Index('syncAttemptsByKey'), q.Var('key'))),
+          q.Paginate(q.Match(q.Index('syncAttemptsByKey'), q.Var('key')), {
+            size: 100000,
+          }),
           q.Lambda('syncAttemptRef', q.Delete(q.Var('syncAttemptRef')))
         ),
         true
