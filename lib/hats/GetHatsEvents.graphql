@@ -1,5 +1,6 @@
 query GetHatsEvents($treeId: String!, $startBlock: Int!, $endBlock: Int!) {
   hatsEvents(
+    first: 1000
     where: {
       tree: $treeId
       blockNumber_gte: $startBlock

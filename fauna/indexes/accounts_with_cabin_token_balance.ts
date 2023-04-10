@@ -9,7 +9,16 @@ const accountsWithCabinTokenBalance: IndexResource = {
       has_cabin_token_balance: q.Query(
         q.Lambda(
           'account',
-          q.ContainsPath(['data', 'cabinTokenBalance'], q.Var('account'))
+          // Has cabin token if cabinTokenBalance is present and not zero
+          q.And(
+            q.ContainsPath(['data', 'cabinTokenBalance'], q.Var('account')),
+            q.Not(
+              q.Equals(
+                q.Select(['data', 'cabinTokenBalance'], q.Var('account')),
+                '0'
+              )
+            )
+          )
         )
       ),
     },

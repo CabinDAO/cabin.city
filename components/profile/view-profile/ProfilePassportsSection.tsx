@@ -31,7 +31,7 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
     }
   }
 
-  if (profile.account.badges.data.length) {
+  if (list.length) {
     return (
       <Container>
         <H3>Passport stamps</H3>
@@ -90,7 +90,7 @@ const Container = styled.div`
 const PassportsPage = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(4, 1fr);
+  grid-auto-flow: row;
   align-items: center;
   justify-items: center;
   width: 100%;
@@ -100,7 +100,6 @@ const PassportsPage = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(2, 1fr);
   }
 
   ${({ theme }) => theme.bp.lg} {

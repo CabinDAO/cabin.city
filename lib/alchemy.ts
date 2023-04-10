@@ -2,19 +2,12 @@ import { Alchemy, Network } from 'alchemy-sdk'
 import { ethers } from 'ethers'
 
 export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
-  console.log({ network })
   switch (network) {
     case 'mainnet':
     case 'goerli':
       return new ethers.providers.AlchemyProvider(
         network,
         process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID
-      )
-    case 'polygon':
-    case 'polygonMumbai':
-      return new ethers.providers.AlchemyProvider(
-        network,
-        process.env.NEXT_PUBLIC_POLYGON_ALCHEMY_ID
       )
     case 'optimism':
       return new ethers.providers.AlchemyProvider(

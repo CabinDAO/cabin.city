@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel-plugin for production.
  */
 const documents = {
-    "query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}": types.GetBadgesDocument,
+    "query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    first: 1000\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}": types.GetBadgesDocument,
 };
 
 /**
@@ -33,7 +33,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}"): (typeof documents)["query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}"];
+export function gql(source: "query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    first: 1000\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}"): (typeof documents)["query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {\n  badges(\n    first: 1000\n    where: {spec_: {raft: $raftId}, _change_block: {number_gte: $startBlock}}\n    block: {number: $endBlock}\n  ) {\n    id\n    owner\n    createdAt\n    spec {\n      id\n      metadata {\n        name\n        description\n        image\n      }\n    }\n  }\n}"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

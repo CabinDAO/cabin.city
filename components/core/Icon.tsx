@@ -111,6 +111,11 @@ const IconWrap = styled.span<IconWrapProps>`
   justify-content: center;
   width: 10rem;
   height: 10rem;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
   ${({ $size }) =>
     $size
       ? css`
