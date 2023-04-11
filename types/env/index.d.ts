@@ -11,6 +11,7 @@ export interface Env {
   NEXT_PUBLIC_USE_TESTNETS: boolean
   NEXT_PUBLIC_VERCEL_URL: string
   SIGNER_PRIVATE_KEY: string
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
 }
 
 declare global {
@@ -23,6 +24,7 @@ declare global {
     unlockProtocol: {
       loadCheckoutModal: (config?: unknown) => void
     }
+    initMap: () => void
   }
 }
 
