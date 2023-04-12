@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components'
 import { notch } from '../layouts/common.styles'
+import { NotchOutline } from './NotchOutline'
 
-type ContainerShape = 'default' | 'notch' | 'curve'
+type ContainerShape = 'default' | 'notch' | 'curve' | 'notch-all'
 type ContainerFillType = 'outline' | 'soft' | 'hard'
 
 interface ContainerProps {
@@ -23,7 +24,9 @@ const BaseContainer = styled.div<ContainerProps>`
   ${({ shape, notchSize }) => {
     switch (shape) {
       case 'notch':
-        return notch(notchSize)
+        return notch(notchSize, 'top-left')
+      case 'notch-all':
+        return notch(notchSize, 'all')
       case 'curve':
         return css`
           border-bottom-right-radius: 4.8rem;
@@ -47,7 +50,8 @@ const BaseContainer = styled.div<ContainerProps>`
         `
       default:
         return css`
-          border: 0.1rem solid ${({ theme }) => theme.colors.yellow900};
+          border: 0.1rem solid
+            var(--border-color, ${({ theme }) => theme.colors.yellow900});
         `
     }
   }}
@@ -59,16 +63,6 @@ const BaseContainer = styled.div<ContainerProps>`
     `}
 
     ${({ maxWidth }) => maxWidth && `max-width: ${maxWidth}rem;`}
-`
-
-const Notch = styled.div<{ notchSize: number }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: ${(props) => props.notchSize}rem};
-  height: ${(props) => props.notchSize}rem};
-  background-color: black;
-  border: solid 1px black;
 `
 
 export const ContentCard = ({
@@ -90,9 +84,29 @@ export const ContentCard = ({
       notchSize={notchSize}
     >
       <>
-        {shape === 'notch' ? <Notch notchSize={notchSize} /> : null}
+        {shape === 'notch' ? (
+          <NotchOutline notchPosition="top-left" notchSize={notchSize} />
+        ) : null}
+        {shape === 'notch-all' ? (
+          <NotchAllContent notchSize={notchSize} />
+        ) : null}
         {children}
       </>
     </BaseContainer>
+  )
+}
+
+interface NotchOutlineContentProps {
+  notchSize: number
+}
+
+const NotchAllContent = ({ notchSize }: NotchOutlineContentProps) => {
+  return (
+    <>
+      <NotchOutline notchPosition="top-left" notchSize={notchSize} />
+      <NotchOutline notchPosition="top-right" notchSize={notchSize} />
+      <NotchOutline notchPosition="bottom-left" notchSize={notchSize} />
+      <NotchOutline notchPosition="bottom-right" notchSize={notchSize} />
+    </>
   )
 }

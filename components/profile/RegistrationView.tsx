@@ -8,7 +8,7 @@ import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { useModal } from '../hooks/useModal'
-import { ProfileErrorModal } from './ProfileErrorModal'
+import { ErrorModal } from '../ErrorModal'
 
 export interface RegistrationParams {
   email: string
@@ -50,7 +50,9 @@ export const RegistrationView = () => {
     const json = await resp.json()
 
     if (!resp.ok) {
-      showModal(() => <ProfileErrorModal error={json.error} />)
+      showModal(() => (
+        <ErrorModal title="Profile Submission Error" description={json.error} />
+      ))
     } else {
       Router.push(`/profile/${json.profileId}`)
     }

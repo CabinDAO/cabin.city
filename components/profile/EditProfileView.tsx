@@ -13,7 +13,7 @@ import { useRouter } from 'next/router'
 import { validateProfileInput } from './validations'
 import { ApolloError } from '@apollo/client'
 import { useModal } from '../hooks/useModal'
-import { ProfileErrorModal } from './ProfileErrorModal'
+import { ErrorModal } from '../ErrorModal'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 
 export const EditProfileView = () => {
@@ -59,15 +59,28 @@ export const EditProfileView = () => {
               FAUNA_ERROR_TO_MESSAGE_MAPPING[extensions?.code as string]
 
             if (mappedError) {
-              showModal(() => <ProfileErrorModal error={mappedError} />)
+              showModal(() => (
+                <ErrorModal
+                  title="Profile Submission Error"
+                  description={mappedError}
+                />
+              ))
             } else {
               showModal(() => (
-                <ProfileErrorModal error="Error updating profile" />
+                <ErrorModal
+                  title="Profile Submission Error"
+                  description="Error updating profile"
+                />
               ))
             }
           }
         } else {
-          showModal(() => <ProfileErrorModal error="Error updating profile" />)
+          showModal(() => (
+            <ErrorModal
+              title="Profile Submission Error"
+              description="Error updating profile"
+            />
+          ))
         }
       }
     }

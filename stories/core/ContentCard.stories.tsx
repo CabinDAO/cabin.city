@@ -85,3 +85,9 @@ HardFillCurve.args = {
   fillType: 'hard',
   shape: 'curve',
 }
+
+export const OutlineNotchAll = Template.bind({})
+OutlineNotchAll.args = {
+  children: <Content />,
+  shape: 'notch-all',
+}
