@@ -168,5 +168,6 @@ const ActivityDate = (props: PostProps) => (
       parseISO(props.activityItem.activity.timestamp),
       props.baseDate
     )}
+    {' ago'}
   </Caption>
 )

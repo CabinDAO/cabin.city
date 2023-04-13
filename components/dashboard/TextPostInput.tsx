@@ -16,13 +16,13 @@ export const TextPostInput = ({ onPost, onCancel }: TextPostInputProps) => {
   const handlePostInputChange = async (e: ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value
 
-    if (text.length <= MAX_POST_LENGTH) {
-      setPostText(e.target.value)
+    if (text.length <= MAX_POST_LENGTH && text.length >= 0) {
+      setPostText(text)
     }
   }
 
   const handlePost = () => {
-    onPost(postText)
+    onPost(postText.trim())
     handleCancel()
   }
 
@@ -46,7 +46,10 @@ export const TextPostInput = ({ onPost, onCancel }: TextPostInputProps) => {
           <Button variant="link" onClick={handleCancel}>
             Cancel
           </Button>
-          <StyledButton disabled={postText.length === 0} onClick={handlePost}>
+          <StyledButton
+            disabled={postText.trim().length === 0}
+            onClick={handlePost}
+          >
             Post
           </StyledButton>
         </Actions>

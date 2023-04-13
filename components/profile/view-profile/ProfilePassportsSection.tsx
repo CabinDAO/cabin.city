@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { Badge } from '@/components/core/Badge'
 import IconButton from '@/components/core/IconButton'
 import { PASSPORT_PAGE_SIZE } from '../constants'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 interface ProfilePassportsProps {
   profile: GetProfileByIdFragment
@@ -72,7 +73,7 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
           icon="stamp"
           title="Collect Passport Stamps"
           description="Build your Cabin creds"
-          href="https://cabin.city"
+          href={EXTERNAL_LINKS.PASSPORTS}
         />
       </Container>
     )
