@@ -7,6 +7,7 @@ import { H3 } from '@/components/core/Typography'
 import { EmptyState } from '../../core/EmptyState'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { pxToRem } from '@/utils/display-utils'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 interface ProfileRolesProps {
   profile: GetProfileByIdFragment
@@ -41,7 +42,7 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
           icon="card-heart"
           title="Choose your interests"
           description="Level them up over time"
-          href="https://cabin.city"
+          href={EXTERNAL_LINKS.ROLES}
         />
       </Container>
     )

@@ -8,6 +8,7 @@ import {
   citizenshipInfoFromStatus,
   DEFAULT_CTA_TEXT,
 } from '@/utils/citizenship'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 import Link from 'next/link'
 import styled from 'styled-components'
 
@@ -18,9 +19,6 @@ interface ProfileUnverifiedCitizenshipProps {
 export const ProfileUnverifiedCitizenship = ({
   profile,
 }: ProfileUnverifiedCitizenshipProps) => {
-  // TODO: Replace with real link
-  const href = 'https://cabin.city'
-
   const { deviceSize } = useDeviceSize()
 
   const citizenCTAText =
@@ -43,7 +41,11 @@ export const ProfileUnverifiedCitizenship = ({
             A digital and physical passport to explore the Cabin network. Join
             the growing community today and unlock some epic benefits.
           </Body2>
-          <AppLink external location={href} iconSize={0.9}>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CITIZENSHIP}
+            iconSize={0.9}
+          >
             <Overline>Learn More</Overline>
           </AppLink>
         </DescriptionContainer>

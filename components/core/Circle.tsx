@@ -10,7 +10,6 @@ export const Circle = styled.div<CircleProps>`
   width: ${({ size }) => size}rem;
   height: ${({ size }) => size}rem;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.green400};
   display: flex;
   justify-content: center;
   align-items: center;

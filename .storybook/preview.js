@@ -2,6 +2,7 @@ import * as NextImage from "next/image";
 import { addDecorator } from '@storybook/react'
 import { ThemeProvider } from 'styled-components'
 import { RouterContext } from "next/dist/shared/lib/router-context";
+import { ModalProvider } from '@/components/contexts/ModalContext'
 
 import theme from '../styles/theme'
 import GlobalStyles from '../styles/global'
@@ -9,7 +10,9 @@ import GlobalStyles from '../styles/global'
 addDecorator(storyFn => (
   <ThemeProvider theme={theme}>
     <GlobalStyles />
-    {storyFn()}
+    <ModalProvider>
+      {storyFn()}
+    </ModalProvider>
   </ThemeProvider>
 ))
 

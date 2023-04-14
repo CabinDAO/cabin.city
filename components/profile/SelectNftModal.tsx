@@ -23,7 +23,7 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
     const alchemy = getAlchemySdk()
 
     alchemy.nft
-      .getNftsForOwner(address) // TODO: address
+      .getNftsForOwner(address)
       .then((nfts) => {
         setNfts(nfts.ownedNfts.filter((nft) => nft.media.length > 0))
       })

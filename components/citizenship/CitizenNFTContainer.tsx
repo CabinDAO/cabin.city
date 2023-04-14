@@ -11,6 +11,7 @@ import { unlockConfig } from '@/lib/protocol-config'
 import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
 import { AppLink } from '../core/AppLink'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 const INNER_PADDING_PX = 24
 const IMAGE_SIZE_PX = 336
@@ -55,7 +56,11 @@ export const CitizenNFTContainer = () => {
             pellentesque aliquet, nisi lacus aliquet lorem, eget pulvinar magna
             justo eu erat. Suspendisse vel scelerisque ante.
           </Caption>
-          <AppLink external location="/" iconSize={0.9}>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CITIZENSHIP}
+            iconSize={0.9}
+          >
             <Overline>Learn More</Overline>
           </AppLink>
         </DescriptionContainer>

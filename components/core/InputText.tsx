@@ -3,6 +3,8 @@ import {
   InputHTMLAttributes,
   MutableRefObject,
   ReactNode,
+  Ref,
+  forwardRef,
   useRef,
 } from 'react'
 import styled from 'styled-components'
@@ -46,53 +48,72 @@ interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   onChange?: (_e: ChangeEvent<HTMLInputElement>) => void
 }
 
-export const InputText = ({
-  id = 'input',
-  label,
-  required,
-  info,
-  placeholder,
-  value,
-  error,
-  disabled,
-  message,
-  endAdornment,
-  helperText,
-  onChange,
-  ...props
-}: InputTextProps) => {
-  const inputRef = useRef() as MutableRefObject<HTMLInputElement>
+export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
+  (
+    {
+      id = 'input',
+      label,
+      required,
+      info,
+      placeholder,
+      value,
+      error,
+      disabled,
+      message,
+      endAdornment,
+      helperText,
+      onChange,
+      ...props
+    },
+    forwardedRef
+  ) => {
+    const localRef = useRef<HTMLInputElement>()
+    // const inputRef = forwardedRef || fallbackRef
 
-  const handleOnParentClick = () => {
-    inputRef?.current.focus()
-  }
+    const handleOnParentClick = () => {
+      localRef?.current?.focus()
+    }
 
-  return (
-    <InputBase
-      id={id}
-      label={label}
-      required={required}
-      info={info}
-      filled={!!value}
-      error={error}
-      disabled={disabled}
-      message={message}
-      helperText={helperText}
-      endAdornment={endAdornment}
-      onClick={handleOnParentClick}
-    >
-      <StyledInput
+    return (
+      <InputBase
         id={id}
-        ref={inputRef}
-        type="text"
-        onChange={onChange}
-        placeholder={placeholder}
-        value={value}
+        label={label}
+        required={required}
+        info={info}
+        filled={!!value}
+        error={error}
         disabled={disabled}
-        {...props}
-      />
-    </InputBase>
-  )
-}
+        message={message}
+        helperText={helperText}
+        endAdornment={endAdornment}
+        onClick={handleOnParentClick}
+      >
+        <StyledInput
+          id={id}
+          ref={assignRefs(forwardedRef, localRef)}
+          type="text"
+          onChange={onChange}
+          placeholder={placeholder}
+          value={value}
+          disabled={disabled}
+          {...props}
+        />
+      </InputBase>
+    )
+  }
+)
 
 InputText.displayName = 'InputText'
+
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-constraint
+const assignRefs = <T extends unknown>(...refs: Ref<T | null>[]) => {
+  return (node: T | null) => {
+    refs.forEach((r) => {
+      if (typeof r === 'function') {
+        r(node)
+      } else if (r) {
+        ;(r as MutableRefObject<T | null>).current = node
+      }
+    })
+  }
+}

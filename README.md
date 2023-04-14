@@ -47,6 +47,10 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Setup Google Maps Places API
+
+Follow [these instructions](https://developers.google.com/maps/documentation/places/web-service/get-api-key) to create an API key and set the `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` env var.
+
 ## Smart Contracts Management
 
 TBD

@@ -3,41 +3,10 @@ import { InputText } from '../core/InputText'
 import Icon from '../core/Icon'
 import { AutofitImage } from '../core/AutofitImage'
 import { MutableRefObject, useRef, useState } from 'react'
-import { Caption } from '../core/Typography'
+import { Caption, WordBreak } from '../core/Typography'
 import { ScrollToTop } from '../core/ScrollToTop'
 import { OwnedNft } from 'alchemy-sdk'
 import { getImageUrlFromNft } from '@/lib/image'
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  width: 100%;
-`
-
-const SearchResults = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 1.6rem;
-  column-gap: 0.8rem;
-  min-width: 100%;
-  min-height: 100%;
-`
-
-const SearchResult = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  cursor: pointer;
-`
-
-const NftImage = styled.div`
-  position: relative;
-  min-width: 9.4rem;
-  min-height: 10.4rem;
-  width: auto;
-  height: auto;
-`
 
 interface SearchNftsProps {
   nfts: OwnedNft[]
@@ -87,7 +56,9 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
               <NftImage>
                 <AutofitImage src={getImageUrlFromNft(nft)} alt={nft.title} />
               </NftImage>
-              <Caption emphasized>{nft.title}</Caption>
+              <CaptionContainer>
+                <Caption emphasized>{nft.title}</Caption>
+              </CaptionContainer>
             </SearchResult>
           )
         })}
@@ -95,3 +66,40 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
     </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+`
+
+const SearchResults = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: 1.6rem;
+  column-gap: 0.8rem;
+  min-width: 100%;
+  min-height: 100%;
+`
+
+const SearchResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  cursor: pointer;
+`
+
+const NftImage = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 11.4rem;
+  max-height: 11.4rem;
+`
+
+const CaptionContainer = styled(WordBreak)`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`
