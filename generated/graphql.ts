@@ -176,12 +176,125 @@ export type HatWearersRelation = {
   disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
+/** 'LocationAddress' input values */
+export type LocationAddressInput = {
+  lat?: InputMaybe<Scalars['Float']>;
+  lng?: InputMaybe<Scalars['Float']>;
+  formattedAddress?: InputMaybe<Scalars['String']>;
+  streetNumber?: InputMaybe<Scalars['String']>;
+  route?: InputMaybe<Scalars['String']>;
+  routeShort?: InputMaybe<Scalars['String']>;
+  locality?: InputMaybe<Scalars['String']>;
+  admininstrativeAreaLevel1?: InputMaybe<Scalars['String']>;
+  admininstrativeAreaLevel1Short?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryShort?: InputMaybe<Scalars['String']>;
+  postalCode?: InputMaybe<Scalars['String']>;
+};
+
+/** Allow manipulating the relationship between the types 'Location' and 'Profile' using the field 'Location.caretaker'. */
+export type LocationCaretakerRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** 'Location' input values */
+export type LocationInput = {
+  locationType?: InputMaybe<LocationType>;
+  name?: InputMaybe<Scalars['String']>;
+  tagline?: InputMaybe<Scalars['String']>;
+  sleepCapacity?: InputMaybe<Scalars['Int']>;
+  caretaker?: InputMaybe<LocationCaretakerRelation>;
+  caretakerEmail?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['Time']>;
+  offers?: InputMaybe<LocationOffersRelation>;
+  mediaItems?: InputMaybe<LocationMediaItemsRelation>;
+  votes?: InputMaybe<LocationVotesRelation>;
+  internetSpeedMbps?: InputMaybe<Scalars['Int']>;
+  address?: InputMaybe<LocationAddressInput>;
+  bannerImageIpfsHash?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  addressInfo?: InputMaybe<Scalars['String']>;
+};
+
+/** 'LocationMediaItem' input values */
+export type LocationMediaItemInput = {
+  location?: InputMaybe<LocationMediaItemLocationRelation>;
+  category: LocationMediaCategory;
+  imageIpfsHash?: InputMaybe<Scalars['String']>;
+};
+
+/** Allow manipulating the relationship between the types 'LocationMediaItem' and 'Location' using the field 'LocationMediaItem.location'. */
+export type LocationMediaItemLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'Location' and 'LocationMediaItem'. */
+export type LocationMediaItemsRelation = {
+  /** Create one or more documents of type 'LocationMediaItem' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<LocationMediaItemInput>>>;
+  /** Connect one or more documents of type 'LocationMediaItem' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'LocationMediaItem' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
+/** Allow manipulating the relationship between the types 'Location' and 'Offer'. */
+export type LocationOffersRelation = {
+  /** Create one or more documents of type 'Offer' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<OfferInput>>>;
+  /** Connect one or more documents of type 'Offer' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'Offer' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
+/** 'LocationVote' input values */
+export type LocationVoteInput = {
+  location?: InputMaybe<LocationVoteLocationRelation>;
+  profile?: InputMaybe<LocationVoteProfileRelation>;
+  count: Scalars['Int'];
+};
+
+/** Allow manipulating the relationship between the types 'LocationVote' and 'Location' using the field 'LocationVote.location'. */
+export type LocationVoteLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'LocationVote' and 'Profile' using the field 'LocationVote.profile'. */
+export type LocationVoteProfileRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'Location' and 'LocationVote'. */
+export type LocationVotesRelation = {
+  /** Create one or more documents of type 'LocationVote' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<LocationVoteInput>>>;
+  /** Connect one or more documents of type 'LocationVote' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'LocationVote' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Delete an existing document in the collection of 'Profile' */
   deleteProfile?: Maybe<Profile>;
   /** Partially updates an existing document in the collection of 'Account'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateAccount?: Maybe<Account>;
+  /** Partially updates an existing document in the collection of 'Offer'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateOffer?: Maybe<Offer>;
   /** Delete an existing document in the collection of 'OtterspaceBadge' */
   deleteOtterspaceBadge?: Maybe<OtterspaceBadge>;
   /** Update an existing document in the collection of 'BlockSyncAttempt' */
@@ -195,8 +308,14 @@ export type Mutation = {
   unvouchProfile: Profile;
   /** Partially updates an existing document in the collection of 'Activity'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateActivity?: Maybe<Activity>;
+  /** Delete an existing document in the collection of 'Location' */
+  deleteLocation?: Maybe<Location>;
+  /** Update an existing document in the collection of 'LocationVote' */
+  updateLocationVote?: Maybe<LocationVote>;
   /** Create a new document in the collection of 'ActivityReaction' */
   createActivityReaction: ActivityReaction;
+  /** Partially updates an existing document in the collection of 'Location'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateLocation?: Maybe<Location>;
   /** Delete an existing document in the collection of 'TrackingEvent' */
   deleteTrackingEvent?: Maybe<TrackingEvent>;
   /** Partially updates an existing document in the collection of 'OtterspaceBadgeSpec'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
@@ -213,6 +332,8 @@ export type Mutation = {
   updateActivityReaction?: Maybe<ActivityReaction>;
   /** Update an existing document in the collection of 'OtterspaceBadgeSpec' */
   updateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
+  /** Partially updates an existing document in the collection of 'LocationVote'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateLocationVote?: Maybe<LocationVote>;
   /** Delete an existing document in the collection of 'ActivityReaction' */
   deleteActivityReaction?: Maybe<ActivityReaction>;
   /** Partially updates an existing document in the collection of 'ActivityReaction'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
@@ -221,8 +342,18 @@ export type Mutation = {
   deleteProfileVouch?: Maybe<ProfileVouch>;
   /** Partially updates an existing document in the collection of 'BlockSyncAttempt'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
+  /** Create a new document in the collection of 'LocationVote' */
+  createLocationVote: LocationVote;
+  /** Update an existing document in the collection of 'Location' */
+  updateLocation?: Maybe<Location>;
+  /** Create a new document in the collection of 'LocationMediaItem' */
+  createLocationMediaItem: LocationMediaItem;
   /** Create a new document in the collection of 'TrackingEvent' */
   createTrackingEvent: TrackingEvent;
+  /** Delete an existing document in the collection of 'LocationMediaItem' */
+  deleteLocationMediaItem?: Maybe<LocationMediaItem>;
+  /** Create a new document in the collection of 'Location' */
+  createLocation: Location;
   unlikeActivity: ActivityReaction;
   /** Update an existing document in the collection of 'TrackingEvent' */
   updateTrackingEvent?: Maybe<TrackingEvent>;
@@ -240,19 +371,29 @@ export type Mutation = {
   partialUpdateHat?: Maybe<Hat>;
   /** Create a new document in the collection of 'BlockSyncAttempt' */
   createBlockSyncAttempt: BlockSyncAttempt;
+  /** Create a new document in the collection of 'Offer' */
+  createOffer: Offer;
+  /** Update an existing document in the collection of 'LocationMediaItem' */
+  updateLocationMediaItem?: Maybe<LocationMediaItem>;
   createTextActivity: Activity;
+  /** Update an existing document in the collection of 'Offer' */
+  updateOffer?: Maybe<Offer>;
   clearSyncAttempts: Scalars['Boolean'];
   createProfile: Profile;
   /** Create a new document in the collection of 'OtterspaceBadgeSpec' */
   createOtterspaceBadgeSpec: OtterspaceBadgeSpec;
   /** Delete an existing document in the collection of 'OtterspaceBadgeSpec' */
   deleteOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
+  /** Delete an existing document in the collection of 'LocationVote' */
+  deleteLocationVote?: Maybe<LocationVote>;
   /** Create a new document in the collection of 'Account' */
   createAccount: Account;
   /** Partially updates an existing document in the collection of 'OtterspaceBadge'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateOtterspaceBadge?: Maybe<OtterspaceBadge>;
   /** Create a new document in the collection of 'Hat' */
   createHat: Hat;
+  /** Partially updates an existing document in the collection of 'LocationMediaItem'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateLocationMediaItem?: Maybe<LocationMediaItem>;
   likeActivity: ActivityReaction;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
@@ -260,6 +401,8 @@ export type Mutation = {
   updateProfile: Profile;
   /** Create a new document in the collection of 'ProfileVouch' */
   createProfileVouch: ProfileVouch;
+  /** Delete an existing document in the collection of 'Offer' */
+  deleteOffer?: Maybe<Offer>;
   logTrackingEvent: TrackingEvent;
   /** Delete an existing document in the collection of 'Activity' */
   deleteActivity?: Maybe<Activity>;
@@ -274,6 +417,12 @@ export type MutationDeleteProfileArgs = {
 export type MutationPartialUpdateAccountArgs = {
   id: Scalars['ID'];
   data: PartialUpdateAccountInput;
+};
+
+
+export type MutationPartialUpdateOfferArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateOfferInput;
 };
 
 
@@ -315,8 +464,25 @@ export type MutationPartialUpdateActivityArgs = {
 };
 
 
+export type MutationDeleteLocationArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateLocationVoteArgs = {
+  id: Scalars['ID'];
+  data: LocationVoteInput;
+};
+
+
 export type MutationCreateActivityReactionArgs = {
   data: ActivityReactionInput;
+};
+
+
+export type MutationPartialUpdateLocationArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateLocationInput;
 };
 
 
@@ -365,6 +531,12 @@ export type MutationUpdateOtterspaceBadgeSpecArgs = {
 };
 
 
+export type MutationPartialUpdateLocationVoteArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateLocationVoteInput;
+};
+
+
 export type MutationDeleteActivityReactionArgs = {
   id: Scalars['ID'];
 };
@@ -387,8 +559,34 @@ export type MutationPartialUpdateBlockSyncAttemptArgs = {
 };
 
 
+export type MutationCreateLocationVoteArgs = {
+  data: LocationVoteInput;
+};
+
+
+export type MutationUpdateLocationArgs = {
+  id: Scalars['ID'];
+  data: LocationInput;
+};
+
+
+export type MutationCreateLocationMediaItemArgs = {
+  data: LocationMediaItemInput;
+};
+
+
 export type MutationCreateTrackingEventArgs = {
   data: TrackingEventInput;
+};
+
+
+export type MutationDeleteLocationMediaItemArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationCreateLocationArgs = {
+  data: LocationInput;
 };
 
 
@@ -444,8 +642,25 @@ export type MutationCreateBlockSyncAttemptArgs = {
 };
 
 
+export type MutationCreateOfferArgs = {
+  data: OfferInput;
+};
+
+
+export type MutationUpdateLocationMediaItemArgs = {
+  id: Scalars['ID'];
+  data: LocationMediaItemInput;
+};
+
+
 export type MutationCreateTextActivityArgs = {
   text: Scalars['String'];
+};
+
+
+export type MutationUpdateOfferArgs = {
+  id: Scalars['ID'];
+  data: OfferInput;
 };
 
 
@@ -469,6 +684,11 @@ export type MutationDeleteOtterspaceBadgeSpecArgs = {
 };
 
 
+export type MutationDeleteLocationVoteArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationCreateAccountArgs = {
   data: AccountInput;
 };
@@ -482,6 +702,12 @@ export type MutationPartialUpdateOtterspaceBadgeArgs = {
 
 export type MutationCreateHatArgs = {
   data: HatInput;
+};
+
+
+export type MutationPartialUpdateLocationMediaItemArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateLocationMediaItemInput;
 };
 
 
@@ -512,6 +738,11 @@ export type MutationCreateProfileVouchArgs = {
 };
 
 
+export type MutationDeleteOfferArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type MutationLogTrackingEventArgs = {
   key: Scalars['String'];
 };
@@ -519,6 +750,33 @@ export type MutationLogTrackingEventArgs = {
 
 export type MutationDeleteActivityArgs = {
   id: Scalars['ID'];
+};
+
+/** 'Offer' input values */
+export type OfferInput = {
+  offerType?: InputMaybe<OfferType>;
+  title?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['Time']>;
+  endDate?: InputMaybe<Scalars['Time']>;
+  location?: InputMaybe<OfferLocationRelation>;
+  price?: InputMaybe<OfferPriceInput>;
+  profileRoleConstraints?: InputMaybe<Array<ProfileRoleConstraintInput>>;
+  applicationUrl?: InputMaybe<Scalars['String']>;
+  imageIpfsHash?: InputMaybe<Scalars['String']>;
+};
+
+/** Allow manipulating the relationship between the types 'Offer' and 'Location' using the field 'Offer.location'. */
+export type OfferLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** 'OfferPrice' input values */
+export type OfferPriceInput = {
+  unit: OfferPriceUnit;
+  amountCents: Scalars['Int'];
 };
 
 /** Allow manipulating the relationship between the types 'OtterspaceBadge' and 'Account' using the field 'OtterspaceBadge.account'. */
@@ -631,6 +889,74 @@ export type PartialUpdateHatInput = {
   wearers?: InputMaybe<HatWearersRelation>;
 };
 
+/** 'LocationAddress' input values */
+export type PartialUpdateLocationAddressInput = {
+  lat?: InputMaybe<Scalars['Float']>;
+  lng?: InputMaybe<Scalars['Float']>;
+  formattedAddress?: InputMaybe<Scalars['String']>;
+  streetNumber?: InputMaybe<Scalars['String']>;
+  route?: InputMaybe<Scalars['String']>;
+  routeShort?: InputMaybe<Scalars['String']>;
+  locality?: InputMaybe<Scalars['String']>;
+  admininstrativeAreaLevel1?: InputMaybe<Scalars['String']>;
+  admininstrativeAreaLevel1Short?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  countryShort?: InputMaybe<Scalars['String']>;
+  postalCode?: InputMaybe<Scalars['String']>;
+};
+
+/** 'Location' input values */
+export type PartialUpdateLocationInput = {
+  locationType?: InputMaybe<LocationType>;
+  name?: InputMaybe<Scalars['String']>;
+  tagline?: InputMaybe<Scalars['String']>;
+  sleepCapacity?: InputMaybe<Scalars['Int']>;
+  caretaker?: InputMaybe<LocationCaretakerRelation>;
+  caretakerEmail?: InputMaybe<Scalars['String']>;
+  publishedAt?: InputMaybe<Scalars['Time']>;
+  offers?: InputMaybe<LocationOffersRelation>;
+  mediaItems?: InputMaybe<LocationMediaItemsRelation>;
+  votes?: InputMaybe<LocationVotesRelation>;
+  internetSpeedMbps?: InputMaybe<Scalars['Int']>;
+  address?: InputMaybe<PartialUpdateLocationAddressInput>;
+  bannerImageIpfsHash?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  addressInfo?: InputMaybe<Scalars['String']>;
+};
+
+/** 'LocationMediaItem' input values */
+export type PartialUpdateLocationMediaItemInput = {
+  location?: InputMaybe<LocationMediaItemLocationRelation>;
+  category?: InputMaybe<LocationMediaCategory>;
+  imageIpfsHash?: InputMaybe<Scalars['String']>;
+};
+
+/** 'LocationVote' input values */
+export type PartialUpdateLocationVoteInput = {
+  location?: InputMaybe<LocationVoteLocationRelation>;
+  profile?: InputMaybe<LocationVoteProfileRelation>;
+  count?: InputMaybe<Scalars['Int']>;
+};
+
+/** 'Offer' input values */
+export type PartialUpdateOfferInput = {
+  offerType?: InputMaybe<OfferType>;
+  title?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['Time']>;
+  endDate?: InputMaybe<Scalars['Time']>;
+  location?: InputMaybe<OfferLocationRelation>;
+  price?: InputMaybe<PartialUpdateOfferPriceInput>;
+  profileRoleConstraints?: InputMaybe<Array<PartialUpdateProfileRoleConstraintInput>>;
+  applicationUrl?: InputMaybe<Scalars['String']>;
+  imageIpfsHash?: InputMaybe<Scalars['String']>;
+};
+
+/** 'OfferPrice' input values */
+export type PartialUpdateOfferPriceInput = {
+  unit?: InputMaybe<OfferPriceUnit>;
+  amountCents?: InputMaybe<Scalars['Int']>;
+};
+
 /** 'OtterspaceBadge' input values */
 export type PartialUpdateOtterspaceBadgeInput = {
   badgeId?: InputMaybe<Scalars['String']>;
@@ -681,6 +1007,14 @@ export type PartialUpdateProfileInput = {
   givenVouches?: InputMaybe<ProfileGivenVouchesRelation>;
   receivedVouches?: InputMaybe<ProfileReceivedVouchesRelation>;
   citizenshipMetadata?: InputMaybe<PartialUpdateCitizenshipMetadataInput>;
+  locations?: InputMaybe<ProfileLocationsRelation>;
+  locationVotes?: InputMaybe<ProfileLocationVotesRelation>;
+};
+
+/** 'ProfileRoleConstraint' input values */
+export type PartialUpdateProfileRoleConstraintInput = {
+  profileRole?: InputMaybe<ProfileRoleType>;
+  level?: InputMaybe<ProfileRoleLevelType>;
 };
 
 /** 'ProfileRole' input values */
@@ -743,6 +1077,26 @@ export type ProfileInput = {
   avatar?: InputMaybe<ProfileAvatarInput>;
 };
 
+/** Allow manipulating the relationship between the types 'Profile' and 'LocationVote'. */
+export type ProfileLocationVotesRelation = {
+  /** Create one or more documents of type 'LocationVote' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<LocationVoteInput>>>;
+  /** Connect one or more documents of type 'LocationVote' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'LocationVote' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
+/** Allow manipulating the relationship between the types 'Profile' and 'Location'. */
+export type ProfileLocationsRelation = {
+  /** Create one or more documents of type 'Location' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<LocationInput>>>;
+  /** Connect one or more documents of type 'Location' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'Location' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
 /** Allow manipulating the relationship between the types 'Profile' and 'ProfileVouch'. */
 export type ProfileReceivedVouchesRelation = {
   /** Create one or more documents of type 'ProfileVouch' and associate them with the current document. */
@@ -751,6 +1105,12 @@ export type ProfileReceivedVouchesRelation = {
   connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
   /** Disconnect the given documents of type 'ProfileVouch' from the current document using their IDs. */
   disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+};
+
+/** 'ProfileRoleConstraint' input values */
+export type ProfileRoleConstraintInput = {
+  profileRole: ProfileRoleType;
+  level: ProfileRoleLevelType;
 };
 
 /** 'ProfileRole' input values */
@@ -1004,6 +1364,177 @@ export type HatPage = {
   before?: Maybe<Scalars['String']>;
 };
 
+export type Location = {
+  __typename?: 'Location';
+  tagline?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  bannerImageIpfsHash?: Maybe<Scalars['String']>;
+  votes: LocationVotePage;
+  caretaker: Profile;
+  description?: Maybe<Scalars['String']>;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  addressInfo?: Maybe<Scalars['String']>;
+  sleepCapacity?: Maybe<Scalars['Int']>;
+  internetSpeedMbps?: Maybe<Scalars['Int']>;
+  offers: OfferPage;
+  mediaItems: LocationMediaItemPage;
+  address?: Maybe<LocationAddress>;
+  caretakerEmail?: Maybe<Scalars['String']>;
+  locationType?: Maybe<LocationType>;
+  publishedAt?: Maybe<Scalars['Time']>;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+
+export type LocationVotesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type LocationOffersArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type LocationMediaItemsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+export type LocationAddress = {
+  __typename?: 'LocationAddress';
+  lng?: Maybe<Scalars['Float']>;
+  formattedAddress?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  routeShort?: Maybe<Scalars['String']>;
+  admininstrativeAreaLevel1Short?: Maybe<Scalars['String']>;
+  countryShort?: Maybe<Scalars['String']>;
+  streetNumber?: Maybe<Scalars['String']>;
+  route?: Maybe<Scalars['String']>;
+  admininstrativeAreaLevel1?: Maybe<Scalars['String']>;
+  locality?: Maybe<Scalars['String']>;
+  lat?: Maybe<Scalars['Float']>;
+};
+
+export enum LocationMediaCategory {
+  Sleeping = 'Sleeping',
+  Working = 'Working',
+  Features = 'Features'
+}
+
+export type LocationMediaItem = {
+  __typename?: 'LocationMediaItem';
+  location: Location;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  imageIpfsHash?: Maybe<Scalars['String']>;
+  category: LocationMediaCategory;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'LocationMediaItem'. */
+export type LocationMediaItemPage = {
+  __typename?: 'LocationMediaItemPage';
+  /** The elements of type 'LocationMediaItem' in this page. */
+  data: Array<Maybe<LocationMediaItem>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Location'. */
+export type LocationPage = {
+  __typename?: 'LocationPage';
+  /** The elements of type 'Location' in this page. */
+  data: Array<Maybe<Location>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+export enum LocationType {
+  Outpost = 'Outpost',
+  Neighborhood = 'Neighborhood'
+}
+
+export type LocationVote = {
+  __typename?: 'LocationVote';
+  count: Scalars['Int'];
+  location: Location;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  profile: Profile;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'LocationVote'. */
+export type LocationVotePage = {
+  __typename?: 'LocationVotePage';
+  /** The elements of type 'LocationVote' in this page. */
+  data: Array<Maybe<LocationVote>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+export type Offer = {
+  __typename?: 'Offer';
+  location: Location;
+  endDate?: Maybe<Scalars['Time']>;
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  price?: Maybe<OfferPrice>;
+  offerType?: Maybe<OfferType>;
+  imageIpfsHash?: Maybe<Scalars['String']>;
+  applicationUrl?: Maybe<Scalars['String']>;
+  profileRoleConstraints?: Maybe<Array<ProfileRoleConstraint>>;
+  title?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['Time']>;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'Offer'. */
+export type OfferPage = {
+  __typename?: 'OfferPage';
+  /** The elements of type 'Offer' in this page. */
+  data: Array<Maybe<Offer>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+export type OfferPrice = {
+  __typename?: 'OfferPrice';
+  unit: OfferPriceUnit;
+  amountCents: Scalars['Int'];
+};
+
+export enum OfferPriceUnit {
+  FlatFee = 'FlatFee',
+  Hourly = 'Hourly',
+  Daily = 'Daily',
+  Weekly = 'Weekly',
+  Monthly = 'Monthly'
+}
+
+export enum OfferType {
+  PaidColiving = 'PaidColiving',
+  Residency = 'Residency',
+  BuildAndGrowWeek = 'BuildAndGrowWeek'
+}
+
 export type OtterspaceBadge = {
   __typename?: 'OtterspaceBadge';
   /** The document's ID. */
@@ -1049,6 +1580,7 @@ export type OtterspaceBadgeSpecBadgesArgs = {
 export type Profile = {
   __typename?: 'Profile';
   trackingEvents: TrackingEventPage;
+  locations: LocationPage;
   name: Scalars['String'];
   givenVouches: ProfileVouchPage;
   avatar?: Maybe<ProfileAvatar>;
@@ -1065,6 +1597,7 @@ export type Profile = {
   citizenshipMetadata?: Maybe<CitizenshipMetadata>;
   account: Account;
   badgeCount: Scalars['Int'];
+  locationVotes: LocationVotePage;
   contactFields: Array<ProfileContactField>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
@@ -1077,6 +1610,12 @@ export type ProfileTrackingEventsArgs = {
 };
 
 
+export type ProfileLocationsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
 export type ProfileGivenVouchesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -1084,6 +1623,12 @@ export type ProfileGivenVouchesArgs = {
 
 
 export type ProfileReceivedVouchesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type ProfileLocationVotesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
 };
@@ -1129,6 +1674,12 @@ export type ProfileRole = {
   __typename?: 'ProfileRole';
   hatId?: Maybe<Scalars['String']>;
   role: ProfileRoleType;
+  level: ProfileRoleLevelType;
+};
+
+export type ProfileRoleConstraint = {
+  __typename?: 'ProfileRoleConstraint';
+  profileRole: ProfileRoleType;
   level: ProfileRoleLevelType;
 };
 
@@ -1183,6 +1734,8 @@ export type Query = {
   findOtterspaceBadgeByID?: Maybe<OtterspaceBadge>;
   /** Find a document from the collection of 'ProfileVouch' by its id. */
   findProfileVouchByID?: Maybe<ProfileVouch>;
+  /** Find a document from the collection of 'Location' by its id. */
+  findLocationByID?: Maybe<Location>;
   citizensCount: Scalars['Int'];
   /** Find a document from the collection of 'Profile' by its id. */
   findProfileByID?: Maybe<Profile>;
@@ -1190,6 +1743,10 @@ export type Query = {
   findBlockSyncAttemptByID?: Maybe<BlockSyncAttempt>;
   /** Find a document from the collection of 'TrackingEvent' by its id. */
   findTrackingEventByID?: Maybe<TrackingEvent>;
+  /** Find a document from the collection of 'LocationVote' by its id. */
+  findLocationVoteByID?: Maybe<LocationVote>;
+  /** Find a document from the collection of 'Offer' by its id. */
+  findOfferByID?: Maybe<Offer>;
   accountByAddress?: Maybe<Account>;
   getProfiles: QueryGetProfilesPage;
   /** Find a document from the collection of 'Activity' by its id. */
@@ -1201,6 +1758,8 @@ export type Query = {
   myVouchesThisYear: Scalars['Int'];
   syncAttemptsByKey: BlockSyncAttemptPage;
   allProfiles: ProfilePage;
+  /** Find a document from the collection of 'LocationMediaItem' by its id. */
+  findLocationMediaItemByID?: Maybe<LocationMediaItem>;
   me: Profile;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
@@ -1227,6 +1786,11 @@ export type QueryFindProfileVouchByIdArgs = {
 };
 
 
+export type QueryFindLocationByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryCitizensCountArgs = {
   status: CitizenshipStatus;
 };
@@ -1243,6 +1807,16 @@ export type QueryFindBlockSyncAttemptByIdArgs = {
 
 
 export type QueryFindTrackingEventByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryFindLocationVoteByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryFindOfferByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -1290,6 +1864,11 @@ export type QuerySyncAttemptsByKeyArgs = {
 export type QueryAllProfilesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryFindLocationMediaItemByIdArgs = {
+  id: Scalars['ID'];
 };
 
 
