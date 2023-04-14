@@ -7,8 +7,10 @@ import {
 } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
+import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 
 export const CitizenshipView = () => {
+  const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/login' })
   const [updateProfileCitizenshipStatus] =
     useUpdateProfileCitizenshipStatusMutation()
@@ -55,7 +57,8 @@ export const CitizenshipView = () => {
           status={user?.citizenshipStatus}
         />
       )}
-      <CitizenNFTContainer />
+      {/* TODO: Remove check when citizenship minting is enabled */}
+      {activeNFT ? <CitizenNFTContainer /> : null}
     </SingleColumnLayout>
   )
 }

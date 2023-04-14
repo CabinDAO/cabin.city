@@ -16,14 +16,17 @@ interface CitizenshipCTAProps {
   onClick(): void
 }
 
+const PENDING_VOUCH_TITLE = 'Receive vouch'
+const PENDING_VOUCH_DESCRIPTION =
+  'Become eligible for Citizenship when an active citizen vouches for you. You can also earn Citizenship by participating in a Build Week.'
+
 export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
   let config: CTAConfig = {} as CTAConfig
 
   if (!status) {
     config = {
-      title: 'Signal Interest',
-      description:
-        'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
+      title: PENDING_VOUCH_TITLE,
+      description: PENDING_VOUCH_DESCRIPTION,
       button: () => (
         <Button variant="primary" onClick={onClick}>
           Signal Interest
@@ -32,9 +35,8 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
     } as CTAConfig
   } else if (status === CitizenshipStatus.VouchRequested) {
     config = {
-      title: 'Signal Interest',
-      description:
-        'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
+      title: PENDING_VOUCH_TITLE,
+      description: PENDING_VOUCH_DESCRIPTION,
       button: () => (
         <Button
           startAdornment={<Icon name="thumb-up-outline" size={1.4} />}
