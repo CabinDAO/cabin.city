@@ -50,8 +50,8 @@ export const DirectoryView = () => {
   const { user } = useUser({ redirectTo: '/login' })
 
   const input = useMemo(() => {
-    // Only search if there are at least 3 characters
-    const searchQuery = searchInput.length >= 3 ? searchInput : ''
+    // Only search if there are at least 2 characters
+    const searchQuery = searchInput.length >= 2 ? searchInput : ''
 
     return {
       roleTypes,
