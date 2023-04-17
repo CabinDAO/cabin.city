@@ -64,6 +64,8 @@ type Profile {
   givenVouches: [ProfileVouch!] @relation(name: "givenVouches")
   receivedVouches: [ProfileVouch!] @relation(name: "receivedVouches")
   citizenshipMetadata: CitizenshipMetadata
+  locations: [Location!] @relation
+  locationVotes: [LocationVote!] @relation
 }
 
 type ProfileVouch {
@@ -269,4 +271,96 @@ enum BlockSyncAttemptStatus {
   Pending
   Successful
   Failed
+}
+
+type Location {
+  locationType: LocationType
+  name: String
+  tagline: String
+  sleepCapacity: Int
+  caretaker: Profile! @relation
+  caretakerEmail: String
+  publishedAt: Time
+  offers: [Offer!] @relation
+  mediaItems: [LocationMediaItem!] @relation
+  votes: [LocationVote!] @relation
+  internetSpeedMbps: Int
+  address: LocationAddress
+  bannerImageIpfsHash: String
+  description: String # Rich text
+  addressInfo: String # Rich text
+}
+
+enum LocationType {
+  Outpost
+  Neighborhood
+}
+
+type LocationAddress @embedded {
+  lat: Float
+  lng: Float
+  formattedAddress: String
+  streetNumber: String
+  route: String # Street, e.g. Cascade Street
+  routeShort: String # e.g. Cascade St
+  locality: String # City
+  admininstrativeAreaLevel1: String # State, e.g. Colorado
+  admininstrativeAreaLevel1Short: String # e.g. CO
+  country: String # e.g. Costa Rica
+  countryShort: String #e.g. CR
+  postalCode: String
+}
+
+type LocationVote {
+  location: Location! @relation
+  profile: Profile! @relation
+  count: Int!
+}
+
+type LocationMediaItem {
+  location: Location! @relation
+  category: LocationMediaCategory!
+  imageIpfsHash: String
+}
+
+enum LocationMediaCategory {
+  Sleeping
+  Working
+  Features
+}
+
+type Offer {
+  offerType: OfferType
+  title: String
+  startDate: Time
+  endDate: Time
+  location: Location! @relation
+  price: OfferPrice
+  profileRoleConstraints: [ProfileRoleConstraint!]
+  applicationUrl: String
+  imageIpfsHash: String
+}
+
+enum OfferType {
+  PaidColiving
+  Residency
+  BuildAndGrowWeek
+}
+
+type OfferPrice @embedded {
+  unit: OfferPriceUnit!
+  amountCents: Int! # 2 decimal integer representation of the price (e.g. $100.00 = 10000)
+}
+
+enum OfferPriceUnit {
+  FlatFee
+  Hourly
+  Daily
+  Weekly
+  Monthly
+}
+
+type ProfileRoleConstraint @embedded {
+  profileRole: ProfileRoleType!
+  level: ProfileRoleLevelType!
 }
