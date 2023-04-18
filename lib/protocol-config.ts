@@ -87,7 +87,7 @@ export const unlockConfig: UnlockConfig = getConfig({
   prod: {
     networkName: 'optimism',
     chainId: 10,
-    contractAddress: '', // TODO: Add prod address
+    contractAddress: '0x45aCCac0E5C953009cDa713a3b722F87F2907F86',
   },
 })
 
