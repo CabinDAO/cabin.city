@@ -115,6 +115,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
 
 const VouchModalContainer = styled(ModalContainer)`
   height: min-content;
+  max-height: 100%;
 `
 
 const VouchButton = styled(Button)`
