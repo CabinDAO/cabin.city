@@ -25,7 +25,9 @@ const handler = async (
         q.Call(q.Function('create_access_token'), [address, TOKEN_TTL])
       )) as FaunaTokenResponse
 
-      req.session.profile = resp.profile.data
+      req.session.profile = {
+        id: resp.profile.data.id,
+      }
       await req.session.save()
 
       res.send(resp)
