@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import styled from 'styled-components'
 import { ContentCard } from './ContentCard'
 import Icon, { IconName } from './Icon'
 import { Body2, Caption } from './Typography'
-import { useFilesUpload } from './listings/useFilesUpload'
+import { useFilesUpload } from '../neighborhoods/useFilesUpload'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import {
   MAX_FILE_SIZE,
@@ -12,57 +12,30 @@ import {
 } from '@/lib/file-storage/configuration'
 import { bytesToMegabytes } from '@/lib/file'
 
-interface FileUploadProps {
+interface FileUploadDropzoneProps {
   iconName: IconName
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
 }
 
-export const FileUpload = ({ iconName, onFilesUploaded }: FileUploadProps) => {
-  const [isDragging, setIsDragging] = useState(false)
+export const FileUploadDropzone = ({
+  iconName,
+  onFilesUploaded,
+  preprocessFiles,
+}: FileUploadDropzoneProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
-  const { uploadFiles } = useFilesUpload()
-
-  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-
-    if (e.target.files && e.target.files[0]) {
-      const result = (await uploadFiles(e.target.files)) as FileNameIpfsHashMap
-      onFilesUploaded(result)
-    }
-  }
+  const { handleDrag, handleDrop, handleChange, isDragging } = useFilesUpload({
+    onFilesUploaded,
+    preprocessFiles,
+  })
 
   const onButtonClick = () => {
     inputRef?.current?.click()
   }
 
-  const handleDrag = (e: React.DragEvent<HTMLFormElement | HTMLDivElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (e.type === 'dragenter' || e.type === 'dragover') {
-      setIsDragging(true)
-    } else if (e.type === 'dragleave') {
-      setIsDragging(false)
-    }
-  }
-
-  const handleDrop = async (
-    e: React.DragEvent<HTMLFormElement | HTMLDivElement>
-  ) => {
-    e.preventDefault()
-    e.stopPropagation()
-    setIsDragging(false)
-
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const result = (await uploadFiles(
-        e.dataTransfer.files
-      )) as FileNameIpfsHashMap
-      onFilesUploaded(result)
-    }
-  }
-
   return (
     <StyledContentCard shape="notch-all">
-      <FileUploadContainer
+      <FileUploadDropzoneContainer
         onDragEnter={handleDrag}
         onClick={onButtonClick}
         onSubmit={(e) => e.preventDefault()}
@@ -92,7 +65,7 @@ export const FileUpload = ({ iconName, onFilesUploaded }: FileUploadProps) => {
             onDrop={handleDrop}
           />
         )}
-      </FileUploadContainer>
+      </FileUploadDropzoneContainer>
     </StyledContentCard>
   )
 }
@@ -101,7 +74,7 @@ const StyledContentCard = styled(ContentCard)`
   --border-color: ${({ theme }) => theme.colors.green900}26;
 `
 
-const FileUploadContainer = styled.form`
+const FileUploadDropzoneContainer = styled.form`
   cursor: pointer;
   display: flex;
   flex-direction: column;

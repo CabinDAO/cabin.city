@@ -1,6 +1,6 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
-import { onlyMe } from './predicates/onlyMe'
+import { onlyBy } from './predicates/onlyBy'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
@@ -41,7 +41,7 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         read: true,
         create: true,
-        delete: onlyMe,
+        delete: onlyBy('profile'),
       },
     },
     {
@@ -75,6 +75,36 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         create: true,
         write: true,
+        read: true,
+      },
+    },
+    {
+      resource: q.Collection('Location'),
+      actions: {
+        read: true,
+        create: true,
+        delete: onlyBy('caretaker'),
+        // TODO: Make onlyBy predicate work with custom fields
+        // write: onlyBy('caretaker'),
+        write: true,
+      },
+    },
+    {
+      resource: q.Collection('Offer'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Collection('LocationMediaItem'),
+      actions: {
+        read: true,
+        create: true,
+      },
+    },
+    {
+      resource: q.Collection('LocationVote'),
+      actions: {
         read: true,
       },
     },
@@ -260,6 +290,24 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('location_offers_by_location'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('locationMediaItem_location_by_location'),
+      actions: {
+        read: true,
+      },
+    },
+    {
+      resource: q.Index('locationVote_location_by_location'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -353,6 +401,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('create_text_activity'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('create_location'),
       actions: {
         call: true,
       },

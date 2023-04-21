@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { SetupStepForm } from './SetupStepForm'
-import { StepProps } from './step-configuration'
 import { ProfileContactField } from '@/generated/graphql'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { ContactInput } from '../ContactInput'
 import { useUser } from '@/components/auth/useUser'
+import { StepProps } from './step-configuration'
 
 export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useUser()

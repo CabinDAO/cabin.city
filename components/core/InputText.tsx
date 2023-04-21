@@ -45,6 +45,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   startAdornment?: ReactNode
   endAdornment?: ReactNode
   helperText?: string
+  bottomHelpText?: string
   onChange?: (_e: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -62,6 +63,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
       message,
       endAdornment,
       helperText,
+      bottomHelpText,
       onChange,
       ...props
     },
@@ -85,6 +87,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
         disabled={disabled}
         message={message}
         helperText={helperText}
+        bottomHelpText={bottomHelpText}
         endAdornment={endAdornment}
         onClick={handleOnParentClick}
       >

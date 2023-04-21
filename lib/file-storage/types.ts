@@ -1,1 +1,3 @@
-export type FileNameIpfsHashMap = Record<string, string>
+type FileName = string
+type IpfsHash = string
+export type FileNameIpfsHashMap = Record<FileName, IpfsHash>

@@ -169,7 +169,7 @@ export const Button = ({
         backgroundColor: theme.colors.yellow100,
       }
       initial = {
-        backgroundColor: theme.colors.yellow200,
+        backgroundColor: 'transparent',
       }
       break
     default:

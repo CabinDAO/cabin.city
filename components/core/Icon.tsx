@@ -19,6 +19,7 @@ import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
 import externalLinkSvg from './svg/external-link.svg'
+import fileDocumentSvg from './svg/file-document.svg'
 import gathererSvg from './svg/gatherer.svg'
 import handWaveSvg from './svg/hand-wave.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
@@ -66,6 +67,7 @@ export const IconSvgs = {
   dashboard: dashboardSvg,
   date: dateSvg,
   'external-link': externalLinkSvg,
+  'file-document': fileDocumentSvg,
   gatherer: gathererSvg,
   'hand-wave': handWaveSvg,
   'heart-outline': heartOutlineSvg,

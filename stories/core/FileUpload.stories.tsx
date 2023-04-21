@@ -1,13 +1,13 @@
-import { FileUpload } from '@/components/core/FileUpload'
+import { FileUploadDropzone } from '@/components/core/FileUploadDropzone'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
 
 export default {
-  title: 'Core/FileUpload',
-  component: FileUpload,
-} as ComponentMeta<typeof FileUpload>
+  title: 'Core/FileUploadDropzone',
+  component: FileUploadDropzone,
+} as ComponentMeta<typeof FileUploadDropzone>
 
-const Template: ComponentStory<typeof FileUpload> = (args) => (
-  <FileUpload {...args} />
+const Template: ComponentStory<typeof FileUploadDropzone> = (args) => (
+  <FileUploadDropzone {...args} />
 )
 
 export const Default = Template.bind({})

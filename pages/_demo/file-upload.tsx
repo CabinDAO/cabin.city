@@ -1,11 +1,11 @@
-import { FileUpload } from '@/components/core/FileUpload'
+import { FileUploadDropzone } from '@/components/core/FileUploadDropzone'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import Image from 'next/image'
 import { useState } from 'react'
 
-const FileUploadPage = () => {
+const FileUploadDropzonePage = () => {
   const [uploadedFiles, setUploadedFiles] = useState<FileNameIpfsHashMap>({})
 
   const handleUploadedFiles = async (
@@ -17,7 +17,10 @@ const FileUploadPage = () => {
 
   return (
     <SingleColumnLayout>
-      <FileUpload onFilesUploaded={handleUploadedFiles} iconName="close" />
+      <FileUploadDropzone
+        onFilesUploaded={handleUploadedFiles}
+        iconName="close"
+      />
       {Object.keys(uploadedFiles).map((fileName) => (
         <Image
           key={fileName}
@@ -31,4 +34,4 @@ const FileUploadPage = () => {
   )
 }
 
-export default FileUploadPage
+export default FileUploadDropzonePage

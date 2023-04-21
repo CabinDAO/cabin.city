@@ -1,0 +1,52 @@
+fragment Caretaker on Profile {
+  _id
+  email
+  name
+  account {
+    address
+  }
+}
+
+fragment Location on Location {
+  _id
+  locationType
+  name
+  tagline
+  sleepCapacity
+  caretaker {
+    ...Caretaker
+  }
+  caretakerEmail
+  publishedAt
+  mediaItems {
+    data {
+      imageIpfsHash
+    }
+  }
+  votes {
+    data {
+      count
+      profile {
+        _id
+      }
+    }
+  }
+  internetSpeedMbps
+  address {
+    lat
+    lng
+    formattedAddress
+    streetNumber
+    route
+    routeShort
+    locality
+    admininstrativeAreaLevel1
+    admininstrativeAreaLevel1Short
+    country
+    countryShort
+    postalCode
+  }
+  bannerImageIpfsHash
+  description
+  addressInfo
+}

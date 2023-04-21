@@ -8,11 +8,13 @@ import { MainContent, NavbarContainer } from './common.styles'
 interface LayoutProps {
   children: React.ReactNode
   displayLaunchBanner?: boolean
+  actionBar?: React.ReactNode
 }
 
 export const SingleColumnLayout = ({
   children,
   displayLaunchBanner,
+  actionBar,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
@@ -30,6 +32,7 @@ export const SingleColumnLayout = ({
           </NavbarContainer>
         )}
       </Container>
+      <ActionBarContainer>{actionBar}</ActionBarContainer>
     </OuterContainer>
   )
 }
@@ -41,6 +44,14 @@ const OuterContainer = styled.div`
   min-width: 100vw;
   justify-content: flex-start;
   align-items: center;
+  position: relative;
+`
+
+const ActionBarContainer = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
 `
 
 const Container = styled.div`

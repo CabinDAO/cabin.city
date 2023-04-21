@@ -20,6 +20,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   message?: string
   endAdornment?: ReactNode
   helperText?: string
+  bottomHelpText?: string
   disabled?: boolean
   children: ReactNode
   onClick?: () => void
@@ -36,6 +37,7 @@ export const InputBase = ({
   onClick,
   children,
   helperText,
+  bottomHelpText,
   helperTextPosition = 'top',
 }: InputBaseProps) => {
   return (
@@ -63,9 +65,18 @@ export const InputBase = ({
           </InsetHelperText>
         ) : null}
       </InputOutline>
+      {bottomHelpText && (
+        <BottomHelpTextCaption emphasized>
+          {bottomHelpText}
+        </BottomHelpTextCaption>
+      )}
     </Container>
   )
 }
+
+const BottomHelpTextCaption = styled(Caption)`
+  opacity: 0.6;
+`
 
 const Container = styled.div<ContainerProps>`
   display: flex;

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { RenderElementProps, RenderLeafProps } from 'slate-react'
-import { Body1 } from '../Typography'
+import { Subline2 } from '../Typography'
 
 export function useSlateRendering() {
   const renderElement = useCallback(
@@ -37,11 +37,7 @@ const Element = (props: RenderElementProps) => {
     //     </h1>
     //   )
     // case 'heading-two':
-    //   return (
-    //     <h2 style={style} {...attributes}>
-    //       {children}
-    //     </h2>
-    //   )
+    //   return <H2 {...attributes}>{children}</H2>
     // case 'list-item':
     //   return (
     //     <li style={style} {...attributes}>
@@ -55,7 +51,7 @@ const Element = (props: RenderElementProps) => {
     //     </ol>
     //   )
     default:
-      return <Body1 {...attributes}>{children}</Body1>
+      return <Subline2 {...attributes}>{children}</Subline2>
   }
 }
 

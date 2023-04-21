@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { SetupStepForm } from './SetupStepForm'
-import { StepProps } from './step-configuration'
 import { useUser } from '@/components/auth/useUser'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { AboutInput } from '../AboutInput'
 import { validBio, validLocation } from '../validations'
+import { StepProps } from './step-configuration'
 
 export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useUser()
