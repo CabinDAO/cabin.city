@@ -12,6 +12,7 @@ import checkStarSvg from './svg/check-star.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronLeftSvg from './svg/chevron-left.svg'
 import chevronRightSvg from './svg/chevron-right.svg'
+import chevronUpSvg from './svg/chevron-up.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
 import copySvg from './svg/copy.svg'
@@ -33,7 +34,9 @@ import menuSvg from './svg/menu.svg'
 import mountainSvg from './svg/mountain.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
+import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
+import outpostSvg from './svg/outpost.svg'
 import personSvg from './svg/person.svg'
 import profileSvg from './svg/profile.svg'
 import profile2Svg from './svg/profile2.svg'
@@ -41,6 +44,7 @@ import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
 import searchSvg from './svg/search.svg'
 import signOutSvg from './svg/sign-out.svg'
+import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
 import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
@@ -60,6 +64,7 @@ export const IconSvgs = {
   'chevron-down': chevronDownSvg,
   'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,
+  'chevron-up': chevronUpSvg,
   citizen: citizenSvg,
   close: closeSvg,
   copy: copySvg,
@@ -81,7 +86,9 @@ export const IconSvgs = {
   mountain: mountainSvg,
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
+  neighborhood: neighborhoodSvg,
   neighborhoods: neighborhoodsSvg,
+  outpost: outpostSvg,
   person: personSvg,
   profile: profileSvg,
   profile2: profile2Svg,
@@ -89,6 +96,7 @@ export const IconSvgs = {
   resident: residentSvg,
   search: searchSvg,
   'sign-out': signOutSvg,
+  sleep: sleepSvg,
   stamp: stampSvg,
   stay: staySvg,
   'thumb-up-outline': thumbUpOutlineSvg,
