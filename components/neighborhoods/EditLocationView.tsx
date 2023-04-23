@@ -1,8 +1,4 @@
-import {
-  useGetLocationByIdQuery,
-  useLogTrackingEventMutation,
-} from '@/generated/graphql'
-import { TrackingEvent } from '@/lib/tracking-events'
+import { useGetLocationByIdQuery } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useUser } from '../auth/useUser'
@@ -10,7 +6,6 @@ import { StepConfig, steps } from './edit-location/configuration'
 
 export const EditLocationView = ({}) => {
   const router = useRouter()
-  const [logTrackingEvent] = useLogTrackingEventMutation()
   const { id: listingId } = router.query
   const { data, loading } = useGetLocationByIdQuery({
     variables: {
