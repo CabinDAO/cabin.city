@@ -11,7 +11,8 @@ interface IconCardProps {
   iconHref?: string
 }
 
-export const IconCard = ({ children, icon, iconHref }: IconCardProps) => {
+export const IconCard = (props: IconCardProps) => {
+  const { children, icon, iconHref } = props
   const [hovered, setHovered] = useState(false)
   return (
     <BaseShadowCard>
@@ -62,7 +63,7 @@ const LinkContainer = styled(Link)`
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   padding: 1.2rem;
   width: 100%;

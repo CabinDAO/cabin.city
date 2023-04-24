@@ -1,9 +1,11 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
+import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
 
 const publicRole: RoleResource = {
   name: 'public',
   privileges: [
+    ...publicOrAuthenticatedPrivileges,
     {
       resource: q.Collection('Account'),
       actions: {

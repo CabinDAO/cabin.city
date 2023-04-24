@@ -25,6 +25,8 @@ type Query {
   activitiesByProfile(profileId: ID!): [ActivityItem!]!
     @resolver(name: "get_activities_by_profile", paginated: true)
   myVouchesThisYear: Int! @resolver(name: "my_vouches_this_year")
+  locationsByLocationType(locationType: LocationType!): [Location!]!
+    @resolver(name: "get_locations_by_location_type", paginated: true)
 }
 
 type Mutation {
@@ -44,6 +46,7 @@ type Mutation {
   unlikeActivity(id: ID!): ActivityReaction! @resolver(name: "unlike_activity")
   createTextActivity(text: String!): Activity!
     @resolver(name: "create_text_activity")
+  createLocation: Location @resolver(name: "create_location")
 }
 
 type Profile {
@@ -282,8 +285,10 @@ type Location {
   caretakerEmail: String
   publishedAt: Time
   offers: [Offer!] @relation
+  offerCount: Int # Denormalized for more efficient queries
   mediaItems: [LocationMediaItem!] @relation
   votes: [LocationVote!] @relation
+  voteCount: Int # Denormalized for sorting
   internetSpeedMbps: Int
   address: LocationAddress
   bannerImageIpfsHash: String

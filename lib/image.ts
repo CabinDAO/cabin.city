@@ -19,8 +19,8 @@ export const getImageUrlFromNft = (nft: OwnedNft) => {
   return getImageUrl(nft.media[0]?.thumbnail || nft.media[0]?.gateway)
 }
 
-export const getImageUrlByIpfsHash = (ipfsHash: string) => {
-  return `${IPFS_GATEWAY}${ipfsHash}`
+export const getImageUrlByIpfsHash = (ipfsHash: string | null | undefined) => {
+  return ipfsHash ? `${IPFS_GATEWAY}${ipfsHash}` : null
 }
 
 export const resolveImageUrl = (image: TempImage) => {

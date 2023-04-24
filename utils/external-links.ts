@@ -5,4 +5,5 @@ export const EXTERNAL_LINKS = {
     'https://cabin-fellowship.notion.site/Census-Roles-e8a8d3048beb4806bc864890de806ee7',
   PASSPORTS:
     'https://cabin-fellowship.notion.site/Passports-and-Stamps-01e0adce6fa441768d884de3e1283e64',
+  CITY_DIRECTORY: '/', // TODO: Fill in city directory link
 }

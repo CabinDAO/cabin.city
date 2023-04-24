@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CustomTypes } from 'slate'
 
 type CustomElement = { type: 'paragraph'; children: CustomText[] }

@@ -1,0 +1,17 @@
+fragment Offer on Offer {
+  _id
+  offerType
+  title
+  startDate
+  endDate
+  price {
+    unit
+    amountCents
+  }
+  profileRoleConstraints {
+    profileRole
+    level
+  }
+  applicationUrl
+  imageIpfsHash
+}

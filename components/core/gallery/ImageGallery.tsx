@@ -28,16 +28,19 @@ export const ImageGallery = ({ title, images = [] }: ImageGalleryProps) => {
     <Container>
       <H2>{title}</H2>
       <ImageList>
-        {filteredImages.slice(0, 4).map((image, index) => (
-          <StyledImage
-            onClick={() => handleImageOnClick(index)}
-            key={image.name}
-            alt={image.name}
-            src={resolveImageUrl(image)}
-            width={415}
-            height={300}
-          />
-        ))}
+        {filteredImages.slice(0, 4).map((image, index) => {
+          const imageUrl = resolveImageUrl(image)
+          return imageUrl ? (
+            <StyledImage
+              onClick={() => handleImageOnClick(index)}
+              key={image.name}
+              alt={image.name}
+              src={imageUrl}
+              width={415}
+              height={300}
+            />
+          ) : null
+        })}
       </ImageList>
     </Container>
   )

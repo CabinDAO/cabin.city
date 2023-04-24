@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { Descendant, Editor, createEditor } from 'slate'
 import { Editable, Slate, useSlate, withReact } from 'slate-react'
-import { Button } from '../Button'
 import styled from 'styled-components'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
+import { h4Styles, subline2Styles } from '../Typography'
 
 interface SlateEditorProps {
+  placeholder?: string
   value?: Descendant[]
   onChange?: ((value: Descendant[]) => void) | undefined
 }
@@ -20,15 +21,10 @@ export const SlateEditor = (props: SlateEditorProps) => {
     <Slate editor={editor} value={value} onChange={onChange}>
       <EditorContainer>
         <Toolbar />
-        <Editable
+        <StyledEditable
+          placeholder={props.placeholder}
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          style={{
-            minHeight: '200px',
-            backgroundColor: 'white',
-            padding: '1rem',
-            marginTop: '0.4rem',
-          }}
         />
       </EditorContainer>
     </Slate>
@@ -37,9 +33,10 @@ export const SlateEditor = (props: SlateEditorProps) => {
 
 const Toolbar = () => {
   return (
-    <div>
+    <ToolbarContainer>
+      <MarkButton format="highlight" text="Header" />
       <MarkButton format="bold" text="B" />
-    </div>
+    </ToolbarContainer>
   )
 }
 
@@ -65,17 +62,41 @@ interface MarkButtonProps {
 const MarkButton = ({ format, text }: MarkButtonProps) => {
   const editor = useSlate()
   return (
-    <Button
-      variant="tertiary"
+    <ToolbarItem
       onClick={() => {
         toggleMark(editor, format)
       }}
     >
       {text}
-    </Button>
+    </ToolbarItem>
   )
 }
 
 const EditorContainer = styled.div`
   margin: 1rem;
+  background-color: white;
+  border: 1px solid ${({ theme }) => theme.colors.green900};
+`
+
+const StyledEditable = styled(Editable)`
+  ${subline2Styles}
+  height: 32.5rem;
+  background-color: white;
+  padding: 2rem 1.6rem;
+  margin-top: 0.4rem;
+`
+
+const ToolbarContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
+`
+
+const ToolbarItem = styled.div`
+  ${h4Styles}
+  padding: 1rem;
+  cursor: pointer;
 `

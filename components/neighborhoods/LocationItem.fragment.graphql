@@ -1,0 +1,21 @@
+fragment LocationItem on Location {
+  _id
+  locationType
+  name
+  tagline
+  sleepCapacity
+  caretaker {
+    _id
+    name
+  }
+  publishedAt
+  internetSpeedMbps
+  address {
+    locality
+    admininstrativeAreaLevel1Short
+  }
+  bannerImageIpfsHash
+  description
+  voteCount
+  offerCount
+}

@@ -10,14 +10,17 @@ import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 
 export const CitizenshipView = () => {
+  const citizenshipMintingEnabled = process.env.NEXT_PUBLIC_APP_ENV === 'dev'
   const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/login' })
   const [updateProfileCitizenshipStatus] =
     useUpdateProfileCitizenshipStatusMutation()
 
   const handleMint = () => {
-    // TODO: Uncomment when citizenship minting is enabled
-    // window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+    // TODO: Remove check when citizenship minting is enabled in prod
+    if (citizenshipMintingEnabled) {
+      window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+    }
   }
 
   const toggleSignal = () => {
@@ -58,7 +61,7 @@ export const CitizenshipView = () => {
         />
       )}
       {/* TODO: Remove check when citizenship minting is enabled */}
-      {activeNFT ? <CitizenNFTContainer /> : null}
+      {activeNFT || citizenshipMintingEnabled ? <CitizenNFTContainer /> : null}
     </SingleColumnLayout>
   )
 }
