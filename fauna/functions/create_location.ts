@@ -1,5 +1,6 @@
 import { query as q } from 'faunadb'
 import { FunctionResource } from 'fauna-gql-upload'
+import { LocationType } from '../../generated/graphql'
 
 const createLocation: FunctionResource = {
   name: 'create_location',
@@ -13,8 +14,11 @@ const createLocation: FunctionResource = {
         },
         q.Create(q.Collection('Location'), {
           data: {
+            locationType: LocationType.Outpost,
             caretaker: q.Var('profileRef'),
             caretakerEmail: q.Select(['data', 'email'], q.Var('profile')),
+            voteCount: 0,
+            offerCount: 0,
           },
         })
       )

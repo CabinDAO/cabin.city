@@ -7,7 +7,7 @@ import Icon from './Icon'
 import { format } from 'date-fns'
 import { Button } from './Button'
 
-interface LocationCardProps {
+export interface LocationCardProps {
   locationType: LocationType
   caretaker: Caretaker
   name: string | null | undefined

@@ -11,7 +11,8 @@ interface IconCardProps {
   iconHref?: string
 }
 
-export const IconCard = ({ children, icon, iconHref }: IconCardProps) => {
+export const IconCard = (props: IconCardProps) => {
+  const { children, icon, iconHref } = props
   const [hovered, setHovered] = useState(false)
   return (
     <BaseShadowCard>
@@ -31,7 +32,7 @@ export const IconCard = ({ children, icon, iconHref }: IconCardProps) => {
         </IconContainer>
       )}
 
-      <ContentContainer>{children}</ContentContainer>
+      <ContentContainer {...props}>{children}</ContentContainer>
     </BaseShadowCard>
   )
 }
@@ -59,10 +60,10 @@ const LinkContainer = styled(Link)`
   }
 `
 
-const ContentContainer = styled.div`
+const ContentContainer = styled.div<IconCardProps>`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   padding: 1.2rem;
   width: 100%;

@@ -3,7 +3,7 @@ import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { EmptyState } from '../core/EmptyState'
 
-export const NeighborhoodsView = () => {
+export const NeighborhoodsPlaceholderView = () => {
   const { user } = useUser({ redirectTo: '/login' })
 
   if (!user) return null

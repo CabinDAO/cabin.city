@@ -1,10 +1,12 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
 import { onlyBy } from './predicates/onlyBy'
+import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
   privileges: [
+    ...publicOrAuthenticatedPrivileges,
     /* Collections */
     {
       resource: q.Collection('Account'),

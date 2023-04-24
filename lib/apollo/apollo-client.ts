@@ -42,6 +42,15 @@ export const apolloClient = new ApolloClient({
               }
             },
           },
+          locationsByLocationType: {
+            keyArgs: ['locationType'],
+            merge(existing, incoming) {
+              return {
+                ...incoming,
+                data: [...(existing?.data ?? []), ...incoming.data],
+              }
+            },
+          },
         },
       },
     },
