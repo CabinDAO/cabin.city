@@ -47,7 +47,7 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
   return (
     <SetupStepForm name={name} onNext={handleNext} onBack={onBack}>
       <SetupStepContainer>
-        <Subline1>Choose yor interests</Subline1>
+        <Subline1>Choose your interests</Subline1>
         <RoleGroup>
           {roles.map((role) => {
             return (
