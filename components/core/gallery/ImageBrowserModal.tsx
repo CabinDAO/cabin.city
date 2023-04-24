@@ -34,7 +34,10 @@ export const ImageBrowserModal = ({
 
   const preloadImage = (image: TempImage) => {
     const img = new Image()
-    img.src = resolveImageUrl(image)
+    const imageUrl = resolveImageUrl(image)
+    if (imageUrl) {
+      img.src = imageUrl
+    }
   }
 
   useEffect(() => {
@@ -58,6 +61,8 @@ export const ImageBrowserModal = ({
     }
   }
 
+  const imageUrl = resolveImageUrl(currentImage)
+
   return (
     <ImageBrowserContainer>
       <ModalHeader>
@@ -77,12 +82,14 @@ export const ImageBrowserModal = ({
         <ChevronCircle onClick={handlePreviousImage}>
           <Icon name="chevron-left" color="green900" size={1.7} />
         </ChevronCircle>
-        <NextImage
-          src={resolveImageUrl(currentImage)}
-          width={1120}
-          height={805}
-          alt={currentImage?.name ?? ''}
-        />
+        {imageUrl ? (
+          <NextImage
+            src={imageUrl}
+            width={1120}
+            height={805}
+            alt={currentImage?.name ?? ''}
+          />
+        ) : null}
         <ChevronCircle onClick={handleNextImage}>
           <Icon name="chevron-right" color="green900" size={1.7} />
         </ChevronCircle>

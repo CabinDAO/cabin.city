@@ -32,7 +32,7 @@ export const IconCard = (props: IconCardProps) => {
         </IconContainer>
       )}
 
-      <ContentContainer {...props}>{children}</ContentContainer>
+      <ContentContainer>{children}</ContentContainer>
     </BaseShadowCard>
   )
 }
@@ -60,7 +60,7 @@ const LinkContainer = styled(Link)`
   }
 `
 
-const ContentContainer = styled.div<IconCardProps>`
+const ContentContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;

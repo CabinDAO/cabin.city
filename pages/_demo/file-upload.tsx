@@ -21,15 +21,18 @@ const FileUploadDropzonePage = () => {
         onFilesUploaded={handleUploadedFiles}
         iconName="close"
       />
-      {Object.keys(uploadedFiles).map((fileName) => (
-        <Image
-          key={fileName}
-          alt={fileName}
-          src={getImageUrlByIpfsHash(uploadedFiles[fileName])}
-          width={200}
-          height={200}
-        />
-      ))}
+      {Object.keys(uploadedFiles).map((fileName) => {
+        const imageUrl = getImageUrlByIpfsHash(uploadedFiles[fileName])
+        return imageUrl ? (
+          <Image
+            key={fileName}
+            alt={fileName}
+            src={imageUrl}
+            width={200}
+            height={200}
+          />
+        ) : null
+      })}
     </SingleColumnLayout>
   )
 }

@@ -22,7 +22,7 @@ export const NewLocationView = () => {
     try {
       const location = await createLocation()
 
-      const id = location.data?.createLocation._id
+      const id = location.data?.createLocation?._id
 
       id
         ? router.push(`/location/${id}/edit`)

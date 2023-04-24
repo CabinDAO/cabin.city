@@ -6,7 +6,6 @@ import { parseISO } from 'date-fns'
 export const locationCardPropsFromFragment = (
   fragment: LocationItemFragment
 ): LocationCardProps => {
-  console.log(fragment.publishedAt)
   return {
     locationType: fragment.locationType ?? LocationType.Outpost,
     name: fragment.name,
