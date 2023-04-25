@@ -53,6 +53,7 @@ import trashSvg from './svg/trash.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
+import walletSvg from './svg/wallet.svg'
 
 export const IconSvgs = {
   'back-arrow': backArrowSvg,
@@ -105,6 +106,7 @@ export const IconSvgs = {
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,
+  wallet: walletSvg,
 }
 
 export type IconName = keyof typeof IconSvgs

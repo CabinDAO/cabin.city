@@ -1,7 +1,8 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
-import { onlyBy } from './predicates/onlyBy'
+import { deleteOnlyBy } from './predicates/deleteOnlyBy'
 import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
+import { writeOnlyBy } from './predicates/writeOnlyBy'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
@@ -43,7 +44,7 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         read: true,
         create: true,
-        delete: onlyBy('profile'),
+        delete: deleteOnlyBy('profile'),
       },
     },
     {
@@ -85,10 +86,8 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         read: true,
         create: true,
-        delete: onlyBy('caretaker'),
-        // TODO: Make onlyBy predicate work with custom fields
-        // write: onlyBy('caretaker'),
-        write: true,
+        delete: deleteOnlyBy('caretaker'),
+        write: writeOnlyBy('caretaker'),
       },
     },
     {

@@ -1,8 +1,8 @@
 import { UserRejectedRequestError } from 'wagmi'
+import { disconnect } from '@wagmi/core'
 import { useEffect, useState } from 'react'
 import Router from 'next/router'
 import { ConnectKitButton } from 'connectkit'
-import { NoSsr } from '../core/NoSsr'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
@@ -10,37 +10,51 @@ import { Body1, H1, H3 } from '../core/Typography'
 import { Button } from '../core/Button'
 import { Circle } from '../core/Circle'
 import Icon from '../core/Icon'
+import { getFaunaSecret } from '@/lib/auth/getFaunaSecret'
+import { useModal } from '../hooks/useModal'
+import { WalletModal } from './WalletModal'
 
 export const Login = () => {
+  const [initialized, setInitialized] = useState(false)
+
+  useEffect(() => {
+    // Disconnect before displaying login to prevent message signing request before the user does anything
+    disconnect().then(() => {
+      setInitialized(true)
+    })
+  }, [])
+
+  if (!initialized) {
+    return null
+  }
+
   return (
-    <NoSsr>
-      <LoginContainer>
-        <ContentCard shadow shape="notch">
-          <LoginContentContainer>
-            <Circle
-              size={6.4}
-              shadowMode="always"
-              source="/images/welcome-logo.png"
-            />
-            <H1>Welcome to Cabin</H1>
-            <Body1>Discover, build & explore within the Cabin network</Body1>
-            <ConnectKitButton.Custom>
-              {({ show, address, isConnected }) => (
-                <SignInButton
-                  onClick={show}
-                  address={address}
-                  isConnected={isConnected}
-                />
-              )}
-            </ConnectKitButton.Custom>
-            <CabinCityLink href="https://cabin.city">
-              <Icon name="back-arrow" size={1.6} />
-              <H3>Back to cabin.city</H3>
-            </CabinCityLink>
-          </LoginContentContainer>
-        </ContentCard>
-      </LoginContainer>
-    </NoSsr>
+    <LoginContainer>
+      <ContentCard shadow shape="notch">
+        <LoginContentContainer>
+          <Circle
+            size={6.4}
+            shadowMode="always"
+            source="/images/welcome-logo.png"
+          />
+          <H1>Welcome to Cabin</H1>
+          <Body1>Discover, build & explore within the Cabin network</Body1>
+          <ConnectKitButton.Custom>
+            {({ show, address, isConnected }) => (
+              <SignInButton
+                onClick={show}
+                address={address}
+                isConnected={isConnected}
+              />
+            )}
+          </ConnectKitButton.Custom>
+          <CabinCityLink href="https://cabin.city">
+            <Icon name="back-arrow" size={1.6} />
+            <H3>Back to cabin.city</H3>
+          </CabinCityLink>
+        </LoginContentContainer>
+      </ContentCard>
+    </LoginContainer>
   )
 }
 
@@ -94,6 +108,7 @@ interface SignInButtonProps {
 const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
   const [loginState, setLoginState] = useState<LoginState>(initialLoginState)
   const { signAuthMessage } = useSignAuthMessage({ prefetchNonce: true })
+  const { showModal, hideModal } = useModal()
 
   // 1. When connected, update status to move forward
   useEffect(() => {
@@ -147,6 +162,7 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
     }
     ;(async () => {
       try {
+        showModal(() => <WalletModal />)
         const { message, signature } = await signAuthMessage(address)
 
         const verifyResponse = await fetch('/api/auth/verify', {
@@ -160,10 +176,17 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
         if (!verifyResponse.ok) {
           throw new SignVerificationError('Unable to verify sign message')
         }
-        setLoginState((s) => ({
-          ...s,
-          status: LoginStatus.FORWARDING,
-        }))
+
+        // Attempt to get fauna secret to confirm user is properly authenticated before proceeding
+        const faunaSecret = await getFaunaSecret()
+        if (faunaSecret) {
+          setLoginState((s) => ({
+            ...s,
+            status: LoginStatus.FORWARDING,
+          }))
+        } else {
+          throw new Error('Unable to get fauna secret')
+        }
       } catch (error: unknown) {
         if (error instanceof UserRejectedRequestError) {
           // user rejected, do nothing
@@ -183,6 +206,8 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
             status: LoginStatus.ERROR,
           }))
         }
+      } finally {
+        hideModal()
       }
     })()
   }, [loginState.status, address, signAuthMessage])
@@ -204,5 +229,12 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
     }
   }
 
-  return <Button onClick={handleClick}>Sign in with Ethereum</Button>
+  return (
+    <>
+      <Button onClick={handleClick}>Sign in with Ethereum</Button>
+      {loginState.status === LoginStatus.ERROR ? (
+        <Body1 $color="red600">An error occurred. Please try again.</Body1>
+      ) : null}
+    </>
+  )
 }

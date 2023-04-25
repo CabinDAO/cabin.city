@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
 
-export const onlyBy = (fieldKey: string) =>
+export const deleteOnlyBy = (fieldKey: string) =>
   q.Query(
     q.Lambda(
       'ref',
