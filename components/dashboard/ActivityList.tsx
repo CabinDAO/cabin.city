@@ -29,6 +29,7 @@ export const ActivityList = () => {
       <InnerContainer>
         <InfiniteScroll
           hasMore={!!hasMore}
+          style={{ overflowX: 'hidden' }}
           dataLength={dataLength}
           next={() => {
             return fetchMore({

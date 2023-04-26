@@ -4,7 +4,11 @@ import styled from 'styled-components'
 type ListItemProps = React.ComponentProps<typeof Link>
 
 export const ListItem = (props: ListItemProps) => {
-  return <ContainerLink href={props.href}>{props.children}</ContainerLink>
+  return (
+    <ContainerLink className={props.className} href={props.href}>
+      {props.children}
+    </ContainerLink>
+  )
 }
 
 const ContainerLink = styled(Link)`
