@@ -234,6 +234,7 @@ export const DirectoryView = () => {
         <InfiniteScroll
           hasMore={!!hasMore}
           dataLength={dataLength}
+          style={{ overflowX: 'hidden' }}
           next={() => {
             return fetchMore({
               variables: {

@@ -22,7 +22,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
   const avatarSize = deviceSize === 'mobile' ? 4 : 6.4
 
   return (
-    <ListItem href={`/profile/${profile._id}`}>
+    <StyledListItem href={`/profile/${profile._id}`}>
       <AvatarContainer>
         <Avatar src={profile.avatar?.url} size={avatarSize} />
         <InfoContainer>
@@ -45,9 +45,16 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
           Joined {format(parseISO(profile.createdAt), 'MMM yyyy')}
         </Caption>
       </CaptionContainer>
-    </ListItem>
+    </StyledListItem>
   )
 }
+
+const StyledListItem = styled(ListItem)`
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`
 
 const CaptionContainer = styled.div`
   padding-left: 5.4rem;
