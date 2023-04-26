@@ -17,6 +17,7 @@ type Query {
 
   profilesCount(input: GetProfilesInput): Int! @resolver(name: "profiles_count")
   tokenHoldersCount: Int! @resolver(name: "token_holders_count")
+  offersCount(input: GetOffersInput): Int! @resolver(name: "offers_count")
   citizensCount(status: CitizenshipStatus!): Int!
     @resolver(name: "profiles_by_citizenship_status_count")
 
@@ -27,6 +28,8 @@ type Query {
   myVouchesThisYear: Int! @resolver(name: "my_vouches_this_year")
   locationsByLocationType(locationType: LocationType!): [Location!]!
     @resolver(name: "get_locations_by_location_type", paginated: true)
+  getOffers(input: GetOffersInput!): [Offer!]!
+    @resolver(name: "get_offers", paginated: true)
 }
 
 type Mutation {
@@ -340,6 +343,7 @@ type Offer {
   startDate: Time
   endDate: Time
   location: Location! @relation
+  locationType: LocationType! # Denormalized for sorting
   price: OfferPrice
   profileRoleConstraints: [ProfileRoleConstraint!]
   applicationUrl: String
@@ -368,4 +372,8 @@ enum OfferPriceUnit {
 type ProfileRoleConstraint @embedded {
   profileRole: ProfileRoleType!
   level: ProfileRoleLevelType!
+}
+
+input GetOffersInput @embedded {
+  offerTypes: [OfferType!]!
 }

@@ -51,6 +51,15 @@ export const apolloClient = new ApolloClient({
               }
             },
           },
+          getOffers: {
+            keyArgs: ['input'],
+            merge(existing, incoming) {
+              return {
+                ...incoming,
+                data: [...(existing?.data ?? []), ...incoming.data],
+              }
+            },
+          },
         },
       },
     },

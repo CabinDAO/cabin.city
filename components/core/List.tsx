@@ -4,16 +4,16 @@ import styled from 'styled-components'
 import { ContentCard } from './ContentCard'
 import { Overline } from './Typography'
 
-interface ProfileListProps {
-  total: number
+interface ListProps {
+  total: number | null | undefined
   children: ReactNode
   sortComponent?: ReactNode
 }
 
-export const ProfileList = (props: ProfileListProps) => {
+export const List = (props: ListProps) => {
   const { total, children, sortComponent } = props
 
-  const formattedTotal = formatValue(total)
+  const formattedTotal = formatValue(total ?? 0)
 
   return (
     <ContentCard>
@@ -48,20 +48,17 @@ const InnerContainer = styled.div`
 `
 
 const HeaderContainer = styled.div`
-  padding: 0.4rem 4rem;
+  padding: 1.6rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
-  padding: 0.4rem;
-  padding-left: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {
-    padding-left: 2.4rem;
+    padding: 1.6rem 2.4rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    padding: 0rem 4rem;
-    padding-right: 1.6rem;
+    padding: 1.6rem 4rem;
   }
 `

@@ -8,10 +8,10 @@ import { enUS } from 'date-fns/locale'
 // Utility functions for displaying numbers compactly. e.g. 1000 -> 1k
 const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
-export const formatValue = (value: number) => {
+export const formatValue = (value: number): string => {
   const tier = (Math.log10(Math.abs(value)) / 3) | 0
 
-  if (tier == 0) return value
+  if (tier == 0) return value.toString()
 
   const suffix = SI_SYMBOL[tier]
   const scale = Math.pow(10, tier * 3)

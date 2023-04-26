@@ -1,0 +1,8 @@
+query GetOffers($input: GetOffersInput!, $size: Int, $cursor: String) {
+  getOffers(input: $input, _size: $size, _cursor: $cursor) {
+    data {
+      ...OfferItem
+    }
+    after
+  }
+}

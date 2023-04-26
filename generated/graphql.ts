@@ -755,6 +755,7 @@ export type OfferInput = {
   startDate?: InputMaybe<Scalars['Time']>;
   endDate?: InputMaybe<Scalars['Time']>;
   location?: InputMaybe<OfferLocationRelation>;
+  locationType: LocationType;
   price?: InputMaybe<OfferPriceInput>;
   profileRoleConstraints?: InputMaybe<Array<ProfileRoleConstraintInput>>;
   applicationUrl?: InputMaybe<Scalars['String']>;
@@ -943,6 +944,7 @@ export type PartialUpdateOfferInput = {
   startDate?: InputMaybe<Scalars['Time']>;
   endDate?: InputMaybe<Scalars['Time']>;
   location?: InputMaybe<OfferLocationRelation>;
+  locationType?: InputMaybe<LocationType>;
   price?: InputMaybe<PartialUpdateOfferPriceInput>;
   profileRoleConstraints?: InputMaybe<Array<PartialUpdateProfileRoleConstraintInput>>;
   applicationUrl?: InputMaybe<Scalars['String']>;
@@ -1324,6 +1326,10 @@ export enum CitizenshipStatus {
   Verified = 'Verified'
 }
 
+export type GetOffersInput = {
+  offerTypes: Array<OfferType>;
+};
+
 export type GetProfilesInput = {
   sort?: InputMaybe<ProfileSortType>;
   roleTypes: Array<ProfileRoleType>;
@@ -1499,6 +1505,7 @@ export type Offer = {
   applicationUrl?: Maybe<Scalars['String']>;
   profileRoleConstraints?: Maybe<Array<ProfileRoleConstraint>>;
   title?: Maybe<Scalars['String']>;
+  locationType: LocationType;
   startDate?: Maybe<Scalars['Time']>;
   /** The document's timestamp. */
   _ts: Scalars['Long'];
@@ -1752,6 +1759,7 @@ export type Query = {
   getProfiles: QueryGetProfilesPage;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
+  getOffers: QueryGetOffersPage;
   profilesCount: Scalars['Int'];
   /** Find a document from the collection of 'Hat' by its id. */
   findHatByID?: Maybe<Hat>;
@@ -1769,6 +1777,7 @@ export type Query = {
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
+  offersCount: Scalars['Int'];
   allBadges: OtterspaceBadgePage;
   /** Find a document from the collection of 'ActivityReaction' by its id. */
   findActivityReactionByID?: Maybe<ActivityReaction>;
@@ -1846,6 +1855,13 @@ export type QueryFindActivityByIdArgs = {
 };
 
 
+export type QueryGetOffersArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+  input: GetOffersInput;
+};
+
+
 export type QueryProfilesCountArgs = {
   input?: InputMaybe<GetProfilesInput>;
 };
@@ -1909,6 +1925,11 @@ export type QueryFindAccountByIdArgs = {
 };
 
 
+export type QueryOffersCountArgs = {
+  input?: InputMaybe<GetOffersInput>;
+};
+
+
 export type QueryAllBadgesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -1941,6 +1962,17 @@ export type QueryAllActivitiesPage = {
   __typename?: 'QueryAllActivitiesPage';
   /** The elements of type 'ActivityItem' in this page. */
   data: Array<Maybe<ActivityItem>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Offer'. */
+export type QueryGetOffersPage = {
+  __typename?: 'QueryGetOffersPage';
+  /** The elements of type 'Offer' in this page. */
+  data: Array<Maybe<Offer>>;
   /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
   /** A cursor for elements coming before the current page. */
@@ -2105,7 +2137,25 @@ export type UpdateLocationMutationVariables = Exact<{
 
 export type UpdateLocationMutation = { __typename?: 'Mutation', partialUpdateLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null } | null };
 
+export type GetOffersQueryVariables = Exact<{
+  input: GetOffersInput;
+  size?: InputMaybe<Scalars['Int']>;
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetOffersQuery = { __typename?: 'Query', getOffers: { __typename?: 'QueryGetOffersPage', after?: string | null, data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } };
+
+export type GetOffersCountQueryVariables = Exact<{
+  input: GetOffersInput;
+}>;
+
+
+export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
+
 export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, startDate?: any | null, endDate?: any | null, applicationUrl?: string | null, imageIpfsHash?: string | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null };
+
+export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
@@ -2376,6 +2426,25 @@ export const OfferFragmentDoc = gql`
   }
   applicationUrl
   imageIpfsHash
+}
+    `;
+export const OfferItemFragmentDoc = gql`
+    fragment OfferItem on Offer {
+  _id
+  offerType
+  locationType
+  title
+  startDate
+  endDate
+  imageIpfsHash
+  location {
+    _id
+    name
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+    }
+  }
 }
     `;
 export const GetProfileByIdFragmentDoc = gql`
@@ -2933,6 +3002,79 @@ export function useUpdateLocationMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateLocationMutationHookResult = ReturnType<typeof useUpdateLocationMutation>;
 export type UpdateLocationMutationResult = Apollo.MutationResult<UpdateLocationMutation>;
 export type UpdateLocationMutationOptions = Apollo.BaseMutationOptions<UpdateLocationMutation, UpdateLocationMutationVariables>;
+export const GetOffersDocument = gql`
+    query GetOffers($input: GetOffersInput!, $size: Int, $cursor: String) {
+  getOffers(input: $input, _size: $size, _cursor: $cursor) {
+    data {
+      ...OfferItem
+    }
+    after
+  }
+}
+    ${OfferItemFragmentDoc}`;
+
+/**
+ * __useGetOffersQuery__
+ *
+ * To run a query within a React component, call `useGetOffersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOffersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOffersQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      size: // value for 'size'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useGetOffersQuery(baseOptions: Apollo.QueryHookOptions<GetOffersQuery, GetOffersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOffersQuery, GetOffersQueryVariables>(GetOffersDocument, options);
+      }
+export function useGetOffersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOffersQuery, GetOffersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOffersQuery, GetOffersQueryVariables>(GetOffersDocument, options);
+        }
+export type GetOffersQueryHookResult = ReturnType<typeof useGetOffersQuery>;
+export type GetOffersLazyQueryHookResult = ReturnType<typeof useGetOffersLazyQuery>;
+export type GetOffersQueryResult = Apollo.QueryResult<GetOffersQuery, GetOffersQueryVariables>;
+export const GetOffersCountDocument = gql`
+    query GetOffersCount($input: GetOffersInput!) {
+  offersCount(input: $input)
+}
+    `;
+
+/**
+ * __useGetOffersCountQuery__
+ *
+ * To run a query within a React component, call `useGetOffersCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOffersCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOffersCountQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetOffersCountQuery(baseOptions: Apollo.QueryHookOptions<GetOffersCountQuery, GetOffersCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOffersCountQuery, GetOffersCountQueryVariables>(GetOffersCountDocument, options);
+      }
+export function useGetOffersCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOffersCountQuery, GetOffersCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOffersCountQuery, GetOffersCountQueryVariables>(GetOffersCountDocument, options);
+        }
+export type GetOffersCountQueryHookResult = ReturnType<typeof useGetOffersCountQuery>;
+export type GetOffersCountLazyQueryHookResult = ReturnType<typeof useGetOffersCountLazyQuery>;
+export type GetOffersCountQueryResult = Apollo.QueryResult<GetOffersCountQuery, GetOffersCountQueryVariables>;
 export const GetProfileByIdDocument = gql`
     query GetProfileById($id: ID!) {
   findProfileByID(id: $id) {

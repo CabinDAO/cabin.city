@@ -1,0 +1,17 @@
+fragment OfferItem on Offer {
+  _id
+  offerType
+  locationType
+  title
+  startDate
+  endDate
+  imageIpfsHash
+  location {
+    _id
+    name
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+    }
+  }
+}

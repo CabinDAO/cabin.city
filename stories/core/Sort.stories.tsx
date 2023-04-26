@@ -15,9 +15,8 @@ const Template: ComponentStory<typeof Sort> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   onSelectOption: (option) => {
-    console.log({ option })
+    console.info({ option })
   },
   fields: [
     {
