@@ -15,6 +15,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
       read: true,
     },
   },
+  {
+    resource: q.Collection('Offer'),
+    actions: {
+      read: true,
+    },
+  },
   /* Indexes */
   {
     resource: q.Index('locations_by_location_type'),
@@ -22,9 +28,27 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
       read: true,
     },
   },
+  {
+    resource: q.Index('offers_by_offerType'),
+    actions: {
+      read: true,
+    },
+  },
   /* Functions */
   {
     resource: q.Function('get_locations_by_location_type'),
+    actions: {
+      call: true,
+    },
+  },
+  {
+    resource: q.Function('get_offers'),
+    actions: {
+      call: true,
+    },
+  },
+  {
+    resource: q.Function('offers_count'),
     actions: {
       call: true,
     },

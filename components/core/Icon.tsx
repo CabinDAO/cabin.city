@@ -36,6 +36,7 @@ import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
+import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
 import personSvg from './svg/person.svg'
 import profileSvg from './svg/profile.svg'
@@ -89,6 +90,7 @@ export const IconSvgs = {
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
   neighborhoods: neighborhoodsSvg,
+  offer: offerSvg,
   outpost: outpostSvg,
   person: personSvg,
   profile: profileSvg,

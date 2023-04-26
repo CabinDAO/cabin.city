@@ -15,11 +15,10 @@ import { allRoles } from '@/utils/roles'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
-import { Filter } from '../core/Filter'
+import { Filter, FilterContainer, FilterGroup } from '../core/Filter'
 import Icon from '../core/Icon'
 import { InputText } from '../core/InputText'
 import { NoWrap } from '../core/NoWrap'
-import { ProfileList } from '../core/ProfileList'
 import { ProfileListItem } from '../core/ProfileListItem'
 import { Sort, SortOption } from '../core/Sort'
 import { TitleCard } from '../core/TitleCard'
@@ -31,6 +30,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { FilterCount } from '../core/FilterCount'
 import { ProfileListEmptyState } from '../core/ProfileListEmptyState'
 import { useUser } from '../auth/useUser'
+import { List } from '../core/List'
 
 export const DirectoryView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -221,7 +221,7 @@ export const DirectoryView = () => {
           </FilterGroup>
         )}
       </FilterContainer>
-      <ProfileList
+      <List
         total={totalProfiles}
         sortComponent={
           <Sort
@@ -251,49 +251,13 @@ export const DirectoryView = () => {
             ))
           )}
         </InfiniteScroll>
-      </ProfileList>
+      </List>
     </SingleColumnLayout>
   )
 }
 
-const FilterContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  width: 100%;
-  padding-top: 0.8rem;
-
-  ${({ theme }) => theme.bp.md} {
-    gap: 0.8rem;
-    margin-top: 0rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    flex-direction: row;
-    padding-top: 2.4rem;
-  }
-`
-
 const StyledInputText = styled(InputText)`
   width: 100%;
-`
-
-const FilterGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-  button {
-    width: 100%;
-  }
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-
-    button {
-      width: auto;
-    }
-  }
 `
 
 const SearchContainer = styled.div`

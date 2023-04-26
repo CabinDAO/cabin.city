@@ -1,0 +1,3 @@
+query GetOffersCount($input: GetOffersInput!) {
+  offersCount(input: $input)
+}

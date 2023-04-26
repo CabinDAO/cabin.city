@@ -2,6 +2,7 @@ import { LocationCardProps } from '@/components/core/LocationCard'
 import { LocationItemFragment, LocationType } from '@/generated/graphql'
 import { getImageUrlByIpfsHash } from './image'
 import { parseISO } from 'date-fns'
+import { formatShortAddress } from './address'
 
 export const locationCardPropsFromFragment = (
   fragment: LocationItemFragment
@@ -9,7 +10,7 @@ export const locationCardPropsFromFragment = (
   return {
     locationType: fragment.locationType ?? LocationType.Outpost,
     name: fragment.name,
-    address: formatAddress(fragment.address),
+    address: formatShortAddress(fragment.address),
     caretaker: fragment.caretaker,
     tagline: fragment.tagline,
     bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash),
@@ -19,10 +20,4 @@ export const locationCardPropsFromFragment = (
     offerCount: fragment.offerCount,
     publishedAt: parseISO(fragment.publishedAt),
   }
-}
-
-const formatAddress = (address: LocationItemFragment['address']) => {
-  return address
-    ? `${address.locality}, ${address.admininstrativeAreaLevel1Short}`
-    : null
 }

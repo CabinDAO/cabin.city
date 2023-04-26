@@ -61,7 +61,7 @@ export const Sort = <T extends string | number>(props: SortProps<T>) => {
   return (
     <ClickAway onClickAway={handleSoftClose}>
       <Container>
-        <Button
+        <StyledButton
           variant="link"
           onClick={() => setOpen(!open)}
           endAdornment={
@@ -71,7 +71,7 @@ export const Sort = <T extends string | number>(props: SortProps<T>) => {
           }
         >
           <Overline>Sort</Overline>
-        </Button>
+        </StyledButton>
         <SortMenuPop open={open}>
           <Menu backgroundColor="yellow100">
             <SortMenuSection>
@@ -95,6 +95,10 @@ export const Sort = <T extends string | number>(props: SortProps<T>) => {
 
 const Container = styled.div`
   position: relative;
+`
+
+const StyledButton = styled(Button)`
+  padding: 0;
 `
 
 const SortMenuSection = styled(MenuSection)`

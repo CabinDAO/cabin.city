@@ -97,6 +97,42 @@ export const Filter = <T extends string | number>(props: FilterProps<T>) => {
   )
 }
 
+export const FilterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  width: 100%;
+  padding-top: 0.8rem;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 0.8rem;
+    margin-top: 0rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    flex-direction: row;
+    padding-top: 2.4rem;
+  }
+`
+
+export const FilterGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  button {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+
+    button {
+      width: auto;
+    }
+  }
+`
+
 const Container = styled.div`
   position: relative;
   width: 100%;
