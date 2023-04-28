@@ -30,6 +30,8 @@ type Query {
     @resolver(name: "get_locations_by_location_type", paginated: true)
   getOffers(input: GetOffersInput!): [Offer!]!
     @resolver(name: "get_offers", paginated: true)
+  getLocationsByIds(ids: [ID!]!): [Location!]!
+    @resolver(name: "get_locations_by_ids")
 }
 
 type Mutation {

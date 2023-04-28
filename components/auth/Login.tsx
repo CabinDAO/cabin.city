@@ -210,7 +210,7 @@ const SignInButton = ({ onClick, isConnected, address }: SignInButtonProps) => {
         hideModal()
       }
     })()
-  }, [loginState.status, address, signAuthMessage])
+  }, [loginState.status, address, signAuthMessage, showModal, hideModal])
 
   // 4. Forward appropriately
   useEffect(() => {

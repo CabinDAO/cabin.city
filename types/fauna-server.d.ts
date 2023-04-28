@@ -6,7 +6,7 @@ export interface FaunaTokenResponse {
     }
   }
   profile: {
-    data: {
+    ref: {
       id: string
     }
   }

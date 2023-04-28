@@ -26,8 +26,9 @@ const handler = async (
       )) as FaunaTokenResponse
 
       req.session.profile = {
-        id: resp.profile.data.id,
+        id: resp.profile.ref.id,
       }
+
       await req.session.save()
 
       res.send(resp)

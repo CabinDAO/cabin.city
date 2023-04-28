@@ -1739,6 +1739,7 @@ export type Query = {
   __typename?: 'Query';
   /** Find a document from the collection of 'OtterspaceBadge' by its id. */
   findOtterspaceBadgeByID?: Maybe<OtterspaceBadge>;
+  getLocationsByIds: Array<Location>;
   /** Find a document from the collection of 'ProfileVouch' by its id. */
   findProfileVouchByID?: Maybe<ProfileVouch>;
   /** Find a document from the collection of 'Location' by its id. */
@@ -1788,6 +1789,11 @@ export type Query = {
 
 export type QueryFindOtterspaceBadgeByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetLocationsByIdsArgs = {
+  ids: Array<Scalars['ID']>;
 };
 
 
@@ -2114,6 +2120,13 @@ export type GetLocationByIdQueryVariables = Exact<{
 
 export type GetLocationByIdQuery = { __typename?: 'Query', findLocationByID?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null } | null };
 
+export type GetLocationVoteCountsByIdsQueryVariables = Exact<{
+  ids: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type GetLocationVoteCountsByIdsQuery = { __typename?: 'Query', getLocationsByIds: Array<{ __typename?: 'Location', _id: string, voteCount?: number | null, locationType?: LocationType | null }> };
+
 export type GetLocationsByLocationTypeQueryVariables = Exact<{
   locationType: LocationType;
   size?: InputMaybe<Scalars['Int']>;
@@ -2128,6 +2141,13 @@ export type CaretakerFragment = { __typename?: 'Profile', _id: string, email: st
 export type LocationFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null };
 
 export type LocationItemFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null };
+
+export type MyLocationVotesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyLocationVotesQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id: string, cabinTokenBalanceInt: number, locationVotes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, location: { __typename?: 'Location', _id: string, name?: string | null } } | null> } } };
+
+export type LocationVoteFragment = { __typename?: 'LocationVote', _id: string, count: number, location: { __typename?: 'Location', _id: string, name?: string | null } };
 
 export type UpdateLocationMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2407,6 +2427,16 @@ export const LocationItemFragmentDoc = gql`
   description
   voteCount
   offerCount
+}
+    `;
+export const LocationVoteFragmentDoc = gql`
+    fragment LocationVote on LocationVote {
+  _id
+  location {
+    _id
+    name
+  }
+  count
 }
     `;
 export const OfferFragmentDoc = gql`
@@ -2924,6 +2954,43 @@ export function useGetLocationByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type GetLocationByIdQueryHookResult = ReturnType<typeof useGetLocationByIdQuery>;
 export type GetLocationByIdLazyQueryHookResult = ReturnType<typeof useGetLocationByIdLazyQuery>;
 export type GetLocationByIdQueryResult = Apollo.QueryResult<GetLocationByIdQuery, GetLocationByIdQueryVariables>;
+export const GetLocationVoteCountsByIdsDocument = gql`
+    query GetLocationVoteCountsByIds($ids: [ID!]!) {
+  getLocationsByIds(ids: $ids) {
+    _id
+    voteCount
+    locationType
+  }
+}
+    `;
+
+/**
+ * __useGetLocationVoteCountsByIdsQuery__
+ *
+ * To run a query within a React component, call `useGetLocationVoteCountsByIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLocationVoteCountsByIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLocationVoteCountsByIdsQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetLocationVoteCountsByIdsQuery(baseOptions: Apollo.QueryHookOptions<GetLocationVoteCountsByIdsQuery, GetLocationVoteCountsByIdsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLocationVoteCountsByIdsQuery, GetLocationVoteCountsByIdsQueryVariables>(GetLocationVoteCountsByIdsDocument, options);
+      }
+export function useGetLocationVoteCountsByIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLocationVoteCountsByIdsQuery, GetLocationVoteCountsByIdsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLocationVoteCountsByIdsQuery, GetLocationVoteCountsByIdsQueryVariables>(GetLocationVoteCountsByIdsDocument, options);
+        }
+export type GetLocationVoteCountsByIdsQueryHookResult = ReturnType<typeof useGetLocationVoteCountsByIdsQuery>;
+export type GetLocationVoteCountsByIdsLazyQueryHookResult = ReturnType<typeof useGetLocationVoteCountsByIdsLazyQuery>;
+export type GetLocationVoteCountsByIdsQueryResult = Apollo.QueryResult<GetLocationVoteCountsByIdsQuery, GetLocationVoteCountsByIdsQueryVariables>;
 export const GetLocationsByLocationTypeDocument = gql`
     query GetLocationsByLocationType($locationType: LocationType!, $size: Int, $cursor: String) {
   locationsByLocationType(
@@ -2968,6 +3035,46 @@ export function useGetLocationsByLocationTypeLazyQuery(baseOptions?: Apollo.Lazy
 export type GetLocationsByLocationTypeQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeQuery>;
 export type GetLocationsByLocationTypeLazyQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeLazyQuery>;
 export type GetLocationsByLocationTypeQueryResult = Apollo.QueryResult<GetLocationsByLocationTypeQuery, GetLocationsByLocationTypeQueryVariables>;
+export const MyLocationVotesDocument = gql`
+    query MyLocationVotes {
+  me {
+    _id
+    cabinTokenBalanceInt
+    locationVotes(_size: 1000) {
+      data {
+        ...LocationVote
+      }
+    }
+  }
+}
+    ${LocationVoteFragmentDoc}`;
+
+/**
+ * __useMyLocationVotesQuery__
+ *
+ * To run a query within a React component, call `useMyLocationVotesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMyLocationVotesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMyLocationVotesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMyLocationVotesQuery(baseOptions?: Apollo.QueryHookOptions<MyLocationVotesQuery, MyLocationVotesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MyLocationVotesQuery, MyLocationVotesQueryVariables>(MyLocationVotesDocument, options);
+      }
+export function useMyLocationVotesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MyLocationVotesQuery, MyLocationVotesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MyLocationVotesQuery, MyLocationVotesQueryVariables>(MyLocationVotesDocument, options);
+        }
+export type MyLocationVotesQueryHookResult = ReturnType<typeof useMyLocationVotesQuery>;
+export type MyLocationVotesLazyQueryHookResult = ReturnType<typeof useMyLocationVotesLazyQuery>;
+export type MyLocationVotesQueryResult = Apollo.QueryResult<MyLocationVotesQuery, MyLocationVotesQueryVariables>;
 export const UpdateLocationDocument = gql`
     mutation UpdateLocation($id: ID!, $data: PartialUpdateLocationInput!) {
   partialUpdateLocation(id: $id, data: $data) {

@@ -31,6 +31,7 @@ import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
+import minusSvg from './svg/minus.svg'
 import mountainSvg from './svg/mountain.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
@@ -38,7 +39,9 @@ import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
 import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
+import pencilSvg from './svg/pencil.svg'
 import personSvg from './svg/person.svg'
+import plusSvg from './svg/plus.svg'
 import profileSvg from './svg/profile.svg'
 import profile2Svg from './svg/profile2.svg'
 import raceSvg from './svg/race.svg'
@@ -85,6 +88,7 @@ export const IconSvgs = {
   'logo-cabin': logoCabinSvg,
   members: membersSvg,
   menu: menuSvg,
+  minus: minusSvg,
   mountain: mountainSvg,
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
@@ -92,7 +96,9 @@ export const IconSvgs = {
   neighborhoods: neighborhoodsSvg,
   offer: offerSvg,
   outpost: outpostSvg,
+  pencil: pencilSvg,
   person: personSvg,
+  plus: plusSvg,
   profile: profileSvg,
   profile2: profile2Svg,
   race: raceSvg,

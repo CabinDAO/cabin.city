@@ -19,6 +19,7 @@ export interface LocationCardProps {
   sleepCapacity: number | null | undefined
   offerCount: number | null | undefined
   publishedAt: Date | null | undefined
+  onVote?: () => void
 }
 
 interface Caretaker {
@@ -43,6 +44,7 @@ export const LocationCard = (props: LocationCardProps) => {
     sleepCapacity,
     offerCount,
     publishedAt,
+    onVote,
   } = props
 
   const name = props.name ?? 'New Listing'
@@ -85,7 +87,7 @@ export const LocationCard = (props: LocationCardProps) => {
         <Caption emphasized>{`${
           voteCount?.toLocaleString() ?? 0
         } Votes`}</Caption>
-        <VoteButton variant="secondary">
+        <VoteButton variant="secondary" onClick={onVote}>
           <Icon name="chevron-up" size={1.6} />
         </VoteButton>
       </VotesContainer>

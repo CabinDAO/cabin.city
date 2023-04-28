@@ -5,6 +5,6 @@ export const RefFromSet = (setExpr: Expr) => {
     {
       setAsArray: q.Paginate(setExpr),
     },
-    q.Select([0], q.Var('setAsArray'))
+    q.Select([0], q.Var('setAsArray'), null)
   )
 }
