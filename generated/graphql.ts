@@ -2088,7 +2088,7 @@ export type GetProfileByAddressQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null } | null };
+export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?: { __typename?: 'Account', _id: string, profile?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, email: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null } | null };
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
@@ -2097,7 +2097,7 @@ export type GetProfilesQueryVariables = Exact<{
 }>;
 
 
-export type GetProfilesQuery = { __typename?: 'Query', getProfiles: { __typename?: 'QueryGetProfilesPage', after?: string | null, data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
+export type GetProfilesQuery = { __typename?: 'Query', getProfiles: { __typename?: 'QueryGetProfilesPage', after?: string | null, data: Array<{ __typename?: 'Profile', _id: string, createdAt: any, name: string, email: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null> } };
 
 export type GetProfilesCountQueryVariables = Exact<{
   input: GetProfilesInput;
@@ -2106,19 +2106,19 @@ export type GetProfilesCountQueryVariables = Exact<{
 
 export type GetProfilesCountQuery = { __typename?: 'Query', profilesCount: number };
 
-export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
+export type ProfileFragment = { __typename?: 'Profile', _id: string, createdAt: any, name: string, email: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
 export type CreateLocationMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CreateLocationMutation = { __typename?: 'Mutation', createLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null } | null };
+export type CreateLocationMutation = { __typename?: 'Mutation', createLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } } | null };
 
 export type GetLocationByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetLocationByIdQuery = { __typename?: 'Query', findLocationByID?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null } | null };
+export type GetLocationByIdQuery = { __typename?: 'Query', findLocationByID?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } } | null };
 
 export type GetLocationVoteCountsByIdsQueryVariables = Exact<{
   ids: Array<Scalars['ID']> | Scalars['ID'];
@@ -2136,9 +2136,9 @@ export type GetLocationsByLocationTypeQueryVariables = Exact<{
 
 export type GetLocationsByLocationTypeQuery = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } | null> } };
 
-export type CaretakerFragment = { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } };
+export type CaretakerFragment = { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
-export type LocationFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null };
+export type LocationFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } };
 
 export type LocationItemFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null };
 
@@ -2155,7 +2155,7 @@ export type UpdateLocationMutationVariables = Exact<{
 }>;
 
 
-export type UpdateLocationMutation = { __typename?: 'Mutation', partialUpdateLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, account: { __typename?: 'Account', address: string } }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null } | null };
+export type UpdateLocationMutation = { __typename?: 'Mutation', partialUpdateLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems: { __typename?: 'LocationMediaItemPage', data: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, imageIpfsHash?: string | null } | null> }, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } } | null };
 
 export type GetOffersQueryVariables = Exact<{
   input: GetOffersInput;
@@ -2164,7 +2164,7 @@ export type GetOffersQueryVariables = Exact<{
 }>;
 
 
-export type GetOffersQuery = { __typename?: 'Query', getOffers: { __typename?: 'QueryGetOffersPage', after?: string | null, data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } };
+export type GetOffersQuery = { __typename?: 'Query', getOffers: { __typename?: 'QueryGetOffersPage', after?: string | null, data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } };
 
 export type GetOffersCountQueryVariables = Exact<{
   input: GetOffersInput;
@@ -2175,7 +2175,7 @@ export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
 export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, startDate?: any | null, endDate?: any | null, applicationUrl?: string | null, imageIpfsHash?: string | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null };
 
-export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
+export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
@@ -2338,6 +2338,7 @@ export const ProfileFragmentDoc = gql`
   _id
   createdAt
   name
+  email
   avatar {
     url
   }
@@ -2356,8 +2357,43 @@ export const CaretakerFragmentDoc = gql`
   _id
   email
   name
+  avatar {
+    url
+  }
+  citizenshipStatus
+  cabinTokenBalanceInt
   account {
     address
+  }
+  createdAt
+  roles {
+    role
+    level
+  }
+  bio
+  badgeCount
+}
+    `;
+export const OfferItemFragmentDoc = gql`
+    fragment OfferItem on Offer {
+  _id
+  offerType
+  locationType
+  title
+  startDate
+  endDate
+  imageIpfsHash
+  profileRoleConstraints {
+    profileRole
+    level
+  }
+  location {
+    _id
+    name
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+    }
   }
 }
     `;
@@ -2375,14 +2411,18 @@ export const LocationFragmentDoc = gql`
   publishedAt
   mediaItems {
     data {
+      category
       imageIpfsHash
     }
   }
-  votes {
+  votes(_size: 3) {
     data {
       count
       profile {
         _id
+        avatar {
+          url
+        }
       }
     }
   }
@@ -2401,11 +2441,19 @@ export const LocationFragmentDoc = gql`
     countryShort
     postalCode
   }
+  offers {
+    data {
+      ...OfferItem
+    }
+  }
   bannerImageIpfsHash
   description
   addressInfo
+  voteCount
+  offerCount
 }
-    ${CaretakerFragmentDoc}`;
+    ${CaretakerFragmentDoc}
+${OfferItemFragmentDoc}`;
 export const LocationItemFragmentDoc = gql`
     fragment LocationItem on Location {
   _id
@@ -2456,25 +2504,6 @@ export const OfferFragmentDoc = gql`
   }
   applicationUrl
   imageIpfsHash
-}
-    `;
-export const OfferItemFragmentDoc = gql`
-    fragment OfferItem on Offer {
-  _id
-  offerType
-  locationType
-  title
-  startDate
-  endDate
-  imageIpfsHash
-  location {
-    _id
-    name
-    address {
-      locality
-      admininstrativeAreaLevel1Short
-    }
-  }
 }
     `;
 export const GetProfileByIdFragmentDoc = gql`

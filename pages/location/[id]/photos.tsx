@@ -1,7 +1,7 @@
-import { LocationPhotosView } from '@/components/neighborhoods/LocationPhotosView'
+import { LocationPhotosPageView } from '@/components/neighborhoods/LocationPhotosPageView'
 
 const LocationPhotosPage = () => {
-  return <LocationPhotosView />
+  return <LocationPhotosPageView />
 }
 
 export default LocationPhotosPage

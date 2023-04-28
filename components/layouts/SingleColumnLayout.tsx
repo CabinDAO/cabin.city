@@ -8,6 +8,7 @@ import { MainContent, NavbarContainer } from './common.styles'
 interface LayoutProps {
   children: React.ReactNode
   displayLaunchBanner?: boolean
+  hideNavbar?: boolean
   actionBar?: React.ReactNode
 }
 
@@ -15,6 +16,7 @@ export const SingleColumnLayout = ({
   children,
   displayLaunchBanner,
   actionBar,
+  hideNavbar,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
@@ -24,12 +26,16 @@ export const SingleColumnLayout = ({
       {displayLaunchBanner && <LaunchBanner />}
       <Container>
         <MainContent>{children}</MainContent>
-        {isMobile ? (
-          <MobileFloatingMenu />
-        ) : (
-          <NavbarContainer>
-            <ProfileNavbar />
-          </NavbarContainer>
+        {!hideNavbar && (
+          <>
+            {isMobile ? (
+              <MobileFloatingMenu />
+            ) : (
+              <NavbarContainer>
+                <ProfileNavbar />
+              </NavbarContainer>
+            )}
+          </>
         )}
       </Container>
       <ActionBarContainer>{actionBar}</ActionBarContainer>

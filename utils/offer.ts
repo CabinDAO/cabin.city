@@ -37,6 +37,7 @@ export const offerListItemPropsFromFragment = (
     offerType: fragment.offerType,
     locationType: fragment.locationType,
     title: fragment.title,
+    profileRoleConstraints: fragment.profileRoleConstraints ?? [],
     startDate: parseISO(fragment.startDate),
     endDate: parseISO(fragment.endDate),
     imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),

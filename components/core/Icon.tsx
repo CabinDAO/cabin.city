@@ -57,6 +57,7 @@ import trashSvg from './svg/trash.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
+import rightArrowSvg from './svg/right-arrow.svg'
 import walletSvg from './svg/wallet.svg'
 
 export const IconSvgs = {
@@ -114,6 +115,7 @@ export const IconSvgs = {
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,
+  'right-arrow': rightArrowSvg,
   wallet: walletSvg,
 }
 

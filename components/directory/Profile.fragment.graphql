@@ -2,6 +2,7 @@ fragment Profile on Profile {
   _id
   createdAt
   name
+  email
   avatar {
     url
   }

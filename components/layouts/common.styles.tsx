@@ -29,6 +29,7 @@ export const MainContent = styled.main`
 
 export const FixedWidthMainContent = styled(MainContent)`
   width: 100%;
+
   ${({ theme }) => theme.bp.lg} {
     width: 84rem;
   }

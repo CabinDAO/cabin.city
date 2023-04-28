@@ -9,10 +9,11 @@ const ICON_SIZE = 1.2
 interface ProfileIconsProps {
   citizenshipStatus?: CitizenshipStatus | null | undefined
   roleInfos: RoleInfo[]
+  size?: number
 }
 
 export const ProfileIcons = (props: ProfileIconsProps) => {
-  const { citizenshipStatus, roleInfos } = props
+  const { citizenshipStatus, roleInfos, size } = props
 
   const citizenshipInfo = citizenshipInfoFromStatus(citizenshipStatus)
 
@@ -24,13 +25,17 @@ export const ProfileIcons = (props: ProfileIconsProps) => {
             key="citizenship"
             name={citizenshipInfo.iconName}
             color="green900"
-            size={ICON_SIZE}
+            size={size ?? ICON_SIZE}
           />
         </Tooltip>
       )}
       {roleInfos.map((roleInfo) => (
         <Tooltip key={roleInfo.name} tooltip={roleInfo.name}>
-          <Icon name={roleInfo.iconName} color="yellow600" size={ICON_SIZE} />
+          <Icon
+            name={roleInfo.iconName}
+            color="yellow600"
+            size={size ?? ICON_SIZE}
+          />
         </Tooltip>
       ))}
     </Container>

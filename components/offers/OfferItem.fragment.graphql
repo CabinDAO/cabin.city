@@ -6,6 +6,10 @@ fragment OfferItem on Offer {
   startDate
   endDate
   imageIpfsHash
+  profileRoleConstraints {
+    profileRole
+    level
+  }
   location {
     _id
     name

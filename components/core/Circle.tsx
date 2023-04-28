@@ -1,9 +1,11 @@
 import styled from 'styled-components'
+import { ColorName } from '@/styles/theme'
 
 interface CircleProps {
   source: string
   size: number
   shadowMode: 'always' | 'hover' | 'never'
+  color?: ColorName
 }
 
 export const Circle = styled.div<CircleProps>`
@@ -16,7 +18,7 @@ export const Circle = styled.div<CircleProps>`
   background-image: url('${({ source }) => source}');
   background-size: cover;
   background-position: center;
-  border: 0.1rem solid ${({ theme }) => theme.colors.green900};
+  border: 0.1rem solid ${({ theme, color = 'green900' }) => theme.colors[color]};
 
   // Based on Design, it corresponds to 6% of the size
   --shadow-size: ${({ size }) => size * 0.06}rem;

@@ -8,6 +8,7 @@ export const DEFAULT_PROFILE_PROPS = {
   _id: '123',
   createdAt: '2023-02-01T00:00:00.000Z',
   name: 'John Doe',
+  email: 'john.doe@creatorcabins.com',
   avatar: {
     url: '/images/test-avatar.jpeg',
   },

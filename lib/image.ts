@@ -3,10 +3,14 @@ import { OwnedNft } from 'alchemy-sdk'
 const IPFS_GATEWAY =
   process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? 'https://ipfs.io/ipfs/'
 // TODO: replace with GraphQL type
-export type TempImage = {
+export type TempImage = ResolvableImage & {
   name: string
-  ipfsHash?: string
-  url?: string
+}
+
+export type ResolvableImage = {
+  ipfsHash?: string | null | undefined
+  imageIpfsHash?: string | null | undefined
+  url?: string | null | undefined
 }
 
 export const getImageUrl = (imageUrl: string) => {
@@ -23,9 +27,9 @@ export const getImageUrlByIpfsHash = (ipfsHash: string | null | undefined) => {
   return ipfsHash ? `${IPFS_GATEWAY}${ipfsHash}` : null
 }
 
-export const resolveImageUrl = (image: TempImage) => {
-  if (image.ipfsHash) {
-    return getImageUrlByIpfsHash(image.ipfsHash)
+export const resolveImageUrl = (image: ResolvableImage) => {
+  if (image.ipfsHash ?? image.imageIpfsHash) {
+    return getImageUrlByIpfsHash(image.ipfsHash ?? image.imageIpfsHash)
   } else if (image.url) {
     return getImageUrl(image.url)
   } else {
