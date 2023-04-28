@@ -55,6 +55,7 @@ fragment Me on Profile {
     tokenId
     mintedAt
   }
+  features
 }
 
 fragment TrackingEvent on TrackingEvent {

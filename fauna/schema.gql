@@ -74,6 +74,7 @@ type Profile {
   citizenshipMetadata: CitizenshipMetadata
   locations: [Location!] @relation
   locationVotes: [LocationVote!] @relation
+  features: [String!]
 }
 
 type ProfileVouch {
