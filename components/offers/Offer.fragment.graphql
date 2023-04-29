@@ -14,4 +14,13 @@ fragment Offer on Offer {
   }
   applicationUrl
   imageIpfsHash
+  locationType
+  location {
+    _id
+    name
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+    }
+  }
 }

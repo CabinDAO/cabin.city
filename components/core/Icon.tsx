@@ -25,6 +25,7 @@ import gathererSvg from './svg/gatherer.svg'
 import handWaveSvg from './svg/hand-wave.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
+import holdingSvg from './svg/holding.svg'
 import infoSvg from './svg/info.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
@@ -83,6 +84,7 @@ export const IconSvgs = {
   'hand-wave': handWaveSvg,
   'heart-outline': heartOutlineSvg,
   'heart-solid': heartSolidSvg,
+  holding: holdingSvg,
   info: infoSvg,
   location: locationSvg,
   lock: lockSvg,

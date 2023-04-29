@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import {
+  CitizenshipStatus,
   LocationType,
   OfferType,
   ProfileRoleConstraint,
@@ -87,7 +88,11 @@ export const OfferListItem = (props: OfferListItemProps) => {
           {isDisplayingEligibility && (
             <EligibilityContainer>
               <H6>Eligibility |&nbsp;</H6>
-              <ProfileIcons roleInfos={roleInfos} size={1.6} />
+              <ProfileIcons
+                citizenshipStatus={CitizenshipStatus.Verified}
+                roleInfos={roleInfos}
+                size={1.6}
+              />
             </EligibilityContainer>
           )}
         </ContentContainer>

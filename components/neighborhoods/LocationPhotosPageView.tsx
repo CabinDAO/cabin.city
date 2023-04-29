@@ -17,7 +17,7 @@ export const LocationPhotosPageView = () => {
     skip: !id || !user,
   })
   const location = data?.findLocationByID
-    ? locationViewPropsFromFragment(data?.findLocationByID)
+    ? locationViewPropsFromFragment(data.findLocationByID)
     : null
 
   useEffect(() => {

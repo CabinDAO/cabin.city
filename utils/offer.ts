@@ -1,8 +1,15 @@
 import { OfferListItemProps } from '@/components/core/OfferListItem'
-import { OfferItemFragment, OfferType } from '@/generated/graphql'
+import {
+  OfferFragment,
+  OfferItemFragment,
+  OfferPrice,
+  OfferPriceUnit,
+  OfferType,
+} from '@/generated/graphql'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { parseISO } from 'date-fns'
+import { OfferViewProps } from '@/components/offers/OfferView'
 
 export interface OfferInfo {
   name: string
@@ -29,6 +36,22 @@ export const allOfferInfos = Object.values(OfferType).map((offerType) => ({
   offerType,
 }))
 
+export const formatOfferPrice = (offerPrice: OfferPrice): string => {
+  switch (offerPrice.unit) {
+    case OfferPriceUnit.Hourly:
+      return `$${offerPrice.amountCents / 100} / hour`
+    case OfferPriceUnit.Daily:
+      return `$${offerPrice.amountCents / 100} / day`
+    case OfferPriceUnit.Weekly:
+      return `$${offerPrice.amountCents / 100} / week`
+    case OfferPriceUnit.Monthly:
+      return `$${offerPrice.amountCents / 100} / month`
+    case OfferPriceUnit.FlatFee:
+    default:
+      return `$${offerPrice.amountCents / 100}`
+  }
+}
+
 export const offerListItemPropsFromFragment = (
   fragment: OfferItemFragment
 ): OfferListItemProps => {
@@ -36,6 +59,28 @@ export const offerListItemPropsFromFragment = (
     _id: fragment._id,
     offerType: fragment.offerType,
     locationType: fragment.locationType,
+    title: fragment.title,
+    profileRoleConstraints: fragment.profileRoleConstraints ?? [],
+    startDate: parseISO(fragment.startDate),
+    endDate: parseISO(fragment.endDate),
+    imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),
+    location: {
+      _id: fragment.location._id,
+      name: fragment.location.name,
+      shortAddress: formatShortAddress(fragment.location.address),
+    },
+  }
+}
+
+export const offerViewPropsFromFragment = (
+  fragment: OfferFragment
+): OfferViewProps => {
+  return {
+    _id: fragment._id,
+    offerType: fragment.offerType,
+    locationType: fragment.locationType,
+    price: fragment.price,
+    applicationUrl: fragment.applicationUrl,
     title: fragment.title,
     profileRoleConstraints: fragment.profileRoleConstraints ?? [],
     startDate: parseISO(fragment.startDate),
