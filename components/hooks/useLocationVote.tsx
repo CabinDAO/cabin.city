@@ -7,38 +7,42 @@ import { LocationVoteModal } from '../core/LocationVoteModal'
 import { useModal } from './useModal'
 import { useCallback } from 'react'
 import { CastLocationVotesBody } from '@/pages/api/cast-location-votes'
+import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 
 export const useLocationVote = () => {
   const { showModal } = useModal()
+  const { confirmLoggedIn } = useConfirmLoggedIn()
   const [getLocationVoteCountsByIds] = useGetLocationVoteCountsByIdsLazyQuery({
     fetchPolicy: 'network-only',
   })
 
   const voteForLocation = useCallback(
     (props: Pick<LocationVoteModalWithDataProps, 'location'>) => {
-      showModal(() => (
-        <LocationVodalModalWithData
-          {...props}
-          onCastVotes={(voteModifiersByLocationId: CastLocationVotesBody) => {
-            return fetch('/api/cast-location-votes', {
-              method: 'POST',
-              body: JSON.stringify(voteModifiersByLocationId),
-            }).then((res) => {
-              if (res.ok) {
-                return getLocationVoteCountsByIds({
-                  variables: {
-                    ids: Object.keys(voteModifiersByLocationId),
-                  },
-                })
-              } else {
-                throw new Error('Error casting votes')
-              }
-            })
-          }}
-        />
-      ))
+      confirmLoggedIn(() => {
+        showModal(() => (
+          <LocationVodalModalWithData
+            {...props}
+            onCastVotes={(voteModifiersByLocationId: CastLocationVotesBody) => {
+              return fetch('/api/cast-location-votes', {
+                method: 'POST',
+                body: JSON.stringify(voteModifiersByLocationId),
+              }).then((res) => {
+                if (res.ok) {
+                  return getLocationVoteCountsByIds({
+                    variables: {
+                      ids: Object.keys(voteModifiersByLocationId),
+                    },
+                  })
+                } else {
+                  throw new Error('Error casting votes')
+                }
+              })
+            }}
+          />
+        ))
+      })
     },
-    [showModal, getLocationVoteCountsByIds]
+    [showModal, getLocationVoteCountsByIds, confirmLoggedIn]
   )
 
   return {
