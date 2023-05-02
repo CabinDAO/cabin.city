@@ -292,7 +292,7 @@ type Location {
   publishedAt: Time
   offers: [Offer!] @relation
   offerCount: Int # Denormalized for more efficient queries
-  mediaItems: [LocationMediaItem!] @relation
+  mediaItems: [LocationMediaItem!]
   votes: [LocationVote!] @relation
   voteCount: Int # Denormalized for sorting
   internetSpeedMbps: Int
@@ -328,10 +328,9 @@ type LocationVote {
   count: Int!
 }
 
-type LocationMediaItem {
-  location: Location! @relation
+type LocationMediaItem @embedded {
   category: LocationMediaCategory!
-  imageIpfsHash: String
+  ipfsHash: String
 }
 
 enum LocationMediaCategory {
@@ -351,6 +350,8 @@ type Offer {
   profileRoleConstraints: [ProfileRoleConstraint!]
   applicationUrl: String
   imageIpfsHash: String
+  citizenshipRequired: Boolean
+  minimunCabinBalance: Int
 }
 
 enum OfferType {

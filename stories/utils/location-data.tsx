@@ -63,26 +63,28 @@ export const sampleLocation = {
   offerCount: 3,
   sleepCapacity: 2,
   bannerImageUrl: DEFAULT_BANNER,
-  mediaItems: {
-    data: [
-      {
-        category: LocationMediaCategory.Sleeping,
-        imageIpfsHash: 'QmaFKezRWFfpZ6Wu2sz7yNrPKU8r7EtdJwy6ncCqX5xvw3',
-      },
-      {
-        category: LocationMediaCategory.Working,
-        imageIpfsHash: 'QmeHuuumTXDPHQi8Mtyg6p2QNqGqHdaHjY6CTzxzpeaR3A',
-      },
-      {
-        category: LocationMediaCategory.Features,
-        imageIpfsHash: 'Qmc7R9bwERoZHBBCaZeWoY3D2JgWhxUUbMbKCwqvBkDTTJ',
-      },
-      {
-        category: LocationMediaCategory.Sleeping,
-        imageIpfsHash: 'QmYnt42rqpWWGkgWPPtvAx8FxqyVqTK8yqVy3nr3Qh5Qrt',
-      },
-    ],
-  },
+  mediaItems: [
+    {
+      _id: '1',
+      category: LocationMediaCategory.Sleeping,
+      ipfsHash: 'QmaFKezRWFfpZ6Wu2sz7yNrPKU8r7EtdJwy6ncCqX5xvw3',
+    },
+    {
+      _id: '2',
+      category: LocationMediaCategory.Working,
+      ipfsHash: 'QmeHuuumTXDPHQi8Mtyg6p2QNqGqHdaHjY6CTzxzpeaR3A',
+    },
+    {
+      _id: '3',
+      category: LocationMediaCategory.Features,
+      ipfsHash: 'Qmc7R9bwERoZHBBCaZeWoY3D2JgWhxUUbMbKCwqvBkDTTJ',
+    },
+    {
+      _id: '4',
+      category: LocationMediaCategory.Sleeping,
+      ipfsHash: 'QmYnt42rqpWWGkgWPPtvAx8FxqyVqTK8yqVy3nr3Qh5Qrt',
+    },
+  ],
   votes: {
     // eslint-disable-next-line prefer-spread
     data: Array.apply(null, Array(27)).map((_, i) => ({

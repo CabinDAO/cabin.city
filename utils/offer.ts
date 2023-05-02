@@ -1,4 +1,5 @@
 import { OfferListItemProps } from '@/components/core/OfferListItem'
+import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
   OfferFragment,
   OfferItemFragment,
@@ -9,7 +10,6 @@ import {
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { parseISO } from 'date-fns'
-import { OfferViewProps } from '@/components/offers/OfferView'
 
 export interface OfferInfo {
   name: string
@@ -91,5 +91,6 @@ export const offerViewPropsFromFragment = (
       name: fragment.location.name,
       shortAddress: formatShortAddress(fragment.location.address),
     },
+    rawFragment: fragment,
   }
 }

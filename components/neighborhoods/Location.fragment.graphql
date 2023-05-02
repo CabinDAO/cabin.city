@@ -31,10 +31,9 @@ fragment Location on Location {
   caretakerEmail
   publishedAt
   mediaItems {
-    data {
-      category
-      imageIpfsHash
-    }
+    category
+    ipfsHash
+    category
   }
   votes(_size: 3) {
     data {

@@ -1,7 +1,7 @@
 import { LocationStepWrapper } from './LocationStepWrapper'
 import { Subline2 } from '@/components/core/Typography'
 import styled from 'styled-components'
-import { StepProps } from './configuration'
+import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
 import { InputText } from '@/components/core/InputText'
 import {
@@ -22,6 +22,7 @@ export const BasicDetailStep = ({
   onBack,
   onNext,
   location,
+  steps,
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location._id)
 
@@ -77,7 +78,12 @@ export const BasicDetailStep = ({
   }
 
   return (
-    <StyledLocationStepWrapper name={name} onNext={handleNext} onBack={onBack}>
+    <StyledLocationStepWrapper
+      name={name}
+      onNext={handleNext}
+      onBack={onBack}
+      steps={steps}
+    >
       <InputCoupleContainer>
         <InputText
           required

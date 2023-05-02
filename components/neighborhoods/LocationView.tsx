@@ -33,7 +33,7 @@ import {
 
 interface LocationMediaItem {
   category: LocationMediaCategory
-  imageIpfsHash?: string | null | undefined
+  ipfsHash?: string | null | undefined
 }
 
 interface ProfileAvatar {
@@ -67,7 +67,7 @@ interface OfferItem {
   title?: string | null | undefined
   startDate?: string | null | undefined
   endDate?: string | null | undefined
-  imageIpfsHash?: string | null | undefined
+  ipfsHash?: string | null | undefined
   profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
   location: OfferLocation
 }

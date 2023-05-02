@@ -3,9 +3,10 @@ import { ReactNode, useEffect, useRef } from 'react'
 interface ClickAwayProps {
   onClickAway: ((event: MouseEvent) => void) | null
   children: ReactNode
+  className?: string
 }
 
-const ClickAway = ({ children, onClickAway }: ClickAwayProps) => {
+const ClickAway = ({ children, onClickAway, className }: ClickAwayProps) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -24,7 +25,11 @@ const ClickAway = ({ children, onClickAway }: ClickAwayProps) => {
     }
   }, [onClickAway, wrapperRef])
 
-  return <div ref={wrapperRef}>{children}</div>
+  return (
+    <div className={className} ref={wrapperRef}>
+      {children}
+    </div>
+  )
 }
 
 export default ClickAway

@@ -14,9 +14,10 @@ export type StepProps = {
   onNext: () => void
   onBack: () => void
   location: LocationFragment
+  steps: StepConfig[]
 }
 
-export const steps: StepConfig[] = [
+export const editLocationSteps: StepConfig[] = [
   {
     name: 'Basic Detail',
     component: BasicDetailStep,

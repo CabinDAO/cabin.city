@@ -19,19 +19,19 @@ export const LocationPhotosView = ({
     .filter(({ category }) => category === LocationMediaCategory.Sleeping)
     .map((image) => ({
       ...image,
-      name: `${image.category}-${image.imageIpfsHash}`,
+      name: `${image.category}-${image.ipfsHash}`,
     }))
   const galleryPreviewWorking = mediaItems
     .filter(({ category }) => category === LocationMediaCategory.Working)
     .map((image) => ({
       ...image,
-      name: `${image.category}-${image.imageIpfsHash}`,
+      name: `${image.category}-${image.ipfsHash}`,
     }))
   const galleryPreviewFeatures = mediaItems
     .filter(({ category }) => category === LocationMediaCategory.Features)
     .map((image) => ({
       ...image,
-      name: `${image.category}-${image.imageIpfsHash}`,
+      name: `${image.category}-${image.ipfsHash}`,
     }))
 
   useEffect(() => {

@@ -17,7 +17,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
   ({ id, title, images = [], className }: ImageGalleryProps, forwardedRef) => {
     const { showModal } = useModal()
     const filteredImages = images.filter(
-      (image) => image.url || image.ipfsHash || image.imageIpfsHash
+      (image) => image.url || image.ipfsHash || image.ipfsHash
     )
 
     const handleImageOnClick = (imageIndex: number) => {
@@ -38,7 +38,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             const imageUrl = resolveImageUrl(image)
             return imageUrl ? (
               <ImageSizeContainer
-                key={image.name || image.ipfsHash || image.imageIpfsHash}
+                key={image.name || image.ipfsHash || image.ipfsHash}
               >
                 <StyledImage
                   onClick={() => handleImageOnClick(index)}

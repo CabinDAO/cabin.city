@@ -36,6 +36,7 @@ interface DropdownProps {
   variant?: 'primary' | 'secondary'
   message?: string
   menuMaxHeight?: number
+  className?: string
 }
 
 export const Dropdown = ({
@@ -52,6 +53,7 @@ export const Dropdown = ({
   variant = 'primary',
   message,
   menuMaxHeight,
+  className,
 }: DropdownProps) => {
   const {
     selectionRef,
@@ -65,7 +67,7 @@ export const Dropdown = ({
     handleOptionSelect,
   } = useDropdownLogic(selectedOption, options, onSelect)
   return (
-    <ClickAway onClickAway={handleSoftClose}>
+    <ClickAway className={className} onClickAway={handleSoftClose}>
       <Container onFocus={() => setActive(true)}>
         <InputBase
           id={id}
@@ -88,7 +90,7 @@ export const Dropdown = ({
             {selectedOption ? (
               <Subline2>{selectedOption.label}</Subline2>
             ) : (
-              <Subline2 $color="yellow900">{placeholder}</Subline2>
+              <OpaqueSubline2 $color="green900">{placeholder}</OpaqueSubline2>
             )}
           </StyledSelect>
         </InputBase>
@@ -121,5 +123,9 @@ export const Dropdown = ({
     </ClickAway>
   )
 }
+
+const OpaqueSubline2 = styled(Subline2)`
+  opacity: 0.42;
+`
 
 Dropdown.displayName = 'Dropdown'

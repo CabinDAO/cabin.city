@@ -93,14 +93,8 @@ const authenticatedProfileRole: RoleResource = {
     {
       resource: q.Collection('Offer'),
       actions: {
-        read: true,
-      },
-    },
-    {
-      resource: q.Collection('LocationMediaItem'),
-      actions: {
-        read: true,
         create: true,
+        read: true,
       },
     },
     {
@@ -293,12 +287,6 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Index('location_offers_by_location'),
-      actions: {
-        read: true,
-      },
-    },
-    {
-      resource: q.Index('locationMediaItem_location_by_location'),
       actions: {
         read: true,
       },

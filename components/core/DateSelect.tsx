@@ -1,20 +1,28 @@
 import styled from 'styled-components'
-import { Subline2, subline2Styles } from './Typography'
-import { useState } from 'react'
+import { Subline1, Subline2, subline2Styles } from './Typography'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { format } from 'date-fns'
 
 interface DateSelectProps {
+  label?: string
   startDate?: Date
   endDate?: Date
   onDateChange?: (date: Date | undefined) => void
+  value?: Date
 }
 
 export const DateSelect = ({
+  label,
   startDate,
   endDate,
+  value,
   onDateChange,
 }: DateSelectProps) => {
   const [isDefault, setIsDefault] = useState<boolean>(true)
+  const ref = useRef<HTMLInputElement>(null)
+
+  const utcDate = (date: Date) =>
+    new Date(date.getTime() + date.getTimezoneOffset() * 60000)
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsDefault(e.target.value === '')
@@ -26,13 +34,13 @@ export const DateSelect = ({
     }
 
     if (onDateChange) {
-      onDateChange(validDate)
+      onDateChange(utcDate(validDate))
     }
   }
 
-  const formatDate = (date: Date) => {
-    return format(date, 'yyyy-MM-dd')
-  }
+  const formatDate = useCallback((date: Date) => {
+    return format(utcDate(date), 'yyyy-MM-dd')
+  }, [])
 
   const dateInputProps: { min?: string; max?: string } = {}
 
@@ -44,20 +52,31 @@ export const DateSelect = ({
     dateInputProps.max = formatDate(endDate)
   }
 
+  useEffect(() => {
+    if (value && ref?.current) {
+      setIsDefault(false)
+      ref.current.value = formatDate(value)
+    }
+  }, [value, formatDate])
+
   return (
     <Container>
-      <DateInput
-        isDefault={isDefault}
-        name="date"
-        type="date"
-        {...dateInputProps}
-        onChange={handleOnChange}
-      />
-      {isDefault && (
-        <Default>
-          <Subline2>Date</Subline2>
-        </Default>
-      )}
+      <Subline1>{label}</Subline1>
+      <InputContainer>
+        <DateInput
+          ref={ref}
+          isDefault={isDefault}
+          name="date"
+          type="date"
+          {...dateInputProps}
+          onChange={handleOnChange}
+        />
+        {isDefault && (
+          <Default>
+            <Subline2>Date</Subline2>
+          </Default>
+        )}
+      </InputContainer>
     </Container>
   )
 }
@@ -67,6 +86,12 @@ interface DateInputProps {
 }
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`
+
+const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

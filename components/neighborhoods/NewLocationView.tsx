@@ -25,7 +25,7 @@ export const NewLocationView = () => {
       const id = location.data?.createLocation?._id
 
       id
-        ? router.push(`/location/${id}/edit`)
+        ? router.push(`/location/${id}/edit?created=true`)
         : showModal(() => (
             <ErrorModal
               title="Location Creation Error"
@@ -63,7 +63,7 @@ export const NewLocationView = () => {
         />
       }
     >
-      <TitleCard title="New Location" icon="close" iconHref="/" />
+      <TitleCard title="New listing" icon="close" iconHref="/" />
       <Container>
         <H3>Getting Started</H3>
         <StyledContentCard shape="notch">

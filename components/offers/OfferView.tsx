@@ -1,11 +1,5 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import {
-  LocationType,
-  OfferPriceUnit,
-  OfferType,
-  ProfileRoleConstraint,
-} from '@/generated/graphql'
 import { formatOfferPrice, offerInfoFromType } from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -21,29 +15,7 @@ import { format } from 'date-fns'
 import Icon from '@/components/core/Icon'
 import { SAMPLE_DESCRIPTION } from '@/stories/utils/offer-data'
 import { roleConstraintInfoFromType } from '@/utils/roles'
-
-interface OfferPrice {
-  unit: OfferPriceUnit
-  amountCents: number
-}
-
-export interface OfferViewProps {
-  _id: string
-  offerType: OfferType | null | undefined
-  locationType: LocationType
-  title: string | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  imageUrl: string | null | undefined
-  applicationUrl: string | null | undefined
-  price: OfferPrice | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
-  location: {
-    _id: string
-    name: string | null | undefined
-    shortAddress: string | null | undefined
-  }
-}
+import { OfferViewProps } from './useGetOffer'
 
 const EMPTY = '—'
 
