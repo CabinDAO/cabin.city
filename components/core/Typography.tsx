@@ -201,3 +201,20 @@ export const WordBreak = styled.div`
   -webkit-hyphens: auto;
   hyphens: auto;
 `
+
+export const BlockQuote = styled(Body1)`
+  padding-left: 2.4rem;
+  border-left: 2px solid rgba(29, 42, 42, 0.12);
+`
+
+export const OrderedList = styled.ol`
+  list-style-position: inside;
+`
+
+export const UnorderedList = styled.ul`
+  list-style-position: inside;
+`
+
+export const ListItem = styled.li`
+  ${body1Styles}
+`

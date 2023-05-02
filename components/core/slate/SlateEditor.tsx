@@ -1,10 +1,18 @@
 import { useState } from 'react'
-import { Descendant, Editor, createEditor } from 'slate'
+import {
+  Descendant,
+  Editor,
+  Transforms,
+  createEditor,
+  Element as SlateElement,
+} from 'slate'
 import { Editable, Slate, useSlate, withReact } from 'slate-react'
 import styled from 'styled-components'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
 import { h4Styles, subline2Styles } from '../Typography'
+import Icon, { IconName } from '../Icon'
+import { CustomElement } from '@/types/slate'
 
 interface SlateEditorProps {
   placeholder?: string
@@ -31,12 +39,69 @@ export const SlateEditor = (props: SlateEditorProps) => {
   )
 }
 
+const LIST_TYPES = ['list-numbered', 'list-bulleted']
+
+const EditorContainer = styled.div`
+  margin: 1rem;
+  background-color: white;
+  border: 1px solid ${({ theme }) => theme.colors.green900};
+`
+
+const StyledEditable = styled(Editable)`
+  ${subline2Styles}
+  min-height: 32.5rem;
+  background-color: white;
+  padding: 2rem 1.6rem;
+  margin-top: 0.4rem;
+`
+
 const Toolbar = () => {
   return (
     <ToolbarContainer>
-      <MarkButton format="highlight" text="Header" />
-      <MarkButton format="bold" text="B" />
+      <MarkButton format="bold" iconName="format-bold" />
+      <MarkButton format="italic" iconName="format-italic" />
+      <MarkButton format="underline" iconName="format-underline" />
+      <BlockButton format="header1" iconName="format-header1" />
+      <BlockButton format="header2" iconName="format-header2" />
+      <BlockButton format="quote" iconName="format-quote" />
+      <BlockButton format="list-numbered" iconName="format-list-numbered" />
+      <BlockButton format="list-bulleted" iconName="format-list-bulleted" />
     </ToolbarContainer>
+  )
+}
+
+const ToolbarContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
+`
+
+const ToolbarItem = styled.div`
+  ${h4Styles}
+  padding: 1rem;
+  cursor: pointer;
+`
+
+interface MarkButtonProps {
+  format: string
+  iconName: IconName
+}
+const MarkButton = ({ format, iconName }: MarkButtonProps) => {
+  const editor = useSlate()
+  const isActive = isMarkActive(editor, format)
+
+  return (
+    <ToolbarItem
+      onMouseDown={(e) => {
+        e.preventDefault()
+        toggleMark(editor, format)
+      }}
+    >
+      <StyledIcon name={iconName} size={2} isActive={isActive} />
+    </ToolbarItem>
   )
 }
 
@@ -55,48 +120,64 @@ const toggleMark = (editor: Editor, format: string) => {
   }
 }
 
-interface MarkButtonProps {
-  format: string
-  text: string
+interface BlockButtonProps {
+  format: CustomElement['type']
+  iconName: IconName
 }
-const MarkButton = ({ format, text }: MarkButtonProps) => {
+const BlockButton = ({ format, iconName }: BlockButtonProps) => {
   const editor = useSlate()
+  const isActive = isBlockActive(editor, format)
   return (
     <ToolbarItem
-      onClick={() => {
-        toggleMark(editor, format)
+      onMouseDown={(event) => {
+        event.preventDefault()
+        toggleBlock(editor, format)
       }}
     >
-      {text}
+      <StyledIcon name={iconName} size={2} isActive={isActive} />
     </ToolbarItem>
   )
 }
 
-const EditorContainer = styled.div`
-  margin: 1rem;
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.green900};
-`
+const toggleBlock = (editor: Editor, format: CustomElement['type']) => {
+  const isActive = isBlockActive(editor, format)
+  const isList = LIST_TYPES.includes(format)
 
-const StyledEditable = styled(Editable)`
-  ${subline2Styles}
-  height: 32.5rem;
-  background-color: white;
-  padding: 2rem 1.6rem;
-  margin-top: 0.4rem;
-`
+  Transforms.unwrapNodes(editor, {
+    match: (n) =>
+      !Editor.isEditor(n) &&
+      SlateElement.isElement(n) &&
+      LIST_TYPES.includes(n.type),
+    split: true,
+  })
+  const newProperties: Partial<SlateElement> = {
+    type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+  }
+  Transforms.setNodes<SlateElement>(editor, newProperties)
 
-const ToolbarContainer = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: white;
-`
+  if (!isActive && isList) {
+    const block: CustomElement = { type: format, children: [] }
+    Transforms.wrapNodes(editor, block)
+  }
+}
 
-const ToolbarItem = styled.div`
-  ${h4Styles}
-  padding: 1rem;
-  cursor: pointer;
+const isBlockActive = (editor: Editor, format: string) => {
+  const { selection } = editor
+  if (!selection) return false
+
+  const [match] = Array.from(
+    Editor.nodes(editor, {
+      at: Editor.unhangRange(editor, selection),
+      match: (n) =>
+        !Editor.isEditor(n) &&
+        SlateElement.isElement(n) &&
+        n['type'] === format,
+    })
+  )
+
+  return !!match
+}
+
+const StyledIcon = styled(Icon)<{ isActive: boolean }>`
+  opacity: ${({ isActive }) => (isActive ? 1 : 0.42)};
 `

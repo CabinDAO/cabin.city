@@ -13,6 +13,7 @@ import {
   Subline2,
   Body2,
   Overline,
+  BlockQuote,
 } from '@/components/core/Typography'
 
 const Container = styled.div`
@@ -95,6 +96,10 @@ const TypographyList = ({ $color }: TypographyListProps) => {
       <TypographyRow>
         <Body1>Overline</Body1>
         <Overline $color={$color}>{'Welcome to Cabin'}</Overline>
+      </TypographyRow>
+      <TypographyRow>
+        <Body1>BlockQuote</Body1>
+        <BlockQuote $color={$color}>{'This is a quote'}</BlockQuote>
       </TypographyRow>
     </Container>
   )

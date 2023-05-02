@@ -21,6 +21,14 @@ import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
+import formatBold from './svg/format-bold.svg'
+import formatHeader1 from './svg/format-header1.svg'
+import formatHeader2 from './svg/format-header2.svg'
+import formatItalic from './svg/format-italic.svg'
+import formatListBulleted from './svg/format-list-bulleted.svg'
+import formatListNumbered from './svg/format-list-numbered.svg'
+import formatQuote from './svg/format-quote.svg'
+import formatUnderline from './svg/format-underline.svg'
 import gathererSvg from './svg/gatherer.svg'
 import handWaveSvg from './svg/hand-wave.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
@@ -80,6 +88,14 @@ export const IconSvgs = {
   date: dateSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
+  'format-bold': formatBold,
+  'format-header1': formatHeader1,
+  'format-header2': formatHeader2,
+  'format-italic': formatItalic,
+  'format-list-bulleted': formatListBulleted,
+  'format-list-numbered': formatListNumbered,
+  'format-quote': formatQuote,
+  'format-underline': formatUnderline,
   gatherer: gathererSvg,
   'hand-wave': handWaveSvg,
   'heart-outline': heartOutlineSvg,
