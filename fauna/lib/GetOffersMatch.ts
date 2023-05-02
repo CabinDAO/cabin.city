@@ -16,7 +16,12 @@ const OffersByOfferType = (offerTypes: Expr) =>
       offerTypes,
       q.Lambda(
         'offerType',
-        q.Match(q.Index('offers_by_offerType'), q.Var('offerType'))
+        // Range filters out inactive (endDate has passed) offers
+        q.Range(
+          q.Match(q.Index('offers_by_offerType'), q.Var('offerType')),
+          q.Now(),
+          []
+        )
       )
     )
   )

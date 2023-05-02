@@ -35,6 +35,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
+    resource: q.Index('offers_sort_by_locationType'),
+    actions: {
+      read: true,
+    },
+  },
+  {
     resource: q.Index('offers_by_offerType'),
     actions: {
       read: true,

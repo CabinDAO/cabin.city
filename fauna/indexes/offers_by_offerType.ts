@@ -7,11 +7,7 @@ const offersByOfferType: IndexResource = {
     collection: q.Collection('Offer'),
   },
   terms: [{ field: ['data', 'offerType'] }],
-  values: [
-    { field: ['data', 'locationType'] },
-    { field: ['data', 'startDate'] },
-    { field: ['ref'] },
-  ],
+  values: [{ field: ['data', 'endDate'] }, { field: ['ref'] }],
 }
 
 export default offersByOfferType
