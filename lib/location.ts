@@ -47,5 +47,6 @@ export const locationViewPropsFromFragment = (
     voteCount: fragment.voteCount,
     offers: fragment.offers.data.filter(isNotNull),
     votes: fragment.votes.data.filter(isNotNull),
+    publishedAt: fragment.publishedAt ? parseISO(fragment.publishedAt) : null,
   }
 }

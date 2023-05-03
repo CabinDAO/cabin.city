@@ -80,6 +80,7 @@ export interface LocationProps {
   voteCount: number | null | undefined
   offers: OfferItem[]
   votes: LocationVote[] | null | undefined
+  publishedAt: Date | null | undefined
 }
 
 const EMPTY = '—'
