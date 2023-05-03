@@ -26,6 +26,8 @@ export interface OfferListItemProps {
   endDate: Date | null | undefined
   imageUrl: string | null | undefined
   profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
+  citizenshipRequired?: boolean | null | undefined
+  minimunCabinBalance?: number | null | undefined
   location: {
     _id: string
     name: string | null | undefined
@@ -47,10 +49,15 @@ export const OfferListItem = (props: OfferListItemProps) => {
     location,
     className,
     profileRoleConstraints,
+    citizenshipRequired,
+    minimunCabinBalance,
     variant,
     isLocked,
   } = props
-  const isDisplayingEligibility = !!profileRoleConstraints?.length
+  const isDisplayingEligibility =
+    !!profileRoleConstraints?.length ||
+    citizenshipRequired ||
+    minimunCabinBalance
   const roleInfos = (profileRoleConstraints || []).map((role) =>
     roleInfoFromType(role.profileRole)
   )
@@ -94,7 +101,9 @@ export const OfferListItem = (props: OfferListItemProps) => {
             <EligibilityContainer>
               <H6>Eligibility |&nbsp;</H6>
               <ProfileIcons
-                citizenshipStatus={CitizenshipStatus.Verified}
+                citizenshipStatus={
+                  citizenshipRequired ? CitizenshipStatus.Verified : null
+                }
                 roleInfos={roleInfos}
                 size={1.6}
               />

@@ -63,6 +63,8 @@ export const offerListItemPropsFromFragment = (
     locationType: fragment.locationType,
     title: fragment.title,
     profileRoleConstraints: fragment.profileRoleConstraints ?? [],
+    citizenshipRequired: fragment.citizenshipRequired,
+    minimunCabinBalance: fragment.minimunCabinBalance,
     startDate: parseISO(fragment.startDate),
     endDate: parseISO(fragment.endDate),
     imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),

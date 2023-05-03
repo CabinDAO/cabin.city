@@ -4,6 +4,7 @@ import {
   DEFAULT_OFFER_PROPS,
   EMPTY_IMAGE_OFFER_PROPS,
 } from '../utils/offer-data'
+import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 
 export default {
   title: 'Core/OfferListItem',
@@ -22,3 +23,20 @@ EmptyImage.args = EMPTY_IMAGE_OFFER_PROPS
 
 export const Locked = Template.bind({})
 Locked.args = { ...DEFAULT_OFFER_PROPS, isLocked: true }
+
+export const SingleRoleEligibility = Template.bind({})
+SingleRoleEligibility.args = {
+  ...DEFAULT_OFFER_PROPS,
+  profileRoleConstraints: [
+    {
+      profileRole: ProfileRoleType.Builder,
+      level: ProfileRoleLevelType.Artisan,
+    },
+  ],
+}
+
+export const CitizenshipRequired = Template.bind({})
+CitizenshipRequired.args = {
+  ...DEFAULT_OFFER_PROPS,
+  citizenshipRequired: true,
+}
