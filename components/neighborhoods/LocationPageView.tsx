@@ -5,11 +5,13 @@ import { LocationView } from '@/components/neighborhoods/LocationView'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { useEffect } from 'react'
 import { useUser } from '@/components/auth/useUser'
+import { useLocationVote } from '../hooks/useLocationVote'
 
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
   const { user } = useUser({ redirectTo: '/login' })
+  const { voteForLocation } = useLocationVote()
   const { data } = useGetLocationByIdQuery({
     variables: {
       id: `${id}`,
@@ -30,9 +32,15 @@ export const LocationPageView = () => {
     return null
   }
 
+  const handleVote = () => {
+    voteForLocation({
+      location,
+    })
+  }
+
   return (
     <SingleColumnLayout>
-      <LocationView location={location} />
+      <LocationView location={location} onVote={handleVote} />
     </SingleColumnLayout>
   )
 }

@@ -30,6 +30,8 @@ import {
   DEFAULT_BANNER,
   SAMPLE_DESCRIPTION,
 } from '@/stories/utils/location-data'
+import { SlateRenderer } from '../core/slate/SlateRenderer'
+import { stringToSlateValue } from '../core/slate/slate-utils'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -91,7 +93,13 @@ export interface LocationProps {
 
 const EMPTY = '—'
 
-export const LocationView = ({ location }: { location: LocationProps }) => {
+export const LocationView = ({
+  location,
+  onVote,
+}: {
+  location: LocationProps
+  onVote?: () => void
+}) => {
   const {
     _id: id,
     name,
@@ -179,7 +187,7 @@ export const LocationView = ({ location }: { location: LocationProps }) => {
                 <ProfilesCount profiles={voteProfiles} />
               </VotesAvatarContainer>
 
-              <VotingProfilesButton variant="secondary">
+              <VotingProfilesButton variant="secondary" onClick={onVote}>
                 <Icon name="chevron-up" size={2.4} />
               </VotingProfilesButton>
             </VotesContainer>
@@ -245,7 +253,7 @@ export const LocationView = ({ location }: { location: LocationProps }) => {
         <Tab name="Description">
           <DescriptionTwoColumn>
             <DescriptionDetails>
-              {description ?? SAMPLE_DESCRIPTION}
+              <SlateRenderer value={stringToSlateValue(description)} />
 
               <HorizontalBar />
 
@@ -318,30 +326,7 @@ const DescriptionDetails = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
-
-  section {
-    display: flex;
-    flex-flow: column;
-    gap: 2.4rem;
-  }
-
-  > h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-bottom: 1.6rem;
-  }
-
-  ul {
-  }
-
-  li {
-    ${body1Styles}
-    margin-left: 1.6rem;
-    padding-left: 0.8rem;
-  }
+  flex: 1;
 `
 
 const VotingProfilesButton = styled(Button)`

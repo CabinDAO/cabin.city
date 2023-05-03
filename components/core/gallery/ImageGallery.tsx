@@ -83,16 +83,9 @@ const ImageList = styled.div`
 const ImageSizeContainer = styled.div`
   position: relative;
   width: 100%;
-  padding: 36.14% 0;
 `
 
 const StyledImage = styled(Image)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  object-fit: cover;
   cursor: pointer;
-  width: 100%;
-  height: auto;
 `

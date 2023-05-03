@@ -227,6 +227,14 @@ export type LocationMediaItemInput = {
   ipfsHash?: InputMaybe<Scalars['String']>;
 };
 
+/** Allow manipulating the relationship between the types 'LocationMediaItem' and 'Location' using the field 'LocationMediaItem.location'. */
+export type LocationMediaItemLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
 /** Allow manipulating the relationship between the types 'Location' and 'Offer'. */
 export type LocationOffersRelation = {
   /** Create one or more documents of type 'Offer' and associate them with the current document. */
@@ -329,8 +337,12 @@ export type Mutation = {
   createLocationVote: LocationVote;
   /** Update an existing document in the collection of 'Location' */
   updateLocation?: Maybe<Location>;
+  /** Create a new document in the collection of 'LocationMediaItem' */
+  createLocationMediaItem: LocationMediaItem;
   /** Create a new document in the collection of 'TrackingEvent' */
   createTrackingEvent: TrackingEvent;
+  /** Delete an existing document in the collection of 'LocationMediaItem' */
+  deleteLocationMediaItem?: Maybe<LocationMediaItem>;
   createLocation?: Maybe<Location>;
   unlikeActivity: ActivityReaction;
   /** Update an existing document in the collection of 'TrackingEvent' */
@@ -351,6 +363,8 @@ export type Mutation = {
   createBlockSyncAttempt: BlockSyncAttempt;
   /** Create a new document in the collection of 'Offer' */
   createOffer: Offer;
+  /** Update an existing document in the collection of 'LocationMediaItem' */
+  updateLocationMediaItem?: Maybe<LocationMediaItem>;
   createTextActivity: Activity;
   /** Update an existing document in the collection of 'Offer' */
   updateOffer?: Maybe<Offer>;
@@ -368,6 +382,8 @@ export type Mutation = {
   partialUpdateOtterspaceBadge?: Maybe<OtterspaceBadge>;
   /** Create a new document in the collection of 'Hat' */
   createHat: Hat;
+  /** Partially updates an existing document in the collection of 'LocationMediaItem'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateLocationMediaItem?: Maybe<LocationMediaItem>;
   likeActivity: ActivityReaction;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
@@ -544,8 +560,18 @@ export type MutationUpdateLocationArgs = {
 };
 
 
+export type MutationCreateLocationMediaItemArgs = {
+  data: LocationMediaItemInput;
+};
+
+
 export type MutationCreateTrackingEventArgs = {
   data: TrackingEventInput;
+};
+
+
+export type MutationDeleteLocationMediaItemArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -606,6 +632,12 @@ export type MutationCreateOfferArgs = {
 };
 
 
+export type MutationUpdateLocationMediaItemArgs = {
+  id: Scalars['ID'];
+  data: LocationMediaItemInput;
+};
+
+
 export type MutationCreateTextActivityArgs = {
   text: Scalars['String'];
 };
@@ -655,6 +687,12 @@ export type MutationPartialUpdateOtterspaceBadgeArgs = {
 
 export type MutationCreateHatArgs = {
   data: HatInput;
+};
+
+
+export type MutationPartialUpdateLocationMediaItemArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateLocationMediaItemInput;
 };
 
 
@@ -711,6 +749,8 @@ export type OfferInput = {
   profileRoleConstraints?: InputMaybe<Array<ProfileRoleConstraintInput>>;
   applicationUrl?: InputMaybe<Scalars['String']>;
   imageIpfsHash?: InputMaybe<Scalars['String']>;
+  citizenshipRequired?: InputMaybe<Scalars['Boolean']>;
+  minimunCabinBalance?: InputMaybe<Scalars['Int']>;
 };
 
 /** Allow manipulating the relationship between the types 'Offer' and 'Location' using the field 'Offer.location'. */
@@ -899,6 +939,8 @@ export type PartialUpdateOfferInput = {
   profileRoleConstraints?: InputMaybe<Array<PartialUpdateProfileRoleConstraintInput>>;
   applicationUrl?: InputMaybe<Scalars['String']>;
   imageIpfsHash?: InputMaybe<Scalars['String']>;
+  citizenshipRequired?: InputMaybe<Scalars['Boolean']>;
+  minimunCabinBalance?: InputMaybe<Scalars['Int']>;
 };
 
 /** 'OfferPrice' input values */
@@ -1430,7 +1472,9 @@ export type Offer = {
   _id: Scalars['ID'];
   price?: Maybe<OfferPrice>;
   offerType?: Maybe<OfferType>;
+  minimunCabinBalance?: Maybe<Scalars['Int']>;
   imageIpfsHash?: Maybe<Scalars['String']>;
+  citizenshipRequired?: Maybe<Scalars['Boolean']>;
   applicationUrl?: Maybe<Scalars['String']>;
   profileRoleConstraints?: Maybe<Array<ProfileRoleConstraint>>;
   title?: Maybe<Scalars['String']>;
@@ -1698,6 +1742,8 @@ export type Query = {
   myVouchesThisYear: Scalars['Int'];
   syncAttemptsByKey: BlockSyncAttemptPage;
   allProfiles: ProfilePage;
+  /** Find a document from the collection of 'LocationMediaItem' by its id. */
+  findLocationMediaItemByID?: Maybe<LocationMediaItem>;
   me: Profile;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
@@ -1822,6 +1868,11 @@ export type QuerySyncAttemptsByKeyArgs = {
 export type QueryAllProfilesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryFindLocationMediaItemByIdArgs = {
+  id: Scalars['ID'];
 };
 
 
