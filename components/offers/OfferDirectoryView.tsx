@@ -18,11 +18,13 @@ import Icon from '../core/Icon'
 import { List } from '../core/List'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { OfferListItem } from '../core/OfferListItem'
+import { useUser } from '../auth/useUser'
 
 export const OfferDirectoryView = () => {
   const [open, setOpen] = useState(false)
   const [offerTypes, setOfferTypes] = useState<OfferType[]>([])
   const { deviceSize } = useDeviceSize()
+  const { user } = useUser()
   const input = useMemo(() => {
     // Zero selected means all are selected
     return {
@@ -118,7 +120,7 @@ export const OfferDirectoryView = () => {
             <div>TODO: Empty state</div>
           ) : (
             offers.map((offer) => {
-              const offerProps = offerListItemPropsFromFragment(offer)
+              const offerProps = offerListItemPropsFromFragment(offer, user)
               return <OfferListItem key={offer._id} {...offerProps} />
             })
           )}

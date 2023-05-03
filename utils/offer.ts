@@ -1,6 +1,7 @@
 import { OfferListItemProps } from '@/components/core/OfferListItem'
 import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
+  MeFragment,
   OfferFragment,
   OfferItemFragment,
   OfferPrice,
@@ -53,7 +54,8 @@ export const formatOfferPrice = (offerPrice: OfferPrice): string => {
 }
 
 export const offerListItemPropsFromFragment = (
-  fragment: OfferItemFragment
+  fragment: OfferItemFragment,
+  me: MeFragment | null | undefined
 ): OfferListItemProps => {
   return {
     _id: fragment._id,
@@ -69,6 +71,7 @@ export const offerListItemPropsFromFragment = (
       name: fragment.location.name,
       shortAddress: formatShortAddress(fragment.location.address),
     },
+    isLocked: !me,
   }
 }
 

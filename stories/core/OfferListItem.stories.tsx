@@ -19,3 +19,6 @@ Default.args = DEFAULT_OFFER_PROPS
 
 export const EmptyImage = Template.bind({})
 EmptyImage.args = EMPTY_IMAGE_OFFER_PROPS
+
+export const Locked = Template.bind({})
+Locked.args = { ...DEFAULT_OFFER_PROPS, isLocked: true }

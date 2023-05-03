@@ -31,6 +31,7 @@ export interface OfferListItemProps {
     name: string | null | undefined
     shortAddress: string | null | undefined
   }
+  isLocked?: boolean
 }
 
 type OfferListItemVariant = 'default' | 'no-icon'
@@ -47,6 +48,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
     className,
     profileRoleConstraints,
     variant,
+    isLocked,
   } = props
   const isDisplayingEligibility = !!profileRoleConstraints?.length
   const roleInfos = (profileRoleConstraints || []).map((role) =>
@@ -81,7 +83,10 @@ export const OfferListItem = (props: OfferListItemProps) => {
             <Caption
               emphasized
             >{`${formattedStartDate} - ${formattedEndDate} · ${offerInfo?.name}`}</Caption>
-            <H4>{title}</H4>
+            <TitleContainer>
+              <H4>{title}</H4>
+              {isLocked && <Icon name="lock" size={1.2} />}
+            </TitleContainer>
             <Caption>{formattedLocation}</Caption>
           </OfferDetails>
 
@@ -175,4 +180,10 @@ const TagContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.green900};
   border-radius: 50%;
   border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 `
