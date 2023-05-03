@@ -16,6 +16,7 @@ const Template: ComponentStory<typeof LocationCard> = (args) => (
 
 export const Neighborhood = Template.bind({})
 Neighborhood.args = {
+  _id: '1',
   locationType: LocationType.Neighborhood,
   name: 'Neighborhood Zero',
   tagline: 'A Cabin Neighborhood in the Texas Hill County.',
@@ -34,6 +35,7 @@ Neighborhood.args = {
 
 export const Outpost = Template.bind({})
 Outpost.args = {
+  _id: '1',
   locationType: LocationType.Outpost,
   name: 'Neighborhood Zero',
   tagline: 'A Cabin Neighborhood in the Texas Hill County.',
@@ -52,6 +54,7 @@ Outpost.args = {
 
 export const Draft = Template.bind({})
 Draft.args = {
+  _id: '1',
   caretaker: {
     _id: '1',
     name: 'April Ludgate',

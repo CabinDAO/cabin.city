@@ -2,6 +2,7 @@ import theme from '@/styles/theme'
 import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
+import { MouseEventHandler } from 'react'
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link'
 
@@ -106,7 +107,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
 interface ButtonProps {
   children: React.ReactNode
   variant?: ButtonVariant
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement>
   startAdornment?: React.ReactNode
   endAdornment?: React.ReactNode
   isActive?: boolean

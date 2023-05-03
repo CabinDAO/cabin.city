@@ -6,8 +6,10 @@ import { IconName } from './Icon'
 import Icon from './Icon'
 import { format } from 'date-fns'
 import { Button } from './Button'
+import Link from 'next/link'
 
 export interface LocationCardProps {
+  _id: string
   locationType: LocationType
   caretaker: Caretaker
   name: string | null | undefined
@@ -36,6 +38,7 @@ const EMPTY = '—'
 
 export const LocationCard = (props: LocationCardProps) => {
   const {
+    _id,
     caretaker,
     tagline,
     bannerImageUrl,
@@ -50,7 +53,7 @@ export const LocationCard = (props: LocationCardProps) => {
   const name = props.name ?? 'New Listing'
 
   return (
-    <Container>
+    <ContainerLink href={`/location/${_id}`}>
       <ImageContainer>
         {bannerImageUrl ? (
           <StyledImage src={bannerImageUrl} fill alt={name} />
@@ -87,11 +90,17 @@ export const LocationCard = (props: LocationCardProps) => {
         <Caption emphasized>{`${
           voteCount?.toLocaleString() ?? 0
         } Votes`}</Caption>
-        <VoteButton variant="secondary" onClick={onVote}>
+        <VoteButton
+          variant="secondary"
+          onClick={(e) => {
+            e.preventDefault()
+            onVote?.()
+          }}
+        >
           <Icon name="chevron-up" size={1.6} />
         </VoteButton>
       </VotesContainer>
-    </Container>
+    </ContainerLink>
   )
 }
 
@@ -139,7 +148,7 @@ const LocationInfo = (props: LocationInfoProps) => {
   )
 }
 
-const Container = styled.div`
+const ContainerLink = styled(Link)`
   display: flex;
   flex-direction: column;
   border: solid 1px ${({ theme }) => theme.colors.green900};

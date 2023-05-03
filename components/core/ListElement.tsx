@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Icon, { IconName } from './Icon'
+import { IconName } from './Icon'
 import { Subline2 } from './Typography'
 import { Checkbox } from './Checkbox'
 
@@ -96,10 +96,6 @@ const ElementSet = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 0.8rem;
-`
-
-const IconContainer = styled.div`
-  min-width: 2.4rem;
 `
 
 interface ListElementProps {

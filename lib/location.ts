@@ -14,6 +14,7 @@ export const locationCardPropsFromFragment = (
   fragment: LocationItemFragment
 ): LocationCardProps => {
   return {
+    _id: fragment._id,
     address: formatShortAddress(fragment.address),
     bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash),
     caretaker: fragment.caretaker,

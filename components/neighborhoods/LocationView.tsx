@@ -2,13 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import {
-  Body1,
-  Caption,
-  H1,
-  H4,
-  body1Styles,
-} from '@/components/core/Typography'
+import { Body1, Caption, H1, H4 } from '@/components/core/Typography'
 import Tab from '@/components/core/Tab'
 import TabGroup from '@/components/core/TabGroup'
 import {
@@ -26,10 +20,7 @@ import { Button } from '@/components/core/Button'
 import { resolveImageUrl } from '@/lib/image'
 import { OffersList } from '@/components/offers/OffersList'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import {
-  DEFAULT_BANNER,
-  SAMPLE_DESCRIPTION,
-} from '@/stories/utils/location-data'
+import { DEFAULT_BANNER } from '@/stories/utils/location-data'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 
