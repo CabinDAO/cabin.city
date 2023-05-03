@@ -2,15 +2,30 @@ import { Switch } from '@/components/core/Switch'
 import { Body2, H3 } from '@/components/core/Typography'
 import styled from 'styled-components'
 import { EligibilityRequirements } from './EligibilityRequirements'
+import { ProfileRoleConstraint } from '@/generated/graphql'
 
 interface EligibilityProps {
   checked: boolean
   onEligibilityChange: (checked: boolean) => void
+  profileRoleConstraints?: ProfileRoleConstraint[]
+  onProfileRoleConstraintsChange?: (
+    profileRoleConstraints: ProfileRoleConstraint[]
+  ) => void
+  citizenshipRequired?: boolean
+  onCitizenshipRequiredChange?: (checked: boolean) => void
+  minimumCabinBalance?: number | null
+  onMinimumCabinBalanceChange?: (value: number | null) => void
 }
 
 export const Eligibility = ({
   checked,
   onEligibilityChange,
+  profileRoleConstraints,
+  onProfileRoleConstraintsChange,
+  citizenshipRequired,
+  onCitizenshipRequiredChange,
+  minimumCabinBalance,
+  onMinimumCabinBalanceChange,
 }: EligibilityProps) => {
   return (
     <Container>
@@ -21,7 +36,16 @@ export const Eligibility = ({
           <StyledBody2>I want to limit who’s eligible to apply</StyledBody2>
         </EligibilityField>
       </EligibilitySwitchContainer>
-      <EligibilityRequirements />
+      {checked && (
+        <EligibilityRequirements
+          onRoleConstraintsChange={onProfileRoleConstraintsChange}
+          profileRoleConstraints={profileRoleConstraints}
+          citizenshipRequired={citizenshipRequired}
+          onCitizenshipRequiredChange={onCitizenshipRequiredChange}
+          minimumCabinBalance={minimumCabinBalance}
+          onMinimumCabinBalanceChange={onMinimumCabinBalanceChange}
+        />
+      )}
     </Container>
   )
 }

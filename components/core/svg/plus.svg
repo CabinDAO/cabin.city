@@ -1,3 +1,5 @@
-<svg width="100%" height="100%" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M19.0005 13H13.0005V19H11.0005V13H5.00049V11H11.0005V5H13.0005V11H19.0005V13Z" fill="#1D2B2A"/>
+<svg width="100%" height="100%" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path
+    d="M9.66732 5.66634H5.66732V9.66634H4.33398V5.66634H0.333984V4.33301H4.33398V0.333008H5.66732V4.33301H9.66732V5.66634Z"
+    fill="var(--icon-color, #1D2B2A)" />
 </svg>

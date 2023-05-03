@@ -741,6 +741,7 @@ export type MutationDeleteActivityArgs = {
 export type OfferInput = {
   offerType?: InputMaybe<OfferType>;
   title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   startDate?: InputMaybe<Scalars['Time']>;
   endDate?: InputMaybe<Scalars['Time']>;
   location?: InputMaybe<OfferLocationRelation>;
@@ -931,6 +932,7 @@ export type PartialUpdateLocationVoteInput = {
 export type PartialUpdateOfferInput = {
   offerType?: InputMaybe<OfferType>;
   title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
   startDate?: InputMaybe<Scalars['Time']>;
   endDate?: InputMaybe<Scalars['Time']>;
   location?: InputMaybe<OfferLocationRelation>;
@@ -1468,6 +1470,7 @@ export type Offer = {
   __typename?: 'Offer';
   location: Location;
   endDate?: Maybe<Scalars['Time']>;
+  description?: Maybe<Scalars['String']>;
   /** The document's ID. */
   _id: Scalars['ID'];
   price?: Maybe<OfferPrice>;
@@ -2138,14 +2141,14 @@ export type CreateOfferMutationVariables = Exact<{
 }>;
 
 
-export type CreateOfferMutation = { __typename?: 'Mutation', createOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, startDate?: any | null, endDate?: any | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } };
+export type CreateOfferMutation = { __typename?: 'Mutation', createOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } };
 
 export type GetOfferByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetOfferByIdQuery = { __typename?: 'Query', findOfferByID?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, startDate?: any | null, endDate?: any | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null };
+export type GetOfferByIdQuery = { __typename?: 'Query', findOfferByID?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null };
 
 export type GetOffersQueryVariables = Exact<{
   input: GetOffersInput;
@@ -2163,9 +2166,17 @@ export type GetOffersCountQueryVariables = Exact<{
 
 export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
-export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, startDate?: any | null, endDate?: any | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
+export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } };
+
+export type UpdateOfferMutationVariables = Exact<{
+  offerId: Scalars['ID'];
+  data: PartialUpdateOfferInput;
+}>;
+
+
+export type UpdateOfferMutation = { __typename?: 'Mutation', partialUpdateOffer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId: string, mintedAt: any } | null };
 
@@ -2482,6 +2493,7 @@ export const OfferFragmentDoc = gql`
   _id
   offerType
   title
+  description
   startDate
   endDate
   price {
@@ -2492,6 +2504,8 @@ export const OfferFragmentDoc = gql`
     profileRole
     level
   }
+  citizenshipRequired
+  minimunCabinBalance
   applicationUrl
   imageIpfsHash
   locationType
@@ -3282,6 +3296,40 @@ export function useGetOffersCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetOffersCountQueryHookResult = ReturnType<typeof useGetOffersCountQuery>;
 export type GetOffersCountLazyQueryHookResult = ReturnType<typeof useGetOffersCountLazyQuery>;
 export type GetOffersCountQueryResult = Apollo.QueryResult<GetOffersCountQuery, GetOffersCountQueryVariables>;
+export const UpdateOfferDocument = gql`
+    mutation UpdateOffer($offerId: ID!, $data: PartialUpdateOfferInput!) {
+  partialUpdateOffer(id: $offerId, data: $data) {
+    ...Offer
+  }
+}
+    ${OfferFragmentDoc}`;
+export type UpdateOfferMutationFn = Apollo.MutationFunction<UpdateOfferMutation, UpdateOfferMutationVariables>;
+
+/**
+ * __useUpdateOfferMutation__
+ *
+ * To run a mutation, you first call `useUpdateOfferMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOfferMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOfferMutation, { data, loading, error }] = useUpdateOfferMutation({
+ *   variables: {
+ *      offerId: // value for 'offerId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateOfferMutation(baseOptions?: Apollo.MutationHookOptions<UpdateOfferMutation, UpdateOfferMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateOfferMutation, UpdateOfferMutationVariables>(UpdateOfferDocument, options);
+      }
+export type UpdateOfferMutationHookResult = ReturnType<typeof useUpdateOfferMutation>;
+export type UpdateOfferMutationResult = Apollo.MutationResult<UpdateOfferMutation>;
+export type UpdateOfferMutationOptions = Apollo.BaseMutationOptions<UpdateOfferMutation, UpdateOfferMutationVariables>;
 export const GetProfileByIdDocument = gql`
     query GetProfileById($id: ID!) {
   findProfileByID(id: $id) {

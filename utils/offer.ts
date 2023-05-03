@@ -94,3 +94,19 @@ export const offerViewPropsFromFragment = (
     rawFragment: fragment,
   }
 }
+
+export const labelByOfferPriceUnit = (unit: OfferPriceUnit): string => {
+  switch (unit) {
+    case OfferPriceUnit.Hourly:
+      return 'Per Hour'
+    case OfferPriceUnit.Daily:
+      return 'Per Day'
+    case OfferPriceUnit.Weekly:
+      return 'Per Week'
+    case OfferPriceUnit.Monthly:
+      return 'Per Month'
+    case OfferPriceUnit.FlatFee:
+    default:
+      return 'Flat Fee'
+  }
+}

@@ -342,6 +342,7 @@ enum LocationMediaCategory {
 type Offer {
   offerType: OfferType
   title: String
+  description: String # Rich text
   startDate: Time
   endDate: Time
   location: Location! @relation

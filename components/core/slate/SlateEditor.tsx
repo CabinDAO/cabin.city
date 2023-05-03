@@ -42,14 +42,13 @@ export const SlateEditor = (props: SlateEditorProps) => {
 const LIST_TYPES = ['list-numbered', 'list-bulleted']
 
 const EditorContainer = styled.div`
-  margin: 1rem;
+  min-height: 32.5rem;
   background-color: white;
   border: 1px solid ${({ theme }) => theme.colors.green900};
 `
 
 const StyledEditable = styled(Editable)`
   ${subline2Styles}
-  min-height: 32.5rem;
   background-color: white;
   padding: 2rem 1.6rem;
   margin-top: 0.4rem;

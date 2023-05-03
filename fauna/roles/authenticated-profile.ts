@@ -95,6 +95,7 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         create: true,
         read: true,
+        write: true,
       },
     },
     {

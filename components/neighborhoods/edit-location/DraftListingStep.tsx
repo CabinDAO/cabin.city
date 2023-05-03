@@ -14,6 +14,7 @@ import { Button } from '@/components/core/Button'
 import { useState } from 'react'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { useRouter } from 'next/router'
+import { allOfferInfos } from '@/utils/offer'
 
 export const DraftListingStep = ({
   name,
@@ -34,20 +35,10 @@ export const DraftListingStep = ({
     SelectOption | undefined
   >()
 
-  const options = [
-    {
-      label: 'Colive',
-      value: OfferType.PaidColiving,
-    },
-    {
-      label: 'Residency',
-      value: OfferType.Residency,
-    },
-    {
-      label: 'Build Week',
-      value: OfferType.PaidColiving,
-    },
-  ]
+  const options = allOfferInfos.map((offerInfo) => ({
+    label: offerInfo.name,
+    value: offerInfo.offerType,
+  }))
 
   const handleCreateOfferClick = async () => {
     if (location && location.locationType && selectedOfferType) {

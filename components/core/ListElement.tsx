@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import { IconName } from './Icon'
+import Icon, { IconName } from './Icon'
 import { Subline2 } from './Typography'
+import { Checkbox } from './Checkbox'
 
 interface ContainerProps {
   active?: boolean
@@ -97,9 +98,13 @@ const ElementSet = styled.div`
   gap: 0.8rem;
 `
 
+const IconContainer = styled.div`
+  min-width: 2.4rem;
+`
+
 interface ListElementProps {
   label: string
-  leadingIcon?: IconName
+  leadingIcon?: IconName | null
   showLeadingIcon?: boolean
   trailingIcon?: IconName
   showTrailingIcon?: boolean
@@ -117,6 +122,7 @@ const ListElement = ({
   focused,
   tabIndex,
   onClick,
+  showLeadingIcon,
 }: ListElementProps) => {
   return (
     <Container
@@ -128,6 +134,9 @@ const ListElement = ({
       tabIndex={tabIndex}
     >
       <ElementSet>
+        {showLeadingIcon && (
+          <Checkbox selected={!!active} disabled={disabled} />
+        )}
         <Subline2>{label}</Subline2>
       </ElementSet>
     </Container>

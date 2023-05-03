@@ -8,29 +8,47 @@ interface DateRange {
   end: Date
 }
 
-export const Availability = () => {
+interface AvailabilityProps {
+  onEdit: (startDate: string, endDate: string) => void
+  defaultStartDate?: string
+  defaultEndDate?: string
+}
+
+export const Availability = ({
+  onEdit,
+  defaultStartDate,
+  defaultEndDate,
+}: AvailabilityProps) => {
   const [dateRange, setDateRange] = useState<DateRange>({
-    start: new Date(),
-    end: new Date(),
+    start: defaultStartDate ? new Date(defaultStartDate) : new Date(),
+    end: defaultEndDate ? new Date(defaultEndDate) : new Date(),
   })
 
   const handleStartDateChange = (date: Date | undefined) => {
     if (date) {
+      let newRange: DateRange
       if (date > dateRange.end) {
-        setDateRange({ ...dateRange, start: date, end: date })
+        newRange = { ...dateRange, start: date, end: date }
+        setDateRange(newRange)
       } else {
+        newRange = { ...dateRange, start: date }
         setDateRange({ ...dateRange, start: date })
       }
+      onEdit(newRange.start.toISOString(), newRange.end.toISOString())
     }
   }
 
   const handleEndDateChange = (date: Date | undefined) => {
     if (date) {
+      let newRange: DateRange
       if (date < dateRange.start) {
-        setDateRange({ ...dateRange, start: date, end: date })
+        newRange = { ...dateRange, start: date, end: date }
+        setDateRange(newRange)
       } else {
-        setDateRange({ ...dateRange, end: date })
+        newRange = { ...dateRange, end: date }
+        setDateRange(newRange)
       }
+      onEdit(newRange.start.toISOString(), newRange.end.toISOString())
     }
   }
 
@@ -43,13 +61,13 @@ export const Availability = () => {
           onDateChange={handleStartDateChange}
           label="Start"
           startDate={new Date()}
-          value={dateRange.start}
+          value={dateRange.start ?? defaultStartDate}
         />
         <DateSelect
           onDateChange={handleEndDateChange}
           label="End"
           startDate={dateRange.start}
-          value={dateRange.end}
+          value={dateRange.end ?? defaultEndDate}
         />
       </DateRange>
     </Container>

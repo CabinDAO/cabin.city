@@ -20,13 +20,13 @@ const StyledSelect = styled.div`
   display: block;
 `
 
-interface DropdownProps {
+interface MultipleDropdownOptions {
   id?: string
   label?: string
   required?: boolean
   info?: string
   placeholder?: string
-  selectedOption?: SelectOption
+  selectedOptions?: SelectOption[]
   error?: boolean
   disabled?: boolean
   onSelect: (_opt: SelectOption) => void
@@ -39,13 +39,13 @@ interface DropdownProps {
   className?: string
 }
 
-export const Dropdown = ({
+export const MultipleDropdown = ({
   id = 'input',
   label,
   required,
   info,
   placeholder,
-  selectedOption,
+  selectedOptions = [],
   error,
   disabled,
   onSelect,
@@ -54,7 +54,7 @@ export const Dropdown = ({
   message,
   menuMaxHeight,
   className,
-}: DropdownProps) => {
+}: MultipleDropdownOptions) => {
   const {
     selectionRef,
     active,
@@ -65,7 +65,9 @@ export const Dropdown = ({
     handleSoftClose,
     setActive,
     handleOptionSelect,
-  } = useDropdownLogic(selectedOption, options, onSelect)
+  } = useDropdownLogic(selectedOptions, options, onSelect)
+  const values = selectedOptions.map((opt) => opt.value)
+  const labels = selectedOptions.map((opt) => opt.label)
   return (
     <ClickAway className={className} onClickAway={handleSoftClose}>
       <Container onFocus={() => setActive(true)}>
@@ -74,7 +76,7 @@ export const Dropdown = ({
           label={label}
           required={required}
           info={info}
-          filled={variant === 'primary' && !!selectedOption}
+          filled={variant === 'primary' && selectedOptions.length > 0}
           focused={active} // if active keep parent focus status
           error={error}
           disabled={disabled}
@@ -87,8 +89,8 @@ export const Dropdown = ({
           message={message}
         >
           <StyledSelect ref={selectionRef} role="button" tabIndex={0}>
-            {selectedOption ? (
-              <Subline2>{selectedOption.label}</Subline2>
+            {selectedOptions.length > 0 ? (
+              <Subline2>{labels.join(', ')}</Subline2>
             ) : (
               <OpaqueSubline2 $color="green900">{placeholder}</OpaqueSubline2>
             )}
@@ -102,14 +104,15 @@ export const Dropdown = ({
                   <ListElement
                     key={idx}
                     label={opt.label}
-                    leadingIcon={opt.icon}
+                    showLeadingIcon
+                    leadingIcon={values.includes(opt.value) ? 'check' : null}
                     onClick={(
                       e: React.MouseEvent<HTMLDivElement, MouseEvent>
                     ) => {
                       e.stopPropagation()
                       handleOptionSelect(opt)
                     }}
-                    active={selectedOption?.value === opt.value || true}
+                    active={values.includes(opt.value)}
                     focused={showFocusOption && focusOption === idx}
                     disabled={opt.disabled}
                   />
@@ -127,4 +130,4 @@ const OpaqueSubline2 = styled(Subline2)`
   opacity: 0.42;
 `
 
-Dropdown.displayName = 'Dropdown'
+MultipleDropdown.displayName = 'MultipleDropdown'
