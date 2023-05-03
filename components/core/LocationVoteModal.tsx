@@ -2,13 +2,14 @@ import styled from 'styled-components'
 import { ModalContainer } from './modals/ModalContainer'
 import { ModalContent } from './modals/ModalContent'
 import { ModalTitle } from './modals/ModalTitle'
-import { Caption, Overline, Subline1 } from './Typography'
+import { Body2, Caption, H4, Overline, Subline1 } from './Typography'
 import { LocationVoteSelector } from './LocationVoteSelector'
 import { Button } from './Button'
 import Icon from './Icon'
 import { useEffect, useState } from 'react'
 import { useModal } from '../hooks/useModal'
 import { isNil } from '@/lib/isNil'
+import IconButton from './IconButton'
 
 interface LocationVoteModalProps {
   location: Location
@@ -38,15 +39,47 @@ interface VoteModifiersByLocationId {
   [key: string]: number
 }
 
+enum ContentState {
+  Default,
+  Info,
+}
+
 export const LocationVoteModal = (props: LocationVoteModalProps) => {
+  const [contentState, setContentState] = useState(ContentState.Default)
   return (
     <LocationVoteModalContainer>
-      <ModalTitle text="Vote" />
+      <ModalTitle
+        startAdornment={
+          contentState === ContentState.Info ? (
+            <IconButton
+              animated
+              icon="back-arrow"
+              color="green900"
+              size={2}
+              onClick={() => setContentState(ContentState.Default)}
+            />
+          ) : undefined
+        }
+        text="Vote"
+        endAdornment={
+          contentState === ContentState.Default ? (
+            <IconButton
+              animated
+              icon="info"
+              color="green900"
+              size={2}
+              onClick={() => setContentState(ContentState.Info)}
+            />
+          ) : null
+        }
+      />
       {props.isLoading ? (
         <ModalContent />
-      ) : (
+      ) : contentState === ContentState.Default ? (
         <LocationVoteModalBody {...props} />
-      )}
+      ) : contentState === ContentState.Info ? (
+        <LocationVoteModalInfo />
+      ) : null}
     </LocationVoteModalContainer>
   )
 }
@@ -251,4 +284,26 @@ const CastVoteButton = styled(Button)`
 const ErrorContainer = styled.div`
   text-align: center;
   margin-top: 1.6rem;
+`
+
+const LocationVoteModalInfo = () => (
+  <ModalContent>
+    <InfoContainer>
+      <H4>Show support for your favorite Neighborhoods and Outposts</H4>
+      <Body2>
+        Help the Neighborhoods and Outposts that are cultivating a safe,
+        enjoyable, and quality experience climb the leaderboard. Your voting
+        power is determined by the amount of ₡ABIN token you hold, which can be
+        acquired by becoming a Citizen or contributing to the community over
+        time. You may cast or redistribute your votes at any time.
+      </Body2>
+    </InfoContainer>
+  </ModalContent>
+)
+
+const InfoContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin: 4rem;
 `
