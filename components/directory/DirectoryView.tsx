@@ -28,7 +28,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ChevronButton } from '../core/ChevronButton'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { FilterCount } from '../core/FilterCount'
-import { ProfileListEmptyState } from '../core/ProfileListEmptyState'
+import { ListEmptyState } from '../core/ListEmptyState'
 import { useUser } from '../auth/useUser'
 import { List } from '../core/List'
 
@@ -245,7 +245,7 @@ export const DirectoryView = () => {
           loader="..."
         >
           {profiles.length === 0 && data && profilesCountData ? (
-            <ProfileListEmptyState />
+            <ListEmptyState iconName="profile2" />
           ) : (
             profiles.map((profile) => (
               <ProfileListItem key={profile._id} profile={profile} />

@@ -1,9 +1,13 @@
 import styled from 'styled-components'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import Icon from './Icon'
+import Icon, { IconName } from './Icon'
 import { Body2, H2 } from './Typography'
 
-export const ProfileListEmptyState = () => {
+interface ListEmptyStateProps {
+  iconName: IconName
+}
+
+export const ListEmptyState = (props: ListEmptyStateProps) => {
   const { deviceSize } = useDeviceSize()
 
   const iconSize = deviceSize === 'desktop' ? 4 : 3
@@ -11,7 +15,7 @@ export const ProfileListEmptyState = () => {
   return (
     <Container>
       <Circle>
-        <Icon name="profile2" color="yellow600" size={iconSize} />
+        <Icon name={props.iconName} color="yellow600" size={iconSize} />
       </Circle>
       <Legend>
         <H2>No results found</H2>

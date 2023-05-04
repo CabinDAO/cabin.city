@@ -71,6 +71,10 @@ export const OfferListItem = (props: OfferListItemProps) => {
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const formattedStartDate = startDate ? format(startDate, 'MMM') : null
   const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
+  const formattedDateRange =
+    formattedStartDate && formattedEndDate
+      ? `${formattedStartDate} - ${formattedEndDate} · `
+      : null
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
@@ -102,9 +106,9 @@ export const OfferListItem = (props: OfferListItemProps) => {
 
           <ContentContainer>
             <OfferDetails>
-              <Caption
-                emphasized
-              >{`${formattedStartDate} - ${formattedEndDate} · ${offerInfo?.name}`}</Caption>
+              <Caption emphasized>{`${formattedDateRange ?? ''}${
+                offerInfo?.name
+              }`}</Caption>
               <TitleContainer>
                 <H4>{title}</H4>
                 {isLocked && <Icon name="lock" size={1.2} />}

@@ -52,6 +52,18 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
       read: true,
     },
   },
+  {
+    resource: q.Index('offers_by_profileRoleConstraints'),
+    actions: {
+      read: true,
+    },
+  },
+  {
+    resource: q.Index('offers_with_endDate'),
+    actions: {
+      read: true,
+    },
+  },
   /* Functions */
   {
     resource: q.Function('get_locations_by_location_type'),

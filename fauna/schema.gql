@@ -379,6 +379,12 @@ type ProfileRoleConstraint @embedded {
   level: ProfileRoleLevelType!
 }
 
+input ProfileRoleConstraintInput {
+  profileRole: ProfileRoleType!
+  level: ProfileRoleLevelType!
+}
+
 input GetOffersInput @embedded {
   offerTypes: [OfferType!]!
+  profileRoleConstraints: [ProfileRoleConstraintInput!]!
 }
