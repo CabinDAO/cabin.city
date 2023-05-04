@@ -1,5 +1,5 @@
 import { ContentCard } from '../../core/ContentCard'
-import { H3 } from '../../core/Typography'
+import { H3, Overline } from '../../core/Typography'
 import { StepProps } from './location-wizard-configuration'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -15,8 +15,13 @@ import { useState } from 'react'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { useRouter } from 'next/router'
 import { allOfferInfos } from '@/utils/offer'
+import { isNotNull } from '@/lib/data'
+import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffersList'
+import { OfferTypesDescriptionList } from '@/components/offers/OfferTypeExplanation'
+import { AppLink } from '@/components/core/AppLink'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
-export const DraftListingStep = ({
+export const OffersStep = ({
   name,
   onBack,
   onNext,
@@ -25,11 +30,14 @@ export const DraftListingStep = ({
 }: StepProps) => {
   const [createOffer] = useCreateOfferMutation()
   const router = useRouter()
+  const { created } = router.query
+  const stepTitle = created ? 'Draft listing' : 'Edit listing'
   const stepIndicatorText = () => {
     const names = steps.map((step) => step.name)
     const currentStepIndex = names.indexOf(name)
     return `Step ${currentStepIndex + 1} of ${names.length}`
   }
+  const offerList = location?.offers.data.filter(isNotNull) || []
 
   const [selectedOfferType, setSelectedOfferType] = useState<
     SelectOption | undefined
@@ -75,7 +83,7 @@ export const DraftListingStep = ({
         />
       }
     >
-      <TitleCard title="Draft listing" icon="close" iconHref="/profile" />
+      <TitleCard title={stepTitle} icon="close" iconHref="/profile" />
       <Container>
         <StepIndicator>
           <H3>{name}</H3>
@@ -97,13 +105,25 @@ export const DraftListingStep = ({
                 </Button>
               </InputGroup>
               <HorizontalDivider />
+              <OfferTypesDescriptionList />
+              <AppLink
+                external
+                location={EXTERNAL_LINKS.CITY_DIRECTORY}
+                iconSize={0.9}
+              >
+                <Overline>Learn More</Overline>
+              </AppLink>
             </OfferFormContainer>
           </ContentCard>
-          <StyledEmptyState
-            icon="file-document"
-            title="No offers yet"
-            description="Create new offers and manage them from here"
-          />
+          {offerList.length ? (
+            <LocationOffersList offers={offerList} location={location} />
+          ) : (
+            <StyledEmptyState
+              icon="file-document"
+              title="No offers yet"
+              description="Create new offers and manage them from here"
+            />
+          )}
         </ContainerGroup>
       </Container>
     </SingleColumnLayout>

@@ -6,9 +6,13 @@ import { useUser } from '../auth/useUser'
 
 export interface OffersListProps {
   offers: OfferItemFragment[]
+  actionsEnabled?: boolean
 }
 
-export const OffersList = ({ offers }: OffersListProps) => {
+export const OffersList = ({
+  offers,
+  actionsEnabled = false,
+}: OffersListProps) => {
   const { user } = useUser()
   return (
     <OffersListContainer>
@@ -17,6 +21,7 @@ export const OffersList = ({ offers }: OffersListProps) => {
           key={offer._id}
           {...offerListItemPropsFromFragment(offer, user)}
           variant="no-icon"
+          actionsEnabled={actionsEnabled}
         />
       ))}
     </OffersListContainer>
@@ -27,4 +32,5 @@ const OffersListContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 0.8rem;
+  width: 100%;
 `

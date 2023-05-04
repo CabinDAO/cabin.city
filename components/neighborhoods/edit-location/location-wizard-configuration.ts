@@ -2,7 +2,7 @@ import { DescriptionStep } from './DescriptionStep'
 import { BasicDetailStep } from './BasicDetailStep'
 import { LocationFragment } from '@/generated/graphql'
 import { PhotoGalleryStep } from './PhotoGalleryStep'
-import { DraftListingStep } from './DraftListingStep'
+import { OffersStep } from './OffersStep'
 
 export type StepConfig = {
   name: string
@@ -32,6 +32,6 @@ export const editLocationSteps: StepConfig[] = [
   },
   {
     name: 'Offers',
-    component: DraftListingStep,
+    component: OffersStep,
   },
 ]

@@ -65,8 +65,8 @@ export const offerListItemPropsFromFragment = (
     profileRoleConstraints: fragment.profileRoleConstraints ?? [],
     citizenshipRequired: fragment.citizenshipRequired,
     minimunCabinBalance: fragment.minimunCabinBalance,
-    startDate: parseISO(fragment.startDate),
-    endDate: parseISO(fragment.endDate),
+    startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
+    endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
     imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),
     location: {
       _id: fragment.location._id,
@@ -88,8 +88,8 @@ export const offerViewPropsFromFragment = (
     applicationUrl: fragment.applicationUrl,
     title: fragment.title,
     profileRoleConstraints: fragment.profileRoleConstraints ?? [],
-    startDate: parseISO(fragment.startDate),
-    endDate: parseISO(fragment.endDate),
+    startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
+    endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
     imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),
     location: {
       _id: fragment.location._id,
