@@ -13,15 +13,17 @@ import {
 import { Button } from '@/components/core/Button'
 import { format } from 'date-fns'
 import Icon from '@/components/core/Icon'
-import { SAMPLE_DESCRIPTION } from '@/stories/utils/offer-data'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
+import { SlateRenderer } from '../core/slate/SlateRenderer'
+import { stringToSlateValue } from '../core/slate/slate-utils'
 
 const EMPTY = '—'
 
 export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
   const {
     title,
+    description,
     offerType,
     location,
     applicationUrl,
@@ -29,6 +31,8 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
     endDate,
     price,
     profileRoleConstraints,
+    citizenshipRequired,
+    minimunCabinBalance,
   } = offer
   const formattedStartDate = startDate ? format(startDate, 'MMM') : null
   const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
@@ -43,7 +47,9 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
 
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
-          <DescriptionDetails>{SAMPLE_DESCRIPTION}</DescriptionDetails>
+          <DescriptionDetails>
+            <SlateRenderer value={stringToSlateValue(description)} />
+          </DescriptionDetails>
 
           <OfferDetailsContainer>
             <OfferDetails>
@@ -91,24 +97,28 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   <OfferDetailsEligibilityMatching>
                     <Caption emphasized>Match all:</Caption>
 
-                    <OfferDetailsEligibilityCaption>
-                      <Icon
-                        key="citizen"
-                        name="citizen"
-                        color="green900"
-                        size={1.6}
-                      />{' '}
-                      Citizen
-                    </OfferDetailsEligibilityCaption>
-                    <OfferDetailsEligibilityCaption>
-                      <Icon
-                        key="holding"
-                        name="holding"
-                        color="green900"
-                        size={1.6}
-                      />{' '}
-                      ≥ 500 ₡ABIN
-                    </OfferDetailsEligibilityCaption>
+                    {citizenshipRequired && (
+                      <OfferDetailsEligibilityCaption>
+                        <Icon
+                          key="citizen"
+                          name="citizen"
+                          color="green900"
+                          size={1.6}
+                        />{' '}
+                        Citizen
+                      </OfferDetailsEligibilityCaption>
+                    )}
+                    {(minimunCabinBalance ?? 0) > 0 && (
+                      <OfferDetailsEligibilityCaption>
+                        <Icon
+                          key="holding"
+                          name="holding"
+                          color="green900"
+                          size={1.6}
+                        />{' '}
+                        ≥ {minimunCabinBalance} ₡ABIN
+                      </OfferDetailsEligibilityCaption>
+                    )}
                   </OfferDetailsEligibilityMatching>
                 </OfferDetailsEligibilitySection>
               </OfferDetailsSection>

@@ -87,10 +87,13 @@ export const offerViewPropsFromFragment = (
     price: fragment.price,
     applicationUrl: fragment.applicationUrl,
     title: fragment.title,
+    description: fragment.description,
     profileRoleConstraints: fragment.profileRoleConstraints ?? [],
     startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
     endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
     imageUrl: getImageUrlByIpfsHash(fragment.imageIpfsHash),
+    citizenshipRequired: fragment.citizenshipRequired,
+    minimunCabinBalance: fragment.minimunCabinBalance,
     location: {
       _id: fragment.location._id,
       name: fragment.location.name,

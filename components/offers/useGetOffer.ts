@@ -21,6 +21,9 @@ export interface OfferViewProps {
   offerType: OfferType | null | undefined
   locationType: LocationType
   title: string | null | undefined
+  description: string | null | undefined
+  citizenshipRequired: boolean | null | undefined
+  minimunCabinBalance: number | null | undefined
   startDate: Date | null | undefined
   endDate: Date | null | undefined
   imageUrl: string | null | undefined
