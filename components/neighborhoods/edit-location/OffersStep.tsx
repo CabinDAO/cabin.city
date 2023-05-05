@@ -52,13 +52,14 @@ export const OffersStep = ({
     if (location && location.locationType && selectedOfferType) {
       const { data: offer } = await createOffer({
         variables: {
-          locationType: location.locationType,
-          offerType: selectedOfferType.value as OfferType,
-          locationId: location._id,
+          data: {
+            offerType: selectedOfferType.value as OfferType,
+            locationId: location._id,
+          },
         },
       })
 
-      if (offer) {
+      if (offer?.createOffer) {
         router.push(`/offer/${offer.createOffer._id}/edit`)
       }
     }

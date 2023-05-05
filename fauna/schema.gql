@@ -52,6 +52,7 @@ type Mutation {
   createTextActivity(text: String!): Activity!
     @resolver(name: "create_text_activity")
   createLocation: Location @resolver(name: "create_location")
+  createOffer(data: CreateOfferInput!): Offer @resolver(name: "create_offer")
 }
 
 type Profile {
@@ -387,4 +388,9 @@ input ProfileRoleConstraintInput {
 input GetOffersInput @embedded {
   offerTypes: [OfferType!]!
   profileRoleConstraints: [ProfileRoleConstraintInput!]!
+}
+
+input CreateOfferInput {
+  offerType: OfferType!
+  locationId: ID!
 }

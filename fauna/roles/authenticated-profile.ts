@@ -401,6 +401,12 @@ const authenticatedProfileRole: RoleResource = {
         call: true,
       },
     },
+    {
+      resource: q.Function('create_offer'),
+      actions: {
+        call: true,
+      },
+    },
   ],
   membership: [
     {

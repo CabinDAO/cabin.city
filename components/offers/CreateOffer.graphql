@@ -1,15 +1,5 @@
-mutation CreateOffer(
-  $locationId: ID!
-  $offerType: OfferType!
-  $locationType: LocationType!
-) {
-  createOffer(
-    data: {
-      offerType: $offerType
-      locationType: $locationType
-      location: { connect: $locationId }
-    }
-  ) {
+mutation CreateOffer($data: CreateOfferInput!) {
+  createOffer(data: $data) {
     ...Offer
   }
 }

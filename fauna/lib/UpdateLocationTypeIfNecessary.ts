@@ -12,6 +12,7 @@ export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
   return q.Let(
     {
       location: ToDoc(locationExpr),
+      locationRef: ToRef(locationExpr),
       newLocationType: q.If(
         MeetsCriteriaForNeighborhood(q.Var('location')),
         LocationType.Neighborhood,
@@ -25,11 +26,29 @@ export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
           q.Var('newLocationType')
         )
       ),
-      q.Update(ToRef(q.Var('location')), {
-        data: {
-          locationType: q.Var('newLocationType'),
-        },
-      }),
+      q.Do(
+        // Update the denormalized locationType on all offers for this location
+        q.Map(
+          q.Paginate(
+            q.Match(
+              q.Index('location_offers_by_location'),
+              q.Var('locationRef')
+            )
+          ),
+          q.Lambda(
+            'offer',
+            q.Update(q.Var('offer'), {
+              data: { locationType: q.Var('newLocationType') },
+            })
+          )
+        ),
+        // Update the location type
+        q.Update(ToRef(q.Var('location')), {
+          data: {
+            locationType: q.Var('newLocationType'),
+          },
+        })
+      ),
       null
     )
   )

@@ -157,6 +157,11 @@ export type CitizenshipMetadataInput = {
   mintedAt: Scalars['Time'];
 };
 
+export type CreateOfferInput = {
+  offerType: OfferType;
+  locationId: Scalars['ID'];
+};
+
 /** 'Hat' input values */
 export type HatInput = {
   hatId: Scalars['String'];
@@ -349,8 +354,7 @@ export type Mutation = {
   partialUpdateHat?: Maybe<Hat>;
   /** Create a new document in the collection of 'BlockSyncAttempt' */
   createBlockSyncAttempt: BlockSyncAttempt;
-  /** Create a new document in the collection of 'Offer' */
-  createOffer: Offer;
+  createOffer?: Maybe<Offer>;
   createTextActivity: Activity;
   /** Update an existing document in the collection of 'Offer' */
   updateOffer?: Maybe<Offer>;
@@ -602,7 +606,7 @@ export type MutationCreateBlockSyncAttemptArgs = {
 
 
 export type MutationCreateOfferArgs = {
-  data: OfferInput;
+  data: CreateOfferInput;
 };
 
 
@@ -2098,13 +2102,11 @@ export type UpdateLocationMutationVariables = Exact<{
 export type UpdateLocationMutation = { __typename?: 'Mutation', partialUpdateLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems?: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, ipfsHash?: string | null }> | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null> } } | null };
 
 export type CreateOfferMutationVariables = Exact<{
-  locationId: Scalars['ID'];
-  offerType: OfferType;
-  locationType: LocationType;
+  data: CreateOfferInput;
 }>;
 
 
-export type CreateOfferMutation = { __typename?: 'Mutation', createOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } };
+export type CreateOfferMutation = { __typename?: 'Mutation', createOffer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null } | null } } | null };
 
 export type GetOfferByIdQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -3151,10 +3153,8 @@ export type UpdateLocationMutationHookResult = ReturnType<typeof useUpdateLocati
 export type UpdateLocationMutationResult = Apollo.MutationResult<UpdateLocationMutation>;
 export type UpdateLocationMutationOptions = Apollo.BaseMutationOptions<UpdateLocationMutation, UpdateLocationMutationVariables>;
 export const CreateOfferDocument = gql`
-    mutation CreateOffer($locationId: ID!, $offerType: OfferType!, $locationType: LocationType!) {
-  createOffer(
-    data: {offerType: $offerType, locationType: $locationType, location: {connect: $locationId}}
-  ) {
+    mutation CreateOffer($data: CreateOfferInput!) {
+  createOffer(data: $data) {
     ...Offer
   }
 }
@@ -3174,9 +3174,7 @@ export type CreateOfferMutationFn = Apollo.MutationFunction<CreateOfferMutation,
  * @example
  * const [createOfferMutation, { data, loading, error }] = useCreateOfferMutation({
  *   variables: {
- *      locationId: // value for 'locationId'
- *      offerType: // value for 'offerType'
- *      locationType: // value for 'locationType'
+ *      data: // value for 'data'
  *   },
  * });
  */
