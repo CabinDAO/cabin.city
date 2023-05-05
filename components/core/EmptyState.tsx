@@ -5,6 +5,8 @@ import { Overline } from './Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EmptyStateDescription } from './EmptyStateDescription'
 
+type BackgroundVariant = 'gradient' | 'empty'
+
 interface EmptyStateProps {
   icon: IconName
   title: string
@@ -12,6 +14,7 @@ interface EmptyStateProps {
   href?: string
   customCta?: () => JSX.Element
   className?: string
+  backgroundVariant?: BackgroundVariant
 }
 
 export const EmptyState = ({
@@ -21,8 +24,10 @@ export const EmptyState = ({
   href,
   customCta,
   className,
+  backgroundVariant = 'empty',
 }: EmptyStateProps) => {
-  const WrapperCard = href || customCta ? CabinGradientCard : EmptyContainer
+  const WrapperCard =
+    backgroundVariant === 'gradient' ? CabinGradientCard : EmptyContainer
   return (
     <WrapperCard className={className}>
       <InnerContainer>

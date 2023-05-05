@@ -3,10 +3,9 @@ import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { Tab, TabBar } from '../core/TabBar'
 import { useRouter } from 'next/router'
-import { Button } from '../core/Button'
 import { useUser } from '../auth/useUser'
-import Link from 'next/link'
 import { LocationList } from './LocationList'
+import { NewListingButton } from './NewListingButton'
 
 interface CityDirectoryViewProps {
   locationType: LocationType
@@ -23,9 +22,7 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
         icon="neighborhoods"
         end={
           user?.citizenshipStatus === CitizenshipStatus.Verified ? (
-            <Link href="/location/new">
-              <Button variant="link">+ New Listing</Button>
-            </Link>
+            <NewListingButton />
           ) : null
         }
       ></TitleCard>

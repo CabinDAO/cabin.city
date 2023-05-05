@@ -19,6 +19,7 @@ import copySvg from './svg/copy.svg'
 import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
+import draftProposalSvg from './svg/draft-proposal.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
 import formatBold from './svg/format-bold.svg'
@@ -87,6 +88,7 @@ export const IconSvgs = {
   creator: creatorSvg,
   dashboard: dashboardSvg,
   date: dateSvg,
+  'draft-proposal': draftProposalSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
   'format-bold': formatBold,

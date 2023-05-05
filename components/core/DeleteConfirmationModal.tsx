@@ -1,33 +1,34 @@
 import styled from 'styled-components'
-import { ModalContainer } from '../modals/ModalContainer'
-import { ModalTitle } from '../modals/ModalTitle'
-import { Body2, H4 } from '../Typography'
-import { Button } from '../Button'
+import { ModalContainer } from './modals/ModalContainer'
+import { ModalTitle } from './modals/ModalTitle'
+import { Body2, H4 } from './Typography'
+import { Button } from './Button'
 import { useModal } from '@/components/hooks/useModal'
-import { useTextActivity } from '@/components/dashboard/useTextActivity'
-import { ActivityItemFragment } from '@/generated/graphql'
 
-interface DeletePostModalProps {
-  activityItem: ActivityItemFragment
+interface DeleteConfirmationModalProps {
+  onDelete: () => void
+  entityName: string
 }
 
-export const DeletePostModal = ({ activityItem }: DeletePostModalProps) => {
+export const DeleteConfirmationModal = ({
+  entityName,
+  onDelete,
+}: DeleteConfirmationModalProps) => {
   const { hideModal } = useModal()
-  const { handleDeleteTextActivity } = useTextActivity()
 
   const handleDelete = () => {
-    handleDeleteTextActivity(activityItem.activity._id)
+    onDelete()
     hideModal()
   }
 
   return (
-    <DeletePostModalContainer>
-      <ModalTitle text="Delete post" />
+    <DeleteConfirmationModalContainer>
+      <ModalTitle text={`Delete ${entityName}`} />
       <DeleteModalContent>
         <QuestionContainer>
           <Question>
             <H4>Are you sure you want to delete</H4>
-            <H4>this post?</H4>
+            <H4>{`this ${entityName}?`}</H4>
           </Question>
           <Body2>This action cannot be undone.</Body2>
         </QuestionContainer>
@@ -40,11 +41,11 @@ export const DeletePostModal = ({ activityItem }: DeletePostModalProps) => {
           </DeleteButton>
         </Actions>
       </DeleteModalContent>
-    </DeletePostModalContainer>
+    </DeleteConfirmationModalContainer>
   )
 }
 
-const DeletePostModalContainer = styled(ModalContainer)`
+const DeleteConfirmationModalContainer = styled(ModalContainer)`
   height: min-content;
 `
 

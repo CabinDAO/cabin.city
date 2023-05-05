@@ -39,6 +39,7 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
       <Container>
         <H3>Role Cards</H3>
         <EmptyState
+          backgroundVariant="gradient"
           icon="card-heart"
           title="Choose your interests"
           description="Level them up over time"

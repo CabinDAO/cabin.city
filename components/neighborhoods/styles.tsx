@@ -37,3 +37,13 @@ export const MobileBanner = styled.div<PreviewProps>`
   display: flex;
   background: url(${(props) => props.imageUrl}) no-repeat center center / cover;
 `
+
+export const LocationListContainer = styled.div`
+  width: 100%;
+
+  .infinite-scroll-component {
+    display: flex;
+    flex-direction: column;
+    gap: 2.4rem;
+  }
+`

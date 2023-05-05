@@ -54,6 +54,15 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
           <Icon name="citizen" size={2} color="green400" />
           <Subline1 $color="yellow100">Citizenship</Subline1>
         </ProfileMenuItem>
+        <ProfileMenuItem href="/my-locations">
+          <Icon name="draft-proposal" size={2} color="green400" />
+          <MenuItemWithNote>
+            <Subline1 $color="yellow100">My Locations</Subline1>
+            <Caption $color="yellow100">
+              ({user.locations?.data?.length ?? 0})
+            </Caption>
+          </MenuItemWithNote>
+        </ProfileMenuItem>
         <ProfileMenuItem href="/logout">
           <Icon name="sign-out" size={2} color="green400" />
           <Subline1 $color="yellow100">Sign out</Subline1>
@@ -78,6 +87,13 @@ const Container = styled(motion.div)`
     left: 7.8rem;
     top: 83%;
   }
+`
+
+const MenuItemWithNote = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.8rem;
 `
 
 const menuLinkStyles = css`

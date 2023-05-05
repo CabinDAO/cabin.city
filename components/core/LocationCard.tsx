@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { Button } from './Button'
 import Link from 'next/link'
 import { ProfilesCount } from './ProfilesCount'
+import { CardActions } from './CardActions'
 
 export interface LocationCardProps {
   _id: string
@@ -23,11 +24,18 @@ export interface LocationCardProps {
   offerCount: number | null | undefined
   publishedAt: Date | null | undefined
   onVote?: () => void
+  onDelete?: () => void
+  onEdit?: () => void
+  actionsEnabled?: boolean
 }
 
 interface Caretaker {
   _id: string
   name: string
+}
+
+const emptyFunction = () => {
+  return
 }
 
 interface Voter {
@@ -51,63 +59,76 @@ export const LocationCard = (props: LocationCardProps) => {
     offerCount,
     publishedAt,
     onVote,
+    onDelete,
+    onEdit,
+    actionsEnabled = false,
   } = props
 
   const name = props.name ?? 'New Listing'
 
   return (
-    <ContainerLink href={`/location/${_id}`}>
-      <ImageContainer>
-        {bannerImageUrl ? (
-          <StyledImage src={bannerImageUrl} fill alt={name} />
-        ) : (
-          <EmptyImageContainer>
-            <Icon name="mountain" size={6} color="yellow500" />
-          </EmptyImageContainer>
-        )}
-        <LocationTag {...props} />
-      </ImageContainer>
-      <ContentContainer>
-        <NameH2>{name}</NameH2>
-        <Body2>{tagline}</Body2>
-        <LocationInfoGroupContainer>
-          <LocationInfo iconName="location" label={address ?? EMPTY} />
-          <LocationInfo
-            iconName="sleep"
-            label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
-          />
-          <LocationInfo
-            iconName="offer"
-            label={offerCount ? `${offerCount} Offers` : EMPTY}
-          />
-          <LocationInfo iconName="caretaker" label={caretaker.name} />
-          <LocationInfo
-            iconName="date"
-            label={
-              publishedAt ? `Joined ${format(publishedAt, 'MMM yyyy')}` : EMPTY
-            }
-          />
-        </LocationInfoGroupContainer>
-      </ContentContainer>
-      <VotesContainer>
-        <VotersContainer>
-          <Caption emphasized>{`${
-            voteCount?.toLocaleString() ?? 0
-          } Votes`}</Caption>
-          {voters ? <ProfilesCount profiles={voters} /> : null}
-        </VotersContainer>
+    <OuterContainer>
+      <ContainerLink href={`/location/${_id}`}>
+        <ImageContainer>
+          {bannerImageUrl ? (
+            <StyledImage src={bannerImageUrl} fill alt={name} />
+          ) : (
+            <EmptyImageContainer>
+              <Icon name="mountain" size={6} color="yellow500" />
+            </EmptyImageContainer>
+          )}
+          <LocationTag {...props} />
+        </ImageContainer>
+        <ContentContainer>
+          <NameH2>{name}</NameH2>
+          <Body2>{tagline}</Body2>
+          <LocationInfoGroupContainer>
+            <LocationInfo iconName="location" label={address ?? EMPTY} />
+            <LocationInfo
+              iconName="sleep"
+              label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
+            />
+            <LocationInfo
+              iconName="offer"
+              label={offerCount ? `${offerCount} Offers` : EMPTY}
+            />
+            <LocationInfo iconName="caretaker" label={caretaker.name} />
+            <LocationInfo
+              iconName="date"
+              label={
+                publishedAt
+                  ? `Joined ${format(publishedAt, 'MMM yyyy')}`
+                  : EMPTY
+              }
+            />
+          </LocationInfoGroupContainer>
+        </ContentContainer>
+        <VotesContainer>
+          <VotersContainer>
+            <Caption emphasized>{`${
+              voteCount?.toLocaleString() ?? 0
+            } Votes`}</Caption>
+            {voters ? <ProfilesCount profiles={voters} /> : null}
+          </VotersContainer>
 
-        <VoteButton
-          variant="secondary"
-          onClick={(e) => {
-            e.preventDefault()
-            onVote?.()
-          }}
-        >
-          <Icon name="chevron-up" size={1.6} />
-        </VoteButton>
-      </VotesContainer>
-    </ContainerLink>
+          <VoteButton
+            variant="secondary"
+            onClick={(e) => {
+              e.preventDefault()
+              onVote?.()
+            }}
+          >
+            <Icon name="chevron-up" size={1.6} />
+          </VoteButton>
+        </VotesContainer>
+      </ContainerLink>
+      {actionsEnabled && (
+        <CardActions
+          onDelete={onDelete ?? emptyFunction}
+          onEdit={onEdit ?? emptyFunction}
+        />
+      )}
+    </OuterContainer>
   )
 }
 
@@ -155,11 +176,16 @@ const LocationInfo = (props: LocationInfoProps) => {
   )
 }
 
+const OuterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`
+
 const ContainerLink = styled(Link)`
   display: flex;
   flex-direction: column;
   border: solid 1px ${({ theme }) => theme.colors.green900};
-
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
   }
@@ -173,7 +199,6 @@ const ImageContainer = styled.div`
     max-height: ${BANNER_IMAGE_SIZE}px;
     max-width: ${BANNER_IMAGE_SIZE}px;
   }
-
   img {
     object-fit: cover;
   }
@@ -188,7 +213,6 @@ const ContentContainer = styled.div`
   flex-direction: column;
   flex: 1;
   padding: 1.6rem;
-
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
   }
@@ -214,7 +238,6 @@ const VotesContainer = styled.div`
   margin: 0 1.6rem;
   padding: 1.6rem 0;
   border-top: ${({ theme }) => theme.border.light};
-
   ${({ theme }) => theme.bp.md} {
     margin: 2.4rem;
     padding: 0;

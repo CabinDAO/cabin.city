@@ -6,6 +6,7 @@ export type MenuItemOption =
   | 'neighborhoods'
   | 'profile'
   | 'citizenship'
+  | 'myLocations'
   | 'signOut'
   | 'offers'
   | 'signIn'
@@ -56,6 +57,11 @@ export const MenuItemsAuthenticatedMap: Record<
     path: '/citizenship',
     displayText: 'Citizenship',
   },
+  myLocations: {
+    icon: 'draft-proposal',
+    path: '/my-locations',
+    displayText: 'My Locations',
+  },
   signOut: {
     icon: 'sign-out',
     path: '/logout',
@@ -85,6 +91,12 @@ export const MenuItemsUnauthenticatedMap: Record<
     icon: 'neighborhoods',
     path: '/city-directory',
     displayText: 'City Directory',
+    iconSize: 2,
+  },
+  myLocations: {
+    icon: 'draft-proposal',
+    path: '/my-locations',
+    displayText: 'My Locations',
     iconSize: 2,
   },
   profile: null,

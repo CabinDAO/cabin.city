@@ -21,7 +21,7 @@ export const locationCardPropsFromFragment = (
     locationType: fragment.locationType ?? LocationType.Outpost,
     name: fragment.name,
     offerCount: fragment.offerCount,
-    publishedAt: parseISO(fragment.publishedAt),
+    publishedAt: fragment.publishedAt ? parseISO(fragment.publishedAt) : null,
     sleepCapacity: fragment.sleepCapacity,
     tagline: fragment.tagline,
     voteCount: fragment.voteCount,

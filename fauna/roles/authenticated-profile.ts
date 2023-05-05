@@ -96,12 +96,14 @@ const authenticatedProfileRole: RoleResource = {
         create: true,
         read: true,
         write: true,
+        delete: true,
       },
     },
     {
       resource: q.Collection('LocationVote'),
       actions: {
         read: true,
+        delete: true,
       },
     },
     /* Indexes */
@@ -298,6 +300,12 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
+    {
+      resource: q.Index('location_caretaker_by_profile'),
+      actions: {
+        read: true,
+      },
+    },
     /* Functions */
     {
       resource: q.Function('me'),
@@ -403,6 +411,12 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('create_offer'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('delete_location'),
       actions: {
         call: true,
       },

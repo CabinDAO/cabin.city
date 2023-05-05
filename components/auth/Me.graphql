@@ -19,6 +19,11 @@ fragment Me on Profile {
     level
     hatId
   }
+  locations {
+    data {
+      ...LocationItem
+    }
+  }
   avatar {
     url
   }

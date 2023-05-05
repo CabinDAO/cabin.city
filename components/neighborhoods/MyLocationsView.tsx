@@ -1,11 +1,25 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-
-import { Body1 } from '../core/Typography'
+import { TitleCard } from '../core/TitleCard'
+import { useUser } from '../auth/useUser'
+import { CitizenshipStatus } from '@/generated/graphql'
+import { NewListingButton } from './NewListingButton'
+import { MyLocations } from './MyLocations'
 
 export const MyLocationsView = () => {
+  const { user } = useUser()
+
   return (
     <SingleColumnLayout>
-      <Body1>My Locations</Body1>
+      <TitleCard
+        icon="draft-proposal"
+        title="My Locations"
+        end={
+          user?.citizenshipStatus === CitizenshipStatus.Verified ? (
+            <NewListingButton />
+          ) : null
+        }
+      />
+      <MyLocations />
     </SingleColumnLayout>
   )
 }

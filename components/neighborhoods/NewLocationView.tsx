@@ -1,4 +1,7 @@
-import { useCreateLocationMutation } from '@/generated/graphql'
+import {
+  CitizenshipStatus,
+  useCreateLocationMutation,
+} from '@/generated/graphql'
 import { ActionBar } from '../core/ActionBar'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
@@ -12,11 +15,14 @@ import { NoWrap } from '../core/NoWrap'
 import { HorizontalDivider } from '../core/Divider'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { useUser } from '../auth/useUser'
+import { useEffect } from 'react'
 
 export const NewLocationView = () => {
   const router = useRouter()
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
+  const { user } = useUser()
 
   const handlePrimaryButtonClick = async () => {
     try {
@@ -46,6 +52,16 @@ export const NewLocationView = () => {
 
   const handleSecondaryButtonClick = () => {
     router.push('/city-directory')
+  }
+
+  useEffect(() => {
+    if (user?.citizenshipStatus !== CitizenshipStatus.Verified) {
+      router.push('/city-directory')
+    }
+  }, [user, router])
+
+  if (user?.citizenshipStatus !== CitizenshipStatus.Verified) {
+    return null
   }
 
   return (

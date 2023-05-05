@@ -25,6 +25,7 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <StyledDivider />
         <MobileMenuProfileItem />
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
+        <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
         <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
         <MobileMenuItem menuItem={'signIn'} profileId={profileId} />
       </InnerContainer>
