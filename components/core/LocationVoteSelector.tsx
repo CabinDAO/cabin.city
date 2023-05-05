@@ -2,6 +2,7 @@ import { ReactNode, useCallback } from 'react'
 import styled from 'styled-components'
 import { Subline2 } from './Typography'
 import IconButton from './IconButton'
+import { InputText } from './InputText'
 
 interface LocationVoteSelectorProps {
   label: ReactNode
@@ -22,19 +23,21 @@ export const LocationVoteSelector = (props: LocationVoteSelectorProps) => {
     }
   }, [count, onCountChange])
 
+  const handleCountChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const newCount = parseInt(event.target.value)
+      const newCountNormalized = isNaN(newCount) ? 0 : newCount
+      onCountChange(newCountNormalized)
+    },
+    [onCountChange]
+  )
+
   return (
     <>
       <LabelContainer error={error}>{label}</LabelContainer>
       <SelectorContainer error={error}>
-        <SelectorButton
-          onClick={handleDecrement}
-          icon="minus"
-          size={1.4}
-          color="green900"
-        />
-        <CountContainer>
-          <Subline2>{count}</Subline2>
-        </CountContainer>
+        <SelectorButton onClick={handleDecrement} icon="minus" size={1.4} />
+        <StyledInput value={count} onChange={handleCountChange} />
         <SelectorButton onClick={handleIncrement} icon="plus" size={1.4} />
       </SelectorContainer>
     </>
@@ -64,11 +67,11 @@ const SelectorContainer = styled.div<{ error?: boolean }>`
   }
 `
 
-const CountContainer = styled.div`
-  padding: 1.6rem;
-  background-color: white;
-  font-variant-numeric: tabular-nums;
+const StyledInput = styled.input`
   flex: 1;
+  width: 100%;
+  border: 0;
+  outline: none;
   text-align: center;
 `
 

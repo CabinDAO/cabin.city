@@ -52,6 +52,51 @@ Outpost.args = {
   publishedAt: new Date(),
 }
 
+export const Voters = Template.bind({})
+Voters.args = {
+  _id: '1',
+  locationType: LocationType.Outpost,
+  name: 'Neighborhood Zero',
+  tagline: 'A Cabin Neighborhood in the Texas Hill County.',
+  bannerImageUrl:
+    'https://fastly.picsum.photos/id/432/1400/600.jpg?hmac=qPwc5sKUwbdvC1VdnqoSjtOb-V_XC7BSc3nVuZYwv_Y',
+  voteCount: 4100,
+  address: 'Texas Hill Country, TX',
+  caretaker: {
+    _id: '1',
+    name: 'Jon Hillis',
+  },
+  voters: [
+    {
+      _id: '2',
+      avatar: {
+        url: 'https://fastly.picsum.photos/id/190/200/200.jpg?hmac=WWXFTlTLvsXZseURWcXXDOC8Ie54it2IFL1gasrgrMQ',
+      },
+    },
+    {
+      _id: '2',
+      avatar: {
+        url: 'https://fastly.picsum.photos/id/667/200/200.jpg?hmac=Dqc51PnEPXpiiStRcDoPxytal0MOGvzg-eDZ4BsVIz8',
+      },
+    },
+    {
+      _id: '3',
+      avatar: {
+        url: 'https://fastly.picsum.photos/id/15/200/200.jpg?hmac=8F3A7g2kO57xRlUcdio-9o4LDz0oEFZrYMldJkHMpVo',
+      },
+    },
+    {
+      _id: '4',
+      avatar: {
+        url: 'https://fastly.picsum.photos/id/799/200/200.jpg?hmac=zFQHfBiAYFHDNrr3oX_pQDYz-YWPWTDB3lIszvP8rRY',
+      },
+    },
+  ],
+  sleepCapacity: 7,
+  offerCount: 7,
+  publishedAt: new Date(),
+}
+
 export const Draft = Template.bind({})
 Draft.args = {
   _id: '1',

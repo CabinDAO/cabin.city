@@ -25,7 +25,7 @@ export const locationCardPropsFromFragment = (
     sleepCapacity: fragment.sleepCapacity,
     tagline: fragment.tagline,
     voteCount: fragment.voteCount,
-    voters: [], // TODO
+    voters: fragment.votes.data.filter(isNotNull).map((v) => v.profile),
   }
 }
 

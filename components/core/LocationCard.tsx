@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { LocationType } from '@/generated/graphql'
+import { LocationType, ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body2, Caption, H2, Subline1 } from './Typography'
 import { IconName } from './Icon'
@@ -7,6 +7,7 @@ import Icon from './Icon'
 import { format } from 'date-fns'
 import { Button } from './Button'
 import Link from 'next/link'
+import { ProfilesCount } from './ProfilesCount'
 
 export interface LocationCardProps {
   _id: string
@@ -30,7 +31,8 @@ interface Caretaker {
 }
 
 interface Voter {
-  avatarUrl: string
+  _id: string
+  avatar?: ProfileAvatar | null | undefined
 }
 
 const BANNER_IMAGE_SIZE = 190
@@ -43,6 +45,7 @@ export const LocationCard = (props: LocationCardProps) => {
     tagline,
     bannerImageUrl,
     voteCount,
+    voters,
     address,
     sleepCapacity,
     offerCount,
@@ -87,9 +90,13 @@ export const LocationCard = (props: LocationCardProps) => {
         </LocationInfoGroupContainer>
       </ContentContainer>
       <VotesContainer>
-        <Caption emphasized>{`${
-          voteCount?.toLocaleString() ?? 0
-        } Votes`}</Caption>
+        <VotersContainer>
+          <Caption emphasized>{`${
+            voteCount?.toLocaleString() ?? 0
+          } Votes`}</Caption>
+          {voters ? <ProfilesCount profiles={voters} /> : null}
+        </VotersContainer>
+
         <VoteButton
           variant="secondary"
           onClick={(e) => {
@@ -214,6 +221,12 @@ const VotesContainer = styled.div`
     border: none;
     align-items: flex-start;
   }
+`
+
+const VotersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 `
 
 const VoteButton = styled(Button)`
