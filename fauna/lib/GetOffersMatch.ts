@@ -10,15 +10,12 @@ export const GetOffersMatch = (input: ExprVal) => {
         [
           OffersByProfileRoleConstraints(q.Var('profileRoleConstraints')),
           OffersByOfferType(q.Var('offerTypes')),
+          ActiveOffers(),
         ],
         q.Lambda('match', q.Not(q.IsNull(q.Var('match'))))
       ),
     },
-    q.If(
-      q.IsNonEmpty(q.Var('matches')),
-      q.Intersection(q.Var('matches')),
-      q.Match(q.Index('offers_with_endDate'))
-    )
+    q.Intersection(q.Var('matches'))
   )
 }
 
@@ -30,12 +27,7 @@ const OffersByOfferType = (offerTypes: Expr) =>
         offerTypes,
         q.Lambda(
           'offerType',
-          // Range filters out inactive (endDate has passed) offers
-          q.Range(
-            q.Match(q.Index('offers_by_offerType'), q.Var('offerType')),
-            q.Now(),
-            []
-          )
+          q.Match(q.Index('offers_by_offerType'), q.Var('offerType'))
         )
       )
     ),
@@ -63,3 +55,7 @@ const OffersByProfileRoleConstraints = (profileRoleConstraints: Expr) =>
     ),
     null
   )
+
+// Range filters out inactive (endDate has passed) offers
+const ActiveOffers = () =>
+  q.Range(q.Match(q.Index('offers_with_endDate')), q.Now(), [])
