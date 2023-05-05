@@ -33,14 +33,16 @@ const StyledInput = styled.input`
   }
 `
 
-interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   id?: string
   label?: string
   required?: boolean
   info?: string
   placeholder?: string
   error?: boolean
+  outlined?: boolean
   disabled?: boolean
+  className?: string
   message?: string
   startAdornment?: ReactNode
   endAdornment?: ReactNode
@@ -59,11 +61,13 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
       placeholder,
       value,
       error,
+      outlined,
       disabled,
       message,
       endAdornment,
       helperText,
       bottomHelpText,
+      className,
       onChange,
       ...props
     },
@@ -85,11 +89,13 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
         filled={!!value}
         error={error}
         disabled={disabled}
+        outlined={outlined}
         message={message}
         helperText={helperText}
         bottomHelpText={bottomHelpText}
         endAdornment={endAdornment}
         onClick={handleOnParentClick}
+        className={className}
       >
         <StyledInput
           id={id}

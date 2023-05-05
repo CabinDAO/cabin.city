@@ -9,12 +9,14 @@ interface AppLinkProps {
   children: ReactNode
   iconName?: IconName
   iconSize?: number
+  className?: string
 }
 
 export const AppLink = ({
   location,
   children,
   external,
+  className,
   iconName = 'chevron-right',
   iconSize = 1,
 }: AppLinkProps) => {
@@ -22,16 +24,21 @@ export const AppLink = ({
 
   if (external) {
     return (
-      <StyledAnchor href={location} target="_blank" rel="noreferrer">
+      <StyledAnchor
+        className={className}
+        href={location}
+        target="_blank"
+        rel="noreferrer"
+      >
         {children}
-        <Icon name={iconName} size={iconSize} />
+        {!!iconSize && <Icon name={iconName} size={iconSize} />}
       </StyledAnchor>
     )
   } else {
     return (
-      <StyledLink href={location}>
+      <StyledLink className={className} href={location}>
         {children}
-        <Icon name={iconName} size={iconSize} />
+        {!!iconSize && <Icon name={iconName} size={iconSize} />}
       </StyledLink>
     )
   }

@@ -9,6 +9,7 @@ type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link'
 interface StyledButtonProps {
   variant: ButtonVariant
   isActive?: boolean
+  full: 'true' | 'false'
 }
 
 const buildBoxShadow = ({
@@ -36,6 +37,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
   border: none;
   padding: 1.5rem 2.4rem;
   white-space: nowrap;
+  ${({ full }) => full === 'true' && 'width: 100%;'}
 
   ${({ variant, isActive }) => {
     switch (variant) {
@@ -104,7 +106,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
     `}
 `
 
-interface ButtonProps {
+export interface ButtonProps {
   children: React.ReactNode
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
@@ -112,11 +114,14 @@ interface ButtonProps {
   endAdornment?: React.ReactNode
   isActive?: boolean
   disabled?: boolean
+  isFullWidth?: boolean
 }
+
 export const Button = ({
   children,
   variant = 'primary',
   isActive = false,
+  isFullWidth,
   startAdornment,
   endAdornment,
   onClick,
@@ -179,6 +184,7 @@ export const Button = ({
 
   return (
     <StyledButton
+      full={isFullWidth ? 'true' : 'false'}
       key={variant + isActive}
       initial={initial}
       whileTap={{

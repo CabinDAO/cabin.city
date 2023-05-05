@@ -2,7 +2,6 @@ import { ReactNode, useCallback } from 'react'
 import styled from 'styled-components'
 import { Subline2 } from './Typography'
 import IconButton from './IconButton'
-import { InputText } from './InputText'
 
 interface LocationVoteSelectorProps {
   label: ReactNode

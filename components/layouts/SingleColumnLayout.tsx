@@ -4,12 +4,17 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { MainContent, NavbarContainer } from './common.styles'
+import { HTMLAttributes } from 'react'
+
+export type LayoutVariant = 'default' | 'full'
 
 interface LayoutProps {
   children: React.ReactNode
   displayLaunchBanner?: boolean
   hideNavbar?: boolean
   actionBar?: React.ReactNode
+  className?: string
+  variant?: LayoutVariant
 }
 
 export const SingleColumnLayout = ({
@@ -17,6 +22,8 @@ export const SingleColumnLayout = ({
   displayLaunchBanner,
   actionBar,
   hideNavbar,
+  className,
+  variant,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
@@ -24,14 +31,16 @@ export const SingleColumnLayout = ({
   return (
     <OuterContainer>
       {displayLaunchBanner && <LaunchBanner />}
-      <Container>
-        <MainContent>{children}</MainContent>
+      <Container variant={variant}>
+        <MainContent variant={variant} className={className}>
+          {children}
+        </MainContent>
         {!hideNavbar && (
           <>
             {isMobile ? (
               <MobileFloatingMenu />
             ) : (
-              <NavbarContainer>
+              <NavbarContainer variant={variant}>
                 <ProfileNavbar />
               </NavbarContainer>
             )}
@@ -60,26 +69,30 @@ const ActionBarContainer = styled.div`
   width: 100%;
 `
 
-const Container = styled.div`
+interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
+  variant?: LayoutVariant
+}
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   justify-content: flex-start;
   align-items: center;
-
-  padding: 1.6rem;
+  padding: ${({ variant }) => (variant === 'full' ? '0' : '1.6rem')};
 
   ${({ theme }) => theme.bp.md} {
-    flex-direction: row-reverse;
+    flex-direction: ${({ variant }) =>
+      variant === 'full' ? 'column' : 'row-reverse'};
     align-items: flex-start;
-    padding: 2.4rem;
+    padding: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
     gap: 4rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     gap: 2.4rem;
-    padding: 4rem;
+    padding: ${({ variant }) => (variant === 'full' ? '0' : '4rem')};
     flex-direction: column;
   }
 `

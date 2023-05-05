@@ -55,3 +55,10 @@ NaturalistCustodian.args = {
   roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
   levelInfo: levelInfoFromType(ProfileRoleLevelType.Custodian),
 }
+
+export const SmallVariant = Template.bind({})
+SmallVariant.args = {
+  roleInfo: roleInfoFromType(ProfileRoleType.Naturalist),
+  levelInfo: levelInfoFromType(ProfileRoleLevelType.Custodian),
+  variant: 'small',
+}

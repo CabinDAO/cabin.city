@@ -23,6 +23,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { DEFAULT_BANNER } from '@/stories/utils/location-data'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -132,8 +133,7 @@ export const LocationView = ({
     !!galleryPreviewFeaturesUrl
   const bannerWidth = deviceSize === 'tablet' ? 610 : 998
   const bannerHeight = deviceSize === 'tablet' ? 256 : 420
-  const galleryImageWidth = deviceSize === 'tablet' ? 198 : 269
-  const galleryImageHeight = deviceSize === 'tablet' ? 198 : 269
+  const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
 
   return (
     <LocationContent>
@@ -192,43 +192,43 @@ export const LocationView = ({
           <GalleryPreviewList>
             <GalleryPreviewListImages>
               {galleryPreviewSleepingUrl && (
-                <Link
+                <StyledLink
                   key={LocationMediaCategory.Sleeping}
                   href={`/location/${id}/photos?gallery=sleeping`}
                 >
-                  <StyledImage
+                  <ImageFlex
                     alt={LocationMediaCategory.Sleeping}
                     src={galleryPreviewSleepingUrl}
                     width={galleryImageWidth}
-                    height={galleryImageHeight}
+                    aspectRatio={1}
                   />
-                </Link>
+                </StyledLink>
               )}
               {galleryPreviewWorkingUrl && (
-                <Link
+                <StyledLink
                   key={LocationMediaCategory.Working}
                   href={`/location/${id}/photos?gallery=working`}
                 >
-                  <StyledImage
+                  <ImageFlex
                     alt={LocationMediaCategory.Working}
                     src={galleryPreviewWorkingUrl}
                     width={galleryImageWidth}
-                    height={galleryImageHeight}
+                    aspectRatio={1}
                   />
-                </Link>
+                </StyledLink>
               )}
               {galleryPreviewFeaturesUrl && (
-                <Link
+                <StyledLink
                   key={LocationMediaCategory.Features}
                   href={`/location/${id}/photos?gallery=features`}
                 >
-                  <StyledImage
+                  <ImageFlex
                     alt={LocationMediaCategory.Features}
                     src={galleryPreviewFeaturesUrl}
                     width={galleryImageWidth}
-                    height={galleryImageHeight}
+                    aspectRatio={1}
                   />
-                </Link>
+                </StyledLink>
               )}
             </GalleryPreviewListImages>
 
@@ -466,22 +466,6 @@ const GalleryPreviewListImages = styled.div`
     > *:not(:first-child) {
       display: block;
     }
-
-    > a {
-      position: relative;
-      width: 100%;
-      padding: 50%;
-    }
-
-    > a > img {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      height: 100%;
-    }
   }
 
   ${({ theme }) => theme.bp.lg_max} {
@@ -489,21 +473,7 @@ const GalleryPreviewListImages = styled.div`
   }
 
   ${({ theme }) => theme.bp.md_max} {
-    width: 100%;
-    padding: 50%;
-
-    > a {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-    }
-
-    img {
-      height: 100%;
-      width: 100%;
-    }
+    grid-template-columns: repeat(1, 1fr);
   }
 `
 
@@ -515,7 +485,7 @@ const GalleryPreviewButton = styled(Button)`
   right: 2.4rem;
 `
 
-const StyledImage = styled(Image)`
+const StyledLink = styled(Link)`
   border: 1px solid ${({ theme }) => theme.colors.black};
   cursor: pointer;
 `

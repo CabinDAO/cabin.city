@@ -4,6 +4,8 @@ import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'
+import { useFeatures } from '@/components/hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -41,30 +43,39 @@ const NeighborhoodsItemGroup = styled.div`
 `
 
 interface NavbarProps {
-  profileId: string
+  profileId?: string
   avatarUrl?: string
 }
 
-export const Navbar = (props: NavbarProps) => {
+export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
+
   return (
     <>
       <Container>
         <SingleMenuItem>
-          <MenuItemLink menuItem={'home'} />
+          <MenuItemLink menuItem={'home'} profileId={profileId} />
         </SingleMenuItem>
         <Divider />
         <NeighborhoodsItemGroup>
-          <MenuItemLink menuItem={'members'} />
-          <MenuItemLink menuItem={'neighborhoods'} />
+          <MenuItemLink menuItem={'members'} profileId={profileId} />
+          <MenuItemLink menuItem={'neighborhoods'} profileId={profileId} />
+          {hasCityFeature && (
+            <MenuItemLink menuItem={'offers'} profileId={profileId} />
+          )}
         </NeighborhoodsItemGroup>
         <Divider />
         <SingleMenuItem>
-          <Avatar
-            src={props.avatarUrl}
-            size={3.2}
-            onClick={() => setProfileMenuVisible(!profileMenuVisible)}
-          />
+          {profileId && (
+            <Avatar
+              src={avatarUrl}
+              size={3.2}
+              onClick={() => setProfileMenuVisible(!profileMenuVisible)}
+            />
+          )}
+          <MenuItemLink menuItem={'signIn'} profileId={profileId} />
         </SingleMenuItem>
       </Container>
       <ProfileNavMenu visible={profileMenuVisible} />
