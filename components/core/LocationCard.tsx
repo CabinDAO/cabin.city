@@ -77,7 +77,7 @@ export const LocationCard = (props: LocationCardProps) => {
             label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
           />
           <LocationInfo
-            iconName="citizen"
+            iconName="offer"
             label={offerCount ? `${offerCount} Offers` : EMPTY}
           />
           <LocationInfo iconName="caretaker" label={caretaker.name} />
