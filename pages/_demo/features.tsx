@@ -1,7 +1,7 @@
 import { Body1 } from '@/components/core/Typography'
 import { useFeatures } from '@/components/hooks/useFeatures'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
-import { Feature } from '@/fauna/lib/features'
+import { Feature } from '@/lib/features'
 import { NextPage } from 'next'
 
 const FeaturesDemo: NextPage = () => {

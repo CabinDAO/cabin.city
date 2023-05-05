@@ -1129,6 +1129,7 @@ export type UpdateProfileInput = {
   location?: InputMaybe<Scalars['String']>;
   contactFields?: InputMaybe<Array<ProfileContactFieldInput>>;
   avatar?: InputMaybe<ProfileAvatarInput>;
+  features?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type Account = {

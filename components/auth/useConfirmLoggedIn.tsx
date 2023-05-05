@@ -8,12 +8,11 @@ export const useConfirmLoggedIn = () => {
   const { showLoadingModal } = useModal()
 
   const confirmLoggedIn = useCallback(
-    (onConfirmed: () => void) => {
+    (onConfirmed?: () => void) => {
       if (!user && !isUserLoading) {
         showLoadingModal(() => <LoginModal onLogin={onConfirmed} />)
       } else {
-        console.log('Calling onConfirmed')
-        onConfirmed()
+        onConfirmed?.()
       }
     },
     [showLoadingModal, user, isUserLoading]

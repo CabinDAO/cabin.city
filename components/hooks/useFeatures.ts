@@ -1,4 +1,4 @@
-import { Feature } from '@/fauna/lib/features'
+import { Feature } from '@/lib/features'
 import { useCallback } from 'react'
 import { useUser } from '../auth/useUser'
 

@@ -33,9 +33,9 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   }, [])
 
   // Shows a modal but disables close on click away
-  function showLoadingModal(render: () => ReactNode) {
+  const showLoadingModal = useCallback((render: () => ReactNode) => {
     setInternalState({ render, hideOnClickAway: false })
-  }
+  }, [])
 
   const hideModal = useCallback(() => {
     setInternalState({ render: null, hideOnClickAway: true })

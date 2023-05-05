@@ -163,6 +163,7 @@ input UpdateProfileInput {
   location: String
   contactFields: [ProfileContactFieldInput!]
   avatar: ProfileAvatarInput
+  features: [String!]
 }
 
 input ProfileContactFieldInput {
