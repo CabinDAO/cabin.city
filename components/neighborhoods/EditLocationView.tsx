@@ -32,9 +32,13 @@ export const EditLocationView = ({}) => {
   }
 
   const handleBack = () => {
-    resolveTransitionStep(
-      editLocationSteps[editLocationSteps.indexOf(currentStep) - 1]
-    )
+    const newIndex = editLocationSteps.indexOf(currentStep) - 1
+
+    if (newIndex >= 0) {
+      resolveTransitionStep(editLocationSteps[newIndex])
+    } else {
+      router.push('/my-locations')
+    }
   }
 
   const resolveTransitionStep = (targetStep: StepConfig) => {

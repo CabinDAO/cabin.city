@@ -59,6 +59,10 @@ export const OfferListItem = (props: OfferListItemProps) => {
     isLocked,
     actionsEnabled,
   } = props
+  console.log(
+    '🚀 ~ file: OfferListItem.tsx:62 ~ OfferListItem ~ imageUrl:',
+    imageUrl
+  )
   const isDisplayingEligibility =
     !!profileRoleConstraints?.length ||
     citizenshipRequired ||

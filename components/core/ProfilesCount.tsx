@@ -16,13 +16,13 @@ interface ProfilesCountProps {
 }
 
 export const ProfilesCount = ({ profiles }: ProfilesCountProps) => {
-  const firstThreeProfiles = profiles.slice(0, 3)
+  const topProfiles = profiles.slice(0, 3)
   const additionalProfilesCount = profiles.length - 3
   const displayAdditionalProfilesCount = additionalProfilesCount > 0
 
   return (
     <ProfilesCountContainer>
-      {firstThreeProfiles.map((profile) => (
+      {topProfiles.map((profile) => (
         <AvatarContainer key={profile._id}>
           <Avatar src={profile.avatar?.url} size={2.4} color="yellow300" />
         </AvatarContainer>
@@ -31,6 +31,8 @@ export const ProfilesCount = ({ profiles }: ProfilesCountProps) => {
       {displayAdditionalProfilesCount && (
         <ProfileCount>+{additionalProfilesCount}</ProfileCount>
       )}
+
+      {topProfiles.length === 0 && <ProfileCount>-</ProfileCount>}
     </ProfilesCountContainer>
   )
 }
@@ -39,6 +41,8 @@ const ProfilesCountContainer = styled.div`
   display: flex;
   flex-flow: row;
   padding-left: 0.8rem;
+  align-items: center;
+  justify-content: flex-end;
 `
 
 const AvatarContainer = styled.div`

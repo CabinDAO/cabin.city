@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
 import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 interface FooterProps {
   className?: string
@@ -13,48 +14,52 @@ export const Footer = ({ children, className }: FooterProps) => (
     <FooterNavigation>
       <FooterNavigationList>
         <FooterNavigationHeader>Product</FooterNavigationHeader>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location="/city-directory" iconSize={0}>
           <FooterItem>City Directory</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location="/offers" iconSize={0}>
           <FooterItem>Offers</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location="/citizenship" iconSize={0}>
           <FooterItem>Citizenship</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location="/login" iconSize={0}>
           <FooterItem>Sign In</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location={EXTERNAL_LINKS.PRIVACY_AND_TERMS} iconSize={0}>
           <FooterItem>Privacy & Terms</FooterItem>
         </AppLink>
       </FooterNavigationList>
 
       <FooterNavigationList>
         <FooterNavigationHeader>Resources</FooterNavigationHeader>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location={EXTERNAL_LINKS.VISION} iconSize={0}>
           <FooterItem>Vision</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location={EXTERNAL_LINKS.BLOG} iconSize={0}>
           <FooterItem>Blog</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
           <FooterItem>Podcast</FooterItem>
         </AppLink>
-        <AppLink location="#" iconSize={0}>
+        <AppLink location={EXTERNAL_LINKS.WIKI} iconSize={0}>
           <FooterItem>Support Wiki</FooterItem>
         </AppLink>
       </FooterNavigationList>
 
       <FooterNavigationList>
         <FooterNavigationHeader>Social</FooterNavigationHeader>
-        <AppLink external location="#" iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.CABIN_DISCORD} iconSize={0}>
           <FooterItem>Discord</FooterItem>
         </AppLink>
-        <AppLink external location="#" iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.CABIN_TWITTER} iconSize={0}>
           <FooterItem>Twitter</FooterItem>
         </AppLink>
-        <AppLink external location="#" iconSize={0}>
+        <AppLink
+          external
+          location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
+          iconSize={0}
+        >
           <FooterItem>Instagram</FooterItem>
         </AppLink>
       </FooterNavigationList>

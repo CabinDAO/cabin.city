@@ -8,6 +8,8 @@ import { Avatar } from '../Avatar'
 import { HorizontalDivider } from '../Divider'
 import Icon from '../Icon'
 import { Caption, Subline1 } from '../Typography'
+import { useFeatures } from '@/components/hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 interface ProfileNavMenuProps {
   visible: boolean
@@ -17,6 +19,8 @@ const INNER_PADDING = '1.2rem 1.6rem'
 
 export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
   const { user } = useUser()
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
 
   const { ens } = useEns(user?.account.address)
   const displayCaption = ens ?? shortenedAddress(user?.account.address)
@@ -54,15 +58,17 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
           <Icon name="citizen" size={2} color="green400" />
           <Subline1 $color="yellow100">Citizenship</Subline1>
         </ProfileMenuItem>
-        <ProfileMenuItem href="/my-locations">
-          <Icon name="draft-proposal" size={2} color="green400" />
-          <MenuItemWithNote>
-            <Subline1 $color="yellow100">My Locations</Subline1>
-            <Caption $color="yellow100">
-              ({user.locations?.data?.length ?? 0})
-            </Caption>
-          </MenuItemWithNote>
-        </ProfileMenuItem>
+        {hasCityFeature && (
+          <ProfileMenuItem href="/my-locations">
+            <Icon name="draft-proposal" size={2} color="green400" />
+            <MenuItemWithNote>
+              <Subline1 $color="yellow100">My Locations</Subline1>
+              <Caption $color="yellow100">
+                ({user.locations?.data?.length ?? 0})
+              </Caption>
+            </MenuItemWithNote>
+          </ProfileMenuItem>
+        )}
         <ProfileMenuItem href="/logout">
           <Icon name="sign-out" size={2} color="green400" />
           <Subline1 $color="yellow100">Sign out</Subline1>

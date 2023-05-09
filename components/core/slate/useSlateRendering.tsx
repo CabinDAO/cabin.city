@@ -1,12 +1,13 @@
+import styled from 'styled-components'
 import { useCallback } from 'react'
 import { RenderElementProps, RenderLeafProps } from 'slate-react'
 import {
   BlockQuote,
+  Body1,
   H4,
   H5,
   ListItem,
   OrderedList,
-  Subline2,
   UnorderedList,
 } from '../Typography'
 
@@ -39,7 +40,7 @@ const Element = (props: RenderElementProps) => {
     case 'list-numbered':
       return <OrderedList {...attributes}>{children}</OrderedList>
     default:
-      return <Subline2 {...attributes}>{children}</Subline2>
+      return <StyledBody1 {...attributes}>{children}</StyledBody1>
   }
 }
 
@@ -60,3 +61,7 @@ const Leaf = (props: RenderLeafProps) => {
 
   return <span {...attributes}>{newChildren}</span>
 }
+
+const StyledBody1 = styled(Body1)`
+  opacity: 0.75;
+`

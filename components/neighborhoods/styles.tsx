@@ -1,5 +1,6 @@
 import { pxToRem } from '@/utils/display-utils'
 import styled from 'styled-components'
+import { Button } from '../core/Button'
 
 const IMAGE_HEIGHT_PX = 230.67
 const IMAGE_MARGIN_PX = 24
@@ -46,4 +47,11 @@ export const LocationListContainer = styled.div`
     flex-direction: column;
     gap: 2.4rem;
   }
+`
+
+export const VoteButton = styled(Button)`
+  padding: 0;
+  padding-bottom: 0.2rem;
+  width: 4.8rem;
+  height: 4.8rem;
 `

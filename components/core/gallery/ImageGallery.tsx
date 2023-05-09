@@ -11,19 +11,33 @@ interface ImageGalleryProps {
   title: string
   images: TempImage[]
   className?: string
+  onImageClickOverride?: (imageIndex: number) => void
 }
 
 export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
-  ({ id, title, images = [], className }: ImageGalleryProps, forwardedRef) => {
+  (
+    {
+      id,
+      title,
+      onImageClickOverride,
+      images = [],
+      className,
+    }: ImageGalleryProps,
+    forwardedRef
+  ) => {
     const { showModal } = useModal()
     const filteredImages = images.filter(
       (image) => image.url || image.ipfsHash || image.ipfsHash
     )
 
     const handleImageOnClick = (imageIndex: number) => {
-      showModal(() => (
-        <ImageBrowserModal images={images} initialImageIndex={imageIndex} />
-      ))
+      if (onImageClickOverride) {
+        onImageClickOverride(imageIndex)
+      } else {
+        showModal(() => (
+          <ImageBrowserModal images={images} initialImageIndex={imageIndex} />
+        ))
+      }
     }
 
     if (filteredImages.length === 0) {

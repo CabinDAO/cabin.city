@@ -14,6 +14,7 @@ fragment Me on Profile {
   location
   createdAt
   citizenshipStatus
+  cabinTokenBalanceInt
   roles {
     role
     level

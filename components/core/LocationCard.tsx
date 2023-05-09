@@ -5,10 +5,10 @@ import { Body2, Caption, H2, Subline1 } from './Typography'
 import { IconName } from './Icon'
 import Icon from './Icon'
 import { format } from 'date-fns'
-import { Button } from './Button'
 import Link from 'next/link'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
+import { VoteButton } from '../neighborhoods/styles'
 
 export interface LocationCardProps {
   _id: string
@@ -80,8 +80,10 @@ export const LocationCard = (props: LocationCardProps) => {
           <LocationTag {...props} />
         </ImageContainer>
         <ContentContainer>
-          <NameH2>{name}</NameH2>
-          <Body2>{tagline}</Body2>
+          <SummaryContainer>
+            <NameH2>{name}</NameH2>
+            <Body2>{tagline}</Body2>
+          </SummaryContainer>
           <LocationInfoGroupContainer>
             <LocationInfo iconName="location" label={address ?? EMPTY} />
             <LocationInfo
@@ -108,7 +110,7 @@ export const LocationCard = (props: LocationCardProps) => {
             <Caption emphasized>{`${
               voteCount?.toLocaleString() ?? 0
             } Votes`}</Caption>
-            {voters ? <ProfilesCount profiles={voters} /> : null}
+            {<ProfilesCount profiles={voters ?? []} />}
           </VotersContainer>
 
           <VoteButton
@@ -180,6 +182,7 @@ const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  background-color: ${({ theme }) => theme.colors.yellow200};
 `
 
 const ContainerLink = styled(Link)`
@@ -213,9 +216,16 @@ const ContentContainer = styled.div`
   flex-direction: column;
   flex: 1;
   padding: 1.6rem;
+  gap: 2.4rem;
+
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
   }
+`
+
+const SummaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const NameH2 = styled(H2)`
@@ -250,10 +260,10 @@ const VotersContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-`
 
-const VoteButton = styled(Button)`
-  padding: 1.5rem;
+  ${Caption} {
+    opacity: 0.75;
+  }
 `
 
 const LocationInfoGroupContainer = styled.div`
@@ -270,4 +280,8 @@ const LocationInfoContainer = styled.div`
   align-items: center;
   gap: 0.4rem;
   white-space: nowrap;
+
+  svg {
+    opacity: 0.75;
+  }
 `

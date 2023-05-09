@@ -118,6 +118,7 @@ export const NestedFilter = <
                   selections={selectedOptionValues}
                   onSelect={handleSelect}
                   onBack={() => setCurrentOption(null)}
+                  onApply={handleApply}
                 />
               ) : (
                 <NestedOptionsList
@@ -236,11 +237,12 @@ interface OptionsListProps<T1 extends string | number, T2> {
     selection: FilterOption<T2>
   ) => void
   onBack: () => void
+  onApply?: () => void
 }
 const OptionsList = <T1 extends string | number, T2>(
   props: OptionsListProps<T1, T2>
 ) => {
-  const { option, selections, onSelect, onBack } = props
+  const { option, selections, onSelect, onBack, onApply } = props
 
   const selectedOptionValues = selections[option.value] ?? []
 
@@ -264,6 +266,14 @@ const OptionsList = <T1 extends string | number, T2>(
           )
         })}
       </List>
+      <Button
+        onClick={() => {
+          onBack()
+          onApply?.()
+        }}
+      >
+        Apply
+      </Button>
     </>
   )
 }

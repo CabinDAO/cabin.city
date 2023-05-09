@@ -1,19 +1,24 @@
+import { useFeatures } from '@/components/hooks/useFeatures'
 import { NeighborhoodsPlaceholderView } from '@/components/neighborhoods/NeighborhoodsPlaceholderView'
+import { Feature } from '@/lib/features'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 const CityDirectory = () => {
   const router = useRouter()
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
 
   useEffect(() => {
-    if (process.env.NEXT_PUBLIC_APP_ENV === 'dev') {
+    if (hasCityFeature) {
       router.push('/city-directory/neighborhoods')
     }
-  }, [router])
+  }, [router, hasCityFeature])
 
-  if (process.env.NEXT_PUBLIC_APP_ENV === 'dev') {
+  if (hasCityFeature) {
     return null
   }
+
   return <NeighborhoodsPlaceholderView />
 }
 

@@ -10,7 +10,7 @@ import { Editable, Slate, useSlate, withReact } from 'slate-react'
 import styled from 'styled-components'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
-import { h4Styles, subline2Styles } from '../Typography'
+import { body1Styles, h4Styles } from '../Typography'
 import Icon, { IconName } from '../Icon'
 import { CustomElement } from '@/types/slate'
 
@@ -48,10 +48,13 @@ const EditorContainer = styled.div`
 `
 
 const StyledEditable = styled(Editable)`
-  ${subline2Styles}
+  ${body1Styles}
   background-color: white;
   padding: 2rem 1.6rem;
   margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
 `
 
 const Toolbar = () => {

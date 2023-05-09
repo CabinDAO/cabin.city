@@ -1,6 +1,6 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { allOfferInfos, offerListItemPropsFromFragment } from '@/utils/offer'
 import {
@@ -25,15 +25,21 @@ import { NestedFilter, SelectedOptionValues } from '../core/NestedFilter'
 import { allLevels } from '@/utils/levels'
 import { allRoles } from '@/utils/roles'
 import { ListEmptyState } from '../core/ListEmptyState'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
+import { useRouter } from 'next/router'
 
 export const OfferDirectoryView = () => {
+  const router = useRouter()
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
   const [open, setOpen] = useState(false)
   const [offerTypes, setOfferTypes] = useState<OfferType[]>([])
   const [roleLevels, setRoleLevels] = useState<
     SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>
   >({} as SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>)
   const { deviceSize } = useDeviceSize()
-  const { user } = useUser()
+  const { user, isUserLoading } = useUser()
   const input = useMemo(() => {
     const profileRoleConstraints = Object.keys(roleLevels)
       .map((roleTypeStr) => {
@@ -107,6 +113,16 @@ export const OfferDirectoryView = () => {
     setRoleLevels(
       {} as SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>
     )
+  }
+
+  useEffect(() => {
+    if (!isUserLoading && !hasCityFeature) {
+      router.push('/dashboard')
+    }
+  }, [hasCityFeature, router, isUserLoading])
+
+  if (!hasCityFeature) {
+    return null
   }
 
   return (

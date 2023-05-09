@@ -27,6 +27,8 @@ import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { levelInfoFromType } from '@/utils/levels'
 import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import Link from 'next/link'
 
 export const LandingView = () => {
   const { user, isUserLoading } = useUser()
@@ -50,10 +52,14 @@ export const LandingView = () => {
 
             <SectionGrowTwoColumns>
               <SectionGrowSignup>
-                <a href="#signup" target="_blank" rel="noreferrer">
+                <Link href="/login" rel="noreferrer">
                   <Button>Sign Up</Button>
-                </a>
-                <a href="#join_discord" target="_blank" rel="noreferrer">
+                </Link>
+                <a
+                  href={EXTERNAL_LINKS.CABIN_DISCORD}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <Button variant="secondary">Join Discord</Button>
                 </a>
               </SectionGrowSignup>
@@ -67,7 +73,7 @@ export const LandingView = () => {
                 </Body1>
 
                 <Overline>
-                  <AppLink external location="#viewourvision">
+                  <AppLink external location={EXTERNAL_LINKS.VISION}>
                     View our vision
                   </AppLink>
                 </Overline>
@@ -155,7 +161,11 @@ export const LandingView = () => {
                   </JoinPaymentOption>
 
                   <JoinOptionButton>
-                    <AppLink external location="#" iconSize={0}>
+                    <AppLink
+                      external
+                      location={EXTERNAL_LINKS.CABIN_DISCORD}
+                      iconSize={0}
+                    >
                       <Button isFullWidth>Join Discord</Button>
                     </AppLink>
                   </JoinOptionButton>
@@ -197,7 +207,7 @@ export const LandingView = () => {
                   </JoinPaymentOption>
 
                   <JoinOptionButton>
-                    <AppLink external location="#" iconSize={0}>
+                    <AppLink location="/login" iconSize={0}>
                       <Button isFullWidth>Sign Up</Button>
                     </AppLink>
                   </JoinOptionButton>
@@ -241,7 +251,11 @@ export const LandingView = () => {
                   </JoinPayment>
 
                   <JoinOptionButton>
-                    <AppLink external location="#" iconSize={0}>
+                    <AppLink
+                      external
+                      location={EXTERNAL_LINKS.FOUNDING_CITIZEN}
+                      iconSize={0}
+                    >
                       <Button isFullWidth>Learn more</Button>
                     </AppLink>
                   </JoinOptionButton>

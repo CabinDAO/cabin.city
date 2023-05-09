@@ -12,11 +12,14 @@ import {
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { format } from 'date-fns'
-import Icon from '@/components/core/Icon'
+import Icon, { IconName } from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
+import { useOfferApply } from '../hooks/useOfferApply'
+import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
+import { isNotNull } from '@/lib/data'
 
 const EMPTY = '—'
 
@@ -37,9 +40,47 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
   const formattedStartDate = startDate ? format(startDate, 'MMM') : null
   const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
-  const rolesMatchOne = (profileRoleConstraints ?? []).map((roleConstraint) =>
-    roleConstraintInfoFromType(roleConstraint)
+  const levelsByRole = profileRoleConstraints?.reduce(
+    (acc, { profileRole, level }) => ({
+      ...acc,
+      [profileRole]: acc[profileRole] ? [...acc[profileRole], level] : [level],
+    }),
+    {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
   )
+
+  type RoleConstraintType = {
+    constraintName: string
+    iconName: IconName
+  }
+
+  const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
+    .flatMap(
+      (profileRole): RoleConstraintType | RoleConstraintType[] | null => {
+        if (!levelsByRole) return null
+
+        if (levelsByRole[profileRole as ProfileRoleType].length === 3) {
+          return roleConstraintInfoFromType({
+            profileRole: profileRole as ProfileRoleType,
+            level: ProfileRoleLevelType.Apprentice,
+          })
+        } else {
+          return levelsByRole[profileRole as ProfileRoleType].map((level) =>
+            roleConstraintInfoFromType({
+              profileRole: profileRole as ProfileRoleType,
+              level,
+            })
+          )
+        }
+      }
+    )
+    .filter(isNotNull) as RoleConstraintType[]
+
+  const { canApply } = useOfferApply(offer)
+
+  const applyUrl = canApply() ? applicationUrl : null
+
+  const displayMatchOne = rolesMatchOne.length > 0
+  const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
 
   return (
     <>
@@ -57,12 +98,18 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                 <OfferDetailsOverview>
                   <H2>{offerInfo?.name ?? EMPTY}</H2>
                   <Subline2>
-                    at {location.name} in {location.shortAddress}
+                    at{' '}
+                    <a href={`/offers`}>
+                      <u>{location.name}</u>
+                    </a>{' '}
+                    in {location.shortAddress}
                   </Subline2>
                 </OfferDetailsOverview>
 
-                <Link href={applicationUrl ?? '#'}>
-                  <ApplyNowButton>Apply now</ApplyNowButton>
+                <Link href={applyUrl ?? '#'}>
+                  <ApplyNowButton disabled={!applyUrl}>
+                    Apply now
+                  </ApplyNowButton>
                 </Link>
               </OfferDetailsHeader>
 
@@ -79,49 +126,61 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                 </OfferDetailsPricing>
               </OfferDetailsSection>
 
-              <OfferDetailsSection>
-                <H3>ELIGIBILITY</H3>
+              {(displayMatchAll || displayMatchOne) && (
+                <OfferDetailsSection>
+                  <H3>ELIGIBILITY</H3>
 
-                <OfferDetailsEligibilitySection>
-                  <OfferDetailsEligibilityMatching>
-                    <Caption emphasized>Match at least one:</Caption>
+                  <OfferDetailsEligibilitySection>
+                    {displayMatchOne && (
+                      <OfferDetailsEligibilityMatching>
+                        <Caption emphasized>Match at least one:</Caption>
 
-                    {rolesMatchOne.map(({ constraintName, iconName }) => (
-                      <OfferDetailsEligibilityCaption key={iconName}>
-                        <Icon name={iconName} color="green900" size={1.6} />{' '}
-                        {constraintName}
-                      </OfferDetailsEligibilityCaption>
-                    ))}
-                  </OfferDetailsEligibilityMatching>
-
-                  <OfferDetailsEligibilityMatching>
-                    <Caption emphasized>Match all:</Caption>
-
-                    {citizenshipRequired && (
-                      <OfferDetailsEligibilityCaption>
-                        <Icon
-                          key="citizen"
-                          name="citizen"
-                          color="green900"
-                          size={1.6}
-                        />{' '}
-                        Citizen
-                      </OfferDetailsEligibilityCaption>
+                        {rolesMatchOne.map((constraint) => (
+                          <OfferDetailsEligibilityCaption
+                            key={constraint.iconName}
+                          >
+                            <Icon
+                              name={constraint.iconName}
+                              color="green900"
+                              size={1.6}
+                            />{' '}
+                            {constraint.constraintName}
+                          </OfferDetailsEligibilityCaption>
+                        ))}
+                      </OfferDetailsEligibilityMatching>
                     )}
-                    {(minimunCabinBalance ?? 0) > 0 && (
-                      <OfferDetailsEligibilityCaption>
-                        <Icon
-                          key="holding"
-                          name="holding"
-                          color="green900"
-                          size={1.6}
-                        />{' '}
-                        ≥ {minimunCabinBalance} ₡ABIN
-                      </OfferDetailsEligibilityCaption>
+
+                    {displayMatchAll && (
+                      <OfferDetailsEligibilityMatching>
+                        <Caption emphasized>Match all:</Caption>
+
+                        {citizenshipRequired && (
+                          <OfferDetailsEligibilityCaption>
+                            <Icon
+                              key="citizen"
+                              name="citizen"
+                              color="green900"
+                              size={1.6}
+                            />{' '}
+                            Citizen
+                          </OfferDetailsEligibilityCaption>
+                        )}
+                        {(minimunCabinBalance ?? 0) > 0 && (
+                          <OfferDetailsEligibilityCaption>
+                            <Icon
+                              key="holding"
+                              name="holding"
+                              color="green900"
+                              size={1.6}
+                            />{' '}
+                            ≥ {minimunCabinBalance} ₡ABIN
+                          </OfferDetailsEligibilityCaption>
+                        )}
+                      </OfferDetailsEligibilityMatching>
                     )}
-                  </OfferDetailsEligibilityMatching>
-                </OfferDetailsEligibilitySection>
-              </OfferDetailsSection>
+                  </OfferDetailsEligibilitySection>
+                </OfferDetailsSection>
+              )}
             </OfferDetails>
           </OfferDetailsContainer>
         </DescriptionTwoColumn>

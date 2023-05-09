@@ -24,6 +24,7 @@ import { DEFAULT_BANNER } from '@/stories/utils/location-data'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
+import { VoteButton } from './styles'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -179,9 +180,9 @@ export const LocationView = ({
                 <ProfilesCount profiles={voteProfiles} />
               </VotesAvatarContainer>
 
-              <VotingProfilesButton variant="secondary" onClick={onVote}>
-                <Icon name="chevron-up" size={2.4} />
-              </VotingProfilesButton>
+              <VoteButton variant="secondary" onClick={onVote}>
+                <Icon name="chevron-up" size={1.6} />
+              </VoteButton>
             </VotesContainer>
           </LocationHeader>
         </StyledContentCard>
@@ -249,12 +250,12 @@ export const LocationView = ({
 
               <HorizontalBar />
 
-              <div>
+              <InternetSpeed>
                 <H4>Internet speed</H4>
                 <Body1>
                   {internetSpeedMbps ? `${internetSpeedMbps} Mbps` : EMPTY}
                 </Body1>
-              </div>
+              </InternetSpeed>
             </DescriptionDetails>
 
             <CaretakerDetailsContainer>
@@ -319,10 +320,6 @@ const DescriptionDetails = styled.div`
   flex-flow: column;
   gap: 2.4rem;
   flex: 1;
-`
-
-const VotingProfilesButton = styled(Button)`
-  padding: 1.4rem;
 `
 
 const HorizontalBar = styled.div`
@@ -501,4 +498,14 @@ const VotesAvatarContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 0.8rem;
+`
+
+const InternetSpeed = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  ${Body1} {
+    opacity: 0.75;
+  }
 `
