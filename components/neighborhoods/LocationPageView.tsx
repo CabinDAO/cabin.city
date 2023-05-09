@@ -13,14 +13,14 @@ import { PublishModal } from './edit-location/PublishModal'
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser()
   const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
   const { data } = useGetLocationByIdQuery({
     variables: {
       id: `${id}`,
     },
-    skip: !id || !user,
+    skip: !id,
   })
   const location = data?.findLocationByID
     ? locationViewPropsFromFragment(data?.findLocationByID)
@@ -32,7 +32,7 @@ export const LocationPageView = () => {
     }
   }, [data, location, router])
 
-  if (!location || !user) {
+  if (!location) {
     return null
   }
 
@@ -45,7 +45,7 @@ export const LocationPageView = () => {
   }
 
   const previewMode =
-    user._id === location.caretaker._id && !location.publishedAt
+    user?._id === location.caretaker._id && !location.publishedAt
 
   const handlePublish = async () => {
     showModal(() => <PublishModal locationId={location._id} />)

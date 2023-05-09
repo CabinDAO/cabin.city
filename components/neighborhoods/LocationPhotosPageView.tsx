@@ -4,17 +4,15 @@ import { useGetLocationByIdQuery } from '@/generated/graphql'
 import { locationViewPropsFromFragment } from '@/lib/location'
 import { LocationPhotosView } from '@/components/neighborhoods/LocationPhotosView'
 import { useEffect } from 'react'
-import { useUser } from '@/components/auth/useUser'
 
 export const LocationPhotosPageView = () => {
   const router = useRouter()
   const { id, gallery } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
   const { data } = useGetLocationByIdQuery({
     variables: {
       id: `${id}`,
     },
-    skip: !id || !user,
+    skip: !id,
   })
   const location = data?.findLocationByID
     ? locationViewPropsFromFragment(data.findLocationByID)
@@ -26,7 +24,7 @@ export const LocationPhotosPageView = () => {
     }
   }, [data, location, router])
 
-  if (!location || !user) {
+  if (!location) {
     return null
   }
 
