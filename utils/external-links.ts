@@ -18,5 +18,5 @@ export const EXTERNAL_LINKS = {
   PODCAST:
     'https://podcasts.apple.com/us/podcast/campfire-by-cabin/id1613976598',
   CITY_DIRECTORY: '/', // TODO: Fill in city directory link,
-  WIKI: '/',
+  WIKI: 'https://cabin-fellowship.notion.site/Cabin-Community-Wiki-49958f9db9804ef8836d4a37dd4e7bbb',
 }

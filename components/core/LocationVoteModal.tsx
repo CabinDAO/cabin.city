@@ -164,6 +164,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
       setIsCastingVotes(false)
     }
   }
+
   return (
     <>
       <ModalContent>
@@ -235,6 +236,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
 
 const LocationVoteModalContainer = styled(ModalContainer)`
   height: min-content;
+  max-height: 49vh;
 `
 
 const Container = styled.div`
