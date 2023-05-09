@@ -1,4 +1,4 @@
-import { MONTHLY_PRICE_IN_USD } from '@/utils/citizenship'
+import { YEARLY_PRICE_IN_ETH, YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import styled from 'styled-components'
 import { useUser } from '../auth/useUser'
 import { HorizontalDivider } from '../core/Divider'
@@ -17,10 +17,15 @@ export const CitizenshipNFTPreviewData = () => {
       <H3>Details</H3>
       <PriceContainer>
         <Price>
-          <H1 emphasized>${MONTHLY_PRICE_IN_USD}</H1>
-          <Caption>/month</Caption>
+          <PriceValue>
+            <H1 emphasized>{YEARLY_PRICE_IN_ETH}</H1>
+            <H1 emphasized>ETH</H1>
+          </PriceValue>
+          <Caption>/ year</Caption>
         </Price>
-        <Caption>Billed yearly</Caption>
+        <Caption>
+          ${YEARLY_PRICE_IN_USD} | pay with credit card or crypto
+        </Caption>
       </PriceContainer>
       <CabinHolderDisclaimer>
         <H4>FREE</H4>
@@ -68,6 +73,14 @@ const Price = styled.div`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
+`
+
+const PriceValue = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  align-items: center;
+  justify-content: flex-start;
 `
 
 const CabinHolderDisclaimer = styled.div`
