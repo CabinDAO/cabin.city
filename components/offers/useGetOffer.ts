@@ -59,10 +59,11 @@ export const useGetOffer = () => {
   }, [data, offer, router])
 
   if (!offer || !user) {
-    return { offer: null }
+    return { offer: null, ownedByMe: false }
   }
 
   return {
     offer,
+    ownedByMe: user?._id === offer.rawFragment.location.caretaker._id,
   }
 }

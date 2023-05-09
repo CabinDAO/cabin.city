@@ -3,6 +3,9 @@ import { ImageGallery } from '@/components/core/gallery/ImageGallery'
 import { LocationMediaCategory } from '@/generated/graphql'
 import { useEffect, useRef } from 'react'
 import { LocationProps } from '@/components/neighborhoods/LocationView'
+import { TempImage } from '@/lib/image'
+import { useModal } from '../hooks/useModal'
+import { ImageBrowserModal } from '../core/gallery/ImageBrowserModal'
 
 export const LocationPhotosView = ({
   location,
@@ -46,6 +49,22 @@ export const LocationPhotosView = ({
     }
   }, [gallery])
 
+  const { showModal } = useModal()
+
+  const allImages = [
+    ...galleryPreviewSleeping,
+    ...galleryPreviewWorking,
+    ...galleryPreviewFeatures,
+  ]
+
+  const handleImageClick = (image: TempImage) => {
+    const index = allImages.findIndex((img) => img.ipfsHash === image.ipfsHash)
+
+    showModal(() => (
+      <ImageBrowserModal images={allImages} initialImageIndex={index} />
+    ))
+  }
+
   return (
     <>
       <TitleCard
@@ -58,18 +77,21 @@ export const LocationPhotosView = ({
         ref={galleryPreviewSleepingRef}
         images={galleryPreviewSleeping}
         title="Sleeping arrangements"
+        onImageClickOverride={handleImageClick}
       />
       <ImageGallery
         id="working"
         ref={galleryPreviewWorkingRef}
         images={galleryPreviewWorking}
         title="Work stations"
+        onImageClickOverride={handleImageClick}
       />
       <ImageGallery
         id="features"
         ref={galleryPreviewFeaturesRef}
         images={galleryPreviewFeatures}
         title="Amenities"
+        onImageClickOverride={handleImageClick}
       />
     </>
   )

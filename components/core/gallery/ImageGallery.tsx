@@ -11,7 +11,7 @@ interface ImageGalleryProps {
   title: string
   images: TempImage[]
   className?: string
-  onImageClickOverride?: (imageIndex: number) => void
+  onImageClickOverride?: (image: TempImage) => void
 }
 
 export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
@@ -32,7 +32,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
 
     const handleImageOnClick = (imageIndex: number) => {
       if (onImageClickOverride) {
-        onImageClickOverride(imageIndex)
+        onImageClickOverride(filteredImages[imageIndex])
       } else {
         showModal(() => (
           <ImageBrowserModal images={images} initialImageIndex={imageIndex} />

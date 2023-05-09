@@ -34,6 +34,12 @@ export interface OfferListItemProps {
     _id: string
     name: string | null | undefined
     shortAddress: string | null | undefined
+    caretaker?:
+      | {
+          _id: string
+        }
+      | null
+      | undefined
   }
   isLocked?: boolean
   actionsEnabled?: boolean

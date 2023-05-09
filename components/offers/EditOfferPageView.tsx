@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
-  const { offer } = useGetOffer()
+  const { offer, ownedByMe } = useGetOffer()
   const backRoute = `/location/${offer?.location._id}/edit?step=3`
   const [updateOffer] = useUpdateOfferMutation()
 
@@ -23,7 +23,7 @@ export const EditOfferPageView = () => {
       description: offerFragment?.description,
     })
 
-  if (!offer) {
+  if (!offer || !ownedByMe) {
     return null
   }
 

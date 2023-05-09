@@ -21,6 +21,9 @@ export const DEFAULT_OFFER_PROPS: OfferListItemProps = {
     _id: '456',
     name: 'Firefly Hut',
     shortAddress: 'Boone, NC',
+    caretaker: {
+      _id: '789',
+    },
   },
 }
 
@@ -70,6 +73,9 @@ export const sampleOffer = {
     address: {
       locality: 'Boone',
       admininstrativeAreaLevel1Short: 'NC',
+    },
+    caretaker: {
+      _id: '20',
     },
   },
 }

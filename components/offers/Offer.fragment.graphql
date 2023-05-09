@@ -26,5 +26,8 @@ fragment Offer on Offer {
       locality
       admininstrativeAreaLevel1Short
     }
+    caretaker {
+      _id
+    }
   }
 }
