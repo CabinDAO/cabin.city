@@ -116,17 +116,17 @@ export const LocationView = ({
     ({ category }) => category === LocationMediaCategory.Sleeping
   )
   const galleryPreviewSleepingUrl =
-    !!galleryPreviewSleeping && resolveImageUrl(galleryPreviewSleeping)
+    !!galleryPreviewSleeping && resolveImageUrl(galleryPreviewSleeping, true)
   const galleryPreviewWorking = mediaItems.find(
     ({ category }) => category === LocationMediaCategory.Working
   )
   const galleryPreviewWorkingUrl =
-    !!galleryPreviewWorking && resolveImageUrl(galleryPreviewWorking)
+    !!galleryPreviewWorking && resolveImageUrl(galleryPreviewWorking, true)
   const galleryPreviewFeatures = mediaItems.find(
     ({ category }) => category === LocationMediaCategory.Features
   )
   const galleryPreviewFeaturesUrl =
-    !!galleryPreviewFeatures && resolveImageUrl(galleryPreviewFeatures)
+    !!galleryPreviewFeatures && resolveImageUrl(galleryPreviewFeatures, true)
   const { deviceSize } = useDeviceSize()
   const hasPhotos =
     !!galleryPreviewSleepingUrl &&

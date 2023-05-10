@@ -29,7 +29,7 @@ export const LocationPhotoGallerySection = ({
   }
 
   const imageUrls = ipfsHashList
-    ?.map((ipfsHash) => getImageUrlByIpfsHash(ipfsHash))
+    ?.map((ipfsHash) => getImageUrlByIpfsHash(ipfsHash, true))
     .filter(Boolean) as string[]
   const bannerImageUrl = isBanner ? imageUrls?.[0] : null
 

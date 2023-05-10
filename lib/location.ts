@@ -16,7 +16,7 @@ export const locationCardPropsFromFragment = (
   return {
     _id: fragment._id,
     address: formatShortAddress(fragment.address),
-    bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash),
+    bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash, true),
     caretaker: fragment.caretaker,
     locationType: fragment.locationType ?? LocationType.Outpost,
     name: fragment.name,
@@ -35,7 +35,7 @@ export const locationViewPropsFromFragment = (
   return {
     _id: fragment._id,
     address: formatShortAddress(fragment.address),
-    bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash),
+    bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash, true),
     caretaker: fragment.caretaker,
     description: fragment.description,
     locationType: fragment.locationType ?? LocationType.Outpost,

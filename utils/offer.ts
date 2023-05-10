@@ -68,7 +68,8 @@ export const offerListItemPropsFromFragment = (
     startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
     endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
     imageUrl: getImageUrlByIpfsHash(
-      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash
+      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
+      true
     ),
     location: {
       _id: fragment.location._id,
@@ -94,7 +95,8 @@ export const offerViewPropsFromFragment = (
     startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
     endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
     imageUrl: getImageUrlByIpfsHash(
-      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash
+      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
+      true
     ),
     citizenshipRequired: fragment.citizenshipRequired,
     minimunCabinBalance: fragment.minimunCabinBalance,
