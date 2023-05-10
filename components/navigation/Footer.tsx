@@ -26,23 +26,27 @@ export const Footer = ({ children, className }: FooterProps) => (
         <AppLink location="/login" iconSize={0}>
           <FooterItem>Sign In</FooterItem>
         </AppLink>
-        <AppLink location={EXTERNAL_LINKS.PRIVACY_AND_TERMS} iconSize={0}>
+        <AppLink
+          external
+          location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
+          iconSize={0}
+        >
           <FooterItem>Privacy & Terms</FooterItem>
         </AppLink>
       </FooterNavigationList>
 
       <FooterNavigationList>
         <FooterNavigationHeader>Resources</FooterNavigationHeader>
-        <AppLink location={EXTERNAL_LINKS.VISION} iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
           <FooterItem>Vision</FooterItem>
         </AppLink>
-        <AppLink location={EXTERNAL_LINKS.BLOG} iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
           <FooterItem>Blog</FooterItem>
         </AppLink>
-        <AppLink location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
           <FooterItem>Podcast</FooterItem>
         </AppLink>
-        <AppLink location={EXTERNAL_LINKS.WIKI} iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
           <FooterItem>Support Wiki</FooterItem>
         </AppLink>
       </FooterNavigationList>

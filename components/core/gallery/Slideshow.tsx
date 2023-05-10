@@ -120,7 +120,7 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
           onClick={onPreviousSlide}
           disabled={!canNavigatePrevious}
         >
-          <Icon name="chevron-left" size={2.4} />
+          <Icon name="chevron-left" size={1.6} />
         </ControlButton>
 
         <ControlButton
@@ -129,7 +129,7 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
           onClick={onNextSlide}
           disabled={!canNavigateNext}
         >
-          <Icon name="chevron-right" size={2.4} />
+          <Icon name="chevron-right" size={1.6} />
         </ControlButton>
       </SlideshowControls>
     </SlideshowContainer>
@@ -196,5 +196,7 @@ const SlideshowControls = styled.div`
 `
 
 const ControlButton = styled(Button)`
-  padding: 1.2rem;
+  padding: 0rem;
+  width: 4.8rem;
+  height: 4.8rem;
 `

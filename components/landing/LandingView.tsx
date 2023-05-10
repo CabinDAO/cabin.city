@@ -29,6 +29,7 @@ import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import Link from 'next/link'
+import { HeroVideo } from '../core/HeroVideo'
 
 export const LandingView = () => {
   const { user, isUserLoading } = useUser()
@@ -84,11 +85,7 @@ export const LandingView = () => {
       </LandingSection>
 
       <LandingSection>
-        <ImageFlex
-          alt="together"
-          src="/images/landing-together.png"
-          height={50}
-        />
+        <HeroVideo />
       </LandingSection>
 
       <LandingSection>
@@ -484,7 +481,7 @@ export const JoinOptionDetail = styled.div`
   flex-direction: column;
   gap: 2rem;
   align-items: end;
-  justify-content: space-between;
+  justify-content: flex-start;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
