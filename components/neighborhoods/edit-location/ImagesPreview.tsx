@@ -18,7 +18,7 @@ export const ImagesPreview = ({
       {ipfsHashList.map((ipfsHash) => (
         <ImageContainer key={ipfsHash}>
           <Image
-            src={getImageUrlByIpfsHash(ipfsHash) ?? ''}
+            src={getImageUrlByIpfsHash(ipfsHash, true) ?? ''}
             width={152}
             height={152}
             alt="Media Item Preview"

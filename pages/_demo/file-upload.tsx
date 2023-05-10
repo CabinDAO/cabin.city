@@ -22,7 +22,7 @@ const FileUploadDropzonePage = () => {
         iconName="close"
       />
       {Object.keys(uploadedFiles).map((fileName) => {
-        const imageUrl = getImageUrlByIpfsHash(uploadedFiles[fileName])
+        const imageUrl = getImageUrlByIpfsHash(uploadedFiles[fileName], true)
         return imageUrl ? (
           <Image
             key={fileName}

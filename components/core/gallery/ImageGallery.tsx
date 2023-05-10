@@ -49,7 +49,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
         {title && <H2>{title}</H2>}
         <ImageList>
           {filteredImages.slice(0, 4).map((image, index) => {
-            const imageUrl = resolveImageUrl(image)
+            const imageUrl = resolveImageUrl(image, true)
             return imageUrl ? (
               <ImageSizeContainer
                 key={image.name || image.ipfsHash || image.ipfsHash}

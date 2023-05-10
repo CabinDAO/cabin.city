@@ -34,7 +34,7 @@ export const ImageBrowserModal = ({
 
   const preloadImage = (image: TempImage) => {
     const img = new Image()
-    const imageUrl = resolveImageUrl(image)
+    const imageUrl = resolveImageUrl(image, true)
     if (imageUrl) {
       img.src = imageUrl
     }
@@ -61,7 +61,7 @@ export const ImageBrowserModal = ({
     }
   }
 
-  const imageUrl = resolveImageUrl(currentImage)
+  const imageUrl = resolveImageUrl(currentImage, true)
 
   return (
     <ImageBrowserContainer>
