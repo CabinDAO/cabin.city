@@ -1,5 +1,9 @@
 import { IconName } from '@/components/core/Icon'
-import { ProfileRoleType } from '@/generated/graphql'
+import {
+  ProfileRoleConstraint,
+  ProfileRoleLevelType,
+  ProfileRoleType,
+} from '@/generated/graphql'
 
 export interface RoleInfo {
   name: string
@@ -7,6 +11,21 @@ export interface RoleInfo {
   iconName: IconName
   imagePath: string
   backgroundImagePath: string
+}
+
+export interface LevelInfo {
+  name: string
+}
+
+export type RoleConstraintInfo = RoleInfo &
+  LevelInfo & {
+    constraintName: string
+  }
+
+export const LevelInfoByType: Record<ProfileRoleLevelType, LevelInfo> = {
+  [ProfileRoleLevelType.Apprentice]: { name: 'Apprentice' },
+  [ProfileRoleLevelType.Artisan]: { name: 'Artisan' },
+  [ProfileRoleLevelType.Custodian]: { name: 'Custodian' },
 }
 
 export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
@@ -61,6 +80,24 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
 
 export const roleInfoFromType = (roleType: ProfileRoleType): RoleInfo => {
   return RoleInfoByType[roleType]
+}
+
+export const roleConstraintInfoFromType = ({
+  profileRole,
+  level,
+}: ProfileRoleConstraint): RoleConstraintInfo => {
+  const roleInfo = RoleInfoByType[profileRole]
+  const levelInfo = LevelInfoByType[level]
+
+  return {
+    ...roleInfo,
+    ...levelInfo,
+    constraintName: `${roleInfo.name}${
+      level === ProfileRoleLevelType.Apprentice
+        ? ''
+        : ` ${levelInfo.name.toLowerCase()}`
+    }`,
+  }
 }
 
 export const allRoles = Object.values(ProfileRoleType).map((roleType) => ({

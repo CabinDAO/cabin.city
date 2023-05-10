@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { useState } from 'react'
 import { Descendant, createEditor } from 'slate'
 import { Editable, Slate, withReact } from 'slate-react'
@@ -15,7 +16,7 @@ export const SlateRenderer = (props: SlateRendererProps) => {
 
   return (
     <Slate editor={readOnlyEditor} value={value}>
-      <Editable
+      <StyledEditable
         readOnly
         renderElement={renderElement}
         renderLeaf={renderLeaf}
@@ -23,3 +24,9 @@ export const SlateRenderer = (props: SlateRendererProps) => {
     </Slate>
   )
 }
+
+const StyledEditable = styled(Editable)`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`

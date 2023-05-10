@@ -6,3 +6,9 @@ export const defaultSlateValue: Descendant[] = [
     children: [{ text: '' }],
   },
 ]
+
+export const stringToSlateValue = (
+  value: string | null | undefined
+): Descendant[] => {
+  return value ? (JSON.parse(value) as Descendant[]) : []
+}

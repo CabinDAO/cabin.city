@@ -1,13 +1,17 @@
 import Image from 'next/image'
-import { LocationType } from '@/generated/graphql'
+import { LocationType, ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body2, Caption, H2, Subline1 } from './Typography'
 import { IconName } from './Icon'
 import Icon from './Icon'
 import { format } from 'date-fns'
-import { Button } from './Button'
+import Link from 'next/link'
+import { ProfilesCount } from './ProfilesCount'
+import { CardActions } from './CardActions'
+import { VoteButton } from '../neighborhoods/styles'
 
 export interface LocationCardProps {
+  _id: string
   locationType: LocationType
   caretaker: Caretaker
   name: string | null | undefined
@@ -19,6 +23,10 @@ export interface LocationCardProps {
   sleepCapacity: number | null | undefined
   offerCount: number | null | undefined
   publishedAt: Date | null | undefined
+  onVote?: () => void
+  onDelete?: () => void
+  onEdit?: () => void
+  actionsEnabled?: boolean
 }
 
 interface Caretaker {
@@ -26,8 +34,13 @@ interface Caretaker {
   name: string
 }
 
+const emptyFunction = () => {
+  return
+}
+
 interface Voter {
-  avatarUrl: string
+  _id: string
+  avatar?: ProfileAvatar | null | undefined
 }
 
 const BANNER_IMAGE_SIZE = 190
@@ -35,61 +48,89 @@ const EMPTY = '—'
 
 export const LocationCard = (props: LocationCardProps) => {
   const {
+    _id,
     caretaker,
     tagline,
     bannerImageUrl,
     voteCount,
+    voters,
     address,
     sleepCapacity,
     offerCount,
     publishedAt,
+    onVote,
+    onDelete,
+    onEdit,
+    actionsEnabled = false,
   } = props
 
   const name = props.name ?? 'New Listing'
 
   return (
-    <Container>
-      <ImageContainer>
-        {bannerImageUrl ? (
-          <StyledImage src={bannerImageUrl} fill alt={name} />
-        ) : (
-          <EmptyImageContainer>
-            <Icon name="mountain" size={6} color="yellow500" />
-          </EmptyImageContainer>
-        )}
-        <LocationTag {...props} />
-      </ImageContainer>
-      <ContentContainer>
-        <NameH2>{name}</NameH2>
-        <Body2>{tagline}</Body2>
-        <LocationInfoGroupContainer>
-          <LocationInfo iconName="location" label={address ?? EMPTY} />
-          <LocationInfo
-            iconName="sleep"
-            label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
-          />
-          <LocationInfo
-            iconName="citizen"
-            label={offerCount ? `${offerCount} Offers` : EMPTY}
-          />
-          <LocationInfo iconName="caretaker" label={caretaker.name} />
-          <LocationInfo
-            iconName="date"
-            label={
-              publishedAt ? `Joined ${format(publishedAt, 'MMM yyyy')}` : EMPTY
-            }
-          />
-        </LocationInfoGroupContainer>
-      </ContentContainer>
-      <VotesContainer>
-        <Caption emphasized>{`${
-          voteCount?.toLocaleString() ?? 0
-        } Votes`}</Caption>
-        <VoteButton variant="secondary">
-          <Icon name="chevron-up" size={1.6} />
-        </VoteButton>
-      </VotesContainer>
-    </Container>
+    <OuterContainer>
+      <ContainerLink href={`/location/${_id}`}>
+        <ImageContainer>
+          {bannerImageUrl ? (
+            <StyledImage src={bannerImageUrl} fill alt={name} />
+          ) : (
+            <EmptyImageContainer>
+              <Icon name="mountain" size={6} color="yellow500" />
+            </EmptyImageContainer>
+          )}
+          <LocationTag {...props} />
+        </ImageContainer>
+        <ContentContainer>
+          <SummaryContainer>
+            <NameH2>{name}</NameH2>
+            <Body2>{tagline}</Body2>
+          </SummaryContainer>
+          <LocationInfoGroupContainer>
+            <LocationInfo iconName="location" label={address ?? EMPTY} />
+            <LocationInfo
+              iconName="sleep"
+              label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
+            />
+            <LocationInfo
+              iconName="offer"
+              label={offerCount ? `${offerCount} Offers` : EMPTY}
+            />
+            <LocationInfo iconName="caretaker" label={caretaker.name} />
+            <LocationInfo
+              iconName="date"
+              label={
+                publishedAt
+                  ? `Joined ${format(publishedAt, 'MMM yyyy')}`
+                  : EMPTY
+              }
+            />
+          </LocationInfoGroupContainer>
+        </ContentContainer>
+        <VotesContainer>
+          <VotersContainer>
+            <Caption emphasized>{`${
+              voteCount?.toLocaleString() ?? 0
+            } Votes`}</Caption>
+            {<ProfilesCount profiles={voters ?? []} />}
+          </VotersContainer>
+
+          <VoteButton
+            variant="secondary"
+            onClick={(e) => {
+              e.preventDefault()
+              onVote?.()
+            }}
+          >
+            <Icon name="chevron-up" size={1.6} />
+          </VoteButton>
+        </VotesContainer>
+      </ContainerLink>
+      {actionsEnabled && (
+        <CardActions
+          onDelete={onDelete ?? emptyFunction}
+          onEdit={onEdit ?? emptyFunction}
+        />
+      )}
+    </OuterContainer>
   )
 }
 
@@ -137,11 +178,17 @@ const LocationInfo = (props: LocationInfoProps) => {
   )
 }
 
-const Container = styled.div`
+const OuterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: ${({ theme }) => theme.colors.yellow200};
+`
+
+const ContainerLink = styled(Link)`
   display: flex;
   flex-direction: column;
   border: solid 1px ${({ theme }) => theme.colors.green900};
-
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
   }
@@ -155,7 +202,6 @@ const ImageContainer = styled.div`
     max-height: ${BANNER_IMAGE_SIZE}px;
     max-width: ${BANNER_IMAGE_SIZE}px;
   }
-
   img {
     object-fit: cover;
   }
@@ -170,10 +216,16 @@ const ContentContainer = styled.div`
   flex-direction: column;
   flex: 1;
   padding: 1.6rem;
+  gap: 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
   }
+`
+
+const SummaryContainer = styled.div`
+  display: flex;
+  flex-direction: column;
 `
 
 const NameH2 = styled(H2)`
@@ -196,7 +248,6 @@ const VotesContainer = styled.div`
   margin: 0 1.6rem;
   padding: 1.6rem 0;
   border-top: ${({ theme }) => theme.border.light};
-
   ${({ theme }) => theme.bp.md} {
     margin: 2.4rem;
     padding: 0;
@@ -205,8 +256,14 @@ const VotesContainer = styled.div`
   }
 `
 
-const VoteButton = styled(Button)`
-  padding: 1.5rem;
+const VotersContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  ${Caption} {
+    opacity: 0.75;
+  }
 `
 
 const LocationInfoGroupContainer = styled.div`
@@ -223,4 +280,8 @@ const LocationInfoContainer = styled.div`
   align-items: center;
   gap: 0.4rem;
   white-space: nowrap;
+
+  svg {
+    opacity: 0.75;
+  }
 `

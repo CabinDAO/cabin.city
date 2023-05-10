@@ -13,7 +13,8 @@ import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
 import { useUser } from '@/components/auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
-import { DeletePostModal } from './DeletePostModal'
+import { DeleteConfirmationModal } from '../DeleteConfirmationModal'
+import { useTextActivity } from '@/components/dashboard/useTextActivity'
 
 type PostVariant = 'full' | 'compact'
 export interface PostProps {
@@ -36,12 +37,18 @@ export const Post = (props: PostProps) => {
   const { deviceSize } = useDeviceSize()
   const { user } = useUser()
   const { showModal } = useModal()
+  const { handleDeleteTextActivity } = useTextActivity()
 
   const displayMoreMenu =
     profile._id === user?._id && type === ActivityType.Text
 
   const handleDeletePost = () => {
-    showModal(() => <DeletePostModal activityItem={activityItem} />)
+    showModal(() => (
+      <DeleteConfirmationModal
+        entityName="post"
+        onDelete={() => handleDeleteTextActivity(activityItem.activity._id)}
+      />
+    ))
   }
 
   return (

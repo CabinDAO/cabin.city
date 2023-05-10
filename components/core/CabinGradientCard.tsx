@@ -4,13 +4,19 @@ type Variant = 'radial' | 'right'
 interface CabinGradientCardProps {
   children: React.ReactNode
   variant?: Variant
+  className?: string
 }
 
 export const CabinGradientCard = ({
   children,
+  className,
   variant = 'radial',
 }: CabinGradientCardProps) => {
-  return <BaseContainer variant={variant}>{children}</BaseContainer>
+  return (
+    <BaseContainer className={className} variant={variant}>
+      {children}
+    </BaseContainer>
+  )
 }
 
 const BaseContainer = styled.div<{ variant: Variant }>`

@@ -10,6 +10,9 @@ export const MobileMenuProfileItem = () => {
   const { user: profile } = useUser()
   const { ens } = useEns(profile?.account.address)
   const displayCaption = ens ?? shortenedAddress(profile?.account.address)
+
+  if (!profile) return null
+
   return (
     <StyledLink href={`/profile/${profile?._id}`}>
       <Avatar size={2.4} src={profile?.avatar?.url} />

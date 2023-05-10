@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from 'react'
+import { createContext, ReactNode, useCallback, useState } from 'react'
 import Modal from '../core/modals/Modal'
 
 export const ModalContext = createContext<ModalState | null>(null)
@@ -28,18 +28,18 @@ export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [internalState, setInternalState] =
     useState<InternalState>(initialState)
 
-  function showModal(render: () => ReactNode) {
+  const showModal = useCallback((render: () => ReactNode) => {
     setInternalState({ render, hideOnClickAway: true })
-  }
+  }, [])
 
   // Shows a modal but disables close on click away
-  function showLoadingModal(render: () => ReactNode) {
+  const showLoadingModal = useCallback((render: () => ReactNode) => {
     setInternalState({ render, hideOnClickAway: false })
-  }
+  }, [])
 
-  function hideModal() {
+  const hideModal = useCallback(() => {
     setInternalState({ render: null, hideOnClickAway: true })
-  }
+  }, [])
 
   const state = {
     showModal,

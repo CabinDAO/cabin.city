@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components'
+import { HTMLAttributes } from 'react'
+import { LayoutVariant } from '@/components/layouts/SingleColumnLayout'
 
 export type NotchPosition =
   | 'top-left'
@@ -7,18 +9,22 @@ export type NotchPosition =
   | 'bottom-right'
   | 'all'
 
-export const MainContent = styled.main`
+interface MainContentProps extends HTMLAttributes<HTMLElement> {
+  variant?: LayoutVariant
+}
+
+export const MainContent = styled.main<MainContentProps>`
   display: flex;
   flex-direction: column;
   align-self: center;
   justify-content: center;
   align-items: center;
-  gap: 2.4rem;
+  gap: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
   height: 100%;
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    width: 84rem;
+    width: ${({ variant }) => (variant === 'full' ? '100%' : '84rem')};
     align-self: flex-start;
   }
 
@@ -29,14 +35,23 @@ export const MainContent = styled.main`
 
 export const FixedWidthMainContent = styled(MainContent)`
   width: 100%;
+
   ${({ theme }) => theme.bp.lg} {
     width: 84rem;
   }
 `
 
-export const NavbarContainer = styled.div`
+export const NavbarContainer = styled.div<MainContentProps>`
   ${({ theme }) => theme.bp.md} {
     display: flex;
+
+    ${({ variant }) =>
+      variant === 'full' &&
+      css`
+        position: fixed;
+        top: 4rem;
+        left: 2.4rem;
+      `}
   }
 
   ${({ theme }) => theme.bp.lg} {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { LocationStepWrapper } from './LocationStepWrapper'
 import { Body2 } from '@/components/core/Typography'
-import { StepProps } from './configuration'
+import { StepProps } from './location-wizard-configuration'
 import styled from 'styled-components'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
 import { PartialUpdateLocationInput } from '@/generated/graphql'
@@ -13,6 +13,7 @@ export const DescriptionStep = ({
   onBack,
   onNext,
   location,
+  steps,
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location._id)
   const [locationInput, setLocationInput] =
@@ -34,7 +35,12 @@ export const DescriptionStep = ({
   }
 
   return (
-    <LocationStepWrapper name={name} onNext={handleNext} onBack={onBack}>
+    <LocationStepWrapper
+      name={name}
+      onNext={handleNext}
+      onBack={onBack}
+      steps={steps}
+    >
       <StyledBody2>
         Get specific, but be clear and brief. Describe what makes it attractive
         to a resident, a little about the location, and any special amenities.

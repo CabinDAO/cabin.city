@@ -1,4 +1,4 @@
-import { MONTHLY_PRICE_IN_USD, UnlockNFT } from '@/utils/citizenship'
+import { UnlockNFT, YEARLY_PRICE_IN_ETH } from '@/utils/citizenship'
 import { formatDate } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { useUser } from '../auth/useUser'
@@ -36,7 +36,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
     Expires: {
       value: formatDate(nft.expirationDate, 'MMM dd, yyyy'),
     },
-    'Renewal Price': { value: `$${MONTHLY_PRICE_IN_USD * 12}/year` },
+    'Renewal Price': { value: `${YEARLY_PRICE_IN_ETH} ETH / year` },
   }
 
   return (

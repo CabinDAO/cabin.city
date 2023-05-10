@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 import { AppLink } from '../core/AppLink'
 import { H4, Subline2 } from '../core/Typography'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const LaunchBanner = () => {
   return (
     <Banner>
       <H4>Citizenship minting opens on May 23rd</H4>
-      <AppLink external location="https://twitter.com/creatorcabins">
+      <AppLink external location={EXTERNAL_LINKS.CABIN_TWITTER}>
         <Subline2>Follow us on Twitter for updates</Subline2>
       </AppLink>
     </Banner>

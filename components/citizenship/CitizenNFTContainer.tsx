@@ -1,6 +1,6 @@
 import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
-import { Caption, H3, Overline } from '../core/Typography'
+import { Body2, H3, Overline } from '../core/Typography'
 import { HorizontalDivider } from '../core/Divider'
 import { AutofitImage } from '../core/AutofitImage'
 import { CitizenshipNFTPreviewData } from './CitizenshipNFTPreviewData'
@@ -49,13 +49,17 @@ export const CitizenNFTContainer = () => {
       <Section>
         <DescriptionContainer>
           <H3>Description</H3>
-          <Caption>
-            Etiam interdum odio vel mi facilisis, ut luctus orci dictum. Aenean
-            consequat libero eros. Vivamus sollicitudin vestibulum nisi, nec
-            elementum augue pulvinar sit amet. Fusce dictum, urna ut
-            pellentesque aliquet, nisi lacus aliquet lorem, eget pulvinar magna
-            justo eu erat. Suspendisse vel scelerisque ante.
-          </Caption>
+          <Body2>
+            Citizenship is your passport to Cabin’s network of neighborhoods. A
+            current Citizen must nominate you for citizenship, and can only
+            vouch for up to five people per year. Citizens are granted
+            chip-embedded passports, a numbered Citizen NFT, and ₡ABIN to
+            participate in governance. They have exclusive access to
+            residencies, coliving experiences, and build weeks at neighborhoods
+            and outposts in the City Directory. Citizens also receive exclusive
+            access to our annual gathering, citizens-only discord channels,
+            merch, and partnership perks.
+          </Body2>
           <AppLink
             external
             location={EXTERNAL_LINKS.CITIZENSHIP}

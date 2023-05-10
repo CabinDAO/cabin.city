@@ -64,7 +64,7 @@ async function generateLocations() {
               tagline: q.Select('tagline', q.Var('location')),
               name: q.Select('name', q.Var('location')),
               sleepCapacity: q.Select('sleepCapacity', q.Var('location')),
-              internetSpeed: q.Select('internetSpeed', q.Var('location')),
+              internetSpeedMbps: q.Select('internetSpeed', q.Var('location')),
               description: q.Select('description', q.Var('location')),
               locationType: q.Select('locationType', q.Var('location')),
               caretaker: q.Var('careTakerRef'),

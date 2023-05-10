@@ -28,4 +28,5 @@ const Container = styled.div`
   gap: 4rem;
   padding: 0 2rem;
   border: 1px solid ${({ theme }) => theme.colors.green900};
+  background-color: ${({ theme }) => theme.colors.yellow200};
 `

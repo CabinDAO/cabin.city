@@ -9,16 +9,25 @@ interface EmphasizableTypographyProps extends TypographyProps {
   emphasized?: boolean
 }
 
-const fonts = {
+export const fonts = {
   inter: 'Inter',
   ibmPlexMono: 'IBM Plex Mono',
+  poppins: 'Poppins',
 }
 
-const typographySharedStyles = css<TypographyProps>`
+export const typographySharedStyles = css<TypographyProps>`
   font-style: normal;
   margin: 0;
   color: ${(props) =>
     props.$color ? props.theme.colors[props.$color] : theme.colors.green900};
+`
+
+export const hhStyles = css`
+  ${typographySharedStyles}
+  font-family: ${fonts.poppins};
+  font-weight: 600;
+  line-height: 1.5;
+  font-size: 3.2rem;
 `
 
 export const h1Styles = css<EmphasizableTypographyProps>`
@@ -142,6 +151,10 @@ export const buttonStyles = css`
   font-size: 1.5rem;
 `
 
+export const HHero = styled.h1`
+  ${hhStyles}
+`
+
 export const H1 = styled.h1`
   ${h1Styles}
 `
@@ -200,4 +213,21 @@ export const WordBreak = styled.div`
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+`
+
+export const BlockQuote = styled(Body1)`
+  padding-left: 2.4rem;
+  border-left: 2px solid rgba(29, 42, 42, 0.12);
+`
+
+export const OrderedList = styled.ol`
+  list-style-position: inside;
+`
+
+export const UnorderedList = styled.ul`
+  list-style-position: inside;
+`
+
+export const ListItem = styled.li`
+  ${body1Styles}
 `

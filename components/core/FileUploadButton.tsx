@@ -8,17 +8,23 @@ import { SUPPORTED_FILE_TYPES } from '@/lib/file-storage/configuration'
 interface FileUploadButtonProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
+  removeEnabled?: boolean
 }
 
 export const FileUploadButton = ({
   onFilesUploaded,
   preprocessFiles,
+  removeEnabled = false,
 }: FileUploadButtonProps) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { handleChange } = useFilesUpload({ onFilesUploaded, preprocessFiles })
 
   const handleButtonClick = () => {
-    inputRef?.current?.click()
+    if (removeEnabled) {
+      onFilesUploaded({})
+    } else {
+      inputRef?.current?.click()
+    }
   }
 
   return (
@@ -30,7 +36,7 @@ export const FileUploadButton = ({
         accept={`${SUPPORTED_FILE_TYPES.join(',')}`}
       />
       <Button variant="tertiary" onClick={handleButtonClick}>
-        Upload image
+        {removeEnabled ? 'Remove image' : 'Upload image'}
       </Button>
     </FileUploadContainer>
   )

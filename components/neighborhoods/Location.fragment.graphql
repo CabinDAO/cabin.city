@@ -2,9 +2,21 @@ fragment Caretaker on Profile {
   _id
   email
   name
+  avatar {
+    url
+  }
+  citizenshipStatus
+  cabinTokenBalanceInt
   account {
     address
   }
+  createdAt
+  roles {
+    role
+    level
+  }
+  bio
+  badgeCount
 }
 
 fragment Location on Location {
@@ -19,15 +31,18 @@ fragment Location on Location {
   caretakerEmail
   publishedAt
   mediaItems {
-    data {
-      imageIpfsHash
-    }
+    category
+    ipfsHash
+    category
   }
-  votes {
+  votes(_size: 3) {
     data {
       count
       profile {
         _id
+        avatar {
+          url
+        }
       }
     }
   }
@@ -46,7 +61,14 @@ fragment Location on Location {
     countryShort
     postalCode
   }
+  offers {
+    data {
+      ...OfferItem
+    }
+  }
   bannerImageIpfsHash
   description
   addressInfo
+  voteCount
+  offerCount
 }

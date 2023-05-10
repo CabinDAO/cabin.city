@@ -1,11 +1,13 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { allOfferInfos, offerListItemPropsFromFragment } from '@/utils/offer'
 import {
   OfferItemFragment,
   OfferType,
+  ProfileRoleLevelType,
+  ProfileRoleType,
   useGetOffersCountQuery,
   useGetOffersQuery,
 } from '@/generated/graphql'
@@ -18,17 +20,43 @@ import Icon from '../core/Icon'
 import { List } from '../core/List'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { OfferListItem } from '../core/OfferListItem'
+import { useUser } from '../auth/useUser'
+import { NestedFilter, SelectedOptionValues } from '../core/NestedFilter'
+import { allLevels } from '@/utils/levels'
+import { allRoles } from '@/utils/roles'
+import { ListEmptyState } from '../core/ListEmptyState'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
+import { useRouter } from 'next/router'
 
 export const OfferDirectoryView = () => {
+  const router = useRouter()
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
   const [open, setOpen] = useState(false)
   const [offerTypes, setOfferTypes] = useState<OfferType[]>([])
+  const [roleLevels, setRoleLevels] = useState<
+    SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>
+  >({} as SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>)
   const { deviceSize } = useDeviceSize()
+  const { user, isUserLoading } = useUser()
   const input = useMemo(() => {
-    // Zero selected means all are selected
+    const profileRoleConstraints = Object.keys(roleLevels)
+      .map((roleTypeStr) => {
+        const roleType = roleTypeStr as ProfileRoleType
+        const levels = roleLevels[roleType]
+        return levels.map((levelType) => ({
+          profileRole: roleType,
+          level: levelType,
+        }))
+      })
+      .flat()
+
     return {
-      offerTypes: offerTypes.length > 0 ? offerTypes : Object.values(OfferType),
+      offerTypes,
+      profileRoleConstraints,
     }
-  }, [offerTypes])
+  }, [offerTypes, roleLevels])
   const { data, fetchMore } = useGetOffersQuery({
     variables: {
       input,
@@ -57,12 +85,44 @@ export const OfferDirectoryView = () => {
     value: offerInfo.offerType,
   }))
 
+  const roleLevelOptions = allRoles.map((role) => {
+    return {
+      label: role.name,
+      value: role.roleType,
+      options: allLevels.map((level) => {
+        return {
+          label: level.name,
+          value: level.levelType,
+        }
+      }),
+    }
+  })
+
   const handleSelectedOfferTypes = (selectedOfferTypes: OfferType[]) => {
     setOfferTypes(selectedOfferTypes)
   }
 
+  const handleSelectedRoleLevels = (
+    selections: SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>
+  ) => {
+    setRoleLevels(selections)
+  }
+
   const handleClearFilters = () => {
     setOfferTypes([])
+    setRoleLevels(
+      {} as SelectedOptionValues<ProfileRoleType, ProfileRoleLevelType>
+    )
+  }
+
+  useEffect(() => {
+    if (!isUserLoading && !hasCityFeature) {
+      router.push('/dashboard')
+    }
+  }, [hasCityFeature, router, isUserLoading])
+
+  if (!hasCityFeature) {
+    return null
   }
 
   return (
@@ -95,6 +155,12 @@ export const OfferDirectoryView = () => {
               selections={offerTypes}
               onApply={handleSelectedOfferTypes}
             />
+            <NestedFilter
+              label="Role"
+              options={roleLevelOptions}
+              selections={roleLevels}
+              onApply={handleSelectedRoleLevels}
+            />
             <Button variant="link" onClick={handleClearFilters}>
               <NoWrap>Clear all</NoWrap>
             </Button>
@@ -105,6 +171,7 @@ export const OfferDirectoryView = () => {
         <InfiniteScroll
           hasMore={!!hasMore}
           dataLength={dataLength}
+          style={{ overflowX: 'hidden', overflowY: 'hidden' }}
           next={() => {
             return fetchMore({
               variables: {
@@ -115,10 +182,10 @@ export const OfferDirectoryView = () => {
           loader="..."
         >
           {offers.length === 0 && data && offersCountData ? (
-            <div>TODO: Empty state</div>
+            <ListEmptyState iconName="offer" />
           ) : (
             offers.map((offer) => {
-              const offerProps = offerListItemPropsFromFragment(offer)
+              const offerProps = offerListItemPropsFromFragment(offer, user)
               return <OfferListItem key={offer._id} {...offerProps} />
             })
           )}

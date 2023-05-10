@@ -2,6 +2,7 @@ fragment Offer on Offer {
   _id
   offerType
   title
+  description
   startDate
   endDate
   price {
@@ -12,6 +13,21 @@ fragment Offer on Offer {
     profileRole
     level
   }
+  citizenshipRequired
+  minimunCabinBalance
   applicationUrl
   imageIpfsHash
+  locationType
+  location {
+    _id
+    name
+    bannerImageIpfsHash
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+    }
+    caretaker {
+      _id
+    }
+  }
 }

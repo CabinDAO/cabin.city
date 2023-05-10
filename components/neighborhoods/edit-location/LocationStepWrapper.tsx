@@ -1,29 +1,34 @@
 import styled from 'styled-components'
 import { ContentCard } from '../../core/ContentCard'
 import { H3 } from '../../core/Typography'
-import { steps } from './configuration'
+import { StepConfig } from './location-wizard-configuration'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ActionBar } from '@/components/core/ActionBar'
+import { useRouter } from 'next/router'
 
 interface LocationStepWrapperProps {
   onNext?: VoidFunction
   onBack?: VoidFunction
   children: React.ReactNode
   name: string
-  stepTitle?: string
+  steps: StepConfig[]
   className?: string
   displayStepIndicator?: boolean
 }
 
 export const LocationStepWrapper = ({
+  steps,
   onNext = () => console.log('next'),
   onBack = () => console.log('back'),
   children,
   name,
-  stepTitle = 'New listing',
   displayStepIndicator = true,
 }: LocationStepWrapperProps) => {
+  const router = useRouter()
+  const { created } = router.query
+  const stepTitle = created ? 'New listing' : 'Edit listing'
+
   const stepIndicatorText = () => {
     const names = steps.map((step) => step.name)
     const currentStepIndex = names.indexOf(name)

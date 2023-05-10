@@ -6,9 +6,16 @@ fragment OfferItem on Offer {
   startDate
   endDate
   imageIpfsHash
+  profileRoleConstraints {
+    profileRole
+    level
+  }
+  minimunCabinBalance
+  citizenshipRequired
   location {
     _id
     name
+    bannerImageIpfsHash
     address {
       locality
       admininstrativeAreaLevel1Short

@@ -1,12 +1,17 @@
 import { useGetLocationByIdQuery } from '@/generated/graphql'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useUser } from '../auth/useUser'
-import { StepConfig, steps } from './edit-location/configuration'
+import {
+  StepConfig,
+  editLocationSteps,
+} from './edit-location/location-wizard-configuration'
 
 export const EditLocationView = ({}) => {
   const router = useRouter()
-  const { id: listingId } = router.query
+  const { id: listingId, step } = router.query
+  const stepNumber = step ? parseInt(step.toString()) : 0
+
   const { data, loading } = useGetLocationByIdQuery({
     variables: {
       id: listingId as string,
@@ -16,18 +21,29 @@ export const EditLocationView = ({}) => {
   const location = data?.findLocationByID
   const { user } = useUser({ redirectTo: '/login' })
 
-  const [currentStep, setCurrentStep] = useState<StepConfig>(steps[0])
+  const [currentStep, setCurrentStep] = useState<StepConfig>(
+    editLocationSteps[0]
+  )
 
   const handleNext = () => {
-    resolveTransitionStep(steps[steps.indexOf(currentStep) + 1])
+    resolveTransitionStep(
+      editLocationSteps[editLocationSteps.indexOf(currentStep) + 1]
+    )
   }
 
   const handleBack = () => {
-    resolveTransitionStep(steps[steps.indexOf(currentStep) - 1])
+    const newIndex = editLocationSteps.indexOf(currentStep) - 1
+
+    if (newIndex >= 0) {
+      resolveTransitionStep(editLocationSteps[newIndex])
+    } else {
+      router.push('/my-locations')
+    }
   }
 
   const resolveTransitionStep = (targetStep: StepConfig) => {
-    const isLastStep = steps.indexOf(currentStep) === steps.length - 1
+    const isLastStep =
+      editLocationSteps.indexOf(currentStep) === editLocationSteps.length - 1
 
     if (targetStep) {
       setCurrentStep(targetStep)
@@ -35,6 +51,16 @@ export const EditLocationView = ({}) => {
       router.push('/location/[id]', `/location/${location?._id}`)
     }
   }
+
+  useEffect(() => {
+    if (stepNumber) {
+      const targetStep = editLocationSteps[stepNumber]
+
+      if (targetStep) {
+        setCurrentStep(targetStep)
+      }
+    }
+  }, [stepNumber])
 
   const isMyListing = user?._id === location?.caretaker._id
 
@@ -46,10 +72,12 @@ export const EditLocationView = ({}) => {
 
   return (
     <CurrentStep
+      key={stepNumber}
       location={location}
       name={currentStep.name}
       onNext={handleNext}
       onBack={handleBack}
+      steps={editLocationSteps}
     />
   )
 }

@@ -1,13 +1,25 @@
 import Image from 'next/image'
-import { LocationType, OfferType } from '@/generated/graphql'
+import {
+  CitizenshipStatus,
+  LocationType,
+  OfferType,
+  ProfileRoleConstraint,
+} from '@/generated/graphql'
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
 import Icon from './Icon'
 import { format } from 'date-fns'
 import { offerInfoFromType } from '@/utils/offer'
 import { ListItem } from './ListItem'
+import { roleInfoFromType } from '@/utils/roles'
+import { ProfileIcons } from '@/components/core/ProfileIcons'
+import { H6 } from '@/components/core/Typography'
+import { Button } from './Button'
+import { useRouter } from 'next/router'
 
 export interface OfferListItemProps {
+  className?: string
+  variant?: OfferListItemVariant
   _id: string
   offerType: OfferType | null | undefined
   locationType: LocationType
@@ -15,44 +27,133 @@ export interface OfferListItemProps {
   startDate: Date | null | undefined
   endDate: Date | null | undefined
   imageUrl: string | null | undefined
+  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
+  citizenshipRequired?: boolean | null | undefined
+  minimunCabinBalance?: number | null | undefined
   location: {
     _id: string
     name: string | null | undefined
     shortAddress: string | null | undefined
+    caretaker?:
+      | {
+          _id: string
+        }
+      | null
+      | undefined
   }
+  isLocked?: boolean
+  actionsEnabled?: boolean
 }
 
-export const OfferListItem = (props: OfferListItemProps) => {
-  const { _id, offerType, title, startDate, endDate, imageUrl, location } =
-    props
+type OfferListItemVariant = 'default' | 'no-icon'
 
+export const OfferListItem = (props: OfferListItemProps) => {
+  const router = useRouter()
+  const {
+    _id,
+    offerType,
+    title,
+    startDate,
+    endDate,
+    imageUrl,
+    location,
+    className,
+    profileRoleConstraints,
+    citizenshipRequired,
+    minimunCabinBalance,
+    variant,
+    isLocked,
+    actionsEnabled,
+  } = props
+  console.log(
+    '🚀 ~ file: OfferListItem.tsx:62 ~ OfferListItem ~ imageUrl:',
+    imageUrl
+  )
+  const isDisplayingEligibility =
+    !!profileRoleConstraints?.length ||
+    citizenshipRequired ||
+    minimunCabinBalance
+  const roleInfos = Array.from(
+    new Set(
+      profileRoleConstraints?.map((c) => roleInfoFromType(c.profileRole)) ?? []
+    )
+  )
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const formattedStartDate = startDate ? format(startDate, 'MMM') : null
   const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
+  const formattedDateRange =
+    formattedStartDate && formattedEndDate
+      ? `${formattedStartDate} - ${formattedEndDate} · `
+      : null
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
+  const isDisplayingIcon = variant !== 'no-icon'
+  const inactive = endDate && endDate < new Date()
+
+  const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    router.push(`/offer/${_id}/edit`)
+  }
 
   return (
     <ListItem href={`/offer/${_id}`}>
       <InnerContainer>
-        <ImageContainer>
-          {imageUrl ? (
-            <StyledImage src={imageUrl} fill alt={title ?? 'Offer'} />
-          ) : (
-            <EmptyImageContainer>
-              <Icon name="offer" size={3.2} color="yellow500" />
-            </EmptyImageContainer>
+        <OfferInfoContainer active={!inactive} className={className}>
+          {isDisplayingIcon && (
+            <ImageContainer>
+              {imageUrl ? (
+                <StyledImage src={imageUrl} fill alt={title ?? 'Offer'} />
+              ) : (
+                <EmptyImageContainer>
+                  <Icon name="offer" size={3.2} color="yellow500" />
+                </EmptyImageContainer>
+              )}
+              <LocationTag {...props} />
+            </ImageContainer>
           )}
-          <LocationTag {...props} />
-        </ImageContainer>
-        <ContentContainer>
-          <Caption
-            emphasized
-          >{`${formattedStartDate} - ${formattedEndDate} · ${offerInfo?.name}`}</Caption>
-          <H4>{title}</H4>
-          <Caption>{formattedLocation}</Caption>
-        </ContentContainer>
+
+          <ContentContainer>
+            <OfferDetails>
+              <Caption emphasized>{`${formattedDateRange ?? ''}${
+                offerInfo?.name
+              }`}</Caption>
+              <TitleContainer>
+                <H4>{title}</H4>
+                {isLocked && <Icon name="lock" size={1.2} />}
+              </TitleContainer>
+              <Caption>{formattedLocation}</Caption>
+            </OfferDetails>
+
+            {isDisplayingEligibility && (
+              <EligibilityContainer>
+                <H6>Eligibility |&nbsp;</H6>
+                <ProfileIcons
+                  citizenshipStatus={
+                    citizenshipRequired ? CitizenshipStatus.Verified : null
+                  }
+                  roleInfos={roleInfos}
+                  size={1.6}
+                />
+              </EligibilityContainer>
+            )}
+          </ContentContainer>
+        </OfferInfoContainer>
+        <RightContent>
+          {inactive && (
+            <InactiveLabel>
+              <Caption $color="red700" emphasized>
+                Inactive
+              </Caption>
+            </InactiveLabel>
+          )}
+          {actionsEnabled && (
+            <EditButton variant="secondary" onClick={handleOnEdit}>
+              <Icon name="pencil" size={1.6} />
+            </EditButton>
+          )}
+        </RightContent>
       </InnerContainer>
     </ListItem>
   )
@@ -74,9 +175,55 @@ const LocationTag = (props: OfferListItemProps) => {
   )
 }
 
+const EligibilityContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  padding-bottom: 0.6rem;
+`
+
+const ContentContainer = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 1.6rem;
+`
+
 const InnerContainer = styled.div`
   display: flex;
+  flex-flow: row;
+  width: 100%;
+  justify-content: space-between;
+  align-items: flex-start;
+  // opacity: 0.5;
+`
+
+const InactiveLabel = styled.div`
+  padding: 0.8rem;
+  color: ${({ theme }) => theme.colors.red700};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0.5px solid ${({ theme }) => theme.colors.red600};
+  border-radius: 2px;
+`
+
+const OfferInfoContainer = styled.div<{ active: boolean }>`
+  display: flex;
   gap: 1.6rem;
+  opacity: ${({ active }) => (active ? 1 : 0.5)};
+`
+
+const EditButton = styled(Button)`
+  height: 4.8rem;
+  width: 4.8rem;
+  padding: 0;
+`
+
+const RightContent = styled.div`
+  display: flex;
+  flex-flow: row;
+  gap: 1.6rem;
+  align-items: flex-start;
+  justify-content: center;
 `
 
 const EmptyImageContainer = styled.div`
@@ -106,7 +253,7 @@ const StyledImage = styled(Image)`
   border: solid 1px black;
 `
 
-const ContentContainer = styled.div`
+const OfferDetails = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
@@ -120,4 +267,10 @@ const TagContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.green900};
   border-radius: 50%;
   border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
 `

@@ -2,21 +2,32 @@ import styled from 'styled-components'
 import { HorizontalDivider } from '../Divider'
 import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
+import { useFeatures } from '@/components/hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 interface MobileNavBarProps {
+  profileId?: string
   open: boolean
 }
-export const MobileNavBar = ({ open }: MobileNavBarProps) => {
+export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
+  const { hasFeature } = useFeatures()
+  const hasCityFeature = hasFeature(Feature.City)
+
   return (
     <MobileNavContainer open={open}>
       <InnerContainer>
-        <MobileMenuItem menuItem={'home'} />
-        <MobileMenuItem menuItem={'members'} />
-        <MobileMenuItem menuItem={'neighborhoods'} />
+        <MobileMenuItem menuItem={'home'} profileId={profileId} />
+        <MobileMenuItem menuItem={'members'} profileId={profileId} />
+        <MobileMenuItem menuItem={'neighborhoods'} profileId={profileId} />
+        {hasCityFeature && (
+          <MobileMenuItem menuItem={'offers'} profileId={profileId} />
+        )}
         <StyledDivider />
         <MobileMenuProfileItem />
-        <MobileMenuItem menuItem={'citizenship'} />
-        <MobileMenuItem menuItem={'signOut'} />
+        <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
+        <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
+        <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
+        <MobileMenuItem menuItem={'signIn'} profileId={profileId} />
       </InnerContainer>
     </MobileNavContainer>
   )

@@ -22,7 +22,6 @@ const Container = styled.div<{
 export const MenuSection = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   height: 100%;
   width: 100%;
 `

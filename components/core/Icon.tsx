@@ -19,18 +19,29 @@ import copySvg from './svg/copy.svg'
 import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
+import draftProposalSvg from './svg/draft-proposal.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
+import formatBold from './svg/format-bold.svg'
+import formatHeader1 from './svg/format-header1.svg'
+import formatHeader2 from './svg/format-header2.svg'
+import formatItalic from './svg/format-italic.svg'
+import formatListBulleted from './svg/format-list-bulleted.svg'
+import formatListNumbered from './svg/format-list-numbered.svg'
+import formatQuote from './svg/format-quote.svg'
+import formatUnderline from './svg/format-underline.svg'
 import gathererSvg from './svg/gatherer.svg'
 import handWaveSvg from './svg/hand-wave.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
+import holdingSvg from './svg/holding.svg'
 import infoSvg from './svg/info.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
+import minusSvg from './svg/minus.svg'
 import mountainSvg from './svg/mountain.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
@@ -38,9 +49,12 @@ import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
 import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
+import pencilSvg from './svg/pencil.svg'
 import personSvg from './svg/person.svg'
+import plusSvg from './svg/plus.svg'
 import profileSvg from './svg/profile.svg'
 import profile2Svg from './svg/profile2.svg'
+import publishSvg from './svg/publish.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
 import searchSvg from './svg/search.svg'
@@ -54,6 +68,7 @@ import trashSvg from './svg/trash.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
+import rightArrowSvg from './svg/right-arrow.svg'
 import walletSvg from './svg/wallet.svg'
 
 export const IconSvgs = {
@@ -73,18 +88,29 @@ export const IconSvgs = {
   creator: creatorSvg,
   dashboard: dashboardSvg,
   date: dateSvg,
+  'draft-proposal': draftProposalSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
+  'format-bold': formatBold,
+  'format-header1': formatHeader1,
+  'format-header2': formatHeader2,
+  'format-italic': formatItalic,
+  'format-list-bulleted': formatListBulleted,
+  'format-list-numbered': formatListNumbered,
+  'format-quote': formatQuote,
+  'format-underline': formatUnderline,
   gatherer: gathererSvg,
   'hand-wave': handWaveSvg,
   'heart-outline': heartOutlineSvg,
   'heart-solid': heartSolidSvg,
+  holding: holdingSvg,
   info: infoSvg,
   location: locationSvg,
   lock: lockSvg,
   'logo-cabin': logoCabinSvg,
   members: membersSvg,
   menu: menuSvg,
+  minus: minusSvg,
   mountain: mountainSvg,
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
@@ -92,9 +118,12 @@ export const IconSvgs = {
   neighborhoods: neighborhoodsSvg,
   offer: offerSvg,
   outpost: outpostSvg,
+  pencil: pencilSvg,
   person: personSvg,
+  plus: plusSvg,
   profile: profileSvg,
   profile2: profile2Svg,
+  publish: publishSvg,
   race: raceSvg,
   resident: residentSvg,
   search: searchSvg,
@@ -108,6 +137,7 @@ export const IconSvgs = {
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,
+  'right-arrow': rightArrowSvg,
   wallet: walletSvg,
 }
 

@@ -16,12 +16,14 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   required?: boolean
   filled?: boolean
   focused?: boolean
+  outlined?: boolean
   error?: boolean
   message?: string
   endAdornment?: ReactNode
   helperText?: string
   bottomHelpText?: string
   disabled?: boolean
+  className?: string
   children: ReactNode
   onClick?: () => void
   helperTextPosition?: HelperTextPosition
@@ -31,6 +33,7 @@ export const InputBase = ({
   required = false,
   filled,
   focused,
+  outlined = true,
   error,
   disabled,
   endAdornment,
@@ -39,9 +42,15 @@ export const InputBase = ({
   helperText,
   bottomHelpText,
   helperTextPosition = 'top',
+  className,
 }: InputBaseProps) => {
   return (
-    <Container disabled={disabled} filled={filled} onClick={onClick}>
+    <Container
+      disabled={disabled}
+      filled={filled}
+      onClick={onClick}
+      className={className}
+    >
       {label && (
         <InputLabel
           required={required}
@@ -54,6 +63,7 @@ export const InputBase = ({
         focused={focused}
         error={error}
         disabled={disabled}
+        outlined={outlined}
       >
         <InputContent>
           <ChildrenContainer>{children}</ChildrenContainer>
@@ -133,6 +143,7 @@ interface InputOutlineProps {
   focused?: boolean
   error?: boolean
   disabled?: boolean
+  outlined?: boolean
 }
 
 const InputOutline = styled.div<InputOutlineProps>`
@@ -145,7 +156,10 @@ const InputOutline = styled.div<InputOutlineProps>`
   background: ${(props) => props.theme.colors.white};
   color: ${(props) => props.theme.colors.yellow900};
   --icon-color: ${(props) => props.theme.colors.yellow900};
-  box-shadow: inset 0 0 0 1px ${(props) => props.theme.colors.yellow900};
+
+  ${(props) =>
+    props.outlined &&
+    `box-shadow: inset 0 0 0 1px ${props.theme.colors.yellow900};`}
 
   ${(props) =>
     props.filled &&

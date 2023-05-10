@@ -14,10 +14,16 @@ fragment Me on Profile {
   location
   createdAt
   citizenshipStatus
+  cabinTokenBalanceInt
   roles {
     role
     level
     hatId
+  }
+  locations {
+    data {
+      ...LocationItem
+    }
   }
   avatar {
     url
@@ -55,6 +61,7 @@ fragment Me on Profile {
     tokenId
     mintedAt
   }
+  features
 }
 
 fragment TrackingEvent on TrackingEvent {

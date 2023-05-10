@@ -1,0 +1,1 @@
+export const MAX_OFFER_TITLE_LENGTH = 48

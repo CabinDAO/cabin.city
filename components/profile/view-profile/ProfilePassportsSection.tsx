@@ -70,6 +70,7 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
       <Container>
         <H3>Passport stamps</H3>
         <EmptyState
+          backgroundVariant="gradient"
           icon="stamp"
           title="Collect Passport Stamps"
           description="Build your Cabin creds"

@@ -1,0 +1,5 @@
+mutation UpdateOffer($offerId: ID!, $data: PartialUpdateOfferInput!) {
+  partialUpdateOffer(id: $offerId, data: $data) {
+    ...Offer
+  }
+}

@@ -13,7 +13,13 @@ const getOffers: FunctionResource = {
           offersMatch: GetOffersMatch(q.Var('input')),
         },
         PaginatedMatch(
-          q.Var('offersMatch'),
+          q.Join(
+            q.Var('offersMatch'),
+            q.Lambda(
+              ['endDate', 'ref'],
+              q.Match(q.Index('offers_sort_by_locationType'), q.Var('ref'))
+            )
+          ),
           q.Var('size'),
           q.Var('after'),
           q.Var('before'),
