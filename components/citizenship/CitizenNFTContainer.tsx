@@ -25,7 +25,7 @@ export const CitizenNFTContainer = () => {
   const contractData = {
     'Contract Address': {
       value: shortenedAddress(unlockConfig.contractAddress) ?? '',
-      url: `https://${unlockConfig.networkName}.etherscan.io/address/${unlockConfig.contractAddress}`,
+      url: `${unlockConfig.etherscanUrl}/address/${unlockConfig.contractAddress}`,
       external: true,
     },
     Blockchain: { value: capitalize(unlockConfig.networkName) ?? '' },
