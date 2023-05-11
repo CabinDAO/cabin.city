@@ -7,6 +7,7 @@ import { InputBase } from './InputBase'
 import ListElement from './ListElement'
 import { Menu, MenuPopup, MenuSection } from './Menu'
 import { Subline2 } from './Typography'
+import { InputText } from './InputText'
 
 const Container = styled.div`
   position: relative;
@@ -37,6 +38,8 @@ interface DropdownProps {
   message?: string
   menuMaxHeight?: number
   className?: string
+  enableSearch?: boolean
+  onSearch?: (value: string) => void
 }
 
 export const Dropdown = ({
@@ -53,7 +56,9 @@ export const Dropdown = ({
   variant = 'primary',
   message,
   menuMaxHeight,
+  enableSearch,
   className,
+  onSearch,
 }: DropdownProps) => {
   const {
     selectionRef,
@@ -65,51 +70,77 @@ export const Dropdown = ({
     handleSoftClose,
     setActive,
     handleOptionSelect,
-  } = useDropdownLogic(selectedOption, options, onSelect)
+    handleSearchInputChange,
+    searchInput,
+    displayOptions,
+  } = useDropdownLogic(selectedOption, options, onSelect, onSearch)
+
+  const handleOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSearchInputChange(e.target.value)
+  }
+
   return (
     <ClickAway className={className} onClickAway={handleSoftClose}>
-      <Container onFocus={() => setActive(true)}>
-        <InputBase
-          id={id}
-          label={label}
-          required={required}
-          info={info}
-          filled={variant === 'primary' && !!selectedOption}
-          focused={active} // if active keep parent focus status
-          error={error}
-          disabled={disabled}
-          endAdornment={
-            <ChevronButton role="button" open={open}>
-              <Icon name="chevron-down" size={1.4} />
-            </ChevronButton>
-          }
-          onClick={toggleOpen}
-          message={message}
+      <Container onFocus={() => setActive(true)} onClick={toggleOpen}>
+        {enableSearch ? (
+          <InputText
+            value={searchInput ?? (selectedOption?.label || '')}
+            placeholder={placeholder}
+            onChange={handleOnSearch}
+            message={message}
+            label={label}
+            onClick={toggleOpen}
+            endAdornment={<SearchIcon name="search" size={1.4} />}
+          />
+        ) : (
+          <InputBase
+            id={id}
+            label={label}
+            required={required}
+            info={info}
+            filled={variant === 'primary' && !!selectedOption}
+            focused={active} // if active keep parent focus status
+            error={error}
+            disabled={disabled}
+            endAdornment={
+              <ChevronButton role="button" open={open}>
+                <Icon name="chevron-down" size={1.4} />
+              </ChevronButton>
+            }
+            message={message}
+          >
+            <StyledSelect ref={selectionRef} role="button" tabIndex={0}>
+              {selectedOption ? (
+                <Subline2>{selectedOption.label}</Subline2>
+              ) : (
+                <OpaqueSubline2 $color="green900">{placeholder}</OpaqueSubline2>
+              )}
+            </StyledSelect>
+          </InputBase>
+        )}
+        <MenuPopup
+          open={open && !disabled && displayOptions.length > 0}
+          fullWidth
         >
-          <StyledSelect ref={selectionRef} role="button" tabIndex={0}>
-            {selectedOption ? (
-              <Subline2>{selectedOption.label}</Subline2>
-            ) : (
-              <OpaqueSubline2 $color="green900">{placeholder}</OpaqueSubline2>
-            )}
-          </StyledSelect>
-        </InputBase>
-        <MenuPopup open={open && !disabled} fullWidth>
           <Menu maxHeight={menuMaxHeight}>
             <MenuSection>
-              {options.map((opt, idx) => {
+              {displayOptions.map((opt, idx) => {
                 return (
                   <ListElement
                     key={idx}
                     label={opt.label}
                     leadingIcon={opt.icon}
+                    imageSrc={opt.imageSrc}
+                    showLeadingIcon={!!opt.icon || !!opt.imageSrc}
                     onClick={(
                       e: React.MouseEvent<HTMLDivElement, MouseEvent>
                     ) => {
                       e.stopPropagation()
                       handleOptionSelect(opt)
                     }}
-                    active={selectedOption?.value === opt.value || true}
+                    active={
+                      selectedOption?.value === opt.value && focusOption !== idx
+                    }
                     focused={showFocusOption && focusOption === idx}
                     disabled={opt.disabled}
                   />
@@ -125,6 +156,10 @@ export const Dropdown = ({
 
 const OpaqueSubline2 = styled(Subline2)`
   opacity: 0.42;
+`
+
+const SearchIcon = styled(Icon)`
+  cursor: pointer;
 `
 
 Dropdown.displayName = 'Dropdown'

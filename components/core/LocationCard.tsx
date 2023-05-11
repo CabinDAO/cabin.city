@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
+import { emptyFunction } from '@/utils/general'
 
 export interface LocationCardProps {
   _id: string
@@ -32,10 +33,6 @@ export interface LocationCardProps {
 interface Caretaker {
   _id: string
   name: string
-}
-
-const emptyFunction = () => {
-  return
 }
 
 interface Voter {

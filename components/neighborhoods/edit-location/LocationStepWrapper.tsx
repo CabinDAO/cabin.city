@@ -24,6 +24,7 @@ export const LocationStepWrapper = ({
   children,
   name,
   displayStepIndicator = true,
+  className,
 }: LocationStepWrapperProps) => {
   const router = useRouter()
   const { created } = router.query
@@ -51,7 +52,7 @@ export const LocationStepWrapper = ({
       }
     >
       <TitleCard title={stepTitle} icon="close" iconHref="/profile" />
-      <Container>
+      <Container className={className}>
         <StepIndicator>
           <H3>{name}</H3>
           {displayStepIndicator && <H3>{stepIndicatorText()}</H3>}

@@ -1,17 +1,20 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { IconName } from '../core/Icon'
+import lodash from 'lodash'
 
 export interface SelectOption {
   label: string
   value: string | number | boolean
   icon?: IconName
   disabled?: boolean
+  imageSrc?: string
 }
 
 const useDropdownLogic = (
   value: SelectOption[] | SelectOption | undefined,
   defaultOptions: SelectOption[],
   onSelect: (_opt: SelectOption) => void,
+  onSearch?: (value: string) => void,
   onDelete?: () => void
 ) => {
   const [options, _setOptions] = useState<SelectOption[]>(defaultOptions)
@@ -19,6 +22,11 @@ const useDropdownLogic = (
   const [open, _setOpen] = useState(false)
   const [focusOption, _setFocusOption] = useState<number>(-1)
   const [showFocusOption, _setShowFocusOption] = useState(false)
+  const [searchInput, setSearchInput] = useState<string | undefined | null>(
+    null
+  )
+  const [filteredOptions, _setFilteredOptions] =
+    useState<SelectOption[]>(options)
 
   const selectionRef = useRef() as MutableRefObject<
     HTMLDivElement | HTMLInputElement
@@ -27,11 +35,17 @@ const useDropdownLogic = (
   const activeStateRef = useRef(active)
   const focusOptionStateRef = useRef(focusOption)
   const showFocusOptionStateRef = useRef(showFocusOption)
-  const optionsStateRef = useRef(options)
+  const optionsStateRef = useRef(filteredOptions)
+  const filteredOptionsStateRef = useRef(filteredOptions)
 
   const setOptions = (state: SelectOption[]) => {
     optionsStateRef.current = state
     _setOptions(state)
+  }
+
+  const setFilteredOptions = (state: SelectOption[]) => {
+    filteredOptionsStateRef.current = state
+    _setFilteredOptions(state)
   }
 
   const setActive = (state: boolean) => {
@@ -61,7 +75,9 @@ const useDropdownLogic = (
     // if theres value, set focus option to the value index, otherwise set to 0
     const val = Array.isArray(value) ? value[0] : value
     if (val) {
-      const currentOptIdx = options.findIndex((opt) => opt.value === val.value)
+      const currentOptIdx = filteredOptions.findIndex(
+        (opt) => opt.value === val.value
+      )
       setFocusOption(currentOptIdx)
     } else {
       setFocusOption(0)
@@ -76,9 +92,31 @@ const useDropdownLogic = (
     }
   }
 
+  const handleSearchInputChange = (value: string) => {
+    setSearchInput(value)
+
+    if (value === '') {
+      setFilteredOptions(options)
+    } else if (value.length > 0) {
+      if (onSearch) {
+        lodash.debounce(onSearch, 500)(value)
+        handleOpen(true)
+      } else {
+        const coincidentOptions = options.filter((opt) =>
+          opt.label.toLowerCase().includes(value.toLowerCase())
+        )
+        if (coincidentOptions.length > 0) {
+          handleOpen(true)
+          setFocusOption(0)
+        }
+        setFilteredOptions(coincidentOptions)
+      }
+    }
+  }
+
   const handleOptionSelect = (opt: SelectOption) => {
-    // event.stopPropagation();
     handleOpen(false)
+    setSearchInput(null)
     onSelect(opt)
   }
 
@@ -112,7 +150,7 @@ const useDropdownLogic = (
             setShowFocusOption(true)
           } else if (
             focusOptionStateRef.current <
-            optionsStateRef.current.length - 1
+            filteredOptionsStateRef.current.length - 1
           ) {
             setFocusOption(focusOptionStateRef.current + 1)
           }
@@ -121,9 +159,9 @@ const useDropdownLogic = (
       case 'Enter':
         evt.preventDefault()
         if (openStateRef.current) {
-          if (optionsStateRef.current[focusOptionStateRef.current]) {
+          if (filteredOptionsStateRef.current[focusOptionStateRef.current]) {
             handleOptionSelect(
-              optionsStateRef.current[focusOptionStateRef.current]
+              filteredOptionsStateRef.current[focusOptionStateRef.current]
             )
           }
         } else {
@@ -146,6 +184,7 @@ const useDropdownLogic = (
   // Update internal options when parent options change
   useEffect(() => {
     setOptions(defaultOptions)
+    setFilteredOptions(defaultOptions)
   }, [defaultOptions])
 
   // When dropdown is active then start listening on keyboard
@@ -179,8 +218,12 @@ const useDropdownLogic = (
     open,
     selectionRef,
     handleOptionSelect,
+    handleSearchInputChange,
     focusOption,
     showFocusOption,
+    setOptions,
+    searchInput,
+    displayOptions: filteredOptions.length > 0 ? filteredOptions : options,
   }
 }
 

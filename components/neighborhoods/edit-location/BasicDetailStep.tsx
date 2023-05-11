@@ -1,5 +1,5 @@
 import { LocationStepWrapper } from './LocationStepWrapper'
-import { Subline2 } from '@/components/core/Typography'
+import { Subline2, h4Styles } from '@/components/core/Typography'
 import styled from 'styled-components'
 import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
@@ -11,11 +11,17 @@ import {
 import {
   LocationAddressInput,
   PartialUpdateLocationInput,
+  useGetProfileByAddressLazyQuery,
+  useGetProfilesLazyQuery,
 } from '@/generated/graphql'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { validTitle, validateLocationInput } from '../validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
+import { Dropdown } from '@/components/core/Dropdown'
+import { resolveAddressOrName } from '@/lib/ens'
+import { SelectOption } from '@/components/hooks/useDropdownLogic'
+import { isNotNull } from '@/lib/data'
 
 export const BasicDetailStep = ({
   name,
@@ -32,6 +38,26 @@ export const BasicDetailStep = ({
   const [address, setAddress] = useState<LocationAddressInput | null>(
     currentAddress ?? {}
   )
+
+  useEffect(() => {
+    if (location.referrer) {
+      const option: SelectOption = {
+        label: location.referrer.name,
+        value: location.referrer._id,
+        imageSrc: location.referrer.avatar?.url,
+      }
+
+      setOptions([option])
+      setSelectedOption(option)
+    }
+  }, [location.referrer])
+
+  const [searchProfiles] = useGetProfilesLazyQuery({})
+  const [getProfileByAddress] = useGetProfileByAddressLazyQuery()
+  const [options, setOptions] = useState<SelectOption[]>([])
+  const [selectedOption, setSelectedOption] = useState<
+    SelectOption | undefined
+  >(undefined)
 
   const [locationInput, setLocationInput] =
     useState<PartialUpdateLocationInput>({
@@ -74,6 +100,67 @@ export const BasicDetailStep = ({
     if (validateLocationInput(locationInput)) {
       await updateLocation({ ...locationInput, address })
       onNext()
+    }
+  }
+
+  const handleSearch = async (value: string) => {
+    const resolvedAddress = await resolveAddressOrName(value)
+    if (resolvedAddress) {
+      const result = await getProfileByAddress({
+        variables: { address: resolvedAddress },
+      })
+      if (
+        result.data?.accountByAddress?.profile &&
+        result.data?.accountByAddress?.profile?._id !== location.caretaker._id
+      ) {
+        setOptions([
+          {
+            label: result.data.accountByAddress.profile.name,
+            value: result.data.accountByAddress.profile._id,
+            imageSrc:
+              result.data.accountByAddress.profile?.avatar?.url ??
+              '/images/default-avatar.png',
+          },
+        ])
+      }
+    } else {
+      const result = await searchProfiles({
+        variables: {
+          input: {
+            searchQuery: value,
+            roleTypes: [],
+            levelTypes: [],
+            citizenshipStatuses: [],
+          },
+          size: 3,
+        },
+      })
+
+      if (result.data?.getProfiles?.data) {
+        setOptions(
+          result.data?.getProfiles?.data
+            .filter(isNotNull)
+            .map((profile) => ({
+              label: profile?.name,
+              value: profile?._id,
+              imageSrc: profile?.avatar?.url ?? '/images/default-avatar.png',
+            }))
+            .filter((option) => option.value !== location.caretaker._id)
+        )
+      }
+    }
+  }
+
+  const handleOnSelect = (option: SelectOption) => {
+    setSelectedOption(option)
+
+    if (option.value) {
+      setLocationInput((prev) => ({
+        ...prev,
+        referrer: {
+          connect: option.value.toLocaleString(),
+        },
+      }))
     }
   }
 
@@ -144,7 +231,15 @@ export const BasicDetailStep = ({
       </InputCoupleContainer>
       <HorizontalDivider />
       <InputCoupleContainer>
-        <InputText label="Did someone at Cabin refer you?" placeholder="Name" />
+        <StyledDropdown
+          enableSearch
+          onSearch={handleSearch}
+          label="Did someone at Cabin refer you?"
+          placeholder="Name"
+          options={options}
+          selectedOption={selectedOption}
+          onSelect={handleOnSelect}
+        />
       </InputCoupleContainer>
     </StyledLocationStepWrapper>
   )
@@ -154,8 +249,14 @@ interface InputContainerProps {
   fullWidth?: boolean
 }
 
+const StyledDropdown = styled(Dropdown)`
+  ${Subline2} {
+    ${h4Styles}
+  }
+`
+
 const StyledLocationStepWrapper = styled(LocationStepWrapper)`
-  min-height: 110vh;
+  min-height: calc(100vh - 4.8rem);
 `
 
 const InputCoupleContainer = styled.div<InputContainerProps>`

@@ -1,7 +1,8 @@
 import styled from 'styled-components'
-import { IconName } from './Icon'
+import Icon, { IconName } from './Icon'
 import { Subline2 } from './Typography'
 import { Checkbox } from './Checkbox'
+import { Avatar } from './Avatar'
 
 interface ContainerProps {
   active?: boolean
@@ -31,18 +32,17 @@ const Container = styled.div<ContainerProps>`
     --icon-color: ${(props) => props.theme.colors.yellow900};
   }
   :focus {
-    background: ${(props) => props.theme.colors.white};
+    background: ${(props) =>
+      props.theme.colors.yellow100}BF; // 75% opacity suffix
     color: ${(props) => props.theme.colors.yellow900};
     --icon-color: ${(props) => props.theme.colors.yellow900};
-    box-shadow: inset 0rem 0rem 0rem 0.4rem
-      ${(props) => props.theme.colors.primary200};
   }
   ${(props) =>
     props.focused &&
     `
-      background: ${props.theme.colors.white};
-      color: ${props.theme.colors.yellow900};
-      --icon-color: ${props.theme.colors.yellow900};
+    background: ${props.theme.colors.yellow100}BF;
+    color: ${props.theme.colors.yellow900};
+    --icon-color: ${props.theme.colors.yellow900};
   `}
   :active {
     background: ${(props) => props.theme.colors.white};
@@ -100,6 +100,7 @@ const ElementSet = styled.div`
 
 interface ListElementProps {
   label: string
+  imageSrc?: string
   leadingIcon?: IconName | null
   showLeadingIcon?: boolean
   trailingIcon?: IconName
@@ -112,6 +113,7 @@ interface ListElementProps {
 }
 
 const ListElement = ({
+  leadingIcon,
   label,
   active,
   disabled,
@@ -119,6 +121,7 @@ const ListElement = ({
   tabIndex,
   onClick,
   showLeadingIcon,
+  imageSrc,
 }: ListElementProps) => {
   return (
     <Container
@@ -131,12 +134,39 @@ const ListElement = ({
     >
       <ElementSet>
         {showLeadingIcon && (
-          <Checkbox selected={!!active} disabled={disabled} />
+          <LeadingContent
+            leadingIcon={leadingIcon}
+            imageSrc={imageSrc}
+            active={active}
+            disabled={disabled}
+          />
         )}
         <Subline2>{label}</Subline2>
       </ElementSet>
     </Container>
   )
+}
+
+interface LeadingContentProps {
+  leadingIcon?: IconName | null
+  imageSrc?: string
+  active?: boolean
+  disabled?: boolean
+}
+
+const LeadingContent = ({
+  leadingIcon,
+  imageSrc,
+  active,
+  disabled,
+}: LeadingContentProps) => {
+  if (leadingIcon) {
+    return <Icon name={leadingIcon} size={1.6} />
+  } else if (imageSrc) {
+    return <Avatar size={4} src={imageSrc} />
+  } else {
+    return <Checkbox selected={!!active} disabled={disabled} />
+  }
 }
 
 export default ListElement

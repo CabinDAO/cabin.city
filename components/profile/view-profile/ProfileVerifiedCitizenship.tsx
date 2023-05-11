@@ -24,7 +24,7 @@ export const ProfileVerifiedCitizenship = ({
   const isOwnProfile = user?._id === profile._id
   const [hovered, setHovered] = useState(false)
 
-  if (!profile.citizenshipMetadata) {
+  if (!profile.citizenshipMetadata || !profile.citizenshipMetadata.tokenId) {
     return null
   }
 

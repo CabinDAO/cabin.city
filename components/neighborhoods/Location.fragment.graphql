@@ -25,6 +25,9 @@ fragment Location on Location {
   name
   tagline
   sleepCapacity
+  referrer {
+    ...Profile
+  }
   caretaker {
     ...Caretaker
   }
