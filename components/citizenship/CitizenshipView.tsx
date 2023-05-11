@@ -8,9 +8,12 @@ import {
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 export const CitizenshipView = () => {
-  const citizenshipMintingEnabled = process.env.NEXT_PUBLIC_APP_ENV === 'dev'
+  const { hasFeature } = useFeatures()
+  const citizenshipMintingEnabled = hasFeature(Feature.Citizenship)
   const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/login' })
   const [updateProfileCitizenshipStatus] =
