@@ -105,7 +105,6 @@ export const MultipleDropdown = ({
                     key={idx}
                     label={opt.label}
                     showLeadingIcon
-                    leadingIcon={values.includes(opt.value) ? 'check' : null}
                     onClick={(
                       e: React.MouseEvent<HTMLDivElement, MouseEvent>
                     ) => {
