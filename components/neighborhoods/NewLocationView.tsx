@@ -17,12 +17,18 @@ import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useUser } from '../auth/useUser'
 import { useEffect } from 'react'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 export const NewLocationView = () => {
   const router = useRouter()
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
   const { user } = useUser()
+  const { hasFeature } = useFeatures()
+  const canCreateListings =
+    hasFeature(Feature.City) ||
+    user?.citizenshipStatus === CitizenshipStatus.Verified
 
   const handlePrimaryButtonClick = async () => {
     try {
@@ -55,12 +61,12 @@ export const NewLocationView = () => {
   }
 
   useEffect(() => {
-    if (user?.citizenshipStatus !== CitizenshipStatus.Verified) {
+    if (!canCreateListings) {
       router.push('/city-directory')
     }
-  }, [user, router])
+  }, [router, canCreateListings])
 
-  if (user?.citizenshipStatus !== CitizenshipStatus.Verified) {
+  if (!canCreateListings) {
     return null
   }
 
