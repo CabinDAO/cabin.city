@@ -6,6 +6,8 @@ import { useRouter } from 'next/router'
 import { useUser } from '../auth/useUser'
 import { LocationList } from './LocationList'
 import { NewListingButton } from './NewListingButton'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 interface CityDirectoryViewProps {
   locationType: LocationType
@@ -14,17 +16,17 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
   const { locationType } = props
   const { user } = useUser()
   const router = useRouter()
+  const { hasFeature } = useFeatures()
+  const canCreateListings =
+    hasFeature(Feature.City) ||
+    user?.citizenshipStatus === CitizenshipStatus.Verified
 
   return (
     <SingleColumnLayout>
       <TitleCard
         title="City Directory"
         icon="neighborhoods"
-        end={
-          user?.citizenshipStatus === CitizenshipStatus.Verified ? (
-            <NewListingButton />
-          ) : null
-        }
+        end={canCreateListings ? <NewListingButton /> : null}
       ></TitleCard>
       <TabBar>
         <Tab
