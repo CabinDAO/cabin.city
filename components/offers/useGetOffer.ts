@@ -41,12 +41,12 @@ export interface OfferViewProps {
 export const useGetOffer = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { user } = useUser()
+  const { user } = useUser({ redirectTo: '/login' })
   const { data } = useGetOfferByIdQuery({
     variables: {
       id: `${offerId}`,
     },
-    skip: !offerId,
+    skip: !offerId || !user,
   })
   const offer = data?.findOfferByID
     ? offerViewPropsFromFragment(data.findOfferByID)
@@ -58,7 +58,7 @@ export const useGetOffer = () => {
     }
   }, [data, offer, router])
 
-  if (!offer) {
+  if (!offer || !user) {
     return { offer: null, ownedByMe: false }
   }
 

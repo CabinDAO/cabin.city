@@ -77,17 +77,20 @@ interface UnlockConfig {
   networkName: string
   chainId: number
   contractAddress: string
+  etherscanUrl: string
 }
 export const unlockConfig: UnlockConfig = getConfig({
   dev: {
     networkName: 'goerli',
     chainId: 5,
     contractAddress: '0xAAae475e2e1D92Ffd4a103A72FDc9f5301896e28',
+    etherscanUrl: 'https://goerli.etherscan.io',
   },
   prod: {
     networkName: 'optimism',
     chainId: 10,
     contractAddress: '0x45aCCac0E5C953009cDa713a3b722F87F2907F86',
+    etherscanUrl: 'https://optimistic.etherscan.io',
   },
 })
 
