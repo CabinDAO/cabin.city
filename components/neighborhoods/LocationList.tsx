@@ -17,7 +17,7 @@ export const LocationList = (props: LocationListProps) => {
   const { locationType } = props
   const { voteForLocation } = useLocationVote()
   const { data, fetchMore } = useGetLocationsByLocationTypeQuery({
-    variables: { locationType, size: 20 },
+    variables: { locationType, size: 20, cursor: null },
   })
 
   const locations =

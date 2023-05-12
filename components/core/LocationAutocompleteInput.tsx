@@ -55,7 +55,7 @@ export const LocationAutocompleteInput = ({
       <InputText
         ref={inputRef}
         label="Location"
-        bottomHelpText="Your precise location will not be shown publicaly"
+        bottomHelpText="Your precise location will not be shown publicly"
       />
     </>
   )
