@@ -1,6 +1,5 @@
 import {
   ActivityItemFragment,
-  GetProfileByIdDocument,
   useLikeActivityMutation,
   useUnlikeActivityMutation,
 } from '@/generated/graphql'
@@ -16,13 +15,6 @@ export const useActivityReactions = () => {
         variables: {
           id: activityItem.activity._id,
         },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: activityItem.activity.profile._id },
-          },
-        ],
       })
     },
     [likeActivity]
@@ -34,13 +26,6 @@ export const useActivityReactions = () => {
         variables: {
           id: activityItem.activity._id,
         },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: activityItem.activity.profile._id },
-          },
-        ],
       })
     },
     [unlikeActivity]

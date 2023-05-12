@@ -38,6 +38,26 @@ export const Post = (props: PostProps) => {
   const { user } = useUser()
   const { showModal } = useModal()
   const { handleDeleteTextActivity } = useTextActivity()
+  const [hasReactionByMe, setHasReactionByMe] = useState(
+    activityItem.hasReactionByMe
+  )
+  const [likesCount, setLikesCount] = useState(activityItem.reactionCount)
+
+  const handleLike = () => {
+    if (onLike) {
+      onLike()
+      setHasReactionByMe(true)
+      setLikesCount(likesCount + 1)
+    }
+  }
+
+  const handleUnlike = () => {
+    if (onUnlike) {
+      onUnlike()
+      setHasReactionByMe(false)
+      setLikesCount(likesCount - 1)
+    }
+  }
 
   const displayMoreMenu =
     profile._id === user?._id && type === ActivityType.Text
@@ -89,17 +109,17 @@ export const Post = (props: PostProps) => {
           <Media {...props} hovered={hovered} />
         )}
         <ReactionsContainer>
-          {activityItem.hasReactionByMe ? (
+          {hasReactionByMe ? (
             <IconButton
               icon="heart-solid"
               size={2}
               color="red600"
-              onClick={onUnlike}
+              onClick={handleUnlike}
             />
           ) : (
-            <IconButton icon="heart-outline" size={2} onClick={onLike} />
+            <IconButton icon="heart-outline" size={2} onClick={handleLike} />
           )}
-          <Caption>{activityItem.reactionCount}</Caption>
+          <Caption>{likesCount}</Caption>
         </ReactionsContainer>
       </ContentContainer>
       {Media && variant == 'compact' && deviceSize !== 'mobile' && (
