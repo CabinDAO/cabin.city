@@ -65,12 +65,6 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
-    resource: q.Index('location_offers_by_location'),
-    actions: {
-      read: true,
-    },
-  },
-  {
     resource: q.Index('locationVote_location_by_location'),
     actions: {
       read: true,
@@ -78,18 +72,6 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
   },
   {
     resource: q.Index('location_caretaker_by_profile'),
-    actions: {
-      read: true,
-    },
-  },
-  {
-    resource: q.Index('caretakerLocations_by_profile'),
-    actions: {
-      read: true,
-    },
-  },
-  {
-    resource: q.Index('referredLocations_by_profile'),
     actions: {
       read: true,
     },
