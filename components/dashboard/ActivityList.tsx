@@ -7,13 +7,20 @@ import {
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Post } from '../core/post/Post'
 import { useActivityReactions } from './useActivityReactions'
+import { useEffect } from 'react'
 
 export const ActivityList = () => {
-  const { data, fetchMore } = useGetActivitiesQuery({
+  const { data, fetchMore, refetch } = useGetActivitiesQuery({
     variables: {
       size: 20,
     },
   })
+
+  useEffect(() => {
+    return () => {
+      refetch()
+    }
+  }, [refetch])
 
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 

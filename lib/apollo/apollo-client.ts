@@ -27,6 +27,9 @@ export const apolloClient = new ApolloClient({
           allActivities: {
             keyArgs: false,
             merge(existing, incoming) {
+              if (existing?.after === incoming?.after) {
+                return existing
+              }
               return {
                 ...incoming,
                 data: [...(existing?.data ?? []), ...incoming.data],
@@ -45,11 +48,7 @@ export const apolloClient = new ApolloClient({
           locationsByLocationType: {
             keyArgs: ['locationType'],
             merge(existing, incoming) {
-              if (
-                (existing?.data ?? {})[0]?._ref ===
-                  (incoming?.data ?? {})[0]?._ref &&
-                incoming?.data?.length
-              ) {
+              if (existing?.after === incoming?.after) {
                 return existing
               }
               return {
