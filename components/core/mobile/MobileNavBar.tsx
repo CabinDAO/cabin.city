@@ -17,6 +17,7 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
     <MobileNavContainer open={open}>
       <InnerContainer>
         <MobileMenuItem menuItem={'home'} profileId={profileId} />
+        <MobileMenuItem menuItem={'activity'} profileId={profileId} />
         <MobileMenuItem menuItem={'members'} profileId={profileId} />
         <MobileMenuItem menuItem={'neighborhoods'} profileId={profileId} />
         {hasCityFeature && (
@@ -27,7 +28,11 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
         <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
         <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
-        <MobileMenuItem menuItem={'signIn'} profileId={profileId} />
+        <MobileMenuItem
+          authenticated
+          menuItem={'signIn'}
+          profileId={profileId}
+        />
       </InnerContainer>
     </MobileNavContainer>
   )

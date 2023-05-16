@@ -9,9 +9,14 @@ import { Tooltip } from '../Tooltip'
 interface MenuItemLinkProps {
   menuItem: MenuItemOption
   profileId?: string
+  authenticated?: boolean
 }
 
-export const MenuItemLink = ({ menuItem, profileId }: MenuItemLinkProps) => {
+export const MenuItemLink = ({
+  menuItem,
+  profileId,
+  authenticated,
+}: MenuItemLinkProps) => {
   const menuItemConfig = profileId
     ? MenuItemsAuthenticatedMap[menuItem]
     : MenuItemsUnauthenticatedMap[menuItem]
@@ -25,6 +30,7 @@ export const MenuItemLink = ({ menuItem, profileId }: MenuItemLinkProps) => {
       animate
     >
       <IconLink
+        authenticated={authenticated}
         icon={menuItemConfig.icon}
         size={menuItemConfig.iconSize ?? 2.5}
         color={'green400'}

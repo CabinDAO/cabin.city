@@ -13,7 +13,7 @@ import { PublishModal } from './edit-location/PublishModal'
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
   const { data } = useGetLocationByIdQuery({

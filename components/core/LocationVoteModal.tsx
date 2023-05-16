@@ -24,6 +24,7 @@ interface LocationVoteModalProps {
 interface Location {
   _id: string
   name?: string | null | undefined
+  publishedAt?: Date | null | undefined
 }
 
 interface LocationVote {
@@ -86,6 +87,7 @@ export const LocationVoteModal = (props: LocationVoteModalProps) => {
 
 const LocationVoteModalBody = (props: LocationVoteModalProps) => {
   const { location, votingPower, myVotes, onCastVotes } = props
+  const previewing = !location.publishedAt
   const [showOtherLocations, setShowOtherLocations] = useState(false)
   const [isCastingVotes, setIsCastingVotes] = useState(false)
   const [didErrorOccur, setDidErrorOccur] = useState(false)
@@ -165,6 +167,16 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
     }
   }
 
+  const voteSubmitButtonText = () => {
+    if (isCastingVotes) {
+      return 'Casting vote...'
+    } else if (previewing) {
+      return 'Previewing only'
+    } else {
+      return 'Cast vote'
+    }
+  }
+
   return (
     <>
       <ModalContent>
@@ -218,9 +230,12 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
         <CastVoteButton
           variant="primary"
           onClick={handleCastVotesButtonClick}
-          disabled={isCastingVotes || exceededVotingPower}
+          disabled={isCastingVotes || exceededVotingPower || previewing}
+          endAdornment={
+            previewing ? <Icon name="lock" size={1.2} /> : undefined
+          }
         >
-          {!isCastingVotes ? 'Cast vote' : 'Casting vote...'}
+          {voteSubmitButtonText()}
         </CastVoteButton>
         {didErrorOccur && (
           <ErrorContainer>

@@ -11,7 +11,7 @@ export const SetupProfileView = ({}) => {
   const router = useRouter()
   const [logTrackingEvent] = useLogTrackingEventMutation()
   const { id: profileId } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(steps[0])
 

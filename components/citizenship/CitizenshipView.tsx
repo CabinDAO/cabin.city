@@ -15,7 +15,7 @@ export const CitizenshipView = () => {
   const { hasFeature } = useFeatures()
   const citizenshipMintingEnabled = hasFeature(Feature.Citizenship)
   const { activeNFT } = useGetUnlockNFT()
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const [updateProfileCitizenshipStatus] =
     useUpdateProfileCitizenshipStatusMutation()
 
@@ -49,7 +49,7 @@ export const CitizenshipView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout displayLaunchBanner>
+    <SingleColumnLayout displayLaunchBanner={!citizenshipMintingEnabled}>
       <TitleCard
         title="Citizenship"
         icon="back-arrow"

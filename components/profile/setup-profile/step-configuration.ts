@@ -36,6 +36,6 @@ export const contactFieldDisplayNameMapping = {
   [ProfileContactFieldType.Instagram]: 'Instagram Username',
   [ProfileContactFieldType.LinkedIn]: 'Linkedin Username',
   [ProfileContactFieldType.Telegram]: 'Telegram Username',
-  [ProfileContactFieldType.Lens]: 'Lens URL',
+  [ProfileContactFieldType.Lens]: 'Lens Username',
   [ProfileContactFieldType.Website]: 'Website URL',
 }

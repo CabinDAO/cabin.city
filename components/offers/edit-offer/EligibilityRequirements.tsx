@@ -112,13 +112,18 @@ export const EligibilityRequirements = ({
   ) => {
     const newConstraintList = [...constraintList]
     newConstraintList[index] = roleConstraintInput
+
+    if (!roleConstraintInput.profileRole) {
+      newConstraintList.splice(index, 1)
+    }
+
     setConstraintList(newConstraintList)
 
     if (onRoleConstraintsChange) {
       const flattenedConstraints = newConstraintList.reduce(
         (acc, constraint) => {
           constraint.levels.forEach((level) => {
-            if (!constraint.profileRole) {
+            if (!constraint.profileRole || constraint.levels.length === 0) {
               return
             }
 
@@ -242,11 +247,15 @@ const OpaqueBody2 = styled(Body2)`
 
 const InputPair = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   flex-direction: row;
   grid-gap: 2.4rem;
   width: 100%;
   align-items: center;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
 const StyledDropdown = styled(Dropdown)`

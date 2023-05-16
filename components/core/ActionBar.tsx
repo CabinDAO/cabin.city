@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Button } from './Button'
 import { MainContent } from '../layouts/common.styles'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 const defaultButtonConfig = {
   label: 'OK',
@@ -21,9 +22,12 @@ export const ActionBar = ({
   primaryButton = defaultButtonConfig,
   secondaryButton = defaultButtonConfig,
 }: ActionBarProps) => {
+  const { deviceSize } = useDeviceSize()
+  const isTablet = deviceSize === 'tablet'
+
   return (
     <ActionBarContainer>
-      <MainContent>
+      <MainContent variant={isTablet ? 'full' : 'default'}>
         <ButtonContainer>
           <Button variant="link" onClick={secondaryButton.onClick}>
             {secondaryButton.label}

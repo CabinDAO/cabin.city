@@ -9,6 +9,7 @@ import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
+import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 
 export interface RegistrationParams {
   email: string
@@ -21,12 +22,15 @@ export const RegistrationView = () => {
   const router = useRouter()
   const { signAuthMessage } = useSignAuthMessage()
   const { showModal } = useModal()
+  const { confirmLoggedIn } = useConfirmLoggedIn()
 
   const handleSubmit = async (params: RegistrationParams) => {
     const { email, displayName: name, avatar } = params
 
     if (!address) {
-      router.push('/login')
+      confirmLoggedIn(() => {
+        router.push('/registration')
+      })
       return
     }
 

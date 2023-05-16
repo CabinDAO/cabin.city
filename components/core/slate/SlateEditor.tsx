@@ -79,6 +79,7 @@ const ToolbarContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   background-color: white;
+  overflow-x: auto;
 `
 
 const ToolbarItem = styled.div`

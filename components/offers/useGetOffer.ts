@@ -41,7 +41,7 @@ export interface OfferViewProps {
 export const useGetOffer = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const { data } = useGetOfferByIdQuery({
     variables: {
       id: `${offerId}`,

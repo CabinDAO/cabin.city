@@ -82,8 +82,13 @@ const Container = styled.div`
 
 const DateRange = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 0.8rem;
   justify-content: center;
   align-items: center;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `

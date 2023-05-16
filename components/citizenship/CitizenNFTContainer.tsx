@@ -12,6 +12,9 @@ import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { useState } from 'react'
+import { useFeatures } from '../hooks/useFeatures'
+import { Feature } from '@/lib/features'
 
 const INNER_PADDING_PX = 24
 const IMAGE_SIZE_PX = 336
@@ -19,6 +22,13 @@ const TABLET_IMAGE_SIZE_PX = 222
 
 export const CitizenNFTContainer = () => {
   const { activeNFT } = useGetUnlockNFT()
+  const [displayVideo, setDisplayVideo] = useState(false)
+  const { hasFeature } = useFeatures()
+  const citizenshipEnabled = hasFeature(Feature.Citizenship)
+
+  const handleImageOnClick = () => {
+    setDisplayVideo((prev) => !prev)
+  }
 
   const imageSrc = activeNFT?.image || DEFAULT_NFT_IMAGE
 
@@ -34,9 +44,13 @@ export const CitizenNFTContainer = () => {
   return (
     <StyledContentCard shape="notch">
       <Section>
-        <NFTContainer>
+        <NFTContainer onClick={handleImageOnClick}>
           <NftImage>
-            <AutofitImage src={imageSrc} alt={'Unlock NFT'} />
+            {displayVideo && citizenshipEnabled ? (
+              <video src="/videos/citizenship.mp4" autoPlay loop />
+            ) : (
+              <AutofitImage src={imageSrc} alt={'Unlock NFT'} />
+            )}
           </NftImage>
         </NFTContainer>
         {activeNFT ? (
@@ -110,34 +124,33 @@ const Section = styled.div`
 
 const NFTContainer = styled.div`
   display: flex;
-  padding: ${pxToRem(INNER_PADDING_PX)}rem;
-  background: url('/images/nft-background.png');
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
 
   ${({ theme }) => theme.bp.md} {
+    height: ${pxToRem(TABLET_IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
+    width: ${pxToRem(TABLET_IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
     max-height: ${pxToRem(TABLET_IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
+    height: ${pxToRem(IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
+    width: ${pxToRem(IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
     max-height: ${pxToRem(IMAGE_SIZE_PX + INNER_PADDING_PX * 2)}rem;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
   }
 `
 
 const NftImage = styled.div`
   position: relative;
   display: flex;
-  border-radius: 0 0 49rem 0;
   width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 22.2rem;
-    height: 22.2rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 33.6rem;
-    height: 33.6rem;
-    border-radius: 0 0 64rem 0;
-  }
+  height: 100%;
 `

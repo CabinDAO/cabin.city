@@ -1,16 +1,18 @@
-import { YEARLY_PRICE_IN_ETH, YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
+import { YEARLY_PRICE_IN_ETH } from '@/utils/citizenship'
 import styled from 'styled-components'
 import { useUser } from '../auth/useUser'
 import { HorizontalDivider } from '../core/Divider'
 import { H3, H1, Caption, H4, Body2 } from '../core/Typography'
 import { NFTDataList } from './NFTDataList'
+import { usePriceInUsd } from '../hooks/usePriceInUsd'
 
 export const CitizenshipNFTPreviewData = () => {
   const { user } = useUser()
-
-  if (!user) return null
+  const { priceInUsd } = usePriceInUsd()
 
   const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+
+  if (!user) return null
 
   return (
     <Container>
@@ -23,9 +25,7 @@ export const CitizenshipNFTPreviewData = () => {
           </PriceValue>
           <Caption>/ year</Caption>
         </Price>
-        <Caption>
-          ${YEARLY_PRICE_IN_USD} | pay with credit card or crypto
-        </Caption>
+        <Caption>${priceInUsd} | pay with credit card or crypto</Caption>
       </PriceContainer>
       <CabinHolderDisclaimer>
         <H4>FREE</H4>

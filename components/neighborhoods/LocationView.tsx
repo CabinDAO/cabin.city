@@ -138,7 +138,7 @@ export const LocationView = ({
 
   return (
     <LocationContent>
-      <LocationBannerContainer>
+      <LocationBannerContainer width={bannerWidth} height={bannerHeight}>
         <LocationBanner
           src={bannerImageUrl ?? DEFAULT_BANNER}
           alt="Location Banner"
@@ -339,7 +339,12 @@ const LocationHeaderHorizontalBar = styled.div`
   }
 `
 
-const LocationBannerContainer = styled.div`
+interface LocationBannerContainerProps {
+  width: number
+  height: number
+}
+
+const LocationBannerContainer = styled.div<LocationBannerContainerProps>`
   position: absolute;
   top: 0;
   left: 50%;
@@ -379,6 +384,8 @@ const LocationContent = styled.div`
 `
 
 const LocationBanner = styled(Image)`
+  object-fit: cover;
+
   ${({ theme }) => theme.bp.lg_max} {
     width: 100%;
     height: auto;
@@ -387,13 +394,10 @@ const LocationBanner = styled(Image)`
 
 const LocationDetailsContainer = styled.div`
   width: 100%;
+  margin-top: 75vw;
 
-  ${({ theme }) => theme.bp.lg_max} {
-    margin-top: 26.4vw;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    margin-top: 18.4vw;
+  ${({ theme }) => theme.bp.md} {
+    margin-top: 70.4vw;
   }
 
   ${({ theme }) => theme.bp.lg} {

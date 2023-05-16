@@ -5,11 +5,11 @@ import { Body2, Caption, H2, Subline1 } from './Typography'
 import { IconName } from './Icon'
 import Icon from './Icon'
 import { format } from 'date-fns'
-import Link from 'next/link'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
 import { emptyFunction } from '@/utils/general'
+import { AuthenticatedLink } from './AuthenticatedLink'
 
 export interface LocationCardProps {
   _id: string
@@ -68,7 +68,7 @@ export const LocationCard = (props: LocationCardProps) => {
       <ContainerLink href={`/location/${_id}`}>
         <ImageContainer>
           {bannerImageUrl ? (
-            <StyledImage src={bannerImageUrl} fill alt={name} />
+            <StyledImage priority src={bannerImageUrl} fill alt={name} />
           ) : (
             <EmptyImageContainer>
               <Icon name="mountain" size={6} color="yellow500" />
@@ -182,7 +182,8 @@ const OuterContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.yellow200};
 `
 
-const ContainerLink = styled(Link)`
+const ContainerLink = styled(AuthenticatedLink)`
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   border: solid 1px ${({ theme }) => theme.colors.green900};

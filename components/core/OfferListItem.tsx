@@ -65,10 +65,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
     isLocked,
     actionsEnabled,
   } = props
-  console.log(
-    '🚀 ~ file: OfferListItem.tsx:62 ~ OfferListItem ~ imageUrl:',
-    imageUrl
-  )
   const isDisplayingEligibility =
     !!profileRoleConstraints?.length ||
     citizenshipRequired ||
@@ -98,7 +94,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
   }
 
   return (
-    <ListItem href={`/offer/${_id}`}>
+    <ListItem authenticated href={`/offer/${_id}`}>
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>
           {isDisplayingIcon && (

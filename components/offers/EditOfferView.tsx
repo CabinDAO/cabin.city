@@ -46,5 +46,9 @@ const StyledContentCard = styled(ContentCard)`
 `
 
 const OfferSummaryContainer = styled.div`
-  width: 50%;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+  }
 `

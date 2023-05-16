@@ -149,10 +149,23 @@ const OfferFormContainer = styled(FormContainer)`
 
 const InputGroup = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 0.8rem;
   align-items: flex-end;
-  width: 55%;
+  width: 100%;
+
+  button {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    width: 55%;
+    flex-direction: row;
+
+    button {
+      width: auto;
+    }
+  }
 `
 
 const StyledDropdown = styled(Dropdown)`

@@ -47,7 +47,7 @@ export const DirectoryView = () => {
     ProfileSortType.CreatedAtDesc
   )
   const { deviceSize } = useDeviceSize()
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
 
   const input = useMemo(() => {
     // Only search if there are at least 2 characters

@@ -6,6 +6,7 @@ import { LocationProps } from '@/components/neighborhoods/LocationView'
 import { TempImage } from '@/lib/image'
 import { useModal } from '../hooks/useModal'
 import { ImageBrowserModal } from '../core/gallery/ImageBrowserModal'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export const LocationPhotosView = ({
   location,
@@ -14,6 +15,7 @@ export const LocationPhotosView = ({
   location: LocationProps
   gallery?: string | string[] | null | undefined
 }) => {
+  const { deviceSize } = useDeviceSize()
   const { _id: locationId, mediaItems } = location
   const galleryPreviewSleepingRef = useRef<HTMLDivElement>(null)
   const galleryPreviewWorkingRef = useRef<HTMLDivElement>(null)
@@ -58,6 +60,10 @@ export const LocationPhotosView = ({
   ]
 
   const handleImageClick = (image: TempImage) => {
+    if (deviceSize === 'mobile') {
+      return
+    }
+
     const index = allImages.findIndex((img) => img.ipfsHash === image.ipfsHash)
 
     showModal(() => (
