@@ -68,7 +68,7 @@ export const LocationCard = (props: LocationCardProps) => {
       <ContainerLink href={`/location/${_id}`}>
         <ImageContainer>
           {bannerImageUrl ? (
-            <StyledImage src={bannerImageUrl} fill alt={name} />
+            <StyledImage priority src={bannerImageUrl} fill alt={name} />
           ) : (
             <EmptyImageContainer>
               <Icon name="mountain" size={6} color="yellow500" />

@@ -27,7 +27,8 @@ export const locationCardPropsFromFragment = (
     voteCount: fragment.voteCount,
     voters: fragment.votes.data
       .filter((v) => v && v?.count > 0)
-      .filter(isNotNull),
+      .filter(isNotNull)
+      .map((v) => v.profile),
   }
 }
 
