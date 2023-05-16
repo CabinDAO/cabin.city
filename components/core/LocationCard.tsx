@@ -207,6 +207,7 @@ const ImageContainer = styled.div`
 
 const StyledImage = styled(Image)`
   display: block;
+  object-fit: cover;
 `
 
 const ContentContainer = styled.div`

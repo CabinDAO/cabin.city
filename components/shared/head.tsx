@@ -85,7 +85,7 @@ export const AppHead = ({
 
       <meta
         name="twitter:image"
-        content="/images/cabin.png"
+        content="/images/cabin_social.png"
         key="twitter:image"
       />
       <meta property="og:image" content="/images/cabin.png" key="og:image" />
