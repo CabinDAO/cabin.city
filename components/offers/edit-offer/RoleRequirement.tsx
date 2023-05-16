@@ -9,6 +9,8 @@ import { RoleInfo, roleInfoFromType } from '@/utils/roles'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { RoleConstraintInput } from './EligibilityRequirements'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { HorizontalDivider } from '@/components/core/Divider'
 
 const levelOptions = allLevels.map((level) => ({
   label: level.name,
@@ -29,6 +31,7 @@ interface RoleRequirementProps {
   role?: ProfileRoleType | undefined
   levels?: ProfileRoleLevelType[]
   onChange?: (roleConstraintInput: RoleConstraintInput, index: number) => void
+  onDelete?: (index: number) => void
 }
 
 export const RoleRequirement = ({
@@ -99,43 +102,63 @@ export const RoleRequirement = ({
     )
   }
 
+  const removeConstraint = () => {
+    if (!onChange) return
+
+    onChange(
+      {
+        profileRole: undefined,
+        levels: [],
+      },
+      index
+    )
+  }
+
+  const { deviceSize } = useDeviceSize()
+  const isMobile = deviceSize === 'mobile'
+
   return (
     <Container>
-      <Dropdown
-        label="Role"
-        options={roleOptions}
-        placeholder="Select"
-        onSelect={handleSelectRole}
-        selectedOption={selectedRole}
-      />
+      <DropdownContainer>
+        <RoleDropdown
+          label="Role"
+          options={roleOptions}
+          placeholder="Select"
+          onSelect={handleSelectRole}
+          selectedOption={selectedRole}
+        />
+        {isMobile && <IconButton icon="trash" size={1.8} color="yellow200" />}
+      </DropdownContainer>
+
       <Level>
         <Subline1>Level</Subline1>
-        <LevelPlusRemove>
+        <DropdownContainer>
           <LevelDropdown
             options={options}
             onSelect={handleSelectLevels}
             selectedOptions={selectedLevels}
             placeholder="Select"
           />
-          <IconButton
-            icon="trash"
-            size={1.8}
-            onClick={() => console.log('hi')}
-          />
-        </LevelPlusRemove>
+          <IconButton icon="trash" size={1.8} onClick={removeConstraint} />
+        </DropdownContainer>
       </Level>
+      {isMobile && <HorizontalDivider />}
     </Container>
   )
 }
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 2.4rem;
   width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
-const LevelPlusRemove = styled.div`
+const DropdownContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -145,6 +168,10 @@ const LevelPlusRemove = styled.div`
 `
 
 const LevelDropdown = styled(MultipleDropdown)`
+  width: 100%;
+`
+
+const RoleDropdown = styled(Dropdown)`
   width: 100%;
 `
 

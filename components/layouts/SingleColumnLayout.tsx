@@ -81,6 +81,7 @@ const Container = styled.div<ContainerProps>`
   justify-content: flex-start;
   align-items: center;
   padding: ${({ variant }) => (variant === 'full' ? '0' : '1.6rem')};
+  margin-bottom: 10rem;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: ${({ variant }) =>
@@ -88,6 +89,7 @@ const Container = styled.div<ContainerProps>`
     align-items: flex-start;
     padding: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
     gap: 4rem;
+    margin-bottom: 0;
   }
 
   ${({ theme }) => theme.bp.lg} {

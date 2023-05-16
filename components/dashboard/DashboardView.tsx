@@ -8,7 +8,7 @@ import { TextPost } from './TextPost'
 import { useTextActivity } from './useTextActivity'
 
 export const DashboardView = () => {
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const { data } = useGetActivitySummaryQuery()
   const { handleCreateTextActivity } = useTextActivity()
 

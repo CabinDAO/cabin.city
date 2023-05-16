@@ -261,12 +261,16 @@ const StyledLocationStepWrapper = styled(LocationStepWrapper)`
 
 const InputCoupleContainer = styled.div<InputContainerProps>`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 2.4rem;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
   width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
 const FullWidthInputContainer = styled.div`

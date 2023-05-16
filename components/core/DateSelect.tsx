@@ -9,6 +9,7 @@ interface DateSelectProps {
   endDate?: Date
   onDateChange?: (date: Date | undefined) => void
   value?: Date
+  className?: string
 }
 
 export const DateSelect = ({
@@ -17,6 +18,7 @@ export const DateSelect = ({
   endDate,
   value,
   onDateChange,
+  className,
 }: DateSelectProps) => {
   const [isDefault, setIsDefault] = useState<boolean>(true)
   const ref = useRef<HTMLInputElement>(null)
@@ -60,7 +62,7 @@ export const DateSelect = ({
   }, [value, formatDate])
 
   return (
-    <Container>
+    <Container className={className}>
       <Subline1>{label}</Subline1>
       <InputContainer>
         <DateInput

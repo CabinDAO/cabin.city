@@ -3,6 +3,7 @@ import { IconName } from '@/components/core/Icon'
 export type MenuItemOption =
   | 'home'
   | 'members'
+  | 'activity'
   | 'neighborhoods'
   | 'profile'
   | 'citizenship'
@@ -24,9 +25,15 @@ export const MenuItemsAuthenticatedMap: Record<
 > = {
   home: {
     icon: 'logo-cabin',
+    path: '/',
+    displayText: 'Home',
+    iconSize: 3.2,
+  },
+  activity: {
+    icon: 'dashboard',
     path: '/dashboard',
     displayText: 'Activity',
-    iconSize: 3.2,
+    iconSize: 2.5,
   },
   members: {
     icon: 'members',
@@ -76,10 +83,11 @@ export const MenuItemsUnauthenticatedMap: Record<
 > = {
   home: {
     icon: 'logo-cabin',
-    path: '/landing',
+    path: '/',
     displayText: 'Home',
     iconSize: 3.2,
   },
+  activity: null,
   members: null,
   offers: {
     icon: 'offer',
@@ -104,7 +112,7 @@ export const MenuItemsUnauthenticatedMap: Record<
   signOut: null,
   signIn: {
     icon: 'profile',
-    path: '/login',
+    path: '/?signin=true',
     displayText: 'Sign In',
   },
 }

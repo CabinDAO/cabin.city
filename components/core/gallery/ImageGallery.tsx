@@ -48,7 +48,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
       <Container className={className} id={id} ref={forwardedRef}>
         {title && <H2>{title}</H2>}
         <ImageList>
-          {filteredImages.slice(0, 4).map((image, index) => {
+          {filteredImages.map((image, index) => {
             const imageUrl = resolveImageUrl(image, true)
             return imageUrl ? (
               <ImageSizeContainer
@@ -102,4 +102,11 @@ const ImageSizeContainer = styled.div`
 const StyledImage = styled(Image)`
   object-fit: cover;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 41.5rem;
+    height: 30rem;
+  }
 `

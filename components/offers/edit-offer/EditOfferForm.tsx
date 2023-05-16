@@ -92,7 +92,7 @@ export const EditOfferForm = ({
       <EditorContainer>
         {offer && (
           <SlateEditor
-            placeholder="Share a description of your neighborhood here"
+            placeholder="Share a description of your offer here"
             onChange={handleEditorChange}
             {...slateProps}
           />

@@ -57,8 +57,12 @@ export const DescriptionStep = ({
 }
 
 const StyledBody2 = styled(Body2)`
-  width: 50%;
+  width: 100%;
   align-self: flex-start;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+  }
 `
 
 const EditorContainer = styled.div`

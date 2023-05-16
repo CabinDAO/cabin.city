@@ -19,7 +19,7 @@ export const EditLocationView = ({}) => {
     skip: !listingId,
   })
   const location = data?.findLocationByID
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(
     editLocationSteps[0]

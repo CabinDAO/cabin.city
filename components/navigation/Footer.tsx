@@ -3,6 +3,7 @@ import Icon from '@/components/core/Icon'
 import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { AuthenticatedLink } from '../core/AuthenticatedLink'
 
 interface FooterProps {
   className?: string
@@ -14,18 +15,18 @@ export const Footer = ({ children, className }: FooterProps) => (
     <FooterNavigation>
       <FooterNavigationList>
         <FooterNavigationHeader>Product</FooterNavigationHeader>
-        <AppLink location="/city-directory" iconSize={0}>
+        <AppLink location="/city-directory/neighborhoods" iconSize={0}>
           <FooterItem>City Directory</FooterItem>
         </AppLink>
         <AppLink location="/offers" iconSize={0}>
           <FooterItem>Offers</FooterItem>
         </AppLink>
-        <AppLink location="/citizenship" iconSize={0}>
+        <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
           <FooterItem>Citizenship</FooterItem>
         </AppLink>
-        <AppLink location="/login" iconSize={0}>
+        <AuthenticatedLink href="/dashboard">
           <FooterItem>Sign In</FooterItem>
-        </AppLink>
+        </AuthenticatedLink>
         <AppLink
           external
           location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}

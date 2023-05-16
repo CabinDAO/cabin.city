@@ -12,6 +12,7 @@ import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 export const useLocationVote = () => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
+
   const [getLocationVoteCountsByIds] = useGetLocationVoteCountsByIdsLazyQuery({
     fetchPolicy: 'network-only',
   })
@@ -54,6 +55,7 @@ interface LocationVoteModalWithDataProps {
   location: {
     _id: string
     name?: string | null | undefined
+    publishedAt?: Date | null | undefined
   }
   onCastVotes: (
     voteCountsByLocationId: CastLocationVotesBody

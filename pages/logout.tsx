@@ -9,7 +9,7 @@ const LogoutPage: NextPage = () => {
       await logOut()
 
       // Force reload to clear apollo cache and prevent weird state updates
-      ;(window as Window).location = '/login'
+      ;(window as Window).location = '/'
     })()
   }, [])
 

@@ -1,7 +1,7 @@
-import Link from 'next/link'
 import styled from 'styled-components'
 import { Overline } from '../core/Typography'
 import Icon from '../core/Icon'
+import { AuthenticatedLink } from '../core/AuthenticatedLink'
 
 export const NewListingButton = () => (
   <NewListing href="/location/new">
@@ -10,7 +10,7 @@ export const NewListingButton = () => (
   </NewListing>
 )
 
-const NewListing = styled(Link)`
+const NewListing = styled(AuthenticatedLink)`
   display: flex;
   flex-direction: row;
   align-items: center;

@@ -64,15 +64,24 @@ const Container = styled.div`
 
 const UploadContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `
 
 const UploadFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 100%;
   gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+  }
 `

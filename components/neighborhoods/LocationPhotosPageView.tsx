@@ -9,7 +9,7 @@ import { useUser } from '../auth/useUser'
 export const LocationPhotosPageView = () => {
   const router = useRouter()
   const { id, gallery } = router.query
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const { data } = useGetLocationByIdQuery({
     variables: {
       id: `${id}`,

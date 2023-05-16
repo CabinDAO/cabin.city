@@ -1,4 +1,5 @@
 import Icon from '@/components/core/Icon'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { InputMaybe } from '@/generated/graphql'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import Image from 'next/image'
@@ -13,14 +14,17 @@ export const ImagesPreview = ({
   ipfsHashList,
   onDelete,
 }: ImagesPreviewProps) => {
+  const { deviceSize } = useDeviceSize()
+
+  const imageSize = deviceSize === 'mobile' ? 95.3 : 152
   return (
     <Container>
       {ipfsHashList.map((ipfsHash) => (
         <ImageContainer key={ipfsHash}>
-          <Image
+          <StyledImage
             src={getImageUrlByIpfsHash(ipfsHash, true) ?? ''}
-            width={152}
-            height={152}
+            width={imageSize}
+            height={imageSize}
             alt="Media Item Preview"
           />
           <DeleteContainer
@@ -34,11 +38,21 @@ export const ImagesPreview = ({
   )
 }
 
+const StyledImage = styled(Image)`
+  object-fit: cover;
+`
+
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  auto-rows: 1fr;
+
   width: 100%;
   grid-gap: 0.79rem;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: repeat(5, 1fr);
+  }
 `
 
 const DeleteContainer = styled.div`

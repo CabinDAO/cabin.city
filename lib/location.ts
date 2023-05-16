@@ -25,7 +25,9 @@ export const locationCardPropsFromFragment = (
     sleepCapacity: fragment.sleepCapacity,
     tagline: fragment.tagline,
     voteCount: fragment.voteCount,
-    voters: fragment.votes.data.filter(isNotNull).map((v) => v.profile),
+    voters: fragment.votes.data
+      .filter((v) => v && v?.count > 0)
+      .filter(isNotNull),
   }
 }
 
@@ -46,7 +48,9 @@ export const locationViewPropsFromFragment = (
     internetSpeedMbps: fragment.internetSpeedMbps,
     voteCount: fragment.voteCount,
     offers: fragment.offers.data.filter(isNotNull),
-    votes: fragment.votes.data.filter(isNotNull),
+    votes: fragment.votes.data
+      .filter((v) => v && v?.count > 0)
+      .filter(isNotNull),
     publishedAt: fragment.publishedAt ? parseISO(fragment.publishedAt) : null,
   }
 }

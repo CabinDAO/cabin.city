@@ -1,7 +1,5 @@
-import { useRouter } from 'next/router'
-import { useUser } from '../auth/useUser'
 import styled from 'styled-components'
-import { HTMLAttributes, useEffect } from 'react'
+import { HTMLAttributes } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
 import {
@@ -28,19 +26,14 @@ import { levelInfoFromType } from '@/utils/levels'
 import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import Link from 'next/link'
 import { HeroVideo } from '../core/HeroVideo'
+import { AuthenticatedLink } from '../core/AuthenticatedLink'
+import { usePriceInUsd } from '../hooks/usePriceInUsd'
+import { NoWrap } from '../core/NoWrap'
 
 export const LandingView = () => {
-  const { user, isUserLoading } = useUser()
-  const router = useRouter()
   const { showModal } = useModal()
-
-  useEffect(() => {
-    if (!isUserLoading && user) {
-      router.push('/dashboard')
-    }
-  }, [isUserLoading, user, router])
+  const { priceInUsd } = usePriceInUsd()
 
   const onSubscribeEmail = () => showModal(() => <SubscribeEmail />)
 
@@ -53,9 +46,9 @@ export const LandingView = () => {
 
             <SectionGrowTwoColumns>
               <SectionGrowSignup>
-                <Link href="/login" rel="noreferrer">
+                <AuthenticatedLink href="/dashboard">
                   <Button>Sign Up</Button>
-                </Link>
+                </AuthenticatedLink>
                 <a
                   href={EXTERNAL_LINKS.CABIN_DISCORD}
                   target="_blank"
@@ -204,9 +197,9 @@ export const LandingView = () => {
                   </JoinPaymentOption>
 
                   <JoinOptionButton>
-                    <AppLink location="/login" iconSize={0}>
+                    <AuthenticatedLink href="/dashboard">
                       <Button isFullWidth>Sign Up</Button>
-                    </AppLink>
+                    </AuthenticatedLink>
                   </JoinOptionButton>
                 </JoinOptionDetailColumn>
 
@@ -244,13 +237,17 @@ export const LandingView = () => {
                         <JoinPaymentInterval>/ year</JoinPaymentInterval>
                       </JoinPrice>
                     </JoinPaymentOption>
-                    <Body2>$400 | pay with credit card or crypto</Body2>
+                    <NoWrap>
+                      <Body2>
+                        ${priceInUsd} | pay with credit card or crypto
+                      </Body2>
+                    </NoWrap>
                   </JoinPayment>
 
                   <JoinOptionButton>
                     <AppLink
                       external
-                      location={EXTERNAL_LINKS.FOUNDING_CITIZEN}
+                      location={EXTERNAL_LINKS.CITIZENSHIP}
                       iconSize={0}
                     >
                       <Button isFullWidth>Learn more</Button>

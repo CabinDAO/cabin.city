@@ -24,7 +24,7 @@ export const NewLocationView = () => {
   const router = useRouter()
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
-  const { user } = useUser()
+  const { user } = useUser({ redirectTo: '/' })
   const { hasFeature } = useFeatures()
   const canCreateListings =
     hasFeature(Feature.City) ||
@@ -66,7 +66,7 @@ export const NewLocationView = () => {
     }
   }, [router, canCreateListings])
 
-  if (!canCreateListings) {
+  if (!canCreateListings || !user) {
     return null
   }
 
@@ -178,6 +178,7 @@ const StyledList = styled.ul`
 
   li {
     padding-left: 2px;
+    opacity: 0.75;
   }
 `
 
@@ -187,10 +188,13 @@ const StyledContentCard = styled(ContentCard)`
   gap: 2.4rem;
 `
 const Content = styled.div`
-  width: 55%;
   flex-direction: column;
   display: flex;
   gap: 2.4rem;
+
+  @media ${({ theme }) => theme.bp.md} {
+    width: 55%;
+  }
 `
 
 const JoiningTextContainer = styled.div`
@@ -200,16 +204,22 @@ const JoiningTextContainer = styled.div`
   gap: 1.6rem;
   align-items: flex-start;
   justify-content: center;
-  opacity: 0.75;
+
+  p {
+    opacity: 0.75;
+  }
 `
 
 const ListingTypeTextContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 4rem;
   width: 100%;
   align-items: flex-start;
-  opacity: 0.75;
+
+  @media ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+  }
 `
 
 const ListingTextColumn = styled.div`

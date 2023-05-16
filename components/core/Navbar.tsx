@@ -60,6 +60,7 @@ export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
         </SingleMenuItem>
         <Divider />
         <NeighborhoodsItemGroup>
+          <MenuItemLink menuItem={'activity'} profileId={profileId} />
           <MenuItemLink menuItem={'members'} profileId={profileId} />
           <MenuItemLink menuItem={'neighborhoods'} profileId={profileId} />
           {hasCityFeature && (
@@ -75,7 +76,11 @@ export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
               onClick={() => setProfileMenuVisible(!profileMenuVisible)}
             />
           )}
-          <MenuItemLink menuItem={'signIn'} profileId={profileId} />
+          <MenuItemLink
+            authenticated
+            menuItem={'signIn'}
+            profileId={profileId}
+          />
         </SingleMenuItem>
       </Container>
       <ProfileNavMenu visible={profileMenuVisible} />

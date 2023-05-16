@@ -18,7 +18,7 @@ import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user } = useUser({ redirectTo: '/login' })
+  const { user } = useUser({ redirectTo: '/' })
   const [updateProfile] = useUpdateProfileMutation()
   const [editProfileInput, setEditProfileInput] = useState<UpdateProfileInput>(
     {}

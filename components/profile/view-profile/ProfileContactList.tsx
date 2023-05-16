@@ -3,6 +3,7 @@ import { formatContactField } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { Caption } from '../../core/Typography'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface ProfileContactListProps {
   contactFields: GetProfileByIdFragment['contactFields']
@@ -10,6 +11,8 @@ interface ProfileContactListProps {
 export const ProfileContactList = ({
   contactFields,
 }: ProfileContactListProps) => {
+  const { deviceSize } = useDeviceSize()
+
   return (
     <ProfileListContainer>
       <ContactFields>
@@ -20,7 +23,9 @@ export const ProfileContactList = ({
       <ContactFields>
         {contactFields.map((field) => (
           <CopyToClipboard key={field.type} text={field.value}>
-            <Caption emphasized>{formatContactField(field)}</Caption>
+            <Caption emphasized>
+              {formatContactField(field, deviceSize !== 'tablet')}
+            </Caption>
           </CopyToClipboard>
         ))}
       </ContactFields>

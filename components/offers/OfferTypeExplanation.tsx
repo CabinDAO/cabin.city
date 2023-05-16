@@ -38,9 +38,13 @@ export const OfferTypesDescriptionList = () => {
 
 const OfferTypeExplanationGroup = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
   gap: 4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `
 
 const OfferTypeDescription = styled.div`

@@ -26,23 +26,44 @@ export const pxToRem = (px: number) => `${px / 10}`
 export const shortenedAddress = (address: string | undefined) =>
   address ? `${address.slice(0, 4)}...${address.slice(-4)}` : null
 
+export const shortenedContactField = (value: string | undefined) => {
+  if (!value) return null
+
+  return value.length > 23
+    ? `${value.slice(0, 20)}...${value.slice(-1)}`
+    : value
+}
 export const formatDate = (date: Date, desiredFormat = 'MMMM yyyy') =>
   format(date, desiredFormat, { locale: enUS })
 
 export const monthYearFormat = (dateISOString: string) =>
   format(new Date(dateISOString), 'MMMM yyyy', { locale: enUS })
 
-export const formatContactField = (field: ProfileContactField) => {
+export const formatContactField = (
+  field: ProfileContactField,
+  truncateValue = false
+) => {
+  const shortenedValue = truncateValue
+    ? shortenedContactField(field.value)
+    : field.value
+
+  if (ProfileContactFieldType.Lens) {
+    const lensUrl = 'https://lenster.xyz/u/'
+
+    if (field.value.startsWith(lensUrl)) {
+      return field.value.slice(lensUrl.length)
+    } else {
+      return shortenedValue
+    }
+  }
   if (
-    [
-      ProfileContactFieldType.Lens,
-      ProfileContactFieldType.Email,
-      ProfileContactFieldType.Website,
-    ].includes(field.type)
+    [ProfileContactFieldType.Email, ProfileContactFieldType.Website].includes(
+      field.type
+    )
   ) {
-    return field.value
+    return shortenedValue
   } else {
-    return field.value.includes('@') ? field.value : `@${field.value}`
+    shortenedValue?.startsWith('@') ? shortenedValue : `@${shortenedValue}`
   }
 }
 

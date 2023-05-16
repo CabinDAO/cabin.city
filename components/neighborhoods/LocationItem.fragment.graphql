@@ -27,6 +27,7 @@ fragment LocationItem on Location {
           url
         }
       }
+      count
     }
   }
 }
