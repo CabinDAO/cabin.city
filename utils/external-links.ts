@@ -10,7 +10,7 @@ export const EXTERNAL_LINKS = {
   PRIVACY_AND_TERMS:
     'https://cabin-fellowship.notion.site/Privacy-Policy-and-Terms-of-Service-af00c235b7c149ec9bd7c8cd807c3b7b',
   CABIN_INSTAGRAM: 'https://www.instagram.com/creatorcabins',
-  CABIN_TWITTER: 'https://twitter.com/creatorcabins',
+  CABIN_TWITTER: 'https://twitter.com/cabindotcity',
   CABIN_DISCORD: 'https://discord.gg/paqg6acbE8',
   BLOG: 'https://creators.mirror.xyz/',
   PODCAST:
@@ -18,4 +18,5 @@ export const EXTERNAL_LINKS = {
   CITY_DIRECTORY:
     'https://cabin-fellowship.notion.site/The-City-Directory-853a83a5170749df8d200db9a8bd9c77',
   WIKI: 'https://cabin-fellowship.notion.site/Cabin-Community-Wiki-49958f9db9804ef8836d4a37dd4e7bbb',
+  CITIZENSHIP_PERKS: '/', // TODO: add link
 }

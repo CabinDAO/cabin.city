@@ -60,9 +60,7 @@ export const EditOfferForm = ({
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= MAX_OFFER_TITLE_LENGTH) {
-      onEdit({ title: e.target.value })
-    }
+    onEdit({ title: e.target.value.slice(0, MAX_OFFER_TITLE_LENGTH) })
   }
 
   const handleAvailabilityChange = (startDate: string, endDate: string) => {

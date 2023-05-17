@@ -26,6 +26,7 @@ export function useSlateRendering() {
 
 const Element = (props: RenderElementProps) => {
   const { attributes, children, element } = props
+
   switch (element.type) {
     case 'quote':
       return <BlockQuote {...attributes}>{children}</BlockQuote>
@@ -36,9 +37,11 @@ const Element = (props: RenderElementProps) => {
     case 'list-item':
       return <ListItem {...attributes}>{children}</ListItem>
     case 'list-bulleted':
-      return <UnorderedList {...attributes}>{children}</UnorderedList>
+      return (
+        <StyledUnorderedList {...attributes}>{children}</StyledUnorderedList>
+      )
     case 'list-numbered':
-      return <OrderedList {...attributes}>{children}</OrderedList>
+      return <StyledOrderedList {...attributes}>{children}</StyledOrderedList>
     default:
       return <StyledBody1 {...attributes}>{children}</StyledBody1>
   }
@@ -61,6 +64,14 @@ const Leaf = (props: RenderLeafProps) => {
 
   return <span {...attributes}>{newChildren}</span>
 }
+
+const StyledUnorderedList = styled(UnorderedList)`
+  opacity: 0.75;
+`
+
+const StyledOrderedList = styled(OrderedList)`
+  opacity: 0.75;
+`
 
 const StyledBody1 = styled(Body1)`
   opacity: 0.75;

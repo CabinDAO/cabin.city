@@ -10,11 +10,13 @@ import { useState } from 'react'
 interface UseFilesUploadProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
+  onStartUploading?: () => void
 }
 
 export const useFilesUpload = ({
   onFilesUploaded,
   preprocessFiles,
+  onStartUploading,
 }: UseFilesUploadProps) => {
   const [isDragging, setIsDragging] = useState(false)
   const { showModal } = useModal()
@@ -91,6 +93,7 @@ export const useFilesUpload = ({
     e.preventDefault()
 
     if (e.target.files && e.target.files[0]) {
+      onStartUploading && onStartUploading()
       const result = (await uploadFiles(e.target.files)) as FileNameIpfsHashMap
       onFilesUploaded(result)
     }

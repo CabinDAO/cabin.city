@@ -20,6 +20,7 @@ export const PhotoGalleryStep = ({
   steps,
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location._id)
+  const [uploading, setUploading] = useState(false)
 
   const [locationInput, setLocationInput] =
     useState<PartialUpdateLocationInput>({
@@ -55,6 +56,8 @@ export const PhotoGalleryStep = ({
     fileNameIpfsHashMap: FileNameIpfsHashMap,
     category: LocationMediaCategory
   ) => {
+    setUploading(false)
+
     const newImages = Object.values(fileNameIpfsHashMap).map((ipfsHash) => ({
       ipfsHash,
       category,
@@ -71,6 +74,7 @@ export const PhotoGalleryStep = ({
   const handleBannerFileUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
+    setUploading(false)
     setLocationInput((prev) => ({
       ...prev,
       bannerImageIpfsHash:
@@ -101,7 +105,9 @@ export const PhotoGalleryStep = ({
       steps={steps}
     >
       <LocationPhotoGallerySection
+        onStartUploading={() => setUploading(true)}
         onFilesUploaded={handleBannerFileUploaded}
+        uploading={uploading}
         title="Neighborhood banner image"
         instructions="This picture will be your banner on the listing page. It will be trimmed to a 7:3 ratio for desktop and 1:1 for mobile. Thus, it's best to put the main focus in the center to avoid unwanted trimming. Choose a JPG or PNG no larger than 5 MB."
         isBanner
@@ -111,6 +117,8 @@ export const PhotoGalleryStep = ({
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
+        onStartUploading={() => setUploading(true)}
+        uploading={uploading}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(
             fileNameIpfsHashMap,
@@ -119,11 +127,13 @@ export const PhotoGalleryStep = ({
         }
         onDelete={deleteByIpfsHash}
         title="sleeping arrangements"
-        instructions="This is the maximum number of people who can sleep comfortably in a place. We recommend that neighborhoods have enough space for at least four people to sleep. Choose a JPG or PNG no larger than 5 MB."
+        instructions="Share images of the available sleeping arrangements at your place to provide potential guests with an idea of where they can rest. Choose JPG or PNG file formats no larger than 5 MB."
         ipfsHashList={getImagesForCategory(LocationMediaCategory.Sleeping)}
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
+        onStartUploading={() => setUploading(true)}
+        uploading={uploading}
         onDelete={deleteByIpfsHash}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(
@@ -137,6 +147,8 @@ export const PhotoGalleryStep = ({
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
+        onStartUploading={() => setUploading(true)}
+        uploading={uploading}
         onDelete={deleteByIpfsHash}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(

@@ -11,7 +11,6 @@ import {
   body1Styles,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import { format } from 'date-fns'
 import Icon, { IconName } from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
@@ -20,6 +19,7 @@ import { stringToSlateValue } from '../core/slate/slate-utils'
 import { useOfferApply } from '../hooks/useOfferApply'
 import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { isNotNull } from '@/lib/data'
+import { formatRange } from '@/utils/display-utils'
 
 const EMPTY = '—'
 
@@ -37,8 +37,6 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
     citizenshipRequired,
     minimunCabinBalance,
   } = offer
-  const formattedStartDate = startDate ? format(startDate, 'MMM') : null
-  const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const levelsByRole = profileRoleConstraints?.reduce(
     (acc, { profileRole, level }) => ({
@@ -62,6 +60,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
           return roleConstraintInfoFromType({
             profileRole: profileRole as ProfileRoleType,
             level: ProfileRoleLevelType.Apprentice,
+            hideLevel: true,
           })
         } else {
           return levelsByRole[profileRole as ProfileRoleType].map((level) =>
@@ -97,13 +96,13 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
               <OfferDetailsHeader>
                 <OfferDetailsOverview>
                   <H2>{offerInfo?.name ?? EMPTY}</H2>
-                  <Subline2>
+                  <LocationSubline2>
                     at{' '}
-                    <a href={`/offers`}>
+                    <a href={`/location/${location._id}`}>
                       <u>{location.name}</u>
                     </a>{' '}
                     in {location.shortAddress}
-                  </Subline2>
+                  </LocationSubline2>
                 </OfferDetailsOverview>
 
                 <Link href={applyUrl ?? '#'}>
@@ -117,9 +116,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                 <H3>AVAILABILITY</H3>
 
                 <OfferDetailsPricing>
-                  <Caption>
-                    {formattedStartDate ?? EMPTY} - {formattedEndDate ?? EMPTY}
-                  </Caption>
+                  <Caption>{formatRange(startDate, endDate)}</Caption>
                   <Caption emphasized>
                     {price ? formatOfferPrice(price) : EMPTY}
                   </Caption>
@@ -348,4 +345,8 @@ const OfferDetailsEligibilityCaption = styled(Caption)`
   display: flex;
   flex-flow: row;
   gap: 0.4rem;
+`
+
+const LocationSubline2 = styled(Subline2)`
+  line-height: 1.6;
 `

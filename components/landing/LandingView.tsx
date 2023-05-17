@@ -257,17 +257,19 @@ export const LandingView = () => {
 
                 <JoinOptionDetailColumn>
                   <JoinOptionBenefits>
-                    <JoinBenefit>Community Member benefits</JoinBenefit>
-                    <JoinBenefit>Access to coliving opportunities</JoinBenefit>
-                    <JoinBenefit>Join the City Directory</JoinBenefit>
+                    <JoinBenefit>Numbered NFT and passport card</JoinBenefit>
                     <JoinBenefit>
-                      Receive 25₡ to boost your voting power
+                      Access exclusive offers in the City Directory
                     </JoinBenefit>
-                    <JoinBenefit>Merch and additional member perks</JoinBenefit>
+                    <JoinBenefit>
+                      Add listings to the City Directory
+                    </JoinBenefit>
+                    <JoinBenefit>25₡ to boost your voting power</JoinBenefit>
+                    <JoinBenefit>Merch drops and member discounts</JoinBenefit>
                   </JoinOptionBenefits>
 
                   <JoinBenefitsCaption>
-                    * FREE if you hold 1000 ₡ or a Passport Card
+                    * FREE for holders of 1,000 ₡ABIN
                   </JoinBenefitsCaption>
                 </JoinOptionDetailColumn>
               </JoinOptionDetail>
@@ -413,6 +415,7 @@ export const SectionHeader = styled.div`
 
 export const SectionDescription = styled(Body1)`
   width: 100%;
+  opacity: 0.75;
 
   ${({ theme }) => theme.bp.md} {
     width: 43rem;

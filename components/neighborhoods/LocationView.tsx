@@ -72,6 +72,7 @@ export interface LocationProps {
   address: string | null | undefined
   bannerImageUrl: string | null | undefined
   caretaker: ProfileFragment
+  caretakerEmail: string | null | undefined
   description: string | null | undefined
   locationType: LocationType
   mediaItems: LocationMediaItem[]
@@ -109,6 +110,7 @@ export const LocationView = ({
     voteCount,
     votes,
     offers,
+    caretakerEmail,
   } = location
   const isNeighborhood = locationType === LocationType.Neighborhood
   const voteProfiles = (votes ?? []).map(({ profile }) => profile)
@@ -168,7 +170,9 @@ export const LocationView = ({
               <LocationHeaderInformation>
                 <span>{address ?? EMPTY}</span>
                 <span>Sleeps {sleepCapacity ?? EMPTY}</span>
-                <span>{offerCount} Offers</span>
+                <span>
+                  {offerCount} {offerCount === 1 ? 'Offer' : 'Offers'}
+                </span>
               </LocationHeaderInformation>
             </LocationHeaderTitle>
 
@@ -176,7 +180,9 @@ export const LocationView = ({
 
             <VotesContainer>
               <VotesAvatarContainer>
-                <Caption>{voteCount} Votes</Caption>
+                <Caption>
+                  {voteCount} {voteCount === 1 ? 'Vote' : 'Votes'}
+                </Caption>
                 <ProfilesCount profiles={voteProfiles} />
               </VotesAvatarContainer>
 
@@ -260,7 +266,10 @@ export const LocationView = ({
 
             <CaretakerDetailsContainer>
               <CaretakerDetails>
-                <ProfileContact profile={caretaker} />
+                <ProfileContact
+                  caretakerEmail={caretakerEmail}
+                  profile={caretaker}
+                />
               </CaretakerDetails>
             </CaretakerDetailsContainer>
           </DescriptionTwoColumn>

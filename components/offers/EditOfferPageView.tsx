@@ -8,12 +8,14 @@ import {
 } from '@/generated/graphql'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { useNavigation } from '../hooks/useNavigation'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
   const { offer, ownedByMe } = useGetOffer()
-  const backRoute = `/location/${offer?.location._id}/edit?step=3`
   const [updateOffer] = useUpdateOfferMutation()
+  const { history } = useNavigation()
+  const backRoute = history[history.length - 2]
 
   const offerFragment = offer?.rawFragment
 

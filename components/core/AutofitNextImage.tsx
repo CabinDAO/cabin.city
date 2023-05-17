@@ -4,6 +4,8 @@ import styled from 'styled-components'
 interface ImageProps {
   src: string
   alt: string
+  className?: string
+  onLoadingComplete?: () => void
 }
 
 const StyledNextImage = styled(Image)`
@@ -11,6 +13,17 @@ const StyledNextImage = styled(Image)`
   height: 100%;
 `
 
-export const AutofitNextImage = ({ src, alt }: ImageProps) => (
-  <StyledNextImage src={src} alt={alt} fill />
+export const AutofitNextImage = ({
+  src,
+  alt,
+  className,
+  onLoadingComplete,
+}: ImageProps) => (
+  <StyledNextImage
+    onLoadingComplete={onLoadingComplete}
+    className={className}
+    src={src}
+    alt={alt}
+    fill
+  />
 )

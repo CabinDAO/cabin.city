@@ -29,12 +29,10 @@ export const SingleColumnLayout = ({
   const isMobile = deviceSize === 'mobile'
 
   return (
-    <OuterContainer>
+    <OuterContainer className={className}>
       {displayLaunchBanner && <LaunchBanner />}
       <Container variant={variant}>
-        <MainContent variant={variant} className={className}>
-          {children}
-        </MainContent>
+        <MainContent variant={variant}>{children}</MainContent>
         {!hideNavbar && (
           <>
             {isMobile ? (

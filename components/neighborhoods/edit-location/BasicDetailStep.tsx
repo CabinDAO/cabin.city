@@ -83,6 +83,20 @@ export const BasicDetailStep = ({
       }
     }
 
+    if (field === 'name') {
+      setLocationInput((prev) => ({
+        ...prev,
+        [field]: e.target.value.slice(0, MAX_LOCATION_TITLE_LENGTH),
+      }))
+      return
+    } else if (field === 'tagline') {
+      setLocationInput((prev) => ({
+        ...prev,
+        [field]: e.target.value.slice(0, MAX_LOCATION_BIO_LENGTH),
+      }))
+      return
+    }
+
     setLocationInput((prev) => ({
       ...prev,
       [field]:

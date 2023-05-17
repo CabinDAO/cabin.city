@@ -1,10 +1,11 @@
 import { UnlockNFT, YEARLY_PRICE_IN_ETH } from '@/utils/citizenship'
-import { formatDate } from '@/utils/display-utils'
+import { EMPTY, formatDate } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { useUser } from '../auth/useUser'
 import { Button } from '../core/Button'
 import { H3, H1 } from '../core/Typography'
 import { NFTDataList } from './NFTDataList'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 interface CitizenshipNFTDataProps {
   nft?: UnlockNFT
@@ -27,8 +28,8 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
 
   nftData = {
     'Vouched for by': {
-      value: vouchedBy?.name || '',
-      url: `/profile/${vouchedBy?._id}`,
+      value: vouchedBy?.name || EMPTY,
+      url: vouchedBy ? `/profile/${vouchedBy?._id}` : undefined,
     },
     Type: { value: 'Cabin Citizenship' },
     Status: { value: expiredNft ? 'Expired' : user.citizenshipStatus },
@@ -37,6 +38,11 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
       value: formatDate(nft.expirationDate, 'MMM dd, yyyy'),
     },
     'Renewal Price': { value: `${YEARLY_PRICE_IN_ETH} ETH / year` },
+    'Citizen perks': {
+      value: 'View my perks',
+      url: EXTERNAL_LINKS.CITIZENSHIP_PERKS,
+      external: true,
+    },
   }
 
   return (

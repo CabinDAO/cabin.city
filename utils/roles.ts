@@ -82,10 +82,13 @@ export const roleInfoFromType = (roleType: ProfileRoleType): RoleInfo => {
   return RoleInfoByType[roleType]
 }
 
+type RoleConstraintInfoParams = ProfileRoleConstraint & { hideLevel?: boolean }
+
 export const roleConstraintInfoFromType = ({
   profileRole,
   level,
-}: ProfileRoleConstraint): RoleConstraintInfo => {
+  hideLevel = false,
+}: RoleConstraintInfoParams): RoleConstraintInfo => {
   const roleInfo = RoleInfoByType[profileRole]
   const levelInfo = LevelInfoByType[level]
 
@@ -93,9 +96,7 @@ export const roleConstraintInfoFromType = ({
     ...roleInfo,
     ...levelInfo,
     constraintName: `${roleInfo.name}${
-      level === ProfileRoleLevelType.Apprentice
-        ? ''
-        : ` ${levelInfo.name.toLowerCase()}`
+      hideLevel ? '' : ` ${levelInfo.name.toLowerCase()}`
     }`,
   }
 }

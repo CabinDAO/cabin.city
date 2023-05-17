@@ -10,6 +10,7 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 import { WagmiConfig } from 'wagmi'
 import GlobalStyles from '../styles/global'
+import { NavigationProvider } from '@/components/contexts/NavigationContext'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -21,9 +22,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <ConnectKitProvider>
             <ApolloProvider client={apolloClient}>
               <CitizenshipProvider>
-                <ModalProvider>
-                  <Component {...pageProps} />
-                </ModalProvider>
+                <NavigationProvider>
+                  <ModalProvider>
+                    <Component {...pageProps} />
+                  </ModalProvider>
+                </NavigationProvider>
               </CitizenshipProvider>
             </ApolloProvider>
           </ConnectKitProvider>

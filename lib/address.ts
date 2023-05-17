@@ -1,3 +1,5 @@
+import { EMPTY } from '@/utils/display-utils'
+
 interface FormatShortAddressParams {
   locality?: string | null | undefined
   admininstrativeAreaLevel1Short?: string | null | undefined
@@ -6,7 +8,13 @@ interface FormatShortAddressParams {
 export const formatShortAddress = (
   address: FormatShortAddressParams | null | undefined
 ) => {
-  return address
-    ? `${address.locality}, ${address.admininstrativeAreaLevel1Short}`
-    : null
+  if (!address) return EMPTY
+
+  if (!address.locality && !address.admininstrativeAreaLevel1Short) {
+    return EMPTY
+  } else {
+    return `${address.locality ?? EMPTY}, ${
+      address.admininstrativeAreaLevel1Short ?? EMPTY
+    }`
+  }
 }

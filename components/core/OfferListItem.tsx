@@ -8,7 +8,6 @@ import {
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
 import Icon from './Icon'
-import { format } from 'date-fns'
 import { offerInfoFromType } from '@/utils/offer'
 import { ListItem } from './ListItem'
 import { roleInfoFromType } from '@/utils/roles'
@@ -16,6 +15,7 @@ import { ProfileIcons } from '@/components/core/ProfileIcons'
 import { H6 } from '@/components/core/Typography'
 import { Button } from './Button'
 import { useRouter } from 'next/router'
+import { formatRange } from '@/utils/display-utils'
 
 export interface OfferListItemProps {
   className?: string
@@ -75,12 +75,8 @@ export const OfferListItem = (props: OfferListItemProps) => {
     )
   )
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
-  const formattedStartDate = startDate ? format(startDate, 'MMM') : null
-  const formattedEndDate = endDate ? format(endDate, 'MMM yyyy') : null
-  const formattedDateRange =
-    formattedStartDate && formattedEndDate
-      ? `${formattedStartDate} - ${formattedEndDate} · `
-      : null
+  const dateRange = formatRange(startDate, endDate)
+  const formattedDateRange = dateRange ? `${dateRange} · ` : null
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
@@ -94,7 +90,10 @@ export const OfferListItem = (props: OfferListItemProps) => {
   }
 
   return (
-    <ListItem authenticated href={`/offer/${_id}`}>
+    <ListItem
+      authenticated
+      href={actionsEnabled ? `/offer/${_id}/edit` : `/offer/${_id}`}
+    >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>
           {isDisplayingIcon && (

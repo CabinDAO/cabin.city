@@ -10,6 +10,7 @@ import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
 import { emptyFunction } from '@/utils/general'
 import { AuthenticatedLink } from './AuthenticatedLink'
+import { EMPTY } from '@/utils/display-utils'
 
 export interface LocationCardProps {
   _id: string
@@ -41,7 +42,6 @@ interface Voter {
 }
 
 const BANNER_IMAGE_SIZE = 190
-const EMPTY = '—'
 
 export const LocationCard = (props: LocationCardProps) => {
   const {

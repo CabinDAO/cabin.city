@@ -14,12 +14,16 @@ interface LocationPhotoGallerySectionProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   ipfsHashList?: (InputMaybe<string> | undefined)[]
   onDelete?: (ipfsHash: InputMaybe<string> | undefined) => void
+  onStartUploading?: () => void
+  uploading?: boolean
 }
 
 export const LocationPhotoGallerySection = ({
   title,
   instructions,
   onFilesUploaded,
+  onStartUploading,
+  uploading = false,
   isBanner = false,
   ipfsHashList,
   onDelete,
@@ -40,13 +44,17 @@ export const LocationPhotoGallerySection = ({
         <UploadFormContainer>
           <Body2>{instructions}</Body2>
           <FileUploadButton
+            onStartUploading={onStartUploading}
+            multiple={!isBanner}
             onFilesUploaded={onFilesUploaded}
             removeEnabled={!!bannerImageUrl}
           />
         </UploadFormContainer>
       </UploadContainer>
-      {bannerImageUrl ? <BannerPreview imageUrl={bannerImageUrl} /> : null}
-      {imageUrls?.length && !bannerImageUrl ? (
+      {isBanner ? (
+        <BannerPreview uploading={uploading} imageUrl={bannerImageUrl} />
+      ) : null}
+      {imageUrls?.length && !isBanner ? (
         <ImagesPreview onDelete={onDelete} ipfsHashList={ipfsHashList} />
       ) : null}
     </Container>

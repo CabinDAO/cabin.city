@@ -1,14 +1,11 @@
 import { pxToRem } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
+import LoadingSpinner from '../core/LoadingSpinner'
 
 const IMAGE_HEIGHT_PX = 230.67
 const MOBILE_IMAGE_HEIGHT_PX = 127
 const IMAGE_MARGIN_PX = 24
-
-interface PreviewProps {
-  imageUrl: string
-}
 
 export const BannerPreviewContainer = styled.div`
   display: flex;
@@ -28,31 +25,42 @@ export const BannerPreviewContainer = styled.div`
   }
 `
 
-export const DesktopBanner = styled.div<PreviewProps>`
+export const DesktopBanner = styled.div`
   display: flex;
+  position: relative;
   width: 100%;
   height: ${pxToRem(MOBILE_IMAGE_HEIGHT_PX)}rem;
-  background-color: #000;
   justify-content: center;
   align-items: center;
-  background: url(${(props) => props.imageUrl}) no-repeat center center / cover;
 
   ${(props) => props.theme.bp.md} {
-    background: url(${(props) => props.imageUrl}) no-repeat center center /
-      cover;
     height: ${pxToRem(IMAGE_HEIGHT_PX)}rem;
+  }
+
+  ${LoadingSpinner} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `
 
-export const MobileBanner = styled.div<PreviewProps>`
+export const MobileBanner = styled.div`
   width: 29.6rem;
   height: 29.6rem;
   display: flex;
-  background: url(${(props) => props.imageUrl}) no-repeat center center / cover;
+  position: relative;
 
   ${(props) => props.theme.bp.md} {
     height: ${pxToRem(IMAGE_HEIGHT_PX)}rem;
     width: ${pxToRem(IMAGE_HEIGHT_PX)}rem;
+  }
+
+  ${LoadingSpinner} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 `
 

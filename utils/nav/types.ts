@@ -37,7 +37,7 @@ export const MenuItemsAuthenticatedMap: Record<
   },
   members: {
     icon: 'members',
-    path: '/directory',
+    path: '/census',
     displayText: 'Census',
     iconSize: 2.5,
   },
