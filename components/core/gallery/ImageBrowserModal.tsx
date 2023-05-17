@@ -83,7 +83,7 @@ export const ImageBrowserModal = ({
           <Icon name="chevron-left" color="green900" size={1.7} />
         </ChevronCircle>
         {imageUrl ? (
-          <NextImage
+          <StyledImageNextImage
             src={imageUrl}
             width={1120}
             height={805}
@@ -138,4 +138,8 @@ const ImageBrowserContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.green900};
   padding: 3rem 4rem;
   gap: 3.6rem;
+`
+
+const StyledImageNextImage = styled(NextImage)`
+  object-fit: cover;
 `

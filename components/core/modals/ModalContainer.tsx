@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const ModalContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   max-height: 70vh;

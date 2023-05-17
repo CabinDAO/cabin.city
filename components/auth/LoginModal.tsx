@@ -4,9 +4,9 @@ import { ModalContent } from '../core/modals/ModalContent'
 import { ConnectKitButton } from 'connectkit'
 import { LoginLogic, LoginStatus } from './LoginLogic'
 import { Button } from '../core/Button'
-import { Circle } from '../core/Circle'
 import styled from 'styled-components'
 import { ModalTitle } from '../core/modals/ModalTitle'
+import Icon from '../core/Icon'
 
 interface LoginModalProps {
   onLogin?: () => void
@@ -22,11 +22,9 @@ export const LoginModal = (props: LoginModalProps) => {
             <ModalTitle text="" />
             <ModalContent>
               <Container>
-                <Circle
-                  size={6.4}
-                  shadowMode="always"
-                  source="/images/welcome-logo.png"
-                />
+                <CabinCircle>
+                  <Icon name="logo-cabin" size={2.56} color="green400" />
+                </CabinCircle>
                 <Heading>Log in or Sign up</Heading>
                 <Body2>by connecting your Ethereum wallet</Body2>
 
@@ -108,6 +106,16 @@ const MessageContainer = styled.div<MessageProps>`
     error ? theme.colors.red200 : 'rgba(29, 43, 42, 0.05)'};
   border-radius: 0.4rem;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const CabinCircle = styled.div`
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.green900};
   display: flex;
   align-items: center;
   justify-content: center;

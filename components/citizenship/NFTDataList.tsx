@@ -39,7 +39,7 @@ export const NFTDataList = ({ data }: NFTDataListProps) => {
                 external={value.external}
                 location={value.url}
                 key={value.value}
-                iconSize={0.7}
+                iconSize={0.9}
                 iconName={value.external ? 'up-right-arrow' : 'chevron-right'}
               >
                 {displayValue()}

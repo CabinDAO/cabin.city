@@ -40,6 +40,7 @@ export const locationViewPropsFromFragment = (
     address: formatShortAddress(fragment.address),
     bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash, true),
     caretaker: fragment.caretaker,
+    caretakerEmail: fragment.caretakerEmail,
     description: fragment.description,
     locationType: fragment.locationType ?? LocationType.Outpost,
     mediaItems: fragment.mediaItems?.filter(isNotNull) ?? [],

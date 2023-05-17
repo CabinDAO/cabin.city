@@ -53,7 +53,11 @@ export const Pricing = ({ price, onPriceChange }: PricingProps) => {
           placeholder="$ Value"
           label="Price"
           onChange={handlePriceChange}
-          value={price ? (price.amountCents / 100).toString() : ''}
+          value={
+            price && price.amountCents > 0
+              ? (price.amountCents / 100).toString()
+              : ''
+          }
         />
         <Dropdown
           label="Unit"

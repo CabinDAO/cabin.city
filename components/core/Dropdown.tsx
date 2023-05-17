@@ -81,7 +81,11 @@ export const Dropdown = ({
 
   return (
     <ClickAway className={className} onClickAway={handleSoftClose}>
-      <Container onFocus={() => setActive(true)} onClick={toggleOpen}>
+      <Container
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+        onClick={toggleOpen}
+      >
         {enableSearch ? (
           <InputText
             value={searchInput ?? (selectedOption?.label || '')}

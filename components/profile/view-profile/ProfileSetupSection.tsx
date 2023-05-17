@@ -46,7 +46,7 @@ export const ProfileSetupSection = ({
 
   const handleTwitterShareClick = () => {
     const text = encodeURIComponent(
-      `I'm live on @creatorcabins Community Census`
+      `I'm live on the @cabindotcity Census. Check it out on cabin.city.`
     )
 
     window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank')

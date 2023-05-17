@@ -11,9 +11,22 @@ interface ModalTitleProps {
 }
 
 export const ModalTitle = (props: ModalTitleProps) => {
+  const { hideModal } = useModal()
   const { text, startAdornment, endAdornment } = props
   const theStartAdornment =
-    typeof startAdornment !== 'undefined' ? startAdornment : <ModalTitleClose />
+    typeof startAdornment !== 'undefined' ? (
+      <AdornmentContainer position="start">{startAdornment}</AdornmentContainer>
+    ) : (
+      <AdornmentContainer onClick={hideModal} position="start">
+        <IconButton
+          animated
+          onClick={hideModal}
+          size={2}
+          color="green900"
+          icon="close"
+        />
+      </AdornmentContainer>
+    )
 
   return (
     <Container>
@@ -28,25 +41,13 @@ export const ModalTitle = (props: ModalTitleProps) => {
   )
 }
 
-const ModalTitleClose = () => {
-  const { hideModal } = useModal()
-  return (
-    <IconButton
-      animated
-      onClick={hideModal}
-      size={2}
-      color="green900"
-      icon="close"
-    />
-  )
-}
-
 interface AdornmentContainerProps {
   position: 'start' | 'end'
 }
 
 const AdornmentContainer = styled.div<AdornmentContainerProps>`
   position: absolute;
+  cursor: pointer;
   ${(props) => (props.position === 'start' ? 'left' : 'right')}: 0;
   top: 0;
   display: flex;

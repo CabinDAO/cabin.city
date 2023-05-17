@@ -19,6 +19,7 @@ import { useUser } from '../auth/useUser'
 import { useEffect } from 'react'
 import { useFeatures } from '../hooks/useFeatures'
 import { Feature } from '@/lib/features'
+import { useNavigation } from '../hooks/useNavigation'
 
 export const NewLocationView = () => {
   const router = useRouter()
@@ -26,6 +27,7 @@ export const NewLocationView = () => {
   const { showModal } = useModal()
   const { user } = useUser({ redirectTo: '/' })
   const { hasFeature } = useFeatures()
+  const { goBack } = useNavigation()
   const canCreateListings =
     hasFeature(Feature.City) ||
     user?.citizenshipStatus === CitizenshipStatus.Verified
@@ -57,7 +59,7 @@ export const NewLocationView = () => {
   }
 
   const handleSecondaryButtonClick = () => {
-    router.push('/city-directory')
+    goBack()
   }
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export const NewLocationView = () => {
   }
 
   return (
-    <SingleColumnLayout
+    <StyledLayout
       actionBar={
         <ActionBar
           primaryButton={{
@@ -93,9 +95,10 @@ export const NewLocationView = () => {
             <JoiningTextContainer>
               <H3>Joining the City Directory</H3>
               <Body2>
-                Our City Directory connects people who want to rent out their
-                property with people building better ways to live, create, and
-                conserve at Cabin.
+                Cabin&apos;s City Directory is a hub for connecting people and
+                space around the world. If you&apos;re interested in welcoming
+                residents focused on building better ways to live, create,
+                build, and steward the natural land, this is the place for you.
               </Body2>
               <Body2>
                 Properties compete to increase their rank on the directory
@@ -112,7 +115,7 @@ export const NewLocationView = () => {
             <ListingTypeTextContainer>
               <ListingTextColumn>
                 <NoWrap>
-                  <H4>Outpost properties:</H4>
+                  <H4>Outposts:</H4>
                 </NoWrap>
                 <StyledList>
                   <li>
@@ -122,7 +125,7 @@ export const NewLocationView = () => {
                   </li>
                   <li>
                     <Body2>
-                      Smaller locations that don’t meeting ‘Neighborhood’
+                      Smaller locations that don’t meet ‘Neighborhood’
                       requirements
                     </Body2>
                   </li>
@@ -130,7 +133,7 @@ export const NewLocationView = () => {
               </ListingTextColumn>
               <ListingTextColumn>
                 <NoWrap>
-                  <H4>Neighborhood properties:</H4>
+                  <H4>Neighborhoods:</H4>
                 </NoWrap>
                 <StyledList>
                   <li>
@@ -156,9 +159,13 @@ export const NewLocationView = () => {
           </AppLink>
         </StyledContentCard>
       </Container>
-    </SingleColumnLayout>
+    </StyledLayout>
   )
 }
+
+const StyledLayout = styled(SingleColumnLayout)`
+  // display: none;
+`
 
 const Container = styled.div`
   padding-top: 2.4rem;

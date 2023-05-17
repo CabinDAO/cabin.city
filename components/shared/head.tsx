@@ -93,7 +93,7 @@ export const AppHead = ({
       <meta property="og:image:width" content="1200" key="og:image:width" />
       <meta property="og:image:height" content="630" key="og:image:height" />
       <meta property="og:image:alt" content={DESCRIPTION} key="og:image:alt" />
-      <meta name="twitter:site" content="@creatorcabins" key="twitter:site" />
+      <meta name="twitter:site" content="@cabindotcity" key="twitter:site" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="robots" content="noindex, nosnippet, noimageindex" />
     </Head>

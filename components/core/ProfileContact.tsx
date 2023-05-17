@@ -2,20 +2,27 @@ import Link from 'next/link'
 import { ProfileFragment } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Avatar } from './Avatar'
 import { ProfileIcons } from './ProfileIcons'
 import { Caption, H4 } from './Typography'
 import { Button } from '@/components/core/Button'
+import { NoWrap } from './NoWrap'
 
 interface ProfileContactProps {
   profile: ProfileFragment
+  caretakerEmail?: string | null | undefined
 }
 
-export const ProfileContact = ({ profile }: ProfileContactProps) => {
+export const ProfileContact = ({
+  profile,
+  caretakerEmail,
+}: ProfileContactProps) => {
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.role)
   )
+
+  const wrapToNextLine = profile.name.length > 15 && roleInfos.length > 4
 
   return (
     <ProfileContactContainer>
@@ -24,8 +31,10 @@ export const ProfileContact = ({ profile }: ProfileContactProps) => {
       </AvatarContainer>
 
       <InfoContainer>
-        <NameContainer>
-          <H4>{profile.name}</H4>
+        <NameContainer wrapToNextLine={wrapToNextLine}>
+          <NoWrap>
+            <H4>{profile.name}</H4>
+          </NoWrap>
           <ProfileIcons
             size={1.6}
             citizenshipStatus={profile.citizenshipStatus}
@@ -39,7 +48,7 @@ export const ProfileContact = ({ profile }: ProfileContactProps) => {
       </InfoContainer>
 
       <ContactContainer>
-        <Link href={`mailto:${profile.email}`}>
+        <Link href={`mailto:${caretakerEmail ?? profile.email}`}>
           <ContactButton variant="tertiary">Contact</ContactButton>
         </Link>
       </ContactContainer>
@@ -73,8 +82,20 @@ const InfoContainer = styled.div`
   gap: 0.4rem;
 `
 
-const NameContainer = styled.div`
+interface NameContainerProps {
+  wrapToNextLine?: boolean
+}
+
+const NameContainer = styled.div<NameContainerProps>`
   display: flex;
   gap: 0.4rem;
+  flex-direction: row;
   align-items: center;
+
+  ${({ wrapToNextLine }) =>
+    wrapToNextLine &&
+    css`
+      flex-direction: column;
+      align-items: flex-start;
+    `}
 `

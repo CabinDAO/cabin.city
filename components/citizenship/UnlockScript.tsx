@@ -57,6 +57,8 @@ export const UnlockScript = () => {
           pessimistic: true,
           skipRecipient: true,
           title: 'Cabin Citizenship',
+          icon: "https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png",
+          expectedAddress: '${user?.account.address}',
         };
 
       (function(d, s) {
