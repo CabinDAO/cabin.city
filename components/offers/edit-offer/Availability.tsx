@@ -1,5 +1,6 @@
 import { DateSelect } from '@/components/core/DateSelect'
 import { Body2, H3 } from '@/components/core/Typography'
+import { getYear } from 'date-fns'
 import { useState } from 'react'
 import styled from 'styled-components'
 
@@ -27,7 +28,7 @@ export const Availability = ({
   const handleStartDateChange = (date: Date | undefined) => {
     if (date) {
       let newRange: DateRange
-      if (date > dateRange.end) {
+      if (date > dateRange.end && getYear(date) > 999) {
         newRange = { ...dateRange, start: date, end: date }
         setDateRange(newRange)
       } else {
@@ -41,7 +42,7 @@ export const Availability = ({
   const handleEndDateChange = (date: Date | undefined) => {
     if (date) {
       let newRange: DateRange
-      if (date < dateRange.start) {
+      if (date < dateRange.start && getYear(date) > 999) {
         newRange = { ...dateRange, start: date, end: date }
         setDateRange(newRange)
       } else {
