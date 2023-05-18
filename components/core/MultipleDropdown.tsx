@@ -70,7 +70,10 @@ export const MultipleDropdown = ({
   const labels = selectedOptions.map((opt) => opt.label)
   return (
     <ClickAway className={className} onClickAway={handleSoftClose}>
-      <Container onFocus={() => setActive(true)}>
+      <Container
+        onFocus={() => setActive(true)}
+        onBlur={() => setActive(false)}
+      >
         <InputBase
           id={id}
           label={label}

@@ -25,6 +25,7 @@ fragment Offer on Offer {
     address {
       locality
       admininstrativeAreaLevel1Short
+      country
     }
     caretaker {
       _id

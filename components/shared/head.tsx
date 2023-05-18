@@ -1,7 +1,7 @@
 import Head from 'next/head'
 
 // TODO: Update title/description
-const TITLE = 'Cabin Census'
+const TITLE = 'Cabin'
 const DESCRIPTION = 'Create your Census profile to join the community'
 
 let origin = 'http://localhost:3000'

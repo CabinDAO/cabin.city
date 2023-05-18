@@ -6,7 +6,7 @@ export const useOfferApply = (offer: OfferViewProps) => {
   const { user } = useUser()
 
   const canApply = () => {
-    if (!user) {
+    if (!user || user.citizenshipStatus !== CitizenshipStatus.Verified) {
       return false
     }
 
