@@ -9,7 +9,11 @@ import styled from 'styled-components'
 import { EmptyState } from '@/components/core/EmptyState'
 import { Dropdown } from '@/components/core/Dropdown'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { OfferType, useCreateOfferMutation } from '@/generated/graphql'
+import {
+  LocationType,
+  OfferType,
+  useCreateOfferMutation,
+} from '@/generated/graphql'
 import { Button } from '@/components/core/Button'
 import { useState } from 'react'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
@@ -48,7 +52,7 @@ export const OffersStep = ({
     value: offerInfo.offerType,
     disabled:
       offerInfo.offerType === OfferType.BuildAndGrowWeek &&
-      !location.publishedAt,
+      location.locationType === LocationType.Outpost,
   }))
 
   const handleCreateOfferClick = async () => {
