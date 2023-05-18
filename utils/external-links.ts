@@ -13,8 +13,7 @@ export const EXTERNAL_LINKS = {
   CABIN_TWITTER: 'https://twitter.com/cabindotcity',
   CABIN_DISCORD: 'https://discord.gg/paqg6acbE8',
   BLOG: 'https://creators.mirror.xyz/',
-  PODCAST:
-    'https://podcasts.apple.com/us/podcast/campfire-by-cabin/id1613976598',
+  PODCAST: 'https://campfire-by-cabin.simplecast.com',
   CITY_DIRECTORY:
     'https://cabin-fellowship.notion.site/The-City-Directory-853a83a5170749df8d200db9a8bd9c77',
   WIKI: 'https://cabin-fellowship.notion.site/Cabin-Community-Wiki-49958f9db9804ef8836d4a37dd4e7bbb',

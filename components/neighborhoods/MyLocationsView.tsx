@@ -31,7 +31,8 @@ export const MyLocationsView = () => {
         icon="draft-proposal"
         title="My Locations"
         end={
-          user?.citizenshipStatus === CitizenshipStatus.Verified ? (
+          user?.citizenshipStatus === CitizenshipStatus.Verified ||
+          hasCityFeature ? (
             <NewListingButton />
           ) : null
         }

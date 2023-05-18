@@ -107,6 +107,13 @@ export const BasicDetailStep = ({
   }
 
   const handleLocationChange = (value: LocationAddressInput) => {
+    // Nullify undefined values so that they are deleted from DB
+    Object.keys(value).forEach((key) => {
+      if (!value[key as keyof LocationAddressInput]) {
+        value[key as keyof LocationAddressInput] = null
+      }
+    })
+
     setAddress(value)
   }
 

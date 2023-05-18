@@ -30,10 +30,12 @@ import { HeroVideo } from '../core/HeroVideo'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { NoWrap } from '../core/NoWrap'
+import { useUser } from '../auth/useUser'
 
 export const LandingView = () => {
   const { showModal } = useModal()
   const { priceInUsd } = usePriceInUsd()
+  const { user } = useUser()
 
   const onSubscribeEmail = () => showModal(() => <SubscribeEmail />)
 
@@ -47,7 +49,7 @@ export const LandingView = () => {
             <SectionGrowTwoColumns>
               <SectionGrowSignup>
                 <AuthenticatedLink href="/dashboard">
-                  <Button>Sign Up</Button>
+                  <Button>{user ? 'View Dashboard' : 'Sign Up'}</Button>
                 </AuthenticatedLink>
                 <a
                   href={EXTERNAL_LINKS.CABIN_DISCORD}

@@ -142,6 +142,7 @@ export const LocationView = ({
     <LocationContent>
       <LocationBannerContainer width={bannerWidth} height={bannerHeight}>
         <LocationBanner
+          priority
           src={bannerImageUrl ?? DEFAULT_BANNER}
           alt="Location Banner"
           width={bannerWidth}
@@ -394,6 +395,7 @@ const LocationContent = styled.div`
 
 const LocationBanner = styled(Image)`
   object-fit: cover;
+  object-position: center;
 
   ${({ theme }) => theme.bp.lg_max} {
     width: 100%;

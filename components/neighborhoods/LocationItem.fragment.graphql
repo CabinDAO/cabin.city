@@ -13,6 +13,7 @@ fragment LocationItem on Location {
   address {
     locality
     admininstrativeAreaLevel1Short
+    country
   }
   bannerImageIpfsHash
   description

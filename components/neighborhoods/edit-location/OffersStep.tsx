@@ -46,6 +46,9 @@ export const OffersStep = ({
   const options = allOfferInfos.map((offerInfo) => ({
     label: offerInfo.name,
     value: offerInfo.offerType,
+    disabled:
+      offerInfo.offerType === OfferType.BuildAndGrowWeek &&
+      !location.publishedAt,
   }))
 
   const handleCreateOfferClick = async () => {
