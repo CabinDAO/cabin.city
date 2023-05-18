@@ -22,7 +22,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
 
   let nftData = {}
 
-  const expiredNft = nft.expirationDate < new Date()
+  const expiredNft = nft?.expirationDate && nft.expirationDate < new Date()
 
   const vouchedBy = user?.receivedVouches?.data[0]?.voucher
 
@@ -35,7 +35,9 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
     Status: { value: expiredNft ? 'Expired' : user.citizenshipStatus },
     Created: { value: formatDate(nft.mintedDate, 'MMM dd, yyyy') },
     Expires: {
-      value: formatDate(nft.expirationDate, 'MMM dd, yyyy'),
+      value: nft.expirationDate
+        ? formatDate(nft.expirationDate, 'MMM dd, yyyy')
+        : EMPTY,
     },
     'Renewal Price': { value: `${YEARLY_PRICE_IN_ETH} ETH / year` },
     'Citizen perks': {
