@@ -17,5 +17,6 @@ export const EXTERNAL_LINKS = {
   CITY_DIRECTORY:
     'https://cabin-fellowship.notion.site/The-City-Directory-853a83a5170749df8d200db9a8bd9c77',
   WIKI: 'https://cabin-fellowship.notion.site/Cabin-Community-Wiki-49958f9db9804ef8836d4a37dd4e7bbb',
-  CITIZENSHIP_PERKS: '/', // TODO: add link
+  CITIZENSHIP_PERKS:
+    '/https://cabin-fellowship.notion.site/Citizenship-Perks-and-General-Store-761ab3ab6fef44ac931585784edc3ffc',
 }

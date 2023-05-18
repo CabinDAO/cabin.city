@@ -1,12 +1,10 @@
 import { DEFAULT_NFT_IMAGE, UnlockNFT } from '@/utils/citizenship'
 import { useEffect, useState } from 'react'
-import { useSigner } from 'wagmi'
 import { useUser } from '../auth/useUser'
 import { usePublicLockContract } from './usePublicLockContract'
 
 export const useGetUnlockNFT = () => {
   const publicLockContract = usePublicLockContract()
-  const { data: signer } = useSigner()
   const [activeNFT, setActiveNFT] = useState<UnlockNFT | null>(null)
   const [loading, setLoading] = useState(false)
   const { user: profile } = useUser()
@@ -14,7 +12,6 @@ export const useGetUnlockNFT = () => {
   useEffect(() => {
     const getNFT = async () => {
       if (
-        !signer ||
         !publicLockContract ||
         !profile?.account?.address ||
         !profile.citizenshipMetadata
@@ -27,15 +24,24 @@ export const useGetUnlockNFT = () => {
       const nft = await publicLockContract.getHasValidKey(
         profile.account.address
       )
+      console.log('🚀 ~ file: useGetUnlockNFT.ts:30 ~ getNFT ~ nft:', nft)
 
       if (nft) {
         const tokenId = await publicLockContract.tokenOfOwnerByIndex(
           profile.account.address,
           0
         )
+        console.log(
+          '🚀 ~ file: useGetUnlockNFT.ts:37 ~ getNFT ~ tokenId:',
+          tokenId
+        )
 
         const expirationTimestamp =
           await publicLockContract.keyExpirationTimestampFor(tokenId)
+        console.log(
+          '🚀 ~ file: useGetUnlockNFT.ts:43 ~ getNFT ~ expirationTimestamp:',
+          expirationTimestamp
+        )
 
         setActiveNFT({
           tokenId: tokenId.toString(),
@@ -48,7 +54,7 @@ export const useGetUnlockNFT = () => {
     }
 
     getNFT()
-  }, [signer, publicLockContract, profile])
+  }, [profile])
 
   return { activeNFT, loading }
 }
