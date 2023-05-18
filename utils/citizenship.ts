@@ -11,7 +11,7 @@ export const DEFAULT_NFT_IMAGE = '/images/citizenship-thumbnail.png'
 export interface UnlockNFT {
   tokenId: string
   mintedDate: Date
-  expirationDate: Date
+  expirationDate: Date | null
   image: string
 }
 
