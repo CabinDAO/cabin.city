@@ -54,6 +54,7 @@ type Mutation {
   createLocation: Location @resolver(name: "create_location")
   createOffer(data: CreateOfferInput!): Offer @resolver(name: "create_offer")
   deleteLocation(id: ID!): Location! @resolver(name: "delete_location")
+  deleteOffer(id: ID!): Offer! @resolver(name: "delete_offer")
 }
 
 type Profile {

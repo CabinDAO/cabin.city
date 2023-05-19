@@ -10,11 +10,17 @@ import {
   OfferType,
   PartialUpdateOfferInput,
   ProfileRoleConstraint,
+  useDeleteOfferMutation,
 } from '@/generated/graphql'
 import { ApplicationLink } from './ApplicationLink'
 import { MAX_OFFER_TITLE_LENGTH } from '../offer-constants'
 import { useState } from 'react'
 import { Pricing } from './Pricing'
+import { Button } from '@/components/core/Button'
+import { useModal } from '@/components/hooks/useModal'
+import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import Icon from '@/components/core/Icon'
+import { useRouter } from 'next/router'
 
 interface EditOfferFormProps {
   offer: OfferFragment
@@ -29,6 +35,21 @@ export const EditOfferForm = ({
 }: EditOfferFormProps) => {
   const handleEditorChange = (val: Descendant[]) => {
     onEdit({ description: JSON.stringify(val) })
+  }
+  const { showModal } = useModal()
+  const [deleteOffer] = useDeleteOfferMutation()
+  const router = useRouter()
+
+  const handleDelete = () => {
+    showModal(() => (
+      <DeleteConfirmationModal
+        entityName="offer"
+        onDelete={async () => {
+          await deleteOffer({ variables: { id: offer._id } })
+          router.push(`/location/${offer.location._id}/edit?step=3`)
+        }}
+      />
+    ))
   }
 
   const [eligibilityChecked, setEligibilityChecked] = useState(false)
@@ -133,6 +154,14 @@ export const EditOfferForm = ({
         }}
         url={offerField('applicationUrl')}
       />
+      <HorizontalDivider />
+      <DeleteButton
+        startAdornment={<Icon name="trash" size={1.2} />}
+        variant="tertiary"
+        onClick={handleDelete}
+      >
+        Delete Offer
+      </DeleteButton>
     </Container>
   )
 }
@@ -149,4 +178,10 @@ const EditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`
+
+const DeleteButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.red700};
+  --icon-color: ${({ theme }) => theme.colors.red700};
+  border: 1px solid ${({ theme }) => theme.colors.red700};
 `
