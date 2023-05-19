@@ -20,7 +20,14 @@ export const PhotoGalleryStep = ({
   steps,
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location._id)
-  const [uploading, setUploading] = useState(false)
+  const [uploadingBanner, setUploadingBanner] = useState(false)
+  const [uploadingByCategory, setUploadingByCategory] = useState<{
+    [key in LocationMediaCategory]: boolean
+  }>({
+    [LocationMediaCategory.Sleeping]: false,
+    [LocationMediaCategory.Working]: false,
+    [LocationMediaCategory.Features]: false,
+  })
 
   const [locationInput, setLocationInput] =
     useState<PartialUpdateLocationInput>({
@@ -56,7 +63,10 @@ export const PhotoGalleryStep = ({
     fileNameIpfsHashMap: FileNameIpfsHashMap,
     category: LocationMediaCategory
   ) => {
-    setUploading(false)
+    setUploadingByCategory((prev) => ({
+      ...prev,
+      [category]: false,
+    }))
 
     const newImages = Object.values(fileNameIpfsHashMap).map((ipfsHash) => ({
       ipfsHash,
@@ -74,7 +84,7 @@ export const PhotoGalleryStep = ({
   const handleBannerFileUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
-    setUploading(false)
+    setUploadingBanner(false)
     setLocationInput((prev) => ({
       ...prev,
       bannerImageIpfsHash:
@@ -105,9 +115,9 @@ export const PhotoGalleryStep = ({
       steps={steps}
     >
       <LocationPhotoGallerySection
-        onStartUploading={() => setUploading(true)}
+        onStartUploading={() => setUploadingBanner(true)}
         onFilesUploaded={handleBannerFileUploaded}
-        uploading={uploading}
+        uploading={uploadingBanner}
         title="Neighborhood banner image"
         instructions="This picture will be your banner on the listing page. It will be trimmed to a 7:3 ratio for desktop and 1:1 for mobile. Thus, it's best to put the main focus in the center to avoid unwanted trimming. Choose a JPG or PNG no larger than 5 MB."
         isBanner
@@ -117,8 +127,13 @@ export const PhotoGalleryStep = ({
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
-        onStartUploading={() => setUploading(true)}
-        uploading={uploading}
+        onStartUploading={() =>
+          setUploadingByCategory((prev) => ({
+            ...prev,
+            [LocationMediaCategory.Sleeping]: true,
+          }))
+        }
+        uploading={uploadingByCategory[LocationMediaCategory.Sleeping]}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(
             fileNameIpfsHashMap,
@@ -132,8 +147,13 @@ export const PhotoGalleryStep = ({
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
-        onStartUploading={() => setUploading(true)}
-        uploading={uploading}
+        onStartUploading={() =>
+          setUploadingByCategory((prev) => ({
+            ...prev,
+            [LocationMediaCategory.Working]: true,
+          }))
+        }
+        uploading={uploadingByCategory[LocationMediaCategory.Working]}
         onDelete={deleteByIpfsHash}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(
@@ -147,8 +167,13 @@ export const PhotoGalleryStep = ({
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
-        onStartUploading={() => setUploading(true)}
-        uploading={uploading}
+        onStartUploading={() =>
+          setUploadingByCategory((prev) => ({
+            ...prev,
+            [LocationMediaCategory.Features]: true,
+          }))
+        }
+        uploading={uploadingByCategory[LocationMediaCategory.Features]}
         onDelete={deleteByIpfsHash}
         onFilesUploaded={(fileNameIpfsHashMap) =>
           handleFilesUploaded(

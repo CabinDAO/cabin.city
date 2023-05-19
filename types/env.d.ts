@@ -14,6 +14,8 @@ export interface Env {
   SIGNER_PRIVATE_KEY: string
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string
   PINATA_API_JWT: string
+  NEXT_PUBLIC_PINATA_API_KEY: string
+  NEXT_PUBLIC_PINATA_API_SECRET: string
 }
 
 declare global {
