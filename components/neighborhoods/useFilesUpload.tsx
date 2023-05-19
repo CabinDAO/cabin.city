@@ -6,6 +6,7 @@ import {
 } from '@/lib/file-storage/configuration'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { useState } from 'react'
+import axios from 'axios'
 
 interface UseFilesUploadProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
@@ -49,6 +50,16 @@ export const useFilesUpload = ({
       return []
     }
 
+    if (filtered.length > 10) {
+      showModal(() => (
+        <ErrorModal
+          title="File Upload Error"
+          description="You can upload up to 10 files at a time"
+        />
+      ))
+      return []
+    }
+
     return filtered
   }
 
@@ -63,15 +74,30 @@ export const useFilesUpload = ({
       ? await preprocessFiles(files)
       : files
 
-    const formData = new FormData()
-    for (let i = 0; i < processedFiles.length; i++) {
-      formData.append('files', files[i])
+    const mapping: FileNameIpfsHashMap = {}
+
+    for (const file of processedFiles as File[]) {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      mapping[file.name] = ''
+
+      const { data } = await axios<{ IpfsHash: string }>({
+        method: 'post',
+        url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        data: formData,
+        headers: {
+          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY as string,
+          pinata_secret_api_key: process.env
+            .NEXT_PUBLIC_PINATA_API_SECRET as string,
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      mapping[file.name] = data.IpfsHash
     }
-    const response = await fetch('/api/upload-files', {
-      method: 'POST',
-      body: formData,
-    })
-    return response.json()
+
+    return mapping
   }
 
   const handleDrop = async (

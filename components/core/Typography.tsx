@@ -231,3 +231,9 @@ export const UnorderedList = styled.ul`
 export const ListItem = styled.li`
   ${body1Styles}
 `
+
+export const truncateStyles = css`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`

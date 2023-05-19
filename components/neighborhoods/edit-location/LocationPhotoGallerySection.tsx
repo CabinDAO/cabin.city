@@ -54,8 +54,12 @@ export const LocationPhotoGallerySection = ({
       {isBanner ? (
         <BannerPreview uploading={uploading} imageUrl={bannerImageUrl} />
       ) : null}
-      {imageUrls?.length && !isBanner ? (
-        <ImagesPreview onDelete={onDelete} ipfsHashList={ipfsHashList} />
+      {(uploading || imageUrls?.length) && !isBanner ? (
+        <ImagesPreview
+          uploading={uploading}
+          onDelete={onDelete}
+          ipfsHashList={ipfsHashList}
+        />
       ) : null}
     </Container>
   )

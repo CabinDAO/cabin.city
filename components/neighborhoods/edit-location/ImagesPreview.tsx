@@ -10,11 +10,13 @@ import styled from 'styled-components'
 interface ImagesPreviewProps {
   ipfsHashList: (InputMaybe<string> | undefined)[]
   onDelete?: (ipfsHash: InputMaybe<string> | undefined) => void
+  uploading?: boolean
 }
 
 export const ImagesPreview = ({
   ipfsHashList,
   onDelete,
+  uploading = false,
 }: ImagesPreviewProps) => {
   const { deviceSize } = useDeviceSize()
   const [loadedImages, setLoadedImages] = useState<string[]>([])
@@ -24,6 +26,17 @@ export const ImagesPreview = ({
   }
 
   const imageSize = deviceSize === 'mobile' ? 95.3 : 152
+
+  if (!ipfsHashList?.length && uploading) {
+    return (
+      <Container>
+        <ImageContainer>
+          <LoadingSpinner />
+        </ImageContainer>
+      </Container>
+    )
+  }
+
   return (
     <Container>
       {ipfsHashList.map((ipfsHash) => (

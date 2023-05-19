@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { LocationType, ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
-import { Body2, Caption, H2, Subline1 } from './Typography'
+import { Body2, Caption, H2, Subline1, truncateStyles } from './Typography'
 import { IconName } from './Icon'
 import Icon from './Icon'
 import { format } from 'date-fns'
@@ -10,7 +10,8 @@ import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
 import { emptyFunction } from '@/utils/general'
 import { AuthenticatedLink } from './AuthenticatedLink'
-import { EMPTY } from '@/utils/display-utils'
+import { EMPTY, truncate } from '@/utils/display-utils'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export interface LocationCardProps {
   _id: string
@@ -63,6 +64,15 @@ export const LocationCard = (props: LocationCardProps) => {
 
   const name = props.name ?? 'New Listing'
 
+  const { deviceSize } = useDeviceSize()
+
+  const shortTagline =
+    deviceSize === 'tablet'
+      ? truncate(tagline ?? EMPTY, 40)
+      : truncate(tagline ?? EMPTY, 100)
+
+  const truncatedName = deviceSize === 'tablet' ? truncate(name, 30) : name
+
   return (
     <OuterContainer>
       <ContainerLink href={`/location/${_id}`}>
@@ -78,8 +88,8 @@ export const LocationCard = (props: LocationCardProps) => {
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
-            <NameH2>{name}</NameH2>
-            <Body2>{tagline}</Body2>
+            <NameH2>{truncatedName}</NameH2>
+            <StyledBody2>{shortTagline}</StyledBody2>
           </SummaryContainer>
           <LocationInfoGroupContainer>
             <LocationInfo iconName="location" label={address ?? EMPTY} />
@@ -216,6 +226,8 @@ const ContentContainer = styled.div`
   flex: 1;
   padding: 1.6rem;
   gap: 2.4rem;
+  overflow: hidden;
+  width: 100%;
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
@@ -225,10 +237,13 @@ const ContentContainer = styled.div`
 const SummaryContainer = styled.div`
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  width: 100%;
 `
 
 const NameH2 = styled(H2)`
   margin-bottom: 0.8rem;
+  ${truncateStyles}
 `
 
 const TagContainer = styled.div`
@@ -282,5 +297,11 @@ const LocationInfoContainer = styled.div`
 
   svg {
     opacity: 0.75;
+  }
+`
+
+const StyledBody2 = styled(Body2)`
+  ${({ theme }) => theme.bp.lg} {
+    ${truncateStyles}
   }
 `
