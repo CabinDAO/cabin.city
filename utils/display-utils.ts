@@ -110,3 +110,11 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
     )}`
   }
 }
+
+export const formatUrl = (url?: string | undefined | null) => {
+  if (!url) return null
+
+  return url.startsWith('http://') || url.startsWith('https://')
+    ? url
+    : `https://${url}`
+}

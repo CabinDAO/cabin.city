@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import styled from 'styled-components'
 import { formatOfferPrice, offerInfoFromType } from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -19,7 +18,7 @@ import { stringToSlateValue } from '../core/slate/slate-utils'
 import { useOfferApply } from '../hooks/useOfferApply'
 import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { isNotNull } from '@/lib/data'
-import { formatRange } from '@/utils/display-utils'
+import { formatRange, formatUrl } from '@/utils/display-utils'
 
 const EMPTY = '—'
 
@@ -76,7 +75,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
 
   const { canApply } = useOfferApply(offer)
 
-  const applyUrl = canApply() ? applicationUrl : null
+  const applyUrl = canApply() ? formatUrl(applicationUrl) : null
 
   const displayMatchOne = rolesMatchOne.length > 0
   const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
@@ -105,11 +104,11 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   </LocationSubline2>
                 </OfferDetailsOverview>
 
-                <Link href={applyUrl ?? '#'}>
+                <a href={applyUrl ?? '#'} target="_blank" rel="noreferrer">
                   <ApplyNowButton disabled={!applyUrl}>
                     Apply now
                   </ApplyNowButton>
-                </Link>
+                </a>
               </OfferDetailsHeader>
 
               <OfferDetailsSection>
