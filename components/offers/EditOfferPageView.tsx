@@ -36,7 +36,7 @@ export const EditOfferPageView = () => {
         data: updateOfferInput,
       },
     })
-    router.push(backRoute)
+    router.push(`/location/${offer.location._id}/edit?step=3`)
   }
 
   const handleBack = () => {

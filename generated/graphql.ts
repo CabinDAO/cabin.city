@@ -2172,6 +2172,13 @@ export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: Off
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } };
 
+export type DeleteOfferMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type DeleteOfferMutation = { __typename?: 'Mutation', deleteOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } };
+
 export type UpdateOfferMutationVariables = Exact<{
   offerId: Scalars['ID'];
   data: PartialUpdateOfferInput;
@@ -3394,6 +3401,39 @@ export function useGetOffersCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetOffersCountQueryHookResult = ReturnType<typeof useGetOffersCountQuery>;
 export type GetOffersCountLazyQueryHookResult = ReturnType<typeof useGetOffersCountLazyQuery>;
 export type GetOffersCountQueryResult = Apollo.QueryResult<GetOffersCountQuery, GetOffersCountQueryVariables>;
+export const DeleteOfferDocument = gql`
+    mutation DeleteOffer($id: ID!) {
+  deleteOffer(id: $id) {
+    ...Offer
+  }
+}
+    ${OfferFragmentDoc}`;
+export type DeleteOfferMutationFn = Apollo.MutationFunction<DeleteOfferMutation, DeleteOfferMutationVariables>;
+
+/**
+ * __useDeleteOfferMutation__
+ *
+ * To run a mutation, you first call `useDeleteOfferMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOfferMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOfferMutation, { data, loading, error }] = useDeleteOfferMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteOfferMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOfferMutation, DeleteOfferMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOfferMutation, DeleteOfferMutationVariables>(DeleteOfferDocument, options);
+      }
+export type DeleteOfferMutationHookResult = ReturnType<typeof useDeleteOfferMutation>;
+export type DeleteOfferMutationResult = Apollo.MutationResult<DeleteOfferMutation>;
+export type DeleteOfferMutationOptions = Apollo.BaseMutationOptions<DeleteOfferMutation, DeleteOfferMutationVariables>;
 export const UpdateOfferDocument = gql`
     mutation UpdateOffer($offerId: ID!, $data: PartialUpdateOfferInput!) {
   partialUpdateOffer(id: $offerId, data: $data) {

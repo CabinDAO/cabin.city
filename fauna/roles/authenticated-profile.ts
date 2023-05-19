@@ -422,6 +422,12 @@ const authenticatedProfileRole: RoleResource = {
         call: true,
       },
     },
+    {
+      resource: q.Function('delete_offer'),
+      actions: {
+        call: true,
+      },
+    },
   ],
   membership: [
     {
