@@ -13,7 +13,10 @@ const VerifiedCitizenshipContent = (props: PostProps) => {
 const VerifiedCitizenshipMedia = (props: PostProps) => {
   if (props.variant === 'compact') {
     return (
-      <CompactPostImage alt="Cabin Citizen" imageUrl="/images/citizen.png" />
+      <CompactPostImage
+        alt="Cabin Citizen"
+        imageUrl="/images/citizenship-thumbnail.png"
+      />
     )
   } else {
     return <CitizenCard hovered={props.hovered} />

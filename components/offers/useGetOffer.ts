@@ -34,6 +34,7 @@ export interface OfferViewProps {
     _id: string
     name: string | null | undefined
     shortAddress: string | null | undefined
+    publishedAt: Date | null | undefined
   }
   rawFragment: OfferFragment
 }
@@ -48,22 +49,30 @@ export const useGetOffer = () => {
     },
     skip: !offerId || !user,
   })
+
   const offer = data?.findOfferByID
     ? offerViewPropsFromFragment(data.findOfferByID)
     : null
 
+  const ownedByMe =
+    offer && user?._id === offer?.rawFragment.location.caretaker._id
+
+  const hideFromOthers = offer && !offer.location.publishedAt && !ownedByMe
+
   useEffect(() => {
     if (data && !offer) {
       router.push('/404')
+    } else if (hideFromOthers) {
+      router.push('/city-directory')
     }
-  }, [data, offer, router])
+  }, [data, offer, router, hideFromOthers])
 
-  if (!offer || !user) {
+  if (!offer || !user || hideFromOthers) {
     return { offer: null, ownedByMe: false }
   }
 
   return {
     offer,
-    ownedByMe: user?._id === offer.rawFragment.location.caretaker._id,
+    ownedByMe,
   }
 }

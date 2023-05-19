@@ -22,6 +22,7 @@ fragment Offer on Offer {
     _id
     name
     bannerImageIpfsHash
+    publishedAt
     address {
       locality
       admininstrativeAreaLevel1Short
