@@ -27,14 +27,18 @@ export const ProfileContact = ({
   return (
     <ProfileContactContainer>
       <AvatarContainer>
-        <Avatar src={profile.avatar?.url} size={8.8} />
+        <Link href={`/profile/${profile._id}`}>
+          <Avatar src={profile.avatar?.url} size={8.8} />
+        </Link>
       </AvatarContainer>
 
       <InfoContainer>
         <NameContainer wrapToNextLine={wrapToNextLine}>
-          <NoWrap>
-            <H4>{profile.name}</H4>
-          </NoWrap>
+          <Link href={`/profile/${profile._id}`}>
+            <NoWrap>
+              <H4>{profile.name}</H4>
+            </NoWrap>
+          </Link>
           <ProfileIcons
             size={1.6}
             citizenshipStatus={profile.citizenshipStatus}

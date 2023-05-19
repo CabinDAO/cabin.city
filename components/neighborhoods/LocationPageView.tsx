@@ -26,17 +26,22 @@ export const LocationPageView = () => {
     ? locationViewPropsFromFragment(data?.findLocationByID)
     : null
 
+  const hideFromOthersIfPreview =
+    location && !location.publishedAt && user?._id !== location?.caretaker._id
+
   useEffect(() => {
     if (data && !location) {
       router.push('/404')
+    } else if (hideFromOthersIfPreview) {
+      router.push('/city-directory/neighborhoods')
     }
-  }, [data, location, router])
+  }, [data, location, router, hideFromOthersIfPreview, user])
 
-  if (!location || !user) {
+  if (!location || !user || hideFromOthersIfPreview) {
     return null
   }
 
-  const backRoute = `/location/${location._id}/edit?step=3`
+  const backRoute = `/location/${location._id}/edit`
 
   const handleVote = () => {
     voteForLocation({
