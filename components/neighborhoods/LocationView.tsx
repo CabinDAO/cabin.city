@@ -199,6 +199,19 @@ export const LocationView = ({
         {hasPhotos && (
           <GalleryPreviewList>
             <GalleryPreviewListImages>
+              {galleryPreviewFeaturesUrl && (
+                <StyledLink
+                  key={LocationMediaCategory.Features}
+                  href={`/location/${id}/photos?gallery=features`}
+                >
+                  <ImageFlex
+                    alt={LocationMediaCategory.Features}
+                    src={galleryPreviewFeaturesUrl}
+                    width={galleryImageWidth}
+                    aspectRatio={1}
+                  />
+                </StyledLink>
+              )}
               {galleryPreviewSleepingUrl && (
                 <StyledLink
                   key={LocationMediaCategory.Sleeping}
@@ -220,19 +233,6 @@ export const LocationView = ({
                   <ImageFlex
                     alt={LocationMediaCategory.Working}
                     src={galleryPreviewWorkingUrl}
-                    width={galleryImageWidth}
-                    aspectRatio={1}
-                  />
-                </StyledLink>
-              )}
-              {galleryPreviewFeaturesUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Features}
-                  href={`/location/${id}/photos?gallery=features`}
-                >
-                  <ImageFlex
-                    alt={LocationMediaCategory.Features}
-                    src={galleryPreviewFeaturesUrl}
                     width={galleryImageWidth}
                     aspectRatio={1}
                   />

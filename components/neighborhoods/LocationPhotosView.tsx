@@ -54,9 +54,9 @@ export const LocationPhotosView = ({
   const { showModal } = useModal()
 
   const allImages = [
+    ...galleryPreviewFeatures,
     ...galleryPreviewSleeping,
     ...galleryPreviewWorking,
-    ...galleryPreviewFeatures,
   ]
 
   const handleImageClick = (image: TempImage) => {
@@ -79,6 +79,13 @@ export const LocationPhotosView = ({
         iconHref={`/location/${locationId}`}
       />
       <ImageGallery
+        id="features"
+        ref={galleryPreviewFeaturesRef}
+        images={galleryPreviewFeatures}
+        title="Amenities"
+        onImageClickOverride={handleImageClick}
+      />
+      <ImageGallery
         id="sleeping"
         ref={galleryPreviewSleepingRef}
         images={galleryPreviewSleeping}
@@ -90,13 +97,6 @@ export const LocationPhotosView = ({
         ref={galleryPreviewWorkingRef}
         images={galleryPreviewWorking}
         title="Work stations"
-        onImageClickOverride={handleImageClick}
-      />
-      <ImageGallery
-        id="features"
-        ref={galleryPreviewFeaturesRef}
-        images={galleryPreviewFeatures}
-        title="Amenities"
         onImageClickOverride={handleImageClick}
       />
     </>
