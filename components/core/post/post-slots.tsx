@@ -5,6 +5,10 @@ import { profileCreatedSlots } from './profileCreatedSlots'
 import { profileRoleAddedSlots } from './profileRoleAddedSlots'
 import { verifiedCitizenshipSlots } from './verifiedCitizenshipSlots'
 import { textSlots } from './textSlots'
+import { locationPublishedSlots } from './locationPublishedSlots'
+import { locationPromotedSlots } from './locationPromotedSlots'
+import { offerCreatedSlots } from './offerCreatedSlots'
+import { vouchRequestedSlots } from './vouchRequestedSlots'
 
 /*
   Slots allow us to specify both the content and media portions of a post, which vary based on the type of activity.
@@ -42,6 +46,22 @@ export const getPostSlots = (props: PostProps): PostSlots => {
 
   if (activity.type === ActivityType.Text) {
     return textSlots
+  }
+
+  if (activity.type === ActivityType.LocationPublished) {
+    return locationPublishedSlots
+  }
+
+  if (activity.type === ActivityType.LocationPromoted) {
+    return locationPromotedSlots
+  }
+
+  if (activity.type === ActivityType.OfferCreated) {
+    return offerCreatedSlots
+  }
+
+  if (activity.type === ActivityType.VouchRequested) {
+    return vouchRequestedSlots
   }
 
   return {}

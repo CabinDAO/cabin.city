@@ -1,5 +1,5 @@
-mutation UpdateOffer($offerId: ID!, $data: PartialUpdateOfferInput!) {
-  partialUpdateOffer(id: $offerId, data: $data) {
+mutation UpdateOffer($offerId: ID!, $data: UpdateOfferInput!) {
+  updateOffer(id: $offerId, data: $data) {
     ...Offer
   }
 }

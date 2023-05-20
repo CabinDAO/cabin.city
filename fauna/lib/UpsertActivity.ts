@@ -18,9 +18,15 @@ interface UpsertActivityMetadataInput {
   badge?: ExprVal
   profileRole?: ProfileRole | null
   citizenshipTokenId?: string | null
+  location?: ExprVal
+  offer?: ExprVal
 }
 
-export const UpsertActivity = (profile: Expr, input: UpsertActivityInput) => {
+export const UpsertActivity = (
+  profile: Expr,
+  input: UpsertActivityInput,
+  preventUpdate = false
+) => {
   return q.If(
     q.IsNull(profile),
     null,
@@ -41,10 +47,15 @@ export const UpsertActivity = (profile: Expr, input: UpsertActivityInput) => {
           q.Create(q.Collection('Activity'), {
             data: q.Var('data'),
           }),
-          // Activity already exists, update it
-          q.Update(RefFromSet(q.Var('existingActivitySet')), {
-            data: q.Var('data'),
-          })
+          q.If(
+            preventUpdate,
+            // Activity already exists, do not update it
+            q.Get(RefFromSet(q.Var('existingActivitySet'))),
+            // Activity already exists, update it
+            q.Update(RefFromSet(q.Var('existingActivitySet')), {
+              data: q.Var('data'),
+            })
+          )
         )
       )
     )

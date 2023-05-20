@@ -1,5 +1,5 @@
-mutation PublishLocation($id: ID!, $publishedAt: Time!) {
-  partialUpdateLocation(id: $id, data: { publishedAt: $publishedAt }) {
+mutation PublishLocation($id: ID!) {
+  publishLocation(id: $id) {
     ...Location
   }
 }

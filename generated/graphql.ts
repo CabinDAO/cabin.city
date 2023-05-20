@@ -100,6 +100,28 @@ export type ActivityMetadataInput = {
   badge?: InputMaybe<Scalars['ID']>;
   profileRole?: InputMaybe<ProfileRoleInput>;
   citizenshipTokenId?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['ID']>;
+  offer?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'ActivityMetadata' and 'Location' using the field 'ActivityMetadata.location'. */
+export type ActivityMetadataLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+  /** If true, disconnects this document from 'Location' */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+};
+
+/** Allow manipulating the relationship between the types 'ActivityMetadata' and 'Offer' using the field 'ActivityMetadata.offer'. */
+export type ActivityMetadataOfferRelation = {
+  /** Create a document of type 'Offer' and associate it with the current document. */
+  create?: InputMaybe<OfferInput>;
+  /** Connect a document of type 'Offer' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+  /** If true, disconnects this document from 'Offer' */
+  disconnect?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Allow manipulating the relationship between the types 'Activity' and 'Profile' using the field 'Activity.profile'. */
@@ -320,6 +342,7 @@ export type Mutation = {
   partialUpdateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
   /** Update an existing document in the collection of 'OtterspaceBadge' */
   updateOtterspaceBadge?: Maybe<OtterspaceBadge>;
+  publishLocation: Location;
   /** Partially updates an existing document in the collection of 'TrackingEvent'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateTrackingEvent?: Maybe<TrackingEvent>;
   /** Create a new document in the collection of 'OtterspaceBadge' */
@@ -366,8 +389,7 @@ export type Mutation = {
   createBlockSyncAttempt: BlockSyncAttempt;
   createOffer?: Maybe<Offer>;
   createTextActivity: Activity;
-  /** Update an existing document in the collection of 'Offer' */
-  updateOffer?: Maybe<Offer>;
+  updateOffer: Offer;
   clearSyncAttempts: Scalars['Boolean'];
   createProfile: Profile;
   /** Create a new document in the collection of 'OtterspaceBadgeSpec' */
@@ -385,6 +407,7 @@ export type Mutation = {
   likeActivity: ActivityReaction;
   /** Delete an existing document in the collection of 'BlockSyncAttempt' */
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
+  toggleSignal: Profile;
   vouchProfile: Profile;
   updateProfile: Profile;
   /** Create a new document in the collection of 'ProfileVouch' */
@@ -487,6 +510,11 @@ export type MutationPartialUpdateOtterspaceBadgeSpecArgs = {
 export type MutationUpdateOtterspaceBadgeArgs = {
   id: Scalars['ID'];
   data: OtterspaceBadgeInput;
+};
+
+
+export type MutationPublishLocationArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -626,7 +654,7 @@ export type MutationCreateTextActivityArgs = {
 
 export type MutationUpdateOfferArgs = {
   id: Scalars['ID'];
-  data: OfferInput;
+  data: UpdateOfferInput;
 };
 
 
@@ -737,7 +765,6 @@ export type OfferLocationRelation = {
   connect?: InputMaybe<Scalars['ID']>;
 };
 
-/** 'OfferPrice' input values */
 export type OfferPriceInput = {
   unit: OfferPriceUnit;
   amountCents: Scalars['Int'];
@@ -821,6 +848,8 @@ export type PartialUpdateActivityMetadataInput = {
   badge?: InputMaybe<Scalars['ID']>;
   profileRole?: InputMaybe<PartialUpdateProfileRoleInput>;
   citizenshipTokenId?: InputMaybe<Scalars['String']>;
+  location?: InputMaybe<Scalars['ID']>;
+  offer?: InputMaybe<Scalars['ID']>;
 };
 
 /** 'ActivityReaction' input values */
@@ -1027,6 +1056,11 @@ export type ProfileAvatarInput = {
   tokenUri?: InputMaybe<Scalars['String']>;
 };
 
+export type ProfileConstraintInput = {
+  role: ProfileRoleType;
+  level: ProfileRoleLevelType;
+};
+
 export type ProfileContactFieldInput = {
   type: ProfileContactFieldType;
   value: Scalars['String'];
@@ -1143,6 +1177,19 @@ export type TrackingEventProfileRelation = {
   connect?: InputMaybe<Scalars['ID']>;
 };
 
+export type UpdateOfferInput = {
+  title?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['Time']>;
+  endDate?: InputMaybe<Scalars['Time']>;
+  price?: InputMaybe<OfferPriceInput>;
+  profileRoleConstraints?: InputMaybe<Array<InputMaybe<ProfileRoleConstraintInput>>>;
+  applicationUrl?: InputMaybe<Scalars['String']>;
+  imageIpfsHash?: InputMaybe<Scalars['String']>;
+  citizenshipRequired?: InputMaybe<Scalars['Boolean']>;
+  minimunCabinBalance?: InputMaybe<Scalars['Int']>;
+};
+
 export type UpdateProfileInput = {
   name?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
@@ -1227,8 +1274,10 @@ export type ActivityItem = {
 
 export type ActivityMetadata = {
   __typename?: 'ActivityMetadata';
-  badge?: Maybe<OtterspaceBadge>;
+  location?: Maybe<Location>;
   profileRole?: Maybe<ProfileRole>;
+  badge?: Maybe<OtterspaceBadge>;
+  offer?: Maybe<Offer>;
   citizenshipTokenId?: Maybe<Scalars['String']>;
 };
 
@@ -1258,7 +1307,11 @@ export enum ActivityType {
   ProfileRoleAdded = 'ProfileRoleAdded',
   ProfileBadgeAdded = 'ProfileBadgeAdded',
   VerifiedCitizenship = 'VerifiedCitizenship',
-  Text = 'Text'
+  Text = 'Text',
+  LocationPublished = 'LocationPublished',
+  OfferCreated = 'OfferCreated',
+  LocationPromoted = 'LocationPromoted',
+  VouchRequested = 'VouchRequested'
 }
 
 export type BlockSyncAttempt = {
@@ -2004,23 +2057,23 @@ export type MeFragment = { __typename?: 'Profile', _id: string, name: string, em
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
-export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
+export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
 
-export type ActivityItemFragment = { __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+export type ActivityItemFragment = { __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
 
 export type CreateTextActivityMutationVariables = Exact<{
   text: Scalars['String'];
 }>;
 
 
-export type CreateTextActivityMutation = { __typename?: 'Mutation', createTextActivity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
+export type CreateTextActivityMutation = { __typename?: 'Mutation', createTextActivity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } };
 
 export type DeleteActivityMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type DeleteActivityMutation = { __typename?: 'Mutation', deleteActivity?: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null };
+export type DeleteActivityMutation = { __typename?: 'Mutation', deleteActivity?: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null };
 
 export type GetActivitiesQueryVariables = Exact<{
   size?: InputMaybe<Scalars['Int']>;
@@ -2028,7 +2081,7 @@ export type GetActivitiesQueryVariables = Exact<{
 }>;
 
 
-export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
+export type GetActivitiesQuery = { __typename?: 'Query', allActivities: { __typename?: 'QueryAllActivitiesPage', after?: string | null, data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
 
 export type GetActivitySummaryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -2124,11 +2177,10 @@ export type LocationVoteFragment = { __typename?: 'LocationVote', _id: string, c
 
 export type PublishLocationMutationVariables = Exact<{
   id: Scalars['ID'];
-  publishedAt: Scalars['Time'];
 }>;
 
 
-export type PublishLocationMutation = { __typename?: 'Mutation', partialUpdateLocation?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, referrer?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, email: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems?: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, ipfsHash?: string | null }> | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null> } } | null };
+export type PublishLocationMutation = { __typename?: 'Mutation', publishLocation: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, caretakerEmail?: string | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, addressInfo?: string | null, voteCount?: number | null, offerCount?: number | null, referrer?: { __typename?: 'Profile', _id: string, createdAt: any, name: string, email: string, citizenshipStatus?: CitizenshipStatus | null, bio?: string | null, cabinTokenBalanceInt: number, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> } | null, caretaker: { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> }, mediaItems?: Array<{ __typename?: 'LocationMediaItem', category: LocationMediaCategory, ipfsHash?: string | null }> | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> }, address?: { __typename?: 'LocationAddress', lat?: number | null, lng?: number | null, formattedAddress?: string | null, streetNumber?: string | null, route?: string | null, routeShort?: string | null, locality?: string | null, admininstrativeAreaLevel1?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null, countryShort?: string | null, postalCode?: string | null } | null, offers: { __typename?: 'OfferPage', data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null> } } };
 
 export type UpdateLocationMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2181,11 +2233,11 @@ export type DeleteOfferMutation = { __typename?: 'Mutation', deleteOffer: { __ty
 
 export type UpdateOfferMutationVariables = Exact<{
   offerId: Scalars['ID'];
-  data: PartialUpdateOfferInput;
+  data: UpdateOfferInput;
 }>;
 
 
-export type UpdateOfferMutation = { __typename?: 'Mutation', partialUpdateOffer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } | null };
+export type UpdateOfferMutation = { __typename?: 'Mutation', updateOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null };
 
@@ -2194,7 +2246,7 @@ export type GetProfileByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
+export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -2217,20 +2269,17 @@ export type MyVouchesThisYearQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MyVouchesThisYearQuery = { __typename?: 'Query', myVouchesThisYear: number };
 
+export type ToggleSignalMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ToggleSignalMutation = { __typename?: 'Mutation', toggleSignal: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } };
+
 export type UnvouchProfileMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
 export type UnvouchProfileMutation = { __typename?: 'Mutation', unvouchProfile: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } };
-
-export type UpdateProfileCitizenshipStatusMutationVariables = Exact<{
-  id: Scalars['ID'];
-  citizenshipStatus?: InputMaybe<CitizenshipStatus>;
-}>;
-
-
-export type UpdateProfileCitizenshipStatusMutation = { __typename?: 'Mutation', partialUpdateProfile?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } | null };
 
 export type VouchProfileMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2342,6 +2391,34 @@ export const MeFragmentDoc = gql`
 }
     ${LocationItemFragmentDoc}
 ${TrackingEventFragmentDoc}`;
+export const OfferItemFragmentDoc = gql`
+    fragment OfferItem on Offer {
+  _id
+  offerType
+  locationType
+  title
+  startDate
+  endDate
+  imageIpfsHash
+  profileRoleConstraints {
+    profileRole
+    level
+  }
+  minimunCabinBalance
+  citizenshipRequired
+  location {
+    _id
+    name
+    bannerImageIpfsHash
+    publishedAt
+    address {
+      locality
+      admininstrativeAreaLevel1Short
+      country
+    }
+  }
+}
+    `;
 export const ActivityFragmentDoc = gql`
     fragment Activity on Activity {
   _id
@@ -2362,6 +2439,12 @@ export const ActivityFragmentDoc = gql`
       role
       level
     }
+    location {
+      ...LocationItem
+    }
+    offer {
+      ...OfferItem
+    }
     citizenshipTokenId
   }
   profile {
@@ -2377,7 +2460,8 @@ export const ActivityFragmentDoc = gql`
     }
   }
 }
-    `;
+    ${LocationItemFragmentDoc}
+${OfferItemFragmentDoc}`;
 export const ActivityItemFragmentDoc = gql`
     fragment ActivityItem on ActivityItem {
   activity {
@@ -2426,34 +2510,6 @@ export const CaretakerFragmentDoc = gql`
   }
   bio
   badgeCount
-}
-    `;
-export const OfferItemFragmentDoc = gql`
-    fragment OfferItem on Offer {
-  _id
-  offerType
-  locationType
-  title
-  startDate
-  endDate
-  imageIpfsHash
-  profileRoleConstraints {
-    profileRole
-    level
-  }
-  minimunCabinBalance
-  citizenshipRequired
-  location {
-    _id
-    name
-    bannerImageIpfsHash
-    publishedAt
-    address {
-      locality
-      admininstrativeAreaLevel1Short
-      country
-    }
-  }
 }
     `;
 export const LocationFragmentDoc = gql`
@@ -3195,8 +3251,8 @@ export type MyLocationVotesQueryHookResult = ReturnType<typeof useMyLocationVote
 export type MyLocationVotesLazyQueryHookResult = ReturnType<typeof useMyLocationVotesLazyQuery>;
 export type MyLocationVotesQueryResult = Apollo.QueryResult<MyLocationVotesQuery, MyLocationVotesQueryVariables>;
 export const PublishLocationDocument = gql`
-    mutation PublishLocation($id: ID!, $publishedAt: Time!) {
-  partialUpdateLocation(id: $id, data: {publishedAt: $publishedAt}) {
+    mutation PublishLocation($id: ID!) {
+  publishLocation(id: $id) {
     ...Location
   }
 }
@@ -3217,7 +3273,6 @@ export type PublishLocationMutationFn = Apollo.MutationFunction<PublishLocationM
  * const [publishLocationMutation, { data, loading, error }] = usePublishLocationMutation({
  *   variables: {
  *      id: // value for 'id'
- *      publishedAt: // value for 'publishedAt'
  *   },
  * });
  */
@@ -3437,8 +3492,8 @@ export type DeleteOfferMutationHookResult = ReturnType<typeof useDeleteOfferMuta
 export type DeleteOfferMutationResult = Apollo.MutationResult<DeleteOfferMutation>;
 export type DeleteOfferMutationOptions = Apollo.BaseMutationOptions<DeleteOfferMutation, DeleteOfferMutationVariables>;
 export const UpdateOfferDocument = gql`
-    mutation UpdateOffer($offerId: ID!, $data: PartialUpdateOfferInput!) {
-  partialUpdateOffer(id: $offerId, data: $data) {
+    mutation UpdateOffer($offerId: ID!, $data: UpdateOfferInput!) {
+  updateOffer(id: $offerId, data: $data) {
     ...Offer
   }
 }
@@ -3615,6 +3670,38 @@ export function useMyVouchesThisYearLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type MyVouchesThisYearQueryHookResult = ReturnType<typeof useMyVouchesThisYearQuery>;
 export type MyVouchesThisYearLazyQueryHookResult = ReturnType<typeof useMyVouchesThisYearLazyQuery>;
 export type MyVouchesThisYearQueryResult = Apollo.QueryResult<MyVouchesThisYearQuery, MyVouchesThisYearQueryVariables>;
+export const ToggleSignalDocument = gql`
+    mutation ToggleSignal {
+  toggleSignal {
+    ...GetProfileById
+  }
+}
+    ${GetProfileByIdFragmentDoc}`;
+export type ToggleSignalMutationFn = Apollo.MutationFunction<ToggleSignalMutation, ToggleSignalMutationVariables>;
+
+/**
+ * __useToggleSignalMutation__
+ *
+ * To run a mutation, you first call `useToggleSignalMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleSignalMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleSignalMutation, { data, loading, error }] = useToggleSignalMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useToggleSignalMutation(baseOptions?: Apollo.MutationHookOptions<ToggleSignalMutation, ToggleSignalMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleSignalMutation, ToggleSignalMutationVariables>(ToggleSignalDocument, options);
+      }
+export type ToggleSignalMutationHookResult = ReturnType<typeof useToggleSignalMutation>;
+export type ToggleSignalMutationResult = Apollo.MutationResult<ToggleSignalMutation>;
+export type ToggleSignalMutationOptions = Apollo.BaseMutationOptions<ToggleSignalMutation, ToggleSignalMutationVariables>;
 export const UnvouchProfileDocument = gql`
     mutation UnvouchProfile($id: ID!) {
   unvouchProfile(id: $id) {
@@ -3648,40 +3735,6 @@ export function useUnvouchProfileMutation(baseOptions?: Apollo.MutationHookOptio
 export type UnvouchProfileMutationHookResult = ReturnType<typeof useUnvouchProfileMutation>;
 export type UnvouchProfileMutationResult = Apollo.MutationResult<UnvouchProfileMutation>;
 export type UnvouchProfileMutationOptions = Apollo.BaseMutationOptions<UnvouchProfileMutation, UnvouchProfileMutationVariables>;
-export const UpdateProfileCitizenshipStatusDocument = gql`
-    mutation updateProfileCitizenshipStatus($id: ID!, $citizenshipStatus: CitizenshipStatus) {
-  partialUpdateProfile(id: $id, data: {citizenshipStatus: $citizenshipStatus}) {
-    ...GetProfileById
-  }
-}
-    ${GetProfileByIdFragmentDoc}`;
-export type UpdateProfileCitizenshipStatusMutationFn = Apollo.MutationFunction<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>;
-
-/**
- * __useUpdateProfileCitizenshipStatusMutation__
- *
- * To run a mutation, you first call `useUpdateProfileCitizenshipStatusMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateProfileCitizenshipStatusMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateProfileCitizenshipStatusMutation, { data, loading, error }] = useUpdateProfileCitizenshipStatusMutation({
- *   variables: {
- *      id: // value for 'id'
- *      citizenshipStatus: // value for 'citizenshipStatus'
- *   },
- * });
- */
-export function useUpdateProfileCitizenshipStatusMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>(UpdateProfileCitizenshipStatusDocument, options);
-      }
-export type UpdateProfileCitizenshipStatusMutationHookResult = ReturnType<typeof useUpdateProfileCitizenshipStatusMutation>;
-export type UpdateProfileCitizenshipStatusMutationResult = Apollo.MutationResult<UpdateProfileCitizenshipStatusMutation>;
-export type UpdateProfileCitizenshipStatusMutationOptions = Apollo.BaseMutationOptions<UpdateProfileCitizenshipStatusMutation, UpdateProfileCitizenshipStatusMutationVariables>;
 export const VouchProfileDocument = gql`
     mutation VouchProfile($id: ID!) {
   vouchProfile(id: $id) {

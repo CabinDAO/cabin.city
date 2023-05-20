@@ -3,12 +3,12 @@ import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
 import { OfferTypeSummary } from './edit-offer/OfferTypeSummary'
 import { EditOfferForm } from './edit-offer/EditOfferForm'
-import { OfferFragment, PartialUpdateOfferInput } from '@/generated/graphql'
+import { OfferFragment, UpdateOfferInput } from '@/generated/graphql'
 
 interface EditOfferViewProps {
   offer: OfferFragment
-  updateOfferInput: PartialUpdateOfferInput
-  onEdit: (updateOfferInput: PartialUpdateOfferInput) => void
+  updateOfferInput: UpdateOfferInput
+  onEdit: (updateOfferInput: UpdateOfferInput) => void
 }
 
 export const EditOfferView = ({

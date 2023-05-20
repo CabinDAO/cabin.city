@@ -23,7 +23,7 @@ Neighborhood.args = {
   bannerImageUrl:
     'https://fastly.picsum.photos/id/432/1400/600.jpg?hmac=qPwc5sKUwbdvC1VdnqoSjtOb-V_XC7BSc3nVuZYwv_Y',
   voteCount: 4100,
-  address: 'Texas Hill Country, TX',
+  address: 'Texas Hill Country, TX | United States',
   caretaker: {
     _id: '1',
     name: 'Jon Hillis',

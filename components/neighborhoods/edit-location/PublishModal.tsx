@@ -26,7 +26,6 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
       const { data } = await publishLocation({
         variables: {
           id: `${locationId}`,
-          publishedAt: new Date().toISOString(),
         },
         refetchQueries: [
           'GetLocationsByLocationType',
@@ -37,7 +36,7 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
         ],
       })
 
-      if (data?.partialUpdateLocation?.publishedAt) {
+      if (data?.publishLocation?.publishedAt) {
         hideModal()
       }
     } catch (error) {

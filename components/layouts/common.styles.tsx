@@ -35,6 +35,7 @@ export const MainContent = styled.main<MainContentProps>`
 
 export const FixedWidthMainContent = styled(MainContent)`
   width: 100%;
+  overflow-y: hidden;
 
   ${({ theme }) => theme.bp.lg} {
     width: 84rem;

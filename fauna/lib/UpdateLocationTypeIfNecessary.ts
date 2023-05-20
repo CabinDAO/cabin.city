@@ -1,14 +1,18 @@
 import { Expr, query as q } from 'faunadb'
 import { ToDoc } from './ToDoc'
 import { ToRef } from './ToRef'
-import { LocationType } from '../../generated/graphql'
+import { ActivityType, LocationType } from '../../generated/graphql'
+import { UpsertActivity } from './UpsertActivity'
 
 /**
  * Checks if the location meets the criteria for being a neighborhood and updates the locationType if necessary.
  * @param locationExpr A `Ref` or a `Document` for a Location
  * @returns Document update metadata if the locationType was updated, otherwise null
  */
-export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
+export const UpdateLocationTypeIfNecessary = (
+  locationExpr: Expr,
+  profileExpr: Expr
+) => {
   return q.Let(
     {
       location: ToDoc(locationExpr),
@@ -18,6 +22,8 @@ export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
         LocationType.Neighborhood,
         LocationType.Outpost
       ),
+      profileRef: ToRef(profileExpr),
+      profile: ToDoc(profileExpr),
     },
     q.If(
       q.Not(
@@ -42,12 +48,35 @@ export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
             })
           )
         ),
+
         // Update the location type
         q.Update(ToRef(q.Var('location')), {
           data: {
             locationType: q.Var('newLocationType'),
           },
-        })
+        }),
+        q.If(
+          q.Equals(q.Var('newLocationType'), LocationType.Neighborhood),
+          UpsertActivity(q.Var('profile'), {
+            key: q.Format(
+              'LocationPromoted|%s',
+              q.Concat(
+                [
+                  q.Var('newLocationType'),
+                  q.Select(['ref', 'id'], q.Var('location')),
+                ],
+                '|'
+              )
+            ),
+            timestamp: q.Now(),
+            type: ActivityType.LocationPromoted,
+            metadata: {
+              location: q.Var('locationRef'),
+            },
+          }),
+          null
+        ),
+        ToDoc(q.Var('location'))
       ),
       null
     )
