@@ -33,6 +33,7 @@ export interface OfferListItemProps {
   location: {
     _id: string
     name: string | null | undefined
+    publishedAt: Date | null | undefined
     shortAddress: string | null | undefined
     caretaker?:
       | {
@@ -82,6 +83,10 @@ export const OfferListItem = (props: OfferListItemProps) => {
   }`
   const isDisplayingIcon = variant !== 'no-icon'
   const inactive = endDate && endDate < new Date()
+
+  if (!location.publishedAt) {
+    return null
+  }
 
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()

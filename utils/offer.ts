@@ -75,6 +75,9 @@ export const offerListItemPropsFromFragment = (
       _id: fragment.location._id,
       name: fragment.location.name,
       shortAddress: formatShortAddress(fragment.location.address),
+      publishedAt: fragment.location.publishedAt
+        ? parseISO(fragment.location.publishedAt)
+        : null,
     },
     isLocked: !me,
   }
