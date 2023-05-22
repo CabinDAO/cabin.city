@@ -99,7 +99,12 @@ export const OfferListItem = (props: OfferListItemProps) => {
           {isDisplayingIcon && (
             <ImageContainer>
               {imageUrl ? (
-                <StyledImage src={imageUrl} fill alt={title ?? 'Offer'} />
+                <StyledImage
+                  src={imageUrl}
+                  alt={title ?? 'Offer'}
+                  width={64}
+                  height={64}
+                />
               ) : (
                 <EmptyImageContainer>
                   <Icon name="offer" size={3.2} color="yellow500" />
@@ -234,8 +239,8 @@ const EmptyImageContainer = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
-  width: 64px;
-  height: 64px;
+  width: 6.4rem;
+  height: 6.4rem;
 
   img {
     object-fit: cover;

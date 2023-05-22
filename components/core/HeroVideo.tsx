@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 
-const VIDEO_SRC = '/videos/hero.mp4'
 const DESKTOP_WIDTH_PX = 1440
 const DESKTOP_HEIGHT_PX = 500
 
@@ -13,7 +12,8 @@ export const HeroVideo = () => {
   return (
     <VideoContainer aspectRatio={heroAspectRatio}>
       <video autoPlay muted loop playsInline>
-        <source src={VIDEO_SRC} type="video/mp4" />
+        <source src="/videos/hero.webm" type="video/webm" />
+        <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
     </VideoContainer>
   )

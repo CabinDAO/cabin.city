@@ -33,9 +33,7 @@ export const DashboardView = () => {
   }
 
   useEffect(() => {
-    return () => {
-      refetch()
-    }
+    refetch()
   }, [refetch])
 
   if (!user) return null

@@ -1,6 +1,6 @@
 import { query as q } from 'faunadb'
 import { FunctionResource } from 'fauna-gql-upload'
-import { ActivityType, LocationType } from '../../generated/graphql'
+import { ActivityType } from '../../generated/graphql'
 import { UpsertActivity } from '../lib/UpsertActivity'
 import { Coalesce } from '../lib/Coalesce'
 
@@ -13,9 +13,15 @@ const updateOffer: FunctionResource = {
         {
           offerRef: q.Ref(q.Collection('Offer'), q.Var('id')),
           offer: q.Get(q.Var('offerRef')),
-          locationType: q.Select(['data', 'locationType'], q.Var('offer')),
           profileRef: q.CurrentIdentity(),
           profile: q.Get(q.Var('profileRef')),
+          locationRef: q.Select(['data', 'location'], q.Var('offer')),
+          location: q.Get(q.Var('locationRef')),
+          locationPublishedAt: q.Select(
+            ['data', 'publishedAt'],
+            q.Var('location'),
+            null
+          ),
         },
         q.Do(
           q.Update(q.Var('offerRef'), {
@@ -25,7 +31,7 @@ const updateOffer: FunctionResource = {
             ),
           }),
           q.If(
-            q.Equals(q.Var('locationType'), LocationType.Neighborhood),
+            q.Not(q.IsNull(q.Var('locationPublishedAt'))),
             UpsertActivity(
               q.Var('profile'),
               {

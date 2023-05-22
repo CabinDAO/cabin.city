@@ -57,23 +57,27 @@ export const UpdateLocationTypeIfNecessary = (
         }),
         q.If(
           q.Equals(q.Var('newLocationType'), LocationType.Neighborhood),
-          UpsertActivity(q.Var('profile'), {
-            key: q.Format(
-              'LocationPromoted|%s',
-              q.Concat(
-                [
-                  q.Var('newLocationType'),
-                  q.Select(['ref', 'id'], q.Var('location')),
-                ],
-                '|'
-              )
-            ),
-            timestamp: q.Now(),
-            type: ActivityType.LocationPromoted,
-            metadata: {
-              location: q.Var('locationRef'),
+          UpsertActivity(
+            q.Var('profile'),
+            {
+              key: q.Format(
+                'LocationPromoted|%s',
+                q.Concat(
+                  [
+                    q.Var('newLocationType'),
+                    q.Select(['ref', 'id'], q.Var('location')),
+                  ],
+                  '|'
+                )
+              ),
+              timestamp: q.Now(),
+              type: ActivityType.LocationPromoted,
+              metadata: {
+                location: q.Var('locationRef'),
+              },
             },
-          }),
+            true
+          ),
           null
         ),
         ToDoc(q.Var('location'))

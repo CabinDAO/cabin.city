@@ -1,8 +1,5 @@
 import Link from 'next/link'
-import {
-  LocationType,
-  useGetLocationsByLocationTypeQuery,
-} from '@/generated/graphql'
+import { useGetNeighborhoodsTop3Query } from '@/generated/graphql'
 import { LocationCard } from '../core/LocationCard'
 import { locationCardPropsFromFragment } from '@/lib/location'
 import styled from 'styled-components'
@@ -12,11 +9,9 @@ import { Button } from '@/components/core/Button'
 
 export const NeighborhoodsTop3List = () => {
   const { voteForLocation } = useLocationVote()
-  const { data } = useGetLocationsByLocationTypeQuery({
-    variables: { locationType: LocationType.Neighborhood, size: 3 },
-  })
+  const { data } = useGetNeighborhoodsTop3Query()
   const locations = data?.locationsByLocationType
-    ? data.locationsByLocationType.data.filter(isNotNull)
+    ? data.locationsByLocationType.data.filter(isNotNull).slice(0, 3)
     : []
 
   return (

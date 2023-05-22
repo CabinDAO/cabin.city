@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus, OfferType } from '@/generated/graphql'
 import { useUser } from '../auth/useUser'
 import { OfferViewProps } from '../offers/useGetOffer'
 
@@ -6,7 +6,14 @@ export const useOfferApply = (offer: OfferViewProps) => {
   const { user } = useUser()
 
   const canApply = () => {
-    if (!user || user.citizenshipStatus !== CitizenshipStatus.Verified) {
+    if (!user) {
+      return false
+    }
+
+    if (
+      offer.offerType === OfferType.PaidColiving &&
+      user.citizenshipStatus !== CitizenshipStatus.Verified
+    ) {
       return false
     }
 

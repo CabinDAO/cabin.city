@@ -4,6 +4,7 @@ import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
 import { useFeatures } from '@/components/hooks/useFeatures'
 import { Feature } from '@/lib/features'
+import { useUser } from '@/components/auth/useUser'
 
 interface MobileNavBarProps {
   profileId?: string
@@ -12,6 +13,7 @@ interface MobileNavBarProps {
 export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
   const { hasFeature } = useFeatures()
   const hasCityFeature = hasFeature(Feature.City)
+  const { user } = useUser()
 
   return (
     <MobileNavContainer open={open}>
@@ -26,7 +28,9 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <StyledDivider />
         <MobileMenuProfileItem />
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
-        <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
+        {user && (
+          <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
+        )}
         <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
         <MobileMenuItem
           authenticated

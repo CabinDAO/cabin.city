@@ -8,6 +8,10 @@ interface Props {
 }
 
 export const MobileFloatingMenuButton = ({ open, onClick }: Props) => {
+  if (open) {
+    return null
+  }
+
   return (
     <Container onClick={onClick}>
       <Icon name={open ? 'close' : 'menu'} size={2.4} color={'green400'} />

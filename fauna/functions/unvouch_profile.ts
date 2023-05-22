@@ -11,7 +11,8 @@ const unVouchProfile: FunctionResource = {
           profileRef: q.Ref(q.Collection('Profile'), q.Var('id')),
           citizenshipStatus: q.Select(
             ['data', 'citizenshipStatus'],
-            q.Get(q.Var('profileRef'))
+            q.Get(q.Var('profileRef')),
+            null
           ),
         },
         q.If(

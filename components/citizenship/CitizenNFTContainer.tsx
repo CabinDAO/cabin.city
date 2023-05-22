@@ -2,7 +2,6 @@ import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
 import { Body2, H3, Overline } from '../core/Typography'
 import { HorizontalDivider } from '../core/Divider'
-import { AutofitImage } from '../core/AutofitImage'
 import { CitizenshipNFTPreviewData } from './CitizenshipNFTPreviewData'
 import { CitizenshipNFTData } from './CitizenshipNFTData'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
@@ -12,7 +11,7 @@ import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useFeatures } from '../hooks/useFeatures'
 import { Feature } from '@/lib/features'
 
@@ -25,12 +24,17 @@ export const CitizenNFTContainer = () => {
   const [displayVideo, setDisplayVideo] = useState(false)
   const { hasFeature } = useFeatures()
   const citizenshipEnabled = hasFeature(Feature.Citizenship)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   const handleImageOnClick = () => {
-    setDisplayVideo((prev) => !prev)
-  }
+    setDisplayVideo(true)
 
-  const imageSrc = activeNFT?.image || DEFAULT_NFT_IMAGE
+    if (videoRef.current) {
+      videoRef.current.paused
+        ? videoRef.current.play()
+        : videoRef.current.pause()
+    }
+  }
 
   const contractData = {
     'Contract Address': {
@@ -46,11 +50,14 @@ export const CitizenNFTContainer = () => {
       <Section>
         <NFTContainer onClick={handleImageOnClick}>
           <NftImage>
-            {displayVideo && citizenshipEnabled ? (
-              <video src="/videos/citizenship.mp4" autoPlay loop />
-            ) : (
-              <AutofitImage src={imageSrc} alt={'Unlock NFT'} />
-            )}
+            <Video
+              ref={videoRef}
+              displayVideo={displayVideo && citizenshipEnabled}
+              loop
+            >
+              <source src="/videos/citizenship.webm" type="video/webm" />
+              <source src="/videos/citizenship.mp4" type="video/mp4" />
+            </Video>
           </NftImage>
         </NFTContainer>
         {activeNFT ? (
@@ -90,6 +97,14 @@ export const CitizenNFTContainer = () => {
     </StyledContentCard>
   )
 }
+
+interface VideoProps {
+  displayVideo: boolean
+}
+
+const Video = styled.video<VideoProps>`
+  opacity: ${({ displayVideo }) => (displayVideo ? 1 : 0)};
+`
 
 const StyledContentCard = styled(ContentCard)`
   padding: 2.4rem 1.6rem;
@@ -153,4 +168,6 @@ const NftImage = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
+  background: url(${DEFAULT_NFT_IMAGE}) no-repeat center;
+  background-size: contain;
 `
