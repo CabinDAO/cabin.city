@@ -20,7 +20,6 @@ import { Button } from '@/components/core/Button'
 import { resolveImageUrl } from '@/lib/image'
 import { OffersList } from '@/components/offers/OffersList'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { DEFAULT_BANNER } from '@/stories/utils/location-data'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -140,17 +139,19 @@ export const LocationView = ({
 
   return (
     <LocationContent>
-      <LocationBannerContainer width={bannerWidth} height={bannerHeight}>
-        <LocationBanner
-          priority
-          src={bannerImageUrl ?? DEFAULT_BANNER}
-          alt="Location Banner"
-          width={bannerWidth}
-          height={bannerHeight}
-        />
-      </LocationBannerContainer>
+      {bannerImageUrl && (
+        <LocationBannerContainer width={bannerWidth} height={bannerHeight}>
+          <LocationBanner
+            priority
+            src={bannerImageUrl}
+            alt="Location Banner"
+            width={bannerWidth}
+            height={bannerHeight}
+          />
+        </LocationBannerContainer>
+      )}
 
-      <LocationDetailsContainer>
+      <LocationDetailsContainer hasBanner={!!bannerImageUrl}>
         <LocationTypeTag
           label={
             isNeighborhood ? 'Verified Neighborhood' : 'Registered Outpost'
@@ -403,16 +404,20 @@ const LocationBanner = styled(Image)`
   }
 `
 
-const LocationDetailsContainer = styled.div`
+interface LocationDetailsContainerProps {
+  hasBanner: boolean
+}
+
+const LocationDetailsContainer = styled.div<LocationDetailsContainerProps>`
   width: 100%;
-  margin-top: 75vw;
+  margin-top: ${({ hasBanner }) => (hasBanner ? '75w' : '0')};
 
   ${({ theme }) => theme.bp.md} {
-    margin-top: 70.4vw;
+    margin-top: ${({ hasBanner }) => (hasBanner ? '70.4vw' : '0')};
   }
 
   ${({ theme }) => theme.bp.lg} {
-    margin-top: 33.2rem;
+    margin-top: ${({ hasBanner }) => (hasBanner ? '33.2rem' : '0')};
   }
 `
 
