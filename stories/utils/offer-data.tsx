@@ -24,6 +24,7 @@ export const DEFAULT_OFFER_PROPS: OfferListItemProps = {
     caretaker: {
       _id: '789',
     },
+    publishedAt: new Date(),
   },
 }
 
@@ -39,6 +40,7 @@ export const EMPTY_IMAGE_OFFER_PROPS: OfferListItemProps = {
     _id: '456',
     name: 'Firefly Hut',
     shortAddress: 'Boone, NC',
+    publishedAt: new Date(),
   },
 }
 
