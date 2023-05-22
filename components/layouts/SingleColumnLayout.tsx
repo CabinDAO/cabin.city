@@ -58,6 +58,7 @@ const OuterContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
+  margin-bottom: 10rem;
 `
 
 const ActionBarContainer = styled.div`
@@ -79,7 +80,6 @@ const Container = styled.div<ContainerProps>`
   justify-content: flex-start;
   align-items: center;
   padding: ${({ variant }) => (variant === 'full' ? '0' : '1.6rem')};
-  margin-bottom: 10rem;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: ${({ variant }) =>

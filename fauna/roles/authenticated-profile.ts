@@ -45,6 +45,7 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
         create: true,
         delete: deleteOnlyBy('profile'),
+        write: writeOnlyBy('profile'),
       },
     },
     {
@@ -424,6 +425,24 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('delete_offer'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('publish_location'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('update_offer'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('toggle_signal'),
       actions: {
         call: true,
       },

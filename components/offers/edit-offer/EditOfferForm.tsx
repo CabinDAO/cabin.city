@@ -8,9 +8,9 @@ import { Eligibility } from './Eligibility'
 import {
   OfferFragment,
   OfferType,
-  PartialUpdateOfferInput,
-  ProfileRoleConstraint,
+  UpdateOfferInput,
   useDeleteOfferMutation,
+  ProfileRoleConstraintInput,
 } from '@/generated/graphql'
 import { ApplicationLink } from './ApplicationLink'
 import { MAX_OFFER_TITLE_LENGTH } from '../offer-constants'
@@ -24,8 +24,8 @@ import { useRouter } from 'next/router'
 
 interface EditOfferFormProps {
   offer: OfferFragment
-  onEdit: (updateOfferInput: PartialUpdateOfferInput) => void
-  updateOfferInput: PartialUpdateOfferInput
+  onEdit: (updateOfferInput: UpdateOfferInput) => void
+  updateOfferInput: UpdateOfferInput
 }
 
 export const EditOfferForm = ({
@@ -54,7 +54,7 @@ export const EditOfferForm = ({
 
   const [eligibilityChecked, setEligibilityChecked] = useState(false)
 
-  const offerField = (field: keyof PartialUpdateOfferInput) => {
+  const offerField = (field: keyof UpdateOfferInput) => {
     return updateOfferInput[field] || offer[field]
   }
 
@@ -92,7 +92,7 @@ export const EditOfferForm = ({
     : {}
 
   const handleProfileRoleConstraintsChange = (
-    profileRoleConstraints: ProfileRoleConstraint[]
+    profileRoleConstraints: ProfileRoleConstraintInput[]
   ) => {
     onEdit({ profileRoleConstraints })
   }

@@ -1,7 +1,5 @@
 query GetLocationVoteCountsByIds($ids: [ID!]!) {
   getLocationsByIds(ids: $ids) {
-    _id
-    voteCount
-    locationType
+    ...LocationItem
   }
 }

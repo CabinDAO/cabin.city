@@ -6,10 +6,11 @@ import { useUser } from '../auth/useUser'
 import styled from 'styled-components'
 import { TextPost } from './TextPost'
 import { useTextActivity } from './useTextActivity'
+import { useEffect } from 'react'
 
 export const DashboardView = () => {
   const { user } = useUser({ redirectTo: '/' })
-  const { data } = useGetActivitySummaryQuery()
+  const { data, refetch } = useGetActivitySummaryQuery()
   const { handleCreateTextActivity } = useTextActivity()
 
   const dashboardItems = [
@@ -30,6 +31,10 @@ export const DashboardView = () => {
   const handleOnPost = (text: string) => {
     handleCreateTextActivity(text)
   }
+
+  useEffect(() => {
+    refetch()
+  }, [refetch])
 
   if (!user) return null
 

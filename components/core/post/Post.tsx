@@ -138,6 +138,7 @@ const Container = styled.div<ContainerProps>`
   flex-direction: column;
   gap: 1.6rem;
   width: 100%;
+  overflow: hidden;
 
   &:not(:first-child) {
     padding-top: 1.6rem;

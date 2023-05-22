@@ -68,6 +68,7 @@ const InnerContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-y: hidden;
 
   ${({ theme }) => theme.bp.md} {
     margin: 2.4rem;

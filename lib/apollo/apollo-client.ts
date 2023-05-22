@@ -49,7 +49,7 @@ export const apolloClient = new ApolloClient({
             keyArgs: ['locationType'],
             merge(existing, incoming) {
               if (existing?.after === incoming?.after) {
-                return existing
+                return incoming
               }
               return {
                 ...incoming,

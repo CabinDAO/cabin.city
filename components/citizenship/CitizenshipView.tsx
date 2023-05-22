@@ -1,10 +1,7 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { useUser } from '../auth/useUser'
-import {
-  CitizenshipStatus,
-  useUpdateProfileCitizenshipStatusMutation,
-} from '@/generated/graphql'
+import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
@@ -16,8 +13,8 @@ export const CitizenshipView = () => {
   const citizenshipMintingEnabled = hasFeature(Feature.Citizenship)
   const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/' })
-  const [updateProfileCitizenshipStatus] =
-    useUpdateProfileCitizenshipStatusMutation()
+
+  const [toggleSignal] = useToggleSignalMutation()
 
   const handleMint = () => {
     // TODO: Remove check when citizenship minting is enabled in prod
@@ -26,24 +23,10 @@ export const CitizenshipView = () => {
     }
   }
 
-  const toggleSignal = () => {
+  const handleToggleSignal = () => {
     if (!user) return
 
-    if (user?.citizenshipStatus === CitizenshipStatus.VouchRequested) {
-      updateProfileCitizenshipStatus({
-        variables: {
-          id: user._id,
-          citizenshipStatus: null,
-        },
-      })
-    } else {
-      updateProfileCitizenshipStatus({
-        variables: {
-          id: user._id,
-          citizenshipStatus: CitizenshipStatus.VouchRequested,
-        },
-      })
-    }
+    toggleSignal()
   }
 
   if (!user) return null
@@ -59,7 +42,7 @@ export const CitizenshipView = () => {
       {user && user?.citizenshipStatus !== CitizenshipStatus.Verified && (
         <CitizenshipStatusBar
           onMint={handleMint}
-          onSignal={toggleSignal}
+          onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
         />
       )}

@@ -1,0 +1,8 @@
+query GetNeighborhoodsTop3 {
+  locationsByLocationType(locationType: Neighborhood, _size: 3) {
+    data {
+      ...LocationItem
+    }
+    after
+  }
+}

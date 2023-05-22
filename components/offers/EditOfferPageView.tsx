@@ -2,10 +2,7 @@ import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useGetOffer } from './useGetOffer'
 import { EditOfferView } from './EditOfferView'
 import { ActionBar } from '../core/ActionBar'
-import {
-  PartialUpdateOfferInput,
-  useUpdateOfferMutation,
-} from '@/generated/graphql'
+import { UpdateOfferInput, useUpdateOfferMutation } from '@/generated/graphql'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useNavigation } from '../hooks/useNavigation'
@@ -19,11 +16,10 @@ export const EditOfferPageView = () => {
 
   const offerFragment = offer?.rawFragment
 
-  const [updateOfferInput, setUpdateOfferInput] =
-    useState<PartialUpdateOfferInput>({
-      title: offerFragment?.title,
-      description: offerFragment?.description,
-    })
+  const [updateOfferInput, setUpdateOfferInput] = useState<UpdateOfferInput>({
+    title: offerFragment?.title,
+    description: offerFragment?.description,
+  })
 
   if (!offer || !ownedByMe) {
     return null
@@ -43,7 +39,7 @@ export const EditOfferPageView = () => {
     router.push(backRoute)
   }
 
-  const handleOnEdit = (updateOfferInput: PartialUpdateOfferInput) => {
+  const handleOnEdit = (updateOfferInput: UpdateOfferInput) => {
     setUpdateOfferInput((prev) => ({ ...prev, ...updateOfferInput }))
   }
 

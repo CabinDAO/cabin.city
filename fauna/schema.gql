@@ -55,6 +55,10 @@ type Mutation {
   createOffer(data: CreateOfferInput!): Offer @resolver(name: "create_offer")
   deleteLocation(id: ID!): Location! @resolver(name: "delete_location")
   deleteOffer(id: ID!): Offer! @resolver(name: "delete_offer")
+  publishLocation(id: ID!): Location! @resolver(name: "publish_location")
+  updateOffer(id: ID!, data: UpdateOfferInput!): Offer!
+    @resolver(name: "update_offer")
+  toggleSignal: Profile! @resolver(name: "toggle_signal")
 }
 
 type Profile {
@@ -169,6 +173,24 @@ input UpdateProfileInput {
   features: [String!]
 }
 
+input OfferPriceInput {
+  unit: OfferPriceUnit!
+  amountCents: Int!
+}
+
+input UpdateOfferInput {
+  title: String
+  description: String # Rich text
+  startDate: Time
+  endDate: Time
+  price: OfferPriceInput
+  profileRoleConstraints: [ProfileRoleConstraintInput]
+  applicationUrl: String
+  imageIpfsHash: String
+  citizenshipRequired: Boolean
+  minimunCabinBalance: Int
+}
+
 input ProfileContactFieldInput {
   type: ProfileContactFieldType!
   value: String!
@@ -258,6 +280,15 @@ type ActivityMetadata @embedded {
 
   # VerifiedCitizenship
   citizenshipTokenId: String
+
+  # LocationPublished, LocationPromoted
+  location: Location
+
+  # OfferCreated
+  offer: Offer
+
+  # VouchRequested
+  # None
 }
 
 type ActivityReaction {
@@ -271,6 +302,10 @@ enum ActivityType {
   ProfileBadgeAdded
   VerifiedCitizenship
   Text
+  LocationPublished
+  OfferCreated
+  LocationPromoted
+  VouchRequested
 }
 
 type BlockSyncAttempt {

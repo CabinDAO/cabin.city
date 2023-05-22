@@ -8,6 +8,7 @@ import { LocationCard } from '../core/LocationCard'
 import { locationCardPropsFromFragment } from '@/lib/location'
 import styled from 'styled-components'
 import { useLocationVote } from '../hooks/useLocationVote'
+import { useEffect, useState } from 'react'
 
 interface LocationListProps {
   locationType: LocationType
@@ -15,9 +16,12 @@ interface LocationListProps {
 
 export const LocationList = (props: LocationListProps) => {
   const { locationType } = props
-  const { voteForLocation } = useLocationVote()
-  const { data, fetchMore } = useGetLocationsByLocationTypeQuery({
+  const { data, fetchMore, refetch } = useGetLocationsByLocationTypeQuery({
     variables: { locationType, size: 20, cursor: null },
+  })
+  const [refetchList, setRefetchList] = useState(false)
+  const { voteForLocation } = useLocationVote(() => {
+    setRefetchList(true)
   })
 
   const locations =
@@ -27,6 +31,12 @@ export const LocationList = (props: LocationListProps) => {
 
   const hasMore = !!data?.locationsByLocationType?.after
   const dataLength = locations?.length ?? 0
+
+  useEffect(() => {
+    if (refetchList) {
+      refetch()
+    }
+  }, [refetchList, refetch, locationType])
 
   return (
     <LocationListContainer>

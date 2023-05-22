@@ -31,16 +31,17 @@ import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { NoWrap } from '../core/NoWrap'
 import { useUser } from '../auth/useUser'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export const LandingView = () => {
   const { showModal } = useModal()
   const { priceInUsd } = usePriceInUsd()
   const { user } = useUser()
-
+  const { deviceSize } = useDeviceSize()
   const onSubscribeEmail = () => showModal(() => <SubscribeEmail />)
 
   return (
-    <SingleColumnLayout variant="full">
+    <StyledLayout variant="full">
       <LandingSection>
         <LandingContent>
           <SectionContent>
@@ -110,11 +111,11 @@ export const LandingView = () => {
               </SectionDescription>
             </SectionHeader>
 
-            <Slideshow>
+            <Slideshow key={deviceSize}>
               {Object.values(ProfileRoleType).map((role) => (
                 <RoleCard
-                  key={role}
-                  variant="small"
+                  key={`${role}-${deviceSize}`}
+                  variant={deviceSize === 'desktop' ? 'default' : 'small'}
                   roleInfo={roleInfoFromType(ProfileRoleType[role])}
                   levelInfo={levelInfoFromType(ProfileRoleLevelType.Custodian)}
                 />
@@ -318,7 +319,7 @@ export const LandingView = () => {
           <Footer />
         </LandingContent>
       </LandingSection>
-    </SingleColumnLayout>
+    </StyledLayout>
   )
 }
 
@@ -612,4 +613,8 @@ export const JoinPriceHero = styled(HHero)`
 export const JoinPaymentInterval = styled(Caption)`
   line-height: 0.8;
   font-size: 1.8rem;
+`
+
+const StyledLayout = styled(SingleColumnLayout)`
+  margin-bottom: 0rem;
 `

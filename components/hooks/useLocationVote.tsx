@@ -9,7 +9,7 @@ import { useCallback } from 'react'
 import { CastLocationVotesBody } from '@/pages/api/cast-location-votes'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 
-export const useLocationVote = () => {
+export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
 
@@ -29,6 +29,7 @@ export const useLocationVote = () => {
                 body: JSON.stringify(voteModifiersByLocationId),
               }).then((res) => {
                 if (res.ok) {
+                  afterVote?.()
                   return getLocationVoteCountsByIds({
                     variables: {
                       ids: Object.keys(voteModifiersByLocationId),
@@ -43,7 +44,7 @@ export const useLocationVote = () => {
         ))
       })
     },
-    [showModal, getLocationVoteCountsByIds, confirmLoggedIn]
+    [showModal, getLocationVoteCountsByIds, confirmLoggedIn, afterVote]
   )
 
   return {

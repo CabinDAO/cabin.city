@@ -17,6 +17,12 @@ fragment Activity on Activity {
       role
       level
     }
+    location {
+      ...LocationItem
+    }
+    offer {
+      ...OfferItem
+    }
     citizenshipTokenId
   }
   profile {
