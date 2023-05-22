@@ -7,19 +7,26 @@ import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 import { useFeatures } from '../hooks/useFeatures'
 import { Feature } from '@/lib/features'
+import { useAccount } from 'wagmi'
+import { loadUnlockCheckout } from './UnlockScript'
 
 export const CitizenshipView = () => {
   const { hasFeature } = useFeatures()
   const citizenshipMintingEnabled = hasFeature(Feature.Citizenship)
   const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/' })
+  const { connector } = useAccount()
 
   const [toggleSignal] = useToggleSignalMutation()
 
-  const handleMint = () => {
+  const handleMint = async () => {
     // TODO: Remove check when citizenship minting is enabled in prod
     if (citizenshipMintingEnabled) {
-      window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
+      if (!connector) return // This should not happen...
+      const provider = await connector.getProvider({
+        chainId: 10,
+      })
+      loadUnlockCheckout(provider)
     }
   }
 

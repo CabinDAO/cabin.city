@@ -28,6 +28,8 @@
     "@types/node": "18.13.0",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
+    "@unlock-protocol/networks": "^0.0.15",
+    "@unlock-protocol/paywall": "^0.4.1",
     "@wagmi/chains": "^0.2.9",
     "alchemy-sdk": "^2.4.3",
     "axios": "^1.4.0",
