@@ -13,7 +13,12 @@ const LocationMedia = (props: PostProps) => {
   const location = props.activityItem.activity.metadata?.location
 
   if (location) {
-    return <LocationPostItem {...locationCardPropsFromFragment(location)} />
+    return (
+      <LocationPostItem
+        {...locationCardPropsFromFragment(location)}
+        hideNeighborTag
+      />
+    )
   } else {
     return null
   }

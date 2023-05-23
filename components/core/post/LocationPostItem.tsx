@@ -16,6 +16,7 @@ export const LocationPostItem = ({
   tagline,
   locationType,
   _id,
+  hideNeighborTag,
 }: LocationCardProps) => {
   const offerCountString = offerCount === 1 ? 'Offer' : 'Offers'
   const router = useRouter()
@@ -26,7 +27,7 @@ export const LocationPostItem = ({
 
   return (
     <OuterContainer>
-      {locationType === LocationType.Neighborhood ? (
+      {locationType === LocationType.Neighborhood && !hideNeighborTag ? (
         <VerifiedContainer>
           <Icon name="neighborhood" color="green400" size={1.6} />
           <Subline1 $color="green400">Verified Neighborhood</Subline1>

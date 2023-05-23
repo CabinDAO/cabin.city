@@ -30,6 +30,7 @@ export interface LocationCardProps {
   onDelete?: () => void
   onEdit?: () => void
   actionsEnabled?: boolean
+  hideNeighborTag?: boolean
 }
 
 interface Caretaker {
