@@ -8,7 +8,7 @@ import { useCitizenship } from '../hooks/useCitizenship'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
 
-export const loadUnlockCheckout = (provider) => {
+export const loadUnlockCheckout = (provider: any) => {
   var paywallConfig = {
     locks: {
       [unlockConfig.contractAddress]: {
