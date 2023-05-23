@@ -43,10 +43,7 @@ export const castLocationVotes = async (params: CastLocationVotesParams) => {
               q.Var('profileRef'),
               q.Var('voteModifier')
             ),
-            UpdateLocationTypeIfNecessary(
-              q.Var('locationRef'),
-              q.Var('profileRef')
-            )
+            UpdateLocationTypeIfNecessary(q.Var('locationRef'))
           )
         )
       )

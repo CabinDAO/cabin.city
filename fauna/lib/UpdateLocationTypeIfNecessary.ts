@@ -9,10 +9,7 @@ import { UpsertActivity } from './UpsertActivity'
  * @param locationExpr A `Ref` or a `Document` for a Location
  * @returns Document update metadata if the locationType was updated, otherwise null
  */
-export const UpdateLocationTypeIfNecessary = (
-  locationExpr: Expr,
-  profileExpr: Expr
-) => {
+export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
   return q.Let(
     {
       location: ToDoc(locationExpr),
@@ -22,8 +19,9 @@ export const UpdateLocationTypeIfNecessary = (
         LocationType.Neighborhood,
         LocationType.Outpost
       ),
-      profileRef: ToRef(profileExpr),
-      profile: ToDoc(profileExpr),
+      locationCaretaker: ToDoc(
+        q.Select(['data', 'caretaker'], q.Var('location'))
+      ),
     },
     q.If(
       q.Not(
@@ -58,7 +56,7 @@ export const UpdateLocationTypeIfNecessary = (
         q.If(
           q.Equals(q.Var('newLocationType'), LocationType.Neighborhood),
           UpsertActivity(
-            q.Var('profile'),
+            q.Var('locationCaretaker'),
             {
               key: q.Format(
                 'LocationPromoted|%s',
