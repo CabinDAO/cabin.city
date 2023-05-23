@@ -14,10 +14,6 @@ interface CitizenshipNFTDataProps {
 export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
   const { user } = useUser()
 
-  const handleManage = () => {
-    window.unlockProtocol && window.unlockProtocol.loadCheckoutModal()
-  }
-
   if (!user || !nft) return null
 
   let nftData = {}
@@ -54,14 +50,22 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
         <H3>Details</H3>
         <NFTDataList data={nftData} />
       </DetailsContainer>
-      <UnlockCTAButton variant="secondary" onClick={handleManage}>
-        Manage
+      <UnlockCTAButton>
+        <a
+          href={EXTERNAL_LINKS.UNLOCK_KEY_MANAGE}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Button isFullWidth variant="secondary">
+            Manage
+          </Button>
+        </a>
       </UnlockCTAButton>
     </Container>
   )
 }
 
-const UnlockCTAButton = styled(Button)`
+const UnlockCTAButton = styled.div`
   width: 100%;
 `
 

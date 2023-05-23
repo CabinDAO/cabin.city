@@ -50,7 +50,7 @@ export const LandingView = () => {
             <SectionGrowTwoColumns>
               <SectionGrowSignup>
                 <AuthenticatedLink href="/dashboard">
-                  <Button>{user ? 'View Dashboard' : 'Sign Up'}</Button>
+                  <Button>{user ? 'View Dashboard' : 'Sign In'}</Button>
                 </AuthenticatedLink>
                 <a
                   href={EXTERNAL_LINKS.CABIN_DISCORD}
@@ -303,12 +303,9 @@ export const LandingView = () => {
                 <Body1>Stay up-to-date on Cabin&apos;s latest events</Body1>
               </SubscribeToNewsletter>
 
-              <SubscribeWithEmail
-                placeholder="Email"
-                buttonProps={{ onClick: onSubscribeEmail }}
-              >
+              <Button variant="secondary" onClick={onSubscribeEmail}>
                 Subscribe
-              </SubscribeWithEmail>
+              </Button>
             </SectionHeader>
           </SectionContent>
         </LandingContent>

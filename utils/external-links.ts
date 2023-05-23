@@ -19,4 +19,5 @@ export const EXTERNAL_LINKS = {
   WIKI: 'https://cabin-fellowship.notion.site/Cabin-Community-Wiki-49958f9db9804ef8836d4a37dd4e7bbb',
   CITIZENSHIP_PERKS:
     'https://cabin-fellowship.notion.site/Citizenship-Perks-and-General-Store-761ab3ab6fef44ac931585784edc3ffc',
+  UNLOCK_KEY_MANAGE: 'https://app.unlock-protocol.com/keychain',
 }
