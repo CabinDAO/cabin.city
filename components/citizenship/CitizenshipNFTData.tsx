@@ -6,7 +6,6 @@ import { Button } from '../core/Button'
 import { H3, H1 } from '../core/Typography'
 import { NFTDataList } from './NFTDataList'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useAccount } from 'wagmi'
 
 interface CitizenshipNFTDataProps {
   nft?: UnlockNFT
@@ -14,7 +13,6 @@ interface CitizenshipNFTDataProps {
 
 export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
   const { user } = useUser()
-  const { connector } = useAccount()
 
   if (!user || !nft) return null
 
