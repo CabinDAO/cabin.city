@@ -11,7 +11,7 @@ export const NeighborhoodsTop3List = () => {
   const { voteForLocation } = useLocationVote()
   const { data } = useGetNeighborhoodsTop3Query()
   const locations = data?.locationsByLocationType
-    ? data.locationsByLocationType.data.filter(isNotNull).slice(0, 3)
+    ? data.locationsByLocationType.data.filter(isNotNull)
     : []
 
   return (
