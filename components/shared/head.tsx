@@ -9,7 +9,7 @@ if (process.env.NEXT_PUBLIC_VERCEL_URL) {
   origin =
     process.env.NEXT_PUBLIC_APP_ENV === 'dev'
       ? 'https://cabin-census-dev.vercel.app'
-      : 'https://cabin.city'
+      : 'https://www.cabin.city'
 }
 
 export const AppHead = ({
@@ -33,6 +33,7 @@ export const AppHead = ({
         content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"
       />
       <meta property="og:site_name" content={TITLE.trim()} key="og:site_name" />
+      <meta name="twitter:url" content={origin} />
       {pageTitle ? (
         <>
           <title key="title">{pageTitle}</title>
@@ -41,10 +42,17 @@ export const AppHead = ({
         </>
       ) : null}
       <meta name="description" content={pageDescription} key="description" />
+      <meta name="twitter:creator" content="@cabindotcity" />
       <meta
         name="twitter:description"
         content={pageDescription}
         key="twitter:description"
+      />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta
+        name="twitter:image"
+        content={`${origin}/images/cabin_social.png`}
+        key="twitter:image"
       />
       <meta
         property="og:description"
@@ -85,12 +93,6 @@ export const AppHead = ({
       ))}
 
       <link rel="manifest" href="/manifest.json" />
-
-      <meta
-        name="twitter:image"
-        content={`${origin}/images/cabin_social.png`}
-        key="twitter:image"
-      />
       <meta
         property="og:image"
         content={`${origin}/images/cabin_social.png`}
@@ -100,8 +102,7 @@ export const AppHead = ({
       <meta property="og:image:width" content="1200" key="og:image:width" />
       <meta property="og:image:height" content="630" key="og:image:height" />
       <meta property="og:image:alt" content={DESCRIPTION} key="og:image:alt" />
-      <meta name="twitter:site" content="@cabindotcity" key="twitter:site" />
-      <meta name="twitter:card" content="summary_large_image" />
+
       <meta name="robots" content="noindex, nosnippet, noimageindex" />
     </Head>
   )
