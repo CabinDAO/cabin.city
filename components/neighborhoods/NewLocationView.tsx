@@ -17,8 +17,6 @@ import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useUser } from '../auth/useUser'
 import { useEffect } from 'react'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
 import { useNavigation } from '../hooks/useNavigation'
 
 export const NewLocationView = () => {
@@ -26,10 +24,9 @@ export const NewLocationView = () => {
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
   const { user } = useUser({ redirectTo: '/' })
-  const { hasFeature } = useFeatures()
+
   const { goBack } = useNavigation()
   const canCreateListings =
-    hasFeature(Feature.City) ||
     user?.citizenshipStatus === CitizenshipStatus.Verified
 
   const handlePrimaryButtonClick = async () => {

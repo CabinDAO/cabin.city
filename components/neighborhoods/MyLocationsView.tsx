@@ -4,24 +4,11 @@ import { useUser } from '../auth/useUser'
 import { CitizenshipStatus } from '@/generated/graphql'
 import { NewListingButton } from './NewListingButton'
 import { MyLocations } from './MyLocations'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 
 export const MyLocationsView = () => {
-  const { user, isUserLoading } = useUser()
-  const router = useRouter()
-  const { hasFeature } = useFeatures()
-  const hasCityFeature = hasFeature(Feature.City)
+  const { user } = useUser({ redirectTo: '/' })
 
-  useEffect(() => {
-    if (!isUserLoading && !hasCityFeature) {
-      router.push('/dashboard')
-    }
-  }, [router, hasCityFeature, isUserLoading])
-
-  if (!hasCityFeature) {
+  if (!user) {
     return null
   }
 
@@ -31,8 +18,7 @@ export const MyLocationsView = () => {
         icon="draft-proposal"
         title="My Locations"
         end={
-          user?.citizenshipStatus === CitizenshipStatus.Verified ||
-          hasCityFeature ? (
+          user?.citizenshipStatus === CitizenshipStatus.Verified ? (
             <NewListingButton />
           ) : null
         }

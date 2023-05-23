@@ -4,8 +4,6 @@ import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'
-import { useFeatures } from '@/components/hooks/useFeatures'
-import { Feature } from '@/lib/features'
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -49,8 +47,6 @@ interface NavbarProps {
 
 export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
-  const { hasFeature } = useFeatures()
-  const hasCityFeature = hasFeature(Feature.City)
 
   return (
     <>
@@ -63,9 +59,7 @@ export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
           <MenuItemLink menuItem={'activity'} profileId={profileId} />
           <MenuItemLink menuItem={'members'} profileId={profileId} />
           <MenuItemLink menuItem={'neighborhoods'} profileId={profileId} />
-          {hasCityFeature && (
-            <MenuItemLink menuItem={'offers'} profileId={profileId} />
-          )}
+          <MenuItemLink menuItem={'offers'} profileId={profileId} />
         </NeighborhoodsItemGroup>
         <Divider />
         <SingleMenuItem>
