@@ -1,6 +1,5 @@
 import { CitizenshipStatus } from '@/generated/graphql'
 import { unlockConfig } from '@/lib/protocol-config'
-import Script from 'next/script'
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
 import { useUser } from '../auth/useUser'
@@ -8,20 +7,20 @@ import { useCitizenship } from '../hooks/useCitizenship'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loadUnlockCheckout = (provider: any) => {
-  var paywallConfig = {
+  const paywallConfig = {
     locks: {
       [unlockConfig.contractAddress]: {
         network: unlockConfig.chainId,
         recurringPayments: 10,
       },
     },
-    dataBuilder:
-      'https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder',
+    dataBuilder: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder`,
     pessimistic: true,
     skipRecipient: true,
     title: 'Cabin Citizenship',
-    icon: 'https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png',
+    icon: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png`,
   }
 
   const paywall = new Paywall(paywallConfig, networks, provider)

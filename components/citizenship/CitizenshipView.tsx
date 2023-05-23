@@ -9,6 +9,7 @@ import { useFeatures } from '../hooks/useFeatures'
 import { Feature } from '@/lib/features'
 import { useAccount } from 'wagmi'
 import { loadUnlockCheckout } from './UnlockScript'
+import { unlockConfig } from '@/lib/protocol-config'
 
 export const CitizenshipView = () => {
   const { hasFeature } = useFeatures()
@@ -23,9 +24,11 @@ export const CitizenshipView = () => {
     // TODO: Remove check when citizenship minting is enabled in prod
     if (citizenshipMintingEnabled) {
       if (!connector) return // This should not happen...
+
       const provider = await connector.getProvider({
-        chainId: 10,
+        chainId: unlockConfig.chainId,
       })
+
       loadUnlockCheckout(provider)
     }
   }
