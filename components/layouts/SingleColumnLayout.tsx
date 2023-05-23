@@ -61,7 +61,7 @@ const OuterContainer = styled.div`
   margin-bottom: 10rem;
 `
 
-const ActionBarContainer = styled.div`
+export const ActionBarContainer = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;

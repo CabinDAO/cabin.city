@@ -4,7 +4,6 @@ import {
   UpdateProfileInput,
 } from '@/generated/graphql'
 import styled from 'styled-components'
-import { Button } from '../core/Button'
 import { HorizontalDivider } from '../core/Divider'
 import { About } from './edit-profile/About'
 import { Contact } from './edit-profile/Contact'
@@ -64,14 +63,5 @@ const InnerContainer = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
-  }
-`
-
-const StyledButton = styled(Button)`
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-end;
-    width: auto;
   }
 `

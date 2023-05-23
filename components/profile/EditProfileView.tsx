@@ -16,6 +16,7 @@ import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 import { ActionBar } from '../core/ActionBar'
+import styled from 'styled-components'
 
 export const EditProfileView = () => {
   const router = useRouter()
@@ -104,7 +105,7 @@ export const EditProfileView = () => {
   }
 
   return (
-    <SingleColumnLayout
+    <StyledLayout
       actionBar={
         <ActionBar
           primaryButton={{
@@ -127,6 +128,14 @@ export const EditProfileView = () => {
           onRolesChange={handleRolesChange}
         />
       </ContentCard>
-    </SingleColumnLayout>
+    </StyledLayout>
   )
 }
+
+const StyledLayout = styled(SingleColumnLayout)`
+  padding-bottom: 11.5rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding-bottom: 17rem;
+  }
+`
