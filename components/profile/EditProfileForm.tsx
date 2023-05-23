@@ -12,7 +12,6 @@ import { Identity } from './edit-profile/Identity'
 import { Roles } from './edit-profile/Roles'
 
 interface EditProfileFormProps {
-  onSubmit: () => void
   editProfileInput: UpdateProfileInput | null
   onChange: (input: UpdateProfileInput) => void
   user: MeFragment
@@ -24,7 +23,6 @@ export const EditProfileForm = ({
   onChange,
   onRolesChange,
   user,
-  onSubmit,
 }: EditProfileFormProps) => {
   if (!user) {
     return null
@@ -51,8 +49,6 @@ export const EditProfileForm = ({
         editProfileInput={editProfileInput}
         onChange={onChange}
       />
-      <HorizontalDivider />
-      <StyledButton onClick={onSubmit}>Save profile</StyledButton>
     </InnerContainer>
   )
 }
