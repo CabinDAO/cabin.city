@@ -15,6 +15,7 @@ interface TabProps {
 }
 
 export const Tab = styled(H3)<TabProps>`
+  white-space: nowrap;
   cursor: pointer;
   padding: 1.6rem 0;
   opacity: ${({ isSelected }) => (isSelected ? 1 : 0.65)};
@@ -25,8 +26,12 @@ export const Tab = styled(H3)<TabProps>`
 const Container = styled.div`
   display: flex;
   width: 100%;
-  gap: 4rem;
+  gap: 1.6rem;
   padding: 0 2rem;
   border: 1px solid ${({ theme }) => theme.colors.green900};
   background-color: ${({ theme }) => theme.colors.yellow200};
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4rem;
+  }
 `

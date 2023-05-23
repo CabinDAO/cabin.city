@@ -201,7 +201,7 @@ export const LandingView = () => {
 
                   <JoinOptionButton>
                     <AuthenticatedLink href="/dashboard">
-                      <Button isFullWidth>Sign Up</Button>
+                      <Button isFullWidth>Sign In</Button>
                     </AuthenticatedLink>
                   </JoinOptionButton>
                 </JoinOptionDetailColumn>

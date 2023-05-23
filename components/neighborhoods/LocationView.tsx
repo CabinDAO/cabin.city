@@ -2,9 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import { Body1, Caption, H1, H4 } from '@/components/core/Typography'
-import Tab from '@/components/core/Tab'
-import TabGroup from '@/components/core/TabGroup'
+import { Body1, Caption, H1, H3, H4 } from '@/components/core/Typography'
+
 import {
   LocationMediaCategory,
   LocationType,
@@ -250,8 +249,21 @@ export const LocationView = ({
         )}
       </GalleryPreviewContainer>
 
-      <TabGroup>
-        <Tab name="Description">
+      {!!offers.length && (
+        <Section>
+          <SectionHeader>
+            <H3>Offers</H3>
+          </SectionHeader>
+          <SectionContent>
+            <OffersList offers={offers} />
+          </SectionContent>
+        </Section>
+      )}
+      <Section>
+        <SectionHeader>
+          <H3>Description</H3>
+        </SectionHeader>
+        <SectionContent>
           <DescriptionTwoColumn>
             <DescriptionDetails>
               <SlateRenderer value={stringToSlateValue(description)} />
@@ -275,15 +287,32 @@ export const LocationView = ({
               </CaretakerDetails>
             </CaretakerDetailsContainer>
           </DescriptionTwoColumn>
-        </Tab>
-
-        <Tab name="Offers">
-          <OffersList offers={offers} />
-        </Tab>
-      </TabGroup>
+        </SectionContent>
+      </Section>
     </LocationContent>
   )
 }
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.yellow200};
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.yellow900};
+`
+
+const SectionContent = styled.div`
+  padding: 2.4rem;
+  padding-top: 3.2rem;
+  display: flex;
+  width: 100%;
+`
+
+const SectionHeader = styled.div`
+  display: flex;
+  padding: 1.6rem 2.4rem;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.yellow900};
+`
 
 const LocationTypeTag = styled(Tag)`
   border-radius: 0.8rem 0 0 0;
@@ -320,6 +349,7 @@ const DescriptionTwoColumn = styled.div`
   display: flex;
   flex-flow: row;
   gap: 2.4rem;
+  width: 100%;
 
   ${({ theme }) => theme.bp.lg_max} {
     flex-flow: column;
@@ -410,7 +440,7 @@ interface LocationDetailsContainerProps {
 
 const LocationDetailsContainer = styled.div<LocationDetailsContainerProps>`
   width: 100%;
-  margin-top: ${({ hasBanner }) => (hasBanner ? '75w' : '0')};
+  margin-top: ${({ hasBanner }) => (hasBanner ? '75vw' : '0')};
 
   ${({ theme }) => theme.bp.md} {
     margin-top: ${({ hasBanner }) => (hasBanner ? '70.4vw' : '0')};
