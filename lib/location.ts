@@ -29,6 +29,7 @@ export const locationCardPropsFromFragment = (
       .filter((v) => v && v?.count > 0)
       .filter(isNotNull)
       .map((v) => v.profile),
+    hideNeighborTag: false,
   }
 }
 

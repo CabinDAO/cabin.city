@@ -5,15 +5,11 @@ import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
 import { useAccount } from 'wagmi'
 import { loadUnlockCheckout } from './UnlockScript'
 import { unlockConfig } from '@/lib/protocol-config'
 
 export const CitizenshipView = () => {
-  const { hasFeature } = useFeatures()
-  const citizenshipMintingEnabled = hasFeature(Feature.Citizenship)
   const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/' })
   const { connector } = useAccount()
@@ -21,16 +17,13 @@ export const CitizenshipView = () => {
   const [toggleSignal] = useToggleSignalMutation()
 
   const handleMint = async () => {
-    // TODO: Remove check when citizenship minting is enabled in prod
-    if (citizenshipMintingEnabled) {
-      if (!connector) return // This should not happen...
+    if (!connector) return
 
-      const provider = await connector.getProvider({
-        chainId: unlockConfig.chainId,
-      })
+    const provider = await connector.getProvider({
+      chainId: unlockConfig.chainId,
+    })
 
-      loadUnlockCheckout(provider)
-    }
+    loadUnlockCheckout(provider)
   }
 
   const handleToggleSignal = () => {
@@ -42,7 +35,7 @@ export const CitizenshipView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout displayLaunchBanner={!citizenshipMintingEnabled}>
+    <SingleColumnLayout>
       <TitleCard
         title="Citizenship"
         icon="back-arrow"
@@ -56,8 +49,7 @@ export const CitizenshipView = () => {
           status={user?.citizenshipStatus}
         />
       )}
-      {/* TODO: Remove check when citizenship minting is enabled */}
-      {activeNFT || citizenshipMintingEnabled ? <CitizenNFTContainer /> : null}
+      {activeNFT ? <CitizenNFTContainer /> : null}
     </SingleColumnLayout>
   )
 }

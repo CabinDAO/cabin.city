@@ -12,8 +12,6 @@ import { NFTDataList } from './NFTDataList'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useRef, useState } from 'react'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
 
 const INNER_PADDING_PX = 24
 const IMAGE_SIZE_PX = 336
@@ -22,8 +20,6 @@ const TABLET_IMAGE_SIZE_PX = 222
 export const CitizenNFTContainer = () => {
   const { activeNFT } = useGetUnlockNFT()
   const [displayVideo, setDisplayVideo] = useState(false)
-  const { hasFeature } = useFeatures()
-  const citizenshipEnabled = hasFeature(Feature.Citizenship)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   const handleImageOnClick = () => {
@@ -50,11 +46,7 @@ export const CitizenNFTContainer = () => {
       <Section>
         <NFTContainer onClick={handleImageOnClick}>
           <NftImage>
-            <Video
-              ref={videoRef}
-              displayVideo={displayVideo && citizenshipEnabled}
-              loop
-            >
+            <Video ref={videoRef} displayVideo={displayVideo} loop>
               <source src="/videos/citizenship.webm" type="video/webm" />
               <source src="/videos/citizenship.mp4" type="video/mp4" />
             </Video>

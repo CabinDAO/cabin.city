@@ -2,8 +2,6 @@ import styled from 'styled-components'
 import { HorizontalDivider } from '../Divider'
 import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
-import { useFeatures } from '@/components/hooks/useFeatures'
-import { Feature } from '@/lib/features'
 import { useUser } from '@/components/auth/useUser'
 
 interface MobileNavBarProps {
@@ -11,8 +9,6 @@ interface MobileNavBarProps {
   open: boolean
 }
 export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
-  const { hasFeature } = useFeatures()
-  const hasCityFeature = hasFeature(Feature.City)
   const { user } = useUser()
 
   return (
@@ -22,9 +18,7 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <MobileMenuItem menuItem={'activity'} profileId={profileId} />
         <MobileMenuItem menuItem={'members'} profileId={profileId} />
         <MobileMenuItem menuItem={'neighborhoods'} profileId={profileId} />
-        {hasCityFeature && (
-          <MobileMenuItem menuItem={'offers'} profileId={profileId} />
-        )}
+        <MobileMenuItem menuItem={'offers'} profileId={profileId} />
         <StyledDivider />
         <MobileMenuProfileItem />
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />

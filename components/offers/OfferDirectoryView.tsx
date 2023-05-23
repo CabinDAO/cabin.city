@@ -1,10 +1,6 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { useEffect } from 'react'
 import { OfferType } from '@/generated/graphql'
-import { useUser } from '../auth/useUser'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
 import { useRouter } from 'next/router'
 import { TabBar, Tab } from '../core/TabBar'
 import { OfferTabList } from './OfferTabList'
@@ -20,19 +16,6 @@ export const OfferDirectoryView = () => {
   const { offerTypeSlug } = router.query
   const offerType =
     SlugOfferTypeMap[offerTypeSlug as string] ?? OfferType.PaidColiving
-  const { hasFeature } = useFeatures()
-  const hasCityFeature = hasFeature(Feature.City)
-  const { isUserLoading } = useUser()
-
-  useEffect(() => {
-    if (!isUserLoading && !hasCityFeature) {
-      router.push('/dashboard')
-    }
-  }, [hasCityFeature, router, isUserLoading])
-
-  if (!hasCityFeature) {
-    return null
-  }
 
   return (
     <SingleColumnLayout>

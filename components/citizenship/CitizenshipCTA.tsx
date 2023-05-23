@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { Button } from '../core/Button'
 import Icon from '../core/Icon'
 import { Body2, H2 } from '../core/Typography'
-import { useFeatures } from '../hooks/useFeatures'
-import { Feature } from '@/lib/features'
 
 type CTAConfig = {
   title: string
@@ -24,8 +22,6 @@ const SIGNAL_INTEREST_DESCRIPTION =
 
 export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
   let config: CTAConfig = {} as CTAConfig
-  const { hasFeature } = useFeatures()
-  const isCitizenshipEnabled = hasFeature(Feature.Citizenship)
 
   if (!status) {
     config = {
@@ -53,19 +49,11 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
     }
   } else if (status === CitizenshipStatus.Vouched) {
     config = {
-      title: isCitizenshipEnabled
-        ? 'Citizenship eligible'
-        : 'Citizenship eligible pending launch',
+      title: 'Citizenship eligible',
       description:
         'When you create a citizenship NFT, it becomes unalterable proof that serves as evidence of your citizenship. We’ll guide you through the steps.',
       button: () => (
-        <Button
-          variant="primary"
-          onClick={onClick}
-          endAdornment={
-            isCitizenshipEnabled ? null : <Icon name="lock" size={1.1} />
-          }
-        >
+        <Button variant="primary" onClick={onClick}>
           Mint now
         </Button>
       ),
