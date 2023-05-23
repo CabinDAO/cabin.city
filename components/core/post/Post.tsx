@@ -1,4 +1,3 @@
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ActivityItemFragment, ActivityType } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
@@ -34,7 +33,6 @@ export const Post = (props: PostProps) => {
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
-  const { deviceSize } = useDeviceSize()
   const { user } = useUser()
   const { showModal } = useModal()
   const { handleDeleteTextActivity } = useTextActivity()
@@ -105,8 +103,10 @@ export const Post = (props: PostProps) => {
         )}
         {Content && <Content {...props} hovered={hovered} />}
         <ActivityDate {...props} />
-        {Media && (variant == 'full' || deviceSize === 'mobile') && (
-          <Media {...props} hovered={hovered} />
+        {Media && (
+          <MediaContainer>
+            <Media {...props} hovered={hovered} />
+          </MediaContainer>
         )}
         <ReactionsContainer>
           {hasReactionByMe ? (
@@ -122,9 +122,6 @@ export const Post = (props: PostProps) => {
           <Caption>{likesCount}</Caption>
         </ReactionsContainer>
       </ContentContainer>
-      {Media && variant == 'compact' && deviceSize !== 'mobile' && (
-        <Media {...props} hovered={hovered} />
-      )}
     </Container>
   )
 }
@@ -132,6 +129,11 @@ export const Post = (props: PostProps) => {
 interface ContainerProps {
   variant: PostVariant
 }
+
+const MediaContainer = styled.div`
+  display: flex;
+  width: 100%;
+`
 
 const Container = styled.div<ContainerProps>`
   display: flex;
@@ -161,6 +163,7 @@ const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+  width: 100%;
 `
 
 const ProfileContainer = styled.div`

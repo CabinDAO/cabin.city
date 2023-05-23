@@ -84,10 +84,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
   const isDisplayingIcon = variant !== 'no-icon'
   const inactive = endDate && endDate < new Date()
 
-  if (!location.publishedAt) {
-    return null
-  }
-
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()

@@ -15,6 +15,8 @@ import { ApolloError } from '@apollo/client'
 import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
+import { ActionBar } from '../core/ActionBar'
+import styled from 'styled-components'
 
 export const EditProfileView = () => {
   const router = useRouter()
@@ -103,7 +105,16 @@ export const EditProfileView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <StyledLayout
+      actionBar={
+        <ActionBar
+          primaryButton={{
+            label: 'Save Profile',
+            onClick: handleSubmit,
+          }}
+        />
+      }
+    >
       <TitleCard
         title="Edit profile"
         icon="close"
@@ -113,11 +124,18 @@ export const EditProfileView = () => {
         <EditProfileForm
           user={user}
           editProfileInput={editProfileInput}
-          onSubmit={handleSubmit}
           onChange={handleChange}
           onRolesChange={handleRolesChange}
         />
       </ContentCard>
-    </SingleColumnLayout>
+    </StyledLayout>
   )
 }
+
+const StyledLayout = styled(SingleColumnLayout)`
+  padding-bottom: 11.5rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding-bottom: 17rem;
+  }
+`

@@ -5,7 +5,7 @@ export const LevelUpLocationBackdrop = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
+  width: 100%;
   background: url('/images/confetti.svg') no-repeat;
   background-size: cover;
   padding: 2.4rem 1.6rem;

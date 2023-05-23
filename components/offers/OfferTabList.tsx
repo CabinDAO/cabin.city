@@ -12,7 +12,6 @@ import { ListEmptyState } from '../core/ListEmptyState'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { OfferListItem } from '../core/OfferListItem'
 import { useUser } from '../auth/useUser'
-import { off } from 'process'
 
 interface OfferTabListProps {
   offerType: OfferType

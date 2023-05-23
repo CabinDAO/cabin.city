@@ -14,6 +14,10 @@ const LocationMedia = (props: PostProps) => {
   const location = props.activityItem.activity.metadata?.location
 
   if (location) {
+    if (props.variant === 'compact') {
+      return <LocationPostItem {...locationCardPropsFromFragment(location)} />
+    }
+
     return (
       <LevelUpLocationBackdrop>
         <LocationPostItem {...locationCardPropsFromFragment(location)} />

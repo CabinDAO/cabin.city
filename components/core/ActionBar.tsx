@@ -29,9 +29,11 @@ export const ActionBar = ({
     <ActionBarContainer>
       <MainContent variant={isTablet ? 'full' : 'default'}>
         <ButtonContainer>
-          <Button variant="link" onClick={secondaryButton.onClick}>
-            {secondaryButton.label}
-          </Button>
+          {secondaryButton.onClick && (
+            <Button variant="link" onClick={secondaryButton.onClick}>
+              {secondaryButton.label}
+            </Button>
+          )}
           <Button variant="primary" onClick={primaryButton.onClick}>
             {primaryButton.label}
           </Button>

@@ -4,7 +4,6 @@ import {
   UpdateProfileInput,
 } from '@/generated/graphql'
 import styled from 'styled-components'
-import { Button } from '../core/Button'
 import { HorizontalDivider } from '../core/Divider'
 import { About } from './edit-profile/About'
 import { Contact } from './edit-profile/Contact'
@@ -12,7 +11,6 @@ import { Identity } from './edit-profile/Identity'
 import { Roles } from './edit-profile/Roles'
 
 interface EditProfileFormProps {
-  onSubmit: () => void
   editProfileInput: UpdateProfileInput | null
   onChange: (input: UpdateProfileInput) => void
   user: MeFragment
@@ -24,7 +22,6 @@ export const EditProfileForm = ({
   onChange,
   onRolesChange,
   user,
-  onSubmit,
 }: EditProfileFormProps) => {
   if (!user) {
     return null
@@ -51,8 +48,6 @@ export const EditProfileForm = ({
         editProfileInput={editProfileInput}
         onChange={onChange}
       />
-      <HorizontalDivider />
-      <StyledButton onClick={onSubmit}>Save profile</StyledButton>
     </InnerContainer>
   )
 }
@@ -68,14 +63,5 @@ const InnerContainer = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;
-  }
-`
-
-const StyledButton = styled(Button)`
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-end;
-    width: auto;
   }
 `
