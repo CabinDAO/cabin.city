@@ -6,7 +6,10 @@ const DESCRIPTION = 'Create your Census profile to join the community'
 
 let origin = 'http://localhost:3000'
 if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-  origin = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  origin =
+    process.env.NEXT_PUBLIC_APP_ENV === 'dev'
+      ? 'https://cabin-census-dev.vercel.app'
+      : 'https://cabin.city'
 }
 
 export const AppHead = ({
@@ -48,7 +51,7 @@ export const AppHead = ({
         content={pageDescription}
         key="og:description"
       />
-      <meta property="og:url" content={`${origin}${pathname}`} key="og:url" />
+      <meta property="og:url" content={`${origin}/${pathname}`} key="og:url" />
       <link rel="icon" href="/favicon.ico" sizes="any" key="icon:ico" />
 
       {['16', '32', '96'].map((size) => (
