@@ -9,7 +9,7 @@ if (process.env.NEXT_PUBLIC_VERCEL_URL) {
   origin =
     process.env.NEXT_PUBLIC_APP_ENV === 'dev'
       ? 'https://cabin-census-dev.vercel.app'
-      : 'https://cabin.city'
+      : 'https://www.cabin.city'
 }
 
 export const AppHead = ({
