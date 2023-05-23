@@ -198,7 +198,6 @@ const InnerContainer = styled.div`
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
-  // opacity: 0.5;
 `
 
 const InactiveLabel = styled.div`
