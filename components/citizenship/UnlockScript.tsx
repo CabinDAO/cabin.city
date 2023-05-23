@@ -1,10 +1,31 @@
 import { CitizenshipStatus } from '@/generated/graphql'
 import { unlockConfig } from '@/lib/protocol-config'
-import Script from 'next/script'
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
 import { useUser } from '../auth/useUser'
 import { useCitizenship } from '../hooks/useCitizenship'
+import { Paywall } from '@unlock-protocol/paywall'
+import networks from '@unlock-protocol/networks'
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const loadUnlockCheckout = (provider: any) => {
+  const paywallConfig = {
+    locks: {
+      [unlockConfig.contractAddress]: {
+        network: unlockConfig.chainId,
+        recurringPayments: 10,
+      },
+    },
+    dataBuilder: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder`,
+    pessimistic: true,
+    skipRecipient: true,
+    title: 'Cabin Citizenship',
+    icon: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png`,
+  }
+
+  const paywall = new Paywall(paywallConfig, networks, provider)
+  paywall.loadCheckoutModal(paywallConfig, 'https://app.unlock-protocol.com/')
+}
 
 // https://docs.unlock-protocol.com/tools/paywall/#user-info
 export const UnlockScript = () => {
@@ -44,28 +65,5 @@ export const UnlockScript = () => {
     return null
   }
 
-  if (!user) {
-    return null
-  }
-
-  return (
-    <Script id="unlock-script">
-      {`
-        var unlockProtocolConfig = {
-          locks: { '${unlockConfig.contractAddress}': { network: ${unlockConfig.chainId} } },
-          dataBuilder:"https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder",
-          pessimistic: true,
-          skipRecipient: true,
-          title: 'Cabin Citizenship',
-          icon: "https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png",
-        };
-
-      (function(d, s) {
-        var js = d.createElement(s),
-          sc = d.getElementsByTagName(s)[0];
-        js.src="https://paywall.unlock-protocol.com/static/unlock.latest.min.js";
-        sc.parentNode.insertBefore(js, sc); }(document, "script"));
-      `}
-    </Script>
-  )
+  return null
 }
