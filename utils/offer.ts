@@ -110,6 +110,9 @@ export const offerViewPropsFromFragment = (
       publishedAt: fragment.location.publishedAt
         ? parseISO(fragment.location.publishedAt)
         : null,
+      caretaker: {
+        _id: fragment.location.caretaker._id,
+      },
     },
     rawFragment: fragment,
   }

@@ -251,7 +251,10 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
 
 const LocationVoteModalContainer = styled(ModalContainer)`
   height: min-content;
-  max-height: 49vh;
+
+  ${({ theme }) => theme.bp.md} {
+    max-height: 54vh;
+  }
 `
 
 const Container = styled.div`

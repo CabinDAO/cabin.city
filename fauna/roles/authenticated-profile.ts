@@ -289,24 +289,6 @@ const authenticatedProfileRole: RoleResource = {
         read: true,
       },
     },
-    {
-      resource: q.Index('caretakerLocations_by_profile'),
-      actions: {
-        read: true,
-      },
-    },
-    {
-      resource: q.Index('referredLocations_by_profile'),
-      actions: {
-        read: true,
-      },
-    },
-    {
-      resource: q.Index('location_offers_by_location'),
-      actions: {
-        read: true,
-      },
-    },
 
     /* Functions */
     {

@@ -9,9 +9,9 @@ import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
 import { emptyFunction } from '@/utils/general'
-import { AuthenticatedLink } from './AuthenticatedLink'
 import { EMPTY, truncate } from '@/utils/display-utils'
 import { useDeviceSize } from '../hooks/useDeviceSize'
+import Link from 'next/link'
 
 export interface LocationCardProps {
   _id: string
@@ -193,7 +193,7 @@ const OuterContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.yellow200};
 `
 
-const ContainerLink = styled(AuthenticatedLink)`
+const ContainerLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;

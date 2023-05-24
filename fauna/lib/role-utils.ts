@@ -16,6 +16,24 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
+    resource: q.Index('referredLocations_by_profile'),
+    actions: {
+      read: true,
+    },
+  },
+  {
+    resource: q.Index('location_offers_by_location'),
+    actions: {
+      read: true,
+    },
+  },
+  {
+    resource: q.Index('caretakerLocations_by_profile'),
+    actions: {
+      read: true,
+    },
+  },
+  {
     resource: q.Collection('Offer'),
     actions: {
       read: true,
