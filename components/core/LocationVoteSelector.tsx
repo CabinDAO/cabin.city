@@ -72,6 +72,7 @@ const StyledInput = styled.input`
   border: 0;
   outline: none;
   text-align: center;
+  border-radius: 0;
 `
 
 const SelectorButton = styled(IconButton)`

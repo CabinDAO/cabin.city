@@ -1,6 +1,6 @@
-import { getAlchemySdk } from '@/lib/alchemy'
+import { getAlchemySdks } from '@/lib/alchemy'
 import { OwnedNft } from 'alchemy-sdk'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useAccount, useNetwork } from 'wagmi'
 import IconButton from '../core/IconButton'
 import { ModalContainer } from '../core/modals/ModalContainer'
@@ -17,20 +17,32 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
   const { chain } = useNetwork()
   const { address } = useAccount()
 
+  const fetchNfts = useCallback(async () => {
+    if (!chain || !address) return
+
+    const alchemyInstances = getAlchemySdks()
+
+    const myNfts =
+      (
+        await Promise.all(
+          alchemyInstances.map((alchemy) =>
+            alchemy.nft.getNftsForOwner(address)
+          )
+        )
+      ).flatMap((response) => response.ownedNfts) ?? []
+
+    const filteredNfts = myNfts.filter((nft) => nft.media.length > 0)
+
+    if (filteredNfts.length > 0) {
+      setNfts(filteredNfts)
+    }
+  }, [chain, address])
+
   useEffect(() => {
     if (!chain || !address) return
 
-    const alchemy = getAlchemySdk()
-
-    alchemy.nft
-      .getNftsForOwner(address)
-      .then((nfts) => {
-        setNfts(nfts.ownedNfts.filter((nft) => nft.media.length > 0))
-      })
-      .catch((err) => {
-        console.error(err)
-      })
-  }, [chain, address])
+    fetchNfts()
+  }, [chain, address, fetchNfts])
 
   return (
     <ModalContainer>

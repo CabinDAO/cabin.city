@@ -11,6 +11,7 @@ import {
   LocationType,
   usePublishLocationMutation,
 } from '@/generated/graphql'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
 
 interface PublishModalProps {
@@ -20,6 +21,7 @@ interface PublishModalProps {
 export const PublishModal = ({ locationId }: PublishModalProps) => {
   const [publishLocation] = usePublishLocationMutation()
   const { showModal, hideModal } = useModal()
+  const router = useRouter()
 
   const handlePublish = async () => {
     try {
@@ -38,6 +40,7 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
 
       if (data?.publishLocation?.publishedAt) {
         hideModal()
+        router.push(`/location/${locationId}`)
       }
     } catch (error) {
       showModal(() => (

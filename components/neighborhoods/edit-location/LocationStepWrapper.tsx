@@ -37,7 +37,7 @@ export const LocationStepWrapper = ({
   }
 
   return (
-    <SingleColumnLayout
+    <StyledLayout
       actionBar={
         <ActionBar
           primaryButton={{
@@ -51,7 +51,7 @@ export const LocationStepWrapper = ({
         />
       }
     >
-      <TitleCard title={stepTitle} icon="close" iconHref="/profile" />
+      <TitleCard title={stepTitle} icon="close" iconHref="/my-locations" />
       <Container className={className}>
         <StepIndicator>
           <H3>{name}</H3>
@@ -61,9 +61,17 @@ export const LocationStepWrapper = ({
           <FormContainer>{children}</FormContainer>
         </ContentCard>
       </Container>
-    </SingleColumnLayout>
+    </StyledLayout>
   )
 }
+
+const StyledLayout = styled(SingleColumnLayout)`
+  padding-bottom: 20vh;
+
+  ${({ theme }) => theme.bp.md} {
+    padding-bottom: 0;
+  }
+`
 
 const Container = styled.div`
   margin-top: 3.2rem;
@@ -73,7 +81,7 @@ const Container = styled.div`
   justify-content: flex-start;
   width: 100%;
   gap: 1.6rem;
-  margin-bottom: 4.8rem;
+  // margin-bottom: 4.8rem;
 `
 
 const StepIndicator = styled.div`

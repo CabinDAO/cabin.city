@@ -19,14 +19,27 @@ export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
   }
 }
 
-export const getAlchemySdk = () =>
-  new Alchemy({
-    apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
-    network:
-      process.env.NEXT_PUBLIC_USE_TESTNETS === 'true'
-        ? Network.ETH_GOERLI
-        : Network.ETH_MAINNET,
-  })
+export const getAlchemySdks = (): Alchemy[] => {
+  if (process.env.NEXT_PUBLIC_USE_TESTNETS === 'true') {
+    return [
+      new Alchemy({
+        apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
+        network: Network.ETH_GOERLI,
+      }),
+    ]
+  } else {
+    return [
+      new Alchemy({
+        apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
+        network: Network.ETH_MAINNET,
+      }),
+      new Alchemy({
+        apiKey: process.env.NEXT_PUBLIC_OPTIMISM_ALCHEMY_ID,
+        network: Network.OPT_MAINNET,
+      }),
+    ]
+  }
+}
 
 export const getEthPrice = async () => {
   const response = await fetch(

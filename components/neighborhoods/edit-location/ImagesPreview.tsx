@@ -91,8 +91,8 @@ const Container = styled.div`
 const DeleteContainer = styled.div`
   display: flex;
   position: absolute;
-  top: 0.8rem;
-  right: 0.8rem;
+  top: 0.6rem;
+  right: 0.6rem;
   justify-content: center;
   align-items: center;
   width: 3rem;
@@ -112,6 +112,7 @@ const DeleteContainer = styled.div`
 
 const ImageContainer = styled.div`
   position: relative;
+  width: min-content;
 
   &:hover {
     ${DeleteContainer} {

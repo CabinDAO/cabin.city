@@ -8,6 +8,7 @@ import { ProfileIcons } from './ProfileIcons'
 import { Caption, H4 } from './Typography'
 import { Button } from '@/components/core/Button'
 import { NoWrap } from './NoWrap'
+import { AuthenticatedLink } from './AuthenticatedLink'
 
 interface ProfileContactProps {
   profile: ProfileFragment
@@ -52,9 +53,9 @@ export const ProfileContact = ({
       </InfoContainer>
 
       <ContactContainer>
-        <Link href={`mailto:${caretakerEmail ?? profile.email}`}>
+        <AuthenticatedLink href={`mailto:${caretakerEmail ?? profile.email}`}>
           <ContactButton variant="tertiary">Contact</ContactButton>
-        </Link>
+        </AuthenticatedLink>
       </ContactContainer>
     </ProfileContactContainer>
   )

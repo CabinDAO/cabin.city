@@ -388,13 +388,19 @@ interface LocationBannerContainerProps {
 const LocationBannerContainer = styled.div<LocationBannerContainerProps>`
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
   z-index: -1;
+  transform: translateX(-50%);
+  left: 50%;
+  width: 100%;
 
-  ${({ theme }) => theme.bp.lg_max} {
-    top: -2.4rem;
+  ${({ theme }) => theme.bp.md} {
     width: 100%;
+    top: -2.4rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: calc(84rem + 2 * 8rem);
+    top: 0;
   }
 `
 
@@ -427,10 +433,15 @@ const LocationContent = styled.div`
 const LocationBanner = styled(Image)`
   object-fit: cover;
   object-position: center;
+  height: 28rem;
 
-  ${({ theme }) => theme.bp.lg_max} {
+  ${({ theme }) => theme.bp.md} {
     width: 100%;
-    height: auto;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 100%;
+    height: 42rem;
   }
 `
 
@@ -440,14 +451,14 @@ interface LocationDetailsContainerProps {
 
 const LocationDetailsContainer = styled.div<LocationDetailsContainerProps>`
   width: 100%;
-  margin-top: ${({ hasBanner }) => (hasBanner ? '75vw' : '0')};
+  margin-top: ${({ hasBanner }) => (hasBanner ? '21rem' : '0')};
 
   ${({ theme }) => theme.bp.md} {
-    margin-top: ${({ hasBanner }) => (hasBanner ? '70.4vw' : '0')};
+    margin-top: ${({ hasBanner }) => (hasBanner ? '20rem' : '0')};
   }
 
   ${({ theme }) => theme.bp.lg} {
-    margin-top: ${({ hasBanner }) => (hasBanner ? '33.2rem' : '0')};
+    margin-top: ${({ hasBanner }) => (hasBanner ? '33rem' : '0')};
   }
 `
 

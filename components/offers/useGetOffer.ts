@@ -35,6 +35,9 @@ export interface OfferViewProps {
     name: string | null | undefined
     shortAddress: string | null | undefined
     publishedAt: Date | null | undefined
+    caretaker: {
+      _id: string
+    }
   }
   rawFragment: OfferFragment
 }
@@ -54,8 +57,7 @@ export const useGetOffer = () => {
     ? offerViewPropsFromFragment(data.findOfferByID)
     : null
 
-  const ownedByMe =
-    offer && user?._id === offer?.rawFragment.location.caretaker._id
+  const ownedByMe = offer && user?._id === offer?.location.caretaker._id
 
   const hideFromOthers = offer && !offer.location.publishedAt && !ownedByMe
 
@@ -74,5 +76,6 @@ export const useGetOffer = () => {
   return {
     offer,
     ownedByMe,
+    published: !!offer.location.publishedAt,
   }
 }
