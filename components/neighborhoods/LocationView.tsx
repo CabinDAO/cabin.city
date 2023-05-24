@@ -433,6 +433,7 @@ const LocationContent = styled.div`
 const LocationBanner = styled(Image)`
   object-fit: cover;
   object-position: center;
+  width: 100vw;
   height: 28rem;
 
   ${({ theme }) => theme.bp.md} {
