@@ -4,13 +4,11 @@ import { useUser } from '../auth/useUser'
 import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
-import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 import { useAccount } from 'wagmi'
 import { loadUnlockCheckout } from './UnlockScript'
 import { unlockConfig } from '@/lib/protocol-config'
 
 export const CitizenshipView = () => {
-  const { activeNFT } = useGetUnlockNFT()
   const { user } = useUser({ redirectTo: '/' })
   const { connector } = useAccount()
 
@@ -49,7 +47,7 @@ export const CitizenshipView = () => {
           status={user?.citizenshipStatus}
         />
       )}
-      {activeNFT ? <CitizenNFTContainer /> : null}
+      <CitizenNFTContainer />
     </SingleColumnLayout>
   )
 }
