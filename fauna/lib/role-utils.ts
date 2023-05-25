@@ -94,6 +94,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
       read: true,
     },
   },
+  {
+    resource: q.Index('profile_by_name_casefold'),
+    actions: {
+      read: true,
+    },
+  },
   /* Functions */
   {
     resource: q.Function('get_locations_by_location_type'),
@@ -115,6 +121,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
   },
   {
     resource: q.Function('get_locations_by_ids'),
+    actions: {
+      call: true,
+    },
+  },
+  {
+    resource: q.Function('profile_by_name'),
     actions: {
       call: true,
     },

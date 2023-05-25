@@ -8,6 +8,7 @@ import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
+import checkCircleSvg from './svg/check-circle.svg'
 import checkStarSvg from './svg/check-star.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronLeftSvg from './svg/chevron-left.svg'
@@ -70,6 +71,7 @@ import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
 import rightArrowSvg from './svg/right-arrow.svg'
 import walletSvg from './svg/wallet.svg'
+import xCircleSvg from './svg/x-circle.svg'
 
 export const IconSvgs = {
   'back-arrow': backArrowSvg,
@@ -78,6 +80,7 @@ export const IconSvgs = {
   'card-heart': cardHeartSvg,
   check: checkSvg,
   'check-star': checkStarSvg,
+  'check-circle': checkCircleSvg,
   'chevron-down': chevronDownSvg,
   'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,
@@ -139,6 +142,7 @@ export const IconSvgs = {
   'up-right-arrow': upRightArrowSvg,
   'right-arrow': rightArrowSvg,
   wallet: walletSvg,
+  'x-circle': xCircleSvg,
 }
 
 export type IconName = keyof typeof IconSvgs

@@ -1,4 +1,7 @@
-import { ProfileAvatarInput } from '@/generated/graphql'
+import {
+  ProfileAvatarInput,
+  useGetProfileByNameLazyQuery,
+} from '@/generated/graphql'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
@@ -7,6 +10,8 @@ import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
 import { validEmail, validName } from './validations'
+import { FieldAvailability } from '../core/FieldAvailability'
+import { DisplayNameInputContainer } from './styles'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
@@ -16,41 +21,70 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
   const [avatar, setAvatar] = useState<ProfileAvatarInput | undefined>()
-  const [displayError, setDisplayError] = useState(false)
+  const [getProfileByName] = useGetProfileByNameLazyQuery()
+  const [isUniqueName, setIsUniqueName] = useState(true)
+  const [displayAvailability, setDisplayAvailability] = useState(false)
+  const [displayUsernameError, setDisplayUsernameError] = useState(false)
+  const [displayEmailError, setDisplayEmailError] = useState(false)
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayError(false)
+    setIsUniqueName(true)
+    setDisplayUsernameError(false)
+    setDisplayAvailability(false)
     setDisplayName(e.target.value)
   }
 
   const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayError(false)
+    setDisplayEmailError(false)
     setEmail(e.target.value)
   }
 
   const handleSubmit = () => {
-    setDisplayError(true)
-    if (validName(displayName) && validEmail(email)) {
-      onSubmit({ email, displayName, avatar })
+    setDisplayEmailError(true)
+    setDisplayUsernameError(true)
+
+    if (validName(displayName, !isUniqueName) && validEmail(email)) {
+      onSubmit({ email: email.trim(), displayName: displayName.trim(), avatar })
     }
+  }
+
+  const handleDisplayNameValidation = async () => {
+    if (!validName(displayName)) return
+
+    const name = await getProfileByName({
+      variables: { name: displayName.trim() },
+    })
+
+    setDisplayUsernameError(true)
+    setDisplayAvailability(true)
+
+    setIsUniqueName(!name.data?.profileByName?._id)
   }
 
   return (
     <Container>
       <AvatarSetup onNftSelected={setAvatar} avatar={avatar} />
       <InputGroup>
-        <InputText
-          id="displayName"
-          error={displayError && !validName(displayName)}
-          required
-          label="Display Name"
-          value={displayName}
-          onChange={onDisplayNameChange}
-          helperText={`${displayName.length}/${MAX_DISPLAY_NAME_LENGTH}`}
-        />
+        <DisplayNameInputContainer>
+          <InputText
+            id="displayName"
+            error={
+              displayUsernameError && !validName(displayName, !isUniqueName)
+            }
+            required
+            label="Display Name"
+            value={displayName}
+            onBlur={handleDisplayNameValidation}
+            onChange={onDisplayNameChange}
+            helperText={`${displayName.length}/${MAX_DISPLAY_NAME_LENGTH}`}
+          />
+          {displayAvailability && (
+            <FieldAvailability available={isUniqueName} />
+          )}
+        </DisplayNameInputContainer>
         <InputText
           id="email"
-          error={displayError && !validEmail(email)}
+          error={displayEmailError && !validEmail(email)}
           required
           label="Email"
           value={email}
