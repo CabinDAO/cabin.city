@@ -38,8 +38,6 @@ export const validLocation = (location: ConditionalString) => {
 export const validEmail = (email: ConditionalString) => {
   return (
     email !== '' &&
-    !!email?.match(
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-    )
+    !!email?.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
   )
 }
