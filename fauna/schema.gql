@@ -32,6 +32,7 @@ type Query {
     @resolver(name: "get_offers", paginated: true)
   getLocationsByIds(ids: [ID!]!): [Location!]!
     @resolver(name: "get_locations_by_ids")
+  profileByName(name: String!): Profile @resolver(name: "profile_by_name")
 }
 
 type Mutation {
@@ -63,7 +64,7 @@ type Mutation {
 
 type Profile {
   createdAt: Time!
-  name: String!
+  name: String! @index(name: "profile_by_name_casefold")
   email: String!
   bio: String
   location: String
