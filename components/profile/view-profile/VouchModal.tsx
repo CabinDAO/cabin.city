@@ -23,7 +23,7 @@ interface VouchModalProps {
   profile: GetProfileByIdFragment
 }
 
-const MAX_VOUCHES_PER_YEAR = 5
+const MAX_VOUCHES_PER_YEAR = 10
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
   const { data } = useMyVouchesThisYearQuery()
