@@ -65,7 +65,7 @@ export const DirectoryView = () => {
   const { data, fetchMore } = useGetProfilesQuery({
     variables: {
       input,
-      size: 20,
+      size: 30,
     },
   })
 
