@@ -369,6 +369,7 @@ export type Mutation = {
   updateLocation?: Maybe<Location>;
   /** Create a new document in the collection of 'TrackingEvent' */
   createTrackingEvent: TrackingEvent;
+  accountByName?: Maybe<Account>;
   createLocation?: Maybe<Location>;
   unlikeActivity: ActivityReaction;
   /** Update an existing document in the collection of 'TrackingEvent' */
@@ -587,6 +588,11 @@ export type MutationUpdateLocationArgs = {
 
 export type MutationCreateTrackingEventArgs = {
   data: TrackingEventInput;
+};
+
+
+export type MutationAccountByNameArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -1784,6 +1790,7 @@ export type Query = {
   findOfferByID?: Maybe<Offer>;
   accountByAddress?: Maybe<Account>;
   getProfiles: QueryGetProfilesPage;
+  profileByName?: Maybe<Profile>;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
   getOffers: QueryGetOffersPage;
@@ -1877,6 +1884,11 @@ export type QueryGetProfilesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
   input: GetProfilesInput;
+};
+
+
+export type QueryProfileByNameArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -2252,6 +2264,13 @@ export type GetProfileByIdQueryVariables = Exact<{
 
 
 export type GetProfileByIdQuery = { __typename?: 'Query', findProfileByID?: { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null } | null, activitiesByProfile: { __typename?: 'QueryActivitiesByProfilePage', data: Array<{ __typename?: 'ActivityItem', reactionCount: number, hasReactionByMe: boolean, activity: { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } } | null> } };
+
+export type GetProfileByNameQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type GetProfileByNameQuery = { __typename?: 'Query', profileByName?: { __typename?: 'Profile', _id: string, name: string } | null };
 
 export type LogTrackingEventMutationVariables = Exact<{
   key: Scalars['String'];
@@ -3606,6 +3625,42 @@ export function useGetProfileByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetProfileByIdQueryHookResult = ReturnType<typeof useGetProfileByIdQuery>;
 export type GetProfileByIdLazyQueryHookResult = ReturnType<typeof useGetProfileByIdLazyQuery>;
 export type GetProfileByIdQueryResult = Apollo.QueryResult<GetProfileByIdQuery, GetProfileByIdQueryVariables>;
+export const GetProfileByNameDocument = gql`
+    query GetProfileByName($name: String!) {
+  profileByName(name: $name) {
+    _id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetProfileByNameQuery__
+ *
+ * To run a query within a React component, call `useGetProfileByNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProfileByNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProfileByNameQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useGetProfileByNameQuery(baseOptions: Apollo.QueryHookOptions<GetProfileByNameQuery, GetProfileByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProfileByNameQuery, GetProfileByNameQueryVariables>(GetProfileByNameDocument, options);
+      }
+export function useGetProfileByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProfileByNameQuery, GetProfileByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProfileByNameQuery, GetProfileByNameQueryVariables>(GetProfileByNameDocument, options);
+        }
+export type GetProfileByNameQueryHookResult = ReturnType<typeof useGetProfileByNameQuery>;
+export type GetProfileByNameLazyQueryHookResult = ReturnType<typeof useGetProfileByNameLazyQuery>;
+export type GetProfileByNameQueryResult = Apollo.QueryResult<GetProfileByNameQuery, GetProfileByNameQueryVariables>;
 export const LogTrackingEventDocument = gql`
     mutation LogTrackingEvent($key: String!) {
   logTrackingEvent(key: $key) {

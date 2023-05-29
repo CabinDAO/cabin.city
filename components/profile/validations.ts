@@ -19,8 +19,12 @@ export const validateProfileInput = (editProfileInput: UpdateProfileInput) => {
 
 type ConditionalString = string | undefined | null
 
-export const validName = (name: ConditionalString) => {
-  return name !== '' && (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH
+export const validName = (name: ConditionalString, existingRecord = false) => {
+  return (
+    name !== '' &&
+    (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH &&
+    !existingRecord
+  )
 }
 
 export const validBio = (bio: ConditionalString) => {
@@ -32,5 +36,8 @@ export const validLocation = (location: ConditionalString) => {
 }
 
 export const validEmail = (email: ConditionalString) => {
-  return email !== ''
+  return (
+    email !== '' &&
+    !!email?.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+  )
 }

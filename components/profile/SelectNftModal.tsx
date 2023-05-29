@@ -13,7 +13,7 @@ interface SelectNftModalProps {
 
 export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
   const [aboutOpen, setAboutOpen] = useState(false)
-  const [nfts, setNfts] = useState<OwnedNft[] | null>(null)
+  const [nfts, setNfts] = useState<OwnedNft[] | null>([])
   const { chain } = useNetwork()
   const { address } = useAccount()
 
@@ -31,7 +31,7 @@ export const SelectNftModal = ({ onSelect }: SelectNftModalProps) => {
         )
       ).flatMap((response) => response.ownedNfts) ?? []
 
-    const filteredNfts = myNfts.filter((nft) => nft.media.length > 0)
+    const filteredNfts = myNfts.filter((nft) => nft.media.length > 0) ?? []
 
     if (filteredNfts.length > 0) {
       setNfts(filteredNfts)
