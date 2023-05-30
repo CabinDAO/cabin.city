@@ -3,12 +3,12 @@ import { ModalExplainer } from '../core/modals/ModalExplainer'
 import { Caption } from '../core/Typography'
 import { SearchNft } from './SearchNft'
 import styled from 'styled-components'
-import { OwnedNft } from 'alchemy-sdk'
+import { ExtendedOwnedNft } from './AvatarSetup'
 
 interface SelectNftModalContentProps {
-  nfts: OwnedNft[] | null
+  nfts: ExtendedOwnedNft[] | null
   aboutOpen: boolean
-  onSelect: (nft: OwnedNft) => void
+  onSelect: (nft: ExtendedOwnedNft) => void
 }
 
 const AboutExplainer = styled.div`

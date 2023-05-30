@@ -2,13 +2,14 @@ import styled from 'styled-components'
 import { ColorName } from '@/styles/theme'
 
 interface CircleProps {
-  source: string
+  source?: string
   size: number
   shadowMode: 'always' | 'hover' | 'never'
   color?: ColorName
 }
 
 export const Circle = styled.div<CircleProps>`
+  position: relative;
   width: ${({ size }) => size}rem;
   height: ${({ size }) => size}rem;
   border-radius: 50%;

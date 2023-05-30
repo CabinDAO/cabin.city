@@ -19,9 +19,9 @@ export const CheckboxChip = ({
   disabled = false,
 }: CheckboxChipProps) => {
   return (
-    <Container selected={selected}>
+    <Container onClick={onSelect} selected={selected}>
       <CheckboxContainer>
-        <Checkbox onClick={onSelect} disabled={disabled} selected={selected} />
+        <Checkbox disabled={disabled} selected={selected} />
         <H5 $color="yellow900">{label}</H5>
       </CheckboxContainer>
       <IconContainer>
@@ -36,6 +36,7 @@ interface ContainerProps {
 }
 
 const Container = styled.div<ContainerProps>`
+  cursor: pointer;
   display: flex;
   flex-direction: row;
   padding: 1.6rem;

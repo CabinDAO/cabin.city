@@ -1,6 +1,9 @@
 import { Circle } from './Circle'
 import styled from 'styled-components'
 import { ColorName } from '@/styles/theme'
+import Image from 'next/image'
+import LoadingSpinner from './LoadingSpinner'
+import { useState } from 'react'
 
 interface AvatarProps {
   src?: string
@@ -8,6 +11,8 @@ interface AvatarProps {
   hoverShadow?: boolean
   onClick?: () => void
   color?: ColorName
+  isLoading?: boolean
+  onRendered?: () => void
 }
 
 export const Avatar = ({
@@ -16,18 +21,37 @@ export const Avatar = ({
   hoverShadow,
   onClick,
   color,
+  isLoading = false,
 }: AvatarProps) => {
   return (
     <StyledCircle
       onClick={onClick}
       size={size ?? 3.2}
-      source={src ?? '/images/default-avatar.png'}
       shadowMode={hoverShadow ? 'hover' : 'never'}
       color={color}
-    ></StyledCircle>
+    >
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <StyledImage
+          fill
+          sizes="100%"
+          alt="Avatar"
+          src={src ?? '/images/default-avatar.png'}
+        />
+      )}
+    </StyledCircle>
   )
 }
 
 const StyledCircle = styled(Circle)`
   cursor: pointer;
+`
+
+const StyledImage = styled(Image)`
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  width: auto;
+  height: auto;
 `
