@@ -25,6 +25,7 @@ export const validateLocationInput = (
 ) => {
   const {
     name,
+    tagline,
     description,
     caretakerEmail,
     address,
@@ -34,6 +35,8 @@ export const validateLocationInput = (
 
   const invalid =
     (editProfileInput.hasOwnProperty('name') && !validateTitle(name).valid) ||
+    (editProfileInput.hasOwnProperty('tagline') &&
+      !validateBio(tagline).valid) ||
     (editProfileInput.hasOwnProperty('description') &&
       !validateBio(description).valid) ||
     (editProfileInput.hasOwnProperty('caretakerEmail') &&
