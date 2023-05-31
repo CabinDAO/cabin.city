@@ -2,8 +2,13 @@ import { Dropdown } from '@/components/core/Dropdown'
 import { InputText } from '@/components/core/InputText'
 import { H3 } from '@/components/core/Typography'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
-import { OfferPrice, OfferPriceUnit } from '@/generated/graphql'
+import {
+  OfferPrice,
+  OfferPriceUnit,
+  PartialUpdateOfferPriceInput,
+} from '@/generated/graphql'
 import { labelByOfferPriceUnit } from '@/utils/offer'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import { ChangeEvent } from 'react'
 import styled from 'styled-components'
 
@@ -13,11 +18,18 @@ const options = Object.values(OfferPriceUnit).map((unit) => ({
 }))
 
 interface PricingProps {
-  price?: OfferPrice
+  price?: OfferPrice | PartialUpdateOfferPriceInput | null
   onPriceChange?: (value: OfferPrice) => void
+  highlightErrors?: boolean
 }
 
-export const Pricing = ({ price, onPriceChange }: PricingProps) => {
+export const Pricing = ({
+  price,
+  onPriceChange,
+  highlightErrors,
+}: PricingProps) => {
+  const amountCents = price?.amountCents ?? 0
+
   const handlePriceChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let parsedValue = 0
 
@@ -50,22 +62,22 @@ export const Pricing = ({ price, onPriceChange }: PricingProps) => {
       <H3>Pricing</H3>
       <InputPair>
         <InputText
+          required
           placeholder="$ Value"
           label="Price"
           onChange={handlePriceChange}
-          value={
-            price && price.amountCents > 0
-              ? (price.amountCents / 100).toString()
-              : ''
-          }
+          value={price && amountCents > 0 ? (amountCents / 100).toString() : ''}
+          error={highlightErrors && !price?.amountCents}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
         <Dropdown
           label="Unit"
+          required
           options={options}
           onSelect={handlePriceUnitSelect}
-          selectedOption={options.find(
-            (option) => option.value === price?.unit
-          )}
+          selectedOption={
+            options.find((option) => option.value === price?.unit) ?? options[0]
+          }
         />
       </InputPair>
     </Container>
@@ -85,5 +97,5 @@ const InputPair = styled.div`
   grid-gap: 0.8rem;
   width: 100%;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `

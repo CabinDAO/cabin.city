@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { ColorName } from '../../styles/theme'
 
+import alertSvg from './svg/alert.svg'
 import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
@@ -48,6 +49,7 @@ import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
+import nftSvg from './svg/nft.svg'
 import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
 import pencilSvg from './svg/pencil.svg'
@@ -74,6 +76,7 @@ import walletSvg from './svg/wallet.svg'
 import xCircleSvg from './svg/x-circle.svg'
 
 export const IconSvgs = {
+  alert: alertSvg,
   'back-arrow': backArrowSvg,
   builder: builderSvg,
   caretaker: caretakerSvg,
@@ -119,6 +122,7 @@ export const IconSvgs = {
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
   neighborhoods: neighborhoodsSvg,
+  nft: nftSvg,
   offer: offerSvg,
   outpost: outpostSvg,
   pencil: pencilSvg,

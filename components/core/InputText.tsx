@@ -43,7 +43,7 @@ export interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   outlined?: boolean
   disabled?: boolean
   className?: string
-  message?: string
+  errorMessage?: string
   startAdornment?: ReactNode
   endAdornment?: ReactNode
   helperText?: string
@@ -63,7 +63,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
       error,
       outlined,
       disabled,
-      message,
+      errorMessage,
       endAdornment,
       helperText,
       bottomHelpText,
@@ -90,7 +90,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
         error={error}
         disabled={disabled}
         outlined={outlined}
-        message={message}
+        errorMessage={errorMessage}
         helperText={helperText}
         bottomHelpText={bottomHelpText}
         endAdornment={endAdornment}

@@ -16,7 +16,7 @@ export const useGetUnlockNFT = () => {
       return date
     } catch (error) {
       // Example invalid date: '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-      console.log('Invalid date', error)
+      console.error('Invalid date', error)
       return null
     }
   }
@@ -36,16 +36,11 @@ export const useGetUnlockNFT = () => {
       const nft = await publicLockContract.getHasValidKey(
         profile.account.address
       )
-      console.log('🚀 ~ file: useGetUnlockNFT.ts:30 ~ getNFT ~ nft:', nft)
 
       if (nft) {
         const tokenId = await publicLockContract.tokenOfOwnerByIndex(
           profile.account.address,
           0
-        )
-        console.log(
-          '🚀 ~ file: useGetUnlockNFT.ts:37 ~ getNFT ~ tokenId:',
-          tokenId
         )
 
         const expirationTimestamp =

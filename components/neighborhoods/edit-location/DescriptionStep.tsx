@@ -7,6 +7,12 @@ import { SlateEditor } from '@/components/core/slate/SlateEditor'
 import { PartialUpdateLocationInput } from '@/generated/graphql'
 import { Descendant } from 'slate'
 import { useUpdateLocation } from '../useUpdateLocation'
+import { emptyEditorValue } from '@/components/core/slate/slate-utils'
+import {
+  REQUIRED_FIELDS_TOAST_ERROR,
+  REQUIRED_FIELD_ERROR,
+} from '@/utils/validate'
+import { useError } from '@/components/hooks/useError'
 
 export const DescriptionStep = ({
   name,
@@ -21,9 +27,19 @@ export const DescriptionStep = ({
       description: location.description,
     })
 
+  const [highlightErrors, setHighlightErrors] = useState(false)
+  const { showError } = useError()
+
+  const emptyDescription = emptyEditorValue(locationInput?.description)
+
   const handleNext = async () => {
-    await updateLocation(locationInput)
-    onNext()
+    if (emptyDescription) {
+      setHighlightErrors(true)
+      showError(REQUIRED_FIELDS_TOAST_ERROR)
+    } else {
+      await updateLocation(locationInput)
+      onNext()
+    }
   }
 
   const slateProps = locationInput?.description
@@ -50,6 +66,8 @@ export const DescriptionStep = ({
           {...slateProps}
           placeholder="Share a description of your neighborhood here"
           onChange={handleEditorChange}
+          error={highlightErrors && emptyDescription}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
       </EditorContainer>
     </LocationStepWrapper>

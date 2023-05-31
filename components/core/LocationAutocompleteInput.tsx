@@ -6,11 +6,15 @@ import { useEffect, useRef } from 'react'
 interface LocationAutocompleteInputProps {
   onLocationChange: (value: LocationAddressInput) => void
   initialValue?: LocationAddressInput | null
+  error: boolean
+  errorMessage?: string
 }
 
 export const LocationAutocompleteInput = ({
   onLocationChange,
   initialValue,
+  error,
+  errorMessage,
 }: LocationAutocompleteInputProps) => {
   const autoCompleteRef = useRef<google.maps.places.Autocomplete>()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,9 +57,12 @@ export const LocationAutocompleteInput = ({
         async
       />
       <InputText
+        required
         ref={inputRef}
         label="Location"
         bottomHelpText="Your precise location will not be shown publicly"
+        error={error}
+        errorMessage={errorMessage}
       />
     </>
   )

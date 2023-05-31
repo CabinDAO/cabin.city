@@ -2,21 +2,25 @@ import styled from 'styled-components'
 import { InputText } from '../core/InputText'
 import Icon from '../core/Icon'
 import { AutofitImage } from '../core/AutofitImage'
-import { MutableRefObject, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { Caption, WordBreak } from '../core/Typography'
 import { ScrollToTop } from '../core/ScrollToTop'
-import { OwnedNft } from 'alchemy-sdk'
 import { getImageUrlFromNft } from '@/lib/image'
+import { ExtendedOwnedNft } from './AvatarSetup'
 
 interface SearchNftsProps {
-  nfts: OwnedNft[]
-  onSelect: (nft: OwnedNft) => void
+  nfts: ExtendedOwnedNft[]
+  onSelect: (nft: ExtendedOwnedNft) => void
 }
 
 export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
-  const [searchResults, setSearchResults] = useState<OwnedNft[]>(nfts)
+  const [searchResults, setSearchResults] = useState<ExtendedOwnedNft[]>([])
   const containerRef = useRef() as MutableRefObject<HTMLDivElement>
   const searchBarRef = useRef() as MutableRefObject<HTMLDivElement>
+
+  useEffect(() => {
+    setSearchResults(nfts)
+  }, [nfts])
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
@@ -32,7 +36,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
     setSearchResults(results)
   }
 
-  const handleSearchResultClick = (nft: OwnedNft) => {
+  const handleSearchResultClick = (nft: ExtendedOwnedNft) => {
     onSelect(nft)
   }
 

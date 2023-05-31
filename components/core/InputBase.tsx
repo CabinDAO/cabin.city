@@ -18,7 +18,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   focused?: boolean
   outlined?: boolean
   error?: boolean
-  message?: string
+  errorMessage?: string
   endAdornment?: ReactNode
   helperText?: string
   bottomHelpText?: string
@@ -41,6 +41,7 @@ export const InputBase = ({
   children,
   helperText,
   bottomHelpText,
+  errorMessage,
   helperTextPosition = 'top',
   className,
 }: InputBaseProps) => {
@@ -79,6 +80,11 @@ export const InputBase = ({
         <BottomHelpTextCaption emphasized>
           {bottomHelpText}
         </BottomHelpTextCaption>
+      )}
+      {error && errorMessage && (
+        <Caption $color="red600" emphasized>
+          {errorMessage}
+        </Caption>
       )}
     </Container>
   )

@@ -1,12 +1,19 @@
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { getImageUrlFromNft } from '@/lib/image'
-import { OwnedNft } from 'alchemy-sdk'
+import { Network, OwnedNft } from 'alchemy-sdk'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
 import { Button } from '../core/Button'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { useModal } from '../hooks/useModal'
-import { SelectNftModal } from './SelectNftModal'
+import { AvatarModal } from './AvatarModal'
+import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { useState } from 'react'
+
+export type ExtendedOwnedNft = OwnedNft & {
+  network: Network
+}
 
 interface AvatarSetupProps {
   onNftSelected: (nft: ProfileAvatarInput | undefined) => void
@@ -15,12 +22,41 @@ interface AvatarSetupProps {
 
 export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
   const { deviceSize } = useDeviceSize()
+  const [uploading, setUploading] = useState(false)
   const { showModal, hideModal } = useModal()
   const openSelectNftModal = () => {
-    showModal(() => <SelectNftModal onSelect={handleNftSelect} />)
+    showModal(() => (
+      <AvatarModal
+        onStartUpload={handleStartUpload}
+        onPhotoUploaded={handlePhotoUploaded}
+        onNftSelect={handleNftSelect}
+      />
+    ))
   }
 
-  const handleNftSelect = (nft: OwnedNft) => {
+  const handleStartUpload = () => {
+    setUploading(true)
+    onNftSelected(undefined)
+    hideModal()
+  }
+
+  const handlePhotoUploaded = async (
+    fileNameIpfsHashMap: FileNameIpfsHashMap
+  ) => {
+    const ipfsHash = Object.values(fileNameIpfsHashMap)[0]
+
+    if (ipfsHash) {
+      setUploading(false)
+
+      onNftSelected({
+        url: getImageUrlByIpfsHash(ipfsHash, true) as string,
+      })
+
+      hideModal()
+    }
+  }
+
+  const handleNftSelect = (nft: ExtendedOwnedNft) => {
     const url = getImageUrlFromNft(nft)
 
     if (!url) {
@@ -28,6 +64,7 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
     }
     onNftSelected({
       url,
+      network: nft.network,
       contractAddress: nft.contract.address,
       title: nft.title,
       tokenId: nft.tokenId,
@@ -39,6 +76,7 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
   return (
     <Container>
       <Avatar
+        isLoading={uploading}
         onClick={openSelectNftModal}
         size={deviceSize === 'mobile' ? 9.6 : 8.8}
         hoverShadow

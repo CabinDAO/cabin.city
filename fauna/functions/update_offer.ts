@@ -46,7 +46,7 @@ const updateOffer: FunctionResource = {
             ),
             null
           ),
-          q.Var('offer')
+          q.Get(q.Var('offerRef'))
         )
       )
     )

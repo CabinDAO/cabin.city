@@ -44,7 +44,7 @@ export const MyLocations = () => {
                 location,
               })
             }
-            actionsEnabled
+            editMode
             onDelete={() => deleteLocation(location._id)}
             onEdit={() => editLocation(location._id)}
           />

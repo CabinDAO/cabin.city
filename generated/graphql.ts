@@ -983,6 +983,7 @@ export type PartialUpdateOtterspaceBadgeSpecInput = {
 export type PartialUpdateProfileAvatarInput = {
   url?: InputMaybe<Scalars['String']>;
   contractAddress?: InputMaybe<Scalars['String']>;
+  network?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   tokenId?: InputMaybe<Scalars['String']>;
   tokenUri?: InputMaybe<Scalars['String']>;
@@ -1060,6 +1061,7 @@ export type ProfileAvatarInput = {
   title?: InputMaybe<Scalars['String']>;
   tokenId?: InputMaybe<Scalars['String']>;
   tokenUri?: InputMaybe<Scalars['String']>;
+  network?: InputMaybe<Scalars['String']>;
 };
 
 export type ProfileConstraintInput = {
@@ -1669,6 +1671,7 @@ export type ProfileLocationVotesArgs = {
 
 export type ProfileAvatar = {
   __typename?: 'ProfileAvatar';
+  network?: Maybe<Scalars['String']>;
   url: Scalars['String'];
   contractAddress?: Maybe<Scalars['String']>;
   tokenId?: Maybe<Scalars['String']>;

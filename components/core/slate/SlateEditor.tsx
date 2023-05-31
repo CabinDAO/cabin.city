@@ -10,7 +10,7 @@ import { Editable, Slate, useSlate, withReact } from 'slate-react'
 import styled from 'styled-components'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
-import { body1Styles, h4Styles } from '../Typography'
+import { Caption, body1Styles, h4Styles } from '../Typography'
 import Icon, { IconName } from '../Icon'
 import { CustomElement } from '@/types/slate'
 
@@ -18,6 +18,8 @@ interface SlateEditorProps {
   placeholder?: string
   value?: Descendant[]
   onChange?: ((value: Descendant[]) => void) | undefined
+  error?: boolean
+  errorMessage?: string
 }
 
 export const SlateEditor = (props: SlateEditorProps) => {
@@ -27,7 +29,7 @@ export const SlateEditor = (props: SlateEditorProps) => {
 
   return (
     <Slate editor={editor} value={value} onChange={onChange}>
-      <EditorContainer>
+      <EditorContainer error={!!props.error}>
         <Toolbar />
         <StyledEditable
           placeholder={props.placeholder}
@@ -35,16 +37,33 @@ export const SlateEditor = (props: SlateEditorProps) => {
           renderLeaf={renderLeaf}
         />
       </EditorContainer>
+      {props.error && (
+        <ErrorMessage emphasized $color="red600">
+          {props.errorMessage}
+        </ErrorMessage>
+      )}
     </Slate>
   )
 }
 
 const LIST_TYPES = ['list-numbered', 'list-bulleted']
 
-const EditorContainer = styled.div`
+interface EditorContainerProps {
+  error: boolean
+}
+
+const ErrorMessage = styled(Caption)`
+  color: ${({ theme }) => theme.colors.red600};
+  margin-top: 0.4rem;
+`
+
+const EditorContainer = styled.div<EditorContainerProps>`
   min-height: 32.5rem;
   background-color: white;
-  border: 1px solid ${({ theme }) => theme.colors.green900};
+  border: ${({ theme, error }) =>
+    error
+      ? `2px solid ${theme.colors.red600}`
+      : `1px solid ${theme.colors.green900}`};
 `
 
 const StyledEditable = styled(Editable)`

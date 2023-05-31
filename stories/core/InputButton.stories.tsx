@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof InputButton> = (args) => (
 
 export const Default = Template.bind({})
 Default.args = {
-  message: 'Optional helper text',
+  errorMessage: 'Optional helper text',
   placeholder: 'Placeholder',
   helperText: '12/48',
 }
@@ -22,7 +22,7 @@ export const EndAdornment = Template.bind({})
 EndAdornment.args = {
   info: 'This is an important info',
   required: true,
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   endAdornment: <Icon name="chevron-down" size={1.8} />,
 }
@@ -30,27 +30,27 @@ EndAdornment.args = {
 export const Filled = Template.bind({})
 Filled.args = {
   value: 'This is an Input value',
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
 }
 
 export const Disabled = Template.bind({})
 Disabled.args = {
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   disabled: true,
 }
 
 export const Error = Template.bind({})
 Error.args = {
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   error: true,
 }
 
 export const ErrorFilled = Template.bind({})
 ErrorFilled.args = {
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   error: true,
   value: 'This is an Input value',

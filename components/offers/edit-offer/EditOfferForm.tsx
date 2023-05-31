@@ -21,17 +21,22 @@ import { useModal } from '@/components/hooks/useModal'
 import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
 import Icon from '@/components/core/Icon'
 import { useRouter } from 'next/router'
+import { validateTitle } from '@/components/neighborhoods/validations'
+import { REQUIRED_FIELD_ERROR, truthyString } from '@/utils/validate'
+import { defaultSlateValue } from '@/components/core/slate/slate-utils'
 
 interface EditOfferFormProps {
   offer: OfferFragment
   onEdit: (updateOfferInput: UpdateOfferInput) => void
   updateOfferInput: UpdateOfferInput
+  highlightErrors?: boolean
 }
 
 export const EditOfferForm = ({
   offer,
   updateOfferInput,
   onEdit,
+  highlightErrors,
 }: EditOfferFormProps) => {
   const handleEditorChange = (val: Descendant[]) => {
     onEdit({ description: JSON.stringify(val) })
@@ -97,16 +102,25 @@ export const EditOfferForm = ({
     onEdit({ profileRoleConstraints })
   }
 
+  const titleValidation = validateTitle(updateOfferInput.title)
+
+  const emptyDescription =
+    !truthyString(updateOfferInput.description) ||
+    updateOfferInput.description === JSON.stringify(defaultSlateValue)
+
   return (
     <Container>
       <InputText
         label="Title"
+        required
         placeholder="Name"
         helperText={`${
-          offerField('title')?.length || 0
+          updateOfferInput.title?.length || 0
         } / ${MAX_OFFER_TITLE_LENGTH}`}
-        value={offerField('title')}
+        value={updateOfferInput.title ?? ''}
         onChange={handleTitleChange}
+        error={highlightErrors && !titleValidation.valid}
+        errorMessage={titleValidation.error}
       />
       <EditorContainer>
         {offer && (
@@ -114,6 +128,8 @@ export const EditOfferForm = ({
             placeholder="Share a description of your offer here"
             onChange={handleEditorChange}
             {...slateProps}
+            error={highlightErrors && emptyDescription}
+            errorMessage={REQUIRED_FIELD_ERROR}
           />
         )}
       </EditorContainer>
@@ -126,7 +142,8 @@ export const EditOfferForm = ({
       <HorizontalDivider />
       {offer.offerType === OfferType.PaidColiving ? (
         <Pricing
-          price={offerField('price')}
+          highlightErrors={highlightErrors}
+          price={updateOfferInput.price}
           onPriceChange={(price) => {
             onEdit({ price })
           }}
@@ -152,7 +169,11 @@ export const EditOfferForm = ({
         onEdit={(url) => {
           onEdit({ applicationUrl: url })
         }}
-        url={offerField('applicationUrl')}
+        url={updateOfferInput.applicationUrl ?? ''}
+        error={
+          highlightErrors && !truthyString(updateOfferInput.applicationUrl)
+        }
+        errorMessage={REQUIRED_FIELD_ERROR}
       />
       <HorizontalDivider />
       <DeleteButton

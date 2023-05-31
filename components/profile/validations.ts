@@ -4,6 +4,7 @@ import {
   MAX_BIO_LENGTH,
   MAX_LOCATION_LENGTH,
 } from './constants'
+import { EMAIL_VALID_REGEX } from '@/utils/validate'
 
 export const validateProfileInput = (editProfileInput: UpdateProfileInput) => {
   const { name, email, bio, location } = editProfileInput
@@ -36,8 +37,5 @@ export const validLocation = (location: ConditionalString) => {
 }
 
 export const validEmail = (email: ConditionalString) => {
-  return (
-    email !== '' &&
-    !!email?.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
-  )
+  return email !== '' && !!email?.match(EMAIL_VALID_REGEX)
 }

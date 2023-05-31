@@ -1,5 +1,5 @@
 import { FileUploadButton } from '@/components/core/FileUploadButton'
-import { Body2, H3 } from '@/components/core/Typography'
+import { Body2, Caption, H3 } from '@/components/core/Typography'
 import { InputMaybe } from '@/generated/graphql'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
@@ -16,6 +16,7 @@ interface LocationPhotoGallerySectionProps {
   onDelete?: (ipfsHash: InputMaybe<string> | undefined) => void
   onStartUploading?: () => void
   uploading?: boolean
+  errorMessage?: string
 }
 
 export const LocationPhotoGallerySection = ({
@@ -27,6 +28,7 @@ export const LocationPhotoGallerySection = ({
   isBanner = false,
   ipfsHashList,
   onDelete,
+  errorMessage,
 }: LocationPhotoGallerySectionProps) => {
   if (!ipfsHashList) {
     return null
@@ -40,7 +42,14 @@ export const LocationPhotoGallerySection = ({
   return (
     <Container>
       <UploadContainer>
-        <H3>{title}</H3>
+        <TitleContainer>
+          <H3>{title} *</H3>
+          {errorMessage ? (
+            <Caption emphasized $color="red600">
+              {errorMessage}
+            </Caption>
+          ) : null}
+        </TitleContainer>
         <UploadFormContainer>
           <Body2>{instructions}</Body2>
           <FileUploadButton
@@ -64,6 +73,12 @@ export const LocationPhotoGallerySection = ({
     </Container>
   )
 }
+
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`
 
 const Container = styled.div`
   display: flex;

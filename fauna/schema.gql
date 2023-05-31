@@ -101,6 +101,7 @@ type ProfileAvatar @embedded {
 
   # NFT Metadata
   contractAddress: String
+  network: String
   title: String
   tokenId: String
   tokenUri: String
@@ -119,6 +120,7 @@ input ProfileAvatarInput {
   title: String
   tokenId: String
   tokenUri: String
+  network: String
 }
 
 type ProfileRole @embedded {

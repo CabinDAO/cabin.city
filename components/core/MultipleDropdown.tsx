@@ -89,7 +89,7 @@ export const MultipleDropdown = ({
             </ChevronButton>
           }
           onClick={toggleOpen}
-          message={message}
+          errorMessage={message}
         >
           <StyledSelect ref={selectionRef} role="button" tabIndex={0}>
             {selectedOptions.length > 0 ? (

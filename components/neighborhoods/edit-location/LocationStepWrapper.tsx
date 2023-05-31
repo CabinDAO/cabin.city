@@ -42,7 +42,7 @@ export const LocationStepWrapper = ({
         <ActionBar
           primaryButton={{
             onClick: onNext,
-            label: 'Next',
+            label: 'Save & Continue',
           }}
           secondaryButton={{
             onClick: onBack,
