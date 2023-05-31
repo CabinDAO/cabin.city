@@ -1,8 +1,14 @@
-import { H1, H3, Overline, Subline2 } from '@/components/core/Typography'
+import {
+  Caption,
+  H1,
+  H3,
+  Overline,
+  Subline2,
+} from '@/components/core/Typography'
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { shortenedAddress } from '@/utils/display-utils'
+import { EMPTY, shortenedAddress } from '@/utils/display-utils'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
@@ -12,6 +18,7 @@ import Icon from '@/components/core/Icon'
 import { useUser } from '@/components/auth/useUser'
 import { AppLink } from '@/components/core/AppLink'
 import { useState } from 'react'
+import { useRouter } from 'next/router'
 
 interface ProfileVerifiedCitizenshipProps {
   profile: GetProfileByIdFragment
@@ -23,6 +30,20 @@ export const ProfileVerifiedCitizenship = ({
   const { user } = useUser()
   const isOwnProfile = user?._id === profile._id
   const [hovered, setHovered] = useState(false)
+  const router = useRouter()
+
+  const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+
+  const handleVouchOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!vouchedBy?._id) {
+      return
+    }
+
+    router.push(`/profile/${vouchedBy?._id}`)
+  }
 
   if (!profile.citizenshipMetadata || !profile.citizenshipMetadata.tokenId) {
     return null
@@ -83,6 +104,12 @@ export const ProfileVerifiedCitizenship = ({
           <Subline2 $color="yellow100">
             Address {shortenedAddress(unlockConfig.contractAddress)}
           </Subline2>
+          <VouchedByContainer>
+            <Subline2 $color="yellow100">Vouched for by:</Subline2>
+            <Caption emphasized $color="yellow100" onClick={handleVouchOnClick}>
+              {vouchedBy ? vouchedBy.name : EMPTY}
+            </Caption>
+          </VouchedByContainer>
         </NFTDataContainer>
       </NFTContainer>
     </InnerContainer>
@@ -91,6 +118,14 @@ export const ProfileVerifiedCitizenship = ({
 
 const StyledImage = styled(Image)`
   z-index: 4;
+`
+
+const VouchedByContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
 `
 
 const TitleLine = styled.div`
