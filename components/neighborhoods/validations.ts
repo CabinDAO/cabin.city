@@ -1,4 +1,5 @@
 import {
+  OfferType,
   PartialUpdateLocationInput,
   UpdateOfferInput,
 } from '@/generated/graphql'
@@ -41,19 +42,26 @@ export const validateLocationInput = (
       !truthyString(address?.formattedAddress)) ||
     (editProfileInput.hasOwnProperty('internetSpeedMbps') &&
       !isNumber(internetSpeedMbps)) ||
-    !isNumber(sleepCapacity)
+    (editProfileInput.hasOwnProperty('sleepCapacity') &&
+      !isNumber(sleepCapacity))
 
   return !invalid
 }
 
-export const validateOfferInput = (offerInput: UpdateOfferInput) => {
-  const { title, description, applicationUrl } = offerInput
+export const validateOfferInput = (
+  offerInput: UpdateOfferInput,
+  offerType: OfferType
+) => {
+  const { title, description, applicationUrl, price } = offerInput
 
   const invalid =
     !validateTitle(title).valid ||
     emptyEditorValue(description) ||
     (offerInput.hasOwnProperty('applicationUrl') &&
-      !truthyString(applicationUrl))
+      !truthyString(applicationUrl)) ||
+    (offerType === OfferType.PaidColiving &&
+      offerInput.hasOwnProperty('price') &&
+      !isNumber(price?.amountCents))
 
   return !invalid
 }

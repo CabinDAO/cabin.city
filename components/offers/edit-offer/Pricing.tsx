@@ -8,6 +8,7 @@ import {
   PartialUpdateOfferPriceInput,
 } from '@/generated/graphql'
 import { labelByOfferPriceUnit } from '@/utils/offer'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import { ChangeEvent } from 'react'
 import styled from 'styled-components'
 
@@ -19,9 +20,14 @@ const options = Object.values(OfferPriceUnit).map((unit) => ({
 interface PricingProps {
   price?: OfferPrice | PartialUpdateOfferPriceInput | null
   onPriceChange?: (value: OfferPrice) => void
+  highlightErrors?: boolean
 }
 
-export const Pricing = ({ price, onPriceChange }: PricingProps) => {
+export const Pricing = ({
+  price,
+  onPriceChange,
+  highlightErrors,
+}: PricingProps) => {
   const amountCents = price?.amountCents ?? 0
 
   const handlePriceChange = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,15 +67,17 @@ export const Pricing = ({ price, onPriceChange }: PricingProps) => {
           label="Price"
           onChange={handlePriceChange}
           value={price && amountCents > 0 ? (amountCents / 100).toString() : ''}
+          error={highlightErrors && !price?.amountCents}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
         <Dropdown
           label="Unit"
           required
           options={options}
           onSelect={handlePriceUnitSelect}
-          selectedOption={options.find(
-            (option) => option.value === price?.unit
-          )}
+          selectedOption={
+            options.find((option) => option.value === price?.unit) ?? options[0]
+          }
         />
       </InputPair>
     </Container>
@@ -89,5 +97,5 @@ const InputPair = styled.div`
   grid-gap: 0.8rem;
   width: 100%;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `

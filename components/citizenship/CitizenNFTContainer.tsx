@@ -65,7 +65,7 @@ export const CitizenNFTContainer = () => {
           <Body2>
             Citizenship is your passport to Cabin’s network of neighborhoods. A
             current Citizen must nominate you for citizenship, and can only
-            vouch for up to five people per year. Citizens are granted
+            vouch for up to ten people per year. Citizens are granted
             chip-embedded passports, a numbered Citizen NFT, and ₡ABIN to
             participate in governance. They have exclusive access to
             residencies, coliving experiences, and build weeks at neighborhoods

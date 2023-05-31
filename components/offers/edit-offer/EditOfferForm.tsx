@@ -142,6 +142,7 @@ export const EditOfferForm = ({
       <HorizontalDivider />
       {offer.offerType === OfferType.PaidColiving ? (
         <Pricing
+          highlightErrors={highlightErrors}
           price={updateOfferInput.price}
           onPriceChange={(price) => {
             onEdit({ price })

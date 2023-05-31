@@ -29,7 +29,7 @@ export interface LocationCardProps {
   onVote?: () => void
   onDelete?: () => void
   onEdit?: () => void
-  actionsEnabled?: boolean
+  editMode?: boolean
   hideNeighborTag?: boolean
 }
 
@@ -60,7 +60,7 @@ export const LocationCard = (props: LocationCardProps) => {
     onVote,
     onDelete,
     onEdit,
-    actionsEnabled = false,
+    editMode = false,
   } = props
 
   const name = props.name ?? 'New Listing'
@@ -76,7 +76,9 @@ export const LocationCard = (props: LocationCardProps) => {
 
   return (
     <OuterContainer>
-      <ContainerLink href={`/location/${_id}`}>
+      <ContainerLink
+        href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
+      >
         <ImageContainer>
           {bannerImageUrl ? (
             <StyledImage priority src={bannerImageUrl} fill alt={name} />
@@ -132,7 +134,7 @@ export const LocationCard = (props: LocationCardProps) => {
           </VoteButton>
         </VotesContainer>
       </ContainerLink>
-      {actionsEnabled && (
+      {editMode && (
         <CardActions
           onDelete={onDelete ?? emptyFunction}
           onEdit={onEdit ?? emptyFunction}

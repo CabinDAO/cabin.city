@@ -2,7 +2,11 @@ import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useGetOffer } from './useGetOffer'
 import { EditOfferView } from './EditOfferView'
 import { ActionBar } from '../core/ActionBar'
-import { UpdateOfferInput, useUpdateOfferMutation } from '@/generated/graphql'
+import {
+  OfferPriceUnit,
+  UpdateOfferInput,
+  useUpdateOfferMutation,
+} from '@/generated/graphql'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useNavigation } from '../hooks/useNavigation'
@@ -28,9 +32,12 @@ export const EditOfferPageView = () => {
       setUpdateOfferInput({
         title: offerFragment.title ?? '',
         description: offerFragment.description,
-        startDate: offerFragment.startDate,
-        endDate: offerFragment.endDate,
-        price: offerFragment.price,
+        startDate: offerFragment.startDate ?? new Date(),
+        endDate: offerFragment.endDate ?? new Date(),
+        price: {
+          amountCents: offerFragment.price?.amountCents ?? 0,
+          unit: offerFragment.price?.unit ?? OfferPriceUnit.FlatFee,
+        },
         applicationUrl: offerFragment.applicationUrl,
       })
     }
@@ -41,7 +48,13 @@ export const EditOfferPageView = () => {
   }
 
   const handleNext = async () => {
-    if (validateOfferInput({ ...offerFragment, ...updateOfferInput })) {
+    if (
+      offer?.offerType &&
+      validateOfferInput(
+        { ...offerFragment, ...updateOfferInput },
+        offer.offerType
+      )
+    ) {
       await updateOffer({
         variables: {
           offerId: offer._id,
@@ -61,8 +74,6 @@ export const EditOfferPageView = () => {
 
   const handleOnEdit = (updateOfferInput: UpdateOfferInput) => {
     setUpdateOfferInput((prev) => ({
-      startDate: new Date(),
-      endDate: new Date(),
       ...prev,
       ...updateOfferInput,
     }))
