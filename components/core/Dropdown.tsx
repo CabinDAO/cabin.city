@@ -54,7 +54,6 @@ export const Dropdown = ({
   onSelect,
   options,
   variant = 'primary',
-  message,
   menuMaxHeight,
   enableSearch,
   className,
@@ -91,7 +90,6 @@ export const Dropdown = ({
             value={searchInput ?? (selectedOption?.label || '')}
             placeholder={placeholder}
             onChange={handleOnSearch}
-            message={message}
             label={label}
             onClick={toggleOpen}
             endAdornment={<SearchIcon name="search" size={1.4} />}
@@ -111,7 +109,6 @@ export const Dropdown = ({
                 <Icon name="chevron-down" size={1.4} />
               </ChevronButton>
             }
-            message={message}
           >
             <StyledSelect ref={selectionRef} role="button" tabIndex={0}>
               {selectedOption ? (

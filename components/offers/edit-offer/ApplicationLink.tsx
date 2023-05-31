@@ -5,9 +5,16 @@ import styled from 'styled-components'
 interface ApplicationLinkProps {
   onEdit: (url: string) => void
   url?: string
+  error?: boolean
+  errorMessage?: string
 }
 
-export const ApplicationLink = ({ onEdit, url }: ApplicationLinkProps) => {
+export const ApplicationLink = ({
+  onEdit,
+  url,
+  error,
+  errorMessage,
+}: ApplicationLinkProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit(e.target.value)
   }
@@ -23,9 +30,12 @@ export const ApplicationLink = ({ onEdit, url }: ApplicationLinkProps) => {
       </ApplicationDescription>
       <InputText
         label="URL"
+        required
         placeholder="URL"
         onChange={handleInputChange}
         value={url}
+        error={error}
+        errorMessage={errorMessage}
       />
     </Application>
   )

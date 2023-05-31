@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 
 import { ColorName } from '../../styles/theme'
 
+import alertSvg from './svg/alert.svg'
 import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
 import caretakerSvg from './svg/caretaker.svg'
@@ -75,6 +76,7 @@ import walletSvg from './svg/wallet.svg'
 import xCircleSvg from './svg/x-circle.svg'
 
 export const IconSvgs = {
+  alert: alertSvg,
   'back-arrow': backArrowSvg,
   builder: builderSvg,
   caretaker: caretakerSvg,

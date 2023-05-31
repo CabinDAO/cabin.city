@@ -11,6 +11,12 @@ import {
 } from '@/generated/graphql'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { unique } from '@/utils/array'
+import {
+  PHOTO_REQUIRED_ERROR,
+  REQUIRED_SECTIONS_TOAST_ERROR,
+  REQUIRED_SECTION_ERROR,
+} from '@/utils/validate'
+import { useError } from '@/components/hooks/useError'
 
 export const PhotoGalleryStep = ({
   name,
@@ -21,6 +27,7 @@ export const PhotoGalleryStep = ({
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location._id)
   const [uploadingBanner, setUploadingBanner] = useState(false)
+  const [highlightErrors, setHighlightErrors] = useState(false)
   const [uploadingByCategory, setUploadingByCategory] = useState<{
     [key in LocationMediaCategory]: boolean
   }>({
@@ -54,7 +61,19 @@ export const PhotoGalleryStep = ({
 
   const resolvedbannerImageIpfsHash = locationInput?.bannerImageIpfsHash
 
+  const { showError } = useError()
+
   const handleNext = async () => {
+    if (
+      !locationInput.bannerImageIpfsHash ||
+      !getImagesForCategory(LocationMediaCategory.Sleeping).length ||
+      !getImagesForCategory(LocationMediaCategory.Working).length ||
+      !getImagesForCategory(LocationMediaCategory.Features).length
+    ) {
+      setHighlightErrors(true)
+      showError(REQUIRED_SECTIONS_TOAST_ERROR)
+      return
+    }
     await updateLocation(locationInput)
     onNext()
   }
@@ -124,6 +143,11 @@ export const PhotoGalleryStep = ({
         ipfsHashList={
           resolvedbannerImageIpfsHash ? [resolvedbannerImageIpfsHash] : []
         }
+        errorMessage={
+          highlightErrors && !resolvedbannerImageIpfsHash
+            ? REQUIRED_SECTION_ERROR
+            : undefined
+        }
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
@@ -144,6 +168,12 @@ export const PhotoGalleryStep = ({
         title="sleeping arrangements"
         instructions="Share images of the available sleeping arrangements at your place to provide potential guests with an idea of where they can rest. Choose JPG or PNG file formats no larger than 5 MB."
         ipfsHashList={getImagesForCategory(LocationMediaCategory.Sleeping)}
+        errorMessage={
+          highlightErrors &&
+          !getImagesForCategory(LocationMediaCategory.Sleeping).length
+            ? PHOTO_REQUIRED_ERROR
+            : undefined
+        }
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
@@ -164,6 +194,12 @@ export const PhotoGalleryStep = ({
         title="Work stations"
         instructions="This is a designated area where computer work, writing or other job duties are done. It should be equipped with the necessary tools and furniture. Choose a JPG or PNG no larger than 5 MB."
         ipfsHashList={getImagesForCategory(LocationMediaCategory.Working)}
+        errorMessage={
+          highlightErrors &&
+          !getImagesForCategory(LocationMediaCategory.Working).length
+            ? PHOTO_REQUIRED_ERROR
+            : undefined
+        }
       />
       <HorizontalDivider />
       <LocationPhotoGallerySection
@@ -184,6 +220,12 @@ export const PhotoGalleryStep = ({
         title="Amenities"
         instructions="This entails any indoor or outdoor features like nearby nature or additional amenities your place offers. Choose a JPG or PNG no larger than 5 MB."
         ipfsHashList={getImagesForCategory(LocationMediaCategory.Features)}
+        errorMessage={
+          highlightErrors &&
+          !getImagesForCategory(LocationMediaCategory.Features).length
+            ? PHOTO_REQUIRED_ERROR
+            : undefined
+        }
       />
     </LocationStepWrapper>
   )

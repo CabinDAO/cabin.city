@@ -14,7 +14,7 @@ const Template: ComponentStory<typeof InputText> = (args) => (
 export const Default = Template.bind({})
 Default.args = {
   label: 'Label',
-  message: 'Optional helper text',
+  errorMessage: 'Optional helper text',
   placeholder: 'Placeholder',
   helperText: '12/48',
 }
@@ -24,7 +24,7 @@ LabelInfoRequired.args = {
   label: 'Label',
   info: 'This is an important info',
   required: true,
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
 }
 
@@ -33,7 +33,7 @@ EndAdornment.args = {
   label: 'Label',
   info: 'This is an important info',
   required: true,
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   endAdornment: <Icon name="chevron-down" size={1.8} />,
 }
@@ -42,14 +42,14 @@ export const Filled = Template.bind({})
 Filled.args = {
   label: 'Label',
   value: 'This is an Input value',
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
 }
 
 export const Disabled = Template.bind({})
 Disabled.args = {
   label: 'Label',
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   disabled: true,
 }
@@ -57,7 +57,7 @@ Disabled.args = {
 export const Error = Template.bind({})
 Error.args = {
   label: 'Label',
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   error: true,
 }
@@ -65,7 +65,7 @@ Error.args = {
 export const ErrorFilled = Template.bind({})
 ErrorFilled.args = {
   label: 'Label',
-  message: 'This is a message',
+  errorMessage: 'This is a message',
   placeholder: 'Placeholder',
   error: true,
   value: 'This is an Input value',

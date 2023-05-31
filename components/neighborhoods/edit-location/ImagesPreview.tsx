@@ -31,6 +31,7 @@ export const ImagesPreview = ({
     return (
       <Container>
         <ImageContainer>
+          <div style={{ width: imageSize, height: imageSize }} />
           <LoadingSpinner />
         </ImageContainer>
       </Container>

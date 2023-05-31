@@ -16,12 +16,24 @@ import {
 } from '@/generated/graphql'
 import { useEffect, useState } from 'react'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { validTitle, validateLocationInput } from '../validations'
+import {
+  validateBio,
+  validateEmail,
+  validateLocationInput,
+  validateTitle,
+} from '../validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { Dropdown } from '@/components/core/Dropdown'
 import { resolveAddressOrName } from '@/lib/ens'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { isNotNull } from '@/lib/data'
+import {
+  REQUIRED_FIELDS_TOAST_ERROR,
+  REQUIRED_FIELD_ERROR,
+  isNumber,
+  truthyString,
+} from '@/utils/validate'
+import { useError } from '@/components/hooks/useError'
 
 export const BasicDetailStep = ({
   name,
@@ -38,6 +50,10 @@ export const BasicDetailStep = ({
   const [address, setAddress] = useState<LocationAddressInput | null>(
     currentAddress ?? {}
   )
+
+  const [highlightErrors, setHighlightErrors] = useState(false)
+
+  const { showError } = useError()
 
   useEffect(() => {
     if (location.referrer) {
@@ -67,6 +83,10 @@ export const BasicDetailStep = ({
       sleepCapacity: location.sleepCapacity,
       internetSpeedMbps: location.internetSpeedMbps,
     })
+
+  const nameValidation = validateTitle(locationInput.name)
+  const contactEmailValidation = validateEmail(locationInput.caretakerEmail)
+  const shortBioValidation = validateBio(locationInput.tagline)
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -121,6 +141,9 @@ export const BasicDetailStep = ({
     if (validateLocationInput(locationInput)) {
       await updateLocation({ ...locationInput, address })
       onNext()
+    } else {
+      setHighlightErrors(true)
+      showError(REQUIRED_FIELDS_TOAST_ERROR)
     }
   }
 
@@ -202,7 +225,8 @@ export const BasicDetailStep = ({
           }/${MAX_LOCATION_TITLE_LENGTH}`}
           label="Listing title"
           placeholder="Title"
-          error={!validTitle(locationInput.name)}
+          error={highlightErrors && !nameValidation.valid}
+          errorMessage={nameValidation.error}
         />
       </InputCoupleContainer>
       <InputCoupleContainer>
@@ -212,14 +236,18 @@ export const BasicDetailStep = ({
           disabled
         />
         <InputText
+          required
           value={locationInput.caretakerEmail ?? ''}
           onChange={(event) => handleOnChange(event, 'caretakerEmail')}
-          label="Caretaker email"
+          label="Contact email"
           placeholder="Email"
+          error={highlightErrors && !contactEmailValidation.valid}
+          errorMessage={contactEmailValidation.error}
         />
       </InputCoupleContainer>
       <FullWidthInputContainer>
         <InputText
+          required
           value={locationInput.tagline ?? ''}
           onChange={(event) => handleOnChange(event, 'tagline')}
           helperText={`${
@@ -227,27 +255,37 @@ export const BasicDetailStep = ({
           }/${MAX_LOCATION_BIO_LENGTH}`}
           label="Short bio"
           placeholder="1 sentence description of your property"
+          error={highlightErrors && !shortBioValidation.valid}
+          errorMessage={shortBioValidation.error}
         />
       </FullWidthInputContainer>
       <FullWidthInputContainer>
         <LocationAutocompleteInput
           onLocationChange={handleLocationChange}
           initialValue={address}
+          error={highlightErrors && !truthyString(address?.formattedAddress)}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
       </FullWidthInputContainer>
       <InputCoupleContainer>
         <InputText
+          required
           value={locationInput.sleepCapacity ?? ''}
           onChange={(event) => handleOnChange(event, 'sleepCapacity')}
           label="Number of beds"
           placeholder="Value"
+          error={highlightErrors && !isNumber(locationInput.sleepCapacity)}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
         <InputText
+          required
           value={locationInput.internetSpeedMbps ?? ''}
           onChange={(event) => handleOnChange(event, 'internetSpeedMbps')}
           label="Average internet speed"
           placeholder="Value"
           endAdornment={<Subline2 style={{ opacity: '0.5' }}>Mbps</Subline2>}
+          error={highlightErrors && !isNumber(locationInput.internetSpeedMbps)}
+          errorMessage={REQUIRED_FIELD_ERROR}
         />
       </InputCoupleContainer>
       <HorizontalDivider />

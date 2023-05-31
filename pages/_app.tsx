@@ -12,6 +12,7 @@ import { WagmiConfig } from 'wagmi'
 import GlobalStyles from '../styles/global'
 import { NavigationProvider } from '@/components/contexts/NavigationContext'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
+import { ErrorProvider } from '@/components/contexts/ErrorContext'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -25,8 +26,10 @@ export default function App({ Component, pageProps }: AppProps) {
               <CitizenshipProvider>
                 <NavigationProvider>
                   <ModalProvider>
-                    <GoogleAnalytics />
-                    <Component {...pageProps} />
+                    <ErrorProvider>
+                      <GoogleAnalytics />
+                      <Component {...pageProps} />
+                    </ErrorProvider>
                   </ModalProvider>
                 </NavigationProvider>
               </CitizenshipProvider>

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
 import LoadingSpinner from './LoadingSpinner'
-import { useState } from 'react'
 
 interface AvatarProps {
   src?: string

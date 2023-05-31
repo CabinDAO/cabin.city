@@ -9,12 +9,14 @@ interface EditOfferViewProps {
   offer: OfferFragment
   updateOfferInput: UpdateOfferInput
   onEdit: (updateOfferInput: UpdateOfferInput) => void
+  highlightErrors?: boolean
 }
 
 export const EditOfferView = ({
   offer,
   onEdit,
   updateOfferInput,
+  highlightErrors,
 }: EditOfferViewProps) => {
   const locationId = offer.location._id
   return (
@@ -29,6 +31,7 @@ export const EditOfferView = ({
           <OfferTypeSummary offerType={offer.offerType} />
         </OfferSummaryContainer>
         <EditOfferForm
+          highlightErrors={highlightErrors}
           updateOfferInput={updateOfferInput}
           offer={offer}
           onEdit={onEdit}

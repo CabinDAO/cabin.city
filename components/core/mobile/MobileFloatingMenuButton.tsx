@@ -21,7 +21,7 @@ export const MobileFloatingMenuButton = ({ open, onClick }: Props) => {
 }
 const Container = styled.nav`
   position: fixed;
-  z-index: 10000;
+  z-index: 100;
   cursor: pointer;
   padding: 1.6rem;
   bottom: 9.3rem;
