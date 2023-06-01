@@ -22,18 +22,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>
           <ConnectKitProvider>
-            <ApolloProvider client={apolloClient}>
-              <CitizenshipProvider>
-                <NavigationProvider>
-                  <ModalProvider>
-                    <ErrorProvider>
+            <ErrorProvider>
+              <ApolloProvider client={apolloClient}>
+                <CitizenshipProvider>
+                  <NavigationProvider>
+                    <ModalProvider>
                       <GoogleAnalytics />
                       <Component {...pageProps} />
-                    </ErrorProvider>
-                  </ModalProvider>
-                </NavigationProvider>
-              </CitizenshipProvider>
-            </ApolloProvider>
+                    </ModalProvider>
+                  </NavigationProvider>
+                </CitizenshipProvider>
+              </ApolloProvider>
+            </ErrorProvider>
           </ConnectKitProvider>
         </WagmiConfig>
       </ThemeProvider>
