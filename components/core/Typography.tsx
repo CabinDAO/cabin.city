@@ -1,6 +1,25 @@
 import theme, { ColorName } from '../../styles/theme'
 import styled, { css } from 'styled-components'
 
+import { Inter, IBM_Plex_Mono, Poppins } from '@next/font/google'
+
+const inter = Inter({
+  display: 'swap',
+  subsets: ['latin'],
+})
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['600'],
+  subsets: ['latin'],
+  display: 'swap',
+})
+
+const poppins = Poppins({
+  weight: ['600'],
+  subsets: ['latin'],
+  display: 'swap',
+})
+
 interface TypographyProps {
   $color?: ColorName
 }
@@ -10,9 +29,9 @@ interface EmphasizableTypographyProps extends TypographyProps {
 }
 
 export const fonts = {
-  inter: 'Inter',
-  ibmPlexMono: 'IBM Plex Mono',
-  poppins: 'Poppins',
+  inter: inter.style.fontFamily,
+  ibmPlexMono: ibmPlexMono.style.fontFamily,
+  poppins: poppins.style.fontFamily,
 }
 
 export const typographySharedStyles = css<TypographyProps>`

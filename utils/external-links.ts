@@ -9,7 +9,7 @@ export const EXTERNAL_LINKS = {
     'https://creators.mirror.xyz/zHox-AfvHbX0Q2JxAbcfwiAmOXRy7BzYafhZNlvHnmM',
   PRIVACY_AND_TERMS:
     'https://cabin-fellowship.notion.site/Privacy-Policy-and-Terms-of-Service-af00c235b7c149ec9bd7c8cd807c3b7b',
-  CABIN_INSTAGRAM: 'https://www.instagram.com/creatorcabins',
+  CABIN_INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   CABIN_TWITTER: 'https://twitter.com/cabindotcity',
   CABIN_DISCORD: 'https://discord.gg/paqg6acbE8',
   BLOG: 'https://creators.mirror.xyz/',

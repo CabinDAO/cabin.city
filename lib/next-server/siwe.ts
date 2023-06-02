@@ -14,7 +14,7 @@ export const validateSessionMessage = async (params: VerifySessionParams) => {
   const validatedMessage = await siweMessage.validate(signature)
 
   if (validatedMessage.nonce !== req.session.nonce) {
-    res.status(422).json({ message: 'Invalid nonce.' })
+    res.json({ ok: false })
     return null
   }
 

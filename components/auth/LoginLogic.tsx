@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { disconnect } from '@wagmi/core'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { useModal } from '../hooks/useModal'
 import { getFaunaSecret } from '@/lib/auth/getFaunaSecret'
 import { UserRejectedRequestError } from 'wagmi'
 import Router from 'next/router'
+import { logOut } from '@/lib/auth/logout'
 
 class SignVerificationError extends Error {}
 
@@ -50,7 +50,7 @@ export const LoginLogic = (props: LoginLogicProps) => {
 
   useEffect(() => {
     // Disconnect before displaying login to prevent message signing request before the user does anything
-    disconnect().then(() => {
+    logOut().then(() => {
       setInitialized(true)
     })
   }, [])
