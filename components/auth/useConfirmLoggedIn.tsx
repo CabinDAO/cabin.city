@@ -11,7 +11,7 @@ export const useConfirmLoggedIn = () => {
     (onConfirmed?: () => void) => {
       if (!user && !isUserLoading) {
         showLoadingModal(() => <LoginModal onLogin={onConfirmed} />)
-      } else {
+      } else if (user) {
         onConfirmed?.()
       }
     },

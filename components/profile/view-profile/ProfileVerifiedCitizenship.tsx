@@ -8,7 +8,7 @@ import {
 import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
-import { EMPTY, shortenedAddress } from '@/utils/display-utils'
+import { shortenedAddress } from '@/utils/display-utils'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
@@ -104,12 +104,18 @@ export const ProfileVerifiedCitizenship = ({
           <Subline2 $color="yellow100">
             Address {shortenedAddress(unlockConfig.contractAddress)}
           </Subline2>
-          <VouchedByContainer>
-            <Subline2 $color="yellow100">Vouched for by:</Subline2>
-            <Caption emphasized $color="yellow100" onClick={handleVouchOnClick}>
-              {vouchedBy ? vouchedBy.name : EMPTY}
-            </Caption>
-          </VouchedByContainer>
+          {!!vouchedBy && (
+            <VouchedByContainer>
+              <Subline2 $color="yellow100">Vouched for by:</Subline2>
+              <Caption
+                emphasized
+                $color="yellow100"
+                onClick={handleVouchOnClick}
+              >
+                {vouchedBy.name}
+              </Caption>
+            </VouchedByContainer>
+          )}
         </NFTDataContainer>
       </NFTContainer>
     </InnerContainer>

@@ -22,12 +22,7 @@ export default class MyDocument extends Document {
       const initialProps = await Document.getInitialProps(ctx)
       return {
         ...initialProps,
-        styles: (
-          <>
-            {initialProps.styles}
-            {sheet.getStyleElement()}
-          </>
-        ),
+        styles: [initialProps.styles, sheet.getStyleElement()],
       }
     } finally {
       sheet.seal()
@@ -37,22 +32,7 @@ export default class MyDocument extends Document {
   render() {
     return (
       <Html>
-        <Head>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap"
-            rel="stylesheet"
-          />
-
-          <link
-            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap"
-            rel="stylesheet"
-          />
-
-          <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
+        <Head></Head>
         <body>
           <Main />
           <NextScript />
