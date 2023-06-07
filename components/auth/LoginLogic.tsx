@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
 import { useModal } from '../hooks/useModal'
 import { getFaunaSecret } from '@/lib/auth/getFaunaSecret'
-import { UserRejectedRequestError } from 'wagmi'
+import { UserRejectedRequestError, useDisconnect } from 'wagmi'
 import Router from 'next/router'
 import { logOut } from '@/lib/auth/logout'
 
@@ -47,13 +47,14 @@ export const LoginLogic = (props: LoginLogicProps) => {
   const { signAuthMessage } = useSignAuthMessage({ prefetchNonce: true })
   const { hideModal } = useModal()
   const [initialized, setInitialized] = useState(false)
+  const { disconnectAsync } = useDisconnect()
 
   useEffect(() => {
     // Disconnect before displaying login to prevent message signing request before the user does anything
-    logOut().then(() => {
+    disconnectAsync().then(() => {
       setInitialized(true)
     })
-  }, [])
+  }, [disconnectAsync])
 
   // 1. When connected, update status to move forward
   useEffect(() => {
@@ -107,9 +108,13 @@ export const LoginLogic = (props: LoginLogicProps) => {
     if (loginState.status !== LoginStatus.AUTHENTICATING) {
       return
     }
+
     if (!address) {
-      throw new Error('No address found')
+      console.error('No address found')
+      logOut()
+      return
     }
+
     ;(async () => {
       try {
         setLoginState((s) => ({

@@ -1,4 +1,4 @@
-import { Body2, Caption, H2 } from '../core/Typography'
+import { Body2, H2 } from '../core/Typography'
 import { ModalContainer } from '../core/modals/ModalContainer'
 import { ModalContent } from '../core/modals/ModalContent'
 import { ConnectKitButton } from 'connectkit'
@@ -7,6 +7,7 @@ import { Button } from '../core/Button'
 import styled from 'styled-components'
 import { ModalTitle } from '../core/modals/ModalTitle'
 import Icon from '../core/Icon'
+import { Message } from './Message'
 
 interface LoginModalProps {
   onLogin?: () => void
@@ -85,32 +86,10 @@ const ConnectButton = styled(Button)`
   margin-bottom: 2.4rem;
 `
 
-interface MessageProps {
+export interface MessageProps {
   children: React.ReactNode
   error?: boolean
 }
-const Message = (props: MessageProps) => {
-  const { children, error } = props
-  return (
-    <MessageContainer {...props}>
-      <Caption emphasized $color={error ? 'red700' : 'green900'}>
-        {children}
-      </Caption>
-    </MessageContainer>
-  )
-}
-
-const MessageContainer = styled.div<MessageProps>`
-  padding: 0.8rem;
-  background-color: ${({ theme, error }) =>
-    error ? theme.colors.red200 : 'rgba(29, 43, 42, 0.05)'};
-  border-radius: 0.4rem;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`
-
 const CabinCircle = styled.div`
   width: 6.4rem;
   height: 6.4rem;

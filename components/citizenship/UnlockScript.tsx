@@ -9,6 +9,11 @@ import networks from '@unlock-protocol/networks'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loadUnlockCheckout = (provider: any) => {
+  const url =
+    process.env.NEXT_PUBLIC_APP_ENV === 'prod'
+      ? 'cabin.city'
+      : process.env.NEXT_PUBLIC_VERCEL_URL
+
   const paywallConfig = {
     locks: {
       [unlockConfig.contractAddress]: {
@@ -16,11 +21,11 @@ export const loadUnlockCheckout = (provider: any) => {
         recurringPayments: 10,
       },
     },
-    dataBuilder: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/unlock/data-builder`,
+    dataBuilder: `https://${url}/api/unlock/data-builder`,
     pessimistic: true,
     skipRecipient: true,
     title: 'Cabin Citizenship',
-    icon: `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/images/cabin-nft.png`,
+    icon: `https://${url}/images/cabin-nft.png`,
   }
 
   const paywall = new Paywall(paywallConfig, networks, provider)
