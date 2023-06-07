@@ -32,7 +32,7 @@ export const ProfileVerifiedCitizenship = ({
   const [hovered, setHovered] = useState(false)
   const router = useRouter()
 
-  const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+  const vouchedBy = profile?.receivedVouches?.data[0]?.voucher
 
   const handleVouchOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
