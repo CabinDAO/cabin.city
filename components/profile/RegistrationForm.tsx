@@ -12,6 +12,7 @@ import { RegistrationParams } from './RegistrationView'
 import { validEmail, validName } from './validations'
 import { FieldAvailability } from '../core/FieldAvailability'
 import { DisplayNameInputContainer } from './styles'
+import { Message } from '../auth/Message'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
@@ -26,6 +27,8 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [displayAvailability, setDisplayAvailability] = useState(false)
   const [displayUsernameError, setDisplayUsernameError] = useState(false)
   const [displayEmailError, setDisplayEmailError] = useState(false)
+  const [displaySignMessageInfoText, setDisplaySignMessageInfoText] =
+    useState(false)
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsUniqueName(true)
@@ -44,6 +47,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     setDisplayUsernameError(true)
 
     if (validName(displayName, !isUniqueName) && validEmail(email)) {
+      setDisplaySignMessageInfoText(true)
       onSubmit({ email: email.trim(), displayName: displayName.trim(), avatar })
     }
   }
@@ -91,9 +95,18 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
           onChange={onEmailChange}
         />
       </InputGroup>
-      <SubmitButton onClick={handleSubmit} variant="primary">
-        Save
-      </SubmitButton>
+      <Submission>
+        {displaySignMessageInfoText && (
+          <Message>Sign a message in your wallet to continue</Message>
+        )}
+        <SubmitButton
+          onClick={handleSubmit}
+          disabled={displaySignMessageInfoText}
+          variant="primary"
+        >
+          Save
+        </SubmitButton>
+      </Submission>
     </Container>
   )
 }
@@ -120,11 +133,30 @@ const InputGroup = styled.div`
   width: 100%;
 `
 
+const Submission = styled.div`
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4rem;
+  position: relative;
+  min-height: 4.8rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    gap: 5.2rem;
+  }
+`
+
 const SubmitButton = styled(Button)`
-  align-self: flex-end;
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
     width: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 `

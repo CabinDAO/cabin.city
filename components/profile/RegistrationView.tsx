@@ -34,31 +34,38 @@ export const RegistrationView = () => {
       return
     }
 
-    const { message, signature } = await signAuthMessage(address)
+    try {
+      const { message, signature } = await signAuthMessage(address)
 
-    const createProfileBody: CreateProfileBody = {
-      message,
-      signature,
-      name,
-      email,
-      avatar,
-    }
+      const createProfileBody: CreateProfileBody = {
+        message,
+        signature,
+        name,
+        email,
+        avatar,
+      }
 
-    const resp = await fetch('/api/auth/create-profile', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(createProfileBody),
-    })
-    const json = await resp.json()
+      const resp = await fetch('/api/auth/create-profile', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(createProfileBody),
+      })
+      const json = await resp.json()
 
-    if (!resp.ok) {
-      showModal(() => (
-        <ErrorModal title="Profile Submission Error" description={json.error} />
-      ))
-    } else {
-      Router.push(`/profile/${json.profileId}`)
+      if (!resp.ok) {
+        showModal(() => (
+          <ErrorModal
+            title="Profile Submission Error"
+            description={json.error}
+          />
+        ))
+      } else {
+        Router.push(`/profile/${json.profileId}`)
+      }
+    } catch (e) {
+      console.error(e)
     }
   }
 
