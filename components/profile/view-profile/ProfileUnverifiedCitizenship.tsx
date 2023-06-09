@@ -151,6 +151,6 @@ const DescriptionContainer = styled.div`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    max-width: 60%;
+    max-width: 62%;
   }
 `

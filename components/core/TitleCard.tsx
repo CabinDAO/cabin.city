@@ -7,11 +7,18 @@ interface TitleCardProps {
   icon: IconName
   iconHref?: string
   end?: ReactNode | null
+  iconOnClick?: () => void
 }
 
-export const TitleCard = ({ title, icon, iconHref, end }: TitleCardProps) => {
+export const TitleCard = ({
+  title,
+  icon,
+  iconHref,
+  iconOnClick,
+  end,
+}: TitleCardProps) => {
   return (
-    <IconCard iconHref={iconHref} icon={icon}>
+    <IconCard iconHref={iconHref} icon={icon} onClick={iconOnClick}>
       <H1 $color="green900">{title}</H1>
       {end}
     </IconCard>

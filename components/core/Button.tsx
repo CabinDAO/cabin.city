@@ -27,6 +27,7 @@ const buildBoxShadow = ({
 const StyledButton = styled(motion.button)<StyledButtonProps>`
   ${buttonStyles}
   cursor: pointer;
+  user-select: none;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;

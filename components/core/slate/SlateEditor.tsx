@@ -10,7 +10,7 @@ import { Editable, Slate, useSlate, withReact } from 'slate-react'
 import styled from 'styled-components'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
-import { Caption, body1Styles, h4Styles } from '../Typography'
+import { Caption, Subline1, body1Styles, h4Styles } from '../Typography'
 import Icon, { IconName } from '../Icon'
 import { CustomElement } from '@/types/slate'
 
@@ -20,6 +20,7 @@ interface SlateEditorProps {
   onChange?: ((value: Descendant[]) => void) | undefined
   error?: boolean
   errorMessage?: string
+  label?: string
 }
 
 export const SlateEditor = (props: SlateEditorProps) => {
@@ -29,6 +30,7 @@ export const SlateEditor = (props: SlateEditorProps) => {
 
   return (
     <Slate editor={editor} value={value} onChange={onChange}>
+      {props.label && <StyledSubline1>{props.label}</StyledSubline1>}
       <EditorContainer error={!!props.error}>
         <Toolbar />
         <StyledEditable
@@ -51,6 +53,10 @@ const LIST_TYPES = ['list-numbered', 'list-bulleted']
 interface EditorContainerProps {
   error: boolean
 }
+
+const StyledSubline1 = styled(Subline1)`
+  padding-bottom: 1.6rem;
+`
 
 const ErrorMessage = styled(Caption)`
   color: ${({ theme }) => theme.colors.red600};

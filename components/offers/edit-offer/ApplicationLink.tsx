@@ -1,6 +1,7 @@
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
 import styled from 'styled-components'
+import { Pair } from './EditOfferForm'
 
 interface ApplicationLinkProps {
   onEdit: (url: string) => void
@@ -20,24 +21,26 @@ export const ApplicationLink = ({
   }
 
   return (
-    <Application>
+    <Pair>
       <H3>Application Link</H3>
-      <ApplicationDescription>
-        How you would like people to apply for your offer is up to you. Our
-        offer pages will have an “Apply now” button that will link out to your
-        preferred application or booking method. An example could be a Google
-        form or Typeform.
-      </ApplicationDescription>
-      <InputText
-        label="URL"
-        required
-        placeholder="URL"
-        onChange={handleInputChange}
-        value={url}
-        error={error}
-        errorMessage={errorMessage}
-      />
-    </Application>
+      <Application>
+        <ApplicationDescription>
+          How you would like people to apply for your offer is up to you. Our
+          offer pages will have an “Apply now” button that will link out to your
+          preferred application or booking method. An example could be a Google
+          form or Typeform.
+        </ApplicationDescription>
+        <InputText
+          label="URL"
+          required
+          placeholder="URL"
+          onChange={handleInputChange}
+          value={url}
+          error={error}
+          errorMessage={errorMessage}
+        />
+      </Application>
+    </Pair>
   )
 }
 
@@ -51,6 +54,5 @@ const Application = styled.div`
 `
 
 const ApplicationDescription = styled(Body2)`
-  width: 50%;
   opacity: 0.75;
 `

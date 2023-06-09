@@ -27,7 +27,7 @@ export const CitizenshipStatusBar = ({
       case CitizenshipStatus.Vouched:
         return deviceSize === 'mobile' ? 75 : 68
       case CitizenshipStatus.VouchRequested:
-        return deviceSize === 'mobile' ? 40 : 28
+        return deviceSize === 'mobile' ? 40 : 37
       default:
         return deviceSize === 'mobile' ? 8 : 3
     }
@@ -45,7 +45,7 @@ export const CitizenshipStatusBar = ({
               />
               <CitizenStatusStep
                 step={2}
-                description="Receive vouch"
+                description="Earn a Vouch"
                 icon="thumb-up"
                 enabled={!!status}
               />

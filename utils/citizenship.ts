@@ -30,12 +30,12 @@ const CitizenshipInfoByStatus: Record<CitizenshipStatus, CitizenshipInfo> = {
   [CitizenshipStatus.VouchRequested]: {
     iconName: 'thumb-up-outline',
     text: 'Vouch Requested',
-    profileCTAText: 'Pending vouch',
+    profileCTAText: 'Continue',
   },
   [CitizenshipStatus.Vouched]: {
     iconName: 'thumb-up',
     text: 'Vouched',
-    profileCTAText: 'Join now',
+    profileCTAText: 'Continue',
   },
 }
 

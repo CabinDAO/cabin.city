@@ -3,7 +3,7 @@ import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
 import { useState } from 'react'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { LocationPhotoGallerySection } from './LocationPhotoGallerySection'
+import { GalleryUploadSection } from '../../core/GalleryUploadSection'
 import {
   InputMaybe,
   LocationMediaCategory,
@@ -133,7 +133,7 @@ export const PhotoGalleryStep = ({
       onBack={onBack}
       steps={steps}
     >
-      <LocationPhotoGallerySection
+      <GalleryUploadSection
         onStartUploading={() => setUploadingBanner(true)}
         onFilesUploaded={handleBannerFileUploaded}
         uploading={uploadingBanner}
@@ -150,7 +150,7 @@ export const PhotoGalleryStep = ({
         }
       />
       <HorizontalDivider />
-      <LocationPhotoGallerySection
+      <GalleryUploadSection
         onStartUploading={() =>
           setUploadingByCategory((prev) => ({
             ...prev,
@@ -176,7 +176,7 @@ export const PhotoGalleryStep = ({
         }
       />
       <HorizontalDivider />
-      <LocationPhotoGallerySection
+      <GalleryUploadSection
         onStartUploading={() =>
           setUploadingByCategory((prev) => ({
             ...prev,
@@ -202,7 +202,7 @@ export const PhotoGalleryStep = ({
         }
       />
       <HorizontalDivider />
-      <LocationPhotoGallerySection
+      <GalleryUploadSection
         onStartUploading={() =>
           setUploadingByCategory((prev) => ({
             ...prev,

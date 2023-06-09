@@ -55,15 +55,18 @@ const Container = styled.div`
   flex-direction: column;
   gap: 1.6rem;
   width: 100%;
-  gap: 3.6rem;
 `
 
 const EligibilitySwitchContainer = styled.div`
-  display: flex;
+  display: grid;
+  width: 100%;
   flex-direction: column;
   gap: 1.6rem;
-  align-items: flex-start;
-  justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
 `
 
 const EligibilityField = styled.div`

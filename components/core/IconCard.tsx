@@ -9,13 +9,14 @@ interface IconCardProps {
   icon: IconName
   children: React.ReactNode
   iconHref?: string
+  onClick?: () => void
 }
 
 export const IconCard = (props: IconCardProps) => {
   const { children, icon, iconHref } = props
   const [hovered, setHovered] = useState(false)
   return (
-    <BaseShadowCard>
+    <BaseShadowCard onClick={props.onClick}>
       {iconHref ? (
         <LinkContainer
           onMouseEnter={() => setHovered(true)}

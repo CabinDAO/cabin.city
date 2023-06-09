@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
-import { OfferTypeSummary } from './edit-offer/OfferTypeSummary'
 import { EditOfferForm } from './edit-offer/EditOfferForm'
 import { OfferFragment, UpdateOfferInput } from '@/generated/graphql'
+import { useState } from 'react'
+import { useModal } from '../hooks/useModal'
+import { useRouter } from 'next/router'
+import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 interface EditOfferViewProps {
   offer: OfferFragment
@@ -19,22 +22,33 @@ export const EditOfferView = ({
   highlightErrors,
 }: EditOfferViewProps) => {
   const locationId = offer.location._id
+  const [unsavedChanges, setUnsavedChanges] = useState(false)
+  const { showModal } = useModal()
+  const router = useRouter()
+
+  const handleEdit = (updateOfferInput: UpdateOfferInput) => {
+    setUnsavedChanges(true)
+    onEdit(updateOfferInput)
+  }
+
+  const handleBack = () => {
+    const url = `/location/${locationId}/edit?step=3`
+    if (unsavedChanges) {
+      showModal(() => <DiscardChangesModal leaveUrl={url} />)
+    } else {
+      router.push(url)
+    }
+  }
+
   return (
     <>
-      <TitleCard
-        title="Edit Offer"
-        icon="close"
-        iconHref={`/location/${locationId}/edit?step=3`}
-      />
+      <TitleCard title="Edit Offer" icon="close" iconOnClick={handleBack} />
       <StyledContentCard shape="notch">
-        <OfferSummaryContainer>
-          <OfferTypeSummary offerType={offer.offerType} />
-        </OfferSummaryContainer>
         <EditOfferForm
           highlightErrors={highlightErrors}
           updateOfferInput={updateOfferInput}
           offer={offer}
-          onEdit={onEdit}
+          onEdit={handleEdit}
         />
       </StyledContentCard>
     </>
@@ -46,12 +60,4 @@ const StyledContentCard = styled(ContentCard)`
   gap: 2.4rem;
   flex-direction: column;
   margin-bottom: 4.8rem;
-`
-
-const OfferSummaryContainer = styled.div`
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 50%;
-  }
 `

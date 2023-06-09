@@ -1,3 +1,4 @@
+import { IconName } from '@/components/core/Icon'
 import { OfferListItemProps } from '@/components/core/OfferListItem'
 import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
@@ -132,4 +133,9 @@ export const labelByOfferPriceUnit = (unit: OfferPriceUnit): string => {
     default:
       return 'Flat Fee'
   }
+}
+
+export type RoleConstraintType = {
+  constraintName: string
+  iconName: IconName
 }

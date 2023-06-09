@@ -2,8 +2,8 @@ import { CitizenshipStatus } from '@/generated/graphql'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
-import Icon from '../core/Icon'
 import { Body2, H2 } from '../core/Typography'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 type CTAConfig = {
   title: string
@@ -16,17 +16,14 @@ interface CitizenshipCTAProps {
   onClick(): void
 }
 
-const SIGNAL_INTEREST_TITLE = 'Signal Interest'
-const SIGNAL_INTEREST_DESCRIPTION =
-  'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.'
-
 export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
   let config: CTAConfig = {} as CTAConfig
 
   if (!status) {
     config = {
-      title: SIGNAL_INTEREST_TITLE,
-      description: SIGNAL_INTEREST_DESCRIPTION,
+      title: 'Signal Interest',
+      description:
+        'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
       button: () => (
         <Button variant="primary" onClick={onClick}>
           Signal Interest
@@ -35,21 +32,22 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
     } as CTAConfig
   } else if (status === CitizenshipStatus.VouchRequested) {
     config = {
-      title: SIGNAL_INTEREST_TITLE,
-      description: SIGNAL_INTEREST_DESCRIPTION,
+      title: 'Earn a Vouch',
+      description:
+        'Introduce yourself in our Discord community and get involved in our various community calls to earn the endorsement of active Citizens.',
       button: () => (
-        <Button
-          startAdornment={<Icon name="thumb-up-outline" size={1.4} />}
-          variant="tertiary"
-          onClick={onClick}
+        <a
+          href={EXTERNAL_LINKS.VOUCH_REQUEST_DISCORD_CHANNEL}
+          target="_blank"
+          rel="noreferrer"
         >
-          Signaled
-        </Button>
+          <Button>Share on Discord</Button>
+        </a>
       ),
     }
   } else if (status === CitizenshipStatus.Vouched) {
     config = {
-      title: 'Citizenship eligible',
+      title: 'Mint Citizenship',
       description:
         'When you create a citizenship NFT, it becomes unalterable proof that serves as evidence of your citizenship. We’ll guide you through the steps.',
       button: () => (
