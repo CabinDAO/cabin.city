@@ -1,5 +1,9 @@
 import styled from 'styled-components'
-import { formatOfferPrice, offerInfoFromType } from '@/utils/offer'
+import {
+  RoleConstraintType,
+  formatOfferPrice,
+  offerInfoFromType,
+} from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
@@ -10,15 +14,21 @@ import {
   body1Styles,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import Icon, { IconName } from '@/components/core/Icon'
+import Icon from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { useOfferApply } from '../hooks/useOfferApply'
-import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
+import {
+  OfferType,
+  ProfileRoleLevelType,
+  ProfileRoleType,
+} from '@/generated/graphql'
 import { isNotNull } from '@/lib/data'
 import { formatRange, formatUrl } from '@/utils/display-utils'
+import { EligibilityDisplay } from './EligibilityDisplay'
+import { ImageFlex } from '../core/gallery/ImageFlex'
 
 const EMPTY = '—'
 
@@ -35,6 +45,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
     profileRoleConstraints,
     citizenshipRequired,
     minimunCabinBalance,
+    imageUrl,
   } = offer
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const levelsByRole = profileRoleConstraints?.reduce(
@@ -44,11 +55,6 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
     }),
     {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
   )
-
-  type RoleConstraintType = {
-    constraintName: string
-    iconName: IconName
-  }
 
   const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
     .flatMap(
@@ -80,6 +86,8 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
   const displayMatchOne = rolesMatchOne.length > 0
   const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
 
+  if (!offerType) return null
+
   return (
     <>
       <TitleCard title={title ?? EMPTY} icon="offer" />
@@ -87,6 +95,14 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
           <DescriptionDetails>
+            {imageUrl && (
+              <ImageFlex
+                aspectRatio={1.5}
+                fill
+                src={imageUrl}
+                alt={title ?? ''}
+              />
+            )}
             <SlateRenderer value={stringToSlateValue(description)} />
           </DescriptionDetails>
 
@@ -104,11 +120,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   </LocationSubline2>
                 </OfferDetailsOverview>
 
-                <a href={applyUrl ?? '#'} target="_blank" rel="noreferrer">
-                  <ApplyNowButton disabled={!applyUrl}>
-                    Apply now
-                  </ApplyNowButton>
-                </a>
+                <ApplyButton applyUrl={applyUrl} />
               </OfferDetailsHeader>
 
               <OfferDetailsSection>
@@ -122,59 +134,18 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                 </OfferDetailsPricing>
               </OfferDetailsSection>
 
-              {(displayMatchAll || displayMatchOne) && (
+              {(displayMatchAll ||
+                displayMatchOne ||
+                offerType === OfferType.PaidColiving) && (
                 <OfferDetailsSection>
-                  <H3>ELIGIBILITY</H3>
-
-                  <OfferDetailsEligibilitySection>
-                    {displayMatchOne && (
-                      <OfferDetailsEligibilityMatching>
-                        <Caption emphasized>Match at least one:</Caption>
-
-                        {rolesMatchOne.map((constraint) => (
-                          <OfferDetailsEligibilityCaption
-                            key={constraint.iconName}
-                          >
-                            <Icon
-                              name={constraint.iconName}
-                              color="green900"
-                              size={1.6}
-                            />{' '}
-                            {constraint.constraintName}
-                          </OfferDetailsEligibilityCaption>
-                        ))}
-                      </OfferDetailsEligibilityMatching>
-                    )}
-
-                    {displayMatchAll && (
-                      <OfferDetailsEligibilityMatching>
-                        <Caption emphasized>Match all:</Caption>
-
-                        {citizenshipRequired && (
-                          <OfferDetailsEligibilityCaption>
-                            <Icon
-                              key="citizen"
-                              name="citizen"
-                              color="green900"
-                              size={1.6}
-                            />{' '}
-                            Citizen
-                          </OfferDetailsEligibilityCaption>
-                        )}
-                        {(minimunCabinBalance ?? 0) > 0 && (
-                          <OfferDetailsEligibilityCaption>
-                            <Icon
-                              key="holding"
-                              name="holding"
-                              color="green900"
-                              size={1.6}
-                            />{' '}
-                            ≥ {minimunCabinBalance} ₡ABIN
-                          </OfferDetailsEligibilityCaption>
-                        )}
-                      </OfferDetailsEligibilityMatching>
-                    )}
-                  </OfferDetailsEligibilitySection>
+                  <EligibilityDisplay
+                    rolesMatchOne={rolesMatchOne}
+                    displayMatchAll={displayMatchAll}
+                    displayMatchOne={displayMatchOne}
+                    citizenshipRequired={!!citizenshipRequired}
+                    minimunCabinBalance={minimunCabinBalance}
+                    offerType={offerType}
+                  />
                 </OfferDetailsSection>
               )}
             </OfferDetails>
@@ -183,6 +154,26 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
       </StyledContentCard>
     </>
   )
+}
+
+interface ApplyButtonProps {
+  applyUrl?: string | null
+}
+
+const ApplyButton = ({ applyUrl }: ApplyButtonProps) => {
+  if (!applyUrl) {
+    return (
+      <ApplyNowButton startAdornment={<Icon name="lock" size={1.6} />} disabled>
+        Apply now
+      </ApplyNowButton>
+    )
+  } else {
+    return (
+      <a href={applyUrl} target="_blank" rel="noreferrer">
+        <ApplyNowButton>Apply now</ApplyNowButton>
+      </a>
+    )
+  }
 }
 
 const StyledContentCard = styled(ContentCard)`
@@ -203,6 +194,7 @@ const DescriptionTwoColumn = styled.div`
 
 const DescriptionDetails = styled.div`
   display: flex;
+  position: relative;
   flex-flow: column;
   gap: 2.4rem;
   width: 45.1rem;
@@ -326,24 +318,6 @@ const OfferDetailsPricing = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     width: 100%;
   }
-`
-
-const OfferDetailsEligibilitySection = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 2.4rem;
-`
-
-const OfferDetailsEligibilityMatching = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 1.6rem;
-`
-
-const OfferDetailsEligibilityCaption = styled(Caption)`
-  display: flex;
-  flex-flow: row;
-  gap: 0.4rem;
 `
 
 const LocationSubline2 = styled(Subline2)`

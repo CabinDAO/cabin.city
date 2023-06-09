@@ -11,6 +11,7 @@ import { labelByOfferPriceUnit } from '@/utils/offer'
 import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import { ChangeEvent } from 'react'
 import styled from 'styled-components'
+import { Pair } from './EditOfferForm'
 
 const options = Object.values(OfferPriceUnit).map((unit) => ({
   label: labelByOfferPriceUnit(unit),
@@ -58,7 +59,7 @@ export const Pricing = ({
   }
 
   return (
-    <Container>
+    <Pair>
       <H3>Pricing</H3>
       <InputPair>
         <InputText
@@ -80,16 +81,9 @@ export const Pricing = ({
           }
         />
       </InputPair>
-    </Container>
+    </Pair>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  width: 50%;
-`
 
 const InputPair = styled.div`
   display: grid;

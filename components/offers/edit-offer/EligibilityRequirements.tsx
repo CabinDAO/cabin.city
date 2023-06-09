@@ -1,6 +1,6 @@
 import { Dropdown } from '@/components/core/Dropdown'
 import { InputText } from '@/components/core/InputText'
-import { Body2, H4 } from '@/components/core/Typography'
+import { Body2 } from '@/components/core/Typography'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
@@ -154,68 +154,91 @@ export const EligibilityRequirements = ({
 
   return (
     <Container>
-      <Requirement>
-        <RequirementDescription>
-          <H4>Applicants must meet all requirements you set here.</H4>
-          <OpaqueBody2>
-            Leave the fields blank that you don’t wish to constrain.
-          </OpaqueBody2>
-        </RequirementDescription>
-        <InputPair>
-          <StyledDropdown
-            label="Citizenship"
-            placeholder="Select"
-            options={citizenshipOptions}
-            onSelect={handleCitizenshipChange}
-            selectedOption={citizenshipSelectedOption}
-          />
-          <InputText
-            label="₡ABIN holding minimum"
-            placeholder="Value"
-            onChange={handleCabinTokenBalanceChange}
-            value={
-              currentMinimumCabinBalance
-                ? currentMinimumCabinBalance.toString()
-                : ''
-            }
-          />
-        </InputPair>
-      </Requirement>
-      <Requirement>
-        <RequirementDescription>
-          <H4>Applicants must meet at least one of the roles you list here.</H4>
-          <OpaqueBody2>
-            Leaving this section blank will allow any role apply.
-          </OpaqueBody2>
-        </RequirementDescription>
-        <RoleRequirementList>
-          {constraintList.map((role, index) => (
-            <RoleRequirement
-              index={index}
-              availableRoles={availableRoles}
-              key={`${role?.profileRole}${index}`}
-              role={role?.profileRole}
-              levels={role.levels}
-              onChange={handleRoleChange}
+      <div />
+      <RequirementsContainer>
+        <Requirement>
+          <RequirementDescription>
+            <OpaqueBody2>
+              Applicants{' '}
+              <strong>
+                {'must meet at least one of the roles you list here. '}
+              </strong>{' '}
+              Leave the fields blank that you don’t wish to constrain.
+            </OpaqueBody2>
+          </RequirementDescription>
+          <InputPair>
+            <StyledDropdown
+              label="Citizenship"
+              placeholder="Select"
+              options={citizenshipOptions}
+              onSelect={handleCitizenshipChange}
+              selectedOption={citizenshipSelectedOption}
             />
-          ))}
-        </RoleRequirementList>
-        <EligibleRoleButton
-          variant="tertiary"
-          onClick={addRoleConstraint}
-          startAdornment={<Icon name="plus" size={1} />}
-        >
-          Eligible Role
-        </EligibleRoleButton>
-      </Requirement>
+            <InputText
+              label="₡ABIN holding minimum"
+              placeholder="Value"
+              onChange={handleCabinTokenBalanceChange}
+              value={
+                currentMinimumCabinBalance
+                  ? currentMinimumCabinBalance.toString()
+                  : ''
+              }
+            />
+          </InputPair>
+        </Requirement>
+        <Requirement>
+          <RequirementDescription>
+            <OpaqueBody2>
+              Applicants{' '}
+              <strong>
+                {'must meet at least one of the roles you list here. '}
+              </strong>
+              Leaving this section blank will allow any role apply.
+            </OpaqueBody2>
+          </RequirementDescription>
+          <RoleRequirementList>
+            {constraintList.map((role, index) => (
+              <RoleRequirement
+                index={index}
+                availableRoles={availableRoles}
+                key={`${role?.profileRole}${index}`}
+                role={role?.profileRole}
+                levels={role.levels}
+                onChange={handleRoleChange}
+              />
+            ))}
+          </RoleRequirementList>
+          <EligibleRoleButton
+            variant="tertiary"
+            onClick={addRoleConstraint}
+            startAdornment={<Icon name="plus" size={1} />}
+          >
+            Eligible Role
+          </EligibleRoleButton>
+        </Requirement>
+      </RequirementsContainer>
     </Container>
   )
 }
 
 const Container = styled.div`
+  display: grid;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 0;
+    grid-template-columns: 1fr 1fr;
+  }
+`
+
+const RequirementsContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 4rem;
+  gap: 3.2rem;
   width: 100%;
   align-items: flex-start;
   justify-content: center;
@@ -226,15 +249,20 @@ const Requirement = styled.div`
   flex-direction: column;
   gap: 2.4rem;
   width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 1.6rem;
+  }
 `
 
 const EligibleRoleButton = styled(Button)`
   align-self: flex-start;
+  width: 100%;
 `
 
 const RequirementDescription = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 0.8rem;
   width: 100%;
   align-items: flex-start;
@@ -255,6 +283,7 @@ const InputPair = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     grid-template-columns: 1fr 1fr;
+    grid-gap: 0.8rem;
   }
 `
 

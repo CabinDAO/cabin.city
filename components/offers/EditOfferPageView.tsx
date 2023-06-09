@@ -13,6 +13,8 @@ import { useNavigation } from '../hooks/useNavigation'
 import { validateOfferInput } from '../neighborhoods/validations'
 import { useError } from '../hooks/useError'
 import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
+import { useModal } from '../hooks/useModal'
+import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
@@ -24,13 +26,15 @@ export const EditOfferPageView = () => {
   const offerFragment = offer?.rawFragment
   const [highlightErrors, setHighlightErrors] = useState(false)
   const { showError } = useError()
-
+  const [unsavedChanges, setUnsavedChanges] = useState(false)
   const [updateOfferInput, setUpdateOfferInput] = useState<UpdateOfferInput>({})
+  const { showModal } = useModal()
 
   useEffect(() => {
     if (offerFragment) {
       setUpdateOfferInput({
         title: offerFragment.title ?? '',
+        imageIpfsHash: offerFragment.imageIpfsHash ?? '',
         description: offerFragment.description,
         startDate: offerFragment.startDate ?? new Date(),
         endDate: offerFragment.endDate ?? new Date(),
@@ -69,10 +73,16 @@ export const EditOfferPageView = () => {
   }
 
   const handleBack = () => {
-    router.push(backRoute)
+    if (unsavedChanges) {
+      showModal(() => <DiscardChangesModal leaveUrl={backRoute} />)
+    } else {
+      router.push(backRoute)
+    }
   }
 
   const handleOnEdit = (updateOfferInput: UpdateOfferInput) => {
+    setUnsavedChanges(true)
+
     setUpdateOfferInput((prev) => ({
       ...prev,
       ...updateOfferInput,

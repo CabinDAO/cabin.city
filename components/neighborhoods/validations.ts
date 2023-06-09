@@ -55,7 +55,8 @@ export const validateOfferInput = (
   offerInput: UpdateOfferInput,
   offerType: OfferType
 ) => {
-  const { title, description, applicationUrl, price } = offerInput
+  const { title, description, applicationUrl, price, imageIpfsHash } =
+    offerInput
 
   const invalid =
     !validateTitle(title).valid ||
@@ -64,7 +65,8 @@ export const validateOfferInput = (
       !truthyString(applicationUrl)) ||
     (offerType === OfferType.PaidColiving &&
       offerInput.hasOwnProperty('price') &&
-      !isNumber(price?.amountCents))
+      !isNumber(price?.amountCents)) ||
+    (offerInput.hasOwnProperty('imageIpfsHash') && !truthyString(imageIpfsHash))
 
   return !invalid
 }

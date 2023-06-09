@@ -9,21 +9,26 @@ import {
   OfferFragment,
   OfferType,
   UpdateOfferInput,
-  useDeleteOfferMutation,
   ProfileRoleConstraintInput,
 } from '@/generated/graphql'
 import { ApplicationLink } from './ApplicationLink'
-import { MAX_OFFER_TITLE_LENGTH } from '../offer-constants'
+import {
+  MAX_OFFER_TITLE_LENGTH,
+  PHOTO_UPLOAD_INSTRUCTIONS,
+} from '../offer-constants'
 import { useState } from 'react'
 import { Pricing } from './Pricing'
-import { Button } from '@/components/core/Button'
-import { useModal } from '@/components/hooks/useModal'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
-import Icon from '@/components/core/Icon'
-import { useRouter } from 'next/router'
 import { validateTitle } from '@/components/neighborhoods/validations'
-import { REQUIRED_FIELD_ERROR, truthyString } from '@/utils/validate'
+import {
+  REQUIRED_FIELD_ERROR,
+  REQUIRED_SECTION_ERROR,
+  truthyString,
+} from '@/utils/validate'
 import { defaultSlateValue } from '@/components/core/slate/slate-utils'
+import { Body2, H3 } from '@/components/core/Typography'
+import { OfferTypeSummary } from './OfferTypeSummary'
+import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
+import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 
 interface EditOfferFormProps {
   offer: OfferFragment
@@ -41,22 +46,7 @@ export const EditOfferForm = ({
   const handleEditorChange = (val: Descendant[]) => {
     onEdit({ description: JSON.stringify(val) })
   }
-  const { showModal } = useModal()
-  const [deleteOffer] = useDeleteOfferMutation()
-  const router = useRouter()
-
-  const handleDelete = () => {
-    showModal(() => (
-      <DeleteConfirmationModal
-        entityName="offer"
-        onDelete={async () => {
-          await deleteOffer({ variables: { id: offer._id } })
-          router.push(`/location/${offer.location._id}/edit?step=3`)
-        }}
-      />
-    ))
-  }
-
+  const [uploadingBanner, setUploadingBanner] = useState(false)
   const [eligibilityChecked, setEligibilityChecked] = useState(false)
 
   const offerField = (field: keyof UpdateOfferInput) => {
@@ -108,8 +98,46 @@ export const EditOfferForm = ({
     !truthyString(updateOfferInput.description) ||
     updateOfferInput.description === JSON.stringify(defaultSlateValue)
 
+  const handleFilesUploaded = async (
+    fileNameIpfsHashMap: FileNameIpfsHashMap
+  ) => {
+    setUploadingBanner(false)
+    onEdit({
+      imageIpfsHash: fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
+    })
+  }
+
   return (
     <Container>
+      <Pair>
+        <H3>Offer Type</H3>
+        <OfferTypeSummary offerType={offer.offerType} />
+      </Pair>
+      <HorizontalDivider />
+      <GalleryUploadSection
+        onStartUploading={() => setUploadingBanner(true)}
+        ipfsHashList={
+          updateOfferInput.imageIpfsHash ? [updateOfferInput.imageIpfsHash] : []
+        }
+        uploading={uploadingBanner}
+        isBanner
+        instructions={PHOTO_UPLOAD_INSTRUCTIONS}
+        title="banner image"
+        onFilesUploaded={handleFilesUploaded}
+        errorMessage={
+          highlightErrors && !updateOfferInput.imageIpfsHash
+            ? REQUIRED_SECTION_ERROR
+            : undefined
+        }
+      />
+      <HorizontalDivider />
+      <Pair>
+        <H3>Offer Details</H3>
+        <OpaqueBody2>
+          Promote your location and set expectations for the experience using
+          the fields provided.
+        </OpaqueBody2>
+      </Pair>
       <InputText
         label="Title"
         required
@@ -125,6 +153,7 @@ export const EditOfferForm = ({
       <EditorContainer>
         {offer && (
           <SlateEditor
+            label="Description *"
             placeholder="Share a description of your offer here"
             onChange={handleEditorChange}
             {...slateProps}
@@ -175,14 +204,6 @@ export const EditOfferForm = ({
         }
         errorMessage={REQUIRED_FIELD_ERROR}
       />
-      <HorizontalDivider />
-      <DeleteButton
-        startAdornment={<Icon name="trash" size={1.2} />}
-        variant="tertiary"
-        onClick={handleDelete}
-      >
-        Delete Offer
-      </DeleteButton>
     </Container>
   )
 }
@@ -201,8 +222,19 @@ const EditorContainer = styled.div`
   width: 100%;
 `
 
-const DeleteButton = styled(Button)`
-  color: ${({ theme }) => theme.colors.red700};
-  --icon-color: ${({ theme }) => theme.colors.red700};
-  border: 1px solid ${({ theme }) => theme.colors.red700};
+export const Pair = styled.div`
+  display: grid;
+  width: 100%;
+  justify-items: start;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 0;
+  }
+`
+
+const OpaqueBody2 = styled(Body2)`
+  opacity: 0.75;
 `

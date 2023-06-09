@@ -57,11 +57,9 @@ export const FileUpload = ({
 
 const Wrapper = styled.div`
   cursor: pointer;
-  width: 100%;
+  width: min-content;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
 `
 
 const UploadInput = styled.input`

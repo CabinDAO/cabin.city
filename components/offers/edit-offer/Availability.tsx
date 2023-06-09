@@ -1,8 +1,9 @@
 import { DateSelect } from '@/components/core/DateSelect'
-import { Body2, H3 } from '@/components/core/Typography'
+import { H3 } from '@/components/core/Typography'
 import { getYear } from 'date-fns'
 import { useState } from 'react'
 import styled from 'styled-components'
+import { Pair } from './EditOfferForm'
 
 interface DateRange {
   start: Date
@@ -54,9 +55,8 @@ export const Availability = ({
   }
 
   return (
-    <Container>
-      <H3>Availability *</H3>
-      <Body2>Select the range of dates available for applicants.</Body2>
+    <Pair>
+      <H3>Availability Window</H3>
       <DateRange>
         <DateSelect
           onDateChange={handleStartDateChange}
@@ -71,15 +71,9 @@ export const Availability = ({
           value={dateRange.end ?? defaultEndDate}
         />
       </DateRange>
-    </Container>
+    </Pair>
   )
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-`
 
 const DateRange = styled.div`
   display: flex;

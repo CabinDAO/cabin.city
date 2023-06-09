@@ -155,6 +155,7 @@ const Container = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     grid-template-columns: 1fr 1fr;
+    grid-gap: 0.8rem;
   }
 `
 

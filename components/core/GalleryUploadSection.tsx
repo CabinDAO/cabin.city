@@ -3,11 +3,11 @@ import { Body2, Caption, H3 } from '@/components/core/Typography'
 import { InputMaybe } from '@/generated/graphql'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
-import { BannerPreview } from './BannerPreview'
+import { BannerPreview } from '../neighborhoods/edit-location/BannerPreview'
 import { getImageUrlByIpfsHash } from '@/lib/image'
-import { ImagesPreview } from './ImagesPreview'
+import { ImagesPreview } from '../neighborhoods/edit-location/ImagesPreview'
 
-interface LocationPhotoGallerySectionProps {
+interface GalleryUploadSectionProps {
   title: string
   instructions: string
   isBanner?: boolean
@@ -19,7 +19,7 @@ interface LocationPhotoGallerySectionProps {
   errorMessage?: string
 }
 
-export const LocationPhotoGallerySection = ({
+export const GalleryUploadSection = ({
   title,
   instructions,
   onFilesUploaded,
@@ -29,7 +29,7 @@ export const LocationPhotoGallerySection = ({
   ipfsHashList,
   onDelete,
   errorMessage,
-}: LocationPhotoGallerySectionProps) => {
+}: GalleryUploadSectionProps) => {
   if (!ipfsHashList) {
     return null
   }
