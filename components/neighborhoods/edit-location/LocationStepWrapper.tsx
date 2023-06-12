@@ -46,7 +46,7 @@ export const LocationStepWrapper = ({
           }}
           secondaryButton={{
             onClick: onBack,
-            label: 'Back',
+            label: 'Cancel',
           }}
         />
       }

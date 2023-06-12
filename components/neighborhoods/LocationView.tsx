@@ -139,7 +139,7 @@ export const LocationView = ({
   return (
     <LocationContent>
       {bannerImageUrl && (
-        <LocationBannerContainer width={bannerWidth} height={bannerHeight}>
+        <LocationBannerContainer>
           <LocationBanner
             priority
             src={bannerImageUrl}
@@ -380,12 +380,7 @@ const LocationHeaderHorizontalBar = styled.div`
   }
 `
 
-interface LocationBannerContainerProps {
-  width: number
-  height: number
-}
-
-const LocationBannerContainer = styled.div<LocationBannerContainerProps>`
+const LocationBannerContainer = styled.div`
   position: absolute;
   top: 0;
   z-index: -1;

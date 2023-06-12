@@ -89,8 +89,13 @@ interface DateInputProps {
 
 const Container = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 0.8rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+  }
 `
 
 const InputContainer = styled.div`
@@ -98,8 +103,12 @@ const InputContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 18.8rem;
+  width: 100%;
   position: relative;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 18.8rem;
+  }
 `
 
 const Default = styled(Subline2)`

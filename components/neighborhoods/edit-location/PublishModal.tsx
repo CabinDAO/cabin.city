@@ -62,17 +62,15 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
               <Icon name="publish" size={4.8} color="yellow600" />
             </IconContainer>
             <Message>
-              <H4>
-                Publishing your listing makes it public on the Cabin city
-                directory
-              </H4>
+              <H4>Publish to the Cabin City Directory</H4>
               <Body2>
-                Only verified citizens will be able to apply for offers, see the
-                exact location, and contact the caretaker.
+                You’ll be able to share your listing page publicly, but only
+                signed-in users can apply for offers, see the exact location,
+                and contact the caretaker.
               </Body2>
             </Message>
           </Information>
-          <PublishButton onClick={handlePublish}>Submit now</PublishButton>
+          <PublishButton onClick={handlePublish}>Publish now</PublishButton>
         </Container>
       </ModalContent>
     </PublishModalContainer>
