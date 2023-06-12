@@ -14,12 +14,28 @@ type CTAConfig = {
 interface CitizenshipCTAProps {
   status: CitizenshipStatus | undefined | null
   onClick(): void
+  canMint: boolean
 }
 
-export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
+export const CitizenshipCTA = ({
+  status,
+  onClick,
+  canMint,
+}: CitizenshipCTAProps) => {
   let config: CTAConfig = {} as CTAConfig
 
-  if (!status) {
+  if (canMint) {
+    config = {
+      title: 'Mint Citizenship',
+      description:
+        'When you create a citizenship NFT, it becomes unalterable proof that serves as evidence of your citizenship. We’ll guide you through the steps.',
+      button: () => (
+        <Button variant="primary" onClick={onClick}>
+          Mint now
+        </Button>
+      ),
+    }
+  } else if (!status) {
     config = {
       title: 'Signal Interest',
       description:
@@ -43,17 +59,6 @@ export const CitizenshipCTA = ({ status, onClick }: CitizenshipCTAProps) => {
         >
           <Button>Share on Discord</Button>
         </a>
-      ),
-    }
-  } else if (status === CitizenshipStatus.Vouched) {
-    config = {
-      title: 'Mint Citizenship',
-      description:
-        'When you create a citizenship NFT, it becomes unalterable proof that serves as evidence of your citizenship. We’ll guide you through the steps.',
-      button: () => (
-        <Button variant="primary" onClick={onClick}>
-          Mint now
-        </Button>
       ),
     }
   }

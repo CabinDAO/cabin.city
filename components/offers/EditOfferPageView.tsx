@@ -99,7 +99,7 @@ export const EditOfferPageView = () => {
           }}
           secondaryButton={{
             onClick: handleBack,
-            label: 'Back',
+            label: 'Cancel',
           }}
         />
       }

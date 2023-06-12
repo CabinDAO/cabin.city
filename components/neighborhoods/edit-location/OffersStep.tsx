@@ -82,7 +82,7 @@ export const OffersStep = ({
         <ActionBar
           primaryButton={{
             onClick: onNext,
-            label: 'Next',
+            label: 'Save & Continue',
           }}
           secondaryButton={{
             onClick: onBack,
@@ -91,7 +91,7 @@ export const OffersStep = ({
         />
       }
     >
-      <TitleCard title={stepTitle} icon="close" iconHref="/profile" />
+      <TitleCard title={stepTitle} icon="close" iconHref="/my-locations" />
       <Container>
         <StepIndicator>
           <H3>{name}</H3>

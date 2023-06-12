@@ -3,6 +3,7 @@ import { CitizenshipStatus } from '@/generated/graphql'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { getProfileByAddress } from '@/lib/fauna-server/getProfileByAddress'
 import { cabinTokenConfig, unlockConfig } from '@/lib/protocol-config'
+import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
 import { BigNumber, ethers } from 'ethers'
 import { defaultAbiCoder } from 'ethers/lib/utils'
 import type { NextApiRequest, NextApiResponse } from 'next'
@@ -25,14 +26,17 @@ export default async function handler(
   // Here we can interrogate the off-chain Fauna database to see if the user has a confirmed voucher
   const hasVoucher = await _hasVoucher(recipient)
   const cabinBalance = await _getCabinTokenBalance(recipient)
+  const intBalance = Number(cabinBalance.toString()) / 10 ** 18
+  const meetCabinBalance = intBalance >= MINIMUM_CABIN_BALANCE
+  const canMint = hasVoucher || meetCabinBalance
 
   console.info(
-    `DataBuilder: recipient: ${recipient}, hasVoucher: ${hasVoucher}, cabinBalance: ${cabinBalance.toString()}`
+    `DataBuilder: recipient: ${recipient}, canMint: ${canMint}, cabinBalance: ${cabinBalance.toString()}`
   )
 
   const payload = defaultAbiCoder.encode(
     ['bool', 'uint256'],
-    [hasVoucher, cabinBalance]
+    [canMint, cabinBalance]
   )
 
   const chainId = BigNumber.from(unlockConfig.chainId)

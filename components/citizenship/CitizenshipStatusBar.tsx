@@ -9,6 +9,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 
 interface CitizenshipStatusBarProps {
   status: CitizenshipStatus | undefined | null
+  approvedDueToCabinBalance: boolean
   onMint(): void
   onSignal(): void
 }
@@ -17,8 +18,14 @@ export const CitizenshipStatusBar = ({
   status,
   onMint,
   onSignal,
+  approvedDueToCabinBalance,
 }: CitizenshipStatusBarProps) => {
   const { deviceSize } = useDeviceSize()
+
+  const canMint =
+    approvedDueToCabinBalance ||
+    (status &&
+      [CitizenshipStatus.Verified, CitizenshipStatus.Vouched].includes(status))
 
   const determineProgress = () => {
     switch (status) {
@@ -53,13 +60,7 @@ export const CitizenshipStatusBar = ({
                 step={3}
                 description="Mint Citizenship"
                 icon="citizen"
-                enabled={
-                  !!status &&
-                  [
-                    CitizenshipStatus.Vouched,
-                    CitizenshipStatus.Verified,
-                  ].includes(status)
-                }
+                enabled={!!canMint}
               />
             </StepsContainer>
             <StyledProgressBar
@@ -70,6 +71,7 @@ export const CitizenshipStatusBar = ({
           <CitizenshipCTA
             status={status}
             onClick={status === CitizenshipStatus.Vouched ? onMint : onSignal}
+            canMint={!!canMint}
           />
         </InnerContainer>
       </CabinGradientCard>

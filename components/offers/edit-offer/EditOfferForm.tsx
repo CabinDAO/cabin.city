@@ -10,6 +10,7 @@ import {
   OfferType,
   UpdateOfferInput,
   ProfileRoleConstraintInput,
+  useDeleteOfferMutation,
 } from '@/generated/graphql'
 import { ApplicationLink } from './ApplicationLink'
 import {
@@ -29,6 +30,11 @@ import { Body2, H3 } from '@/components/core/Typography'
 import { OfferTypeSummary } from './OfferTypeSummary'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import Icon from '@/components/core/Icon'
+import { Button } from '@/components/core/Button'
+import { useRouter } from 'next/router'
+import { useModal } from '@/components/hooks/useModal'
 
 interface EditOfferFormProps {
   offer: OfferFragment
@@ -48,6 +54,21 @@ export const EditOfferForm = ({
   }
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [eligibilityChecked, setEligibilityChecked] = useState(false)
+  const { showModal } = useModal()
+  const [deleteOffer] = useDeleteOfferMutation()
+  const router = useRouter()
+
+  const handleDelete = () => {
+    showModal(() => (
+      <DeleteConfirmationModal
+        entityName="offer"
+        onDelete={async () => {
+          await deleteOffer({ variables: { id: offer._id } })
+          router.push(`/location/${offer.location._id}/edit?step=3`)
+        }}
+      />
+    ))
+  }
 
   const offerField = (field: keyof UpdateOfferInput) => {
     return updateOfferInput[field] || offer[field]
@@ -204,6 +225,14 @@ export const EditOfferForm = ({
         }
         errorMessage={REQUIRED_FIELD_ERROR}
       />
+      <HorizontalDivider />
+      <DeleteButton
+        startAdornment={<Icon name="trash" size={1.2} />}
+        variant="tertiary"
+        onClick={handleDelete}
+      >
+        Delete Offer
+      </DeleteButton>
     </Container>
   )
 }
@@ -237,4 +266,10 @@ export const Pair = styled.div`
 
 const OpaqueBody2 = styled(Body2)`
   opacity: 0.75;
+`
+
+const DeleteButton = styled(Button)`
+  color: ${({ theme }) => theme.colors.red700};
+  --icon-color: ${({ theme }) => theme.colors.red700};
+  border: 1px solid ${({ theme }) => theme.colors.red700};
 `

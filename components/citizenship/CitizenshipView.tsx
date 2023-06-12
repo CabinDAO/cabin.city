@@ -7,6 +7,7 @@ import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { useAccount } from 'wagmi'
 import { loadUnlockCheckout } from './UnlockScript'
 import { unlockConfig } from '@/lib/protocol-config'
+import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
 
 export const CitizenshipView = () => {
   const { user } = useUser({ redirectTo: '/' })
@@ -45,6 +46,9 @@ export const CitizenshipView = () => {
           onMint={handleMint}
           onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
+          approvedDueToCabinBalance={
+            user?.cabinTokenBalanceInt >= MINIMUM_CABIN_BALANCE
+          }
         />
       )}
       <CitizenNFTContainer />
