@@ -69,6 +69,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
       bottomHelpText,
       className,
       onChange,
+      startAdornment,
       ...props
     },
     forwardedRef
@@ -93,6 +94,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
         errorMessage={errorMessage}
         helperText={helperText}
         bottomHelpText={bottomHelpText}
+        startAdornment={startAdornment}
         endAdornment={endAdornment}
         onClick={handleOnParentClick}
         className={className}
