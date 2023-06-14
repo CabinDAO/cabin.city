@@ -19,6 +19,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   outlined?: boolean
   error?: boolean
   errorMessage?: string
+  startAdornment?: ReactNode
   endAdornment?: ReactNode
   helperText?: string
   bottomHelpText?: string
@@ -36,6 +37,7 @@ export const InputBase = ({
   outlined = true,
   error,
   disabled,
+  startAdornment,
   endAdornment,
   onClick,
   children,
@@ -67,6 +69,7 @@ export const InputBase = ({
         outlined={outlined}
       >
         <InputContent>
+          {startAdornment}
           <ChildrenContainer>{children}</ChildrenContainer>
           {endAdornment}
         </InputContent>
@@ -142,7 +145,7 @@ const InputContent = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 1.2rem;
+  gap: 0.8rem;
 `
 interface InputOutlineProps {
   filled?: boolean

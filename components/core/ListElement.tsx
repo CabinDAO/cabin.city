@@ -163,7 +163,7 @@ const LeadingContent = ({
   if (leadingIcon) {
     return <Icon name={leadingIcon} size={1.6} />
   } else if (imageSrc) {
-    return <Avatar size={4} src={imageSrc} />
+    return <Avatar size={3.2} src={imageSrc} />
   } else {
     return <Checkbox selected={!!active} disabled={disabled} />
   }

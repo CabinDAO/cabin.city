@@ -1,5 +1,9 @@
 import { LocationStepWrapper } from './LocationStepWrapper'
-import { Subline2, h4Styles } from '@/components/core/Typography'
+import {
+  Subline2,
+  h4Styles,
+  subline2Styles,
+} from '@/components/core/Typography'
 import styled from 'styled-components'
 import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
@@ -71,6 +75,7 @@ export const BasicDetailStep = ({
   const [searchProfiles] = useGetProfilesLazyQuery({})
   const [getProfileByAddress] = useGetProfileByAddressLazyQuery()
   const [options, setOptions] = useState<SelectOption[]>([])
+  const [searching, setSearching] = useState(false)
   const [selectedOption, setSelectedOption] = useState<
     SelectOption | undefined
   >(undefined)
@@ -148,6 +153,7 @@ export const BasicDetailStep = ({
   }
 
   const handleSearch = async (value: string) => {
+    setSearching(true)
     const resolvedAddress = await resolveAddressOrName(value)
     if (resolvedAddress) {
       const result = await getProfileByAddress({
@@ -197,6 +203,8 @@ export const BasicDetailStep = ({
 
   const handleOnSelect = (option: SelectOption) => {
     setSelectedOption(option)
+
+    setSearching(false)
 
     if (option.value) {
       setLocationInput((prev) => ({
@@ -291,6 +299,7 @@ export const BasicDetailStep = ({
       <HorizontalDivider />
       <InputCoupleContainer>
         <StyledDropdown
+          searching={searching}
           enableSearch
           onSearch={handleSearch}
           label="Did someone at Cabin refer you?"
@@ -308,9 +317,17 @@ interface InputContainerProps {
   fullWidth?: boolean
 }
 
-const StyledDropdown = styled(Dropdown)`
+interface StyledDropdownProps {
+  searching?: boolean
+}
+
+const StyledDropdown = styled(Dropdown)<StyledDropdownProps>`
   ${Subline2} {
     ${h4Styles}
+  }
+
+  input {
+    ${({ searching }) => (searching ? subline2Styles : h4Styles)}
   }
 `
 

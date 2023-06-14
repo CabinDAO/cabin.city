@@ -8,6 +8,8 @@ import ListElement from './ListElement'
 import { Menu, MenuPopup, MenuSection } from './Menu'
 import { Subline2 } from './Typography'
 import { InputText } from './InputText'
+import { Avatar } from './Avatar'
+import { useEffect, useState } from 'react'
 
 const Container = styled.div`
   position: relative;
@@ -74,7 +76,17 @@ export const Dropdown = ({
     displayOptions,
   } = useDropdownLogic(selectedOption, options, onSelect, onSearch)
 
+  const [
+    displaySelectedOptionStartAdornment,
+    setDisplaySelectedOptionStartAdornment,
+  ] = useState(false)
+
+  useEffect(() => {
+    setDisplaySelectedOptionStartAdornment(!!selectedOption?.imageSrc)
+  }, [selectedOption])
+
   const handleOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDisplaySelectedOptionStartAdornment(false)
     handleSearchInputChange(e.target.value)
   }
 
@@ -92,6 +104,11 @@ export const Dropdown = ({
             onChange={handleOnSearch}
             label={label}
             onClick={toggleOpen}
+            startAdornment={
+              displaySelectedOptionStartAdornment && (
+                <Avatar src={selectedOption?.imageSrc} size={3.2} />
+              )
+            }
             endAdornment={<SearchIcon name="search" size={1.4} />}
           />
         ) : (

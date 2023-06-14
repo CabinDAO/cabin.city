@@ -9,6 +9,7 @@ import { useLocationVote } from '../hooks/useLocationVote'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
 import { PublishModal } from './edit-location/PublishModal'
+import { AppHead } from '../shared/head'
 
 export const LocationPageView = () => {
   const router = useRouter()
@@ -73,6 +74,13 @@ export const LocationPageView = () => {
         ) : null
       }
     >
+      <AppHead
+        title={location.name ?? ''}
+        description={location.tagline ?? ''}
+        pathname={`location/${location._id}`}
+        imageUrl={location.bannerImageUrl ?? undefined}
+      />
+
       <LocationView location={location} onVote={handleVote} />
     </SingleColumnLayout>
   )

@@ -75,6 +75,7 @@ export interface LocationProps {
   locationType: LocationType
   mediaItems: LocationMediaItem[]
   name: string | null | undefined
+  tagline: string | null | undefined
   offerCount: number
   sleepCapacity: number | null | undefined
   internetSpeedMbps: number | null | undefined

@@ -46,6 +46,7 @@ export const locationViewPropsFromFragment = (
     locationType: fragment.locationType ?? LocationType.Outpost,
     mediaItems: fragment.mediaItems?.filter(isNotNull) ?? [],
     name: fragment.name,
+    tagline: fragment.tagline,
     offerCount: fragment.offerCount ?? 0,
     sleepCapacity: fragment.sleepCapacity,
     internetSpeedMbps: fragment.internetSpeedMbps,
