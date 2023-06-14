@@ -20,7 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <AppHead />
+      <AppHead key={router.pathname} />
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>

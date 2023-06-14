@@ -60,6 +60,7 @@ export const LocationPageView = () => {
   return (
     <>
       <AppHead
+        key={router.pathname}
         title={location.name ?? ''}
         description={location.tagline ?? ''}
         pathname={`location/${location._id}`}
