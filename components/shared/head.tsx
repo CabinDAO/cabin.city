@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { NextSeo } from 'next-seo'
 
 // TODO: Update title/description
-const TITLE_PREFIX = 'Cabin'
+const DEFAULT_TITLE = 'Cabin'
 const DESCRIPTION = 'Create your Census profile to join the community'
 
 let origin = 'http://localhost:3000'
@@ -26,9 +26,7 @@ export const AppHead = ({
   title,
   imageUrl = `${origin}/images/cabin_social.png`,
 }: AppHeadProps) => {
-  const pageTitle = (
-    title?.length ? `${TITLE_PREFIX} - ${title}` : TITLE_PREFIX
-  ).trim()
+  const pageTitle = title?.trim() ?? DEFAULT_TITLE
   const pageDescription = description?.trim() ?? DESCRIPTION
 
   const fullUrl = `${origin}/${pathname}`
@@ -84,7 +82,7 @@ export const AppHead = ({
           url: fullUrl,
           title: pageTitle,
           description: pageDescription,
-          siteName: TITLE_PREFIX,
+          siteName: DEFAULT_TITLE,
           images: [
             {
               url: imageUrl,
@@ -93,7 +91,7 @@ export const AppHead = ({
               alt: pageDescription,
             },
           ],
-          site_name: TITLE_PREFIX,
+          site_name: DEFAULT_TITLE,
         }}
         twitter={{
           handle: '@cabindotcity',
