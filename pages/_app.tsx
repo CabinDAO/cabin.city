@@ -17,6 +17,7 @@ import { ErrorProvider } from '@/components/contexts/ErrorContext'
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
+      <AppHead />
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>

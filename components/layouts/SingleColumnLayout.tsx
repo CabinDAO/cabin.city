@@ -5,7 +5,6 @@ import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { MainContent, NavbarContainer } from './common.styles'
 import { HTMLAttributes } from 'react'
-import { AppHead, AppHeadProps } from '../shared/head'
 
 export type LayoutVariant = 'default' | 'full'
 
@@ -16,7 +15,6 @@ interface LayoutProps {
   actionBar?: React.ReactNode
   className?: string
   variant?: LayoutVariant
-  headProps?: AppHeadProps
 }
 
 export const SingleColumnLayout = ({
@@ -26,33 +24,29 @@ export const SingleColumnLayout = ({
   hideNavbar,
   className,
   variant,
-  headProps,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
   return (
-    <>
-      <AppHead {...headProps} />
-      <OuterContainer className={className}>
-        {displayLaunchBanner && <LaunchBanner />}
-        <Container variant={variant}>
-          <MainContent variant={variant}>{children}</MainContent>
-          {!hideNavbar && (
-            <>
-              {isMobile ? (
-                <MobileFloatingMenu />
-              ) : (
-                <NavbarContainer variant={variant}>
-                  <ProfileNavbar />
-                </NavbarContainer>
-              )}
-            </>
-          )}
-        </Container>
-        <ActionBarContainer>{actionBar}</ActionBarContainer>
-      </OuterContainer>
-    </>
+    <OuterContainer className={className}>
+      {displayLaunchBanner && <LaunchBanner />}
+      <Container variant={variant}>
+        <MainContent variant={variant}>{children}</MainContent>
+        {!hideNavbar && (
+          <>
+            {isMobile ? (
+              <MobileFloatingMenu />
+            ) : (
+              <NavbarContainer variant={variant}>
+                <ProfileNavbar />
+              </NavbarContainer>
+            )}
+          </>
+        )}
+      </Container>
+      <ActionBarContainer>{actionBar}</ActionBarContainer>
+    </OuterContainer>
   )
 }
 
