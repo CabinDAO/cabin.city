@@ -14,7 +14,6 @@ interface LocationPageProps {
 }
 
 const LocationPage = ({ location }: LocationPageProps) => {
-  console.log('🚀 ~ file: [id].tsx:14 ~ LocationPage ~ location:', location)
   return (
     <>
       <AppHead
