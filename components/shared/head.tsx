@@ -13,17 +13,19 @@ if (process.env.NEXT_PUBLIC_VERCEL_URL) {
       : 'https://www.cabin.city'
 }
 
+export interface AppHeadProps {
+  description?: string
+  pathname?: string
+  title?: string
+  imageUrl?: string
+}
+
 export const AppHead = ({
   description,
   pathname = '',
   title,
   imageUrl = `${origin}/images/cabin_social.png`,
-}: {
-  description?: string
-  pathname?: string
-  title?: string
-  imageUrl?: string
-}) => {
+}: AppHeadProps) => {
   const pageTitle = (
     title?.length ? `${TITLE_PREFIX} - ${title}` : TITLE_PREFIX
   ).trim()

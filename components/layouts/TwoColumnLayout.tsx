@@ -5,6 +5,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
+import { AppHead, AppHeadProps } from '../shared/head'
 
 const Container = styled.div`
   display: flex;
@@ -47,14 +48,21 @@ interface LayoutProps {
   children: React.ReactNode
   title: string
   iconName?: IconName
+  headProps?: AppHeadProps
 }
 
-export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
+export const TwoColumnLayout = ({
+  children,
+  title,
+  iconName,
+  headProps,
+}: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
   return (
     <>
+      <AppHead {...headProps} />
       <Container>
         <FixedWidthMainContent>
           <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />

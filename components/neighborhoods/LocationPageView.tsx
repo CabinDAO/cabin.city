@@ -58,32 +58,29 @@ export const LocationPageView = () => {
   }
 
   return (
-    <>
-      <AppHead
-        key={router.pathname}
-        title={location.name ?? ''}
-        description={location.tagline ?? ''}
-        pathname={`location/${location._id}`}
-        imageUrl={location.bannerImageUrl ?? undefined}
-      />
-      <SingleColumnLayout
-        actionBar={
-          previewMode ? (
-            <ActionBar
-              primaryButton={{
-                label: 'Publish',
-                onClick: handlePublish,
-              }}
-              secondaryButton={{
-                label: 'Back',
-                onClick: () => router.push(backRoute),
-              }}
-            />
-          ) : null
-        }
-      >
-        <LocationView location={location} onVote={handleVote} />
-      </SingleColumnLayout>
-    </>
+    <SingleColumnLayout
+      actionBar={
+        previewMode ? (
+          <ActionBar
+            primaryButton={{
+              label: 'Publish',
+              onClick: handlePublish,
+            }}
+            secondaryButton={{
+              label: 'Back',
+              onClick: () => router.push(backRoute),
+            }}
+          />
+        ) : null
+      }
+      headProps={{
+        title: location.name ?? '',
+        description: location.tagline ?? '',
+        pathname: `location/${location._id}`,
+        imageUrl: location.bannerImageUrl ?? undefined,
+      }}
+    >
+      <LocationView location={location} onVote={handleVote} />
+    </SingleColumnLayout>
   )
 }

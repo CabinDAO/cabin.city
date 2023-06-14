@@ -13,14 +13,10 @@ import GlobalStyles from '../styles/global'
 import { NavigationProvider } from '@/components/contexts/NavigationContext'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
-import { useRouter } from 'next/router'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const router = useRouter()
-
   return (
     <>
-      <AppHead key={router.pathname} />
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>

@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import { FixedWidthMainContent } from './common.styles'
+import { AppHead, AppHeadProps } from '../shared/head'
 
 interface LayoutProps {
   children: React.ReactNode
+  headProps?: AppHeadProps
 }
 
 const Container = styled.div`
@@ -25,10 +27,13 @@ const Container = styled.div`
   }
 `
 
-export const OnboardingLayout = ({ children }: LayoutProps) => {
+export const OnboardingLayout = ({ children, headProps }: LayoutProps) => {
   return (
-    <Container>
-      <FixedWidthMainContent>{children}</FixedWidthMainContent>
-    </Container>
+    <>
+      <AppHead {...headProps} />
+      <Container>
+        <FixedWidthMainContent>{children}</FixedWidthMainContent>
+      </Container>
+    </>
   )
 }
