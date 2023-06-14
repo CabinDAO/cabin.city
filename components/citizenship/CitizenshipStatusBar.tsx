@@ -28,6 +28,10 @@ export const CitizenshipStatusBar = ({
       [CitizenshipStatus.Verified, CitizenshipStatus.Vouched].includes(status))
 
   const determineProgress = () => {
+    if (approvedDueToCabinBalance) {
+      return deviceSize === 'mobile' ? 75 : 68
+    }
+
     switch (status) {
       case CitizenshipStatus.Verified:
         return 100
@@ -70,7 +74,11 @@ export const CitizenshipStatusBar = ({
           </CitizenStatusProgress>
           <CitizenshipCTA
             status={status}
-            onClick={status === CitizenshipStatus.Vouched ? onMint : onSignal}
+            onClick={
+              status === CitizenshipStatus.Vouched || approvedDueToCabinBalance
+                ? onMint
+                : onSignal
+            }
             canMint={!!canMint}
           />
         </InnerContainer>
