@@ -20,9 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      {router?.pathname && router.pathname !== '/location/[id]' ? (
-        <AppHead />
-      ) : null}
+      <AppHead />
       <GlobalStyles />
       <ThemeProvider theme={theme}>
         <WagmiConfig client={wagmiClient}>
