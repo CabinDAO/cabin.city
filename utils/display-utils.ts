@@ -66,6 +66,10 @@ const contactFieldTypeUrlMap: Partial<Record<ProfileContactFieldType, string>> =
 export const getUrlFromContactField = (field: ProfileContactField) => {
   const keys = Object.keys(contactFieldTypeUrlMap) as ProfileContactFieldType[]
 
+  if (field.type === ProfileContactFieldType.Website) {
+    return formatUrl(field.value)
+  }
+
   if (keys.includes(field.type)) {
     if (
       !!contactFieldTypeUrlMap[field.type] &&
