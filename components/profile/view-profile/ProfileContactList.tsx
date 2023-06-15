@@ -1,5 +1,11 @@
-import { GetProfileByIdFragment } from '@/generated/graphql'
-import { formatContactField } from '@/utils/display-utils'
+import {
+  GetProfileByIdFragment,
+  ProfileContactField,
+} from '@/generated/graphql'
+import {
+  formatContactField,
+  getUrlFromContactField,
+} from '@/utils/display-utils'
 import styled from 'styled-components'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { Caption } from '../../core/Typography'
@@ -11,8 +17,6 @@ interface ProfileContactListProps {
 export const ProfileContactList = ({
   contactFields,
 }: ProfileContactListProps) => {
-  const { deviceSize } = useDeviceSize()
-
   return (
     <ProfileListContainer>
       <ContactFields>
@@ -22,15 +26,36 @@ export const ProfileContactList = ({
       </ContactFields>
       <ContactFields>
         {contactFields.map((field) => (
-          <CopyToClipboard key={field.type} text={field.value}>
-            <Caption emphasized>
-              {formatContactField(field, deviceSize !== 'tablet')}
-            </Caption>
-          </CopyToClipboard>
+          <ContactField key={field.type} field={field} />
         ))}
       </ContactFields>
     </ProfileListContainer>
   )
+}
+
+interface ContactFieldProps {
+  field: ProfileContactField
+}
+
+const ContactField = ({ field }: ContactFieldProps) => {
+  const { deviceSize } = useDeviceSize()
+  const url = getUrlFromContactField(field)
+
+  if (url) {
+    return (
+      <a href={url} target="_blank" rel="noreferrer">
+        <Caption emphasized>{formatContactField(field)}</Caption>
+      </a>
+    )
+  } else {
+    return (
+      <CopyToClipboard text={field.value}>
+        <Caption emphasized>
+          {formatContactField(field, deviceSize !== 'tablet')}
+        </Caption>
+      </CopyToClipboard>
+    )
+  }
 }
 
 const ProfileListContainer = styled.div`

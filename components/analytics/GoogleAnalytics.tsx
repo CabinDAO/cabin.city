@@ -10,33 +10,8 @@ const GoogleAnalytics = () => {
   useEffect(() => {
     if (!TRACKING_ID || router.isPreview) return
 
-    gtag('config', TRACKING_ID, {
-      send_page_view: false,
-    })
-
-    gtag('event', 'page_view', {
-      page_path: window.location.pathname,
-      send_to: TRACKING_ID,
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    gtag('config', TRACKING_ID)
   }, [])
-
-  useEffect(() => {
-    const handleRouteChange = (url: string) => {
-      if (!TRACKING_ID || router.isPreview) return
-
-      gtag('event', 'page_view', {
-        page_path: url,
-        send_to: TRACKING_ID,
-      })
-    }
-    router.events.on('routeChangeComplete', handleRouteChange)
-    router.events.on('hashChangeComplete', handleRouteChange)
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-      router.events.off('hashChangeComplete', handleRouteChange)
-    }
-  }, [router.events, router.isPreview])
 
   if (!TRACKING_ID || router.isPreview) {
     return null

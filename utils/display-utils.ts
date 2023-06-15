@@ -44,6 +44,42 @@ export const formatDate = (
 export const monthYearFormat = (dateISOString: string) =>
   format(new Date(dateISOString), 'MMMM yyyy', { locale: enUS })
 
+export const formatUrl = (url?: string | undefined | null) => {
+  if (!url) return null
+
+  return url.startsWith('http://') || url.startsWith('https://')
+    ? url
+    : `https://${url}`
+}
+
+const contactFieldTypeUrlMap: Partial<Record<ProfileContactFieldType, string>> =
+  {
+    [ProfileContactFieldType.Email]: 'mailto:',
+    [ProfileContactFieldType.Website]: '',
+    [ProfileContactFieldType.Twitter]: 'https://twitter.com/',
+    [ProfileContactFieldType.Telegram]: 'https://t.me/',
+    [ProfileContactFieldType.Instagram]: 'https://instagram.com/',
+    [ProfileContactFieldType.LinkedIn]: 'https://linkedin.com/in/',
+    [ProfileContactFieldType.Lens]: 'https://lenster.xyz/u/',
+  }
+
+export const getUrlFromContactField = (field: ProfileContactField) => {
+  const keys = Object.keys(contactFieldTypeUrlMap) as ProfileContactFieldType[]
+
+  if (keys.includes(field.type)) {
+    if (
+      !!contactFieldTypeUrlMap[field.type] &&
+      field.value.includes(contactFieldTypeUrlMap[field.type] as string)
+    ) {
+      return field.value
+    }
+
+    return `${contactFieldTypeUrlMap[field.type]}${field.value}`
+  } else {
+    return null
+  }
+}
+
 export const formatContactField = (
   field: ProfileContactField,
   truncateValue = false
@@ -109,12 +145,4 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
       EMPTY
     )}`
   }
-}
-
-export const formatUrl = (url?: string | undefined | null) => {
-  if (!url) return null
-
-  return url.startsWith('http://') || url.startsWith('https://')
-    ? url
-    : `https://${url}`
 }
