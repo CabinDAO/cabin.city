@@ -158,6 +158,7 @@ const RoleDataContainer = styled.div<ContainerProps>`
   flex-direction: column;
   gap: 0.8rem;
   padding-right: 1.6rem;
+  min-height: 7.5rem;
 
   ${({ theme }) => theme.bp.md} {
     max-width: ${({ variant }) => (variant === 'horizontal' ? '60%' : '100%')};

@@ -11,7 +11,7 @@ const GoogleAnalytics = () => {
     if (!TRACKING_ID || router.isPreview) return
 
     gtag('config', TRACKING_ID)
-  }, [])
+  }, [router.isPreview])
 
   if (!TRACKING_ID || router.isPreview) {
     return null
