@@ -11,7 +11,6 @@ import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { useModal } from '../hooks/useModal'
 import { CitizenshipModal } from './CitizenshipModal'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import { useEffect } from 'react'
 
 export const JoinSection = () => {
   const { priceInUsd } = usePriceInUsd()
@@ -117,7 +116,11 @@ const ConditionalTypographyText = ({ text }: { text: string }) => {
     return <Subline1 $color="yellow100">{text}</Subline1>
   }
 
-  return <H1 $color="yellow100">{text}</H1>
+  if (deviceSize === 'tablet' || deviceSize === 'desktop') {
+    return <H1 $color="yellow100">{text}</H1>
+  }
+
+  return null
 }
 
 const PriceContainer = styled.div`
@@ -136,8 +139,9 @@ const JoinOptionTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
 
-  ${H1}, ${Subline1} {
-    color: ${({ theme }) => theme.colors.yellow100};
+  h1,
+  h6 {
+    color: ${({ theme }) => theme.colors.yellow100} !important;
   }
 `
 

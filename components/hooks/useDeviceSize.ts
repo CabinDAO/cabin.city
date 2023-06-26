@@ -8,16 +8,17 @@ export const useDeviceSize = () => {
   const [deviceSize, setDeviceSize] = useState<DeviceSize>('mobile')
   const tablet = useMedia(queries.md, true)
   const desktop = useMedia(queries.lg, true)
+  const mobile = useMedia(queries.sm, true)
 
   useEffect(() => {
     if (desktop) {
       setDeviceSize('desktop')
     } else if (tablet) {
       setDeviceSize('tablet')
-    } else {
+    } else if (mobile) {
       setDeviceSize('mobile')
     }
-  }, [desktop, tablet])
+  }, [desktop, tablet, mobile])
 
   return { deviceSize }
 }
