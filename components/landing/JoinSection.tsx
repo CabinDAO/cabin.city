@@ -26,8 +26,6 @@ export const JoinSection = () => {
   const isDesktop = deviceSize === 'desktop'
   const isTablet = deviceSize === 'tablet'
 
-  const TitleTypography = deviceSize === 'mobile' ? Subline1 : H1
-
   return (
     <ParentContainer>
       <Background></Background>
@@ -42,9 +40,7 @@ export const JoinSection = () => {
                 height={43}
               />
               <JoinOptionTitleContainer>
-                <TitleTypography key={deviceSize} $color="yellow100">
-                  Community member
-                </TitleTypography>
+                <ConditionalTypographyText text="Community member" />
                 <JoinOptionTitle $color="yellow100">Free</JoinOptionTitle>
               </JoinOptionTitleContainer>
             </JoinHeaderContainer>
@@ -75,9 +71,7 @@ export const JoinSection = () => {
                 height={43}
               />
               <JoinOptionTitleContainer>
-                <TitleTypography $color="yellow100">
-                  Founding Citizen
-                </TitleTypography>
+                <ConditionalTypographyText text="Founding Citizen" />
                 <PriceContainer>
                   <JoinOptionTitle $color="yellow100">${price}</JoinOptionTitle>
                   <YearlyPrice $color="yellow100">/ year</YearlyPrice>
@@ -107,6 +101,16 @@ export const JoinSection = () => {
       </Content>
     </ParentContainer>
   )
+}
+
+const ConditionalTypographyText = ({ text }: { text: string }) => {
+  const { deviceSize } = useDeviceSize()
+
+  if (deviceSize === 'mobile') {
+    return <Subline1 $color="yellow100">{text}</Subline1>
+  }
+
+  return <H1 $color="yellow100">{text}</H1>
 }
 
 const PriceContainer = styled.div`
