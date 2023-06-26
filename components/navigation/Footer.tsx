@@ -19,7 +19,7 @@ export const Footer = ({ children, className }: FooterProps) => (
           <FooterItem>City Directory</FooterItem>
         </AppLink>
         <AppLink location="/offers" iconSize={0}>
-          <FooterItem>Offers</FooterItem>
+          <FooterItem>Experiences</FooterItem>
         </AppLink>
         <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
           <FooterItem>Citizenship</FooterItem>
@@ -98,7 +98,7 @@ export const FooterNavigation = styled.div`
   gap: 4rem;
   flex-direction: column;
 
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     gap: 6.4rem;
     flex-direction: row;
   }

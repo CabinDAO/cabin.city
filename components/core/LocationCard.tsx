@@ -31,6 +31,7 @@ export interface LocationCardProps {
   onEdit?: () => void
   editMode?: boolean
   hideNeighborTag?: boolean
+  position?: number
 }
 
 interface Caretaker {
@@ -78,6 +79,7 @@ export const LocationCard = (props: LocationCardProps) => {
     <OuterContainer>
       <ContainerLink
         href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
+        shallow
       >
         <ImageContainer>
           {bannerImageUrl ? (

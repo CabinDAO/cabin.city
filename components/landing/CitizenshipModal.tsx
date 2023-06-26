@@ -1,0 +1,73 @@
+import styled from 'styled-components'
+import { ModalTitle } from '../core/modals/ModalTitle'
+import { ModalContainer } from '../core/modals/ModalContainer'
+import { Body2, H4, Subline1 } from '../core/Typography'
+
+export const CitizenshipModal = () => {
+  return (
+    <CitizenshipModalContainer>
+      <ModalTitle text="Citizenship" />
+      <CitizenshipModalContent>
+        <H4>3 ways to unlock Citizenship</H4>
+        <StepList>
+          <Step>
+            <Subline1>Obtain a Vouch & Purchase</Subline1>
+            <Body2>
+              Join our community events, whether online or in real life, and
+              gain the endorsement of a Citizen. Once vouched for, you can
+              purchase Citizenship.
+            </Body2>
+          </Step>
+          <Step>
+            <Subline1>Attend a Build Week</Subline1>
+            <Body2>
+              Participate in a Neighborhood-sponsored build project with fellow
+              Cabin members. Find upcoming Build Weeks to apply for after
+              signing into the app.
+            </Body2>
+          </Step>
+          <Step>
+            <Subline1>Hold 1000 ₡ABIN</Subline1>
+            <Body2>
+              Collect and hold 1000 ₡ABIN tokens by participating in various
+              bounties across the community.
+            </Body2>
+          </Step>
+        </StepList>
+      </CitizenshipModalContent>
+    </CitizenshipModalContainer>
+  )
+}
+
+const CitizenshipModalContainer = styled(ModalContainer)`
+  height: min-content;
+  width: 40.8rem;
+`
+
+const CitizenshipModalContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2.4rem;
+  gap: 2.4rem;
+  width: 100%;
+  align-items: center;
+`
+
+const StepList = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 1.2rem;
+`
+
+const Step = styled.div`
+  border: 1px solid rgba(29, 43, 42, 0.12);
+  padding: 1.8rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+
+  ${Body2} {
+    opacity: 0.75;
+  }
+`

@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 
 const DESKTOP_WIDTH_PX = 1440
-const DESKTOP_HEIGHT_PX = 500
+const DESKTOP_HEIGHT_PX = 730
 
 export const HeroVideo = () => {
   const { deviceSize } = useDeviceSize()

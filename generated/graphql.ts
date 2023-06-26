@@ -1801,18 +1801,22 @@ export type Query = {
   /** Find a document from the collection of 'Hat' by its id. */
   findHatByID?: Maybe<Hat>;
   syncAttemptByKeyAndStatus?: Maybe<BlockSyncAttempt>;
+  profileByEmail?: Maybe<Profile>;
   myVouchesThisYear: Scalars['Int'];
   syncAttemptsByKey: BlockSyncAttemptPage;
   allProfiles: ProfilePage;
   me: Profile;
+  profileByExternalUserId?: Maybe<Profile>;
   /** Find a document from the collection of 'OtterspaceBadgeSpec' by its id. */
   findOtterspaceBadgeSpecByID?: Maybe<OtterspaceBadgeSpec>;
   allActivities: QueryAllActivitiesPage;
   activitiesByProfile: QueryActivitiesByProfilePage;
+  allLocations: LocationPage;
   allAccounts: AccountPage;
   /** Find a document from the collection of 'Account' by its id. */
   findAccountByID?: Maybe<Account>;
   offersCount: Scalars['Int'];
+  pendingMigrationProfiles: QueryPendingMigrationProfilesPage;
   allBadges: OtterspaceBadgePage;
   /** Find a document from the collection of 'ActivityReaction' by its id. */
   findActivityReactionByID?: Maybe<ActivityReaction>;
@@ -1923,6 +1927,11 @@ export type QuerySyncAttemptByKeyAndStatusArgs = {
 };
 
 
+export type QueryProfileByEmailArgs = {
+  email: Scalars['String'];
+};
+
+
 export type QuerySyncAttemptsByKeyArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -1933,6 +1942,11 @@ export type QuerySyncAttemptsByKeyArgs = {
 export type QueryAllProfilesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryProfileByExternalUserIdArgs = {
+  externalUserId: Scalars['String'];
 };
 
 
@@ -1954,6 +1968,12 @@ export type QueryActivitiesByProfileArgs = {
 };
 
 
+export type QueryAllLocationsArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
 export type QueryAllAccountsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -1967,6 +1987,12 @@ export type QueryFindAccountByIdArgs = {
 
 export type QueryOffersCountArgs = {
   input?: InputMaybe<GetOffersInput>;
+};
+
+
+export type QueryPendingMigrationProfilesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2035,6 +2061,17 @@ export type QueryLocationsByLocationTypePage = {
   __typename?: 'QueryLocationsByLocationTypePage';
   /** The elements of type 'Location' in this page. */
   data: Array<Maybe<Location>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Profile'. */
+export type QueryPendingMigrationProfilesPage = {
+  __typename?: 'QueryPendingMigrationProfilesPage';
+  /** The elements of type 'Profile' in this page. */
+  data: Array<Maybe<Profile>>;
   /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
   /** A cursor for elements coming before the current page. */
@@ -2177,10 +2214,10 @@ export type GetLocationsByLocationTypeQueryVariables = Exact<{
 
 export type GetLocationsByLocationTypeQuery = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
 
-export type GetNeighborhoodsTop3QueryVariables = Exact<{ [key: string]: never; }>;
+export type GetNeighborhoodsTop6QueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetNeighborhoodsTop3Query = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
+export type GetNeighborhoodsTop6Query = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
 
 export type CaretakerFragment = { __typename?: 'Profile', _id: string, email: string, name: string, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, createdAt: any, bio?: string | null, badgeCount: number, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', address: string }, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }> };
 
@@ -3235,9 +3272,9 @@ export function useGetLocationsByLocationTypeLazyQuery(baseOptions?: Apollo.Lazy
 export type GetLocationsByLocationTypeQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeQuery>;
 export type GetLocationsByLocationTypeLazyQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeLazyQuery>;
 export type GetLocationsByLocationTypeQueryResult = Apollo.QueryResult<GetLocationsByLocationTypeQuery, GetLocationsByLocationTypeQueryVariables>;
-export const GetNeighborhoodsTop3Document = gql`
-    query GetNeighborhoodsTop3 {
-  locationsByLocationType(locationType: Neighborhood, _size: 3) {
+export const GetNeighborhoodsTop6Document = gql`
+    query GetNeighborhoodsTop6 {
+  locationsByLocationType(locationType: Neighborhood, _size: 6) {
     data {
       ...LocationItem
     }
@@ -3247,31 +3284,31 @@ export const GetNeighborhoodsTop3Document = gql`
     ${LocationItemFragmentDoc}`;
 
 /**
- * __useGetNeighborhoodsTop3Query__
+ * __useGetNeighborhoodsTop6Query__
  *
- * To run a query within a React component, call `useGetNeighborhoodsTop3Query` and pass it any options that fit your needs.
- * When your component renders, `useGetNeighborhoodsTop3Query` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetNeighborhoodsTop6Query` and pass it any options that fit your needs.
+ * When your component renders, `useGetNeighborhoodsTop6Query` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetNeighborhoodsTop3Query({
+ * const { data, loading, error } = useGetNeighborhoodsTop6Query({
  *   variables: {
  *   },
  * });
  */
-export function useGetNeighborhoodsTop3Query(baseOptions?: Apollo.QueryHookOptions<GetNeighborhoodsTop3Query, GetNeighborhoodsTop3QueryVariables>) {
+export function useGetNeighborhoodsTop6Query(baseOptions?: Apollo.QueryHookOptions<GetNeighborhoodsTop6Query, GetNeighborhoodsTop6QueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetNeighborhoodsTop3Query, GetNeighborhoodsTop3QueryVariables>(GetNeighborhoodsTop3Document, options);
+        return Apollo.useQuery<GetNeighborhoodsTop6Query, GetNeighborhoodsTop6QueryVariables>(GetNeighborhoodsTop6Document, options);
       }
-export function useGetNeighborhoodsTop3LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNeighborhoodsTop3Query, GetNeighborhoodsTop3QueryVariables>) {
+export function useGetNeighborhoodsTop6LazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNeighborhoodsTop6Query, GetNeighborhoodsTop6QueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetNeighborhoodsTop3Query, GetNeighborhoodsTop3QueryVariables>(GetNeighborhoodsTop3Document, options);
+          return Apollo.useLazyQuery<GetNeighborhoodsTop6Query, GetNeighborhoodsTop6QueryVariables>(GetNeighborhoodsTop6Document, options);
         }
-export type GetNeighborhoodsTop3QueryHookResult = ReturnType<typeof useGetNeighborhoodsTop3Query>;
-export type GetNeighborhoodsTop3LazyQueryHookResult = ReturnType<typeof useGetNeighborhoodsTop3LazyQuery>;
-export type GetNeighborhoodsTop3QueryResult = Apollo.QueryResult<GetNeighborhoodsTop3Query, GetNeighborhoodsTop3QueryVariables>;
+export type GetNeighborhoodsTop6QueryHookResult = ReturnType<typeof useGetNeighborhoodsTop6Query>;
+export type GetNeighborhoodsTop6LazyQueryHookResult = ReturnType<typeof useGetNeighborhoodsTop6LazyQuery>;
+export type GetNeighborhoodsTop6QueryResult = Apollo.QueryResult<GetNeighborhoodsTop6Query, GetNeighborhoodsTop6QueryVariables>;
 export const MyLocationVotesDocument = gql`
     query MyLocationVotes {
   me {
