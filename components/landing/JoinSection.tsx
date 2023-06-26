@@ -11,6 +11,7 @@ import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { useModal } from '../hooks/useModal'
 import { CitizenshipModal } from './CitizenshipModal'
 import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useEffect } from 'react'
 
 export const JoinSection = () => {
   const { priceInUsd } = usePriceInUsd()
@@ -40,7 +41,10 @@ export const JoinSection = () => {
                 height={43}
               />
               <JoinOptionTitleContainer>
-                <ConditionalTypographyText text="Community member" />
+                <ConditionalTypographyText
+                  key={deviceSize}
+                  text="Community member"
+                />
                 <JoinOptionTitle $color="yellow100">Free</JoinOptionTitle>
               </JoinOptionTitleContainer>
             </JoinHeaderContainer>
@@ -71,7 +75,10 @@ export const JoinSection = () => {
                 height={43}
               />
               <JoinOptionTitleContainer>
-                <ConditionalTypographyText text="Founding Citizen" />
+                <ConditionalTypographyText
+                  key={deviceSize}
+                  text="Founding Citizen"
+                />
                 <PriceContainer>
                   <JoinOptionTitle $color="yellow100">${price}</JoinOptionTitle>
                   <YearlyPrice $color="yellow100">/ year</YearlyPrice>
