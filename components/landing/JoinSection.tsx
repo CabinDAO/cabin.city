@@ -128,6 +128,10 @@ const JoinOptionTitle = styled(HHero)`
 const JoinOptionTitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+
+  ${H1}, ${Subline1} {
+    color: ${({ theme }) => theme.colors.yellow100};
+  }
 `
 
 const JoinHeaderContainer = styled.div`
