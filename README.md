@@ -159,3 +159,12 @@ vercel
 # Deploy to prod
 vercel --prod
 ```
+
+## Github Actions
+
+Github actions rely on two secrets:
+
+- FGU_SECRET_PROD
+- FGU_SECRET_DEV
+
+If needed, this can be changed by going into [Fauna Dashboard](https://dashboard.fauna.com/), then Security > Database Keys, and adding a new Admin key. The key can then be added to the Github Secrets. See how this works in the [Github Actions Workflow](.github/workflows/fauna.yml).
