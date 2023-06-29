@@ -9,6 +9,7 @@ import { privyAPICall } from '@/lib/privy'
 import { addressMatch } from '@/utils/address-match'
 import { GetProfileByAddress } from '@/fauna/lib/GetProfileByAddress'
 import { setExternalUserId } from '@/lib/fauna-server/setExternalUserId'
+import { validEmail } from '@/components/profile/validations'
 
 type CabinProfile = {
   data: {
@@ -32,6 +33,10 @@ type MigrateUserResponse = MigrateUserInput & {
 }
 
 const formatPrivyInput = (input: MigrateUserInput) => {
+  if (!validEmail(input.email)) {
+    return null
+  }
+
   return {
     linked_accounts: [
       {
@@ -91,7 +96,7 @@ const resolveUser = async (
 }
 
 const migrateUsers = async (input: MigrateUserInput[]) => {
-  const privyInput = input.map((i) => formatPrivyInput(i))
+  const privyInput = input.map((i) => formatPrivyInput(i)).filter(Boolean)
 
   return privyAPICall('users/import', 'POST', { users: privyInput })
 }
