@@ -16,6 +16,10 @@ export interface Env {
   PINATA_API_JWT: string
   NEXT_PUBLIC_PINATA_API_KEY: string
   NEXT_PUBLIC_PINATA_API_SECRET: string
+  NEXT_PUBLIC_PRIVY_PUBLIC_KEY: string
+  NEXT_PUBLIC_PRIVY_APP_ID: string
+  PRIVY_APP_SECRET: string
+  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string
 }
 
 declare global {

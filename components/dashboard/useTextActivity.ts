@@ -4,12 +4,12 @@ import {
   useDeleteActivityMutation,
 } from '@/generated/graphql'
 import { useCallback } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 
 export const useTextActivity = () => {
   const [createTextActivity] = useCreateTextActivityMutation()
   const [deleteTextActivity] = useDeleteActivityMutation()
-  const { user } = useUser()
+  const { user } = useProfile()
 
   const handleCreateTextActivity = useCallback(
     (text: string) => {

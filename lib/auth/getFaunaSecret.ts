@@ -1,5 +1,6 @@
 import { addSeconds, isAfter, parseISO } from 'date-fns'
 import { FAUNA_TOKEN_LOCAL_STORAGE_KEY } from './constants'
+import { getAccessToken } from '@privy-io/react-auth'
 
 /**
  * Retrieves the Fauna secret from localStorage if it is not expired.
@@ -19,7 +20,18 @@ export async function getFaunaSecret() {
     }
   }
 
-  const resp = await fetch('/api/auth/fauna-token')
+  const authToken = await getAccessToken()
+
+  if (!authToken) {
+    return
+  }
+
+  const resp = await fetch('/api/auth/fauna-token', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  })
   if (resp.status === 200) {
     const token = await resp.json()
     localStorage.setItem(FAUNA_TOKEN_LOCAL_STORAGE_KEY, JSON.stringify(token))

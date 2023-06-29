@@ -6,6 +6,7 @@ import { unlockConfig } from '@/lib/protocol-config'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { CitizenshipStatus } from '@/generated/graphql'
 import { setCitizenshipStatus } from '@/lib/fauna-server/setCitizenshipStatus'
+import withAuth from '@/utils/api/withAuth'
 
 type ResponseJson = {
   updated?: boolean
@@ -19,9 +20,9 @@ async function handler(
 
   switch (method) {
     case 'GET':
-      const address = req.session.siwe?.address
+      const address = req.query.address as string
+
       if (!address) {
-        console.error('CheckStatus: No address in session', req.session.siwe)
         res.status(401).end('Unauthorized')
         return
       }
@@ -65,4 +66,4 @@ async function handler(
   }
 }
 
-export default withIronSessionApiRoute(handler, ironOptions)
+export default withIronSessionApiRoute(withAuth(handler), ironOptions)

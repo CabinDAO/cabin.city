@@ -15,7 +15,7 @@ import { NoWrap } from '../core/NoWrap'
 import { HorizontalDivider } from '../core/Divider'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { useEffect } from 'react'
 import { useNavigation } from '../hooks/useNavigation'
 
@@ -23,7 +23,7 @@ export const NewLocationView = () => {
   const router = useRouter()
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
 
   const { goBack } = useNavigation()
   const canCreateListings =

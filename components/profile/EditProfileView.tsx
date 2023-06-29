@@ -1,7 +1,7 @@
 import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { EditProfileForm } from './EditProfileForm'
 import { useState } from 'react'
 import {
@@ -20,7 +20,7 @@ import styled from 'styled-components'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
   const [updateProfile] = useUpdateProfileMutation()
   const [editProfileInput, setEditProfileInput] = useState<UpdateProfileInput>(
     {}

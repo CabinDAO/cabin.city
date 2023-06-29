@@ -5,7 +5,7 @@
 #   bin/run_script sync-until-done.ts http://localhost:3000/api/sync/hats
 
 echo "Reading vars from .env.local"
-source .env.local
+source .env
 
 FAUNA_SERVER_SECRET="$FAUNA_SERVER_SECRET" \
 FAUNA_DB_HOST="$FAUNA_DB_HOST" \

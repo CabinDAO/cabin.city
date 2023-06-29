@@ -1,29 +1,44 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
-import { useAccount } from 'wagmi'
 import { loadUnlockCheckout } from './UnlockScript'
-import { unlockConfig } from '@/lib/protocol-config'
 import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
+import { useWallets } from '@privy-io/react-auth'
+import { useChainSwitch } from '../hooks/useChainSwitch'
+import { useCallback, useEffect, useState } from 'react'
 
 export const CitizenshipView = () => {
-  const { user } = useUser({ redirectTo: '/' })
-  const { connector } = useAccount()
+  const { user } = useProfile({ redirectTo: '/' })
+  const { wallets } = useWallets()
+  const [attemptedMint, setAttemptedMint] = useState(false)
 
-  const [toggleSignal] = useToggleSignalMutation()
+  const { handleSwitch, rightChain } = useChainSwitch()
 
-  const handleMint = async () => {
-    if (!connector) return
+  const handleMint = useCallback(async () => {
+    if (!wallets[0] || !rightChain) {
+      handleSwitch()
+      setAttemptedMint(true)
+      return
+    }
 
-    const provider = await connector.getProvider({
-      chainId: unlockConfig.chainId,
-    })
+    const provider = await wallets[0].getEthereumProvider()
+
+    if (!provider) return
 
     loadUnlockCheckout(provider)
-  }
+  }, [handleSwitch, rightChain, wallets])
+
+  useEffect(() => {
+    if (attemptedMint && rightChain) {
+      handleMint()
+      setAttemptedMint(false)
+    }
+  }, [attemptedMint, handleMint, rightChain])
+
+  const [toggleSignal] = useToggleSignalMutation()
 
   const handleToggleSignal = () => {
     if (!user) return

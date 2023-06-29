@@ -1,4 +1,4 @@
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
 import {
   MeFragment,
@@ -22,7 +22,7 @@ export const ProfileHeaderButton = ({
   isOwnProfile,
 }: ProfileHeaderButtonProps) => {
   const router = useRouter()
-  const { user } = useUser()
+  const { user } = useProfile()
   const { showModal } = useModal()
 
   if (!user) return null

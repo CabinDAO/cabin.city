@@ -2,12 +2,23 @@ import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
 import { AvatarSetup } from '../AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
-import { validEmail, validName } from '../validations'
+import { validName } from '../validations'
 import { UpdateProfileProps } from './UpdateProfileProps'
 import { DisplayNameInputContainer } from '../styles'
 import { FieldAvailability } from '@/components/core/FieldAvailability'
-import { useGetProfileByNameLazyQuery } from '@/generated/graphql'
-import { useState } from 'react'
+import {
+  useGetProfileByNameLazyQuery,
+  useUpdateProfileMutation,
+} from '@/generated/graphql'
+import { useEffect, useState } from 'react'
+import { useExternalUser } from '@/components/auth/useExternalUser'
+import { H3 } from '@/components/core/Typography'
+import { AccountAction } from '../AccountAction'
+import useEns from '@/components/hooks/useEns'
+import { shortenedAddress } from '@/utils/display-utils'
+import { usePrivy } from '@privy-io/react-auth'
+import { useModal } from '@/components/hooks/useModal'
+import { ChangeEmailConfirmationModal } from '@/components/core/ChangeEmailConfirmationModal'
 
 export const Identity = ({
   editProfileInput,
@@ -17,19 +28,53 @@ export const Identity = ({
   const avatar = editProfileInput?.hasOwnProperty('avatar')
     ? editProfileInput.avatar
     : user?.avatar
-  const email = editProfileInput?.email ?? user?.email
+  const { externalUser } = useExternalUser()
+  const email = externalUser?.email?.address ?? user?.email
   const name = editProfileInput?.name ?? user?.name
   const [getProfileByName] = useGetProfileByNameLazyQuery()
   const [available, setAvailable] = useState(true)
   const [displayAvailability, setDisplayAvailability] = useState(false)
+  const { ens } = useEns(externalUser?.wallet?.address)
+  const walletDisplay = ens ?? shortenedAddress(externalUser?.wallet?.address)
+  const isEmbeddedWallet = externalUser?.wallet?.walletClient === 'privy'
+  const { linkEmail, unlinkEmail, exportWallet } = usePrivy()
+  const [updateProfile] = useUpdateProfileMutation()
+  const { showModal } = useModal()
+
+  const handleEmailRelink = async () => {
+    showModal(() => (
+      <ChangeEmailConfirmationModal onConfirm={confirmEmailRelink} />
+    ))
+  }
+
+  const confirmEmailRelink = async () => {
+    if (externalUser?.email?.address && !isEmbeddedWallet) {
+      // TODO: do not unlink prematurely
+      await unlinkEmail(externalUser?.email?.address)
+    }
+    linkEmail()
+  }
+
+  useEffect(() => {
+    if (
+      externalUser?.email?.address &&
+      user.email &&
+      externalUser.email.address !== user.email
+    ) {
+      updateProfile({
+        variables: {
+          id: user._id,
+          data: {
+            email: externalUser.email.address,
+          },
+        },
+      })
+    }
+  }, [externalUser?.email?.address, updateProfile, user])
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDisplayAvailability(false)
     onChange({ ...editProfileInput, name: e.target.value })
-  }
-
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ ...editProfileInput, email: e.target.value })
   }
 
   const handleDisplayNameValidation = async () => {
@@ -76,18 +121,36 @@ export const Identity = ({
           />
           {displayAvailability && <FieldAvailability available={available} />}
         </DisplayNameInputContainer>
-        <InputText
-          id="email"
-          error={!validEmail(email)}
-          required
-          label="Email"
-          value={email}
-          onChange={onEmailChange}
-        />
+      </InputGroup>
+      <InputGroup>
+        <AccountContainer>
+          <H3>Account</H3>
+          <InputGroup>
+            <AccountAction
+              fieldTitle="Email"
+              fieldValue={email}
+              onClick={handleEmailRelink}
+              actionCTA={!isEmbeddedWallet ? 'Change Email' : undefined}
+            />
+            <AccountAction
+              fieldTitle="Wallet"
+              fieldValue={walletDisplay ?? ''}
+              onClick={exportWallet}
+              actionCTA={isEmbeddedWallet ? 'Export wallet' : undefined}
+            />
+          </InputGroup>
+        </AccountContainer>
       </InputGroup>
     </AboutContainer>
   )
 }
+
+const AccountContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+`
 
 const AboutContainer = styled.div`
   display: flex;

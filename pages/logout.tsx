@@ -1,17 +1,12 @@
 import { useEffect } from 'react'
-
 import type { NextPage } from 'next'
-import { logOut } from '@/lib/auth/logout'
+import { useAuth } from '@/components/hooks/useAuth'
 
 const LogoutPage: NextPage = () => {
+  const { handleLogout } = useAuth()
   useEffect(() => {
-    ;(async () => {
-      await logOut()
-
-      // Force reload to clear apollo cache and prevent weird state updates
-      ;(window as Window).location = '/'
-    })()
-  }, [])
+    handleLogout()
+  }, [handleLogout])
 
   return null
 }

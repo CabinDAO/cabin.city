@@ -2,17 +2,19 @@ import {
   ProfileAvatarInput,
   useGetProfileByNameLazyQuery,
 } from '@/generated/graphql'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
 import { InputText } from '../core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
-import { validEmail, validName } from './validations'
+import { validName } from './validations'
 import { FieldAvailability } from '../core/FieldAvailability'
 import { DisplayNameInputContainer } from './styles'
-import { Message } from '../auth/Message'
+import { useExternalUser } from '../auth/useExternalUser'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '../auth/useProfile'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
@@ -26,9 +28,41 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [isUniqueName, setIsUniqueName] = useState(true)
   const [displayAvailability, setDisplayAvailability] = useState(false)
   const [displayUsernameError, setDisplayUsernameError] = useState(false)
-  const [displayEmailError, setDisplayEmailError] = useState(false)
-  const [displaySignMessageInfoText, setDisplaySignMessageInfoText] =
-    useState(false)
+  const { externalUser } = useExternalUser()
+  const { linkEmail } = usePrivy()
+  const [submitted, setSubmitted] = useState(false)
+  const { user } = useProfile()
+
+  useEffect(() => {
+    if (
+      externalUser?.email?.address &&
+      externalUser.email.address !== email &&
+      !submitted &&
+      validName(displayName, !isUniqueName) &&
+      !user
+    ) {
+      onSubmit({
+        email: email.trim(),
+        displayName: displayName.trim(),
+        avatar,
+      })
+      setSubmitted(true)
+      return
+    }
+
+    if (externalUser?.email?.address) {
+      setEmail(externalUser.email?.address)
+    }
+  }, [
+    externalUser,
+    avatar,
+    displayName,
+    email,
+    onSubmit,
+    isUniqueName,
+    user,
+    submitted,
+  ])
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsUniqueName(true)
@@ -37,24 +71,25 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     setDisplayName(e.target.value)
   }
 
-  const onEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayEmailError(false)
-    setEmail(e.target.value)
-  }
-
-  const handleSubmit = () => {
-    setDisplayEmailError(true)
+  const handleSubmit = async () => {
     setDisplayUsernameError(true)
 
-    if (validName(displayName, !isUniqueName) && validEmail(email)) {
-      setDisplaySignMessageInfoText(true)
-      onSubmit({ email: email.trim(), displayName: displayName.trim(), avatar })
+    const unique = await handleUniqueNameValidation()
+
+    if (validName(displayName, !unique)) {
+      if (externalUser?.email?.address) {
+        onSubmit({
+          email: email.trim(),
+          displayName: displayName.trim(),
+          avatar,
+        })
+      } else {
+        linkEmail()
+      }
     }
   }
 
-  const handleDisplayNameValidation = async () => {
-    if (!validName(displayName)) return
-
+  const handleUniqueNameValidation = async () => {
     const name = await getProfileByName({
       variables: { name: displayName.trim() },
     })
@@ -63,6 +98,13 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     setDisplayAvailability(true)
 
     setIsUniqueName(!name.data?.profileByName?._id)
+    return !name.data?.profileByName?._id
+  }
+
+  const handleDisplayNameValidation = async () => {
+    if (!validName(displayName)) return
+
+    handleUniqueNameValidation()
   }
 
   return (
@@ -76,6 +118,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
               displayUsernameError && !validName(displayName, !isUniqueName)
             }
             required
+            disabled={!!user || submitted}
             label="Display Name"
             value={displayName}
             onBlur={handleDisplayNameValidation}
@@ -86,22 +129,11 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
             <FieldAvailability available={isUniqueName} />
           )}
         </DisplayNameInputContainer>
-        <InputText
-          id="email"
-          error={displayEmailError && !validEmail(email)}
-          required
-          label="Email"
-          value={email}
-          onChange={onEmailChange}
-        />
       </InputGroup>
       <Submission>
-        {displaySignMessageInfoText && (
-          <Message>Sign a message in your wallet to continue</Message>
-        )}
         <SubmitButton
+          disabled={!!user || submitted}
           onClick={handleSubmit}
-          disabled={displaySignMessageInfoText}
           variant="primary"
         >
           Save

@@ -2,40 +2,63 @@ import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
 import { AppHead } from '@/components/shared/head'
 import { apolloClient } from '@/lib/apollo/apollo-client'
-import { wagmiClient } from '@/lib/wagmi/wagmi-client'
 import theme from '@/styles/theme'
 import { ApolloProvider } from '@apollo/client'
-import { ConnectKitProvider } from 'connectkit'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
-import { WagmiConfig } from 'wagmi'
 import GlobalStyles from '../styles/global'
 import { NavigationProvider } from '@/components/contexts/NavigationContext'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
+import { PrivyProvider } from '@privy-io/react-auth'
+import { appDomain } from '@/utils/display-utils'
+import { PrivyWagmiConnector } from '@privy-io/wagmi-connector'
+import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
+import { useAuth } from '@/components/hooks/useAuth'
+import { Reload } from '@/components/auth/Reload'
 
 export default function App({ Component, pageProps }: AppProps) {
+  const { handleLogin } = useAuth()
+
   return (
     <>
       <AppHead />
       <GlobalStyles />
       <ThemeProvider theme={theme}>
-        <WagmiConfig client={wagmiClient}>
-          <ConnectKitProvider>
+        <PrivyProvider
+          appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
+          onSuccess={handleLogin}
+          config={{
+            loginMethods: ['email', 'wallet'],
+            embeddedWallets: {
+              createOnLogin: 'users-without-wallets',
+            },
+            walletConnectCloudProjectId:
+              process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+            appearance: {
+              theme: theme.colors.yellow100 as `#${string}`,
+              accentColor: theme.colors.green800 as `#${string}`,
+              logo: `https://${appDomain}/images/cabin-auth.png`,
+              showWalletLoginFirst: true,
+            },
+          }}
+        >
+          <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
             <ErrorProvider>
               <ApolloProvider client={apolloClient}>
-                <CitizenshipProvider>
-                  <NavigationProvider>
-                    <ModalProvider>
+                <ModalProvider>
+                  <CitizenshipProvider>
+                    <NavigationProvider>
                       <GoogleAnalytics />
+                      <Reload />
                       <Component {...pageProps} />
-                    </ModalProvider>
-                  </NavigationProvider>
-                </CitizenshipProvider>
+                    </NavigationProvider>
+                  </CitizenshipProvider>
+                </ModalProvider>
               </ApolloProvider>
             </ErrorProvider>
-          </ConnectKitProvider>
-        </WagmiConfig>
+          </PrivyWagmiConnector>
+        </PrivyProvider>
       </ThemeProvider>
     </>
   )

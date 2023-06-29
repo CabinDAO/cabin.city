@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import { HorizontalDivider } from '../Divider'
 import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 
 interface MobileNavBarProps {
   profileId?: string
   open: boolean
 }
 export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
 
   return (
     <MobileNavContainer open={open}>

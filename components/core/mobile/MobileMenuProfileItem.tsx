@@ -1,4 +1,4 @@
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import useEns from '@/components/hooks/useEns'
 import { shortenedAddress } from '@/utils/display-utils'
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import { Avatar } from '../Avatar'
 import { Caption, Subline1 } from '../Typography'
 
 export const MobileMenuProfileItem = () => {
-  const { user: profile } = useUser()
+  const { user: profile } = useProfile()
   const { ens } = useEns(profile?.account.address)
   const displayCaption = ens ?? shortenedAddress(profile?.account.address)
 

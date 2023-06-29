@@ -17,6 +17,7 @@ export interface CreateProfileInput {
   email: string | Expr
   roles: ProfileRole[] | Expr
   avatar?: ProfileAvatarInput | undefined | Expr
+  externalUserId?: string | Expr
 }
 
 export const CreateProfile = (input: CreateProfileInput) => {
@@ -43,6 +44,7 @@ export const CreateProfile = (input: CreateProfileInput) => {
           contactFields: [],
           cabinTokenBalanceInt: q.Var('cabinTokenBalanceInt'),
           badgeCount: q.Var('badgeCount'),
+          externalUserId: input.externalUserId,
         },
       }),
       activity: UpsertActivity(q.Var('profile'), {

@@ -1,5 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
+import { useExternalUser } from '../auth/useExternalUser'
+import { usePrivy } from '@privy-io/react-auth'
 
 export const CitizenshipContext = createContext<CitzenshipState | null>(null)
 
@@ -12,31 +14,48 @@ interface CitzenshipProviderProps {
 }
 
 export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
-  const { user, refetchUser } = useUser()
+  const { refetchProfile } = useProfile()
+  const { externalUser } = useExternalUser()
   const checked = useRef(false)
+  const { getAccessToken } = usePrivy()
 
   // Can be used to check if the user's citizenship status has changed
   // Useful for when the user interacts with the Unlock modal
   const checkStatus = useCallback(async () => {
-    const resp = await fetch('/api/unlock/check-status')
+    if (!externalUser?.wallet?.address) {
+      return
+    }
+
+    const authToken = await getAccessToken()
+
+    const resp = await fetch(
+      `/api/unlock/check-status?address=${externalUser?.wallet?.address}`,
+      {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
     if (resp.ok) {
       const { updated } = await resp.json()
       if (updated) {
         console.log('Status updated. Refetching user...')
-        await refetchUser()
+        await refetchProfile()
       }
       checked.current = true
     }
-  }, [refetchUser])
+  }, [refetchProfile, externalUser, getAccessToken])
 
   useEffect(() => {
-    if (!user || checked.current) {
+    if (!externalUser || checked.current) {
       return
     }
 
     // Check status on initial app load but only one time
     checkStatus()
-  }, [user, checkStatus])
+  }, [externalUser, checkStatus])
 
   const state = {
     checkStatus,

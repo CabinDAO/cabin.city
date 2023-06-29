@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { MobileFloatingMenuButton } from '../core/mobile/MobileFloatingMenuButton'
 import { MobileNavBar } from '../core/mobile/MobileNavBar'
 import { useModal } from '../hooks/useModal'
@@ -7,7 +7,7 @@ import ClickAway from '../core/ClickAway'
 
 export const MobileFloatingMenu = () => {
   const [open, setOpen] = useState(false)
-  const { user } = useUser()
+  const { user } = useProfile()
   const { active } = useModal()
 
   const toggleOpen = () => {

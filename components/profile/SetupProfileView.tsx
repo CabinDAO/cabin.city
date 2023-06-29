@@ -2,7 +2,7 @@ import { useLogTrackingEventMutation } from '@/generated/graphql'
 import { TrackingEvent } from '@/lib/tracking-events'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { StepConfig, steps } from './setup-profile/step-configuration'
@@ -11,7 +11,7 @@ export const SetupProfileView = ({}) => {
   const router = useRouter()
   const [logTrackingEvent] = useLogTrackingEventMutation()
   const { id: profileId } = router.query
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(steps[0])
 

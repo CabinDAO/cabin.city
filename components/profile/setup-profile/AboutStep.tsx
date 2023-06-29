@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { SetupStepForm } from './SetupStepForm'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { AboutInput } from '../AboutInput'
 import { validBio, validLocation } from '../validations'
 import { StepProps } from './step-configuration'
 
 export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const [bio, setBio] = useState(user?.bio ?? '')
   const [location, setLocation] = useState(user?.location ?? '')
   const { updateProfile } = useUpdateProfile(user?._id)

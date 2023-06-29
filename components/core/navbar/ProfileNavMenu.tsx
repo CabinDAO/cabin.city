@@ -1,4 +1,4 @@
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import useEns from '@/components/hooks/useEns'
 import { shortenedAddress } from '@/utils/display-utils'
 import { motion } from 'framer-motion'
@@ -16,7 +16,7 @@ interface ProfileNavMenuProps {
 const INNER_PADDING = '1.2rem 1.6rem'
 
 export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
 
   const { ens } = useEns(user?.account.address)
   const displayCaption = ens ?? shortenedAddress(user?.account.address)

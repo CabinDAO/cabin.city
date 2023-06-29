@@ -1,6 +1,6 @@
 import { offerViewPropsFromFragment } from '@/utils/offer'
 import { useRouter } from 'next/router'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import {
   LocationType,
   OfferFragment,
@@ -45,7 +45,7 @@ export interface OfferViewProps {
 export const useGetOffer = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
   const { data } = useGetOfferByIdQuery({
     variables: {
       id: `${offerId}`,

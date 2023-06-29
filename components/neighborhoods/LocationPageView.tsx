@@ -4,7 +4,7 @@ import { locationViewPropsFromFragment } from '@/lib/location'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { useEffect } from 'react'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { useLocationVote } from '../hooks/useLocationVote'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
@@ -13,7 +13,7 @@ import { PublishModal } from './edit-location/PublishModal'
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
-  const { user } = useUser()
+  const { user } = useProfile()
   const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
   const { data } = useGetLocationByIdQuery({

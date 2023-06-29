@@ -1,21 +1,20 @@
 import { useCallback } from 'react'
-import { useUser } from './useUser'
-import { useModal } from '../hooks/useModal'
-import { LoginModal } from './LoginModal'
+import { usePrivy } from '@privy-io/react-auth'
 
 export const useConfirmLoggedIn = () => {
-  const { user, isUserLoading } = useUser()
-  const { showLoadingModal } = useModal()
+  const { authenticated, ready } = usePrivy()
+  const { login } = usePrivy()
 
   const confirmLoggedIn = useCallback(
     (onConfirmed?: () => void) => {
-      if (!user && !isUserLoading) {
-        showLoadingModal(() => <LoginModal onLogin={onConfirmed} />)
-      } else if (user) {
+      if (ready && !authenticated) {
+        // TODO: re-enable this
+        // login()
+      } else if (authenticated) {
         onConfirmed?.()
       }
     },
-    [showLoadingModal, user, isUserLoading]
+    [authenticated, ready, login]
   )
 
   return {

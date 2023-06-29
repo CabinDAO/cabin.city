@@ -10,7 +10,7 @@ import { ProfileIcons } from '../ProfileIcons'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal'
 import { useTextActivity } from '@/components/dashboard/useTextActivity'
@@ -33,7 +33,7 @@ export const Post = (props: PostProps) => {
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
-  const { user } = useUser()
+  const { user } = useProfile()
   const { showModal } = useModal()
   const { handleDeleteTextActivity } = useTextActivity()
   const [hasReactionByMe, setHasReactionByMe] = useState(
