@@ -8,8 +8,7 @@ export const useConfirmLoggedIn = () => {
   const confirmLoggedIn = useCallback(
     (onConfirmed?: () => void) => {
       if (ready && !authenticated) {
-        // TODO: re-enable this
-        // login()
+        login()
       } else if (authenticated) {
         onConfirmed?.()
       }
