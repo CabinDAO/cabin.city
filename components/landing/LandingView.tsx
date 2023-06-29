@@ -12,7 +12,6 @@ import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { HeroVideo } from '../core/HeroVideo'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
-import { useUser } from '../auth/useUser'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import Icon from '../core/Icon'
 import { BookingSection } from './BookingSection'
@@ -21,9 +20,10 @@ import { LandingContentNoPadding, SectionContent, StyledHHero } from './styles'
 import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
+import { useExternalUser } from '../auth/useExternalUser'
 
 export const LandingView = () => {
-  const { user } = useUser()
+  const { externalUser } = useExternalUser()
   const { deviceSize } = useDeviceSize()
 
   return (
@@ -58,7 +58,7 @@ export const LandingView = () => {
                   </Button>
                 </a>
                 <AuthenticatedLink href="/dashboard">
-                  <Button>{user ? 'View Dashboard' : 'Sign In'}</Button>
+                  <Button>{externalUser ? 'View Dashboard' : 'Sign In'}</Button>
                 </AuthenticatedLink>
               </SectionGrowSignup>
             </SectionHeader>

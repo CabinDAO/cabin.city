@@ -8,10 +8,12 @@ import { useModal } from './useModal'
 import { useCallback } from 'react'
 import { CastLocationVotesBody } from '@/pages/api/cast-location-votes'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { usePrivy } from '@privy-io/react-auth'
 
 export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { getAccessToken } = usePrivy()
 
   const [getLocationVoteCountsByIds] = useGetLocationVoteCountsByIdsLazyQuery({
     fetchPolicy: 'network-only',
@@ -23,9 +25,16 @@ export const useLocationVote = (afterVote?: () => void) => {
         showModal(() => (
           <LocationVodalModalWithData
             {...props}
-            onCastVotes={(voteModifiersByLocationId: CastLocationVotesBody) => {
+            onCastVotes={async (
+              voteModifiersByLocationId: CastLocationVotesBody
+            ) => {
+              const token = await getAccessToken()
               return fetch('/api/cast-location-votes', {
                 method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+                },
                 body: JSON.stringify(voteModifiersByLocationId),
               }).then((res) => {
                 if (res.ok) {
@@ -44,7 +53,13 @@ export const useLocationVote = (afterVote?: () => void) => {
         ))
       })
     },
-    [showModal, getLocationVoteCountsByIds, confirmLoggedIn, afterVote]
+    [
+      showModal,
+      getLocationVoteCountsByIds,
+      confirmLoggedIn,
+      afterVote,
+      getAccessToken,
+    ]
   )
 
   return {

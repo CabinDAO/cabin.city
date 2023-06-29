@@ -1,5 +1,5 @@
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { Button } from '@/components/core/Button'
 import { Body1, H1 } from '@/components/core/Typography'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
@@ -16,13 +16,13 @@ import { useEffect } from 'react'
 */
 const Features: NextPage = () => {
   const router = useRouter()
-  const { user, refetchUser } = useUser()
+  const { user, refetchProfile } = useProfile()
   const [updateProfile] = useUpdateProfileMutation()
   const { confirmLoggedIn } = useConfirmLoggedIn()
 
   useEffect(() => {
-    confirmLoggedIn(refetchUser)
-  }, [confirmLoggedIn, refetchUser])
+    confirmLoggedIn(refetchProfile)
+  }, [confirmLoggedIn, refetchProfile])
 
   if (!user) {
     return null

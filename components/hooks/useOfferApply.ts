@@ -1,9 +1,9 @@
 import { CitizenshipStatus, OfferType } from '@/generated/graphql'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { OfferViewProps } from '../offers/useGetOffer'
 
 export const useOfferApply = (offer: OfferViewProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
 
   const canApply = () => {
     if (!user) {

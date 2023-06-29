@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { InputBase } from './InputBase'
 import { subline2Styles } from './Typography'
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ disabled: boolean }>`
   ${subline2Styles}
   display: block;
   width: 100%;
@@ -31,6 +31,16 @@ const StyledInput = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+
+  ${(props) => {
+    if (props.disabled) {
+      return `
+        cursor: not-allowed;
+        opacity: 0.75;
+        user-select: none;
+        `
+    }
+  }}
 `
 
 export interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -106,7 +116,7 @@ export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
           onChange={onChange}
           placeholder={placeholder}
           value={value}
-          disabled={disabled}
+          disabled={!!disabled}
           {...props}
         />
       </InputBase>

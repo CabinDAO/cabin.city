@@ -2,14 +2,14 @@ import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
 import { DataContainer } from '../core/DataContainer'
 import { ActivityList } from './ActivityList'
 import { useGetActivitySummaryQuery } from '@/generated/graphql'
-import { useUser } from '../auth/useUser'
 import styled from 'styled-components'
 import { TextPost } from './TextPost'
 import { useTextActivity } from './useTextActivity'
 import { useEffect } from 'react'
+import { useProfile } from '../auth/useProfile'
 
 export const DashboardView = () => {
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/logout' })
   const { data, refetch } = useGetActivitySummaryQuery()
   const { handleCreateTextActivity } = useTextActivity()
 

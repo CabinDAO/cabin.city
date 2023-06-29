@@ -2,7 +2,7 @@ import {
   ActivityItemFragment,
   GetProfileByIdFragment,
 } from '@/generated/graphql'
-import { useUser } from '../../auth/useUser'
+import { useProfile } from '../../auth/useProfile'
 import { ProfileSetupSection } from './ProfileSetupSection'
 import { ProfileInnerContainer } from '../profile.styles'
 import { ProfileAboutSection } from './ProfileAboutSection'
@@ -21,7 +21,7 @@ export const ProfileContent = ({
   profile,
   activityItems,
 }: ProfileContentProps) => {
-  const { user: me } = useUser()
+  const { user: me } = useProfile()
   if (!me) return null
 
   const isOwnProfile = me?._id === profile._id

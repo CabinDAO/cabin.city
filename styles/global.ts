@@ -16,6 +16,16 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
   }
 
+  #privy-dialog {
+    img {
+      max-height: 8rem !important;
+    }
+  }
+
+  .unlock-protocol-checkout.show {
+    z-index: 100 !important;
+  }
+
   body {
     --background-grid-color: #e8d6bb;
     --background-fill-color: #fce9cb;

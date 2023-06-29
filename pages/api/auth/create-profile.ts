@@ -3,8 +3,6 @@ import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { CreateProfile, CreateProfileInput } from '@/fauna/lib/CreateProfile'
-import { validateSessionMessage } from '@/lib/next-server/siwe'
-import { SiweMessage } from 'siwe'
 import { ironOptions } from '@/lib/next-server/iron-options'
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { GetAccountHats } from '@/fauna/lib/GetAccountHats'
@@ -12,40 +10,44 @@ import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
 import { hatsClient } from '@/lib/hats/hatsClient'
 import { GetHatsByIdsDocument } from '@/generated/gql/hats/graphql'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
+import withAuth from '@/utils/api/withAuth'
 
 export interface CreateProfileBody {
-  message: SiweMessage
-  signature: string
+  address: string
   name: string
   email: string
   avatar: ProfileAvatarInput | undefined
+  externalUserId: string
 }
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  opts?: { auth: { externalUserId: string } }
+) => {
   const { method } = req
+
   switch (method) {
     case 'POST':
-      // A valid signed message is required to create a profile to ensure the profile is associated with the correct account/address.
-      const validatedMessage = await validateSessionMessage({
-        req,
-        res,
-        ...req.body,
-      })
-
-      if (!validatedMessage) return
-
       const body = req.body as CreateProfileBody
+      const externalUserId = opts?.auth?.externalUserId
+
+      if (!externalUserId) {
+        res.status(401).send({ error: 'Missing externalUserId' })
+        return
+      }
 
       try {
-        const roles = await _getProfileRolesForAccount(validatedMessage.address)
+        const roles = await _getProfileRolesForAccount(body.address)
         console.info('roles', roles)
 
         const profile = await _createProfile({
-          address: validatedMessage.address,
+          address: body.address,
           name: body.name,
           email: body.email,
           roles,
           avatar: body.avatar,
+          externalUserId,
         })
         const profileId = profile.ref.id
         res.send({ profileId })
@@ -90,4 +92,4 @@ function _createProfile(input: CreateProfileInput): Promise<any> {
   return faunaServerClient.query(CreateProfile(input))
 }
 
-export default withIronSessionApiRoute(handler, ironOptions)
+export default withIronSessionApiRoute(withAuth(handler), ironOptions)

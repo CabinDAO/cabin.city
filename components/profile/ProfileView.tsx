@@ -6,12 +6,16 @@ import {
 } from '@/generated/graphql'
 import { ProfileContent } from './view-profile/ProfileContent'
 
-export const ProfileView = () => {
+interface ProfileViewProps {
+  profileId?: string
+}
+
+export const ProfileView = ({ profileId }: ProfileViewProps) => {
   const router = useRouter()
-  const { id: profileId } = router.query
+  const id = (profileId as string) ?? (router.query.id as string)
 
   const { data, loading: loadingProfile } = useGetProfileByIdQuery({
-    variables: { id: profileId as string },
+    variables: { id },
   })
 
   const profile = data?.findProfileByID

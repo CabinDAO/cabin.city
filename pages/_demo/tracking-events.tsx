@@ -1,4 +1,4 @@
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { Body1, H1 } from '@/components/core/Typography'
 import { OnboardingLayout } from '@/components/layouts/OnboardingLayout'
 import { useLogTrackingEventMutation } from '@/generated/graphql'
@@ -8,7 +8,7 @@ import { useLogTrackingEventMutation } from '@/generated/graphql'
 */
 const TrackingEventsDemo = () => {
   const [logTrackingEvent] = useLogTrackingEventMutation()
-  const { user, isUserLoading } = useUser()
+  const { user, isUserLoading } = useProfile()
 
   if (!user) {
     return isUserLoading ? null : <p>Not logged in</p>

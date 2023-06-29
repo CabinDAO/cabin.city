@@ -11,14 +11,14 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { OfferListItem } from '../core/OfferListItem'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 
 interface OfferTabListProps {
   offerType: OfferType
 }
 
 export const OfferTabList = ({ offerType }: OfferTabListProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const input: GetOffersInput = useMemo(() => {
     return {
       offerTypes: [offerType],

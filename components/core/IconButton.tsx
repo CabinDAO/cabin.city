@@ -7,6 +7,7 @@ import { ZoomInCard } from './ZoomInCard'
 interface ButtonStyledProps {
   disabled?: boolean
   addHoverState?: boolean
+  size?: number
 }
 
 const ButtonStyled = styled.button<ButtonStyledProps>`
@@ -33,6 +34,10 @@ const ButtonStyled = styled.button<ButtonStyledProps>`
       pointer-events: none;
       opacity: 0.5;
     `}
+
+  svg {
+    max-width: ${({ size }) => size}rem;
+  }
 `
 
 interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {

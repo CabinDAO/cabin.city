@@ -1,7 +1,7 @@
 import { useGetLocationByIdQuery } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import {
   StepConfig,
   editLocationSteps,
@@ -19,7 +19,7 @@ export const EditLocationView = ({}) => {
     skip: !listingId,
   })
   const location = data?.findLocationByID
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(
     editLocationSteps[0]

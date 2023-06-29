@@ -2,14 +2,16 @@ import { OnboardingLayout } from '../layouts/OnboardingLayout'
 import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
-import { useAccount } from 'wagmi'
-import Router, { useRouter } from 'next/router'
-import { useSignAuthMessage } from '../hooks/useSignAuthMessage'
+import { useRouter } from 'next/router'
 import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { useExternalUser } from '../auth/useExternalUser'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '../auth/useProfile'
+import { useEffect } from 'react'
 
 export interface RegistrationParams {
   email: string
@@ -18,36 +20,48 @@ export interface RegistrationParams {
 }
 
 export const RegistrationView = () => {
-  const { address } = useAccount()
   const router = useRouter()
-  const { signAuthMessage } = useSignAuthMessage()
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { externalUser, isUserLoading } = useExternalUser()
+  const { getAccessToken, linkEmail } = usePrivy()
+  const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
+
+  useEffect(() => {
+    if (!externalUser?.email?.address) {
+      linkEmail()
+    }
+  }, [externalUser?.email?.address, linkEmail])
 
   const handleSubmit = async (params: RegistrationParams) => {
     const { email, displayName: name, avatar } = params
 
-    if (!address) {
+    if (!isUserLoading && !externalUser) {
       confirmLoggedIn(() => {
         router.push('/registration')
       })
       return
     }
 
-    try {
-      const { message, signature } = await signAuthMessage(address)
+    if (!externalUser) {
+      return
+    }
 
+    try {
       const createProfileBody: CreateProfileBody = {
-        message,
-        signature,
+        address: externalUser.wallet?.address || '',
         name,
-        email,
+        email: externalUser.email?.address || email,
         avatar,
+        externalUserId: externalUser.id,
       }
+
+      const accessToken = await getAccessToken()
 
       const resp = await fetch('/api/auth/create-profile', {
         method: 'POST',
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(createProfileBody),
@@ -61,12 +75,16 @@ export const RegistrationView = () => {
             description={json.error}
           />
         ))
-      } else {
-        Router.push(`/profile/${json.profileId}`)
+      } else if (json.profileId) {
+        refetchProfile()
       }
     } catch (e) {
       console.error(e)
     }
+  }
+
+  if (user) {
+    return null
   }
 
   return (

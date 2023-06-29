@@ -1,30 +1,41 @@
 import { useEffect } from 'react'
 import Router from 'next/router'
-import { useAccount } from 'wagmi'
 import { addressMatch } from '@/utils/address-match'
 import { useMeQuery } from '@/generated/graphql'
+import { useExternalUser } from './useExternalUser'
 
 /*
   This hook is used to fetch the current user from the server.
   It can be used to determine if the user is logged in or not.
   It can be configured to redirect to login if the user is not logged in:
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
   Or it can be configured to redirect to a different page if the user is logged in:
-  const { user } = useUser({ redirectToIfFound: '/profile' })
+  const { user } = useProfile({ redirectToIfFound: '/profile' })
   The `user` can have the following values:
   - `undefined` if the login status is not known yet
   - `null` if the user is not logged in
   - `MeFragment` if the user is logged in
 */
-export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
+export const useProfile = ({
+  redirectTo = '',
+  redirectToIfFound = '',
+} = {}) => {
   const { data, loading, refetch } = useMeQuery()
-  const { address } = useAccount()
+  const { externalUser, isUserLoading } = useExternalUser()
 
-  const me = data?.me
+  const me = !externalUser && !isUserLoading ? null : data?.me
 
   useEffect(() => {
-    if (me && !addressMatch(me.account.address, address ?? '0x0')) {
+    if (
+      me &&
+      externalUser?.wallet?.address &&
+      !addressMatch(me.account.address, externalUser?.wallet?.address ?? '0x0')
+    ) {
       Router.push('/logout')
+    }
+
+    if (me && !loading && !me.externalUserId) {
+      Router.push('/registration')
     }
 
     // If redirectTo is set, redirect if the user was not found.
@@ -33,7 +44,7 @@ export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
     } else if (redirectToIfFound && me) {
       Router.push(redirectToIfFound)
     }
-  }, [redirectTo, redirectToIfFound, address, me, loading])
+  }, [redirectTo, redirectToIfFound, externalUser, me, loading])
 
-  return { user: me, isUserLoading: loading, refetchUser: refetch }
+  return { user: me, isUserLoading: loading, refetchProfile: refetch }
 }

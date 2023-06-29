@@ -5,6 +5,11 @@ import {
 import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 
+export const appDomain =
+  process.env.NEXT_PUBLIC_APP_ENV === 'prod'
+    ? 'cabin.city'
+    : process.env.NEXT_PUBLIC_VERCEL_URL
+
 export const EMPTY = '—'
 
 // Utility functions for displaying numbers compactly. e.g. 1000 -> 1k

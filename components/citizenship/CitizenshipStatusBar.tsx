@@ -74,11 +74,7 @@ export const CitizenshipStatusBar = ({
           </CitizenStatusProgress>
           <CitizenshipCTA
             status={status}
-            onClick={
-              status === CitizenshipStatus.Vouched || approvedDueToCabinBalance
-                ? onMint
-                : onSignal
-            }
+            onClick={canMint ? onMint : onSignal}
             canMint={!!canMint}
           />
         </InnerContainer>

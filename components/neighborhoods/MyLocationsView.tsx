@@ -1,12 +1,12 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { CitizenshipStatus } from '@/generated/graphql'
 import { NewListingButton } from './NewListingButton'
 import { MyLocations } from './MyLocations'
 
 export const MyLocationsView = () => {
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
 
   if (!user) {
     return null

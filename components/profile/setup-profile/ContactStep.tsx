@@ -3,11 +3,11 @@ import { SetupStepForm } from './SetupStepForm'
 import { ProfileContactField } from '@/generated/graphql'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { ContactInput } from '../ContactInput'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { StepProps } from './step-configuration'
 
 export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const [contactList, setContactList] = useState<ProfileContactField[]>([])
   const { updateProfile } = useUpdateProfile(user?._id)
 

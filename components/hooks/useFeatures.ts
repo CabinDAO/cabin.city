@@ -1,9 +1,9 @@
 import { Feature } from '@/lib/features'
 import { useCallback } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 
 export const useFeatures = () => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const hasFeature = useCallback(
     (feature: Feature) => {
       return (

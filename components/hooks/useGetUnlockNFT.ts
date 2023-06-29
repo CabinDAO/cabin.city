@@ -1,6 +1,6 @@
 import { DEFAULT_NFT_IMAGE, UnlockNFT } from '@/utils/citizenship'
 import { useEffect, useState } from 'react'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { usePublicLockContract } from './usePublicLockContract'
 import { BigNumber } from 'ethers'
 
@@ -8,7 +8,7 @@ export const useGetUnlockNFT = () => {
   const publicLockContract = usePublicLockContract()
   const [activeNFT, setActiveNFT] = useState<UnlockNFT | null>(null)
   const [loading, setLoading] = useState(false)
-  const { user: profile } = useUser()
+  const { user: profile } = useProfile()
 
   const getDateFromBigNumber = (bigNumber: BigNumber) => {
     try {

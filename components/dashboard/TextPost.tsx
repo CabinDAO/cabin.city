@@ -3,7 +3,7 @@ import { ContentCard } from '../core/ContentCard'
 import { TextPostInput } from './TextPostInput'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { Subline1 } from '../core/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -13,7 +13,7 @@ interface TextPostProps {
 
 export const TextPost = ({ onPost }: TextPostProps) => {
   const [inputVisible, setInputVisible] = useState<boolean>(false)
-  const { user } = useUser()
+  const { user } = useProfile()
 
   const handleCancel = () => {
     setInputVisible(false)

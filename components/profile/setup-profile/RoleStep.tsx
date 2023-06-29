@@ -4,12 +4,12 @@ import { Subline1 } from '@/components/core/Typography'
 import { ProfileRole, ProfileRoleType } from '@/generated/graphql'
 import { RoleChip } from '@/components/core/RoleChip'
 import { useState } from 'react'
-import { useUser } from '@/components/auth/useUser'
+import { useProfile } from '@/components/auth/useProfile'
 import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { StepProps } from './step-configuration'
 
 export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const roles = Object.keys(ProfileRoleType) as ProfileRoleType[]
 
   const allRoles = user?.roles ?? []

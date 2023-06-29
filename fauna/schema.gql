@@ -33,6 +33,9 @@ type Query {
   getLocationsByIds(ids: [ID!]!): [Location!]!
     @resolver(name: "get_locations_by_ids")
   profileByName(name: String!): Profile @resolver(name: "profile_by_name")
+  profileByExternalUserId(externalUserId: String!): Profile
+    @resolver(name: "profile_by_external_user_id")
+  profileByEmail(email: String!): Profile @resolver(name: "profile_by_email")
 }
 
 type Mutation {
@@ -64,6 +67,7 @@ type Mutation {
 
 type Profile {
   createdAt: Time!
+  externalUserId: String
   name: String! @index(name: "profile_by_name_casefold")
   email: String!
   bio: String

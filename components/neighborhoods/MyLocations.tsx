@@ -6,11 +6,11 @@ import { locationCardPropsFromFragment } from '@/lib/location'
 import { EmptyState } from '../core/EmptyState'
 import { Button } from '../core/Button'
 import Link from 'next/link'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { useLocationActions } from '../hooks/useLocationActions'
 
 export const MyLocations = () => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const { voteForLocation } = useLocationVote()
 
   const { editLocation, deleteLocation } = useLocationActions()

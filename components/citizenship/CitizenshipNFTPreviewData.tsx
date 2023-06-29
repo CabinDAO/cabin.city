@@ -1,13 +1,13 @@
 import { YEARLY_PRICE_IN_ETH } from '@/utils/citizenship'
 import styled from 'styled-components'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { HorizontalDivider } from '../core/Divider'
 import { H3, H1, Caption, H4, Body2 } from '../core/Typography'
 import { NFTDataList } from './NFTDataList'
 import { usePriceInUsd } from '../hooks/usePriceInUsd'
 
 export const CitizenshipNFTPreviewData = () => {
-  const { user } = useUser()
+  const { user } = useProfile()
   const { priceInUsd } = usePriceInUsd()
 
   const vouchedBy = user?.receivedVouches?.data[0]?.voucher

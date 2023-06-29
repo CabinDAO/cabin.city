@@ -29,7 +29,7 @@ import { ChevronButton } from '../core/ChevronButton'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { FilterCount } from '../core/FilterCount'
 import { ListEmptyState } from '../core/ListEmptyState'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
 
 export const DirectoryView = () => {
@@ -47,7 +47,7 @@ export const DirectoryView = () => {
     ProfileSortType.CreatedAtDesc
   )
   const { deviceSize } = useDeviceSize()
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useProfile({ redirectTo: '/' })
 
   const input = useMemo(() => {
     // Only search if there are at least 2 characters

@@ -3,7 +3,7 @@ import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { Tab, TabBar } from '../core/TabBar'
 import { useRouter } from 'next/router'
-import { useUser } from '../auth/useUser'
+import { useProfile } from '../auth/useProfile'
 import { LocationList } from './LocationList'
 import { NewListingButton } from './NewListingButton'
 
@@ -12,7 +12,7 @@ interface CityDirectoryViewProps {
 }
 export const CityDirectoryView = (props: CityDirectoryViewProps) => {
   const { locationType } = props
-  const { user } = useUser()
+  const { user } = useProfile()
   const router = useRouter()
   const canCreateListings =
     user?.citizenshipStatus === CitizenshipStatus.Verified
