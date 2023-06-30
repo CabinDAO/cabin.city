@@ -58,8 +58,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                   onClick={() => handleImageOnClick(index)}
                   alt={image.name}
                   src={imageUrl}
-                  width={415}
-                  height={300}
+                  fill
                 />
               </ImageSizeContainer>
             ) : null
@@ -97,16 +96,16 @@ const ImageList = styled.div`
 const ImageSizeContainer = styled.div`
   position: relative;
   width: 100%;
-`
-
-const StyledImage = styled(Image)`
-  object-fit: cover;
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
+  height: 30rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 41.5rem;
     height: 30rem;
   }
+`
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  cursor: pointer;
+  object-position: center;
 `
