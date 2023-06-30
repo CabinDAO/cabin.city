@@ -1,6 +1,6 @@
 import { H2 } from '../Typography'
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useModal } from '@/components/hooks/useModal'
 import NextImage from 'next/image'
 import { TempImage, resolveImageUrl } from '@/lib/image'
@@ -31,21 +31,6 @@ export const ImageBrowserModal = ({
       hideModal()
     }
   })
-
-  const preloadImage = (image: TempImage) => {
-    const img = new Image()
-    const imageUrl = resolveImageUrl(image, true)
-    if (imageUrl) {
-      img.src = imageUrl
-    }
-  }
-
-  useEffect(() => {
-    // Required to make the pagination experience smooth
-    for (const image of images) {
-      preloadImage(image)
-    }
-  }, [images])
 
   const handleNextImage = () => {
     const nextImageIndex = currentImageIndex + 1
@@ -85,6 +70,7 @@ export const ImageBrowserModal = ({
         {imageUrl ? (
           <StyledImageNextImage
             src={imageUrl}
+            priority
             width={1120}
             height={805}
             alt={currentImage?.name ?? ''}

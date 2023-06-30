@@ -30,6 +30,7 @@ export interface LocationCardProps {
   editMode?: boolean
   hideNeighborTag?: boolean
   position?: number
+  prefetch?: boolean
 }
 
 interface Caretaker {
@@ -56,6 +57,7 @@ export const ListingCard = (props: LocationCardProps) => {
     onDelete,
     onEdit,
     editMode = false,
+    prefetch = true,
   } = props
 
   const name = props.name ?? 'New Listing'
@@ -68,6 +70,9 @@ export const ListingCard = (props: LocationCardProps) => {
     <OuterContainer>
       <ContainerLink
         href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
+        prefetch={prefetch}
+        shallow
+        passHref
       >
         <ImageContainer>
           {bannerImageUrl ? (

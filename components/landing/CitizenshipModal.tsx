@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { ModalTitle } from '../core/modals/ModalTitle'
 import { ModalContainer } from '../core/modals/ModalContainer'
 import { Body2, H4, Subline1 } from '../core/Typography'
+import { ModalActionBar } from '../core/modals/ModalActionBar'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const CitizenshipModal = () => {
   return (
@@ -35,6 +37,10 @@ export const CitizenshipModal = () => {
           </Step>
         </StepList>
       </CitizenshipModalContent>
+      <ModalActionBar
+        text="Contact Us"
+        locationHref={EXTERNAL_LINKS.CITIZENSHIP_CONTACT_US}
+      />
     </CitizenshipModalContainer>
   )
 }
@@ -42,6 +48,8 @@ export const CitizenshipModal = () => {
 const CitizenshipModalContainer = styled(ModalContainer)`
   height: min-content;
   width: 40.8rem;
+  height: 54rem;
+  overflow-y: scroll;
 `
 
 const CitizenshipModalContent = styled.div`
@@ -51,6 +59,8 @@ const CitizenshipModalContent = styled.div`
   gap: 2.4rem;
   width: 100%;
   align-items: center;
+  overflow-y: scroll;
+  margin-bottom: 10rem;
 `
 
 const StepList = styled.div`
