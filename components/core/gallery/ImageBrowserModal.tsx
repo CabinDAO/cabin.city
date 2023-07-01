@@ -1,6 +1,6 @@
 import { H2 } from '../Typography'
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useModal } from '@/components/hooks/useModal'
 import NextImage from 'next/image'
 import { TempImage, resolveImageUrl } from '@/lib/image'
@@ -21,6 +21,7 @@ export const ImageBrowserModal = ({
   const imageCount = images.length
   const [currentImageIndex, setCurrentImageIndex] = useState(initialImageIndex)
   const currentImage = images[currentImageIndex]
+  const [preloadImages, setPreloadImages] = useState<boolean>(true)
 
   useEvent('keydown', (event) => {
     if (event.key === 'ArrowRight') {
@@ -48,8 +49,15 @@ export const ImageBrowserModal = ({
 
   const imageUrl = resolveImageUrl(currentImage, true)
 
+  useEffect(() => {
+    if (preloadImages) {
+      setPreloadImages(false)
+    }
+  }, [preloadImages])
+
   return (
     <ImageBrowserContainer>
+      {preloadImages && <PreloadedImages images={images} />}
       <ModalHeader>
         <IconContainer>
           <IconButton
@@ -81,6 +89,26 @@ export const ImageBrowserModal = ({
         </ChevronCircle>
       </ImagePager>
     </ImageBrowserContainer>
+  )
+}
+
+const PreloadedImages = ({ images }: { images: TempImage[] }) => {
+  return (
+    <div style={{ display: 'none' }}>
+      {images.map((image) => {
+        const imageUrl = resolveImageUrl(image, true)
+        return imageUrl ? (
+          <NextImage
+            key={imageUrl}
+            src={imageUrl}
+            priority
+            width={1120}
+            height={805}
+            alt={image?.name ?? ''}
+          />
+        ) : null
+      })}
+    </div>
   )
 }
 

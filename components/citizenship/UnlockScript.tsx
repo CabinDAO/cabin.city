@@ -17,6 +17,7 @@ export const loadUnlockCheckout = async (provider: any) => {
         recurringPayments: 10,
       },
     },
+    useDelegatedProvider: true,
     dataBuilder: `https://${appDomain}/api/unlock/data-builder`,
     pessimistic: true,
     skipRecipient: true,

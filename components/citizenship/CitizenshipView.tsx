@@ -8,35 +8,42 @@ import { loadUnlockCheckout } from './UnlockScript'
 import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
 import { useWallets } from '@privy-io/react-auth'
 import { useChainSwitch } from '../hooks/useChainSwitch'
-import { useCallback, useEffect, useState } from 'react'
+import { addressMatch } from '@/utils/address-match'
+import { useExternalUser } from '../auth/useExternalUser'
 
 export const CitizenshipView = () => {
   const { user } = useProfile({ redirectTo: '/' })
+  const { externalUser } = useExternalUser()
   const { wallets } = useWallets()
-  const [attemptedMint, setAttemptedMint] = useState(false)
 
-  const { handleSwitch, rightChain } = useChainSwitch()
+  const performMint = async () => {
+    const currentUserWallet = wallets.find((w) =>
+      addressMatch(w.address, externalUser?.wallet?.address ?? '')
+    )
 
-  const handleMint = useCallback(async () => {
-    if (!wallets[0] || !rightChain) {
-      handleSwitch()
-      setAttemptedMint(true)
-      return
-    }
+    if (!currentUserWallet) return
 
-    const provider = await wallets[0].getEthereumProvider()
+    const provider = await currentUserWallet.getEthereumProvider()
 
     if (!provider) return
 
     loadUnlockCheckout(provider)
-  }, [handleSwitch, rightChain, wallets])
+  }
 
-  useEffect(() => {
-    if (attemptedMint && rightChain) {
-      handleMint()
-      setAttemptedMint(false)
+  const { handleSwitch, rightChain } = useChainSwitch(performMint)
+
+  const handleMint = async () => {
+    const currentUserWallet = wallets.find((w) =>
+      addressMatch(w.address, externalUser?.wallet?.address ?? '')
+    )
+
+    if (!currentUserWallet || !rightChain) {
+      handleSwitch()
+      return
     }
-  }, [attemptedMint, handleMint, rightChain])
+
+    performMint()
+  }
 
   const [toggleSignal] = useToggleSignalMutation()
 
