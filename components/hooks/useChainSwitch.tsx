@@ -5,6 +5,7 @@ import { useModal } from './useModal'
 import { SwitchNetworkModal } from '../core/SwitchNetworkModal'
 import { useExternalUser } from '../auth/useExternalUser'
 import { useWallets } from '@privy-io/react-auth'
+import { addressMatch } from '@/utils/address-match'
 
 export const useChainSwitch = (afterSwitch?: VoidFunction) => {
   const { hideModal, showLoadingModal } = useModal()
@@ -31,7 +32,10 @@ export const useChainSwitch = (afterSwitch?: VoidFunction) => {
   })
 
   const switchChainForEmbeddedWallet = async () => {
-    const wallet = wallets[0]
+    const wallet =
+      wallets.find((w) =>
+        addressMatch(externalUser?.wallet?.address ?? '', w.address)
+      ) ?? wallets[0]
 
     if (!wallet) return
 
