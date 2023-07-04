@@ -13,11 +13,13 @@ import { AuthenticatedLink } from './AuthenticatedLink'
 interface ProfileContactProps {
   profile: ProfileFragment
   caretakerEmail?: string | null | undefined
+  onContact?: () => void
 }
 
 export const ProfileContact = ({
   profile,
   caretakerEmail,
+  onContact,
 }: ProfileContactProps) => {
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.role)
@@ -54,7 +56,9 @@ export const ProfileContact = ({
 
       <ContactContainer>
         <AuthenticatedLink href={`mailto:${caretakerEmail ?? profile.email}`}>
-          <ContactButton variant="tertiary">Contact</ContactButton>
+          <ContactButton onClick={onContact} variant="tertiary">
+            Contact
+          </ContactButton>
         </AuthenticatedLink>
       </ContactContainer>
     </ProfileContactContainer>

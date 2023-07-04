@@ -26,6 +26,7 @@ export const CollapsibleInfoSection = (props: CollapsibleInfoSectionProps) => {
         <ImageContainer deviceSize={deviceSize}>
           {isMobile ? (
             <ImageFlex
+              sizes={`${IMAGE_WIDTH_PX}px`}
               aspectRatio={1}
               src={props.data.image}
               alt={props.data.title}
