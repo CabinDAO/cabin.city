@@ -23,6 +23,7 @@ import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
+import events from '@/lib/googleAnalytics/events'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -282,6 +283,7 @@ export const LocationView = ({
             <CaretakerDetailsContainer>
               <CaretakerDetails>
                 <ProfileContact
+                  onContact={() => events.contactCaretakerEvent(caretaker._id)}
                   caretakerEmail={caretakerEmail}
                   profile={caretaker}
                 />

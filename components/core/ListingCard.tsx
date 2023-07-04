@@ -79,6 +79,8 @@ export const ListingCard = (props: LocationCardProps) => {
         <ImageContainer>
           {bannerImageUrl ? (
             <ImageFlex
+              sizes={`${BANNER_IMAGE_WIDTH}px`}
+              quality={40}
               aspectRatio={BANNER_IMAGE_WIDTH / BANNER_IMAGE_HEIGHT}
               src={bannerImageUrl}
               alt={name}

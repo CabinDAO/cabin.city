@@ -85,7 +85,13 @@ export const LocationCard = (props: LocationCardProps) => {
       >
         <ImageContainer>
           {bannerImageUrl ? (
-            <StyledImage priority src={bannerImageUrl} fill alt={name} />
+            <StyledImage
+              quality={40}
+              src={bannerImageUrl}
+              sizes={`${BANNER_IMAGE_SIZE}px`}
+              fill
+              alt={name}
+            />
           ) : (
             <EmptyImageContainer>
               <Icon name="mountain" size={6} color="yellow500" />

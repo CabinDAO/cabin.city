@@ -11,6 +11,7 @@ export const CitizenCard = ({ hovered }: CitizenCardProps) => {
     <ZoomInCard hovered={hovered}>
       <ContentContainer>
         <ImageFlex
+          sizes="40rem"
           alt="Verified Citizen"
           aspectRatio={1}
           src="/images/citizenship-thumbnail.png"

@@ -29,6 +29,7 @@ import { isNotNull } from '@/lib/data'
 import { formatRange, formatUrl } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
+import events from '@/lib/googleAnalytics/events'
 
 const EMPTY = '—'
 
@@ -99,6 +100,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
               <ImageFlex
                 aspectRatio={1.5}
                 fill
+                sizes="451px"
                 src={imageUrl}
                 alt={title ?? ''}
               />
@@ -120,7 +122,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   </LocationSubline2>
                 </OfferDetailsOverview>
 
-                <ApplyButton applyUrl={applyUrl} />
+                <ApplyButton applyUrl={applyUrl} experienceId={offer._id} />
               </OfferDetailsHeader>
 
               <OfferDetailsSection>
@@ -158,9 +160,10 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
 
 interface ApplyButtonProps {
   applyUrl?: string | null
+  experienceId: string
 }
 
-const ApplyButton = ({ applyUrl }: ApplyButtonProps) => {
+const ApplyButton = ({ applyUrl, experienceId }: ApplyButtonProps) => {
   if (!applyUrl) {
     return (
       <ApplyNowButton startAdornment={<Icon name="lock" size={1.6} />} disabled>
@@ -169,7 +172,12 @@ const ApplyButton = ({ applyUrl }: ApplyButtonProps) => {
     )
   } else {
     return (
-      <a href={applyUrl} target="_blank" rel="noreferrer">
+      <a
+        onClick={() => events.applyToExperienceEvent(experienceId)}
+        href={applyUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
         <ApplyNowButton>Apply now</ApplyNowButton>
       </a>
     )

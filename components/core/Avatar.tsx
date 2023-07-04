@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
 import LoadingSpinner from './LoadingSpinner'
+import { remToPx } from '@/utils/display-utils'
 
 interface AvatarProps {
   src?: string
@@ -34,7 +35,7 @@ export const Avatar = ({
       ) : (
         <StyledImage
           fill
-          sizes="100%"
+          sizes={`${remToPx(size ?? 3.2)}px`}
           alt="Avatar"
           src={src ?? '/images/default-avatar.png'}
         />
