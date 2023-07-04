@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Button } from '../core/Button'
 import { Body2, H2 } from '../core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import events from '@/lib/googleAnalytics/events'
 
 type CTAConfig = {
   title: string
@@ -15,12 +16,14 @@ interface CitizenshipCTAProps {
   status: CitizenshipStatus | undefined | null
   onClick(): void
   canMint: boolean
+  profileId: string
 }
 
 export const CitizenshipCTA = ({
   status,
   onClick,
   canMint,
+  profileId,
 }: CitizenshipCTAProps) => {
   let config: CTAConfig = {} as CTAConfig
 
@@ -54,6 +57,7 @@ export const CitizenshipCTA = ({
       button: () => (
         <a
           href={EXTERNAL_LINKS.VOUCH_REQUEST_DISCORD_CHANNEL}
+          onClick={() => events.citizenshipShareDiscordEvent(profileId)}
           target="_blank"
           rel="noreferrer"
         >

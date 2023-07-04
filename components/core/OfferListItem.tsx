@@ -16,6 +16,7 @@ import { H6 } from '@/components/core/Typography'
 import { Button } from './Button'
 import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
+import events from '@/lib/googleAnalytics/events'
 
 export interface OfferListItemProps {
   className?: string
@@ -94,6 +95,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
     <ListItem
       authenticated
       href={actionsEnabled ? `/offer/${_id}/edit` : `/offer/${_id}`}
+      onClick={() => events.viewExperiencesEvent(_id)}
     >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>

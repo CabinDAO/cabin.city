@@ -5,6 +5,7 @@ import {
 } from '@/utils/nav/types'
 import IconLink from '../IconLink'
 import { Tooltip } from '../Tooltip'
+import events from '@/lib/googleAnalytics/events'
 
 interface MenuItemLinkProps {
   menuItem: MenuItemOption
@@ -21,6 +22,14 @@ export const MenuItemLink = ({
     ? MenuItemsAuthenticatedMap[menuItem]
     : MenuItemsUnauthenticatedMap[menuItem]
 
+  const handleClick = () => {
+    events.navBarEvent(menuItem)
+
+    if (menuItem === 'signIn') {
+      events.signInEvent()
+    }
+  }
+
   if (!menuItemConfig) return null
 
   return (
@@ -35,6 +44,7 @@ export const MenuItemLink = ({
         size={menuItemConfig.iconSize ?? 2.5}
         color={'green400'}
         href={menuItemConfig.path}
+        onIconClick={handleClick}
       />
     </Tooltip>
   )

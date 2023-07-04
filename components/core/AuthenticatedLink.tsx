@@ -9,14 +9,16 @@ interface AuthenticatedLinkProps {
   href?: string
   children: React.ReactNode
   className?: string
+  logSignInEvent?: boolean
 }
 
 export const AuthenticatedLink = ({
   href,
   children,
   className,
+  logSignInEvent,
 }: AuthenticatedLinkProps) => {
-  const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { confirmLoggedIn } = useConfirmLoggedIn(logSignInEvent)
   const { refetchProfile } = useProfile()
   const { externalUser } = useExternalUser()
   const router = useRouter()
