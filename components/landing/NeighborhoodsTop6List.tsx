@@ -7,6 +7,7 @@ import { useLocationVote } from '../hooks/useLocationVote'
 import { isNotNull } from '@/lib/data'
 import { Button } from '@/components/core/Button'
 import { ListingCard } from '../core/ListingCard'
+import events from '@/lib/googleAnalytics/events'
 
 export const NeighborhoodsTop6List = () => {
   const { voteForLocation } = useLocationVote()
@@ -35,7 +36,10 @@ export const NeighborhoodsTop6List = () => {
           )
         })}
       </NeighborhoodsTop6ListContainer>
-      <Link href="/city-directory/neighborhoods">
+      <Link
+        onClick={() => events.viewCityDirectoryEvent()}
+        href="/city-directory/neighborhoods"
+      >
         <Button variant="secondary" isFullWidth>
           View the City Directory
         </Button>

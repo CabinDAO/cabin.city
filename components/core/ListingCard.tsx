@@ -10,6 +10,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
+import events from '@/lib/googleAnalytics/events'
 
 export interface LocationCardProps {
   _id: string
@@ -73,10 +74,13 @@ export const ListingCard = (props: LocationCardProps) => {
         prefetch={prefetch}
         shallow
         passHref
+        onClick={() => events.viewCityDirectoryEvent(_id)}
       >
         <ImageContainer>
           {bannerImageUrl ? (
             <ImageFlex
+              sizes={`${BANNER_IMAGE_WIDTH}px`}
+              quality={40}
               aspectRatio={BANNER_IMAGE_WIDTH / BANNER_IMAGE_HEIGHT}
               src={bannerImageUrl}
               alt={name}

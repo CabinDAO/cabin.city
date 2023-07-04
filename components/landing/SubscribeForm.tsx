@@ -8,11 +8,33 @@ import {
   subline2Styles,
 } from '@/components/core/Typography'
 import theme from '@/styles/theme'
+import { useEvent } from 'react-use'
+import events from '@/lib/googleAnalytics/events'
 
 export const SubscribeForm = () => {
   const contentRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement | null>(null)
   const [isFormReady, setIsFormReady] = useState(false)
+
+  useEvent(
+    'click',
+    (e) => {
+      if (formRef.current) {
+        const button = formRef.current.querySelector('button')
+
+        if (button && button.contains(e.target as Node)) {
+          const input = formRef.current.querySelector('input')
+
+          if (input && input.value) {
+            events.subscribeToNewsletterEvent(input.value)
+          }
+
+          e.stopPropagation()
+        }
+      }
+    },
+    formRef.current
+  )
 
   useEffect(() => {
     if (

@@ -8,6 +8,7 @@ import styled, { css } from 'styled-components'
 import Icon from '../Icon'
 import { Subline1 } from '../Typography'
 import { AuthenticatedLink } from '../AuthenticatedLink'
+import events from '@/lib/googleAnalytics/events'
 
 interface MobileMenuItemProps {
   menuItem: MenuItemOption
@@ -24,19 +25,27 @@ export const MobileMenuItem = ({
     ? MenuItemsAuthenticatedMap[menuItem]
     : MenuItemsUnauthenticatedMap[menuItem]
 
+  const handleClick = () => {
+    events.navBarEvent(menuItem)
+
+    if (menuItem === 'signIn') {
+      events.signInEvent()
+    }
+  }
+
   if (!menuItemConfig) return null
 
   if (authenticated) {
     return (
-      <StyledAuthenticatingLink>
+      <StyledAuthenticatedLink logSignInEvent={menuItem === 'signIn'}>
         <Icon name={menuItemConfig.icon} size={1.9} color={'green400'} />
         <Subline1 $color="yellow100">{menuItemConfig.displayText}</Subline1>
-      </StyledAuthenticatingLink>
+      </StyledAuthenticatedLink>
     )
   }
 
   return (
-    <StyledLink href={menuItemConfig.path}>
+    <StyledLink onClick={handleClick} href={menuItemConfig.path}>
       <Icon name={menuItemConfig.icon} size={1.9} color={'green400'} />
       <Subline1 $color="yellow100">{menuItemConfig.displayText}</Subline1>
     </StyledLink>
@@ -56,6 +65,6 @@ const StyledLink = styled(Link)`
   ${linkStyles}
 `
 
-const StyledAuthenticatingLink = styled(AuthenticatedLink)`
+const StyledAuthenticatedLink = styled(AuthenticatedLink)`
   ${linkStyles}
 `

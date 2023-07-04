@@ -4,6 +4,7 @@ import { ModalContainer } from '../core/modals/ModalContainer'
 import { Body2, H4, Subline1 } from '../core/Typography'
 import { ModalActionBar } from '../core/modals/ModalActionBar'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import events from '@/lib/googleAnalytics/events'
 
 export const CitizenshipModal = () => {
   return (
@@ -40,6 +41,9 @@ export const CitizenshipModal = () => {
       <ModalActionBar
         text="Contact Us"
         locationHref={EXTERNAL_LINKS.CITIZENSHIP_CONTACT_US}
+        onActionClick={() =>
+          events.externalLinkEvent(EXTERNAL_LINKS.CITIZENSHIP_CONTACT_US)
+        }
       />
     </CitizenshipModalContainer>
   )

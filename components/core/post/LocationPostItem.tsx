@@ -40,6 +40,7 @@ export const LocationPostItem = ({
               alt={name ?? 'Location'}
               src={bannerImageUrl}
               width={9.6}
+              sizes={`96px`}
             />
           ) : null}
         </ImageContainer>

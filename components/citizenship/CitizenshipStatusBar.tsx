@@ -12,6 +12,7 @@ interface CitizenshipStatusBarProps {
   approvedDueToCabinBalance: boolean
   onMint(): void
   onSignal(): void
+  profileId: string
 }
 
 export const CitizenshipStatusBar = ({
@@ -19,6 +20,7 @@ export const CitizenshipStatusBar = ({
   onMint,
   onSignal,
   approvedDueToCabinBalance,
+  profileId,
 }: CitizenshipStatusBarProps) => {
   const { deviceSize } = useDeviceSize()
 
@@ -73,6 +75,7 @@ export const CitizenshipStatusBar = ({
             />
           </CitizenStatusProgress>
           <CitizenshipCTA
+            profileId={profileId}
             status={status}
             onClick={canMint ? onMint : onSignal}
             canMint={!!canMint}

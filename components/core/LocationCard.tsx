@@ -12,6 +12,7 @@ import { emptyFunction } from '@/utils/general'
 import { EMPTY, truncate } from '@/utils/display-utils'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import Link from 'next/link'
+import events from '@/lib/googleAnalytics/events'
 
 export interface LocationCardProps {
   _id: string
@@ -80,10 +81,17 @@ export const LocationCard = (props: LocationCardProps) => {
       <ContainerLink
         href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
         shallow
+        onClick={() => events.viewCityDirectoryEvent(_id)}
       >
         <ImageContainer>
           {bannerImageUrl ? (
-            <StyledImage priority src={bannerImageUrl} fill alt={name} />
+            <StyledImage
+              quality={40}
+              src={bannerImageUrl}
+              sizes={`${BANNER_IMAGE_SIZE}px`}
+              fill
+              alt={name}
+            />
           ) : (
             <EmptyImageContainer>
               <Icon name="mountain" size={6} color="yellow500" />

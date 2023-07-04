@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { MeFragment, useLogTrackingEventMutation } from '@/generated/graphql'
 import { hasEventOccurred, TrackingEvent } from '@/lib/tracking-events'
 import { Button } from '@/components/core/Button'
+import events from '@/lib/googleAnalytics/events'
 
 interface ProfileSetupSectionProps {
   profileId: string
@@ -45,6 +46,8 @@ export const ProfileSetupSection = ({
   }
 
   const handleTwitterShareClick = () => {
+    events.shareEvent('twitter', 'profile_setup', profileId)
+
     const text = encodeURIComponent(
       `I'm live on the @cabindotcity Census. Check it out on cabin.city.`
     )

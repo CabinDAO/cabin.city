@@ -3,24 +3,29 @@ import styled from 'styled-components'
 import { Button } from '../Button'
 
 interface ModalActionBarProps {
-  onClick?: () => void
+  onActionClick?: () => void
   locationHref?: string
   text: string
 }
 
 export const ModalActionBar = (props: ModalActionBarProps) => {
   const { hideModal } = useModal()
-  const { text, onClick, locationHref } = props
+  const { text, onActionClick, locationHref } = props
 
   const handleActionClick = () => {
-    onClick?.()
+    onActionClick?.()
     hideModal()
   }
 
   if (locationHref) {
     return (
       <Container>
-        <a href={locationHref} target="_blank" rel="noreferrer">
+        <a
+          href={locationHref}
+          onClick={handleActionClick}
+          target="_blank"
+          rel="noreferrer"
+        >
           <Button isFullWidth onClick={handleActionClick}>
             {text}
           </Button>

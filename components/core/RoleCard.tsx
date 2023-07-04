@@ -97,6 +97,7 @@ export const RoleCard = ({
         <ContentContainer>
           <InnerContainer variant={variant} paddingSize={paddingSize}>
             <Image
+              quality={40}
               src={roleInfo.imagePath}
               alt={roleInfo.name}
               width={ImageSize[variant][deviceSize]}

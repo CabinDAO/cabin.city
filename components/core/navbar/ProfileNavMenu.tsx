@@ -8,6 +8,8 @@ import { Avatar } from '../Avatar'
 import { HorizontalDivider } from '../Divider'
 import Icon from '../Icon'
 import { Caption, Subline1 } from '../Typography'
+import events from '@/lib/googleAnalytics/events'
+import { MenuItemOption } from '@/utils/nav/types'
 
 interface ProfileNavMenuProps {
   visible: boolean
@@ -23,6 +25,10 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
 
   if (!user) {
     return null
+  }
+
+  const handleClick = (menuItemOption: MenuItemOption) => {
+    events.navBarEvent(menuItemOption)
   }
 
   return (
@@ -41,7 +47,10 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
         },
       }}
     >
-      <ProfileLink href={`/profile/${user._id}`}>
+      <ProfileLink
+        onClick={() => handleClick('profile')}
+        href={`/profile/${user._id}`}
+      >
         <Avatar size={2.4} src={user.avatar?.url} />
         <Name>
           <Subline1 $color="yellow100">{user.name}</Subline1>
@@ -50,11 +59,17 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
       </ProfileLink>
       <HorizontalDivider opaque />
       <ProfileMenuItemsContainer>
-        <ProfileMenuItem href="/citizenship">
+        <ProfileMenuItem
+          onClick={() => handleClick('citizenship')}
+          href="/citizenship"
+        >
           <Icon name="citizen" size={2} color="green400" />
           <Subline1 $color="yellow100">Citizenship</Subline1>
         </ProfileMenuItem>
-        <ProfileMenuItem href="/my-locations">
+        <ProfileMenuItem
+          onClick={() => handleClick('myLocations')}
+          href="/my-locations"
+        >
           <Icon name="draft-proposal" size={2} color="green400" />
           <MenuItemWithNote>
             <Subline1 $color="yellow100">My Locations</Subline1>
@@ -63,7 +78,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
             </Caption>
           </MenuItemWithNote>
         </ProfileMenuItem>
-        <ProfileMenuItem href="/logout">
+        <ProfileMenuItem onClick={() => handleClick('signOut')} href="/logout">
           <Icon name="sign-out" size={2} color="green400" />
           <Subline1 $color="yellow100">Sign out</Subline1>
         </ProfileMenuItem>

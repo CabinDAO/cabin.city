@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { Body1, H4, Subline1 } from '../core/Typography'
 import IconButton from '../core/IconButton'
+import events from '@/lib/googleAnalytics/events'
 
 interface CollapsibleItemProps {
   title: string
@@ -23,8 +24,15 @@ export const CollapsibleItem = ({
     e.stopPropagation()
   }
 
+  const handleQuestionClick = () => {
+    if (!open) {
+      events.faqItemExpand(title)
+    }
+    toggleOpen(index)
+  }
+
   return (
-    <Container onClick={() => toggleOpen(index)}>
+    <Container onClick={handleQuestionClick}>
       <TitleContainer>
         <Title>
           <Subline1 $color="yellow600">0{index + 1}</Subline1>
