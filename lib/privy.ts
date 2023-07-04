@@ -8,6 +8,7 @@ const credentials = Buffer.from(
 export const privyAPICall = async (
   path: string,
   method: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body: any = {}
 ) => {
   return await fetch(`${PRIVY_REST_API_BASE}/${path}`, {

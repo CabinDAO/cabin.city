@@ -4,6 +4,7 @@ import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
+import events from '@/lib/googleAnalytics/events'
 
 interface FooterProps {
   className?: string
@@ -15,16 +16,24 @@ export const Footer = ({ children, className }: FooterProps) => (
     <FooterNavigation>
       <FooterNavigationList>
         <FooterNavigationHeader>Product</FooterNavigationHeader>
-        <AppLink location="/city-directory/neighborhoods" iconSize={0}>
+        <AppLink
+          onClick={() => events.viewCityDirectoryEvent()}
+          location="/city-directory/neighborhoods"
+          iconSize={0}
+        >
           <FooterItem>City Directory</FooterItem>
         </AppLink>
-        <AppLink location="/offers" iconSize={0}>
+        <AppLink
+          onClick={() => events.viewExperiencesEvent()}
+          location="/offers"
+          iconSize={0}
+        >
           <FooterItem>Experiences</FooterItem>
         </AppLink>
         <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
           <FooterItem>Citizenship</FooterItem>
         </AppLink>
-        <AuthenticatedLink href="/dashboard">
+        <AuthenticatedLink logSignInEvent href="/dashboard">
           <FooterItem>Sign In</FooterItem>
         </AuthenticatedLink>
         <AppLink

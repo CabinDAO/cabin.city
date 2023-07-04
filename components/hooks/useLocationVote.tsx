@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { CastLocationVotesBody } from '@/pages/api/cast-location-votes'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { usePrivy } from '@privy-io/react-auth'
+import events from '@/lib/googleAnalytics/events'
 
 export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
@@ -21,6 +22,7 @@ export const useLocationVote = (afterVote?: () => void) => {
 
   const voteForLocation = useCallback(
     (props: Pick<LocationVoteModalWithDataProps, 'location'>) => {
+      events.voteModalEvent(props.location._id)
       confirmLoggedIn(() => {
         showModal(() => (
           <LocationVodalModalWithData

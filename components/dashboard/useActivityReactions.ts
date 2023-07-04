@@ -3,6 +3,7 @@ import {
   useLikeActivityMutation,
   useUnlikeActivityMutation,
 } from '@/generated/graphql'
+import events from '@/lib/googleAnalytics/events'
 import { useCallback } from 'react'
 
 export const useActivityReactions = () => {
@@ -11,6 +12,8 @@ export const useActivityReactions = () => {
 
   const handleLikeActivity = useCallback(
     (activityItem: ActivityItemFragment) => {
+      events.reactToPostEvent(activityItem.activity._id, 'like')
+
       likeActivity({
         variables: {
           id: activityItem.activity._id,
@@ -22,6 +25,8 @@ export const useActivityReactions = () => {
 
   const handleUnlikeActivity = useCallback(
     (activityItem: ActivityItemFragment) => {
+      events.reactToPostEvent(activityItem.activity._id, 'unlike')
+
       unlikeActivity({
         variables: {
           id: activityItem.activity._id,

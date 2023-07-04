@@ -21,6 +21,7 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
+import events from '@/lib/googleAnalytics/events'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
@@ -49,6 +50,9 @@ export const LandingView = () => {
                   href={EXTERNAL_LINKS.VISION}
                   target="_blank"
                   rel="noreferrer"
+                  onClick={() =>
+                    events.externalLinkEvent(EXTERNAL_LINKS.VISION)
+                  }
                 >
                   <Button
                     endAdornment={<Icon name="up-right-arrow" size={0.9} />}
@@ -57,7 +61,7 @@ export const LandingView = () => {
                     View our vision
                   </Button>
                 </a>
-                <AuthenticatedLink href="/dashboard">
+                <AuthenticatedLink href="/dashboard" logSignInEvent>
                   <Button>{externalUser ? 'View Dashboard' : 'Sign In'}</Button>
                 </AuthenticatedLink>
               </SectionGrowSignup>

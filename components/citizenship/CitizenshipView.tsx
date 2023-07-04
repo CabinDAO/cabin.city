@@ -10,6 +10,7 @@ import { useWallets } from '@privy-io/react-auth'
 import { useChainSwitch } from '../hooks/useChainSwitch'
 import { addressMatch } from '@/utils/address-match'
 import { useExternalUser } from '../auth/useExternalUser'
+import events from '@/lib/googleAnalytics/events'
 
 export const CitizenshipView = () => {
   const { user } = useProfile({ redirectTo: '/' })
@@ -33,6 +34,8 @@ export const CitizenshipView = () => {
   const { handleSwitch, rightChain } = useChainSwitch(performMint)
 
   const handleMint = async () => {
+    events.mintEvent(user?._id ?? '')
+
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
     )
@@ -49,6 +52,8 @@ export const CitizenshipView = () => {
 
   const handleToggleSignal = () => {
     if (!user) return
+
+    events.signalInterestEvent(user?._id ?? '')
 
     toggleSignal()
   }
@@ -68,6 +73,7 @@ export const CitizenshipView = () => {
           onMint={handleMint}
           onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
+          profileId={user?._id}
           approvedDueToCabinBalance={
             user?.cabinTokenBalanceInt >= MINIMUM_CABIN_BALANCE
           }

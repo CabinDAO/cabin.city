@@ -11,6 +11,7 @@ import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { useModal } from '../hooks/useModal'
 import { CitizenshipModal } from './CitizenshipModal'
 import { useDeviceSize } from '../hooks/useDeviceSize'
+import events from '@/lib/googleAnalytics/events'
 
 export const JoinSection = () => {
   const { priceInUsd } = usePriceInUsd()
@@ -21,6 +22,7 @@ export const JoinSection = () => {
 
   const handleLearnMoreClick = () => {
     showModal(() => <CitizenshipModal />)
+    events.foundCitizenLearnMoreEvent()
   }
 
   const isDesktop = deviceSize === 'desktop'
