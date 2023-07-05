@@ -59,6 +59,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                   alt={image.name}
                   src={imageUrl}
                   fill
+                  sizes="415px"
                 />
               </ImageSizeContainer>
             ) : null
