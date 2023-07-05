@@ -20,6 +20,7 @@ const GoogleAnalytics = () => {
   return (
     <>
       <Script
+        strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${TRACKING_ID}`}
       ></Script>
       <Script
