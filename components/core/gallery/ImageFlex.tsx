@@ -78,5 +78,6 @@ interface ImageSizingProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const ImageSizing = styled.div<ImageSizingProps>`
+  position: relative;
   padding: ${({ aspectRatio }) => `${50 / aspectRatio}% 0`};
 `
