@@ -137,6 +137,7 @@ export const LocationView = ({
   const bannerWidth = deviceSize === 'tablet' ? 610 : 998
   const bannerHeight = deviceSize === 'tablet' ? 256 : 420
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
+  const imageSizesString = '269px'
 
   return (
     <LocationContent>
@@ -207,6 +208,7 @@ export const LocationView = ({
                   href={`/location/${id}/photos?gallery=features`}
                 >
                   <ImageFlex
+                    sizes={imageSizesString}
                     alt={LocationMediaCategory.Features}
                     src={galleryPreviewFeaturesUrl}
                     width={galleryImageWidth}
@@ -220,6 +222,7 @@ export const LocationView = ({
                   href={`/location/${id}/photos?gallery=sleeping`}
                 >
                   <ImageFlex
+                    sizes={imageSizesString}
                     alt={LocationMediaCategory.Sleeping}
                     src={galleryPreviewSleepingUrl}
                     width={galleryImageWidth}
@@ -233,6 +236,7 @@ export const LocationView = ({
                   href={`/location/${id}/photos?gallery=working`}
                 >
                   <ImageFlex
+                    sizes={imageSizesString}
                     alt={LocationMediaCategory.Working}
                     src={galleryPreviewWorkingUrl}
                     width={galleryImageWidth}
