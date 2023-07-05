@@ -5,11 +5,17 @@ interface MiniChipProps {
   selected: boolean
   label: string
   onClick?: () => void
+  className?: string
 }
 
-export const MiniChip = ({ selected, label, onClick }: MiniChipProps) => {
+export const MiniChip = ({
+  selected,
+  label,
+  onClick,
+  className,
+}: MiniChipProps) => {
   return (
-    <Container selected={selected} onClick={onClick}>
+    <Container className={className} selected={selected} onClick={onClick}>
       <Subline1 $color="yellow900">{label}</Subline1>
     </Container>
   )

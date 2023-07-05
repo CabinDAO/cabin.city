@@ -18,7 +18,7 @@ export const Footer = ({ children, className }: FooterProps) => (
         <FooterNavigationHeader>Product</FooterNavigationHeader>
         <AppLink
           onClick={() => events.viewCityDirectoryEvent()}
-          location="/city-directory/neighborhoods"
+          location="/city-directory"
           iconSize={0}
         >
           <FooterItem>City Directory</FooterItem>

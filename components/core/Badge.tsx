@@ -1,10 +1,10 @@
 import { getImageUrl } from '@/lib/image'
 import { getOtterSpaceOpenseaUrl } from '@/utils/opensea'
 import styled from 'styled-components'
-import { AutofitNextImage } from './AutofitNextImage'
 import Icon from './Icon'
 import { NoWrap } from './NoWrap'
 import { H6 } from './Typography'
+import { ImageFlex } from './gallery/ImageFlex'
 
 interface BadgeProps {
   src: string
@@ -22,7 +22,7 @@ export const Badge = ({ name, src, badgeId }: BadgeProps) => {
   return (
     <BadgeContainer>
       <ImageContainer>
-        <AutofitNextImage src={imageUrl} alt={name} />
+        <ImageFlex src={imageUrl} alt={name} fill sizes={`${IMAGE_SIZE}px`} />
       </ImageContainer>
       <NameContainer>
         <NoWrap>
