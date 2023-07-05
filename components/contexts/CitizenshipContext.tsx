@@ -2,6 +2,7 @@ import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { useExternalUser } from '../auth/useExternalUser'
 import { usePrivy } from '@privy-io/react-auth'
+import { useRouter } from 'next/router'
 
 export const CitizenshipContext = createContext<CitzenshipState | null>(null)
 
@@ -18,11 +19,12 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
   const { externalUser } = useExternalUser()
   const checked = useRef(false)
   const { getAccessToken } = usePrivy()
+  const { asPath } = useRouter()
 
   // Can be used to check if the user's citizenship status has changed
   // Useful for when the user interacts with the Unlock modal
   const checkStatus = useCallback(async () => {
-    if (!externalUser?.wallet?.address) {
+    if (!externalUser?.wallet?.address || asPath === '/') {
       return
     }
 
@@ -46,7 +48,7 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
       }
       checked.current = true
     }
-  }, [refetchProfile, externalUser, getAccessToken])
+  }, [refetchProfile, externalUser, getAccessToken, asPath])
 
   useEffect(() => {
     if (!externalUser || checked.current) {

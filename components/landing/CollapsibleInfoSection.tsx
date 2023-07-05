@@ -26,13 +26,18 @@ export const CollapsibleInfoSection = (props: CollapsibleInfoSectionProps) => {
         <ImageContainer deviceSize={deviceSize}>
           {isMobile ? (
             <ImageFlex
-              sizes={`${IMAGE_WIDTH_PX}px`}
               aspectRatio={1}
               src={props.data.image}
               alt={props.data.title}
+              sizes={`${TABLET_IMAGE_WIDTH_PX}px`}
             />
           ) : (
-            <Image fill src={props.data.image} alt={props.data.title} />
+            <Image
+              fill
+              src={props.data.image}
+              alt={props.data.title}
+              sizes={`${IMAGE_WIDTH_PX}px`}
+            />
           )}
         </ImageContainer>
         <CollapsibleList data={props.data} />
@@ -79,6 +84,7 @@ const ImageContainer = styled.div<{ deviceSize: DeviceSize }>`
   }
 
   ${({ theme }) => theme.bp.md} {
+    position: relative;
     width: ${({ deviceSize }) =>
       pxToRem(
         deviceSize === 'desktop' ? IMAGE_WIDTH_PX : TABLET_IMAGE_WIDTH_PX
