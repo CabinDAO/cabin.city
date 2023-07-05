@@ -1,7 +1,7 @@
 import { LocationType, ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
-import Icon from './Icon'
+import Icon, { IconName } from './Icon'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { emptyFunction } from '@/utils/general'
@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
+import { ColorName } from '@/styles/theme'
 
 export interface LocationCardProps {
   _id: string
@@ -141,18 +142,14 @@ const ExperienceCountTag = (props: LocationCardProps) => {
 
 const ListingTypeTag = (props: LocationCardProps) => {
   const { locationType, position } = props
+  const iconName: IconName =
+    locationType === LocationType.Neighborhood ? 'neighborhood' : 'outpost'
+  const colorName: ColorName =
+    locationType === LocationType.Neighborhood ? 'green400' : 'yellow400'
 
   return (
     <LocationTagContainer>
-      <Icon
-        color="green400"
-        size={1.1}
-        name={
-          locationType === LocationType.Neighborhood
-            ? 'neighborhood'
-            : 'outpost'
-        }
-      />
+      <Icon color={colorName} size={1.1} name={iconName} />
       <Caption $color="yellow100">#{position}</Caption>
     </LocationTagContainer>
   )

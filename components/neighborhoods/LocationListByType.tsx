@@ -4,17 +4,17 @@ import {
   useGetLocationsByLocationTypeQuery,
 } from '@/generated/graphql'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { LocationCard } from '../core/LocationCard'
 import { locationCardPropsFromFragment } from '@/lib/location'
-import styled from 'styled-components'
 import { useLocationVote } from '../hooks/useLocationVote'
 import { useEffect, useState } from 'react'
+import { ListingCard } from '../core/ListingCard'
+import { LocationListContainer } from './styles'
 
-interface LocationListProps {
+interface LocationListByTypeProps {
   locationType: LocationType
 }
 
-export const LocationList = (props: LocationListProps) => {
+export const LocationListByType = (props: LocationListByTypeProps) => {
   const { locationType } = props
   const { data, fetchMore, refetch } = useGetLocationsByLocationTypeQuery({
     variables: { locationType, size: 20, cursor: null },
@@ -52,10 +52,11 @@ export const LocationList = (props: LocationListProps) => {
         }}
         loader="..."
       >
-        {locations.map((location) => {
+        {locations.map((location, index) => {
           const locationCardProps = locationCardPropsFromFragment(location)
           return (
-            <LocationCard
+            <ListingCard
+              position={index + 1}
               key={location._id}
               {...locationCardProps}
               onVote={() =>
@@ -70,13 +71,3 @@ export const LocationList = (props: LocationListProps) => {
     </LocationListContainer>
   )
 }
-
-const LocationListContainer = styled.div`
-  width: 100%;
-
-  .infinite-scroll-component {
-    display: flex;
-    flex-direction: column;
-    gap: 2.4rem;
-  }
-`
