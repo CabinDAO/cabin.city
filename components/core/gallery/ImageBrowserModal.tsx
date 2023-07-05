@@ -78,7 +78,6 @@ export const ImageBrowserModal = ({
         {imageUrl ? (
           <StyledImageNextImage
             src={imageUrl}
-            priority
             width={1120}
             height={805}
             alt={currentImage?.name ?? ''}
