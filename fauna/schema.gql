@@ -28,6 +28,8 @@ type Query {
   myVouchesThisYear: Int! @resolver(name: "my_vouches_this_year")
   locationsByLocationType(locationType: LocationType!): [Location!]!
     @resolver(name: "get_locations_by_location_type", paginated: true)
+  locationsSortedByVoteCount: [Location!]!
+    @resolver(name: "get_locations_sorted_by_vote_count", paginated: true)
   getOffers(input: GetOffersInput!): [Offer!]!
     @resolver(name: "get_offers", paginated: true)
   getLocationsByIds(ids: [ID!]!): [Location!]!

@@ -33,7 +33,7 @@ export const LocationPageView = () => {
     if (data && !location) {
       router.push('/404')
     } else if (hideFromOthersIfPreview) {
-      router.push('/city-directory/neighborhoods')
+      router.push('/city-directory')
     }
   }, [data, location, router, hideFromOthersIfPreview, user])
 

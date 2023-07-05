@@ -1796,6 +1796,7 @@ export type Query = {
   accountByAddress?: Maybe<Account>;
   getProfiles: QueryGetProfilesPage;
   profileByName?: Maybe<Profile>;
+  locationsSortedByVoteCount: QueryLocationsSortedByVoteCountPage;
   /** Find a document from the collection of 'Activity' by its id. */
   findActivityByID?: Maybe<Activity>;
   getOffers: QueryGetOffersPage;
@@ -1898,6 +1899,12 @@ export type QueryGetProfilesArgs = {
 
 export type QueryProfileByNameArgs = {
   name: Scalars['String'];
+};
+
+
+export type QueryLocationsSortedByVoteCountArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -2069,6 +2076,17 @@ export type QueryLocationsByLocationTypePage = {
   before?: Maybe<Scalars['String']>;
 };
 
+/** The pagination object for elements of type 'Location'. */
+export type QueryLocationsSortedByVoteCountPage = {
+  __typename?: 'QueryLocationsSortedByVoteCountPage';
+  /** The elements of type 'Location' in this page. */
+  data: Array<Maybe<Location>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
 /** The pagination object for elements of type 'Profile'. */
 export type QueryPendingMigrationProfilesPage = {
   __typename?: 'QueryPendingMigrationProfilesPage';
@@ -2215,6 +2233,14 @@ export type GetLocationsByLocationTypeQueryVariables = Exact<{
 
 
 export type GetLocationsByLocationTypeQuery = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
+
+export type GetLocationsSortedByVoteCountQueryVariables = Exact<{
+  size?: InputMaybe<Scalars['Int']>;
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetLocationsSortedByVoteCountQuery = { __typename?: 'Query', locationsSortedByVoteCount: { __typename?: 'QueryLocationsSortedByVoteCountPage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
 
 export type GetNeighborhoodsTop6QueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3275,6 +3301,45 @@ export function useGetLocationsByLocationTypeLazyQuery(baseOptions?: Apollo.Lazy
 export type GetLocationsByLocationTypeQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeQuery>;
 export type GetLocationsByLocationTypeLazyQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeLazyQuery>;
 export type GetLocationsByLocationTypeQueryResult = Apollo.QueryResult<GetLocationsByLocationTypeQuery, GetLocationsByLocationTypeQueryVariables>;
+export const GetLocationsSortedByVoteCountDocument = gql`
+    query GetLocationsSortedByVoteCount($size: Int, $cursor: String) {
+  locationsSortedByVoteCount(_size: $size, _cursor: $cursor) {
+    data {
+      ...LocationItem
+    }
+    after
+  }
+}
+    ${LocationItemFragmentDoc}`;
+
+/**
+ * __useGetLocationsSortedByVoteCountQuery__
+ *
+ * To run a query within a React component, call `useGetLocationsSortedByVoteCountQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLocationsSortedByVoteCountQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLocationsSortedByVoteCountQuery({
+ *   variables: {
+ *      size: // value for 'size'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useGetLocationsSortedByVoteCountQuery(baseOptions?: Apollo.QueryHookOptions<GetLocationsSortedByVoteCountQuery, GetLocationsSortedByVoteCountQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLocationsSortedByVoteCountQuery, GetLocationsSortedByVoteCountQueryVariables>(GetLocationsSortedByVoteCountDocument, options);
+      }
+export function useGetLocationsSortedByVoteCountLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLocationsSortedByVoteCountQuery, GetLocationsSortedByVoteCountQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLocationsSortedByVoteCountQuery, GetLocationsSortedByVoteCountQueryVariables>(GetLocationsSortedByVoteCountDocument, options);
+        }
+export type GetLocationsSortedByVoteCountQueryHookResult = ReturnType<typeof useGetLocationsSortedByVoteCountQuery>;
+export type GetLocationsSortedByVoteCountLazyQueryHookResult = ReturnType<typeof useGetLocationsSortedByVoteCountLazyQuery>;
+export type GetLocationsSortedByVoteCountQueryResult = Apollo.QueryResult<GetLocationsSortedByVoteCountQuery, GetLocationsSortedByVoteCountQueryVariables>;
 export const GetNeighborhoodsTop6Document = gql`
     query GetNeighborhoodsTop6 {
   locationsByLocationType(locationType: Neighborhood, _size: 6) {

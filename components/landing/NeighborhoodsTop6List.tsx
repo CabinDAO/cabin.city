@@ -38,7 +38,7 @@ export const NeighborhoodsTop6List = () => {
       </NeighborhoodsTop6ListContainer>
       <Link
         onClick={() => events.viewCityDirectoryEvent()}
-        href="/city-directory/neighborhoods"
+        href="/city-directory"
       >
         <Button variant="secondary" isFullWidth>
           View the City Directory

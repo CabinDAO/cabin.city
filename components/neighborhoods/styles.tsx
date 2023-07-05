@@ -64,19 +64,29 @@ export const MobileBanner = styled.div`
   }
 `
 
-export const LocationListContainer = styled.div`
-  width: 100%;
-
-  .infinite-scroll-component {
-    display: flex;
-    flex-direction: column;
-    gap: 2.4rem;
-  }
-`
-
 export const VoteButton = styled(Button)`
   padding: 0;
   padding-bottom: 0.2rem;
   width: 4.8rem;
   height: 4.8rem;
+`
+
+export const LocationListContainer = styled.div`
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.green900};
+  background-color: ${({ theme }) => theme.colors.yellow200};
+  padding: 2.4rem;
+
+  .infinite-scroll-component {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    grid-gap: 1.6rem;
+    width: 100%;
+
+    ${({ theme }) => theme.bp.md} {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 3.7rem;
+    }
+  }
 `
