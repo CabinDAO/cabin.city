@@ -10,6 +10,7 @@ interface AuthenticatedLinkProps {
   children: React.ReactNode
   className?: string
   logSignInEvent?: boolean
+  onClick?: () => void
 }
 
 export const AuthenticatedLink = ({
@@ -17,6 +18,7 @@ export const AuthenticatedLink = ({
   children,
   className,
   logSignInEvent,
+  onClick,
 }: AuthenticatedLinkProps) => {
   const { confirmLoggedIn } = useConfirmLoggedIn(logSignInEvent)
   const { refetchProfile } = useProfile()
@@ -33,7 +35,7 @@ export const AuthenticatedLink = ({
 
   if (externalUser) {
     return (
-      <Link className={className} href={path}>
+      <Link onClick={onClick} className={className} href={path}>
         {children}
       </Link>
     )

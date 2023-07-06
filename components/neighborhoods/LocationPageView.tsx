@@ -32,7 +32,7 @@ export const LocationPageView = () => {
   useEffect(() => {
     if (data && !location) {
       router.push('/404')
-    } else if (hideFromOthersIfPreview) {
+    } else if (user && hideFromOthersIfPreview) {
       router.push('/city-directory')
     }
   }, [data, location, router, hideFromOthersIfPreview, user])
@@ -41,6 +41,9 @@ export const LocationPageView = () => {
     return null
   }
 
+  const previewMode =
+    user?._id === location.caretaker._id && !location.publishedAt
+
   const backRoute = `/location/${location._id}/edit`
 
   const handleVote = () => {
@@ -48,9 +51,6 @@ export const LocationPageView = () => {
       location,
     })
   }
-
-  const previewMode =
-    user?._id === location.caretaker._id && !location.publishedAt
 
   const handlePublish = async () => {
     showModal(() => <PublishModal locationId={location._id} />)

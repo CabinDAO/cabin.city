@@ -17,13 +17,13 @@ import Icon from '@/components/core/Icon'
 import { ProfilesCount } from '@/components/core/ProfilesCount'
 import { Button } from '@/components/core/Button'
 import { resolveImageUrl } from '@/lib/image'
-import { OffersList } from '@/components/offers/OffersList'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
 import events from '@/lib/googleAnalytics/events'
+import { ExperienceList } from '../offers/ExperienceList'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -260,7 +260,7 @@ export const LocationView = ({
           <SectionHeader>
             <H3>Experience</H3>
           </SectionHeader>
-          <OffersList offers={offers} />
+          <ExperienceList offers={offers} />
         </Section>
       )}
       <Section>
