@@ -7,7 +7,7 @@ import {
 } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body1, Caption, H2, H4, Subline1 } from './Typography'
-import { OfferPriceUnitMap } from '@/utils/offer'
+import { OfferPriceUnitMap, offerInfoFromType } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { centsToUSD, formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
@@ -81,6 +81,7 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
     citizenshipRequired ||
     minimunCabinBalance
 
+  const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const inactive = endDate && endDate < new Date()
 
   return (
@@ -105,7 +106,7 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
-            <Caption emphasized>{offerType}</Caption>
+            <Caption emphasized>{offerInfo?.name}</Caption>
             <NameH2>{title}</NameH2>
             <Caption>{formattedLocation}</Caption>
             {isDisplayingEligibility && (

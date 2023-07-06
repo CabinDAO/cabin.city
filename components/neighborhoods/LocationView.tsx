@@ -24,6 +24,7 @@ import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
 import events from '@/lib/googleAnalytics/events'
+import { ExperienceList } from '../offers/ExperienceList'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -260,7 +261,7 @@ export const LocationView = ({
           <SectionHeader>
             <H3>Experience</H3>
           </SectionHeader>
-          <OffersList offers={offers} />
+          <ExperienceList offers={offers} />
         </Section>
       )}
       <Section>
