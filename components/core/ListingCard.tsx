@@ -33,7 +33,6 @@ export interface LocationCardProps {
   editMode?: boolean
   hideNeighborTag?: boolean
   position?: number
-  prefetch?: boolean
   className?: string
   variant?: CardVariant
 }
@@ -63,7 +62,6 @@ export const ListingCard = (props: LocationCardProps) => {
     className,
     variant = 'city-directory',
     editMode = false,
-    prefetch = true,
   } = props
 
   const name = props.name ?? 'New Listing'
@@ -78,7 +76,6 @@ export const ListingCard = (props: LocationCardProps) => {
     <OuterContainer variant={variant} widthPx={cardWidth} className={className}>
       <ContainerLink
         href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
-        prefetch={prefetch}
         shallow
         passHref
         onClick={() => events.viewCityDirectoryEvent(_id)}

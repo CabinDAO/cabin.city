@@ -24,7 +24,6 @@ export const NeighborhoodsTop6List = () => {
           return (
             <ListingCard
               variant="home"
-              prefetch={false}
               key={location._id}
               position={index + 1}
               {...locationCardProps}
