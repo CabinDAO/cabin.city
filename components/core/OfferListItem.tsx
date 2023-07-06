@@ -90,13 +90,13 @@ export const OfferListItem = (props: OfferListItemProps) => {
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push(`/offer/${_id}/edit`)
+    router.push(`/experience/${_id}/edit`)
   }
 
   return (
     <ListItem
       authenticated
-      href={actionsEnabled ? `/offer/${_id}/edit` : `/offer/${_id}`}
+      href={actionsEnabled ? `/experience/${_id}/edit` : `/experience/${_id}`}
       onClick={() => events.viewExperiencesEvent(_id)}
     >
       <InnerContainer>

@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import {
   GetOffersInput,
   OfferItemFragment,
@@ -7,12 +6,12 @@ import {
   useGetOffersQuery,
 } from '@/generated/graphql'
 import { useMemo } from 'react'
-import { List } from '../core/List'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { useProfile } from '../auth/useProfile'
 import { ExperienceCard } from '../core/ExperienceCard'
+import { ExperienceListContainer } from './styles'
 
 interface OfferTabListProps {
   offerType?: OfferType
@@ -39,6 +38,7 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
     },
   })
 
+  // Exclude offers belonging to locations that are not published
   const offers = useMemo(
     () =>
       data?.getOffers.data.filter(
@@ -50,7 +50,7 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
   const dataLength = offers.length
 
   return (
-    <ExperienceListContainer>
+    <ExperienceListContainer withScroll>
       <InfiniteScroll
         hasMore={!!hasMore}
         dataLength={dataLength}
@@ -76,23 +76,3 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
     </ExperienceListContainer>
   )
 }
-
-export const ExperienceListContainer = styled.div`
-  width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.green900};
-  background-color: ${({ theme }) => theme.colors.yellow200};
-  padding: 2.4rem;
-
-  .infinite-scroll-component {
-    display: grid;
-    grid-template-columns: 1fr;
-    flex-direction: column;
-    grid-gap: 1.6rem;
-    width: 100%;
-
-    ${({ theme }) => theme.bp.md} {
-      grid-template-columns: 1fr 1fr;
-      row-gap: 3.7rem;
-    }
-  }
-`

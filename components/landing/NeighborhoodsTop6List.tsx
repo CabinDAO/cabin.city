@@ -23,6 +23,7 @@ export const NeighborhoodsTop6List = () => {
           const locationCardProps = locationCardPropsFromFragment(location)
           return (
             <ListingCard
+              variant="home"
               prefetch={false}
               key={location._id}
               position={index + 1}

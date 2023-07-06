@@ -258,11 +258,9 @@ export const LocationView = ({
       {!!offers.length && (
         <Section>
           <SectionHeader>
-            <H3>Experiences</H3>
+            <H3>Experience</H3>
           </SectionHeader>
-          <SectionContent>
-            <OffersList offers={offers} />
-          </SectionContent>
+          <OffersList offers={offers} />
         </Section>
       )}
       <Section>

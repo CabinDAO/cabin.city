@@ -13,6 +13,7 @@ import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
 import { ColorName } from '@/styles/theme'
 
+type CardVariant = 'home' | 'city-directory'
 export interface LocationCardProps {
   _id: string
   locationType: LocationType
@@ -33,6 +34,8 @@ export interface LocationCardProps {
   hideNeighborTag?: boolean
   position?: number
   prefetch?: boolean
+  className?: string
+  variant?: CardVariant
 }
 
 interface Caretaker {
@@ -45,7 +48,6 @@ interface Voter {
   avatar?: ProfileAvatar | null | undefined
 }
 
-const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
 
 export const ListingCard = (props: LocationCardProps) => {
@@ -58,6 +60,8 @@ export const ListingCard = (props: LocationCardProps) => {
     sleepCapacity,
     onDelete,
     onEdit,
+    className,
+    variant = 'city-directory',
     editMode = false,
     prefetch = true,
   } = props
@@ -68,8 +72,10 @@ export const ListingCard = (props: LocationCardProps) => {
 
   const truncatedName = deviceSize === 'tablet' ? truncate(name, 30) : name
 
+  const cardWidth = variant === 'home' ? 412 : 388
+
   return (
-    <OuterContainer>
+    <OuterContainer variant={variant} widthPx={cardWidth} className={className}>
       <ContainerLink
         href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
         prefetch={prefetch}
@@ -77,12 +83,12 @@ export const ListingCard = (props: LocationCardProps) => {
         passHref
         onClick={() => events.viewCityDirectoryEvent(_id)}
       >
-        <ImageContainer>
+        <ImageContainer widthPx={cardWidth}>
           {bannerImageUrl ? (
             <ImageFlex
-              sizes={`${BANNER_IMAGE_WIDTH}px`}
+              sizes={`${cardWidth}px`}
               quality={40}
-              aspectRatio={BANNER_IMAGE_WIDTH / BANNER_IMAGE_HEIGHT}
+              aspectRatio={cardWidth / BANNER_IMAGE_HEIGHT}
               src={bannerImageUrl}
               alt={name}
             />
@@ -166,12 +172,22 @@ const EmptyImageContainer = styled.div`
   border: solid 1px ${({ theme }) => theme.colors.green900};
 `
 
-const OuterContainer = styled.div`
+const OuterContainer = styled.div<{ widthPx: number; variant: CardVariant }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.yellow200};
-  max-width: ${BANNER_IMAGE_WIDTH}px;
+  max-width: ${({ widthPx }) => widthPx}px;
+
+  ${({ variant, widthPx, theme }) => {
+    if (variant === 'home') {
+      return `
+        ${theme.bp.lg} {
+          width: ${widthPx}px;
+        }
+        `
+    }
+  }}
 `
 
 const ContainerLink = styled(Link)`
@@ -181,12 +197,12 @@ const ContainerLink = styled(Link)`
   gap: 1.6rem;
 `
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.div<{ widthPx: number }>`
   position: relative;
   width: 100%;
   border: solid 1px ${({ theme }) => theme.colors.green900};
   ${({ theme }) => theme.bp.md} {
-    max-width: ${BANNER_IMAGE_WIDTH}px;
+    max-width: ${({ widthPx }) => widthPx}px;
   }
   img {
     object-fit: cover;

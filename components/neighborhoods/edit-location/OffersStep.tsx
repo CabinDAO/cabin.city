@@ -67,7 +67,7 @@ export const OffersStep = ({
       })
 
       if (offer?.createOffer) {
-        router.push(`/offer/${offer.createOffer._id}/edit`)
+        router.push(`/experience/${offer.createOffer._id}/edit`)
       }
     }
   }
@@ -102,7 +102,7 @@ export const OffersStep = ({
             <OfferFormContainer>
               <InputGroup>
                 <StyledDropdown
-                  label="Choose Offer type"
+                  label="Choose Experience type"
                   placeholder="Select"
                   onSelect={handleSelectedOption}
                   options={options}

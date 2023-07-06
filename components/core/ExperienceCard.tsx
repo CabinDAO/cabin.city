@@ -1,4 +1,5 @@
 import {
+  CitizenshipStatus,
   LocationType,
   OfferPrice,
   OfferType,
@@ -6,7 +7,6 @@ import {
 } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body1, Caption, H2, H4, Subline1 } from './Typography'
-import Icon from './Icon'
 import { OfferPriceUnitMap } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { centsToUSD, formatRange } from '@/utils/display-utils'
@@ -15,6 +15,8 @@ import { ImageFlex } from './gallery/ImageFlex'
 import { OfferListItemProps } from './OfferListItem'
 import Link from 'next/link'
 import { HorizontalDivider } from './Divider'
+import { ProfileIcons } from './ProfileIcons'
+import { roleInfoFromType } from '@/utils/roles'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -59,18 +61,32 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
     imageUrl,
     location,
     citizenshipRequired,
+    profileRoleConstraints,
+    minimunCabinBalance,
     price,
+    endDate,
   } = props
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
-
+  const roleInfos = Array.from(
+    new Set(
+      profileRoleConstraints?.map((c) => roleInfoFromType(c.profileRole)) ?? []
+    )
+  )
   const unit = price?.unit ? OfferPriceUnitMap[price.unit] : null
 
+  const isDisplayingEligibility =
+    !!profileRoleConstraints?.length ||
+    citizenshipRequired ||
+    minimunCabinBalance
+
+  const inactive = endDate && endDate < new Date()
+
   return (
-    <OuterContainer>
+    <OuterContainer inactive={!!inactive}>
       <ContainerLink
-        href={`/offer/${_id}`}
+        href={`/experience/${_id}`}
         shallow
         passHref
         onClick={() => events.viewExperiencesEvent(_id)}
@@ -92,14 +108,20 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
             <Caption emphasized>{offerType}</Caption>
             <NameH2>{title}</NameH2>
             <Caption>{formattedLocation}</Caption>
-            {!citizenshipRequired && (
-              <Eligibility>
-                <H6>Eligibility |</H6>
-                <Icon name="citizen" size={1.4} />
-              </Eligibility>
+            {isDisplayingEligibility && (
+              <EligibilityContainer>
+                <H6>Eligibility |&nbsp;</H6>
+                <ProfileIcons
+                  citizenshipStatus={
+                    citizenshipRequired ? CitizenshipStatus.Verified : null
+                  }
+                  roleInfos={roleInfos}
+                  size={1.6}
+                />
+              </EligibilityContainer>
             )}
           </SummaryContainer>
-          {!!price?.unit && (
+          {(price?.amountCents ?? 0) > 0 && (
             <Price>
               <H4>${centsToUSD(price?.amountCents ?? 0)}</H4>
               {!!unit && <Body1>/ {unit}</Body1>}
@@ -122,12 +144,13 @@ const DateRangeTag = (props: OfferListItemProps) => {
   )
 }
 
-const OuterContainer = styled.div`
+const OuterContainer = styled.div<{ inactive: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.yellow200};
   max-width: ${BANNER_IMAGE_WIDTH}px;
+  ${({ inactive }) => inactive && `opacity: 0.5;`}
 `
 
 const ContainerLink = styled(Link)`
@@ -135,14 +158,6 @@ const ContainerLink = styled(Link)`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-`
-
-const Eligibility = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  justify-content: flex-start;
-  align-items: center;
 `
 
 const Price = styled.div`
@@ -179,7 +194,7 @@ const SummaryContainer = styled.div`
   gap: 0.8rem;
 
   ${H2} {
-    line-height: 1;
+    line-height: 1.2;
     margin: 0;
   }
 `
@@ -187,7 +202,7 @@ const SummaryContainer = styled.div`
 const NameH2 = styled(H2)`
   margin-bottom: 0.4rem;
   ${({ theme }) => theme.bp.md} {
-    max-width: 80%;
+    max-width: 90%;
   }
 `
 
@@ -199,4 +214,10 @@ const TagContainer = styled.div`
   padding: 0.7rem 1.2rem;
   border-radius: 0.4rem;
   width: max-content;
+`
+
+const EligibilityContainer = styled.div`
+  display: flex;
+  flex-flow: row;
+  padding-bottom: 0.6rem;
 `
