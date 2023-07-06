@@ -21,16 +21,21 @@ export const OfferPostItem = ({
   if (!offerType) return null
 
   return (
-    <Container href={`/offer/${_id}`}>
+    <Container href={`/experience/${_id}`}>
       <ImageContainer>
         {imageUrl ? (
-          <Image alt={title ?? 'Offer'} src={imageUrl} width={96} height={96} />
+          <Image
+            alt={title ?? 'Experience'}
+            src={imageUrl}
+            width={96}
+            height={96}
+          />
         ) : null}
       </ImageContainer>
       <Data>
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
-        <TruncatedCaption>{`${offerInfoFromType(offerType).name} Offer · ${
+        <TruncatedCaption>{`${offerInfoFromType(offerType).name} Experience · ${
           location.name
         } · ${location.shortAddress}`}</TruncatedCaption>
       </Data>

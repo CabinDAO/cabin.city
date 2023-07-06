@@ -14,17 +14,24 @@ interface CitzenshipProviderProps {
   children: ReactNode
 }
 
+const allowCheckPages = [
+  '/dashboard',
+  '/citizenship',
+  '/profile',
+  '/profile/[id]',
+]
+
 export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
   const { refetchProfile } = useProfile()
   const { externalUser } = useExternalUser()
   const checked = useRef(false)
   const { getAccessToken } = usePrivy()
-  const { asPath } = useRouter()
+  const { pathname } = useRouter()
 
   // Can be used to check if the user's citizenship status has changed
   // Useful for when the user interacts with the Unlock modal
   const checkStatus = useCallback(async () => {
-    if (!externalUser?.wallet?.address || asPath === '/') {
+    if (!externalUser?.wallet?.address || !allowCheckPages.includes(pathname)) {
       return
     }
 
@@ -48,7 +55,7 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
       }
       checked.current = true
     }
-  }, [refetchProfile, externalUser, getAccessToken, asPath])
+  }, [refetchProfile, externalUser, getAccessToken, pathname])
 
   useEffect(() => {
     if (!externalUser || checked.current) {

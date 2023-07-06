@@ -42,7 +42,11 @@ export const EditOfferView = ({
 
   return (
     <>
-      <TitleCard title="Edit Offer" icon="close" iconOnClick={handleBack} />
+      <TitleCard
+        title="Edit Experience"
+        icon="close"
+        iconOnClick={handleBack}
+      />
       <StyledContentCard shape="notch">
         <EditOfferForm
           highlightErrors={highlightErrors}

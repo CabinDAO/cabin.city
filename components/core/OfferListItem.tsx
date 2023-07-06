@@ -2,6 +2,7 @@ import Image from 'next/image'
 import {
   CitizenshipStatus,
   LocationType,
+  OfferPrice,
   OfferType,
   ProfileRoleConstraint,
 } from '@/generated/graphql'
@@ -28,6 +29,7 @@ export interface OfferListItemProps {
   startDate: Date | null | undefined
   endDate: Date | null | undefined
   imageUrl: string | null | undefined
+  price: OfferPrice | null | undefined
   profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
   citizenshipRequired?: boolean | null | undefined
   minimunCabinBalance?: number | null | undefined
@@ -88,13 +90,13 @@ export const OfferListItem = (props: OfferListItemProps) => {
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push(`/offer/${_id}/edit`)
+    router.push(`/experience/${_id}/edit`)
   }
 
   return (
     <ListItem
       authenticated
-      href={actionsEnabled ? `/offer/${_id}/edit` : `/offer/${_id}`}
+      href={actionsEnabled ? `/experience/${_id}/edit` : `/experience/${_id}`}
       onClick={() => events.viewExperiencesEvent(_id)}
     >
       <InnerContainer>

@@ -6,22 +6,22 @@ import {
   useGetOffersQuery,
 } from '@/generated/graphql'
 import { useMemo } from 'react'
-import { List } from '../core/List'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
-import { OfferListItem } from '../core/OfferListItem'
 import { useProfile } from '../auth/useProfile'
+import { ExperienceCard } from '../core/ExperienceCard'
+import { ExperienceListContainer } from './styles'
 
 interface OfferTabListProps {
-  offerType: OfferType
+  offerType?: OfferType
 }
 
 export const OfferTabList = ({ offerType }: OfferTabListProps) => {
   const { user } = useProfile()
   const input: GetOffersInput = useMemo(() => {
     return {
-      offerTypes: [offerType],
+      offerTypes: offerType ? [offerType] : [],
       profileRoleConstraints: [],
     }
   }, [offerType])
@@ -38,6 +38,7 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
     },
   })
 
+  // Exclude offers belonging to locations that are not published
   const offers = useMemo(
     () =>
       data?.getOffers.data.filter(
@@ -48,14 +49,8 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
   const hasMore = !!data?.getOffers?.after
   const dataLength = offers.length
 
-  // TODO: Add denormalized count to offer
-  const count =
-    (offersCountData?.offersCount ?? 0) > 20
-      ? offersCountData?.offersCount
-      : dataLength
-
   return (
-    <List total={count}>
+    <ExperienceListContainer withScroll>
       <InfiniteScroll
         hasMore={!!hasMore}
         dataLength={dataLength}
@@ -74,10 +69,10 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
         ) : (
           offers.map((offer) => {
             const offerProps = offerListItemPropsFromFragment(offer, user)
-            return <OfferListItem key={offer._id} {...offerProps} />
+            return <ExperienceCard key={offer._id} {...offerProps} />
           })
         )}
       </InfiniteScroll>
-    </List>
+    </ExperienceListContainer>
   )
 }

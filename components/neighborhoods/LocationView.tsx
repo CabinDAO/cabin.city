@@ -175,7 +175,7 @@ export const LocationView = ({
                 <span>{address ?? EMPTY}</span>
                 <span>Sleeps {sleepCapacity ?? EMPTY}</span>
                 <span>
-                  {offerCount} {offerCount === 1 ? 'Offer' : 'Offers'}
+                  {offerCount} {offerCount === 1 ? 'Experience' : 'Experiences'}
                 </span>
               </LocationHeaderInformation>
             </LocationHeaderTitle>
@@ -258,11 +258,9 @@ export const LocationView = ({
       {!!offers.length && (
         <Section>
           <SectionHeader>
-            <H3>Offers</H3>
+            <H3>Experience</H3>
           </SectionHeader>
-          <SectionContent>
-            <OffersList offers={offers} />
-          </SectionContent>
+          <OffersList offers={offers} />
         </Section>
       )}
       <Section>

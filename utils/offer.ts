@@ -17,6 +17,14 @@ export interface OfferInfo {
   name: string
 }
 
+export const OfferPriceUnitMap: Record<OfferPriceUnit, string | null> = {
+  [OfferPriceUnit.Hourly]: 'hour',
+  [OfferPriceUnit.Daily]: 'day',
+  [OfferPriceUnit.Weekly]: 'week',
+  [OfferPriceUnit.Monthly]: 'month',
+  [OfferPriceUnit.FlatFee]: null,
+}
+
 export const OfferInfoByType: Record<OfferType, OfferInfo> = {
   [OfferType.PaidColiving]: {
     name: 'Colive',
@@ -81,6 +89,7 @@ export const offerListItemPropsFromFragment = (
         : null,
     },
     isLocked: !me,
+    price: fragment.price,
   }
 }
 

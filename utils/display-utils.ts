@@ -134,26 +134,28 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
     if (getMonth(startDate) === getMonth(endDate)) {
       // Within same day
       if (startDate.getDate() === endDate.getDate()) {
-        return formatDate(startDate, 'MMMM d, yyyy', EMPTY)
+        return formatDate(startDate, 'MMM d', EMPTY)
       } else {
-        return `${formatDate(startDate, 'MMMM d', EMPTY)} - ${formatDate(
+        return `${formatDate(startDate, 'MMM d', EMPTY)} - ${formatDate(
           endDate,
-          'd, yyyy',
+          'd',
           EMPTY
         )}`
       }
     } else {
-      return `${formatDate(startDate, 'MMMM d', EMPTY)} - ${formatDate(
+      return `${formatDate(startDate, 'MMM d', EMPTY)} - ${formatDate(
         endDate,
-        'MMMM d, yyyy',
+        'MMM d',
         EMPTY
       )}`
     }
   } else {
-    return `${formatDate(startDate, 'MMMM d, yyyy', EMPTY)} - ${formatDate(
+    return `${formatDate(startDate, 'MMM d, yyyy', EMPTY)} - ${formatDate(
       endDate,
-      'MMMM d, yyyy',
+      'MMM d, yyyy',
       EMPTY
     )}`
   }
 }
+
+export const centsToUSD = (cents: number) => Math.round(cents / 100)

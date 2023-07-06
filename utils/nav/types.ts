@@ -43,8 +43,8 @@ export const MenuItemsAuthenticatedMap: Record<
   },
   offers: {
     icon: 'offer',
-    path: '/offers',
-    displayText: 'Offers',
+    path: '/experiences',
+    displayText: 'Experiences',
     iconSize: 2.5,
   },
   neighborhoods: {
@@ -91,8 +91,8 @@ export const MenuItemsUnauthenticatedMap: Record<
   members: null,
   offers: {
     icon: 'offer',
-    path: '/offers',
-    displayText: 'Offers',
+    path: '/experiences',
+    displayText: 'Experiences',
     iconSize: 2.5,
   },
   neighborhoods: {

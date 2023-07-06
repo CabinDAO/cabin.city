@@ -25,7 +25,7 @@ export const Footer = ({ children, className }: FooterProps) => (
         </AppLink>
         <AppLink
           onClick={() => events.viewExperiencesEvent()}
-          location="/offers"
+          location="/experiences"
           iconSize={0}
         >
           <FooterItem>Experiences</FooterItem>

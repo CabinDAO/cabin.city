@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 import { OfferItemFragment } from '@/generated/graphql'
-import { OfferListItem } from '@/components/core/OfferListItem'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { useProfile } from '../auth/useProfile'
+import { ExperienceListContainer } from './styles'
+import { ExperienceCard } from '../core/ExperienceCard'
 
 export interface OffersListProps {
   offers: OfferItemFragment[]
@@ -15,22 +16,19 @@ export const OffersList = ({
 }: OffersListProps) => {
   const { user } = useProfile()
   return (
-    <OffersListContainer>
+    <ExperienceListContainerNoBorder>
       {offers.map((offer) => (
-        <OfferListItem
+        <ExperienceCard
           key={offer._id}
           {...offerListItemPropsFromFragment(offer, user)}
           variant="no-icon"
           actionsEnabled={actionsEnabled}
         />
       ))}
-    </OffersListContainer>
+    </ExperienceListContainerNoBorder>
   )
 }
 
-const OffersListContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.8rem;
-  width: 100%;
+const ExperienceListContainerNoBorder = styled(ExperienceListContainer)`
+  border: none;
 `

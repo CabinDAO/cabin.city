@@ -11,6 +11,10 @@ import { Body1, H4 } from '@/components/core/Typography'
 
 export const DEFAULT_OFFER_PROPS: OfferListItemProps = {
   _id: '123',
+  price: {
+    amountCents: 17200,
+    unit: OfferPriceUnit.Monthly,
+  },
   offerType: OfferType.Residency,
   locationType: LocationType.Neighborhood,
   title: 'May creator residency',
@@ -30,6 +34,10 @@ export const DEFAULT_OFFER_PROPS: OfferListItemProps = {
 
 export const EMPTY_IMAGE_OFFER_PROPS: OfferListItemProps = {
   _id: '123',
+  price: {
+    amountCents: 17200,
+    unit: OfferPriceUnit.Monthly,
+  },
   offerType: OfferType.Residency,
   locationType: LocationType.Neighborhood,
   title: 'May creator residency',

@@ -10,6 +10,10 @@ fragment OfferItem on Offer {
     profileRole
     level
   }
+  price {
+    unit
+    amountCents
+  }
   minimunCabinBalance
   citizenshipRequired
   location {
