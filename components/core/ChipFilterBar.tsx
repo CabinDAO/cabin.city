@@ -12,6 +12,7 @@ export const ChipFilterBar = (props: ChipFilterBarProps) => {
 
 export const ChipFilter = styled(MiniChip)`
   border-radius: 0.4rem;
+  white-space: nowrap;
 `
 
 const Container = styled.div`
@@ -21,4 +22,5 @@ const Container = styled.div`
   padding: 1.6rem 2.4rem;
   border: 1px solid ${({ theme }) => theme.colors.green900};
   background-color: ${({ theme }) => theme.colors.yellow200};
+  overflow-x: scroll;
 `
