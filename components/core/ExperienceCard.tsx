@@ -13,10 +13,10 @@ import { centsToUSD, formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import { ImageFlex } from './gallery/ImageFlex'
 import { OfferListItemProps } from './OfferListItem'
-import Link from 'next/link'
 import { HorizontalDivider } from './Divider'
 import { ProfileIcons } from './ProfileIcons'
 import { roleInfoFromType } from '@/utils/roles'
+import { AuthenticatedLink } from './AuthenticatedLink'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -88,8 +88,6 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
         href={`/experience/${_id}`}
-        shallow
-        passHref
         onClick={() => events.viewExperiencesEvent(_id)}
       >
         <ImageContainer>
@@ -154,7 +152,7 @@ const OuterContainer = styled.div<{ inactive: boolean }>`
   ${({ inactive }) => inactive && `opacity: 0.5;`}
 `
 
-const ContainerLink = styled(Link)`
+const ContainerLink = styled(AuthenticatedLink)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
