@@ -8,12 +8,10 @@ import { Button } from '../core/Button'
 import Link from 'next/link'
 import { useProfile } from '../auth/useProfile'
 import { useLocationActions } from '../hooks/useLocationActions'
-import { ListingCard } from '../core/ListingCard'
 
 export const MyLocations = () => {
   const { user } = useProfile()
   const { voteForLocation } = useLocationVote()
-
   const { editLocation, deleteLocation } = useLocationActions()
 
   const locations =

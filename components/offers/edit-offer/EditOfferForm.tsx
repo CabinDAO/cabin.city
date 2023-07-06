@@ -61,7 +61,7 @@ export const EditOfferForm = ({
   const handleDelete = () => {
     showModal(() => (
       <DeleteConfirmationModal
-        entityName="offer"
+        entityName="experience"
         onDelete={async () => {
           await deleteOffer({ variables: { id: offer._id } })
           router.push(`/location/${offer.location._id}/edit?step=3`)
@@ -131,7 +131,7 @@ export const EditOfferForm = ({
   return (
     <Container>
       <Pair>
-        <H3>Offer Type</H3>
+        <H3>Experience Type</H3>
         <OfferTypeSummary offerType={offer.offerType} />
       </Pair>
       <HorizontalDivider />
@@ -231,7 +231,7 @@ export const EditOfferForm = ({
         variant="tertiary"
         onClick={handleDelete}
       >
-        Delete Offer
+        Delete Experience
       </DeleteButton>
     </Container>
   )

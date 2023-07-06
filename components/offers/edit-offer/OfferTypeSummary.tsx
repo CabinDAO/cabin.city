@@ -13,19 +13,19 @@ interface OfferTypeDescription {
 
 const offerTypeDescriptionMap: Record<OfferType, OfferTypeDescription> = {
   [OfferType.PaidColiving]: {
-    title: 'Colive Offer',
+    title: 'Colive Experience',
     paragraphs: [
-      'Invite people to apply to stay at your location for short-term residence. This offer type will be only available to Cabin Citizens.',
+      'Invite people to apply to stay at your location for short-term residence. This experience type will be only available to Cabin Citizens.',
     ],
   },
   [OfferType.Residency]: {
-    title: 'Residency Offer',
+    title: 'Residency Experience',
     paragraphs: [
       'Support creatives by offering short-term stays where they can work uninterrupted on a personal project.',
     ],
   },
   [OfferType.BuildAndGrowWeek]: {
-    title: 'Build Week Offer',
+    title: 'Build Week Experience',
     paragraphs: [
       'Plan and build out your property with the help of the community. These can be short-term project initiatives on location for community members to participate in for free room and board.',
     ],
