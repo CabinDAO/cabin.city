@@ -7,16 +7,16 @@ import {
 } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body1, Caption, H2, H4, Subline1 } from './Typography'
-import { OfferPriceUnitMap } from '@/utils/offer'
+import { OfferPriceUnitMap, offerInfoFromType } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { centsToUSD, formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import { ImageFlex } from './gallery/ImageFlex'
 import { OfferListItemProps } from './OfferListItem'
-import Link from 'next/link'
 import { HorizontalDivider } from './Divider'
 import { ProfileIcons } from './ProfileIcons'
 import { roleInfoFromType } from '@/utils/roles'
+import { AuthenticatedLink } from './AuthenticatedLink'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -81,14 +81,13 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
     citizenshipRequired ||
     minimunCabinBalance
 
+  const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const inactive = endDate && endDate < new Date()
 
   return (
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
         href={`/experience/${_id}`}
-        shallow
-        passHref
         onClick={() => events.viewExperiencesEvent(_id)}
       >
         <ImageContainer>
@@ -105,7 +104,7 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
-            <Caption emphasized>{offerType}</Caption>
+            <Caption emphasized>{offerInfo?.name}</Caption>
             <NameH2>{title}</NameH2>
             <Caption>{formattedLocation}</Caption>
             {isDisplayingEligibility && (
@@ -153,7 +152,7 @@ const OuterContainer = styled.div<{ inactive: boolean }>`
   ${({ inactive }) => inactive && `opacity: 0.5;`}
 `
 
-const ContainerLink = styled(Link)`
+const ContainerLink = styled(AuthenticatedLink)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
