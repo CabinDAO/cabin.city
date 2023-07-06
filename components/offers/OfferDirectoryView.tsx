@@ -1,9 +1,10 @@
+import styled from 'styled-components'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { OfferType } from '@/generated/graphql'
 import { useRouter } from 'next/router'
-import { TabBar, Tab } from '../core/TabBar'
 import { OfferTabList } from './OfferTabList'
+import { ChipFilter, ChipFilterBar } from '../core/ChipFilterBar'
 
 const SlugOfferTypeMap: Record<string, OfferType> = {
   coliving: OfferType.PaidColiving,
@@ -14,33 +15,47 @@ const SlugOfferTypeMap: Record<string, OfferType> = {
 export const OfferDirectoryView = () => {
   const router = useRouter()
   const { offerTypeSlug } = router.query
-  const offerType =
-    SlugOfferTypeMap[offerTypeSlug as string] ?? OfferType.PaidColiving
+  const offerType = SlugOfferTypeMap[offerTypeSlug as string] || null
 
   return (
     <SingleColumnLayout>
-      <TitleCard icon="offer" title="Offers" />
-      <TabBar>
-        <Tab
-          isSelected={offerType === OfferType.PaidColiving}
-          onClick={() => router.push('/offers/coliving')}
-        >
-          Colive
-        </Tab>
-        <Tab
-          isSelected={offerType === OfferType.Residency}
-          onClick={() => router.push('/offers/residency')}
-        >
-          Residency
-        </Tab>
-        <Tab
-          isSelected={offerType === OfferType.BuildAndGrowWeek}
-          onClick={() => router.push('/offers/build-week')}
-        >
-          Build Week
-        </Tab>
-      </TabBar>
-      <OfferTabList offerType={offerType} />
+      <TitleCard icon="offer" title="Experiences" />
+      <Content>
+        <StyledChipFilterBar>
+          <ChipFilter
+            label="All"
+            selected={!offerType}
+            onClick={() => router.push('/experiences')}
+          />
+          <ChipFilter
+            label="Coliving"
+            selected={offerType === OfferType.PaidColiving}
+            onClick={() => router.push('/experiences/coliving')}
+          />
+          <ChipFilter
+            label="Residencies"
+            selected={offerType === OfferType.Residency}
+            onClick={() => router.push('/experiences/residency')}
+          />
+          <ChipFilter
+            label="Build Week"
+            selected={offerType === OfferType.BuildAndGrowWeek}
+            onClick={() => router.push('/experiences/build-week')}
+          />
+        </StyledChipFilterBar>
+        <OfferTabList offerType={offerType} />
+      </Content>
     </SingleColumnLayout>
   )
 }
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+`
+
+const StyledChipFilterBar = styled(ChipFilterBar)`
+  border-bottom: none;
+`

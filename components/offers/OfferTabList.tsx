@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import {
   GetOffersInput,
   OfferItemFragment,
@@ -10,18 +11,18 @@ import { List } from '../core/List'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { offerListItemPropsFromFragment } from '@/utils/offer'
-import { OfferListItem } from '../core/OfferListItem'
 import { useProfile } from '../auth/useProfile'
+import { ExperienceCard } from '../core/ExperienceCard'
 
 interface OfferTabListProps {
-  offerType: OfferType
+  offerType?: OfferType
 }
 
 export const OfferTabList = ({ offerType }: OfferTabListProps) => {
   const { user } = useProfile()
   const input: GetOffersInput = useMemo(() => {
     return {
-      offerTypes: [offerType],
+      offerTypes: offerType ? [offerType] : [],
       profileRoleConstraints: [],
     }
   }, [offerType])
@@ -48,14 +49,8 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
   const hasMore = !!data?.getOffers?.after
   const dataLength = offers.length
 
-  // TODO: Add denormalized count to offer
-  const count =
-    (offersCountData?.offersCount ?? 0) > 20
-      ? offersCountData?.offersCount
-      : dataLength
-
   return (
-    <List total={count}>
+    <ExperienceListContainer>
       <InfiniteScroll
         hasMore={!!hasMore}
         dataLength={dataLength}
@@ -74,10 +69,30 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
         ) : (
           offers.map((offer) => {
             const offerProps = offerListItemPropsFromFragment(offer, user)
-            return <OfferListItem key={offer._id} {...offerProps} />
+            return <ExperienceCard key={offer._id} {...offerProps} />
           })
         )}
       </InfiniteScroll>
-    </List>
+    </ExperienceListContainer>
   )
 }
+
+export const ExperienceListContainer = styled.div`
+  width: 100%;
+  border: 1px solid ${({ theme }) => theme.colors.green900};
+  background-color: ${({ theme }) => theme.colors.yellow200};
+  padding: 2.4rem;
+
+  .infinite-scroll-component {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-direction: column;
+    grid-gap: 1.6rem;
+    width: 100%;
+
+    ${({ theme }) => theme.bp.md} {
+      grid-template-columns: 1fr 1fr;
+      row-gap: 3.7rem;
+    }
+  }
+`

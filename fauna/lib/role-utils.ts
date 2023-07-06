@@ -95,12 +95,6 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
-    resource: q.Index('location_caretaker_by_profile'),
-    actions: {
-      read: true,
-    },
-  },
-  {
     resource: q.Index('profile_by_name_casefold'),
     actions: {
       read: true,

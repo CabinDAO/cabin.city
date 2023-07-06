@@ -45,7 +45,7 @@ interface Voter {
   avatar?: ProfileAvatar | null | undefined
 }
 
-const BANNER_IMAGE_WIDTH = 412
+const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
 
 export const ListingCard = (props: LocationCardProps) => {
