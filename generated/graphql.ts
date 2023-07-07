@@ -247,7 +247,7 @@ export type LocationInput = {
   description?: InputMaybe<Scalars['String']>;
   addressInfo?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<LocationReferrerRelation>;
-  offerTypes: Array<OfferType>;
+  offerTypes?: InputMaybe<Array<OfferType>>;
 };
 
 /** 'LocationMediaItem' input values */
@@ -1406,7 +1406,7 @@ export type Location = {
   bannerImageIpfsHash?: Maybe<Scalars['String']>;
   votes: LocationVotePage;
   caretaker: Profile;
-  offerTypes: Array<OfferType>;
+  offerTypes?: Maybe<Array<OfferType>>;
   description?: Maybe<Scalars['String']>;
   /** The document's ID. */
   _id: Scalars['ID'];
@@ -1783,6 +1783,7 @@ export type Query = {
   findTrackingEventByID?: Maybe<TrackingEvent>;
   /** Find a document from the collection of 'LocationVote' by its id. */
   findLocationVoteByID?: Maybe<LocationVote>;
+  locationsByOfferType: QueryLocationsByOfferTypePage;
   /** Find a document from the collection of 'Offer' by its id. */
   findOfferByID?: Maybe<Offer>;
   accountByAddress?: Maybe<Account>;
@@ -1867,6 +1868,13 @@ export type QueryFindTrackingEventByIdArgs = {
 
 export type QueryFindLocationVoteByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryLocationsByOfferTypeArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+  offerType?: InputMaybe<OfferType>;
 };
 
 
@@ -2055,6 +2063,17 @@ export type QueryLocationsByLocationTypePage = {
 };
 
 /** The pagination object for elements of type 'Location'. */
+export type QueryLocationsByOfferTypePage = {
+  __typename?: 'QueryLocationsByOfferTypePage';
+  /** The elements of type 'Location' in this page. */
+  data: Array<Maybe<Location>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+/** The pagination object for elements of type 'Location'. */
 export type QueryLocationsSortedByVoteCountPage = {
   __typename?: 'QueryLocationsSortedByVoteCountPage';
   /** The elements of type 'Location' in this page. */
@@ -2200,6 +2219,15 @@ export type GetLocationsByLocationTypeQueryVariables = Exact<{
 
 
 export type GetLocationsByLocationTypeQuery = { __typename?: 'Query', locationsByLocationType: { __typename?: 'QueryLocationsByLocationTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
+
+export type GetLocationsByOfferTypeQueryVariables = Exact<{
+  offerType: OfferType;
+  size?: InputMaybe<Scalars['Int']>;
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetLocationsByOfferTypeQuery = { __typename?: 'Query', locationsByOfferType: { __typename?: 'QueryLocationsByOfferTypePage', after?: string | null, data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> } };
 
 export type GetLocationsSortedByVoteCountQueryVariables = Exact<{
   size?: InputMaybe<Scalars['Int']>;
@@ -3272,6 +3300,46 @@ export function useGetLocationsByLocationTypeLazyQuery(baseOptions?: Apollo.Lazy
 export type GetLocationsByLocationTypeQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeQuery>;
 export type GetLocationsByLocationTypeLazyQueryHookResult = ReturnType<typeof useGetLocationsByLocationTypeLazyQuery>;
 export type GetLocationsByLocationTypeQueryResult = Apollo.QueryResult<GetLocationsByLocationTypeQuery, GetLocationsByLocationTypeQueryVariables>;
+export const GetLocationsByOfferTypeDocument = gql`
+    query GetLocationsByOfferType($offerType: OfferType!, $size: Int, $cursor: String) {
+  locationsByOfferType(offerType: $offerType, _size: $size, _cursor: $cursor) {
+    data {
+      ...LocationItem
+    }
+    after
+  }
+}
+    ${LocationItemFragmentDoc}`;
+
+/**
+ * __useGetLocationsByOfferTypeQuery__
+ *
+ * To run a query within a React component, call `useGetLocationsByOfferTypeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLocationsByOfferTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLocationsByOfferTypeQuery({
+ *   variables: {
+ *      offerType: // value for 'offerType'
+ *      size: // value for 'size'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useGetLocationsByOfferTypeQuery(baseOptions: Apollo.QueryHookOptions<GetLocationsByOfferTypeQuery, GetLocationsByOfferTypeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetLocationsByOfferTypeQuery, GetLocationsByOfferTypeQueryVariables>(GetLocationsByOfferTypeDocument, options);
+      }
+export function useGetLocationsByOfferTypeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLocationsByOfferTypeQuery, GetLocationsByOfferTypeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetLocationsByOfferTypeQuery, GetLocationsByOfferTypeQueryVariables>(GetLocationsByOfferTypeDocument, options);
+        }
+export type GetLocationsByOfferTypeQueryHookResult = ReturnType<typeof useGetLocationsByOfferTypeQuery>;
+export type GetLocationsByOfferTypeLazyQueryHookResult = ReturnType<typeof useGetLocationsByOfferTypeLazyQuery>;
+export type GetLocationsByOfferTypeQueryResult = Apollo.QueryResult<GetLocationsByOfferTypeQuery, GetLocationsByOfferTypeQueryVariables>;
 export const GetLocationsSortedByVoteCountDocument = gql`
     query GetLocationsSortedByVoteCount($size: Int, $cursor: String) {
   locationsSortedByVoteCount(_size: $size, _cursor: $cursor) {

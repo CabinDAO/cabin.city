@@ -1,5 +1,5 @@
 import { CityDirectoryView } from '@/components/neighborhoods/CityDirectoryView'
-import { LocationType } from '@/generated/graphql'
+import { LocationType, OfferType } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 
 const CityDirectoryByLocationType = () => {
@@ -7,7 +7,9 @@ const CityDirectoryByLocationType = () => {
   const locationTypeStr = router.query.locationType as string
   if (!locationTypeStr) return null
 
-  let locationType: LocationType
+  let locationType: LocationType | undefined = undefined
+  let offerType: OfferType | undefined = undefined
+
   switch (locationTypeStr) {
     case 'neighborhoods':
       locationType = LocationType.Neighborhood
@@ -15,11 +17,20 @@ const CityDirectoryByLocationType = () => {
     case 'outposts':
       locationType = LocationType.Outpost
       break
+    case 'residency':
+      offerType = OfferType.Residency
+      break
+    case 'coliving':
+      offerType = OfferType.PaidColiving
+      break
+    case 'build-week':
+      offerType = OfferType.BuildAndGrowWeek
+      break
     default:
       throw new Error('Invalid location type')
   }
 
-  return <CityDirectoryView locationType={locationType} />
+  return <CityDirectoryView locationType={locationType} offerType={offerType} />
 }
 
 export default CityDirectoryByLocationType
