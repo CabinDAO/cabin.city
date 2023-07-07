@@ -34,6 +34,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
+    resource: q.Index('locations_by_offerTypes'),
+    actions: {
+      read: true,
+    },
+  },
+  {
     resource: q.Collection('Offer'),
     actions: {
       read: true,
@@ -157,6 +163,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
   },
   {
     resource: q.Function('profile_by_email'),
+    actions: {
+      call: true,
+    },
+  },
+  {
+    resource: q.Function('get_locations_by_offer_type'),
     actions: {
       call: true,
     },

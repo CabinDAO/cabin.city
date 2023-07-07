@@ -1,4 +1,4 @@
-import { CitizenshipStatus, LocationType } from '@/generated/graphql'
+import { CitizenshipStatus, LocationType, OfferType } from '@/generated/graphql'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useRouter } from 'next/router'
@@ -10,9 +10,10 @@ import styled from 'styled-components'
 
 interface CityDirectoryViewProps {
   locationType?: LocationType
+  offerType?: OfferType
 }
 export const CityDirectoryView = (props: CityDirectoryViewProps) => {
-  const { locationType } = props
+  const { locationType, offerType } = props
   const { user } = useProfile()
   const router = useRouter()
   const canCreateListings =
@@ -29,7 +30,7 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
         <StyledChipFilterBar>
           <ChipFilter
             label="All"
-            selected={!locationType}
+            selected={!locationType && !offerType}
             onClick={() => router.push('/city-directory')}
           />
           <ChipFilter
@@ -42,8 +43,23 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
             selected={locationType === LocationType.Outpost}
             onClick={() => router.push('/city-directory/outposts')}
           />
+          <ChipFilter
+            label="Coliving"
+            selected={offerType === OfferType.PaidColiving}
+            onClick={() => router.push('/city-directory/coliving')}
+          />
+          <ChipFilter
+            label="Residencies"
+            selected={offerType === OfferType.Residency}
+            onClick={() => router.push('/city-directory/residency')}
+          />
+          <ChipFilter
+            label="Build week"
+            selected={offerType === OfferType.BuildAndGrowWeek}
+            onClick={() => router.push('/city-directory/build-week')}
+          />
         </StyledChipFilterBar>
-        <LocationListFilter locationType={locationType} />
+        <LocationListFilter locationType={locationType} offerType={offerType} />
       </Content>
     </SingleColumnLayout>
   )
