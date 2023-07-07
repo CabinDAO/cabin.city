@@ -247,6 +247,7 @@ export type LocationInput = {
   description?: InputMaybe<Scalars['String']>;
   addressInfo?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<LocationReferrerRelation>;
+  offerTypes: Array<OfferType>;
 };
 
 /** 'LocationMediaItem' input values */
@@ -918,6 +919,7 @@ export type PartialUpdateLocationInput = {
   description?: InputMaybe<Scalars['String']>;
   addressInfo?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<LocationReferrerRelation>;
+  offerTypes?: InputMaybe<Array<OfferType>>;
 };
 
 /** 'LocationMediaItem' input values */
@@ -1404,6 +1406,7 @@ export type Location = {
   bannerImageIpfsHash?: Maybe<Scalars['String']>;
   votes: LocationVotePage;
   caretaker: Profile;
+  offerTypes: Array<OfferType>;
   description?: Maybe<Scalars['String']>;
   /** The document's ID. */
   _id: Scalars['ID'];
