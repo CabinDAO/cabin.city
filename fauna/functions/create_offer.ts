@@ -1,5 +1,6 @@
 import { query as q } from 'faunadb'
 import { FunctionResource } from 'fauna-gql-upload'
+import { UpdateLocationOfferTypes } from '../lib/UpdateLocationOfferTypes'
 
 const createOffer: FunctionResource = {
   name: 'create_offer',
@@ -26,14 +27,23 @@ const createOffer: FunctionResource = {
               ),
             },
           }),
-          // Create the offer
-          q.Create(q.Collection('Offer'), {
-            data: {
-              offerType: q.Var('offerType'),
-              location: q.Var('locationRef'),
-              locationType: q.Var('locationType'),
+          q.Let(
+            {
+              offerRef: q.Create(q.Collection('Offer'), {
+                data: {
+                  location: q.Var('locationRef'),
+                  locationType: q.Var('locationType'),
+                  offerType: q.Var('offerType'),
+                },
+              }),
             },
-          })
+            q.Do(
+              // Update the offerTypes on the location
+              UpdateLocationOfferTypes(q.Var('locationRef')),
+              // Return the offer
+              q.Var('offerRef')
+            )
+          )
         )
       )
     )
