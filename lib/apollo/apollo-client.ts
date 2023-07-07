@@ -69,6 +69,18 @@ export const apolloClient = new ApolloClient({
               }
             },
           },
+          locationsByOfferType: {
+            keyArgs: ['offerType', '_size'],
+            merge(existing, incoming) {
+              if (existing?.after === incoming?.after) {
+                return incoming
+              }
+              return {
+                ...incoming,
+                data: [...(existing?.data ?? []), ...incoming.data],
+              }
+            },
+          },
           getOffers: {
             keyArgs: ['input'],
             merge(existing, incoming) {
