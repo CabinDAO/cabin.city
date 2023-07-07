@@ -1,6 +1,7 @@
 import { Expr, query as q } from 'faunadb'
 import { ToDoc } from './ToDoc'
 import { ToRef } from './ToRef'
+import { UpdateLocationOfferTypes } from './UpdateLocationOfferTypes'
 
 export const DeleteOffer = (offerExpr: Expr, profileExpr: Expr) => {
   return q.Let(
@@ -52,7 +53,13 @@ export const DeleteOffer = (offerExpr: Expr, profileExpr: Expr) => {
       ),
 
       // Delete the offer
-      q.Delete(q.Var('offerRef'))
+      q.Delete(q.Var('offerRef')),
+
+      // Update the offerTypes on the location
+      UpdateLocationOfferTypes(q.Var('locationRef')),
+
+      // Return the offer
+      q.Var('offer')
     )
   )
 }
