@@ -53,11 +53,41 @@ Follow [these instructions](https://developers.google.com/maps/documentation/pla
 
 ## Smart Contracts Management
 
-TBD
+### Pre-requisites
 
-## Deployment
+Make sure foundry is upadated: https://book.getfoundry.sh/getting-started/installation
 
-TBD
+You can run the next command to install the lastest version: curl -L https://foundry.paradigm.xyz | bash
+
+Helpful commands:
+
+- format: `npm run lint:contracts:fix` (update .sol files to adhere to styling rules)
+- install: `forge install` install Solidity dependencies
+- test: `forge test` (optionally add `-v` through `-vvvv` for failure message verbosity)
+
+### Unlock Hooks
+
+This [Smart Contract](contracts/src/CabinUnlockHooks.sol) is used to manage the Unlock hooks for the Cabin app. See the Unlock Protocol documentation [here](https://docs.unlock-protocol.com/core-protocol/public-lock/hooks/) for more information. You can run.
+
+### Mock Cabin Token Contract
+
+This [Smart Contract](contracts/src/cabin-token/MockCabinToken.sol) is used to mock the Cabin Token contract. It is used for testing purposes only.
+
+## Development/Deployment Flow
+
+When working on a new feature, follow these steps:
+
+- Create a new branch from `develop`
+- Make your changes
+- Create a PR to `develop`
+  - This will create a preview deployment on Vercel
+- Once the PR is approved, merge it into `develop`
+  - This will also run fauna migrations, if any, so that the database is up to date
+  - The changes will be live on the dev environment: https://cabin-census-dev.vercel.app/
+- Once the changes are tested and ready to be deployed to production, create a PR from `develop` to `main`
+  - Make sure you double check all the changes previously merged to `develop`
+- Once the PR is approved, merge it into `main`
+  - Fauna migrations will be run against the production database
 
 ## Google Analytics
 

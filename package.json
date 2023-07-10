@@ -24,7 +24,7 @@
     "@apollo/client": "^3.7.5",
     "@next/font": "^13.1.6",
     "@pinata/sdk": "^2.1.0",
-    "@privy-io/react-auth": "^1.28.2",
+    "@privy-io/react-auth": "^1.29.0",
     "@privy-io/wagmi-connector": "^0.0.10",
     "@svgr/webpack": "^6.5.1",
     "@types/node": "18.13.0",
