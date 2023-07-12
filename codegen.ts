@@ -5,7 +5,7 @@ const config: CodegenConfig = {
     './generated/gql/hats/': {
       documents: 'lib/hats/**/*.graphql',
       schema:
-        'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-protocol-v1-optimism',
+        'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-v1-optimism',
       plugins: [],
       preset: 'gql-tag-operations-preset',
     },
