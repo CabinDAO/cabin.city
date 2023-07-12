@@ -1,3 +1,4 @@
+import { getAppConfig } from '@/utils/app-config'
 import { BigNumber } from 'ethers'
 
 interface HatsConfig {
@@ -8,7 +9,7 @@ interface HatsConfig {
   treeId: string
 }
 
-export const hatsConfig: HatsConfig = getConfig({
+export const hatsConfig: HatsConfig = getAppConfig({
   dev: {
     networkName: 'goerli',
     contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
@@ -35,7 +36,7 @@ interface OtterspaceConfig {
   raftId: string
 }
 
-export const otterspaceConfig: OtterspaceConfig = getConfig({
+export const otterspaceConfig: OtterspaceConfig = getAppConfig({
   dev: {
     networkName: 'goerli',
     contractAddress: '0xa6773847d3D2c8012C9cF62818b320eE278Ff722',
@@ -60,7 +61,7 @@ interface CabinTokenConfig {
   initialBlock: BigNumber
 }
 
-export const cabinTokenConfig: CabinTokenConfig = getConfig({
+export const cabinTokenConfig: CabinTokenConfig = getAppConfig({
   dev: {
     networkName: 'goerli',
     contractAddress: '0x096ea5c03c3643f48d7ae0bac629bae5a8645f2e',
@@ -79,7 +80,7 @@ interface UnlockConfig {
   contractAddress: string
   etherscanUrl: string
 }
-export const unlockConfig: UnlockConfig = getConfig({
+export const unlockConfig: UnlockConfig = getAppConfig({
   dev: {
     networkName: 'goerli',
     chainId: 5,
@@ -93,21 +94,3 @@ export const unlockConfig: UnlockConfig = getConfig({
     etherscanUrl: 'https://optimistic.etherscan.io',
   },
 })
-
-interface GetConfigArgs<T> extends Record<string, T> {
-  dev: T
-  prod: T
-}
-
-function getConfig<T>(args: GetConfigArgs<T>): T {
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV
-  if (!appEnv) {
-    throw new Error('NEXT_PUBLIC_APP_ENV is not set')
-  }
-
-  const config = args[appEnv]
-  if (!config) {
-    throw new Error(`No config for app env: ${appEnv}`)
-  }
-  return config
-}
