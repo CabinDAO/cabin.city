@@ -11,17 +11,17 @@ interface HatsConfig {
 export const hatsConfig: HatsConfig = getConfig({
   dev: {
     networkName: 'goerli',
-    contractAddress: '0x9D2dfd6066d5935267291718E8AA16C8Ab729E9d',
+    contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
     subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-protocol-v1-goerli',
+      'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-v1-goerli',
     treeId: '0x00000002',
     initialBlock: BigNumber.from('8752122'),
   },
   prod: {
     networkName: 'optimism',
-    contractAddress: '0x9D2dfd6066d5935267291718E8AA16C8Ab729E9d',
+    contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
     subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-protocol-v1-optimism',
+      'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-v1-optimism',
     treeId: '0x00000002',
     initialBlock: BigNumber.from('85223781'),
   },
