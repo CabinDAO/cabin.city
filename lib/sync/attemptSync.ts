@@ -56,19 +56,19 @@ export async function attemptSync(input: SyncAttemptInput) {
     return
   }
 
-  const startBlock = BigNumber.from(syncAttempt.data.startBlock)
-  const endBlock = BigNumber.from(syncAttempt.data.endBlock)
-  const blocksTillLatest = BigNumber.from(latestBlockNumber).sub(endBlock)
-
-  const state = {
-    key,
-    provider,
-    ref: syncAttempt.ref,
-    startBlock,
-    endBlock,
-  }
-
   try {
+    const startBlock = BigNumber.from(syncAttempt.data.startBlock)
+    const endBlock = BigNumber.from(syncAttempt.data.endBlock)
+    const blocksTillLatest = BigNumber.from(latestBlockNumber).sub(endBlock)
+
+    const state = {
+      key,
+      provider,
+      ref: syncAttempt.ref,
+      startBlock,
+      endBlock,
+    }
+
     const result = await handler(state)
     res.status(200).send(
       JSON.stringify(
