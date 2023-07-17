@@ -8,7 +8,9 @@ query GetBadges($raftId: String!, $startBlock: Int!, $endBlock: Int!) {
     block: { number: $endBlock }
   ) {
     id
-    owner
+    owner {
+      id
+    }
     createdAt
     spec {
       id
