@@ -29,12 +29,16 @@ Copy the `.env.example` file to `.env` and fill in the values.
 cp .env.example .env
 ```
 
-### Setup database
+### Fauna local dev db setup
+
+Fauna is our hosted db. There are two shared databases: dev (really more like staging) and prod.
+
+To create your own db for local dev:
 
 1. Create a database following the [quick start](https://docs.fauna.com/fauna/current/learn/quick_start/quick_start).
 2. From your database dashboard, go to `Security` -> `New Key` to create a new key with the `Admin` role.
 3. Copy the key into the value for the `FGU_SECRET` in `.env.fauna.local`.
-4. Run `npm run fauna` to initialize resources in your database.
+4. Run `npm run fauna` to initialize resources in your database. There are no fixtures (initial data) yet (I think?).
 5. Go to `Security` -> `New Key` again to create a new key with the `public` role.
 6. Copy the key into the value for the `NEXT_PUBLIC_FAUNA_CLIENT_KEY` in `.env.local`.
 7. Create a key with the `Server` role and copy it into the value for `FAUNA_SERVER_SECRET` in `.env.local`
@@ -55,9 +59,9 @@ Follow [these instructions](https://developers.google.com/maps/documentation/pla
 
 ### Pre-requisites
 
-Make sure foundry is upadated: https://book.getfoundry.sh/getting-started/installation
+Make sure foundry is updated: https://book.getfoundry.sh/getting-started/installation
 
-You can run the next command to install the lastest version: curl -L https://foundry.paradigm.xyz | bash
+You can install the lastest version with `curl -L https://foundry.paradigm.xyz | bash`
 
 Helpful commands:
 
@@ -220,3 +224,11 @@ Github actions rely on two secrets:
 - FGU_SECRET_DEV
 
 If needed, this can be changed by going into [Fauna Dashboard](https://dashboard.fauna.com/), then Security > Database Keys, and adding a new Admin key. The key can then be added to the Github Secrets. See how this works in the [Github Actions Workflow](.github/workflows/fauna.yml).
+
+## Code Generation
+
+To generate Fauna GQL code for Hats and Otterspace synced data, run:
+
+```bash
+npm run codegen
+```
