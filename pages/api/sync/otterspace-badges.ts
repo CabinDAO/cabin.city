@@ -37,7 +37,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
 
   const badgesToAdd = data.badges.map((b) => {
     return {
-      address: b.owner,
+      address: b.owner.id,
       badge: {
         badgeId: b.id,
         createdAt: b.createdAt.toString(),
