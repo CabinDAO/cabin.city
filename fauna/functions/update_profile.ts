@@ -11,6 +11,7 @@ const updateProfile: FunctionResource = {
       q.Let(
         {
           profileRef: q.Ref(q.Collection('Profile'), q.Var('id')),
+          isMe: q.Equals(q.CurrentIdentity(), q.Var('profileRef')),
           profile: q.Get(q.Var('profileRef')),
           // If the data contains roleTypes, these need to be merged with the existing roles
           newRoles: q.If(
@@ -28,9 +29,13 @@ const updateProfile: FunctionResource = {
             q.Var('newData')
           ),
         },
-        q.Update(q.Var('profileRef'), {
-          data: q.Var('mergedData'),
-        })
+        q.If(
+          q.Var('isMe'),
+          q.Update(q.Var('profileRef'), {
+            data: q.Var('mergedData'),
+          }),
+          q.Abort('Not authorized')
+        )
       )
     )
   ),
