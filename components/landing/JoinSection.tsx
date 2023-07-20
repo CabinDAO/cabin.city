@@ -19,15 +19,15 @@ export const JoinSection = () => {
             height={43}
           />
           <h3>Try Coliving</h3>
+          <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
+            <Button>Join a Cabin Week</Button>
+          </a>
           <Body>
             Join 6-10 members & 2 coordinators for 1-2 weeks at stunning Cabin
             Neighborhoods. Enjoy semi-curated coliving with group dinners, local
             trips, and free time. Gain Citizenship for full access to coliving
             network, flagship events, & perks.
           </Body>
-          <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
-            <Button>Join a Cabin Week</Button>
-          </a>
         </Option>
         <Option>
           <Image
@@ -37,14 +37,14 @@ export const JoinSection = () => {
             height={43}
           />
           <h3>Become a Member</h3>
+          <AuthenticatedLink href="/dashboard">
+            <Button variant="secondary">Sign Up</Button>
+          </AuthenticatedLink>
           <Body>
             Discover work/stay residencies, build your profile, collect passport
             stamps of your experiences, and access to the member directory,
             enriching your journey with diverse opportunities and connections.
           </Body>
-          <AuthenticatedLink href="/dashboard">
-            <Button variant="secondary">Sign Up</Button>
-          </AuthenticatedLink>
         </Option>
       </LandingSectionContent>
     </ParentContainer>
