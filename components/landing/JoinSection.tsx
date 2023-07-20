@@ -10,7 +10,7 @@ export const JoinSection = () => {
   return (
     <ParentContainer>
       <Background></Background>
-      <LandingSectionContent>
+      <Content>
         <Option>
           <Image
             src="/images/landing-citizen.svg"
@@ -46,7 +46,7 @@ export const JoinSection = () => {
             enriching your journey with diverse opportunities and connections.
           </Body>
         </Option>
-      </LandingSectionContent>
+      </Content>
     </ParentContainer>
   )
 }
@@ -60,7 +60,7 @@ const Option = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 3rem 0;
+  padding: 3rem 0 5rem;
   gap: 2.4rem;
 
   h3 {
@@ -91,6 +91,10 @@ const Option = styled.div`
   ${({ theme }) => theme.bp.lg} {
     width: 41.2rem;
   }
+`
+
+const Content = styled(LandingSectionContent)`
+  position: relative; // make sure content is above background without using z-index
 `
 
 const Background = styled.div`

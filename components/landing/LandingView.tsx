@@ -25,13 +25,6 @@ export const LandingView = () => {
   const { externalUser } = useExternalUser()
   const { deviceSize } = useDeviceSize()
 
-  const scrollToCabinWeekSection = () => {
-    const joinSection = document.getElementById('join')
-    if (joinSection) {
-      joinSection.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
-
   return (
     <StyledLayout variant="full">
       <LandingSection>
