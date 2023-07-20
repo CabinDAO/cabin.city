@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Body2, H1, HHero, Subline1, body2Styles } from '../core/Typography'
+import { Body1, Body2, H1, Subline1, body2Styles, fonts } from '../core/Typography'
 import Image from 'next/image'
 import { Button } from '../core/Button'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
@@ -32,42 +32,9 @@ export const JoinSection = () => {
     <ParentContainer>
       <Background></Background>
       <Content>
+
         <JoinOptionContainer>
           <JoinHeader withBottomMargin={isDesktop}>
-            <JoinHeaderContainer>
-              <Image
-                src="/images/landing-member.svg"
-                alt="member"
-                width={43}
-                height={43}
-              />
-              <JoinOptionTitleContainer>
-                <ConditionalTypographyText
-                  key={deviceSize}
-                  text="Community member"
-                />
-                <JoinOptionTitle $color="yellow100">Free</JoinOptionTitle>
-              </JoinOptionTitleContainer>
-            </JoinHeaderContainer>
-            {isTablet && (
-              <AuthenticatedLink href="/dashboard">
-                <Button>Sign in</Button>
-              </AuthenticatedLink>
-            )}
-          </JoinHeader>
-          {!isTablet && (
-            <AuthenticatedLink href="/dashboard">
-              <Button>Sign in</Button>
-            </AuthenticatedLink>
-          )}
-          <StyledList>
-            {communityMemberBulletPoints.map((bulletPoint) => (
-              <li key={bulletPoint}>{bulletPoint}</li>
-            ))}
-          </StyledList>
-        </JoinOptionContainer>
-        <JoinOptionContainer>
-          <JoinHeader withBottomMargin={false}>
             <JoinHeaderContainer>
               <Image
                 src="/images/landing-citizen.svg"
@@ -76,65 +43,62 @@ export const JoinSection = () => {
                 height={43}
               />
               <JoinOptionTitleContainer>
-                <ConditionalTypographyText
-                  key={deviceSize}
-                  text="Founding Citizen"
-                />
-                <PriceContainer>
-                  <JoinOptionTitle $color="yellow100">${price}</JoinOptionTitle>
-                  <YearlyPrice $color="yellow100">/ year</YearlyPrice>
-                </PriceContainer>
-                <Body2 $color="yellow100">
-                  0.2 ETH | pay with credit card or ethereum
-                </Body2>
+                <JoinOptionTitle>Try Coliving</JoinOptionTitle>
               </JoinOptionTitleContainer>
             </JoinHeaderContainer>
-            {isTablet && (
-              <Button onClick={handleLearnMoreClick} variant="secondary">
-                Learn more
-              </Button>
-            )}
           </JoinHeader>
+          <JoinBody $color="yellow100">
+            Join 6-10 members & 2 coordinators for 1-2 weeks at stunning Cabin
+            Neighborhoods. Enjoy semi-curated coliving with group dinners, local
+            trips, and free time. Gain Citizenship for full access to coliving
+            network, flagship events, & perks.
+          </JoinBody>
           {!isTablet && (
-            <Button onClick={handleLearnMoreClick} variant="secondary">
-              Learn more
+            <Button onClick={handleLearnMoreClick}>
+              Join a Cabin Week
             </Button>
           )}
-          <StyledList>
-            {citizenBulletPoints.map((bulletPoint) => (
-              <li key={bulletPoint}>{bulletPoint}</li>
-            ))}
-          </StyledList>
         </JoinOptionContainer>
+
+
+        <JoinOptionContainer>
+          <JoinHeader withBottomMargin={false}>
+            <JoinHeaderContainer>
+              <Image
+                src="/images/landing-member.svg"
+                alt="member"
+                width={43}
+                height={43}
+              />
+              <JoinOptionTitleContainer>
+                <JoinOptionTitle>Become a Member</JoinOptionTitle>
+              </JoinOptionTitleContainer>
+            </JoinHeaderContainer>
+          </JoinHeader>
+          <JoinBody $color="yellow100">
+            Discover work/stay residencies, build your profile, collect passport
+            stamps of your experiences, and access to the member directory,
+            enriching your journey with diverse opportunities and connections.
+          </JoinBody>
+          <AuthenticatedLink href="/dashboard">
+            <Button variant="secondary">Sign in</Button>
+          </AuthenticatedLink>
+        </JoinOptionContainer>
+
       </Content>
     </ParentContainer>
   )
 }
 
-const ConditionalTypographyText = ({ text }: { text: string }) => {
-  const { deviceSize } = useDeviceSize()
-
-  if (deviceSize === 'mobile') {
-    return <Subline1 $color="yellow100">{text}</Subline1>
-  }
-
-  if (deviceSize === 'tablet' || deviceSize === 'desktop') {
-    return <H1 $color="yellow100">{text}</H1>
-  }
-
-  return null
-}
-
-const PriceContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.2rem;
+const JoinBody = styled(Body1)`
+  line-height: 1.5;
+  font-weight: 400;
 `
 
-const JoinOptionTitle = styled(HHero)`
-  font-size: 4.8rem;
-  margin-bottom: 0;
+const JoinOptionTitle = styled.h3`
+  font-size: 3.5rem;
+  font-family: ${fonts.ibmPlexMono};
+  color: ${({ theme }) => theme.colors.yellow100};
 `
 
 const JoinOptionTitleContainer = styled.div`
@@ -265,8 +229,7 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1;
-  padding: 5rem 0;
-  padding-top: 10rem;
+  padding: 10rem 0 5rem;
   gap: 1.6rem;
 
   ${({ theme }) => theme.bp.lg} {

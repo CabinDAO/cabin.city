@@ -27,6 +27,11 @@ export const LandingView = () => {
   const { externalUser } = useExternalUser()
   const { deviceSize } = useDeviceSize()
 
+  const scrollToCabinWeekSection = () => {
+    const joinSection = document.getElementById('join');
+    joinSection.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <StyledLayout variant="full">
       <LandingSection>
@@ -34,35 +39,24 @@ export const LandingView = () => {
           <SectionContent>
             <HeroDescriptionContainer>
               <StyledHHero>
-                Colive across a global network of properties in nature
+                Colive with friends in nature
               </StyledHHero>
               <SectionGrowDescription>
                 <Body1>
-                  Cabin is a network city that connects people to coliving
-                  experiences and
+                  Cabin is a global network of beautiful properties in nature
+                  for remote workers seeking meaningful connections
                 </Body1>
-                <Body1>work/stay residencies</Body1>
               </SectionGrowDescription>
             </HeroDescriptionContainer>
             <SectionHeader>
               <SectionGrowSignup>
-                <a
-                  href={EXTERNAL_LINKS.VISION}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() =>
-                    events.externalLinkEvent(EXTERNAL_LINKS.VISION)
-                  }
-                >
-                  <Button
-                    endAdornment={<Icon name="up-right-arrow" size={0.9} />}
-                    variant="secondary"
-                  >
-                    View our vision
-                  </Button>
-                </a>
+                <Button variant="primary" onClick={scrollToCabinWeekSection}>
+                  Join a Cabin Week
+                </Button>
                 <AuthenticatedLink href="/dashboard" logSignInEvent>
-                  <Button>{externalUser ? 'View Dashboard' : 'Sign In'}</Button>
+                  <Button variant="secondary">
+                    {externalUser ? 'View Dashboard' : 'Sign In'}
+                  </Button>
                 </AuthenticatedLink>
               </SectionGrowSignup>
             </SectionHeader>
@@ -107,7 +101,7 @@ export const LandingView = () => {
         <DetailedInfoSection />
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection id="join">
         <JoinSection />
       </LandingSection>
 

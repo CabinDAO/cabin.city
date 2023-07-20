@@ -17,45 +17,20 @@ export const LandingDiscordSection = () => {
           width={84}
         />
       </LandingForest>
-      <JoinCTAText />
+      <LearnMoreCTA>
+        <p>Want to learn more?</p>
+        <StyledAppLink
+          iconSize={2}
+          external
+          location={EXTERNAL_LINKS.WELCOME_CALL_CALENDLY}
+        >
+          <p style={{ color: theme.colors.yellow700 }}>Book a call</p>
+        </StyledAppLink>
+      </LearnMoreCTA>
     </Container>
   )
 }
 
-const JoinCTAText = () => {
-  const { deviceSize } = useDeviceSize()
-
-  if (deviceSize === 'mobile') {
-    return (
-      <DiscordCTA>
-        <p>Join community</p>
-        <MobileDiscordCTA>
-          <p>gatherings on</p>
-          <StyledAppLink
-            iconSize={1.5}
-            external
-            location={EXTERNAL_LINKS.CABIN_DISCORD}
-          >
-            <p style={{ color: theme.colors.yellow700 }}>Discord</p>
-          </StyledAppLink>
-        </MobileDiscordCTA>
-      </DiscordCTA>
-    )
-  } else {
-    return (
-      <DiscordCTA>
-        <p>Join community gatherings on</p>
-        <StyledAppLink
-          iconSize={2}
-          external
-          location={EXTERNAL_LINKS.CABIN_DISCORD}
-        >
-          <p style={{ color: theme.colors.yellow700 }}>Discord</p>
-        </StyledAppLink>
-      </DiscordCTA>
-    )
-  }
-}
 
 const StyledAppLink = styled(AppLink)`
   ${({ theme }) => theme.bp.md} {
@@ -81,7 +56,7 @@ const Container = styled.div`
   gap: 7rem;
 `
 
-const DiscordCTA = styled.div`
+const LearnMoreCTA = styled.div`
   ${hhStyles}
   font-size: 2.4rem;
   display: flex;
@@ -102,10 +77,4 @@ const DiscordCTA = styled.div`
   ${({ theme }) => theme.bp.lg} {
     font-size: 3.2rem;
   }
-`
-
-const MobileDiscordCTA = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
 `
