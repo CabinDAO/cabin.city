@@ -41,7 +41,7 @@ export const NeighborhoodsTop6List = () => {
         href="/city-directory"
       >
         <Button variant="secondary" isFullWidth>
-          View the City Directory
+          See all locations
         </Button>
       </Link>
     </OuterContainer>

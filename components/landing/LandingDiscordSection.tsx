@@ -4,7 +4,6 @@ import { hhStyles } from '../core/Typography'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import theme from '@/styles/theme'
-import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export const LandingDiscordSection = () => {
   return (
@@ -30,7 +29,6 @@ export const LandingDiscordSection = () => {
     </Container>
   )
 }
-
 
 const StyledAppLink = styled(AppLink)`
   ${({ theme }) => theme.bp.md} {

@@ -9,11 +9,9 @@ import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { levelInfoFromType } from '@/utils/levels'
 import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { HeroVideo } from '../core/HeroVideo'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import Icon from '../core/Icon'
 import { BookingSection } from './BookingSection'
 import { DetailedInfoSection } from './DetailedInfoSection'
 import { LandingContentNoPadding, SectionContent, StyledHHero } from './styles'
@@ -21,16 +19,17 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
-import events from '@/lib/googleAnalytics/events'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
   const { deviceSize } = useDeviceSize()
 
   const scrollToCabinWeekSection = () => {
-    const joinSection = document.getElementById('join');
-    joinSection.scrollIntoView({ behavior: 'smooth' });
-  };
+    const joinSection = document.getElementById('join')
+    if (joinSection) {
+      joinSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   return (
     <StyledLayout variant="full">
@@ -38,9 +37,7 @@ export const LandingView = () => {
         <LandingContent>
           <SectionContent>
             <HeroDescriptionContainer>
-              <StyledHHero>
-                Colive with friends in nature
-              </StyledHHero>
+              <StyledHHero>Colive with friends in nature</StyledHHero>
               <SectionGrowDescription>
                 <Body1>
                   Cabin is a global network of beautiful properties in nature

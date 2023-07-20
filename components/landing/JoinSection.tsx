@@ -1,24 +1,18 @@
 import styled from 'styled-components'
-import { Body1, Body2, H1, Subline1, body2Styles, fonts } from '../core/Typography'
+import { Body1, Body2, H1, fonts } from '../core/Typography'
 import Image from 'next/image'
 import { Button } from '../core/Button'
+import { AppLink } from '../core/AppLink'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
-import {
-  citizenBulletPoints,
-  communityMemberBulletPoints,
-} from '@/utils/landing'
-import { usePriceInUsd } from '../hooks/usePriceInUsd'
 import { useModal } from '../hooks/useModal'
 import { CitizenshipModal } from './CitizenshipModal'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import events from '@/lib/googleAnalytics/events'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const JoinSection = () => {
-  const { priceInUsd } = usePriceInUsd()
   const { showModal } = useModal()
   const { deviceSize } = useDeviceSize()
-
-  const price = Math.round(priceInUsd)
 
   const handleLearnMoreClick = () => {
     showModal(() => <CitizenshipModal />)
@@ -32,7 +26,6 @@ export const JoinSection = () => {
     <ParentContainer>
       <Background></Background>
       <Content>
-
         <JoinOptionContainer>
           <JoinHeader withBottomMargin={isDesktop}>
             <JoinHeaderContainer>
@@ -53,14 +46,14 @@ export const JoinSection = () => {
             trips, and free time. Gain Citizenship for full access to coliving
             network, flagship events, & perks.
           </JoinBody>
-          {!isTablet && (
-            <Button onClick={handleLearnMoreClick}>
-              Join a Cabin Week
-            </Button>
-          )}
+          <a
+            href={EXTERNAL_LINKS.BOOKING_TYPEFORM}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <Button>Join a Cabin Week</Button>
+          </a>
         </JoinOptionContainer>
-
-
         <JoinOptionContainer>
           <JoinHeader withBottomMargin={false}>
             <JoinHeaderContainer>
@@ -84,7 +77,6 @@ export const JoinSection = () => {
             <Button variant="secondary">Sign in</Button>
           </AuthenticatedLink>
         </JoinOptionContainer>
-
       </Content>
     </ParentContainer>
   )
@@ -128,31 +120,6 @@ const JoinHeaderContainer = styled.div`
   }
 `
 
-const StyledList = styled.ul`
-  list-style: outside disc;
-  margin-left: 2rem;
-  gap: 0.8rem;
-  display: flex;
-  flex-direction: column;
-
-  li {
-    ${body2Styles}
-    color: ${({ theme }) => theme.colors.yellow100};
-  }
-
-  ${({ theme }) => theme.bp.md} {
-    margin-left: 8rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    margin-left: 2rem;
-  }
-`
-
-const YearlyPrice = styled(Body2)`
-  font-size: 1.8rem;
-`
-
 const Background = styled.div`
   position: absolute;
   background: url('/images/world-background.png') no-repeat center center;
@@ -167,14 +134,12 @@ const JoinOptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 2.4rem;
+  padding: inherit 2.4rem 4rem;
   gap: 2.4rem;
 
   button {
     width: 100%;
   }
-
-  padding-bottom: 4rem;
 
   &:first-child {
     border-bottom: 0.1rem solid ${({ theme }) => theme.colors.green600};
