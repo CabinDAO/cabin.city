@@ -46,11 +46,7 @@ export const JoinSection = () => {
             trips, and free time. Gain Citizenship for full access to coliving
             network, flagship events, & perks.
           </JoinBody>
-          <a
-            href={EXTERNAL_LINKS.BOOKING_TYPEFORM}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
             <Button>Join a Cabin Week</Button>
           </a>
         </JoinOptionContainer>
