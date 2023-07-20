@@ -20,6 +20,7 @@ import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { TestimonialSection } from '@/components/landing/TestimonialSection'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
@@ -94,6 +95,10 @@ export const LandingView = () => {
 
       <LandingSection id="join" variant="dark">
         <JoinSection />
+      </LandingSection>
+
+      <LandingSection>
+        <TestimonialSection />
       </LandingSection>
 
       <LandingSection>

@@ -89,12 +89,13 @@ const Option = styled.div`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 41.2rem;
+    width: 41rem;
   }
 `
 
 const Content = styled(LandingSectionContent)`
   position: relative; // make sure content is above background without using z-index
+  gap: 2rem;
 `
 
 const Background = styled.div`

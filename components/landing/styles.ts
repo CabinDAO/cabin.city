@@ -56,7 +56,6 @@ export const LandingSectionContent = styled.div<LandingSectionContentProps>`
   height: 100%;
   align-items: stretch;
   justify-content: center;
-  gap: 1.6rem;
   padding: 5rem 4rem 5rem;
 
   ${({ theme }) => theme.bp.lg} {
