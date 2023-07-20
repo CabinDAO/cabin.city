@@ -22,7 +22,6 @@ export const EXTERNAL_LINKS = {
   UNLOCK_KEY_MANAGE: 'https://app.unlock-protocol.com/keychain',
   VOUCH_REQUEST_DISCORD_CHANNEL:
     'https://discord.com/channels/849304522500210709/1115389408095522956',
-  CITIZENSHIP_CONTACT_US: 'https://calendly.com/cabinhome/chat-with-a-citizen',
-  WELCOME_CALL_CALENDLY: 'https://calendly.com/cabinhome/welcome',
-  BOOKING_TYPEFORM: 'https://creatorcabins.typeform.com/cabinweeks\n',
+  CALENDLY_CALL_URL: 'https://calendly.com/cabinhome/welcome',
+  BOOKING_TYPEFORM: 'https://creatorcabins.typeform.com/cabinweeks',
 }

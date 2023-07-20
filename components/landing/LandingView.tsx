@@ -19,6 +19,7 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
@@ -27,7 +28,7 @@ export const LandingView = () => {
   const scrollToCabinWeekSection = () => {
     const joinSection = document.getElementById('join')
     if (joinSection) {
-      joinSection.scrollIntoView({ behavior: 'smooth' })
+      joinSection.scrollIntoView({ behavior: 'smooth', block: 'center'})
     }
   }
 
@@ -47,9 +48,9 @@ export const LandingView = () => {
             </HeroDescriptionContainer>
             <SectionHeader>
               <SectionGrowSignup>
-                <Button variant="primary" onClick={scrollToCabinWeekSection}>
-                  Join a Cabin Week
-                </Button>
+                <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
+                  <Button>Join a Cabin Week</Button>
+                </a>
                 <AuthenticatedLink href="/dashboard" logSignInEvent>
                   <Button variant="secondary">
                     {externalUser ? 'View Dashboard' : 'Sign In'}
@@ -98,11 +99,11 @@ export const LandingView = () => {
         <DetailedInfoSection />
       </LandingSection>
 
-      <LandingSection id="join">
+      <LandingSection id="join" variant="dark">
         <JoinSection />
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection >
         <LandingDiscordSection />
       </LandingSection>
 

@@ -40,9 +40,9 @@ export const CitizenshipModal = () => {
       </CitizenshipModalContent>
       <ModalActionBar
         text="Contact Us"
-        locationHref={EXTERNAL_LINKS.CITIZENSHIP_CONTACT_US}
+        locationHref={EXTERNAL_LINKS.CALENDLY_CALL_URL}
         onActionClick={() =>
-          events.externalLinkEvent(EXTERNAL_LINKS.CITIZENSHIP_CONTACT_US)
+          events.externalLinkEvent(EXTERNAL_LINKS.CALENDLY_CALL_URL)
         }
       />
     </CitizenshipModalContainer>
