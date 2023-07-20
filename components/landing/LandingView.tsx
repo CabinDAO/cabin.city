@@ -28,7 +28,7 @@ export const LandingView = () => {
   const scrollToCabinWeekSection = () => {
     const joinSection = document.getElementById('join')
     if (joinSection) {
-      joinSection.scrollIntoView({ behavior: 'smooth', block: 'center'})
+      joinSection.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
@@ -103,7 +103,7 @@ export const LandingView = () => {
         <JoinSection />
       </LandingSection>
 
-      <LandingSection >
+      <LandingSection>
         <LandingDiscordSection />
       </LandingSection>
 

@@ -91,7 +91,6 @@ const Option = styled.div`
   ${({ theme }) => theme.bp.lg} {
     width: 41.2rem;
   }
-
 `
 
 const Background = styled.div`
