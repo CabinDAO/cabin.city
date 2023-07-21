@@ -21,17 +21,17 @@ type Datum = {
 
 const testimonialData: Datum[] = [
   {
-    imgUrl: 'https://placehold.co/100',
+    imgUrl: '/images/testimonial-ddwchen.jpg',
     name: '@ddwchen',
     text: 'This experience made me feel like we were all family. I formed lifelong friendships this week, which is pretty special and rare when you’re normally working remotely and can feel pretty isolated.',
   },
   {
-    imgUrl: 'https://placehold.co/100',
+    imgUrl: '/images/testimonial-richiebonilla.jpg',
     name: '@richiebonilla',
     text: 'A unique combination of intentional gathering, deeply thoughtful discussion, and barefoot child-like play. I’m still processing and integrating this very special experience.',
   },
   {
-    imgUrl: 'https://placehold.co/100',
+    imgUrl: '/images/testimonial-spengrah.jpg',
     name: '@spengrah',
     text: 'One of the most fulfilling experiences I’ve had in a long time. The opportunity to connect with, jam, and become friends with so many impressive people was a thrill and an honor.',
   },
