@@ -54,7 +54,7 @@ const Content = styled(LandingSectionContent)`
 
 const PFP = styled.img`
   border-radius: 50%;
-  width: 30%;
+  width: 64px;
   filter: drop-shadow(4px 4px 0 ${({ theme }) => theme.colors.yellow500});
 `
 
@@ -76,11 +76,14 @@ const ItemContent = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     padding-right: 5rem;
+    ${PFP} {
+      width: 75px;
+    }
   }
 
   ${({ theme }) => theme.bp.lg} {
     ${PFP} {
-      width: 50%;
+      width: 100px;
     }
     width: 26.4rem;
     padding-bottom: 5rem;
