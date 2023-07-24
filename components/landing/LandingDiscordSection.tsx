@@ -4,7 +4,6 @@ import { hhStyles } from '../core/Typography'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import theme from '@/styles/theme'
-import { useDeviceSize } from '../hooks/useDeviceSize'
 
 export const LandingDiscordSection = () => {
   return (
@@ -17,44 +16,18 @@ export const LandingDiscordSection = () => {
           width={84}
         />
       </LandingForest>
-      <JoinCTAText />
-    </Container>
-  )
-}
-
-const JoinCTAText = () => {
-  const { deviceSize } = useDeviceSize()
-
-  if (deviceSize === 'mobile') {
-    return (
-      <DiscordCTA>
-        <p>Join community</p>
-        <MobileDiscordCTA>
-          <p>gatherings on</p>
-          <StyledAppLink
-            iconSize={1.5}
-            external
-            location={EXTERNAL_LINKS.CABIN_DISCORD}
-          >
-            <p style={{ color: theme.colors.yellow700 }}>Discord</p>
-          </StyledAppLink>
-        </MobileDiscordCTA>
-      </DiscordCTA>
-    )
-  } else {
-    return (
-      <DiscordCTA>
-        <p>Join community gatherings on</p>
+      <LearnMoreCTA>
+        <p>Want to learn more?</p>
         <StyledAppLink
           iconSize={2}
           external
-          location={EXTERNAL_LINKS.CABIN_DISCORD}
+          location={EXTERNAL_LINKS.CALENDLY_CALL_URL}
         >
-          <p style={{ color: theme.colors.yellow700 }}>Discord</p>
+          <p style={{ color: theme.colors.yellow700 }}>Book a call</p>
         </StyledAppLink>
-      </DiscordCTA>
-    )
-  }
+      </LearnMoreCTA>
+    </Container>
+  )
 }
 
 const StyledAppLink = styled(AppLink)`
@@ -81,7 +54,7 @@ const Container = styled.div`
   gap: 7rem;
 `
 
-const DiscordCTA = styled.div`
+const LearnMoreCTA = styled.div`
   ${hhStyles}
   font-size: 2.4rem;
   display: flex;
@@ -102,10 +75,4 @@ const DiscordCTA = styled.div`
   ${({ theme }) => theme.bp.lg} {
     font-size: 3.2rem;
   }
-`
-
-const MobileDiscordCTA = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
 `
