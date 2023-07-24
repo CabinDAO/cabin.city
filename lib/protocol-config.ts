@@ -10,14 +10,16 @@ interface HatsConfig {
 
 export const hatsConfig: HatsConfig = getConfig({
   dev: {
+    // https://app.hatsprotocol.xyz/trees/5/10
     networkName: 'goerli',
     contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
     subgraphUrl:
       'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-v1-goerli',
-    treeId: '0x00000002',
+    treeId: '0x0000000a', // hat ids are hex and layered by byte groups - https://docs.hatsprotocol.xyz/for-developers/hats-protocol-overview/hat-ids
     initialBlock: BigNumber.from('8752122'),
   },
   prod: {
+    // https://app.hatsprotocol.xyz/trees/10/2
     networkName: 'optimism',
     contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
     subgraphUrl:

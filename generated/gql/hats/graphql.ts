@@ -15,6 +15,11 @@ export type Scalars = {
   BigDecimal: any;
   BigInt: any;
   Bytes: any;
+  /**
+   * 8 bytes signed integer
+   *
+   */
+  Int8: any;
 };
 
 export type BlockChangedFilter = {
@@ -31,7 +36,7 @@ export type Hat = {
   __typename?: 'Hat';
   admin: Hat;
   badStandings: Array<Wearer>;
-  createdAt: Scalars['BigInt'];
+  createdAt?: Maybe<Scalars['BigInt']>;
   currentSupply: Scalars['BigInt'];
   details: Scalars['String'];
   eligibility: Scalars['String'];
@@ -39,6 +44,7 @@ export type Hat = {
   id: Scalars['ID'];
   imageUri: Scalars['String'];
   levelAtLocalTree: Scalars['Int'];
+  linkRequestFromTree: Array<Tree>;
   linkedTrees: Array<Tree>;
   maxSupply: Scalars['BigInt'];
   mutable: Scalars['Boolean'];
@@ -66,6 +72,15 @@ export type HateventsArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<HatsEvent_filter>;
+};
+
+
+export type HatlinkRequestFromTreeArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Tree_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Tree_filter>;
 };
 
 
@@ -1670,6 +1685,7 @@ export type Hat_filter = {
   levelAtLocalTree_lte?: InputMaybe<Scalars['Int']>;
   levelAtLocalTree_not?: InputMaybe<Scalars['Int']>;
   levelAtLocalTree_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  linkRequestFromTree_?: InputMaybe<Tree_filter>;
   linkedTrees_?: InputMaybe<Tree_filter>;
   maxSupply?: InputMaybe<Scalars['BigInt']>;
   maxSupply_gt?: InputMaybe<Scalars['BigInt']>;
@@ -1782,6 +1798,7 @@ export enum Hat_orderBy {
   id = 'id',
   imageUri = 'imageUri',
   levelAtLocalTree = 'levelAtLocalTree',
+  linkRequestFromTree = 'linkRequestFromTree',
   linkedTrees = 'linkedTrees',
   maxSupply = 'maxSupply',
   mutable = 'mutable',
@@ -2925,8 +2942,11 @@ export type Tree = {
   hats: Array<Hat>;
   /** Tree ID is its top hat domain - first 4 bytes of the top hat ID */
   id: Scalars['ID'];
+  linkRequestFromTree: Array<Tree>;
   linkedToHat?: Maybe<Hat>;
   parentOfTrees: Array<Tree>;
+  requestedLinkToHat?: Maybe<Hat>;
+  requestedLinkToTree?: Maybe<Tree>;
 };
 
 
@@ -2945,6 +2965,15 @@ export type TreehatsArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Hat_filter>;
+};
+
+
+export type TreelinkRequestFromTreeArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Tree_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Tree_filter>;
 };
 
 
@@ -2991,6 +3020,7 @@ export type Tree_filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  linkRequestFromTree_?: InputMaybe<Tree_filter>;
   linkedToHat?: InputMaybe<Scalars['String']>;
   linkedToHat_?: InputMaybe<Hat_filter>;
   linkedToHat_contains?: InputMaybe<Scalars['String']>;
@@ -3014,6 +3044,48 @@ export type Tree_filter = {
   linkedToHat_starts_with_nocase?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<InputMaybe<Tree_filter>>>;
   parentOfTrees_?: InputMaybe<Tree_filter>;
+  requestedLinkToHat?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_?: InputMaybe<Hat_filter>;
+  requestedLinkToHat_contains?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_contains_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_ends_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_gt?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_gte?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_in?: InputMaybe<Array<Scalars['String']>>;
+  requestedLinkToHat_lt?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_lte?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_contains?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_ends_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_in?: InputMaybe<Array<Scalars['String']>>;
+  requestedLinkToHat_not_starts_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_starts_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToHat_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_?: InputMaybe<Tree_filter>;
+  requestedLinkToTree_contains?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_contains_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_ends_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_gt?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_gte?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_in?: InputMaybe<Array<Scalars['String']>>;
+  requestedLinkToTree_lt?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_lte?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_contains?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_ends_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_in?: InputMaybe<Array<Scalars['String']>>;
+  requestedLinkToTree_not_starts_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_starts_with?: InputMaybe<Scalars['String']>;
+  requestedLinkToTree_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum Tree_orderBy {
@@ -3022,6 +3094,7 @@ export enum Tree_orderBy {
   events = 'events',
   hats = 'hats',
   id = 'id',
+  linkRequestFromTree = 'linkRequestFromTree',
   linkedToHat = 'linkedToHat',
   linkedToHat__createdAt = 'linkedToHat__createdAt',
   linkedToHat__currentSupply = 'linkedToHat__currentSupply',
@@ -3035,7 +3108,22 @@ export enum Tree_orderBy {
   linkedToHat__prettyId = 'linkedToHat__prettyId',
   linkedToHat__status = 'linkedToHat__status',
   linkedToHat__toggle = 'linkedToHat__toggle',
-  parentOfTrees = 'parentOfTrees'
+  parentOfTrees = 'parentOfTrees',
+  requestedLinkToHat = 'requestedLinkToHat',
+  requestedLinkToHat__createdAt = 'requestedLinkToHat__createdAt',
+  requestedLinkToHat__currentSupply = 'requestedLinkToHat__currentSupply',
+  requestedLinkToHat__details = 'requestedLinkToHat__details',
+  requestedLinkToHat__eligibility = 'requestedLinkToHat__eligibility',
+  requestedLinkToHat__id = 'requestedLinkToHat__id',
+  requestedLinkToHat__imageUri = 'requestedLinkToHat__imageUri',
+  requestedLinkToHat__levelAtLocalTree = 'requestedLinkToHat__levelAtLocalTree',
+  requestedLinkToHat__maxSupply = 'requestedLinkToHat__maxSupply',
+  requestedLinkToHat__mutable = 'requestedLinkToHat__mutable',
+  requestedLinkToHat__prettyId = 'requestedLinkToHat__prettyId',
+  requestedLinkToHat__status = 'requestedLinkToHat__status',
+  requestedLinkToHat__toggle = 'requestedLinkToHat__toggle',
+  requestedLinkToTree = 'requestedLinkToTree',
+  requestedLinkToTree__id = 'requestedLinkToTree__id'
 }
 
 export type Wearer = {

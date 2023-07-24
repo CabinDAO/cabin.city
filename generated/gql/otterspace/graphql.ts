@@ -15,6 +15,11 @@ export type Scalars = {
   BigDecimal: any;
   BigInt: any;
   Bytes: any;
+  /**
+   * 8 bytes signed integer
+   *
+   */
+  Int8: any;
 };
 
 export type Badge = {
@@ -22,12 +27,13 @@ export type Badge = {
   createdAt: Scalars['Int'];
   from: Scalars['Bytes'];
   id: Scalars['String'];
-  owner: Scalars['Bytes'];
+  owner: User;
   spec: BadgeSpec;
   status?: Maybe<Scalars['String']>;
   statusReason?: Maybe<Scalars['String']>;
   statusUpdatedAt?: Maybe<Scalars['Int']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
+  transactionHash: Scalars['String'];
 };
 
 export type BadgeSpec = {
@@ -40,6 +46,7 @@ export type BadgeSpec = {
   raft: Raft;
   specUri: Scalars['String'];
   totalBadgesCount: Scalars['Int'];
+  transactionHash: Scalars['String'];
   uri: Scalars['String'];
 };
 
@@ -176,6 +183,26 @@ export type BadgeSpec_filter = {
   totalBadgesCount_lte?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  transactionHash?: InputMaybe<Scalars['String']>;
+  transactionHash_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_gt?: InputMaybe<Scalars['String']>;
+  transactionHash_gte?: InputMaybe<Scalars['String']>;
+  transactionHash_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_lt?: InputMaybe<Scalars['String']>;
+  transactionHash_lte?: InputMaybe<Scalars['String']>;
+  transactionHash_not?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_not_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with_nocase?: InputMaybe<Scalars['String']>;
   uri?: InputMaybe<Scalars['String']>;
   uri_contains?: InputMaybe<Scalars['String']>;
   uri_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -206,20 +233,23 @@ export enum BadgeSpec_orderBy {
   metadata = 'metadata',
   metadata__description = 'metadata__description',
   metadata__expiresAt = 'metadata__expiresAt',
+  metadata__externalUrl = 'metadata__externalUrl',
   metadata__id = 'metadata__id',
   metadata__image = 'metadata__image',
   metadata__name = 'metadata__name',
+  metadata__schema = 'metadata__schema',
   raft = 'raft',
   raft__createdAt = 'raft__createdAt',
   raft__createdBy = 'raft__createdBy',
   raft__id = 'raft__id',
-  raft__owner = 'raft__owner',
   raft__tokenId = 'raft__tokenId',
   raft__totalBadgesCount = 'raft__totalBadgesCount',
   raft__totalSpecsCount = 'raft__totalSpecsCount',
+  raft__transactionHash = 'raft__transactionHash',
   raft__uri = 'raft__uri',
   specUri = 'specUri',
   totalBadgesCount = 'totalBadgesCount',
+  transactionHash = 'transactionHash',
   uri = 'uri'
 }
 
@@ -266,16 +296,27 @@ export type Badge_filter = {
   id_starts_with?: InputMaybe<Scalars['String']>;
   id_starts_with_nocase?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<InputMaybe<Badge_filter>>>;
-  owner?: InputMaybe<Scalars['Bytes']>;
-  owner_contains?: InputMaybe<Scalars['Bytes']>;
-  owner_gt?: InputMaybe<Scalars['Bytes']>;
-  owner_gte?: InputMaybe<Scalars['Bytes']>;
-  owner_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  owner_lt?: InputMaybe<Scalars['Bytes']>;
-  owner_lte?: InputMaybe<Scalars['Bytes']>;
-  owner_not?: InputMaybe<Scalars['Bytes']>;
-  owner_not_contains?: InputMaybe<Scalars['Bytes']>;
-  owner_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<User_filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
   spec?: InputMaybe<Scalars['String']>;
   spec_?: InputMaybe<BadgeSpec_filter>;
   spec_contains?: InputMaybe<Scalars['String']>;
@@ -365,6 +406,26 @@ export type Badge_filter = {
   status_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   status_starts_with?: InputMaybe<Scalars['String']>;
   status_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash?: InputMaybe<Scalars['String']>;
+  transactionHash_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_gt?: InputMaybe<Scalars['String']>;
+  transactionHash_gte?: InputMaybe<Scalars['String']>;
+  transactionHash_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_lt?: InputMaybe<Scalars['String']>;
+  transactionHash_lte?: InputMaybe<Scalars['String']>;
+  transactionHash_not?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_not_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum Badge_orderBy {
@@ -372,17 +433,21 @@ export enum Badge_orderBy {
   from = 'from',
   id = 'id',
   owner = 'owner',
+  owner__id = 'owner__id',
+  owner__totalBadgesCount = 'owner__totalBadgesCount',
   spec = 'spec',
   spec__createdAt = 'spec__createdAt',
   spec__createdBy = 'spec__createdBy',
   spec__id = 'spec__id',
   spec__specUri = 'spec__specUri',
   spec__totalBadgesCount = 'spec__totalBadgesCount',
+  spec__transactionHash = 'spec__transactionHash',
   spec__uri = 'spec__uri',
   status = 'status',
   statusReason = 'statusReason',
   statusUpdatedAt = 'statusUpdatedAt',
-  statusUpdatedBy = 'statusUpdatedBy'
+  statusUpdatedBy = 'statusUpdatedBy',
+  transactionHash = 'transactionHash'
 }
 
 export type BlockChangedFilter = {
@@ -413,6 +478,8 @@ export type Query = {
   raftMetadata: Array<RaftMetadata>;
   rafts: Array<Raft>;
   specMetadata: Array<SpecMetadata>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
 
@@ -496,18 +563,47 @@ export type QueryspecMetadataArgs = {
   where?: InputMaybe<SpecMetadata_filter>;
 };
 
+
+export type QueryuserArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryusersArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<User_filter>;
+};
+
 export type Raft = {
   __typename?: 'Raft';
+  admins: Array<User>;
   createdAt: Scalars['Int'];
   createdBy: Scalars['String'];
   id: Scalars['ID'];
   metadata?: Maybe<RaftMetadata>;
-  owner: Scalars['Bytes'];
+  owner: User;
   specs: Array<BadgeSpec>;
   tokenId: Scalars['BigInt'];
   totalBadgesCount: Scalars['Int'];
   totalSpecsCount: Scalars['Int'];
+  transactionHash: Scalars['String'];
   uri: Scalars['String'];
+};
+
+
+export type RaftadminsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<User_filter>;
 };
 
 
@@ -612,6 +708,13 @@ export enum RaftMetadata_orderBy {
 export type Raft_filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  admins?: InputMaybe<Array<Scalars['String']>>;
+  admins_?: InputMaybe<User_filter>;
+  admins_contains?: InputMaybe<Array<Scalars['String']>>;
+  admins_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  admins_not?: InputMaybe<Array<Scalars['String']>>;
+  admins_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  admins_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   and?: InputMaybe<Array<InputMaybe<Raft_filter>>>;
   createdAt?: InputMaybe<Scalars['Int']>;
   createdAt_gt?: InputMaybe<Scalars['Int']>;
@@ -671,16 +774,27 @@ export type Raft_filter = {
   metadata_starts_with?: InputMaybe<Scalars['String']>;
   metadata_starts_with_nocase?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<InputMaybe<Raft_filter>>>;
-  owner?: InputMaybe<Scalars['Bytes']>;
-  owner_contains?: InputMaybe<Scalars['Bytes']>;
-  owner_gt?: InputMaybe<Scalars['Bytes']>;
-  owner_gte?: InputMaybe<Scalars['Bytes']>;
-  owner_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  owner_lt?: InputMaybe<Scalars['Bytes']>;
-  owner_lte?: InputMaybe<Scalars['Bytes']>;
-  owner_not?: InputMaybe<Scalars['Bytes']>;
-  owner_not_contains?: InputMaybe<Scalars['Bytes']>;
-  owner_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  owner?: InputMaybe<Scalars['String']>;
+  owner_?: InputMaybe<User_filter>;
+  owner_contains?: InputMaybe<Scalars['String']>;
+  owner_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_ends_with?: InputMaybe<Scalars['String']>;
+  owner_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_gt?: InputMaybe<Scalars['String']>;
+  owner_gte?: InputMaybe<Scalars['String']>;
+  owner_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_lt?: InputMaybe<Scalars['String']>;
+  owner_lte?: InputMaybe<Scalars['String']>;
+  owner_not?: InputMaybe<Scalars['String']>;
+  owner_not_contains?: InputMaybe<Scalars['String']>;
+  owner_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with?: InputMaybe<Scalars['String']>;
+  owner_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_not_in?: InputMaybe<Array<Scalars['String']>>;
+  owner_not_starts_with?: InputMaybe<Scalars['String']>;
+  owner_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  owner_starts_with?: InputMaybe<Scalars['String']>;
+  owner_starts_with_nocase?: InputMaybe<Scalars['String']>;
   specs_?: InputMaybe<BadgeSpec_filter>;
   tokenId?: InputMaybe<Scalars['BigInt']>;
   tokenId_gt?: InputMaybe<Scalars['BigInt']>;
@@ -706,6 +820,26 @@ export type Raft_filter = {
   totalSpecsCount_lte?: InputMaybe<Scalars['Int']>;
   totalSpecsCount_not?: InputMaybe<Scalars['Int']>;
   totalSpecsCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  transactionHash?: InputMaybe<Scalars['String']>;
+  transactionHash_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_gt?: InputMaybe<Scalars['String']>;
+  transactionHash_gte?: InputMaybe<Scalars['String']>;
+  transactionHash_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_lt?: InputMaybe<Scalars['String']>;
+  transactionHash_lte?: InputMaybe<Scalars['String']>;
+  transactionHash_not?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains?: InputMaybe<Scalars['String']>;
+  transactionHash_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_not_in?: InputMaybe<Array<Scalars['String']>>;
+  transactionHash_not_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with?: InputMaybe<Scalars['String']>;
+  transactionHash_starts_with_nocase?: InputMaybe<Scalars['String']>;
   uri?: InputMaybe<Scalars['String']>;
   uri_contains?: InputMaybe<Scalars['String']>;
   uri_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -729,6 +863,7 @@ export type Raft_filter = {
 };
 
 export enum Raft_orderBy {
+  admins = 'admins',
   createdAt = 'createdAt',
   createdBy = 'createdBy',
   id = 'id',
@@ -738,10 +873,13 @@ export enum Raft_orderBy {
   metadata__image = 'metadata__image',
   metadata__name = 'metadata__name',
   owner = 'owner',
+  owner__id = 'owner__id',
+  owner__totalBadgesCount = 'owner__totalBadgesCount',
   specs = 'specs',
   tokenId = 'tokenId',
   totalBadgesCount = 'totalBadgesCount',
   totalSpecsCount = 'totalSpecsCount',
+  transactionHash = 'transactionHash',
   uri = 'uri'
 }
 
@@ -749,9 +887,11 @@ export type SpecMetadata = {
   __typename?: 'SpecMetadata';
   description: Scalars['String'];
   expiresAt?: Maybe<Scalars['String']>;
+  externalUrl?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   image: Scalars['String'];
   name: Scalars['String'];
+  schema?: Maybe<Scalars['String']>;
 };
 
 export type SpecMetadata_filter = {
@@ -798,6 +938,26 @@ export type SpecMetadata_filter = {
   expiresAt_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   expiresAt_starts_with?: InputMaybe<Scalars['String']>;
   expiresAt_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl?: InputMaybe<Scalars['String']>;
+  externalUrl_contains?: InputMaybe<Scalars['String']>;
+  externalUrl_contains_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl_ends_with?: InputMaybe<Scalars['String']>;
+  externalUrl_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl_gt?: InputMaybe<Scalars['String']>;
+  externalUrl_gte?: InputMaybe<Scalars['String']>;
+  externalUrl_in?: InputMaybe<Array<Scalars['String']>>;
+  externalUrl_lt?: InputMaybe<Scalars['String']>;
+  externalUrl_lte?: InputMaybe<Scalars['String']>;
+  externalUrl_not?: InputMaybe<Scalars['String']>;
+  externalUrl_not_contains?: InputMaybe<Scalars['String']>;
+  externalUrl_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl_not_ends_with?: InputMaybe<Scalars['String']>;
+  externalUrl_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl_not_in?: InputMaybe<Array<Scalars['String']>>;
+  externalUrl_not_starts_with?: InputMaybe<Scalars['String']>;
+  externalUrl_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  externalUrl_starts_with?: InputMaybe<Scalars['String']>;
+  externalUrl_starts_with_nocase?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -847,14 +1007,36 @@ export type SpecMetadata_filter = {
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<InputMaybe<SpecMetadata_filter>>>;
+  schema?: InputMaybe<Scalars['String']>;
+  schema_contains?: InputMaybe<Scalars['String']>;
+  schema_contains_nocase?: InputMaybe<Scalars['String']>;
+  schema_ends_with?: InputMaybe<Scalars['String']>;
+  schema_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  schema_gt?: InputMaybe<Scalars['String']>;
+  schema_gte?: InputMaybe<Scalars['String']>;
+  schema_in?: InputMaybe<Array<Scalars['String']>>;
+  schema_lt?: InputMaybe<Scalars['String']>;
+  schema_lte?: InputMaybe<Scalars['String']>;
+  schema_not?: InputMaybe<Scalars['String']>;
+  schema_not_contains?: InputMaybe<Scalars['String']>;
+  schema_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  schema_not_ends_with?: InputMaybe<Scalars['String']>;
+  schema_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  schema_not_in?: InputMaybe<Array<Scalars['String']>>;
+  schema_not_starts_with?: InputMaybe<Scalars['String']>;
+  schema_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  schema_starts_with?: InputMaybe<Scalars['String']>;
+  schema_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum SpecMetadata_orderBy {
   description = 'description',
   expiresAt = 'expiresAt',
+  externalUrl = 'externalUrl',
   id = 'id',
   image = 'image',
-  name = 'name'
+  name = 'name',
+  schema = 'schema'
 }
 
 export type Subscription = {
@@ -869,6 +1051,8 @@ export type Subscription = {
   raftMetadata: Array<RaftMetadata>;
   rafts: Array<Raft>;
   specMetadata: Array<SpecMetadata>;
+  user?: Maybe<User>;
+  users: Array<User>;
 };
 
 
@@ -952,6 +1136,96 @@ export type SubscriptionspecMetadataArgs = {
   where?: InputMaybe<SpecMetadata_filter>;
 };
 
+
+export type SubscriptionuserArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionusersArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<User_filter>;
+};
+
+export type User = {
+  __typename?: 'User';
+  adminOfCommunities?: Maybe<Array<Raft>>;
+  badges?: Maybe<Array<Badge>>;
+  id: Scalars['Bytes'];
+  ownerOfCommunities?: Maybe<Array<Raft>>;
+  totalBadgesCount: Scalars['Int'];
+};
+
+
+export type UseradminOfCommunitiesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Raft_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Raft_filter>;
+};
+
+
+export type UserbadgesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Badge_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Badge_filter>;
+};
+
+
+export type UserownerOfCommunitiesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Raft_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Raft_filter>;
+};
+
+export type User_filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  adminOfCommunities_?: InputMaybe<Raft_filter>;
+  and?: InputMaybe<Array<InputMaybe<User_filter>>>;
+  badges_?: InputMaybe<Badge_filter>;
+  id?: InputMaybe<Scalars['Bytes']>;
+  id_contains?: InputMaybe<Scalars['Bytes']>;
+  id_gt?: InputMaybe<Scalars['Bytes']>;
+  id_gte?: InputMaybe<Scalars['Bytes']>;
+  id_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  id_lt?: InputMaybe<Scalars['Bytes']>;
+  id_lte?: InputMaybe<Scalars['Bytes']>;
+  id_not?: InputMaybe<Scalars['Bytes']>;
+  id_not_contains?: InputMaybe<Scalars['Bytes']>;
+  id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  or?: InputMaybe<Array<InputMaybe<User_filter>>>;
+  ownerOfCommunities_?: InputMaybe<Raft_filter>;
+  totalBadgesCount?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_gt?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_gte?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalBadgesCount_lt?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_lte?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_not?: InputMaybe<Scalars['Int']>;
+  totalBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+};
+
+export enum User_orderBy {
+  adminOfCommunities = 'adminOfCommunities',
+  badges = 'badges',
+  id = 'id',
+  ownerOfCommunities = 'ownerOfCommunities',
+  totalBadgesCount = 'totalBadgesCount'
+}
+
 export type _Block_ = {
   __typename?: '_Block_';
   /** The hash of the block */
@@ -993,7 +1267,7 @@ export type GetBadgesQueryVariables = Exact<{
 }>;
 
 
-export type GetBadgesQuery = { __typename?: 'Query', badges: Array<{ __typename?: 'Badge', id: string, owner: any, createdAt: number, spec: { __typename?: 'BadgeSpec', id: string, metadata?: { __typename?: 'SpecMetadata', name: string, description: string, image: string } | null } }> };
+export type GetBadgesQuery = { __typename?: 'Query', badges: Array<{ __typename?: 'Badge', id: string, createdAt: number, owner: { __typename?: 'User', id: any }, spec: { __typename?: 'BadgeSpec', id: string, metadata?: { __typename?: 'SpecMetadata', name: string, description: string, image: string } | null } }> };
 
 
-export const GetBadgesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBadges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"raftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"badges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"1000"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"spec_"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"raft"},"value":{"kind":"Variable","name":{"kind":"Name","value":"raftId"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"_change_block"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"number_gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"block"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"number"},"value":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"owner"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"spec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
+export const GetBadgesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBadges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"raftId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"badges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"1000"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"spec_"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"raft"},"value":{"kind":"Variable","name":{"kind":"Name","value":"raftId"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"_change_block"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"number_gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"startBlock"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"block"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"number"},"value":{"kind":"Variable","name":{"kind":"Name","value":"endBlock"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"owner"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"spec"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"metadata"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"image"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
