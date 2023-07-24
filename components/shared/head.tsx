@@ -3,14 +3,14 @@ import { NextSeo } from 'next-seo'
 
 // TODO: Update title/description
 const DEFAULT_TITLE = 'Cabin'
-const DESCRIPTION = 'Create your Census profile to join the community'
+const DESCRIPTION = 'Colive with friends in nature'
 
 let origin = 'http://localhost:3000'
 if (process.env.NEXT_PUBLIC_VERCEL_URL) {
   origin =
     process.env.NEXT_PUBLIC_APP_ENV === 'dev'
-      ? 'https://cabin-census-dev.vercel.app'
-      : 'https://www.cabin.city'
+      ? 'https://dev.cabin.city'
+      : 'https://cabin.city'
 }
 
 export interface AppHeadProps {

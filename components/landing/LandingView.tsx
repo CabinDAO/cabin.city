@@ -9,11 +9,9 @@ import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { levelInfoFromType } from '@/utils/levels'
 import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { HeroVideo } from '../core/HeroVideo'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import Icon from '../core/Icon'
 import { BookingSection } from './BookingSection'
 import { DetailedInfoSection } from './DetailedInfoSection'
 import { LandingContentNoPadding, SectionContent, StyledHHero } from './styles'
@@ -21,7 +19,8 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
-import events from '@/lib/googleAnalytics/events'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { TestimonialSection } from '@/components/landing/TestimonialSection'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
@@ -33,36 +32,23 @@ export const LandingView = () => {
         <LandingContent>
           <SectionContent>
             <HeroDescriptionContainer>
-              <StyledHHero>
-                Colive across a global network of properties in nature
-              </StyledHHero>
+              <StyledHHero>Colive with friends in nature</StyledHHero>
               <SectionGrowDescription>
                 <Body1>
-                  Cabin is a network city that connects people to coliving
-                  experiences and
+                  Cabin is a global network of beautiful properties in nature
+                  for remote workers seeking meaningful connections
                 </Body1>
-                <Body1>work/stay residencies</Body1>
               </SectionGrowDescription>
             </HeroDescriptionContainer>
             <SectionHeader>
               <SectionGrowSignup>
-                <a
-                  href={EXTERNAL_LINKS.VISION}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() =>
-                    events.externalLinkEvent(EXTERNAL_LINKS.VISION)
-                  }
-                >
-                  <Button
-                    endAdornment={<Icon name="up-right-arrow" size={0.9} />}
-                    variant="secondary"
-                  >
-                    View our vision
-                  </Button>
+                <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
+                  <Button>Join a Cabin Week</Button>
                 </a>
                 <AuthenticatedLink href="/dashboard" logSignInEvent>
-                  <Button>{externalUser ? 'View Dashboard' : 'Sign In'}</Button>
+                  <Button variant="secondary">
+                    {externalUser ? 'View Dashboard' : 'Sign In'}
+                  </Button>
                 </AuthenticatedLink>
               </SectionGrowSignup>
             </SectionHeader>
@@ -107,8 +93,12 @@ export const LandingView = () => {
         <DetailedInfoSection />
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection id="join" variant="dark">
         <JoinSection />
+      </LandingSection>
+
+      <LandingSection>
+        <TestimonialSection />
       </LandingSection>
 
       <LandingSection>

@@ -8,7 +8,7 @@ export const BookingSection = () => {
     <BookingSectionContainer>
       <SectionContent>
         <BookingHeader>
-          <BookingHero>Book your next experience</BookingHero>
+          <BookingHero>Explore the network</BookingHero>
           <OpaqueBody1>
             Discover coliving opportunities or level up your skills with
             work/stay residencies
@@ -26,9 +26,7 @@ const BookingSectionContainer = styled(LandingContentNoPadding)`
   align-self: center;
   justify-content: center;
   align-items: center;
-  padding: 8rem 0;
-  padding-left: 2.4rem;
-  padding-right: 2.4rem;
+  padding: 8rem 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 100%;

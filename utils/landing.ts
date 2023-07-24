@@ -38,24 +38,24 @@ export const collapsibleData: CollapsibleData[] = [
     image: '/images/landing-info-2.jpeg',
     items: [
       {
+        title: 'Participate in a Cabin Week',
+        description:
+          'These 1-2 week long events are our official welcome to the Cabin community and a taste of coliving.',
+      },
+      {
         title: 'Create Your Profile',
         description:
           'Your profile is like your digital passport where you can collect and show off your experiences.',
       },
       {
-        title: 'Connect within the Community',
-        description:
-          'Cross paths with other beautiful people and opportunities at our community gatherings online or IRL.',
-      },
-      {
         title: 'Unlock Citizenship',
         description:
-          'Citizenship is a subscription membership for accessing our network city. A current Citizen must nominate you for citizenship.',
+          'Citizenship is a subscription membership for accessing our full network earned by attending a Cabin Week or by receiving a vouch from a current citizen.',
       },
       {
         title: 'Book Your Next Trip',
         description:
-          'Browse our directory of coliving offers and work/stay residencies across the network city and book your next experience. ',
+          'Browse our directory of coliving offers and work/stay residencies across the network city and book your next experience.',
       },
     ],
   },
