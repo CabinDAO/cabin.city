@@ -24,5 +24,5 @@ export const EXTERNAL_LINKS = {
     'https://discord.com/channels/849304522500210709/1115389408095522956',
   CALENDLY_CALL_URL: 'https://calendly.com/cabinhome/welcome',
   BOOKING_TYPEFORM:
-    'https://cabindotcity.typeform.com/to/cUktrMeV?typeform-source=cabin.city',
+    'https://cabindotcity.typeform.com/cabinweeks?typeform-source=cabin.city)',
 }
