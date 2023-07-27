@@ -69,6 +69,7 @@
     "@types/google.maps": "^3.52.5",
     "@types/gtag.js": "^0.0.12",
     "@types/multiparty": "^0.0.33",
+    "@types/node-fetch": "^2.6.4",
     "@types/styled-components": "^5.1.26",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "babel-loader": "^8.3.0",
