@@ -3,7 +3,6 @@
   "extends": [
     "next",
     "plugin:@typescript-eslint/recommended",
-    "plugin:storybook/recommended",
     "plugin:prettier/recommended",
     "prettier"
   ],

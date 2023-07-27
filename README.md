@@ -117,6 +117,8 @@ The following custom events are being tracked:
 
 ## UI Components
 
+*Removed for now. It's lazy-universal-dotenv dependency had an ancient dotenv version and broke our env var loading*
+
 Storybook is used to document and develop UI components. To run storybook:
 
 ```bash
