@@ -18,6 +18,7 @@ export interface CreateProfileInput {
   roles: ProfileRole[] | Expr
   avatar?: ProfileAvatarInput | undefined | Expr
   externalUserId?: string | Expr
+  isAdmin?: boolean
 }
 
 export const CreateProfile = (input: CreateProfileInput) => {
@@ -45,6 +46,7 @@ export const CreateProfile = (input: CreateProfileInput) => {
           cabinTokenBalanceInt: q.Var('cabinTokenBalanceInt'),
           badgeCount: q.Var('badgeCount'),
           externalUserId: input.externalUserId,
+          isAdmin: input.isAdmin ?? false,
         },
       }),
       activity: UpsertActivity(q.Var('profile'), {

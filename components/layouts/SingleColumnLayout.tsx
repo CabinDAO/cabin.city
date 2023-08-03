@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { LaunchBanner } from '../citizenship/LaunchBanner'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
-import { ProfileNavbar } from '../profile/ProfileNavbar'
+import { Navbar } from '../core/Navbar'
 import { MainContent, NavbarContainer } from './common.styles'
 import { HTMLAttributes } from 'react'
 
@@ -39,7 +39,7 @@ export const SingleColumnLayout = ({
               <MobileFloatingMenu />
             ) : (
               <NavbarContainer variant={variant}>
-                <ProfileNavbar />
+                <Navbar />
               </NavbarContainer>
             )}
           </>

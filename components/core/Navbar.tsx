@@ -4,6 +4,7 @@ import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'
+import { useProfile } from '@/components/auth/useProfile'
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -40,12 +41,13 @@ const NeighborhoodsItemGroup = styled.div`
   gap: 2.7rem;
 `
 
-interface NavbarProps {
-  profileId?: string
-  avatarUrl?: string
-}
+export const Navbar = () => {
+  const { user } = useProfile()
 
-export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
+  const profileId = user?._id
+  const avatarUrl = user?.avatar?.url
+  const isAdmin = user?.isAdmin
+
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
 
   return (
@@ -76,6 +78,11 @@ export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
             profileId={profileId}
           />
         </SingleMenuItem>
+        {profileId && isAdmin && (
+          <SingleMenuItem>
+            <MenuItemLink menuItem={'admin'} profileId={profileId} />
+          </SingleMenuItem>
+        )}
       </Container>
       <ProfileNavMenu visible={profileMenuVisible} />
     </>

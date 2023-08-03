@@ -11,6 +11,7 @@ export type MenuItemOption =
   | 'signOut'
   | 'offers'
   | 'signIn'
+  | 'admin'
 
 export type MenuItemConfig = {
   icon: IconName
@@ -69,6 +70,11 @@ export const MenuItemsAuthenticatedMap: Record<
     path: '/my-locations',
     displayText: 'My Locations',
   },
+  admin: {
+    icon: 'lock',
+    path: '/admin',
+    displayText: 'Admin',
+  },
   signOut: {
     icon: 'sign-out',
     path: '/logout',
@@ -109,6 +115,7 @@ export const MenuItemsUnauthenticatedMap: Record<
   },
   profile: null,
   citizenship: null,
+  admin: null,
   signOut: null,
   signIn: {
     icon: 'profile',

@@ -92,6 +92,7 @@ type Profile {
   referredLocations: [Location!] @relation(name: "referredLocations")
   locationVotes: [LocationVote!] @relation
   features: [String!]
+  isAdmin: Boolean!
 }
 
 type ProfileVouch {

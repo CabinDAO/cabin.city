@@ -1,8 +1,8 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
+import { writeOnlyBy } from './predicates/writeOnlyBy'
 import { deleteOnlyBy } from './predicates/deleteOnlyBy'
 import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
-import { writeOnlyBy } from './predicates/writeOnlyBy'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',

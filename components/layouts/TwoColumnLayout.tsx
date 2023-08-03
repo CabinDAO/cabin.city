@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import { IconName } from '../core/Icon'
 import { TitleCard } from '../core/TitleCard'
+import { Navbar } from '../core/Navbar'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
-import { ProfileNavbar } from '../profile/ProfileNavbar'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
 
 const Container = styled.div`
@@ -64,7 +64,7 @@ export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
           <MobileFloatingMenu />
         ) : (
           <NavbarContainer>
-            <ProfileNavbar />
+            <Navbar />
           </NavbarContainer>
         )}
       </Container>
