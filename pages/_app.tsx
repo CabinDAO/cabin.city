@@ -38,7 +38,9 @@ export default function App({ Component, pageProps }: AppProps) {
             appearance: {
               theme: theme.colors.yellow100 as `#${string}`,
               accentColor: theme.colors.green800 as `#${string}`,
-              logo: `https://${appDomain}/images/cabin-auth.png`,
+              logo:
+                (appDomain == 'localhost:3000' ? 'http' : 'https') +
+                `://${appDomain}/images/cabin-auth.png`,
               showWalletLoginFirst: false,
             },
           }}

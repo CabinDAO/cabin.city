@@ -49,6 +49,9 @@ const withAuth = (handler: AuthApiHandler) => {
       if (error instanceof AuthenticationError) {
         res.statusCode = 401
         return res.json({ error: error.message })
+      } else {
+        res.statusCode = 400
+        return res.json({ error: 'Something went wrong' })
       }
     }
   }
