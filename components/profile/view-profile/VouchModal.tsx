@@ -18,6 +18,9 @@ import {
   useVouchProfileMutation,
 } from '@/generated/graphql'
 import { useState } from 'react'
+import { useEmail } from '@/components/hooks/useEmail'
+import { useProfile } from '@/components/auth/useProfile'
+import { EmailType, VouchDto } from '@/lib/mail/types'
 
 interface VouchModalProps {
   profile: GetProfileByIdFragment
@@ -26,8 +29,10 @@ interface VouchModalProps {
 const MAX_VOUCHES_PER_YEAR = 10
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
+  const { user: myProfile } = useProfile()
   const { data } = useMyVouchesThisYearQuery()
   const [vouched, setVouched] = useState(false)
+  const { sendEmail } = useEmail()
   const [vouchProfile] = useVouchProfileMutation({
     refetchQueries: ['MyVouchesThisYear'],
   })
@@ -46,6 +51,15 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
       result.data?.vouchProfile?.citizenshipStatus === CitizenshipStatus.Vouched
     ) {
       setVouched(true)
+
+      sendEmail({
+        to: result.data?.vouchProfile.email,
+        data: {
+          voucher: myProfile?.name || '',
+          prospective: profile.name || '',
+        } as VouchDto,
+        type: EmailType.VOUCHED,
+      })
     }
   }
 

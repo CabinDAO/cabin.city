@@ -20,6 +20,8 @@ export interface Env {
   NEXT_PUBLIC_PRIVY_APP_ID: string
   PRIVY_APP_SECRET: string
   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string
+  SENDGRID_API_KEY: string
+  SENDGRID_FROM_EMAIL: string
 }
 
 declare global {
