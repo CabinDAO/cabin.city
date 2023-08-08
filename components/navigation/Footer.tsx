@@ -30,6 +30,13 @@ export const Footer = ({ children, className }: FooterProps) => (
         >
           <FooterItem>Experiences</FooterItem>
         </AppLink>
+        <AppLink
+          external
+          location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
+          iconSize={0}
+        >
+          <FooterItem>List Your Property</FooterItem>
+        </AppLink>
         <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
           <FooterItem>Citizenship</FooterItem>
         </AppLink>
