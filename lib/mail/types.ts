@@ -2,25 +2,45 @@ import { emailConfig } from './config'
 
 export enum EmailType {
   VOUCHED = 'VOUCHED',
+  VOUCH_REQUESTED = 'VOUCH_REQUESTED',
 }
 
 export type PayloadMapping = {
-  VOUCHED: VouchDto
+  VOUCHED: VouchPayload
+  VOUCH_REQUESTED: VouchRequstedPayload
 }
 
-export class VouchDto implements EmailPayload {
+export class VouchPayload implements EmailPayload {
   templateId = emailConfig.vouchedTemplateId
-  subject = () => `${this.prospective}, you have been vouched!`
+  to = () => {
+    throw new Error('not implemented')
+    return ''
+  }
+  subject = () => `${this.prospectiveName}, you have been vouched!`
 
-  prospective = ''
+  prospectiveName = ''
+  prospectiveEmail = ''
   voucher = ''
   sendSubject = false
+}
+
+export class VouchRequstedPayload implements EmailPayload {
+  templateId = emailConfig.vouchRequestedTemplateId
+  to = () =>
+    process.env.NODE_ENV === 'production'
+      ? 'jd@cabin.city'
+      : (process.env.SENDGRID_DEV_EMAIL as string)
+  subject = () => `${this.name} wants a vouch plz`
+
+  name = ''
+  sendSubject = true
 }
 
 export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>
 
 export interface EmailPayload {
   templateId: string
+  to: () => string
   subject: () => string
   sendSubject?: boolean
 }

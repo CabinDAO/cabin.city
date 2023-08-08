@@ -21,7 +21,7 @@ const withAuth = (handler: AuthApiHandler) => {
       const authToken = await req.headers.authorization?.replace('Bearer ', '')
 
       if (!authToken) {
-        throw new Error('No authorization token provided.')
+        throw new AuthenticationError('No authorization token provided.')
       }
 
       const spkiPublicKey = `-----BEGIN PUBLIC KEY-----

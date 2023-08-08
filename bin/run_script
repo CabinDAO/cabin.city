@@ -6,6 +6,8 @@
 
 echo "Reading vars from .env.local"
 source .env
+source .env.local
+source .env.fauna.local
 
 FAUNA_SERVER_SECRET="$FAUNA_SERVER_SECRET" \
 FAUNA_DB_HOST="$FAUNA_DB_HOST" \

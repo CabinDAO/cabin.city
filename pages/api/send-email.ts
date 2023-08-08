@@ -27,12 +27,17 @@ async function handler(
   const sendgrid = new SendgridService()
 
   try {
-    const response = await sendgrid.sendEmail(body.to, body.data, body.type)
+    const response = await sendgrid.sendEmail(body.data, body.type)
     console.info('sendgrid response', response)
     res.status(200).send({ message: 'OK' })
-  } catch (error) {
-    console.error('sendgrid error', error)
-    res.status(500).send({ message: 'Internal Server Error' })
+  } catch (error: any) {
+    console.error('sendgrid error', error, error.response?.body)
+    res.status(500).send({
+      message:
+        process.env.NODE_ENV === 'production'
+          ? 'Internal Server Error'
+          : error.message,
+    })
   }
 }
 

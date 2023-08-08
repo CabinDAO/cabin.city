@@ -20,7 +20,7 @@ import {
 import { useState } from 'react'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useProfile } from '@/components/auth/useProfile'
-import { EmailType, VouchDto } from '@/lib/mail/types'
+import { EmailType, VouchPayload } from '@/lib/mail/types'
 
 interface VouchModalProps {
   profile: GetProfileByIdFragment
@@ -52,14 +52,14 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
     ) {
       setVouched(true)
 
-      sendEmail({
-        to: result.data?.vouchProfile.email,
-        data: {
-          voucher: myProfile?.name || '',
-          prospective: profile.name || '',
-        } as VouchDto,
-        type: EmailType.VOUCHED,
-      })
+      // sendEmail({
+      //   //to: result.data?.vouchProfile.email, // THIS CANT BE USER-CONTROLLED
+      //   data: {
+      //     voucher: myProfile?.name || '',
+      //     prospective: profile.name || '',
+      //   } as VouchPayload,
+      //   type: EmailType.VOUCHED,
+      // })
     }
   }
 

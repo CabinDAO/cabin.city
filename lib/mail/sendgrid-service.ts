@@ -1,5 +1,10 @@
 import { MailService } from '@sendgrid/mail'
-import { EmailPayload, EmailType, VouchDto } from './types'
+import {
+  EmailPayload,
+  EmailType,
+  VouchPayload,
+  VouchRequstedPayload,
+} from './types'
 
 export class SendgridService {
   private client: MailService
@@ -9,38 +14,50 @@ export class SendgridService {
     this.client.setApiKey(process.env.SENDGRID_API_KEY)
   }
 
-  /**
-   * Send an email using Sendgrid
-   * @param to
-   * @param data
-   */
-  async sendEmail(to: string, data: EmailPayload, type: EmailType) {
+  async sendEmail(data: EmailPayload, type: EmailType) {
     let payload: EmailPayload
 
     switch (type) {
       case EmailType.VOUCHED:
-        payload = new VouchDto()
+        throw new Error(`Vouch emails disabled for now`)
+        payload = new VouchPayload()
+        Object.assign(payload, data)
+        break
+      case EmailType.VOUCH_REQUESTED:
+        payload = new VouchRequstedPayload()
         Object.assign(payload, data)
         break
       default:
-        throw new Error('Invalid email type')
+        throw new Error(`Invalid email type: '${type}'`)
     }
 
-    if (payload.templateId) {
-      return await this.client.send({
-        to,
-        from: process.env.SENDGRID_FROM_EMAIL,
-        templateId: payload.templateId,
-        personalizations: [
-          {
-            to,
-            dynamicTemplateData: payload,
-          },
-        ],
-        ...(payload.sendSubject && { subject: payload.subject() }),
-      })
-    } else {
+    if (!payload.templateId) {
       throw new Error('Missing templateId or subject from ../types')
     }
+
+    const recipientEmail =
+      process.env.NODE_ENV === 'production'
+        ? payload.to()
+        : process.env.SENDGRID_DEV_EMAIL
+
+    if (!recipientEmail) {
+      throw new Error(
+        'recipient missing or process.env.SENDGRID_DEV_EMAIL is not set'
+      )
+    }
+
+    console.log(`Sending email to ${recipientEmail}`)
+    return await this.client.send({
+      to: recipientEmail,
+      from: process.env.SENDGRID_FROM_EMAIL,
+      templateId: payload.templateId,
+      personalizations: [
+        {
+          to: recipientEmail,
+          dynamicTemplateData: payload,
+        },
+      ],
+      ...(payload.sendSubject && { subject: payload.subject() }),
+    })
   }
 }
