@@ -36,7 +36,7 @@ export class VouchRequstedPayload implements EmailPayload {
   templateId = emailConfig.vouchRequestedTemplateId
   to = () =>
     process.env.NODE_ENV === 'production'
-      ? 'jd@cabin.city'
+      ? 'grin@cabin.city'
       : (process.env.SENDGRID_DEV_EMAIL as string)
   subject = () => `${this.name} wants a vouch plz`
 
