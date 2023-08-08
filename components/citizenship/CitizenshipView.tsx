@@ -11,11 +11,14 @@ import { useChainSwitch } from '../hooks/useChainSwitch'
 import { addressMatch } from '@/utils/address-match'
 import { useExternalUser } from '../auth/useExternalUser'
 import events from '@/lib/googleAnalytics/events'
+import { useEmail } from '@/components/hooks/useEmail'
+import { EmailType, VouchPayload, VouchRequstedPayload } from '@/lib/mail/types'
 
 export const CitizenshipView = () => {
   const { user } = useProfile({ redirectTo: '/' })
   const { externalUser } = useExternalUser()
   const { wallets } = useWallets()
+  const { sendEmail } = useEmail()
 
   const performMint = async () => {
     const currentUserWallet = wallets.find((w) =>
@@ -54,6 +57,14 @@ export const CitizenshipView = () => {
     if (!user) return
 
     events.signalInterestEvent(user?._id ?? '')
+
+    sendEmail({
+      data: {
+        name: user?.name,
+        profileId: user?._id,
+      } as VouchRequstedPayload,
+      type: EmailType.VOUCH_REQUESTED,
+    })
 
     toggleSignal()
   }

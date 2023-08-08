@@ -10,6 +10,9 @@ export const appDomain =
     ? 'cabin.city'
     : process.env.NEXT_PUBLIC_VERCEL_URL
 
+export const appDomainWithProto =
+  (process.env.NODE_ENV == 'development' ? 'http' : 'https') + `://${appDomain}`
+
 export const EMPTY = '—'
 
 // Utility functions for displaying numbers compactly. e.g. 1000 -> 1k

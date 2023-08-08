@@ -5,6 +5,7 @@ import {
   VouchPayload,
   VouchRequstedPayload,
 } from './types'
+import { appDomainWithProto } from '@/utils/display-utils'
 
 export class SendgridService {
   private client: MailService
@@ -14,7 +15,7 @@ export class SendgridService {
     this.client.setApiKey(process.env.SENDGRID_API_KEY)
   }
 
-  async sendEmail(data: EmailPayload, type: EmailType) {
+  async sendEmail(data: object, type: EmailType) {
     let payload: EmailPayload
 
     switch (type) {
@@ -24,8 +25,7 @@ export class SendgridService {
         Object.assign(payload, data)
         break
       case EmailType.VOUCH_REQUESTED:
-        payload = new VouchRequstedPayload()
-        Object.assign(payload, data)
+        payload = new VouchRequstedPayload(data)
         break
       default:
         throw new Error(`Invalid email type: '${type}'`)

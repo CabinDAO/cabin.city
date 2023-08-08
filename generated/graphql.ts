@@ -2169,6 +2169,7 @@ export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
+
   size?: InputMaybe<Scalars['Int']>;
   cursor?: InputMaybe<Scalars['String']>;
 }>;

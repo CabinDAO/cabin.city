@@ -1,4 +1,5 @@
 import { emailConfig } from './config'
+import { appDomainWithProto } from '@/utils/display-utils'
 
 export enum EmailType {
   VOUCHED = 'VOUCHED',
@@ -25,6 +26,13 @@ export class VouchPayload implements EmailPayload {
 }
 
 export class VouchRequstedPayload implements EmailPayload {
+  constructor(data: object) {
+    Object.assign(this, data)
+    if (this.profileId) {
+      this.profileLink = `${appDomainWithProto}/profile/${this.profileId}`
+    }
+  }
+
   templateId = emailConfig.vouchRequestedTemplateId
   to = () =>
     process.env.NODE_ENV === 'production'
@@ -33,6 +41,8 @@ export class VouchRequstedPayload implements EmailPayload {
   subject = () => `${this.name} wants a vouch plz`
 
   name = ''
+  profileId = ''
+  profileLink = ''
   sendSubject = true
 }
 

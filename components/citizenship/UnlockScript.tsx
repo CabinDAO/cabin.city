@@ -6,7 +6,7 @@ import { useProfile } from '../auth/useProfile'
 import { useCitizenship } from '../hooks/useCitizenship'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
-import { appDomain } from '@/utils/display-utils'
+import { appDomainWithProto } from '@/utils/display-utils'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loadUnlockCheckout = async (provider: any) => {
@@ -18,11 +18,11 @@ export const loadUnlockCheckout = async (provider: any) => {
       },
     },
     useDelegatedProvider: true,
-    dataBuilder: `https://${appDomain}/api/unlock/data-builder`,
+    dataBuilder: `${appDomainWithProto}/api/unlock/data-builder`,
     pessimistic: true,
     skipRecipient: true,
     title: 'Cabin Citizenship',
-    icon: `https://${appDomain}/images/cabin-nft.png`,
+    icon: `${appDomainWithProto}/images/cabin-nft.png`,
   }
 
   const paywall = new Paywall(networks)

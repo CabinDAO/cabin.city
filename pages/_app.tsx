@@ -11,7 +11,7 @@ import { NavigationProvider } from '@/components/contexts/NavigationContext'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
 import { PrivyProvider } from '@privy-io/react-auth'
-import { appDomain } from '@/utils/display-utils'
+import { appDomainWithProto } from '@/utils/display-utils'
 import { PrivyWagmiConnector } from '@privy-io/wagmi-connector'
 import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
 import { useAuth } from '@/components/hooks/useAuth'
@@ -38,9 +38,7 @@ export default function App({ Component, pageProps }: AppProps) {
             appearance: {
               theme: theme.colors.yellow100 as `#${string}`,
               accentColor: theme.colors.green800 as `#${string}`,
-              logo:
-                (appDomain == 'localhost:3000' ? 'http' : 'https') +
-                `://${appDomain}/images/cabin-auth.png`,
+              logo: `${appDomainWithProto}/images/cabin-auth.png`,
               showWalletLoginFirst: false,
             },
           }}
