@@ -12,7 +12,7 @@ import { addressMatch } from '@/utils/address-match'
 import { useExternalUser } from '../auth/useExternalUser'
 import events from '@/lib/googleAnalytics/events'
 import { useEmail } from '@/components/hooks/useEmail'
-import { EmailType, VouchPayload, VouchRequstedPayload } from '@/lib/mail/types'
+import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 
 export const CitizenshipView = () => {
   const { user } = useProfile({ redirectTo: '/' })
@@ -59,11 +59,12 @@ export const CitizenshipView = () => {
     events.signalInterestEvent(user?._id ?? '')
 
     sendEmail({
+      type: EmailType.VOUCH_REQUESTED,
       data: {
         name: user?.name,
+        email: user?.email,
         profileId: user?._id,
       } as VouchRequstedPayload,
-      type: EmailType.VOUCH_REQUESTED,
     })
 
     toggleSignal()

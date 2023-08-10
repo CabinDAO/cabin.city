@@ -20,7 +20,7 @@ import {
 import { useState } from 'react'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useProfile } from '@/components/auth/useProfile'
-import { EmailType, VouchPayload } from '@/lib/mail/types'
+import { EmailType } from '@/lib/mail/types'
 
 interface VouchModalProps {
   profile: GetProfileByIdFragment

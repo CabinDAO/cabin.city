@@ -6,7 +6,6 @@ import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailPayload, EmailType } from '@/lib/mail/types'
 
 export interface EmailParams<T extends EmailPayload> {
-  to: string
   data: T
   type: EmailType
 }
@@ -27,7 +26,7 @@ async function handler(
   const sendgrid = new SendgridService()
 
   try {
-    const response = await sendgrid.sendEmail(body.data, body.type)
+    const response = await sendgrid.sendEmail(body.type, body.data)
     console.info('sendgrid response', response)
     res.status(200).send({ message: 'OK' })
   } catch (error: any) {
