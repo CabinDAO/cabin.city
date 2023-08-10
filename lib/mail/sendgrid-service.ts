@@ -1,5 +1,6 @@
 import { MailService, MailDataRequired } from '@sendgrid/mail'
-import { EmailType } from './types'
+import { MailData } from '@sendgrid/helpers/classes/mail'
+import { EmailPayload, EmailType, VouchRequstedPayload } from './types'
 import { appDomainWithProto } from '@/utils/display-utils'
 
 export class SendgridService {
@@ -10,12 +11,8 @@ export class SendgridService {
     this.client.setApiKey(process.env.SENDGRID_API_KEY)
   }
 
-  async sendEmail(type: EmailType, data: object) {
-    if (data.from) {
-      delete data.from
-    }
-
-    const md: MailDataRequired = {
+  async sendEmail(type: EmailType, data: EmailPayload) {
+    const md: MailData = {
       from: {
         name: 'CabinMail',
         email: process.env.SENDGRID_FROM_EMAIL,
@@ -24,14 +21,16 @@ export class SendgridService {
 
     switch (type) {
       case EmailType.VOUCH_REQUESTED:
-        if (!(data.name && data.email && data.profileId)) {
+        const d = data as VouchRequstedPayload
+
+        if (!(d.name && d.email && d.profileId)) {
           throw new Error('required fields: name, email, profileId')
         }
         Object.assign(md, {
           to: 'home@cabin.city',
-          subject: `${data.name} requested a vouch`,
+          subject: `${d.name} requested a vouch`,
           html: `<div>
-            <a href="${appDomainWithProto}/profile/${data.profileId}">${data.name}</a> (<a href="mailto:${data.email}">${data.email}</a>) requested a vouch.
+            <a href="${appDomainWithProto}/profile/${d.profileId}">${d.name}</a> (<a href="mailto:${d.email}">${d.email}</a>) requested a vouch.
           </div>`,
           trackingSettings: {
             clickTracking: { enable: false },
@@ -57,6 +56,6 @@ export class SendgridService {
     }
 
     console.log(`Sending email to ${md.to}`)
-    return await this.client.send(md)
+    return await this.client.send(md as MailDataRequired)
   }
 }
