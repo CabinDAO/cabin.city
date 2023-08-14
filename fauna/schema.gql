@@ -413,6 +413,7 @@ enum OfferType {
   PaidColiving
   Residency
   BuildAndGrowWeek
+  CabinWeek
 }
 
 type OfferPrice @embedded {

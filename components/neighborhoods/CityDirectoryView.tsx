@@ -44,6 +44,11 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
             onClick={() => router.push('/city-directory/outposts')}
           />
           <ChipFilter
+            label="Cabin Week"
+            selected={offerType === OfferType.CabinWeek}
+            onClick={() => router.push('/city-directory/cabin-week')}
+          />
+          <ChipFilter
             label="Coliving"
             selected={offerType === OfferType.PaidColiving}
             onClick={() => router.push('/city-directory/coliving')}
@@ -52,11 +57,6 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
             label="Residencies"
             selected={offerType === OfferType.Residency}
             onClick={() => router.push('/city-directory/residency')}
-          />
-          <ChipFilter
-            label="Build week"
-            selected={offerType === OfferType.BuildAndGrowWeek}
-            onClick={() => router.push('/city-directory/build-week')}
           />
         </StyledChipFilterBar>
         <LocationListFilter locationType={locationType} offerType={offerType} />

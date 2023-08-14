@@ -1,17 +1,20 @@
 import styled from 'styled-components'
 import {
-  RoleConstraintType,
   formatOfferPrice,
+  labelByOfferPriceUnit,
   offerInfoFromType,
+  RoleConstraintType,
 } from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
+  Body1,
+  body1Styles,
   Caption,
+  H1,
   H2,
   H3,
   Subline2,
-  body1Styles,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
@@ -122,19 +125,28 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   </LocationSubline2>
                 </OfferDetailsOverview>
 
+                {offerType == OfferType.CabinWeek && offer.price && (
+                  <OfferCabinWeekDetailsSection>
+                    <H1>{formatOfferPrice(offer.price)}</H1>
+                    <Body1>{formatRange(startDate, endDate)}</Body1>
+                  </OfferCabinWeekDetailsSection>
+                )}
+
                 <ApplyButton applyUrl={applyUrl} experienceId={offer._id} />
               </OfferDetailsHeader>
 
-              <OfferDetailsSection>
-                <H3>AVAILABILITY</H3>
+              {offerType !== OfferType.CabinWeek && (
+                <OfferDetailsSection>
+                  <H3>AVAILABILITY</H3>
 
-                <OfferDetailsPricing>
-                  <Caption>{formatRange(startDate, endDate)}</Caption>
-                  <Caption emphasized>
-                    {price ? formatOfferPrice(price) : EMPTY}
-                  </Caption>
-                </OfferDetailsPricing>
-              </OfferDetailsSection>
+                  <OfferDetailsPricing>
+                    <Caption>{formatRange(startDate, endDate)}</Caption>
+                    <Caption emphasized>
+                      {price ? formatOfferPrice(price) : EMPTY}
+                    </Caption>
+                  </OfferDetailsPricing>
+                </OfferDetailsSection>
+              )}
 
               {(displayMatchAll ||
                 displayMatchOne ||
@@ -310,6 +322,21 @@ const OfferDetailsSection = styled.div`
   display: flex;
   flex-flow: column;
   gap: 1.6rem;
+`
+
+const OfferCabinWeekDetailsSection = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 1.6rem;
+
+  h1 {
+    font-size: 3.2rem;
+    small {
+      font-size: 1.3rem;
+      font-weight: 400;
+      //color: ${({ theme }) => theme.colors.green900};
+    }
+  }
 `
 
 const OfferDetailsPricing = styled.div`

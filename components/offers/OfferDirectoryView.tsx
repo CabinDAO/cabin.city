@@ -9,7 +9,7 @@ import { ChipFilter, ChipFilterBar } from '../core/ChipFilterBar'
 const SlugOfferTypeMap: Record<string, OfferType> = {
   coliving: OfferType.PaidColiving,
   residency: OfferType.Residency,
-  'build-week': OfferType.BuildAndGrowWeek,
+  cabinweek: OfferType.CabinWeek,
 }
 
 export const OfferDirectoryView = () => {
@@ -28,6 +28,11 @@ export const OfferDirectoryView = () => {
             onClick={() => router.push('/experiences')}
           />
           <ChipFilter
+            label="Cabin Week"
+            selected={offerType === OfferType.CabinWeek}
+            onClick={() => router.push('/experiences/cabin-week')}
+          />
+          <ChipFilter
             label="Coliving"
             selected={offerType === OfferType.PaidColiving}
             onClick={() => router.push('/experiences/coliving')}
@@ -36,11 +41,6 @@ export const OfferDirectoryView = () => {
             label="Residencies"
             selected={offerType === OfferType.Residency}
             onClick={() => router.push('/experiences/residency')}
-          />
-          <ChipFilter
-            label="Build Week"
-            selected={offerType === OfferType.BuildAndGrowWeek}
-            onClick={() => router.push('/experiences/build-week')}
           />
         </StyledChipFilterBar>
         <OfferTabList offerType={offerType} />

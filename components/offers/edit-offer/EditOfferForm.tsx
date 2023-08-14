@@ -8,8 +8,8 @@ import { Eligibility } from './Eligibility'
 import {
   OfferFragment,
   OfferType,
-  UpdateOfferInput,
   ProfileRoleConstraintInput,
+  UpdateOfferInput,
   useDeleteOfferMutation,
 } from '@/generated/graphql'
 import { ApplicationLink } from './ApplicationLink'
@@ -153,7 +153,7 @@ export const EditOfferForm = ({
       />
       <HorizontalDivider />
       <Pair>
-        <H3>Offer Details</H3>
+        <H3>Details</H3>
         <OpaqueBody2>
           Promote your location and set expectations for the experience using
           the fields provided.
@@ -190,7 +190,8 @@ export const EditOfferForm = ({
         defaultEndDate={offerField('endDate')}
       />
       <HorizontalDivider />
-      {offer.offerType === OfferType.PaidColiving ? (
+      {offer.offerType === OfferType.PaidColiving ||
+      offer.offerType === OfferType.CabinWeek ? (
         <Pricing
           highlightErrors={highlightErrors}
           price={updateOfferInput.price}

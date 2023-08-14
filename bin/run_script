@@ -11,4 +11,5 @@ echo "Reading vars from .env files"
 
 FAUNA_SERVER_SECRET="$FAUNA_SERVER_SECRET" \
 FAUNA_DB_HOST="$FAUNA_DB_HOST" \
+FAUNA_DB_PORT="${FAUNA_DB_PORT:-443}" \
 npx ts-node --skip-project scripts/$1 ${@:2}

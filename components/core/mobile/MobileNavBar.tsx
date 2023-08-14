@@ -3,6 +3,7 @@ import { HorizontalDivider } from '../Divider'
 import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
 import { useProfile } from '@/components/auth/useProfile'
+import { MenuItemLink } from '@/components/core/navbar/MenuItemLink'
 
 interface MobileNavBarProps {
   profileId?: string
@@ -24,6 +25,9 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
         {user && (
           <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
+        )}
+        {user && user.isAdmin && (
+          <MobileMenuItem menuItem={'admin'} profileId={profileId} />
         )}
         <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
         <MobileMenuItem

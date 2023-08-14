@@ -1554,7 +1554,7 @@ export enum OfferPriceUnit {
 export enum OfferType {
   PaidColiving = 'PaidColiving',
   Residency = 'Residency',
-  BuildAndGrowWeek = 'BuildAndGrowWeek'
+  CabinWeek = 'CabinWeek'
 }
 
 export type OtterspaceBadge = {
@@ -2171,7 +2171,6 @@ export type GetProfileByAddressQuery = { __typename?: 'Query', accountByAddress?
 
 export type GetProfilesQueryVariables = Exact<{
   input: GetProfilesInput;
-
   size?: InputMaybe<Scalars['Int']>;
   cursor?: InputMaybe<Scalars['String']>;
 }>;

@@ -18,7 +18,8 @@ import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
-  const { offer, ownedByMe } = useGetOffer()
+  const { offerId } = router.query
+  const { offer, isEditable } = useGetOffer(`${offerId}`)
   const [updateOffer] = useUpdateOfferMutation()
   const { history } = useNavigation()
   const backRoute = history[history.length - 2]
@@ -47,7 +48,7 @@ export const EditOfferPageView = () => {
     }
   }, [offerFragment])
 
-  if (!offer || !ownedByMe) {
+  if (!offer || !isEditable) {
     return null
   }
 
@@ -95,7 +96,7 @@ export const EditOfferPageView = () => {
         <ActionBar
           primaryButton={{
             onClick: handleNext,
-            label: 'Save Offer',
+            label: 'Save Experience',
           }}
           secondaryButton={{
             onClick: handleBack,

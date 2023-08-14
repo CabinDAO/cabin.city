@@ -24,6 +24,7 @@ import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffer
 import { OfferTypesDescriptionList } from '@/components/offers/OfferTypeExplanation'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { useProfile } from '@/components/auth/useProfile'
 
 export const OffersStep = ({
   name,
@@ -34,6 +35,7 @@ export const OffersStep = ({
 }: StepProps) => {
   const [createOffer] = useCreateOfferMutation()
   const router = useRouter()
+  const { user } = useProfile()
   const { created } = router.query
   const stepTitle = created ? 'Draft listing' : 'Edit listing'
   const stepIndicatorText = () => {
@@ -50,9 +52,7 @@ export const OffersStep = ({
   const options = allOfferInfos.map((offerInfo) => ({
     label: offerInfo.name,
     value: offerInfo.offerType,
-    disabled:
-      offerInfo.offerType === OfferType.BuildAndGrowWeek &&
-      location.locationType === LocationType.Outpost,
+    disabled: offerInfo.offerType === OfferType.CabinWeek && !user?.isAdmin,
   }))
 
   const handleCreateOfferClick = async () => {

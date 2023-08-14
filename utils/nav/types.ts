@@ -71,9 +71,9 @@ export const MenuItemsAuthenticatedMap: Record<
     displayText: 'My Locations',
   },
   admin: {
-    icon: 'lock',
+    icon: 'person',
     path: '/admin',
-    displayText: 'Admin',
+    displayText: 'Admin Tools',
   },
   signOut: {
     icon: 'sign-out',

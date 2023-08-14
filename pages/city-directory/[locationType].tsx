@@ -23,8 +23,8 @@ const CityDirectoryByLocationType = () => {
     case 'coliving':
       offerType = OfferType.PaidColiving
       break
-    case 'build-week':
-      offerType = OfferType.BuildAndGrowWeek
+    case 'cabin-week':
+      offerType = OfferType.CabinWeek
       break
     default:
       throw new Error('Invalid location type')
