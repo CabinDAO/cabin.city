@@ -92,7 +92,7 @@ type Profile {
   referredLocations: [Location!] @relation(name: "referredLocations")
   locationVotes: [LocationVote!] @relation
   features: [String!]
-  isAdmin: Boolean!
+  isAdmin: Boolean
 }
 
 type ProfileVouch {
@@ -412,7 +412,6 @@ type Offer {
 enum OfferType {
   PaidColiving
   Residency
-  BuildAndGrowWeek
   CabinWeek
 }
 
