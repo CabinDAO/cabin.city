@@ -58,10 +58,9 @@ export const useGetOffer = (offerId: string) => {
 
   const isPublished = !!offer?.location.publishedAt
 
-  const isEditable = !!(
-    offer &&
-    (user?.isAdmin || user?._id === offer?.location.caretaker._id)
-  )
+  const isUserCaretaker = user?._id === offer?.location.caretaker._id
+
+  const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
 
   const isVisible = !!offer && (isEditable || isPublished)
 
@@ -77,8 +76,9 @@ export const useGetOffer = (offerId: string) => {
 
   return {
     offer: offer,
-    isVisible: isVisible,
-    isEditable: isEditable,
     isPublished: isPublished,
+    isUserCaretaker: isUserCaretaker,
+    isEditable: isEditable,
+    isVisible: isVisible,
   }
 }

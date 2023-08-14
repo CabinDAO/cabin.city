@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import {
   formatOfferPrice,
-  labelByOfferPriceUnit,
   offerInfoFromType,
   RoleConstraintType,
 } from '@/utils/offer'
@@ -16,6 +15,7 @@ import {
   H3,
   Subline2,
 } from '@/components/core/Typography'
+import Link from 'next/link'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
@@ -33,10 +33,19 @@ import { formatRange, formatUrl } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
 import events from '@/lib/googleAnalytics/events'
+import { useRouter } from 'next/router'
 
 const EMPTY = '—'
 
-export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
+export const OfferView = ({
+  offer,
+  isEditable,
+  isUserCaretaker,
+}: {
+  offer: OfferViewProps
+  isEditable: boolean
+  isUserCaretaker: boolean
+}) => {
   const {
     title,
     description,
@@ -59,6 +68,7 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
     }),
     {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
   )
+  const router = useRouter()
 
   const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
     .flatMap(
@@ -132,7 +142,20 @@ export const OfferView = ({ offer }: { offer: OfferViewProps }) => {
                   </OfferCabinWeekDetailsSection>
                 )}
 
-                <ApplyButton applyUrl={applyUrl} experienceId={offer._id} />
+                <Actions>
+                  <ApplyButton applyUrl={applyUrl} experienceId={offer._id} />
+                  {isEditable && !isUserCaretaker && (
+                    <Button
+                      variant={'secondary'}
+                      onClick={() => {
+                        router.push(`/experience/${offer._id}/edit`)
+                      }}
+                    >
+                      <Icon name={'person'} size={1.5} />
+                      Edit
+                    </Button>
+                  )}
+                </Actions>
               </OfferDetailsHeader>
 
               {offerType !== OfferType.CabinWeek && (
@@ -294,6 +317,17 @@ const OfferDetailsHeader = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     flex-flow: column;
   }
+`
+
+const Actions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`
+
+const EditLink = styled(Link)`
+  font-size: 2.4rem;
+  line-height: 3rem;
 `
 
 const OfferDetailsOverview = styled.div`

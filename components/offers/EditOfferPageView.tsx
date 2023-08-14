@@ -4,6 +4,7 @@ import { EditOfferView } from './EditOfferView'
 import { ActionBar } from '../core/ActionBar'
 import {
   OfferPriceUnit,
+  OfferType,
   UpdateOfferInput,
   useUpdateOfferMutation,
 } from '@/generated/graphql'
@@ -19,7 +20,7 @@ import { DiscardChangesModal } from '../core/DiscardChangesModal'
 export const EditOfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable } = useGetOffer(`${offerId}`)
+  const { offer, isEditable, isUserCaretaker } = useGetOffer(`${offerId}`)
   const [updateOffer] = useUpdateOfferMutation()
   const { history } = useNavigation()
   const backRoute = history[history.length - 2]
@@ -66,7 +67,11 @@ export const EditOfferPageView = () => {
           data: updateOfferInput,
         },
       })
-      router.push(`/location/${offer.location._id}/edit?step=3`)
+      if (offer.offerType === OfferType.CabinWeek && !isUserCaretaker) {
+        router.push(`/experience/${offer._id}`)
+      } else {
+        router.push(`/location/${offer.location._id}/edit?step=3`)
+      }
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
