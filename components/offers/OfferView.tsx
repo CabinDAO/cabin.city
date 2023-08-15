@@ -325,11 +325,6 @@ const Actions = styled.div`
   gap: 1.6rem;
 `
 
-const EditLink = styled(Link)`
-  font-size: 2.4rem;
-  line-height: 3rem;
-`
-
 const OfferDetailsOverview = styled.div`
   display: flex;
   flex-flow: column;

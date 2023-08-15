@@ -3,7 +3,6 @@ import Router from 'next/router'
 import { addressMatch } from '@/utils/address-match'
 import { MeFragment, useMeQuery } from '@/generated/graphql'
 import { useExternalUser } from './useExternalUser'
-import { Profile } from '@/generated/graphql'
 
 /*
   This hook is used to fetch the current user from the server.

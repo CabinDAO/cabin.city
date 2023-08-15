@@ -3,7 +3,6 @@ import { HorizontalDivider } from '../Divider'
 import { MobileMenuItem } from './MobileMenuItem'
 import { MobileMenuProfileItem } from './MobileMenuProfileItem'
 import { useProfile } from '@/components/auth/useProfile'
-import { MenuItemLink } from '@/components/core/navbar/MenuItemLink'
 
 interface MobileNavBarProps {
   profileId?: string

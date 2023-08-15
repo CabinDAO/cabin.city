@@ -9,11 +9,7 @@ import styled from 'styled-components'
 import { EmptyState } from '@/components/core/EmptyState'
 import { Dropdown } from '@/components/core/Dropdown'
 import { HorizontalDivider } from '@/components/core/Divider'
-import {
-  LocationType,
-  OfferType,
-  useCreateOfferMutation,
-} from '@/generated/graphql'
+import { OfferType, useCreateOfferMutation } from '@/generated/graphql'
 import { Button } from '@/components/core/Button'
 import { useState } from 'react'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
