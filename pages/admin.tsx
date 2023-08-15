@@ -49,7 +49,7 @@ const NewCabinWeekModal = () => {
 
   const { data } = useGetLocationsByLocationTypeQuery({
     variables: {
-      locationType: LocationType.Outpost,
+      locationType: LocationType.Neighborhood,
       size: 10000,
       cursor: null,
     },
