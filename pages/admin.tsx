@@ -158,7 +158,6 @@ const InputGroup = styled.div`
   }
 
   ${({ theme }) => theme.bp.md} {
-    width: 55%;
     flex-direction: row;
 
     button {

@@ -12,12 +12,14 @@ interface DateRange {
 
 interface AvailabilityProps {
   onEdit: (startDate: string, endDate: string) => void
+  label?: string
   defaultStartDate?: string
   defaultEndDate?: string
 }
 
 export const Availability = ({
   onEdit,
+  label,
   defaultStartDate,
   defaultEndDate,
 }: AvailabilityProps) => {
@@ -56,7 +58,7 @@ export const Availability = ({
 
   return (
     <Pair>
-      <H3>Availability Window</H3>
+      <H3>{label ?? 'Availability Window'}</H3>
       <DateRange>
         <DateSelect
           onDateChange={handleStartDateChange}

@@ -186,6 +186,9 @@ export const EditOfferForm = ({
       <HorizontalDivider />
       <Availability
         onEdit={handleAvailabilityChange}
+        label={
+          offer.offerType === OfferType.CabinWeek ? 'Date Range' : undefined
+        }
         defaultStartDate={offerField('startDate')}
         defaultEndDate={offerField('endDate')}
       />
