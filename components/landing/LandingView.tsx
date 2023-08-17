@@ -10,6 +10,7 @@ import { levelInfoFromType } from '@/utils/levels'
 import { RoleCard } from '@/components/core/RoleCard'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { HeroVideo } from '../core/HeroVideo'
+import Link from 'next/link'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { BookingSection } from './BookingSection'
@@ -19,8 +20,9 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { useExternalUser } from '../auth/useExternalUser'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { TestimonialSection } from '@/components/landing/TestimonialSection'
+import { HeroSection } from '@/components/landing/HeroSection'
+import { TopLogoSection } from '@/components/landing/TopLogoSection'
 
 export const LandingView = () => {
   const { externalUser } = useExternalUser()
@@ -28,32 +30,23 @@ export const LandingView = () => {
 
   return (
     <StyledLayout variant="full">
+      <TopLogoSection />
+
       <LandingSection>
-        <LandingContent>
-          <SectionContent>
-            <HeroDescriptionContainer>
-              <StyledHHero>Colive with friends in nature</StyledHHero>
-              <SectionGrowDescription>
-                <Body1>
-                  Cabin is a global network of beautiful properties in nature
-                  for remote workers seeking meaningful connections
-                </Body1>
-              </SectionGrowDescription>
-            </HeroDescriptionContainer>
-            <SectionHeader>
-              <SectionGrowSignup>
-                <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
-                  <Button>Join a Cabin Week</Button>
-                </a>
-                <AuthenticatedLink href="/dashboard" logSignInEvent>
-                  <Button variant="secondary">
-                    {externalUser ? 'View Dashboard' : 'Sign In'}
-                  </Button>
-                </AuthenticatedLink>
-              </SectionGrowSignup>
-            </SectionHeader>
-          </SectionContent>
-        </LandingContent>
+        <HeroSection
+          title={'Colive with friends in nature'}
+          body={
+            'Cabin is a global network of beautiful properties in nature for remote workers seeking meaningful connections'
+          }
+          buttons={[
+            <a key="1" href="/try-it">
+              <Button>Try it out</Button>
+            </a>,
+            <a key="2" href="mailto:home@cabin.city">
+              <Button variant="secondary">Contact us</Button>
+            </a>,
+          ]}
+        />
       </LandingSection>
 
       <LandingSection>
@@ -139,32 +132,6 @@ const LandingContent = styled(LandingContentNoPadding)`
   }
 `
 
-const SectionGrowDescription = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-`
-
-const SectionGrowSignup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    > * {
-      flex-grow: 1;
-    }
-
-    button {
-      width: 100%;
-    }
-  }
-`
-
 const SectionHeader = styled.div`
   display: flex;
   flex-flow: column;
@@ -217,16 +184,6 @@ const LandingSection = styled.div<LandingSectionProps>`
   ${({ theme }) => theme.bp.lg} {
     gap: 2.4rem;
   }
-`
-
-export const HeroDescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
 `
 
 type LandingSectionVariant = 'dark' | 'light'
