@@ -174,7 +174,6 @@ export const OfferView = ({
                     displayMatchOne={displayMatchOne}
                     citizenshipRequired={!!citizenshipRequired}
                     minimunCabinBalance={minimunCabinBalance}
-                    offerType={offerType}
                   />
                 </OfferDetailsSection>
               )}
