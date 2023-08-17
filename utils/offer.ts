@@ -140,7 +140,7 @@ export const labelByOfferPriceUnit = (unit: OfferPriceUnit): string => {
       return 'Per Month'
     case OfferPriceUnit.FlatFee:
     default:
-      return 'Flat Fee'
+      return 'Total Cost'
   }
 }
 
