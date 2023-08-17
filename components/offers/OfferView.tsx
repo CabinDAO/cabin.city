@@ -14,6 +14,9 @@ import {
   H2,
   H3,
   Subline2,
+  h1Styles,
+  subline2Styles,
+  captionStyles,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
@@ -22,6 +25,8 @@ import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import {
+  OfferFragment,
+  OfferPrice,
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,
@@ -95,6 +100,19 @@ export const OfferView = ({
 
   if (!offerType) return null
 
+  const CabinWeekPrice = ({ price }: { price: OfferPrice }) => {
+    const [amount, unit] = formatOfferPrice(price)
+    return (
+      <OfferCabinWeekDetailsSection>
+        <div>
+          <Amount>{amount}</Amount>
+          <Unit>{unit}</Unit>
+        </div>
+        <Body1>{formatRange(startDate, endDate)}</Body1>
+      </OfferCabinWeekDetailsSection>
+    )
+  }
+
   return (
     <>
       <TitleCard title={title ?? EMPTY} icon="offer" />
@@ -129,10 +147,7 @@ export const OfferView = ({
                 </OfferDetailsOverview>
 
                 {offerType == OfferType.CabinWeek && offer.price && (
-                  <OfferCabinWeekDetailsSection>
-                    <H1>{formatOfferPrice(offer.price)}</H1>
-                    <Body1>{formatRange(startDate, endDate)}</Body1>
-                  </OfferCabinWeekDetailsSection>
+                  <CabinWeekPrice price={offer.price} />
                 )}
 
                 <Actions>
@@ -283,6 +298,14 @@ const OfferDetailsHeader = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     flex-flow: column;
   }
+`
+
+const Amount = styled.span`
+  ${h1Styles}
+`
+const Unit = styled.span`
+  ${captionStyles}
+  margin-left: 0.5rem;
 `
 
 const Actions = styled.div`

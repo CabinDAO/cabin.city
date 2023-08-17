@@ -98,14 +98,14 @@ export const OffersStep = ({
             <OfferFormContainer>
               <InputGroup>
                 <StyledDropdown
-                  label="Choose Experience type"
+                  label="Choose type"
                   placeholder="Select"
                   onSelect={handleSelectedOption}
                   options={options}
                   selectedOption={selectedOfferType}
                 />
                 <Button variant="secondary" onClick={handleCreateOfferClick}>
-                  Create Offer
+                  Create
                 </Button>
               </InputGroup>
               <HorizontalDivider />

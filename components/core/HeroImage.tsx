@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import { StaticImageData } from 'next/image'
+import { Caption } from '@/components/core/Typography'
 
 interface HeroImageProps {
   src: string | StaticImageData
@@ -10,7 +11,7 @@ interface HeroImageProps {
 
 export const HeroImage = ({ alt, src, caption }: HeroImageProps) => {
   return (
-    <Container>
+    <OuterContainer>
       <ImageContainer>
         <Image
           alt={alt}
@@ -22,17 +23,11 @@ export const HeroImage = ({ alt, src, caption }: HeroImageProps) => {
         />
       </ImageContainer>
       {caption && <Caption>{caption}</Caption>}
-    </Container>
+    </OuterContainer>
   )
 }
-const Caption = styled.div`
-  color: ${({ theme }) => theme.colors.green800};
-  font-size: 1.3rem;
-  font-weight: 400;
-  opacity: 0.75;
-`
 
-const Container = styled.div`
+const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
