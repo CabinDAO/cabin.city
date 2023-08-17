@@ -16,7 +16,7 @@ import { OfferListItemProps } from './OfferListItem'
 import { HorizontalDivider } from './Divider'
 import { ProfileIcons } from './ProfileIcons'
 import { roleInfoFromType } from '@/utils/roles'
-import { AuthenticatedLink } from './AuthenticatedLink'
+import Link from 'next/link'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -152,7 +152,7 @@ const OuterContainer = styled.div<{ inactive: boolean }>`
   ${({ inactive }) => inactive && `opacity: 0.5;`}
 `
 
-const ContainerLink = styled(AuthenticatedLink)`
+const ContainerLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;

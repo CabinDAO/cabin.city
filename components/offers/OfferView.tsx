@@ -15,25 +15,23 @@ import {
   H3,
   Subline2,
 } from '@/components/core/Typography'
-import Link from 'next/link'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
-import { useOfferApply } from '../hooks/useOfferApply'
 import {
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,
 } from '@/generated/graphql'
 import { isNotNull } from '@/lib/data'
-import { formatRange, formatUrl } from '@/utils/display-utils'
+import { formatRange } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
-import events from '@/lib/googleAnalytics/events'
 import { useRouter } from 'next/router'
+import { ApplyButton } from '@/components/offers/ApplyButton'
 
 const EMPTY = '—'
 
@@ -51,7 +49,6 @@ export const OfferView = ({
     description,
     offerType,
     location,
-    applicationUrl,
     startDate,
     endDate,
     price,
@@ -92,10 +89,6 @@ export const OfferView = ({
       }
     )
     .filter(isNotNull) as RoleConstraintType[]
-
-  const { canApply } = useOfferApply(offer)
-
-  const applyUrl = canApply() ? formatUrl(applicationUrl) : null
 
   const displayMatchOne = rolesMatchOne.length > 0
   const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
@@ -143,7 +136,7 @@ export const OfferView = ({
                 )}
 
                 <Actions>
-                  <ApplyButton applyUrl={applyUrl} experienceId={offer._id} />
+                  <ApplyButton offer={offer} />
                   {isEditable && !isUserCaretaker && (
                     <Button
                       variant={'secondary'}
@@ -191,32 +184,6 @@ export const OfferView = ({
       </StyledContentCard>
     </>
   )
-}
-
-interface ApplyButtonProps {
-  applyUrl?: string | null
-  experienceId: string
-}
-
-const ApplyButton = ({ applyUrl, experienceId }: ApplyButtonProps) => {
-  if (!applyUrl) {
-    return (
-      <ApplyNowButton startAdornment={<Icon name="lock" size={1.6} />} disabled>
-        Apply now
-      </ApplyNowButton>
-    )
-  } else {
-    return (
-      <a
-        onClick={() => events.applyToExperienceEvent(experienceId)}
-        href={applyUrl}
-        target="_blank"
-        rel="noreferrer"
-      >
-        <ApplyNowButton>Apply now</ApplyNowButton>
-      </a>
-    )
-  }
 }
 
 const StyledContentCard = styled(ContentCard)`
@@ -331,18 +298,6 @@ const OfferDetailsOverview = styled.div`
   gap: 0.4rem;
 
   ${({ theme }) => theme.bp.lg_max} {
-    width: 100%;
-  }
-`
-
-const ApplyNowButton = styled(Button)`
-  width: 100%;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 18.9rem;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
     width: 100%;
   }
 `

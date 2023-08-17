@@ -44,12 +44,12 @@ export interface OfferViewProps {
 
 export const useGetOffer = (offerId: string) => {
   const router = useRouter()
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useProfile()
   const { data } = useGetOfferByIdQuery({
     variables: {
       id: `${offerId}`,
     },
-    skip: !offerId || !user,
+    skip: !offerId,
   })
 
   const offer = data?.findOfferByID
