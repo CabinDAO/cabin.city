@@ -35,7 +35,7 @@ const Divider = styled.div`
 const NeighborhoodsItemGroup = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2.7rem 1.6rem;p
+  padding: 2.7rem 1.6rem;
   justify-content: center;
   align-items: center;
   gap: 2.7rem;
@@ -46,7 +46,6 @@ export const Navbar = () => {
 
   const profileId = user?._id
   const avatarUrl = user?.avatar?.url
-  const isAdmin = user?.isAdmin
 
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
 
@@ -78,11 +77,6 @@ export const Navbar = () => {
             profileId={profileId}
           />
         </SingleMenuItem>
-        {profileId && isAdmin && (
-          <SingleMenuItem>
-            <MenuItemLink menuItem={'admin'} profileId={profileId} />
-          </SingleMenuItem>
-        )}
       </Container>
       <ProfileNavMenu visible={profileMenuVisible} />
     </>
