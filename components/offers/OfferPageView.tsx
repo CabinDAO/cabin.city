@@ -9,9 +9,7 @@ import { useRouter } from 'next/router'
 export const OfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable, isPublished, isUserCaretaker } = useGetOffer(
-    `${offerId}`
-  )
+  const { offer, isEditable, isPublished } = useGetOffer(`${offerId}`)
   const { showModal } = useModal()
 
   if (!offer) {
@@ -39,11 +37,7 @@ export const OfferPageView = () => {
         ) : null
       }
     >
-      <OfferView
-        offer={offer}
-        isEditable={isEditable}
-        isUserCaretaker={isUserCaretaker}
-      />
+      <OfferView offer={offer} isEditable={isEditable} />
     </SingleColumnLayout>
   )
 }

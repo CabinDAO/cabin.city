@@ -4,7 +4,7 @@ import {
   StyledHHero,
 } from '@/components/landing/styles'
 import styled from 'styled-components'
-import { Body1, H1 } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 
 interface HeroSectionProps {
   title: string

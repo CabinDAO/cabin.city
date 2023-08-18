@@ -10,22 +10,19 @@ import {
   Body1,
   body1Styles,
   Caption,
-  H1,
   H2,
   H3,
   Subline2,
   h1Styles,
-  subline2Styles,
   captionStyles,
+  Overline,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import Icon from '@/components/core/Icon'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import {
-  OfferFragment,
   OfferPrice,
   OfferType,
   ProfileRoleLevelType,
@@ -37,17 +34,16 @@ import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { ApplyButton } from '@/components/offers/ApplyButton'
+import Icon from '@/components/core/Icon'
 
 const EMPTY = '—'
 
 export const OfferView = ({
   offer,
   isEditable,
-  isUserCaretaker,
 }: {
   offer: OfferViewProps
   isEditable: boolean
-  isUserCaretaker: boolean
 }) => {
   const {
     title,
@@ -115,7 +111,23 @@ export const OfferView = ({
 
   return (
     <>
-      <TitleCard title={title ?? EMPTY} icon="offer" />
+      <TitleCard
+        title={title ?? EMPTY}
+        icon="offer"
+        end={
+          isEditable ? (
+            <Button
+              variant={'link-slim'}
+              onClick={() => {
+                router.push(`/experience/${offer._id}/edit`)
+              }}
+            >
+              <Icon name="pencil" size={1.2} />
+              EDIT
+            </Button>
+          ) : null
+        }
+      />
 
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
@@ -152,17 +164,6 @@ export const OfferView = ({
 
                 <Actions>
                   <ApplyButton offer={offer} />
-                  {isEditable && !isUserCaretaker && (
-                    <Button
-                      variant={'secondary'}
-                      onClick={() => {
-                        router.push(`/experience/${offer._id}/edit`)
-                      }}
-                    >
-                      <Icon name={'person'} size={1.5} />
-                      Edit
-                    </Button>
-                  )}
                 </Actions>
               </OfferDetailsHeader>
 
