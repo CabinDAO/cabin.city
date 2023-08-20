@@ -5,6 +5,7 @@ import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import events from '@/lib/googleAnalytics/events'
+import { LandingContent } from '@/components/landing/styles'
 
 interface FooterProps {
   className?: string
@@ -12,89 +13,99 @@ interface FooterProps {
 }
 
 export const Footer = ({ children, className }: FooterProps) => (
-  <FooterContainer className={className}>
-    <FooterNavigation>
-      <FooterNavigationList>
-        <FooterNavigationHeader>Product</FooterNavigationHeader>
-        <AppLink
-          onClick={() => events.viewCityDirectoryEvent()}
-          location="/city-directory"
-          iconSize={0}
-        >
-          <FooterItem>City Directory</FooterItem>
-        </AppLink>
-        <AppLink
-          onClick={() => events.viewExperiencesEvent()}
-          location="/experiences"
-          iconSize={0}
-        >
-          <FooterItem>Experiences</FooterItem>
-        </AppLink>
-        <AppLink
-          external
-          location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
-          iconSize={0}
-        >
-          <FooterItem>List Your Property</FooterItem>
-        </AppLink>
-        <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
-          <FooterItem>Citizenship</FooterItem>
-        </AppLink>
-        <AuthenticatedLink logSignInEvent href="/dashboard">
-          <FooterItem>Sign In</FooterItem>
-        </AuthenticatedLink>
-        <AppLink
-          external
-          location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
-          iconSize={0}
-        >
-          <FooterItem>Privacy & Terms</FooterItem>
-        </AppLink>
-      </FooterNavigationList>
+  <LandingContent>
+    <FooterContainer className={className}>
+      <FooterNavigation>
+        <FooterNavigationList>
+          <FooterNavigationHeader>Product</FooterNavigationHeader>
+          <AppLink
+            onClick={() => events.viewCityDirectoryEvent()}
+            location="/city-directory"
+            iconSize={0}
+          >
+            <FooterItem>City Directory</FooterItem>
+          </AppLink>
+          <AppLink
+            onClick={() => events.viewExperiencesEvent()}
+            location="/experiences"
+            iconSize={0}
+          >
+            <FooterItem>Experiences</FooterItem>
+          </AppLink>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
+            iconSize={0}
+          >
+            <FooterItem>List Your Property</FooterItem>
+          </AppLink>
+          <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
+            <FooterItem>Citizenship</FooterItem>
+          </AppLink>
+          <AuthenticatedLink logSignInEvent href="/dashboard">
+            <FooterItem>Sign In</FooterItem>
+          </AuthenticatedLink>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
+            iconSize={0}
+          >
+            <FooterItem>Privacy & Terms</FooterItem>
+          </AppLink>
+        </FooterNavigationList>
+
+        <FooterNavigationList>
+          <FooterNavigationHeader>Resources</FooterNavigationHeader>
+          <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
+            <FooterItem>Vision</FooterItem>
+          </AppLink>
+          <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
+            <FooterItem>Blog</FooterItem>
+          </AppLink>
+          <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
+            <FooterItem>Podcast</FooterItem>
+          </AppLink>
+          <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
+            <FooterItem>Support Wiki</FooterItem>
+          </AppLink>
+        </FooterNavigationList>
+
+        <FooterNavigationList>
+          <FooterNavigationHeader>Social</FooterNavigationHeader>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CABIN_DISCORD}
+            iconSize={0}
+          >
+            <FooterItem>Discord</FooterItem>
+          </AppLink>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CABIN_TWITTER}
+            iconSize={0}
+          >
+            <FooterItem>Twitter</FooterItem>
+          </AppLink>
+          <AppLink
+            external
+            location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
+            iconSize={0}
+          >
+            <FooterItem>Instagram</FooterItem>
+          </AppLink>
+        </FooterNavigationList>
+      </FooterNavigation>
 
       <FooterNavigationList>
-        <FooterNavigationHeader>Resources</FooterNavigationHeader>
-        <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
-          <FooterItem>Vision</FooterItem>
-        </AppLink>
-        <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
-          <FooterItem>Blog</FooterItem>
-        </AppLink>
-        <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
-          <FooterItem>Podcast</FooterItem>
-        </AppLink>
-        <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
-          <FooterItem>Support Wiki</FooterItem>
-        </AppLink>
+        <FooterLogo>
+          <Icon name="logo-cabin" size={3.8} color="green400" />
+          <IconText>Cabin</IconText>
+        </FooterLogo>
       </FooterNavigationList>
 
-      <FooterNavigationList>
-        <FooterNavigationHeader>Social</FooterNavigationHeader>
-        <AppLink external location={EXTERNAL_LINKS.CABIN_DISCORD} iconSize={0}>
-          <FooterItem>Discord</FooterItem>
-        </AppLink>
-        <AppLink external location={EXTERNAL_LINKS.CABIN_TWITTER} iconSize={0}>
-          <FooterItem>Twitter</FooterItem>
-        </AppLink>
-        <AppLink
-          external
-          location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
-          iconSize={0}
-        >
-          <FooterItem>Instagram</FooterItem>
-        </AppLink>
-      </FooterNavigationList>
-    </FooterNavigation>
-
-    <FooterNavigationList>
-      <FooterLogo>
-        <Icon name="logo-cabin" size={3.8} color="green400" />
-        <IconText>Cabin</IconText>
-      </FooterLogo>
-    </FooterNavigationList>
-
-    {children}
-  </FooterContainer>
+      {children}
+    </FooterContainer>
+  </LandingContent>
 )
 
 export const FooterContainer = styled.div`

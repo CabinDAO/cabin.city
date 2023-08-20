@@ -19,7 +19,6 @@ export const SubscribeSection = () => {
 
 const SubscribeSectionContainer = styled(LandingContentNoPadding)`
   display: flex;
-  padding: 8rem 4rem;
   justify-content: space-between;
   flex-direction: column;
   gap: 2.4rem;
@@ -27,7 +26,7 @@ const SubscribeSectionContainer = styled(LandingContentNoPadding)`
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
     gap: 0;
-    padding: 8rem 0rem;
+    padding: 4rem 0rem;
   }
 `
 

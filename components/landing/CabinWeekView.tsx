@@ -1,35 +1,41 @@
 import styled from 'styled-components'
-import { HTMLAttributes } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
 import { Footer } from '@/components/navigation/Footer'
-import { LandingContentNoPadding } from './styles'
 import { SubscribeSection } from './SubscribeSection'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { HeroSection } from '@/components/landing/HeroSection'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { HeroImage } from '@/components/core/HeroImage'
+import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
+import { TextContent, TextSection } from '@/components/landing/TextSection'
+import { LandingSection } from '@/components/landing/LandingSection'
+import { WordCloud } from '@/components/landing/WordCloud'
+import Icon from '@/components/core/Icon'
+import Link from 'next/link'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
+import { LearnMoreSection } from '@/components/landing/LearnMoreSection'
+
+const cabinWeekButton = (
+  <Link href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}>
+    <Button>Join a Cabin Week</Button>
+  </Link>
+)
 
 export const CabinWeekView = () => {
   return (
     <StyledLayout variant="full">
       <TopLogoSection />
 
-      <LandingSection>
-        <HeroSection
-          title={'Discover community togetherness'}
-          body={
-            'Join one of our upcoming short-term coliving experiences featuring group dinners, local trips, intentional co-creation, and free time activities.'
-          }
-          buttons={[
-            <a key="1" href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
-              <Button>Join a Cabin Week</Button>
-            </a>,
-          ]}
-        />
+      <LandingSection title={'Discover community togetherness'}>
+        <TextSection>
+          Join one of our upcoming short-term coliving experiences featuring
+          group dinners, local trips, intentional co-creation, and free time
+          activities.
+        </TextSection>
+        {cabinWeekButton}
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection fullWidth>
         <HeroImage
           src={'/images/cabin-week-hero.jpg'}
           alt={'Cabin week'}
@@ -37,64 +43,106 @@ export const CabinWeekView = () => {
         />
       </LandingSection>
 
-      <SubscribeLandingSection>
+      <LandingSection title={"What's Cabin Week?"}>
+        <TextSection>
+          Connect with fellow digital nomads and remote workers who share a love
+          for nature and communal dining. Experience the magic of Cabin Weeks,
+          where up to 12 individuals colive and collaborate for 1-2 weeks in
+          breathtaking locations.
+        </TextSection>
+      </LandingSection>
+
+      <LandingSection
+        title={'What people are saying'}
+        icon={'account-group-green'}
+      >
+        <TextSection>Video slideshow goes here</TextSection>
+      </LandingSection>
+
+      <LandingSection
+        title={"What's on the schedule?"}
+        variant={'dark'}
+        icon={'schedule-green'}
+      >
+        <TextSection variant={'dark'}>
+          Each Cabin Week centers around a theme with local adventures, nightly
+          group dinners, and optional curated sessions and volunteer activities.
+          Cabin Weeks are designed for remote workers so while you certainly can
+          take time off, you won&apos;t need to.
+        </TextSection>
+        <WordCloud />
+      </LandingSection>
+
+      <LandingSection title={"What's included"} icon={'check-circle-green'}>
+        <CheckList>
+          <ul>
+            {[
+              'Housing',
+              'Food',
+              'Programming',
+              'To/from airport shuttle',
+              'Access to nature',
+            ].map((item, i) => {
+              return (
+                <li key={i}>
+                  <Icon name={'check'} size={1.4} />
+                  {item}
+                </li>
+              )
+            })}
+          </ul>
+        </CheckList>
+        <TextSection>
+          After participating in a Cabin Week, you are granted Citizenship and
+          get full access to coliving in the network, our flagship annual
+          events, and the full suite of Citizen perks and benefits.
+        </TextSection>
+        {cabinWeekButton}
+      </LandingSection>
+
+      <LandingSection fullWidth title={'Cabin Week Locations'}>
+        <NeighborhoodShowcase />
+        {cabinWeekButton}
+      </LandingSection>
+
+      <LandingSection title={'Want to learn more?'} icon={'hand-wave-green'}>
+        <LearnMoreSection />
+      </LandingSection>
+
+      <LandingSection fullWidth noBottomPadding>
+        <ImageFlex
+          alt="forest-network"
+          src="/images/landing-forest-network.svg"
+          height={32}
+          width={84}
+        />
+      </LandingSection>
+
+      <SubscribeLandingSection variant={'light'}>
         <SubscribeSection />
       </SubscribeLandingSection>
 
       <LandingSection variant="dark">
-        <LandingContent>
-          <Footer />
-        </LandingContent>
+        <Footer />
       </LandingSection>
     </StyledLayout>
   )
 }
 
-const LandingContent = styled(LandingContentNoPadding)`
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-  gap: 2.4rem;
-  padding: 8rem 2.4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-start;
-    box-sizing: content-box;
-    padding: 8rem 2.4rem 8rem 12.8rem;
+const CheckList = styled(TextContent)`
+  font-weight: 700;
+  ul {
+    list-style: none;
   }
-
-  ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-    padding: 8rem 4rem;
+  li {
+    margin-bottom: 1.3rem;
+  }
+  span {
+    display: inline-block;
+    margin-right: 1rem;
+    vertical-align: baseline;
   }
 `
-
-interface LandingSectionProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: LandingSectionVariant
-}
-
-const LandingSection = styled.div<LandingSectionProps>`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${({ theme, variant }) =>
-    variant === 'dark' ? theme.colors.green800 : theme.colors.yellow200};
-  width: 100%;
-  overflow: hidden;
-
-  ${({ theme }) => theme.bp.md} {
-    gap: 4rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    gap: 2.4rem;
-  }
-`
-
-type LandingSectionVariant = 'dark' | 'light'
 
 const StyledLayout = styled(SingleColumnLayout)`
   margin-bottom: 0rem;

@@ -1,6 +1,6 @@
 import {
   LocationVoteFragment,
-  useGetLocationVoteCountsByIdsLazyQuery,
+  useGetLocationsByIdsLazyQuery,
   useMyLocationVotesQuery,
 } from '@/generated/graphql'
 import { LocationVoteModal } from '../core/LocationVoteModal'
@@ -16,7 +16,7 @@ export const useLocationVote = (afterVote?: () => void) => {
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { getAccessToken } = usePrivy()
 
-  const [getLocationVoteCountsByIds] = useGetLocationVoteCountsByIdsLazyQuery({
+  const [getLocationVoteCountsByIds] = useGetLocationsByIdsLazyQuery({
     fetchPolicy: 'network-only',
   })
 

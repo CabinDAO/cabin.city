@@ -31,9 +31,7 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
             <ApplyNowButton>Sign In to Apply</ApplyNowButton>
           </AuthenticatedLink>
         )
-      }
-
-      if (!isEligible(user, offer)) {
+      } else if (!isEligible(user, offer)) {
         return (
           <ApplyNowButton
             startAdornment={<Icon name="lock" size={1.6} />}
@@ -42,22 +40,21 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
             Not Eligible to Apply
           </ApplyNowButton>
         )
+      } else {
+        applicationURL = formatUrl(offer.applicationUrl)
       }
-
-      applicationURL = formatUrl(offer.applicationUrl)
-
       break
 
     case OfferType.PaidColiving:
       if (!user || !isEligible(user, offer)) {
-        applicationURL = EXTERNAL_LINKS.BOOKING_TYPEFORM
+        applicationURL = EXTERNAL_LINKS.COLIVING_TYPEFORM
       } else {
         applicationURL = formatUrl(offer.applicationUrl)
       }
       break
 
     case OfferType.CabinWeek:
-      applicationURL = EXTERNAL_LINKS.BOOKING_TYPEFORM
+      applicationURL = EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM
       break
   }
 

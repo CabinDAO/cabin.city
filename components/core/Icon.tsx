@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components'
 
 import { ColorName } from '../../styles/theme'
 
+import accountGroupSvg from './svg/account-group.svg'
+import accountGroupGreenSvg from './svg/account-group-green.svg'
 import alertSvg from './svg/alert.svg'
 import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
@@ -10,6 +12,7 @@ import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
 import checkCircleSvg from './svg/check-circle.svg'
+import checkCircleGreenSvg from './svg/check-circle-green.svg'
 import checkStarSvg from './svg/check-star.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronLeftSvg from './svg/chevron-left.svg'
@@ -32,8 +35,10 @@ import formatListBulleted from './svg/format-list-bulleted.svg'
 import formatListNumbered from './svg/format-list-numbered.svg'
 import formatQuote from './svg/format-quote.svg'
 import formatUnderline from './svg/format-underline.svg'
+import forumSvg from './svg/forum.svg'
 import gathererSvg from './svg/gatherer.svg'
 import handWaveSvg from './svg/hand-wave.svg'
+import handWaveGreenSvg from './svg/hand-wave-green.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import holdingSvg from './svg/holding.svg'
@@ -61,6 +66,7 @@ import publishSvg from './svg/publish.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
 import searchSvg from './svg/search.svg'
+import scheduleGreenSvg from './svg/schedule-green.svg'
 import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
@@ -76,6 +82,8 @@ import walletSvg from './svg/wallet.svg'
 import xCircleSvg from './svg/x-circle.svg'
 
 export const IconSvgs = {
+  'account-group': accountGroupSvg,
+  'account-group-green': accountGroupGreenSvg,
   alert: alertSvg,
   'back-arrow': backArrowSvg,
   builder: builderSvg,
@@ -84,6 +92,7 @@ export const IconSvgs = {
   check: checkSvg,
   'check-star': checkStarSvg,
   'check-circle': checkCircleSvg,
+  'check-circle-green': checkCircleGreenSvg,
   'chevron-down': chevronDownSvg,
   'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,
@@ -105,8 +114,10 @@ export const IconSvgs = {
   'format-list-numbered': formatListNumbered,
   'format-quote': formatQuote,
   'format-underline': formatUnderline,
+  forum: forumSvg,
   gatherer: gathererSvg,
   'hand-wave': handWaveSvg,
+  'hand-wave-green': handWaveGreenSvg,
   'heart-outline': heartOutlineSvg,
   'heart-solid': heartSolidSvg,
   holding: holdingSvg,
@@ -133,6 +144,7 @@ export const IconSvgs = {
   publish: publishSvg,
   race: raceSvg,
   resident: residentSvg,
+  'schedule-green': scheduleGreenSvg,
   search: searchSvg,
   'sign-out': signOutSvg,
   sleep: sleepSvg,
