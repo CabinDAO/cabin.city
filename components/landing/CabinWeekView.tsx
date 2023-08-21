@@ -52,12 +52,12 @@ export const CabinWeekView = () => {
         </TextSection>
       </LandingSection>
 
-      <LandingSection
-        title={'What people are saying'}
-        icon={'account-group-green'}
-      >
-        <TextSection>Video slideshow goes here</TextSection>
-      </LandingSection>
+      {/*<LandingSection*/}
+      {/*  title={'What people are saying'}*/}
+      {/*  icon={'account-group-green'}*/}
+      {/*>*/}
+      {/*  <TextSection>Video slideshow goes here</TextSection>*/}
+      {/*</LandingSection>*/}
 
       <LandingSection
         title={"What's on the schedule?"}
