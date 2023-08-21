@@ -15,7 +15,6 @@ import {
   Subline2,
   h1Styles,
   captionStyles,
-  Overline,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { roleConstraintInfoFromType } from '@/utils/roles'

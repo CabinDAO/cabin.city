@@ -1,8 +1,6 @@
 import styled from 'styled-components'
-import { HTMLAttributes } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
-import { Body1, H1 } from '@/components/core/Typography'
 import { Footer } from '@/components/navigation/Footer'
 import { HeroVideo } from '../core/HeroVideo'
 import { BookingSection } from './BookingSection'
@@ -10,7 +8,6 @@ import { DetailedInfoSection } from './DetailedInfoSection'
 import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
-import { useExternalUser } from '../auth/useExternalUser'
 import { TestimonialSection } from '@/components/landing/TestimonialSection'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
@@ -18,8 +15,6 @@ import { TextSection } from '@/components/landing/TextSection'
 import { LandingSection } from '@/components/landing/LandingSection'
 
 export const LandingView = () => {
-  const { externalUser } = useExternalUser()
-
   return (
     <StyledLayout variant="full">
       <TopLogoSection />

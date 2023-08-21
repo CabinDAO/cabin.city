@@ -1,17 +1,10 @@
 import Head from 'next/head'
 import { NextSeo } from 'next-seo'
+import { appDomainWithProto } from '@/utils/display-utils'
 
 // TODO: Update title/description
 const DEFAULT_TITLE = 'Cabin'
 const DESCRIPTION = 'Colive with friends in nature'
-
-let origin = 'http://localhost:3000'
-if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-  origin =
-    process.env.NEXT_PUBLIC_APP_ENV === 'dev'
-      ? 'https://dev.cabin.city'
-      : 'https://cabin.city'
-}
 
 export interface AppHeadProps {
   description?: string
@@ -24,12 +17,12 @@ export const AppHead = ({
   description,
   pathname = '',
   title,
-  imageUrl = `${origin}/images/cabin_social.png`,
+  imageUrl = `${appDomainWithProto}/images/cabin_social.png`,
 }: AppHeadProps) => {
   const pageTitle = title?.trim() ?? DEFAULT_TITLE
   const pageDescription = description?.trim() ?? DESCRIPTION
 
-  const fullUrl = `${origin}/${pathname}`
+  const fullUrl = `${appDomainWithProto}/${pathname}`
 
   return (
     <>
