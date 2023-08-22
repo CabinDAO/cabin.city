@@ -26,7 +26,7 @@ export const EXTERNAL_LINKS = {
   CABIN_WEEK_BOOKING_TYPEFORM:
     'https://cabindotcity.typeform.com/cabinweeks?utm_source=cabin.city&utm_medium=web',
   COLIVING_TYPEFORM:
-    'https://cabindotcity.typeform.com/cabinweeks?utm_source=cabin.city&utm_medium=web',
+    'https://cabindotcity.typeform.com/to/ZhyOQyQM?utm_source=cabin.city&utm_medium=web',
   CARETAKER_TYPEFORM:
     'https://cabindotcity.typeform.com/to/CgI1OjLD?utm_source=cabin.city-footer&utm_medium=web',
 }
