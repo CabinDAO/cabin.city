@@ -2,8 +2,7 @@ import styled from 'styled-components'
 import { OfferListItemProps } from '../OfferListItem'
 import Image from 'next/image'
 import { Caption, H4, truncateStyles } from '../Typography'
-import { formatRange } from '@/utils/display-utils'
-import { EMPTY } from '@/utils/display-utils'
+import { EMPTY, formatRange } from '@/utils/display-utils'
 import { offerInfoFromType } from '@/utils/offer'
 import Link from 'next/link'
 
@@ -35,9 +34,11 @@ export const OfferPostItem = ({
       <Data>
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
-        <TruncatedCaption>{`${offerInfoFromType(offerType).name} Experience · ${
-          location.name
-        } · ${location.shortAddress}`}</TruncatedCaption>
+        <TruncatedCaption>
+          {`${offerInfoFromType(offerType).name} · ${location.name} · ${
+            location.shortAddress
+          }`}
+        </TruncatedCaption>
       </Data>
     </Container>
   )
