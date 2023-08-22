@@ -112,6 +112,7 @@ const CaptionContainer = styled.div`
   width: 80%;
   color: ${({ theme }) => theme.colors.white};
   text-shadow: 0px 0px 50px ${({ theme }) => theme.colors.black};
+  //border-radius: 50px; // TODO: there's a really nice way of doing this by layering multiple shadows. steal it from topscore code
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

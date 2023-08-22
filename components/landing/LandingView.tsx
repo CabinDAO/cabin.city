@@ -26,7 +26,7 @@ export const LandingView = () => {
             'Cabin is a global network of beautiful properties in nature for remote workers seeking meaningful connections'
           }
           buttons={[
-            <a key="1" href="/try-it">
+            <a key="1" href="/cabin-week">
               <Button>Try it out</Button>
             </a>,
             <a key="2" href="mailto:home@cabin.city">

@@ -3,7 +3,6 @@ import Icon from '@/components/core/Icon'
 import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { AuthenticatedLink } from '../core/AuthenticatedLink'
 import events from '@/lib/googleAnalytics/events'
 import { LandingContent } from '@/components/landing/styles'
 
@@ -18,6 +17,9 @@ export const Footer = ({ children, className }: FooterProps) => (
       <FooterNavigation>
         <FooterNavigationList>
           <FooterNavigationHeader>Product</FooterNavigationHeader>
+          <AppLink location="/cabin-week" iconSize={0}>
+            <FooterItem>Cabin Weeks</FooterItem>
+          </AppLink>
           <AppLink
             onClick={() => events.viewCityDirectoryEvent()}
             location="/city-directory"
@@ -42,9 +44,6 @@ export const Footer = ({ children, className }: FooterProps) => (
           <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
             <FooterItem>Citizenship</FooterItem>
           </AppLink>
-          <AuthenticatedLink logSignInEvent href="/dashboard">
-            <FooterItem>Sign In</FooterItem>
-          </AuthenticatedLink>
           <AppLink
             external
             location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}

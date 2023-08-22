@@ -3,6 +3,7 @@ import { fonts } from '../core/Typography'
 import { Button } from '@/components/core/Button'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useProfile } from '@/components/auth/useProfile'
 
 export const TopLogoSection = () => {
@@ -14,19 +15,21 @@ export const TopLogoSection = () => {
     <TopLogoContainer>
       <TopLogoContent>
         <Logo>
-          <Image
-            id={'cabin-logo'}
-            src="/images/cabin.png"
-            alt="Cabin Logo"
-            width={56}
-            height={56}
-          />
-          <Image
-            src="/images/cabin-wordmark.svg"
-            alt="Cabin"
-            width={89}
-            height={24}
-          />
+          <Link href="/">
+            <Image
+              id={'cabin-logo'}
+              src="/images/cabin.png"
+              alt="Cabin Logo"
+              width={56}
+              height={56}
+            />
+            <Image
+              src="/images/cabin-wordmark.svg"
+              alt="Cabin"
+              width={89}
+              height={24}
+            />
+          </Link>
         </Logo>
         {!profileId && (
           <AuthenticatedLink href="/dashboard">
