@@ -27,7 +27,7 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
         end={canCreateListings ? <NewListingButton /> : null}
       ></TitleCard>
       <Content>
-        <StyledChipFilterBar>
+        <ChipFilterBar>
           <ChipFilter
             label="All"
             selected={!locationType && !offerType}
@@ -58,7 +58,7 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
             selected={offerType === OfferType.Residency}
             onClick={() => router.push('/city-directory/residency')}
           />
-        </StyledChipFilterBar>
+        </ChipFilterBar>
         <LocationListFilter locationType={locationType} offerType={offerType} />
       </Content>
     </SingleColumnLayout>
@@ -70,9 +70,4 @@ const Content = styled.div`
   flex-direction: column;
   gap: 0;
   width: 100%;
-`
-
-const StyledChipFilterBar = styled(ChipFilterBar)`
-  display: flex;
-  border-bottom: none;
 `

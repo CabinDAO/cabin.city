@@ -21,6 +21,11 @@ const Container = styled.div`
   gap: 0.4rem;
   padding: 1.6rem 2.4rem;
   border: 1px solid ${({ theme }) => theme.colors.green900};
+  border-bottom: none;
   background-color: ${({ theme }) => theme.colors.yellow200};
   overflow-x: scroll;
+
+  ${({ theme }) => theme.bp.md} {
+    overflow-x: hidden;
+  }}
 `
