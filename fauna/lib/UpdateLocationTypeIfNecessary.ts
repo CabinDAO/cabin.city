@@ -86,17 +86,10 @@ export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
 }
 
 const MeetsCriteriaForNeighborhood = (location: Expr) =>
-  q.And(
-    Has1000Votes(location),
-    Has20MbpsInternet(location),
-    Has4SleepingCapacity(location)
-  )
+  q.And(Has1000Votes(location), Has8SleepingCapacity(location))
 
 const Has1000Votes = (location: Expr) =>
   q.GTE(q.Select(['data', 'voteCount'], location, 0), 1000)
 
-const Has20MbpsInternet = (location: Expr) =>
-  q.GTE(q.Select(['data', 'internetSpeedMbps'], location, 0), 20)
-
-const Has4SleepingCapacity = (location: Expr) =>
-  q.GTE(q.Select(['data', 'sleepCapacity'], location, 0), 4)
+const Has8SleepingCapacity = (location: Expr) =>
+  q.GTE(q.Select(['data', 'sleepCapacity'], location, 0), 8)
