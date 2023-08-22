@@ -42,23 +42,25 @@ export const NeighborhoodShowcase = () => {
           )
           return (
             <ImageContainer key={index}>
-              <Image
-                alt={location.name ?? 'A Cabin neighborhood'}
-                src={imgURL ?? 'https://placehold.it/500'}
-                fill={true}
-                sizes="100vw"
-                style={{
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
-              />
-              <CaptionContainer>
-                <Link href={`/location/${location._id}`}>
-                  <Name>{location.name}</Name>
-                  <Icon name={'right-arrow'} size={3} color={'white'} />
+              <Link href={`/location/${location._id}`}>
+                <Image
+                  alt={location.name ?? 'A Cabin neighborhood'}
+                  src={imgURL ?? 'https://placehold.it/500'}
+                  fill={true}
+                  sizes="100vw"
+                  style={{
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                  }}
+                />
+                <CaptionContainer>
+                  <NameWrapper>
+                    <Name>{location.name}</Name>
+                    <Icon name={'right-arrow'} size={3} color={'white'} />
+                  </NameWrapper>
                   <Address>{formatShortAddress(location.address)}</Address>
-                </Link>
-              </CaptionContainer>
+                </CaptionContainer>
+              </Link>
             </ImageContainer>
           )
         })}
@@ -107,38 +109,63 @@ const ImageContainer = styled.div`
 
 const CaptionContainer = styled.div`
   position: absolute;
-  bottom: 10%;
-  left: 10%;
-  width: 80%;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 30% 10% 8%;
   color: ${({ theme }) => theme.colors.white};
-  text-shadow: 0px 0px 50px ${({ theme }) => theme.colors.black};
-  //border-radius: 50px; // TODO: there's a really nice way of doing this by layering multiple shadows. steal it from topscore code
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 
-  span + span {
-    // align the icon
-    margin-left: 1.6rem;
-    display: inline-block;
-    vertical-align: text-bottom;
-  }
+  text-shadow: 2px 2px 3px rgba(0, 0, 0, 20%), -1px -1px 0 rgba(0, 0, 0, 20%),
+    1px -1px 0 rgba(0, 0, 0, 20%), -1px 1px 0 rgba(0, 0, 0, 20%),
+    1px 1px 0 rgba(0, 0, 0, 20%);
+  background-image: linear-gradient(
+    hsla(0, 0%, 35.29%, 0) 0%,
+    hsla(0, 0%, 34.53%, 0.034375) 16.36%,
+    hsla(0, 0%, 32.42%, 0.125) 33.34%,
+    hsla(0, 0%, 29.18%, 0.253125) 50.1%,
+    hsla(0, 0%, 24.96%, 0.4) 65.75%,
+    hsla(0, 0%, 19.85%, 0.546875) 79.43%,
+    hsla(0, 0%, 13.95%, 0.675) 90.28%,
+    hsla(0, 0%, 7.32%, 0.765625) 97.43%,
+    hsla(0, 0%, 0%, 0.8) 100%
+  );
 `
-const Name = styled.span`
+const NameWrapper = styled.div`
+  // need this wrapper so we can do the arrow icon AND the ellipses
+
+  display: flex;
+  align-items: center;
+  width: 100%;
+
+  // font styles go on wrapper so they affect the ellipses too
   font-family: ${fonts.poppins};
   font-weight: 600;
-  line-height: 6.7rem;
   font-size: 2.4rem;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  line-height: 6.7rem;
 
   ${({ theme }) => theme.bp.lg} {
     font-size: 3.2rem;
   }
+
+  span {
+    // arrow icon
+    flex: none;
+    margin-left: 1.6rem;
+  }
+`
+const Name = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
 
 const Address = styled.div`
   font-family: ${fonts.ibmPlexMono};
+  font-weight: 600;
   font-size: 1.4rem;
+  line-height: 2.1rem;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `
