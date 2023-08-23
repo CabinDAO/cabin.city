@@ -19,6 +19,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { roleInfoFromType } from '@/utils/roles'
 import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
 import { levelInfoFromType } from '@/utils/levels'
+import Link from 'next/link'
 
 export const LandingView = () => {
   const { deviceSize } = useDeviceSize()
@@ -34,9 +35,9 @@ export const LandingView = () => {
             'Cabin is a global network of beautiful properties in nature for remote workers seeking meaningful connections'
           }
           buttons={[
-            <a key="1" href="/cabin-week">
+            <Link key="1" href="/cabin-week">
               <Button>Try it out</Button>
-            </a>,
+            </Link>,
             <a key="2" href="mailto:home@cabin.city">
               <Button variant="secondary">Contact us</Button>
             </a>,

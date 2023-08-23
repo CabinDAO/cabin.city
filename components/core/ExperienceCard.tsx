@@ -6,22 +6,14 @@ import {
   ProfileRoleConstraint,
 } from '@/generated/graphql'
 import styled from 'styled-components'
-import {
-  Body1,
-  Caption,
-  captionStyles,
-  h1Styles,
-  H2,
-  H4,
-  Subline1,
-} from './Typography'
+import { Caption, captionStyles, h1Styles, H2, Subline1 } from './Typography'
 import {
   OfferPriceUnitMap,
   offerInfoFromType,
   formatOfferPrice,
 } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
-import { centsToUSD, formatRange } from '@/utils/display-utils'
+import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import { ImageFlex } from './gallery/ImageFlex'
 import { OfferListItemProps } from './OfferListItem'
@@ -86,7 +78,6 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
       profileRoleConstraints?.map((c) => roleInfoFromType(c.profileRole)) ?? []
     )
   )
-  const unit = price?.unit ? OfferPriceUnitMap[price.unit] : null
 
   const isDisplayingEligibility =
     !!profileRoleConstraints?.length ||
