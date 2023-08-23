@@ -24,12 +24,6 @@ const offerTypeDescriptionMap: Record<OfferType, OfferTypeDescription> = {
       'Support creatives by offering short-term stays where they can work uninterrupted on a personal project.',
     ],
   },
-  [OfferType.BuildAndGrowWeek]: {
-    title: 'Build Week',
-    paragraphs: [
-      'Plan and build out your property with the help of the community. These can be short-term project initiatives on location for community members to participate in for free room and board.',
-    ],
-  },
   [OfferType.CabinWeek]: {
     title: 'Cabin Week',
     paragraphs: [

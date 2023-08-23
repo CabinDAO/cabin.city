@@ -32,9 +32,6 @@ export const OfferInfoByType: Record<OfferType, OfferInfo> = {
   [OfferType.Residency]: {
     name: 'Residency',
   },
-  [OfferType.BuildAndGrowWeek]: {
-    name: 'Build Week',
-  },
   [OfferType.CabinWeek]: {
     name: 'Cabin Week',
   },
