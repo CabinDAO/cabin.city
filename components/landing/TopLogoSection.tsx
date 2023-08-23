@@ -12,36 +12,34 @@ export const TopLogoSection = () => {
   const profileId = user?._id
 
   return (
-    <TopLogoContainer>
-      <TopLogoContent>
-        <Logo>
-          <Link href="/">
-            <Image
-              id={'cabin-logo'}
-              src="/images/cabin.png"
-              alt="Cabin Logo"
-              width={56}
-              height={56}
-            />
-            <Image
-              src="/images/cabin-wordmark.svg"
-              alt="Cabin"
-              width={89}
-              height={24}
-            />
-          </Link>
+    <Background>
+      <Content>
+        <Logo href="/">
+          <Image
+            id={'cabin-logo'}
+            src="/images/cabin.png"
+            alt="Cabin Logo"
+            width={56}
+            height={56}
+          />
+          <Image
+            src="/images/cabin-wordmark.svg"
+            alt="Cabin"
+            width={89}
+            height={24}
+          />
         </Logo>
         {!profileId && (
           <AuthenticatedLink href="/dashboard">
             <Button variant={'link'}>Log in &bull; Sign up</Button>
           </AuthenticatedLink>
         )}
-      </TopLogoContent>
-    </TopLogoContainer>
+      </Content>
+    </Background>
   )
 }
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -50,14 +48,14 @@ const Logo = styled.div`
   height: 5.6rem;
   flex-shrink: 0;
 `
-const TopLogoContainer = styled.div`
+const Background = styled.div`
   display: flex;
   align-self: center;
   width: 100%;
   background-color: ${({ theme }) => theme.colors.yellow200};
 `
 
-const TopLogoContent = styled.div`
+const Content = styled.div`
   display: flex;
   align-self: center;
   justify-content: space-between;
