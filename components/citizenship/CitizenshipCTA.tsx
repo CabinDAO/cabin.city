@@ -42,7 +42,7 @@ export const CitizenshipCTA = ({
     config = {
       title: 'Signal Interest',
       description:
-        'Become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
+        'You become eligible for Citizenship when an active citizen vouches for you. Help them discover you by signaling interest.',
       button: () => (
         <Button variant="primary" onClick={onClick}>
           Signal Interest

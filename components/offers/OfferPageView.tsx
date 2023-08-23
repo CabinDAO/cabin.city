@@ -7,9 +7,10 @@ import { useModal } from '../hooks/useModal'
 import { useRouter } from 'next/router'
 
 export const OfferPageView = () => {
-  const { offer, ownedByMe, published } = useGetOffer()
-  const { showModal } = useModal()
   const router = useRouter()
+  const { offerId } = router.query
+  const { offer, isEditable, isPublished } = useGetOffer(`${offerId}`)
+  const { showModal } = useModal()
 
   if (!offer) {
     return null
@@ -22,7 +23,7 @@ export const OfferPageView = () => {
   return (
     <SingleColumnLayout
       actionBar={
-        ownedByMe && !published ? (
+        isEditable && !isPublished ? (
           <ActionBar
             primaryButton={{
               label: 'Publish',
@@ -36,7 +37,7 @@ export const OfferPageView = () => {
         ) : null
       }
     >
-      <OfferView offer={offer} />
+      <OfferView offer={offer} isEditable={isEditable} />
     </SingleColumnLayout>
   )
 }

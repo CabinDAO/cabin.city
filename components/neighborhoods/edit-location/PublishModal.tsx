@@ -64,9 +64,9 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
             <Message>
               <H4>Publish to the Cabin City Directory</H4>
               <Body2>
-                You’ll be able to share your listing page publicly, but only
-                signed-in users can apply for offers, see the exact location,
-                and contact the caretaker.
+                Once published, your property listing and experiences will
+                become openly accessible, ready to be shared across various
+                social platforms.
               </Body2>
             </Message>
           </Information>

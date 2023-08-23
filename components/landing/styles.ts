@@ -2,6 +2,8 @@ import styled from 'styled-components'
 import { HHero } from '../core/Typography'
 import { HTMLAttributes } from 'react'
 
+export type LandingSectionVariant = 'default' | 'light' | 'dark'
+
 export const LandingContentNoPadding = styled.div`
   display: flex;
   height: 100%;
@@ -14,6 +16,27 @@ export const LandingContentNoPadding = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     width: 84rem;
+  }
+`
+
+export const LandingContent = styled(LandingContentNoPadding)`
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  padding: 8rem 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    align-self: flex-start;
+    box-sizing: content-box;
+    padding: 8rem 2.4rem 8rem 12.8rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    align-self: center;
+    padding: 8rem 4rem;
   }
 `
 

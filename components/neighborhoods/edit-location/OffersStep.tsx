@@ -9,11 +9,7 @@ import styled from 'styled-components'
 import { EmptyState } from '@/components/core/EmptyState'
 import { Dropdown } from '@/components/core/Dropdown'
 import { HorizontalDivider } from '@/components/core/Divider'
-import {
-  LocationType,
-  OfferType,
-  useCreateOfferMutation,
-} from '@/generated/graphql'
+import { OfferType, useCreateOfferMutation } from '@/generated/graphql'
 import { Button } from '@/components/core/Button'
 import { useState } from 'react'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
@@ -24,6 +20,7 @@ import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffer
 import { OfferTypesDescriptionList } from '@/components/offers/OfferTypeExplanation'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { useProfile } from '@/components/auth/useProfile'
 
 export const OffersStep = ({
   name,
@@ -34,6 +31,7 @@ export const OffersStep = ({
 }: StepProps) => {
   const [createOffer] = useCreateOfferMutation()
   const router = useRouter()
+  const { user } = useProfile()
   const { created } = router.query
   const stepTitle = created ? 'Draft listing' : 'Edit listing'
   const stepIndicatorText = () => {
@@ -50,9 +48,7 @@ export const OffersStep = ({
   const options = allOfferInfos.map((offerInfo) => ({
     label: offerInfo.name,
     value: offerInfo.offerType,
-    disabled:
-      offerInfo.offerType === OfferType.BuildAndGrowWeek &&
-      location.locationType === LocationType.Outpost,
+    disabled: offerInfo.offerType === OfferType.CabinWeek && !user?.isAdmin,
   }))
 
   const handleCreateOfferClick = async () => {
@@ -102,14 +98,14 @@ export const OffersStep = ({
             <OfferFormContainer>
               <InputGroup>
                 <StyledDropdown
-                  label="Choose Experience type"
+                  label="Choose type"
                   placeholder="Select"
                   onSelect={handleSelectedOption}
                   options={options}
                   selectedOption={selectedOfferType}
                 />
                 <Button variant="secondary" onClick={handleCreateOfferClick}>
-                  Create Offer
+                  Create
                 </Button>
               </InputGroup>
               <HorizontalDivider />

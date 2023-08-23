@@ -1,5 +1,3 @@
-import { appDomainWithProto } from '@/utils/display-utils'
-
 export enum EmailType {
   VOUCH_REQUESTED = 'VOUCH_REQUESTED',
 }

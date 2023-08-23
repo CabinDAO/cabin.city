@@ -78,6 +78,12 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
             </Caption>
           </MenuItemWithNote>
         </ProfileMenuItem>
+        {user.isAdmin && (
+          <ProfileMenuItem onClick={() => handleClick('admin')} href="/admin">
+            <Icon name="person" size={2} color="green400" />
+            <Subline1 $color="yellow100">Admin Tools</Subline1>
+          </ProfileMenuItem>
+        )}
         <ProfileMenuItem onClick={() => handleClick('signOut')} href="/logout">
           <Icon name="sign-out" size={2} color="green400" />
           <Subline1 $color="yellow100">Sign out</Subline1>

@@ -16,6 +16,7 @@ fragment Me on Profile {
   externalUserId
   citizenshipStatus
   cabinTokenBalanceInt
+  isAdmin
   roles {
     role
     level

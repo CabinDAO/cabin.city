@@ -64,7 +64,7 @@ const DebugPage = () => {
       // @ts-ignore
       setProfiles(data.getProfiles.data)
     }
-  }, [loading])
+  }, [data, loading])
 
   return (
     <SingleColumnLayout>

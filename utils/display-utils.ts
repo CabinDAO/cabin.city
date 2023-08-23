@@ -6,12 +6,12 @@ import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 
 export const appDomain =
-  process.env.NEXT_PUBLIC_APP_ENV === 'prod'
+  process.env.NODE_ENV === 'production'
     ? 'cabin.city'
     : process.env.NEXT_PUBLIC_VERCEL_URL
 
 export const appDomainWithProto =
-  (process.env.NODE_ENV == 'development' ? 'http' : 'https') + `://${appDomain}`
+  (appDomain.startsWith('localhost:') ? 'http' : 'https') + `://${appDomain}`
 
 export const EMPTY = '—'
 

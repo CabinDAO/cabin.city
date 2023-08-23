@@ -23,8 +23,10 @@ export const EXTERNAL_LINKS = {
   VOUCH_REQUEST_DISCORD_CHANNEL:
     'https://discord.com/channels/849304522500210709/1115389408095522956',
   CALENDLY_CALL_URL: 'https://calendly.com/cabinhome/welcome',
-  BOOKING_TYPEFORM:
+  CABIN_WEEK_BOOKING_TYPEFORM:
     'https://cabindotcity.typeform.com/cabinweeks?utm_source=cabin.city&utm_medium=web',
+  COLIVING_TYPEFORM:
+    'https://cabindotcity.typeform.com/to/ZhyOQyQM?utm_source=cabin.city&utm_medium=web',
   CARETAKER_TYPEFORM:
     'https://cabindotcity.typeform.com/to/CgI1OjLD?utm_source=cabin.city-footer&utm_medium=web',
 }

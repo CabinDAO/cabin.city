@@ -19,7 +19,7 @@ export const JoinSection = () => {
             height={43}
           />
           <h3>Try Coliving</h3>
-          <a href={EXTERNAL_LINKS.BOOKING_TYPEFORM}>
+          <a href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}>
             <Button>Join a Cabin Week</Button>
           </a>
           <Body>

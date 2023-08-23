@@ -32,8 +32,8 @@ export const OfferInfoByType: Record<OfferType, OfferInfo> = {
   [OfferType.Residency]: {
     name: 'Residency',
   },
-  [OfferType.BuildAndGrowWeek]: {
-    name: 'Build Week',
+  [OfferType.CabinWeek]: {
+    name: 'Cabin Week',
   },
 }
 
@@ -46,19 +46,20 @@ export const allOfferInfos = Object.values(OfferType).map((offerType) => ({
   offerType,
 }))
 
-export const formatOfferPrice = (offerPrice: OfferPrice): string => {
+export const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
+  const dollarString = `$${offerPrice.amountCents / 100}`
   switch (offerPrice.unit) {
     case OfferPriceUnit.Hourly:
-      return `$${offerPrice.amountCents / 100} / hour`
+      return [dollarString, `/ hour`]
     case OfferPriceUnit.Daily:
-      return `$${offerPrice.amountCents / 100} / day`
+      return [dollarString, `/ day`]
     case OfferPriceUnit.Weekly:
-      return `$${offerPrice.amountCents / 100} / week`
+      return [dollarString, `/ week`]
     case OfferPriceUnit.Monthly:
-      return `$${offerPrice.amountCents / 100} / month`
+      return [dollarString, `/ month`]
     case OfferPriceUnit.FlatFee:
     default:
-      return `$${offerPrice.amountCents / 100}`
+      return [dollarString, `total cost`]
   }
 }
 
@@ -140,7 +141,7 @@ export const labelByOfferPriceUnit = (unit: OfferPriceUnit): string => {
       return 'Per Month'
     case OfferPriceUnit.FlatFee:
     default:
-      return 'Flat Fee'
+      return 'Total Cost'
   }
 }
 

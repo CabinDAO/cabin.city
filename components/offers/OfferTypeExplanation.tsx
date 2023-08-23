@@ -13,10 +13,9 @@ const OFFER_TYPE_EXPLANATIONS = [
       'Support creators to work on a personal project for a window of time.',
   },
   {
-    title: 'Build Week',
-    subtitle: '(Neighborhoods only)',
-    description:
-      'Provide housing to members working on your property initiatives.',
+    title: 'Cabin Week',
+    subtitle: '(Cabin team only)',
+    description: 'A short introductory experience for new Cabin members.',
   },
 ]
 

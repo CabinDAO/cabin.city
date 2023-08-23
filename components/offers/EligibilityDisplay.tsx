@@ -1,11 +1,9 @@
 import styled from 'styled-components'
-import { OfferType } from '@/generated/graphql'
 import { Caption, H3 } from '../core/Typography'
 import Icon from '../core/Icon'
 import { RoleConstraintType } from '@/utils/offer'
 
 interface EligibilityDisplayProps {
-  offerType: OfferType
   displayMatchOne?: boolean
   displayMatchAll?: boolean
   rolesMatchOne?: RoleConstraintType[]
@@ -16,23 +14,10 @@ interface EligibilityDisplayProps {
 export const EligibilityDisplay = ({
   displayMatchAll = false,
   displayMatchOne = false,
-  offerType,
   rolesMatchOne = [],
   citizenshipRequired,
   minimunCabinBalance,
 }: EligibilityDisplayProps) => {
-  if (offerType === OfferType.PaidColiving) {
-    return (
-      <>
-        <H3>ELIGIBILITY</H3>
-        <OfferDetailsEligibilityCaption>
-          <Icon key="citizen" name="citizen" color="green900" size={1.6} />{' '}
-          Citizen
-        </OfferDetailsEligibilityCaption>
-      </>
-    )
-  }
-
   return (
     <>
       <H3>ELIGIBILITY</H3>

@@ -22,11 +22,11 @@ export const CitizenshipModal = () => {
             </Body2>
           </Step>
           <Step>
-            <Subline1>Attend a Build Week</Subline1>
+            <Subline1>Attend a Cabin Week</Subline1>
             <Body2>
-              Participate in a Neighborhood-sponsored build project with fellow
-              Cabin members. Find upcoming Build Weeks to apply for after
-              signing into the app.
+              Participate in a 1-2 week coliving experience with fellow Cabin
+              members. Find upcoming Cabin Weeks to apply for after signing into
+              the app.
             </Body2>
           </Step>
           <Step>

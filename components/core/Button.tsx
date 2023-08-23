@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
 import { MouseEventHandler } from 'react'
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link'
+type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 'link-slim'
 
 interface StyledButtonProps {
   variant: ButtonVariant
@@ -36,7 +36,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
   gap: 0.8rem;
   outline: 0;
   border: none;
-  padding: 1.5rem 2.4rem;
+  ${({ variant }) => variant !== 'link-slim' && 'padding: 1.5rem 2.4rem;'}
   white-space: nowrap;
   ${({ full }) => full === 'true' && 'width: 100%;'}
 
@@ -169,6 +169,7 @@ export const Button = ({
       }
       break
     case 'link':
+    case 'link-slim':
       hoverAnimation = {
         backgroundColor: theme.colors.yellow200,
       }

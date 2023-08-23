@@ -4,6 +4,7 @@ import { notch } from '../layouts/common.styles'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'
+import { useProfile } from '@/components/auth/useProfile'
 
 const SingleMenuItem = styled.div`
   padding: 1.6rem;
@@ -34,18 +35,18 @@ const Divider = styled.div`
 const NeighborhoodsItemGroup = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 2.7rem 1.6rem;p
+  padding: 2.7rem 1.6rem;
   justify-content: center;
   align-items: center;
   gap: 2.7rem;
 `
 
-interface NavbarProps {
-  profileId?: string
-  avatarUrl?: string
-}
+export const Navbar = () => {
+  const { user } = useProfile()
 
-export const Navbar = ({ profileId, avatarUrl }: NavbarProps) => {
+  const profileId = user?._id
+  const avatarUrl = user?.avatar?.url
+
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
 
   return (

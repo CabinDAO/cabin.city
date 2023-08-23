@@ -25,6 +25,9 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         {user && (
           <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
         )}
+        {user && user.isAdmin && (
+          <MobileMenuItem menuItem={'admin'} profileId={profileId} />
+        )}
         <MobileMenuItem menuItem={'signOut'} profileId={profileId} />
         <MobileMenuItem
           authenticated

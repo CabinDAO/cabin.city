@@ -6,8 +6,20 @@ import {
   ProfileRoleConstraint,
 } from '@/generated/graphql'
 import styled from 'styled-components'
-import { Body1, Caption, H2, H4, Subline1 } from './Typography'
-import { OfferPriceUnitMap, offerInfoFromType } from '@/utils/offer'
+import {
+  Body1,
+  Caption,
+  captionStyles,
+  h1Styles,
+  H2,
+  H4,
+  Subline1,
+} from './Typography'
+import {
+  OfferPriceUnitMap,
+  offerInfoFromType,
+  formatOfferPrice,
+} from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { centsToUSD, formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
@@ -16,7 +28,7 @@ import { OfferListItemProps } from './OfferListItem'
 import { HorizontalDivider } from './Divider'
 import { ProfileIcons } from './ProfileIcons'
 import { roleInfoFromType } from '@/utils/roles'
-import { AuthenticatedLink } from './AuthenticatedLink'
+import Link from 'next/link'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -120,12 +132,7 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
               </EligibilityContainer>
             )}
           </SummaryContainer>
-          {(price?.amountCents ?? 0) > 0 && (
-            <Price>
-              <H4>${centsToUSD(price?.amountCents ?? 0)}</H4>
-              {!!unit && <Body1>/ {unit}</Body1>}
-            </Price>
-          )}
+          {price && price.amountCents > 0 && <Price price={price} />}
         </ContentContainer>
         <HorizontalDivider />
       </ContainerLink>
@@ -143,6 +150,30 @@ const DateRangeTag = (props: OfferListItemProps) => {
   )
 }
 
+const Price = ({ price }: { price: OfferPrice }) => {
+  const [amount, unit] = formatOfferPrice(price)
+  return (
+    <PriceContainer>
+      <Amount>{amount}</Amount>
+      <Unit>{unit}</Unit>
+    </PriceContainer>
+  )
+}
+
+const PriceContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 0.8rem;
+`
+const Amount = styled.span`
+  ${h1Styles}
+`
+const Unit = styled.span`
+  ${captionStyles}
+`
+
 const OuterContainer = styled.div<{ inactive: boolean }>`
   display: flex;
   flex-direction: column;
@@ -152,17 +183,11 @@ const OuterContainer = styled.div<{ inactive: boolean }>`
   ${({ inactive }) => inactive && `opacity: 0.5;`}
 `
 
-const ContainerLink = styled(AuthenticatedLink)`
+const ContainerLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-`
-
-const Price = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.8rem;
 `
 
 const ImageContainer = styled.div`

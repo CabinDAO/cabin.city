@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import Router from 'next/router'
 import { addressMatch } from '@/utils/address-match'
-import { useMeQuery } from '@/generated/graphql'
+import { MeFragment, useMeQuery } from '@/generated/graphql'
 import { useExternalUser } from './useExternalUser'
 
 /*
@@ -46,5 +46,9 @@ export const useProfile = ({
     }
   }, [redirectTo, redirectToIfFound, externalUser, me, loading])
 
-  return { user: me, isUserLoading: loading, refetchProfile: refetch }
+  return {
+    user: me as MeFragment | null | undefined,
+    isUserLoading: loading,
+    refetchProfile: refetch,
+  }
 }

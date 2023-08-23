@@ -1,9 +1,25 @@
-import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  from,
+} from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
+import { onError } from '@apollo/client/link/error'
 import { getFaunaSecret } from '../auth/getFaunaSecret'
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_FAUNA_GRAPHQL_BASE_URL,
+})
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(
+        `[GQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      )
+    )
+  if (networkError) console.log(`[GQL network error]: ${networkError}`)
 })
 
 const authLink = setContext(async (_, { headers }) => {
@@ -18,8 +34,13 @@ const authLink = setContext(async (_, { headers }) => {
   }
 })
 
+const links =
+  process.env.NODE_ENV === 'production'
+    ? [authLink, httpLink]
+    : [authLink, errorLink, httpLink]
+
 export const apolloClient = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: from(links),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

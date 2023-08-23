@@ -42,40 +42,43 @@ export interface OfferViewProps {
   rawFragment: OfferFragment
 }
 
-export const useGetOffer = () => {
+export const useGetOffer = (offerId: string) => {
   const router = useRouter()
-  const { offerId } = router.query
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useProfile()
   const { data } = useGetOfferByIdQuery({
     variables: {
       id: `${offerId}`,
     },
-    skip: !offerId || !user,
+    skip: !offerId,
   })
 
   const offer = data?.findOfferByID
     ? offerViewPropsFromFragment(data.findOfferByID)
     : null
 
-  const ownedByMe = offer && user?._id === offer?.location.caretaker._id
+  const isPublished = !!offer?.location.publishedAt
 
-  const hideFromOthers = offer && !offer.location.publishedAt && !ownedByMe
+  const isUserCaretaker = user?._id === offer?.location.caretaker._id
+
+  const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
+
+  const isVisible = !!offer && (isEditable || isPublished)
 
   useEffect(() => {
-    if (data && !offer) {
+    if (!data) {
+      return
+    } else if (!offer) {
       router.push('/404')
-    } else if (hideFromOthers) {
+    } else if (!isVisible) {
       router.push('/city-directory')
     }
-  }, [data, offer, router, hideFromOthers])
-
-  if (!offer || !user || hideFromOthers) {
-    return { offer: null, ownedByMe: false }
-  }
+  }, [data, offer, router, isVisible])
 
   return {
-    offer,
-    ownedByMe,
-    published: !!offer.location.publishedAt,
+    offer: offer,
+    isPublished: isPublished,
+    isUserCaretaker: isUserCaretaker,
+    isEditable: isEditable,
+    isVisible: isVisible,
   }
 }
