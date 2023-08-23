@@ -9,7 +9,7 @@ export const LearnMoreSection = () => {
   return (
     <LearnMoreContent>
       <Link
-        href={EXTERNAL_LINKS.CALENDLY_CALL_URL}
+        href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=cabinweekpage`}
         target="_blank"
         rel="noreferrer"
       >

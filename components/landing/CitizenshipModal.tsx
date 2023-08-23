@@ -40,7 +40,7 @@ export const CitizenshipModal = () => {
       </CitizenshipModalContent>
       <ModalActionBar
         text="Contact Us"
-        locationHref={EXTERNAL_LINKS.CALENDLY_CALL_URL}
+        locationHref={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=citizenshipmodal`}
         onActionClick={() =>
           events.externalLinkEvent(EXTERNAL_LINKS.CALENDLY_CALL_URL)
         }

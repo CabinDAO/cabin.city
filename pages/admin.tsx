@@ -101,7 +101,7 @@ const AdminPage = () => {
 
   return (
     <SingleColumnLayout>
-      <TitleCard icon="lock" title="Admin Controls" />
+      <TitleCard icon="person" title="Admin Tools" />
       <AdminContent>
         <Button
           onClick={() => {
