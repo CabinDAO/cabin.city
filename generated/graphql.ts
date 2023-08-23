@@ -1554,6 +1554,7 @@ export enum OfferPriceUnit {
 export enum OfferType {
   PaidColiving = 'PaidColiving',
   Residency = 'Residency',
+  BuildAndGrowWeek = 'BuildAndGrowWeek',
   CabinWeek = 'CabinWeek'
 }
 

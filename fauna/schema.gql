@@ -412,6 +412,7 @@ type Offer {
 enum OfferType {
   PaidColiving
   Residency
+  BuildAndGrowWeek
   CabinWeek
 }
 
