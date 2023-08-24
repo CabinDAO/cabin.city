@@ -1798,6 +1798,7 @@ export type Query = {
   profilesCount: Scalars['Int'];
   /** Find a document from the collection of 'Hat' by its id. */
   findHatByID?: Maybe<Hat>;
+  getOffersByIds: Array<Offer>;
   syncAttemptByKeyAndStatus?: Maybe<BlockSyncAttempt>;
   profileByEmail?: Maybe<Profile>;
   myVouchesThisYear: Scalars['Int'];
@@ -1927,6 +1928,11 @@ export type QueryProfilesCountArgs = {
 
 export type QueryFindHatByIdArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryGetOffersByIdsArgs = {
+  ids: Array<Scalars['ID']>;
 };
 
 
@@ -2294,6 +2300,13 @@ export type GetOffersQueryVariables = Exact<{
 
 
 export type GetOffersQuery = { __typename?: 'Query', getOffers: { __typename?: 'QueryGetOffersPage', after?: string | null, data: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null> } };
+
+export type GetOffersByIdsQueryVariables = Exact<{
+  ids: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type GetOffersByIdsQuery = { __typename?: 'Query', getOffersByIds: Array<{ __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } }> };
 
 export type GetOffersCountQueryVariables = Exact<{
   input: GetOffersInput;
@@ -3634,6 +3647,41 @@ export function useGetOffersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetOffersQueryHookResult = ReturnType<typeof useGetOffersQuery>;
 export type GetOffersLazyQueryHookResult = ReturnType<typeof useGetOffersLazyQuery>;
 export type GetOffersQueryResult = Apollo.QueryResult<GetOffersQuery, GetOffersQueryVariables>;
+export const GetOffersByIdsDocument = gql`
+    query GetOffersByIds($ids: [ID!]!) {
+  getOffersByIds(ids: $ids) {
+    ...OfferItem
+  }
+}
+    ${OfferItemFragmentDoc}`;
+
+/**
+ * __useGetOffersByIdsQuery__
+ *
+ * To run a query within a React component, call `useGetOffersByIdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOffersByIdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOffersByIdsQuery({
+ *   variables: {
+ *      ids: // value for 'ids'
+ *   },
+ * });
+ */
+export function useGetOffersByIdsQuery(baseOptions: Apollo.QueryHookOptions<GetOffersByIdsQuery, GetOffersByIdsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOffersByIdsQuery, GetOffersByIdsQueryVariables>(GetOffersByIdsDocument, options);
+      }
+export function useGetOffersByIdsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOffersByIdsQuery, GetOffersByIdsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOffersByIdsQuery, GetOffersByIdsQueryVariables>(GetOffersByIdsDocument, options);
+        }
+export type GetOffersByIdsQueryHookResult = ReturnType<typeof useGetOffersByIdsQuery>;
+export type GetOffersByIdsLazyQueryHookResult = ReturnType<typeof useGetOffersByIdsLazyQuery>;
+export type GetOffersByIdsQueryResult = Apollo.QueryResult<GetOffersByIdsQuery, GetOffersByIdsQueryVariables>;
 export const GetOffersCountDocument = gql`
     query GetOffersCount($input: GetOffersInput!) {
   offersCount(input: $input)

@@ -150,6 +150,12 @@ export const publicOrAuthenticatedPrivileges: Privilege[] = [
     },
   },
   {
+    resource: q.Function('get_offers_by_ids'),
+    actions: {
+      call: true,
+    },
+  },
+  {
     resource: q.Function('profile_by_name'),
     actions: {
       call: true,

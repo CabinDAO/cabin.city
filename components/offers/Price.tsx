@@ -1,6 +1,6 @@
 import { OfferPrice, OfferPriceUnit } from '@/generated/graphql'
 import styled, { css } from 'styled-components'
-import { captionStyles, h1Styles } from '@/components/core/Typography'
+import { captionStyles, h1Styles, fonts } from '@/components/core/Typography'
 
 interface PriceProps {
   price: OfferPrice
@@ -18,7 +18,7 @@ export const Price = ({ price, small }: PriceProps) => {
   )
 }
 
-const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
+export const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
   const dollarString = `$${offerPrice.amountCents / 100}`
   switch (offerPrice.unit) {
     case OfferPriceUnit.Hourly:

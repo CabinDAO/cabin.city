@@ -33,6 +33,8 @@ export type Badge = {
   statusReason?: Maybe<Scalars['String']>;
   statusUpdatedAt?: Maybe<Scalars['Int']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
+  tokenUri: Scalars['String'];
+  tokenUriUpdatedAt?: Maybe<Scalars['Int']>;
   transactionHash: Scalars['String'];
 };
 
@@ -46,6 +48,7 @@ export type BadgeSpec = {
   raft: Raft;
   specUri: Scalars['String'];
   totalBadgesCount: Scalars['Int'];
+  totalRevokedBadgesCount: Scalars['Int'];
   transactionHash: Scalars['String'];
   uri: Scalars['String'];
 };
@@ -183,6 +186,14 @@ export type BadgeSpec_filter = {
   totalBadgesCount_lte?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalRevokedBadgesCount?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_gt?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_gte?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalRevokedBadgesCount_lt?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_lte?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_not?: InputMaybe<Scalars['Int']>;
+  totalRevokedBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
   transactionHash?: InputMaybe<Scalars['String']>;
   transactionHash_contains?: InputMaybe<Scalars['String']>;
   transactionHash_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -243,12 +254,14 @@ export enum BadgeSpec_orderBy {
   raft__createdBy = 'raft__createdBy',
   raft__id = 'raft__id',
   raft__tokenId = 'raft__tokenId',
+  raft__totalBadgeHoldersCount = 'raft__totalBadgeHoldersCount',
   raft__totalBadgesCount = 'raft__totalBadgesCount',
   raft__totalSpecsCount = 'raft__totalSpecsCount',
   raft__transactionHash = 'raft__transactionHash',
   raft__uri = 'raft__uri',
   specUri = 'specUri',
   totalBadgesCount = 'totalBadgesCount',
+  totalRevokedBadgesCount = 'totalRevokedBadgesCount',
   transactionHash = 'transactionHash',
   uri = 'uri'
 }
@@ -406,6 +419,34 @@ export type Badge_filter = {
   status_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   status_starts_with?: InputMaybe<Scalars['String']>;
   status_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri?: InputMaybe<Scalars['String']>;
+  tokenUriUpdatedAt?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_gt?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_gte?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_in?: InputMaybe<Array<Scalars['Int']>>;
+  tokenUriUpdatedAt_lt?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_lte?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_not?: InputMaybe<Scalars['Int']>;
+  tokenUriUpdatedAt_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  tokenUri_contains?: InputMaybe<Scalars['String']>;
+  tokenUri_contains_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri_ends_with?: InputMaybe<Scalars['String']>;
+  tokenUri_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri_gt?: InputMaybe<Scalars['String']>;
+  tokenUri_gte?: InputMaybe<Scalars['String']>;
+  tokenUri_in?: InputMaybe<Array<Scalars['String']>>;
+  tokenUri_lt?: InputMaybe<Scalars['String']>;
+  tokenUri_lte?: InputMaybe<Scalars['String']>;
+  tokenUri_not?: InputMaybe<Scalars['String']>;
+  tokenUri_not_contains?: InputMaybe<Scalars['String']>;
+  tokenUri_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri_not_ends_with?: InputMaybe<Scalars['String']>;
+  tokenUri_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri_not_in?: InputMaybe<Array<Scalars['String']>>;
+  tokenUri_not_starts_with?: InputMaybe<Scalars['String']>;
+  tokenUri_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  tokenUri_starts_with?: InputMaybe<Scalars['String']>;
+  tokenUri_starts_with_nocase?: InputMaybe<Scalars['String']>;
   transactionHash?: InputMaybe<Scalars['String']>;
   transactionHash_contains?: InputMaybe<Scalars['String']>;
   transactionHash_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -441,12 +482,15 @@ export enum Badge_orderBy {
   spec__id = 'spec__id',
   spec__specUri = 'spec__specUri',
   spec__totalBadgesCount = 'spec__totalBadgesCount',
+  spec__totalRevokedBadgesCount = 'spec__totalRevokedBadgesCount',
   spec__transactionHash = 'spec__transactionHash',
   spec__uri = 'spec__uri',
   status = 'status',
   statusReason = 'statusReason',
   statusUpdatedAt = 'statusUpdatedAt',
   statusUpdatedBy = 'statusUpdatedBy',
+  tokenUri = 'tokenUri',
+  tokenUriUpdatedAt = 'tokenUriUpdatedAt',
   transactionHash = 'transactionHash'
 }
 
@@ -591,6 +635,7 @@ export type Raft = {
   owner: User;
   specs: Array<BadgeSpec>;
   tokenId: Scalars['BigInt'];
+  totalBadgeHoldersCount: Scalars['Int'];
   totalBadgesCount: Scalars['Int'];
   totalSpecsCount: Scalars['Int'];
   transactionHash: Scalars['String'];
@@ -804,6 +849,14 @@ export type Raft_filter = {
   tokenId_lte?: InputMaybe<Scalars['BigInt']>;
   tokenId_not?: InputMaybe<Scalars['BigInt']>;
   tokenId_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  totalBadgeHoldersCount?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_gt?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_gte?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalBadgeHoldersCount_lt?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_lte?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_not?: InputMaybe<Scalars['Int']>;
+  totalBadgeHoldersCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
   totalBadgesCount?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_gt?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_gte?: InputMaybe<Scalars['Int']>;
@@ -877,6 +930,7 @@ export enum Raft_orderBy {
   owner__totalBadgesCount = 'owner__totalBadgesCount',
   specs = 'specs',
   tokenId = 'tokenId',
+  totalBadgeHoldersCount = 'totalBadgeHoldersCount',
   totalBadgesCount = 'totalBadgesCount',
   totalSpecsCount = 'totalSpecsCount',
   transactionHash = 'transactionHash',

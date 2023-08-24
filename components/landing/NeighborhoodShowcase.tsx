@@ -1,50 +1,54 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import { useGetLocationsByIdsQuery } from '@/generated/graphql'
+import { useGetOffersByIdsQuery } from '@/generated/graphql'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import Image from 'next/image'
 import { fonts } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { formatShortAddress } from '@/lib/address'
+import { formatRange } from '@/utils/display-utils'
+import { parseISO } from 'date-fns'
+import { formatOfferPrice } from '@/components/offers/Price'
 
-const neighborhoodIDs =
+const cabinWeekIDs =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? [
-        '364553837499908173', // N0
-        '365094230524166221', // Mana
-        '365455154129928260', // Elkenmist
-        '364890877983719504', // TDF
+        '373884974581940305', // N0
+        '373885328800350288', // Mana
+        '373883889220845648', // Elkenmist
+        '373885641076768848', // TDF
       ]
     : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' ||
       process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
     ? [
-        '363624799920980033',
-        '363648779115561025',
-        '373245837828948048',
-        '366209599901007953',
+        '373340699343454289',
+        '373689242991198289',
+        '373340554520428625',
+        '373412722869534801',
       ]
-    : ['372776408692294144', '373424710078169600', '373425676224561664']
+    : ['373344986613154304', '373068568228528640', '373070482102026752']
 
 export const NeighborhoodShowcase = () => {
-  const { data } = useGetLocationsByIdsQuery({
+  const { data } = useGetOffersByIdsQuery({
     variables: {
-      ids: neighborhoodIDs,
+      ids: cabinWeekIDs,
     },
   })
 
   return (
     <Container>
       <Neighborhoods>
-        {data?.getLocationsByIds.map((location, index) => {
-          const imgURL = getImageUrlByIpfsHash(
-            location.bannerImageIpfsHash,
-            true
-          )
+        {data?.getOffersByIds.map((cabinWeek, index) => {
+          const imgURL = getImageUrlByIpfsHash(cabinWeek.imageIpfsHash, true)
+          const price = cabinWeek.price
+            ? formatOfferPrice(cabinWeek.price).join(' ')
+            : '-'
+          console.log(cabinWeek._id, cabinWeek.startDate, cabinWeek.endDate)
           return (
             <ImageContainer key={index}>
-              <Link href={`/location/${location._id}`}>
+              <Link href={`/experience/${cabinWeek._id}`}>
                 <Image
-                  alt={location.name ?? 'A Cabin neighborhood'}
+                  alt={`Cabin Week at ${cabinWeek.location.name}`}
                   src={imgURL ?? 'https://placehold.it/500'}
                   fill={true}
                   sizes="100vw"
@@ -53,13 +57,21 @@ export const NeighborhoodShowcase = () => {
                     objectPosition: 'center',
                   }}
                 />
-                <CaptionContainer>
-                  <NameWrapper>
-                    <Name>{location.name}</Name>
+                <TextContainer>
+                  <BigText>
+                    {formatRange(
+                      parseISO(cabinWeek.startDate),
+                      parseISO(cabinWeek.endDate)
+                    )}
+                  </BigText>
+                  <BigText>
+                    <Name>
+                      {formatShortAddress(cabinWeek.location.address)}
+                    </Name>
                     <Icon name={'right-arrow'} size={3} color={'white'} />
-                  </NameWrapper>
-                  <Address>{formatShortAddress(location.address)}</Address>
-                </CaptionContainer>
+                  </BigText>
+                  <SmallText>{price}</SmallText>
+                </TextContainer>
               </Link>
             </ImageContainer>
           )
@@ -107,7 +119,7 @@ const ImageContainer = styled.div`
   overflow: hidden;
 `
 
-const CaptionContainer = styled.div`
+const TextContainer = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
@@ -130,7 +142,7 @@ const CaptionContainer = styled.div`
     hsla(0, 0%, 0%, 0.8) 100%
   );
 `
-const NameWrapper = styled.div`
+const BigText = styled.div`
   // need this wrapper so we can do the arrow icon AND the ellipses
 
   display: flex;
@@ -141,7 +153,7 @@ const NameWrapper = styled.div`
   font-family: ${fonts.poppins};
   font-weight: 600;
   font-size: 2.4rem;
-  line-height: 6.7rem;
+  line-height: 4.8rem;
 
   ${({ theme }) => theme.bp.lg} {
     font-size: 3.2rem;
@@ -153,13 +165,14 @@ const NameWrapper = styled.div`
     margin-left: 1.6rem;
   }
 `
+
 const Name = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 `
 
-const Address = styled.div`
+const SmallText = styled.div`
   font-family: ${fonts.ibmPlexMono};
   font-weight: 600;
   font-size: 1.4rem;
