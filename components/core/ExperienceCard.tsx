@@ -7,11 +7,7 @@ import {
 } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Caption, captionStyles, h1Styles, H2, Subline1 } from './Typography'
-import {
-  OfferPriceUnitMap,
-  offerInfoFromType,
-  formatOfferPrice,
-} from '@/utils/offer'
+import { offerInfoFromType } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
@@ -21,6 +17,7 @@ import { HorizontalDivider } from './Divider'
 import { ProfileIcons } from './ProfileIcons'
 import { roleInfoFromType } from '@/utils/roles'
 import Link from 'next/link'
+import { Price } from '@/components/offers/Price'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -140,30 +137,6 @@ const DateRangeTag = (props: OfferListItemProps) => {
     </TagContainer>
   )
 }
-
-const Price = ({ price }: { price: OfferPrice }) => {
-  const [amount, unit] = formatOfferPrice(price)
-  return (
-    <PriceContainer>
-      <Amount>{amount}</Amount>
-      <Unit>{unit}</Unit>
-    </PriceContainer>
-  )
-}
-
-const PriceContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: baseline;
-  gap: 0.8rem;
-`
-const Amount = styled.span`
-  ${h1Styles}
-`
-const Unit = styled.span`
-  ${captionStyles}
-`
 
 const OuterContainer = styled.div<{ inactive: boolean }>`
   display: flex;

@@ -46,23 +46,6 @@ export const allOfferInfos = Object.values(OfferType).map((offerType) => ({
   offerType,
 }))
 
-export const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
-  const dollarString = `$${offerPrice.amountCents / 100}`
-  switch (offerPrice.unit) {
-    case OfferPriceUnit.Hourly:
-      return [dollarString, `/ hour`]
-    case OfferPriceUnit.Daily:
-      return [dollarString, `/ day`]
-    case OfferPriceUnit.Weekly:
-      return [dollarString, `/ week`]
-    case OfferPriceUnit.Monthly:
-      return [dollarString, `/ month`]
-    case OfferPriceUnit.FlatFee:
-    default:
-      return [dollarString, `total cost`]
-  }
-}
-
 export const offerListItemPropsFromFragment = (
   fragment: OfferItemFragment,
   me: MeFragment | null | undefined

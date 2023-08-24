@@ -1,9 +1,5 @@
 import styled from 'styled-components'
-import {
-  formatOfferPrice,
-  offerInfoFromType,
-  RoleConstraintType,
-} from '@/utils/offer'
+import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
@@ -13,8 +9,6 @@ import {
   H2,
   H3,
   Subline2,
-  h1Styles,
-  captionStyles,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { roleConstraintInfoFromType } from '@/utils/roles'
@@ -34,6 +28,7 @@ import { ImageFlex } from '../core/gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { ApplyButton } from '@/components/offers/ApplyButton'
 import Icon from '@/components/core/Icon'
+import { Price } from '@/components/offers/Price'
 
 const EMPTY = '—'
 
@@ -96,13 +91,9 @@ export const OfferView = ({
   if (!offerType) return null
 
   const CabinWeekPrice = ({ price }: { price: OfferPrice }) => {
-    const [amount, unit] = formatOfferPrice(price)
     return (
       <OfferCabinWeekDetailsSection>
-        <div>
-          <Amount>{amount}</Amount>
-          <Unit>{unit}</Unit>
-        </div>
+        <Price price={price} />
         <Body1>{formatRange(startDate, endDate)}</Body1>
       </OfferCabinWeekDetailsSection>
     )
@@ -172,9 +163,7 @@ export const OfferView = ({
 
                   <OfferDetailsPricing>
                     <Caption>{formatRange(startDate, endDate)}</Caption>
-                    <Caption emphasized>
-                      {price ? formatOfferPrice(price) : EMPTY}
-                    </Caption>
+                    {price ? <Price small price={price} /> : EMPTY}
                   </OfferDetailsPricing>
                 </OfferDetailsSection>
               )}
@@ -298,14 +287,6 @@ const OfferDetailsHeader = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     flex-flow: column;
   }
-`
-
-const Amount = styled.span`
-  ${h1Styles}
-`
-const Unit = styled.span`
-  ${captionStyles}
-  margin-left: 0.5rem;
 `
 
 const Actions = styled.div`
