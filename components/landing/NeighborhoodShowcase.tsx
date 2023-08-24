@@ -72,7 +72,9 @@ export const NeighborhoodShowcase = () => {
                     </Name>
                     <Icon name={'right-arrow'} size={3} color={'white'} />
                   </BigText>
-                  <SmallText>{price}</SmallText>
+                  <SmallText>
+                    {price} | {cabinWeek.title}
+                  </SmallText>
                 </TextContainer>
               </Link>
             </ImageContainer>
