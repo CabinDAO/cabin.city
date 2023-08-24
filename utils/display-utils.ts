@@ -49,7 +49,15 @@ export const formatDate = (
   date: Date,
   desiredFormat = 'MMMM yyyy',
   placeholder?: string
-) => (date ? format(date, desiredFormat, { locale: enUS }) : placeholder)
+) => {
+  if (!date) {
+    return placeholder
+  }
+  const dateAdjustedForTZ = new Date(
+    date.valueOf() + date.getTimezoneOffset() * 60 * 1000
+  )
+  return format(dateAdjustedForTZ, desiredFormat, { locale: enUS })
+}
 
 export const monthYearFormat = (dateISOString: string) =>
   format(new Date(dateISOString), 'MMMM yyyy', { locale: enUS })
@@ -160,5 +168,3 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
     )}`
   }
 }
-
-export const centsToUSD = (cents: number) => Math.round(cents / 100)
