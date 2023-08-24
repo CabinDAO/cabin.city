@@ -39,11 +39,13 @@ export const NeighborhoodShowcase = () => {
     <Container>
       <Neighborhoods>
         {data?.getOffersByIds.map((cabinWeek, index) => {
-          const imgURL = getImageUrlByIpfsHash(cabinWeek.imageIpfsHash, true)
+          const imgURL = getImageUrlByIpfsHash(
+            cabinWeek.location.bannerImageIpfsHash,
+            true
+          )
           const price = cabinWeek.price
             ? formatOfferPrice(cabinWeek.price).join(' ')
             : '-'
-          console.log(cabinWeek._id, cabinWeek.startDate, cabinWeek.endDate)
           return (
             <ImageContainer key={index}>
               <Link href={`/experience/${cabinWeek._id}`}>
