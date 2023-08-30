@@ -9,21 +9,14 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { TestimonialSection } from '@/components/landing/TestimonialSection'
+import { QuotesSection } from '@/components/landing/QuotesSection'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
-import { TextSection } from '@/components/landing/TextSection'
 import { LandingSection } from '@/components/landing/LandingSection'
-import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { RoleCard } from '@/components/core/RoleCard'
-import { useDeviceSize } from '../hooks/useDeviceSize'
-import { roleInfoFromType } from '@/utils/roles'
-import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
-import { levelInfoFromType } from '@/utils/levels'
 import Link from 'next/link'
+import { TextSection } from '@/components/landing/TextSection'
 
 export const LandingView = () => {
-  const { deviceSize } = useDeviceSize()
-
   return (
     <StyledLayout variant="full">
       <TopLogoSection />
@@ -53,23 +46,12 @@ export const LandingView = () => {
         <BookingSection />
       </LandingSection>
 
-      <LandingSection variant="dark" title={'Who is Cabin for?'}>
-        <TextSection variant="dark">
+      <LandingSection title={'Who is Cabin for?'} variant={'dark'}>
+        <TextSection>
           Cabin is for individuals seeking to grow their skills and forge
           stronger connections with like-minded peers in inspiring locations
         </TextSection>
-        <SlideshowContainer>
-          <Slideshow key={deviceSize}>
-            {Object.values(ProfileRoleType).map((role) => (
-              <RoleCard
-                key={`${role}-${deviceSize}`}
-                variant={deviceSize === 'desktop' ? 'default' : 'small'}
-                roleInfo={roleInfoFromType(ProfileRoleType[role])}
-                levelInfo={levelInfoFromType(ProfileRoleLevelType.Custodian)}
-              />
-            ))}
-          </Slideshow>
-        </SlideshowContainer>
+        <TestimonialSection />
       </LandingSection>
 
       <LandingSection>
@@ -87,7 +69,7 @@ export const LandingView = () => {
       </LandingSection>
 
       <LandingSection>
-        <TestimonialSection />
+        <QuotesSection />
       </LandingSection>
 
       <LandingSection>
@@ -111,22 +93,4 @@ const StyledLayout = styled(SingleColumnLayout)`
 
 const SubscribeLandingSection = styled(LandingSection)`
   background-color: ${({ theme }) => theme.colors.yellow100};
-`
-
-const SlideshowContainer = styled.div`
-  display: flex;
-  align-items: center;
-  align-self: center;
-  justify-content: center;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-start;
-    box-sizing: content-box;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-    width: 80rem;
-  }
 `
