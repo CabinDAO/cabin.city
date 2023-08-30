@@ -1,18 +1,18 @@
 import styled from 'styled-components'
+import Link from 'next/link'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import Icon from '@/components/core/Icon'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
+import { HeroImage } from '@/components/core/HeroImage'
 import { Footer } from '@/components/navigation/Footer'
 import { SubscribeSection } from './SubscribeSection'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
-import { HeroImage } from '@/components/core/HeroImage'
 import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { TextContent, TextSection } from '@/components/landing/TextSection'
 import { LandingSection } from '@/components/landing/LandingSection'
 import { WordCloud } from '@/components/landing/WordCloud'
-import Icon from '@/components/core/Icon'
-import Link from 'next/link'
-import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { LearnMoreSection } from '@/components/landing/LearnMoreSection'
 import { TestimonialSection } from '@/components/landing/TestimonialSection'
 
@@ -110,7 +110,7 @@ export const CabinWeekView = () => {
         <LearnMoreSection />
       </LandingSection>
 
-      <LandingSection fullWidth noBottomPadding>
+      <LandingSection fullWidth bottomPadding={'0'}>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"
@@ -119,9 +119,9 @@ export const CabinWeekView = () => {
         />
       </LandingSection>
 
-      <SubscribeLandingSection variant={'light'}>
+      <LandingSection variant={'light'}>
         <SubscribeSection />
-      </SubscribeLandingSection>
+      </LandingSection>
 
       <LandingSection variant="dark">
         <Footer />
@@ -147,8 +147,4 @@ const CheckList = styled(TextContent)`
 
 const StyledLayout = styled(SingleColumnLayout)`
   margin-bottom: 0rem;
-`
-
-const SubscribeLandingSection = styled(LandingSection)`
-  background-color: ${({ theme }) => theme.colors.yellow100};
 `

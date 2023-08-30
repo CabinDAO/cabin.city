@@ -3,16 +3,20 @@ import styled, { css } from 'styled-components'
 
 import { ColorName } from '../../styles/theme'
 
+import accountBoxSvg from './svg/account-box.svg'
 import accountGroupSvg from './svg/account-group.svg'
 import accountGroupGreenSvg from './svg/account-group-green.svg'
 import alertSvg from './svg/alert.svg'
 import backArrowSvg from './svg/back-arrow.svg'
+import bibGreenSvg from './svg/bib-green.svg'
 import builderSvg from './svg/builder.svg'
+import calendarStarFourPointsSvg from './svg/calendar-star-four-points.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import checkSvg from './svg/check.svg'
 import checkCircleSvg from './svg/check-circle.svg'
 import checkCircleGreenSvg from './svg/check-circle-green.svg'
+import checkDecagramSvg from './svg/check-decagram.svg'
 import checkStarSvg from './svg/check-star.svg'
 import chevronDownSvg from './svg/chevron-down.svg'
 import chevronLeftSvg from './svg/chevron-left.svg'
@@ -43,6 +47,7 @@ import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import holdingSvg from './svg/holding.svg'
 import infoSvg from './svg/info.svg'
+import lightningBoltSvg from './svg/lightning-bolt.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
@@ -50,6 +55,7 @@ import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import minusSvg from './svg/minus.svg'
 import mountainSvg from './svg/mountain.svg'
+import mountainsSvg from './svg/mountains.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
@@ -57,6 +63,7 @@ import neighborhoodsSvg from './svg/neighborhoods.svg'
 import nftSvg from './svg/nft.svg'
 import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
+import peaceSignSvg from './svg/peace-sign.svg'
 import pencilSvg from './svg/pencil.svg'
 import personSvg from './svg/person.svg'
 import plusSvg from './svg/plus.svg'
@@ -74,25 +81,31 @@ import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
 import trashSvg from './svg/trash.svg'
+import trifoldGreenSvg from './svg/trifold-green.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
 import rightArrowSvg from './svg/right-arrow.svg'
 import walletSvg from './svg/wallet.svg'
 import xCircleSvg from './svg/x-circle.svg'
+import xLogoSvg from './svg/x-logo.svg'
 
 export const IconSvgs = {
+  'account-box': accountBoxSvg,
   'account-group': accountGroupSvg,
   'account-group-green': accountGroupGreenSvg,
   alert: alertSvg,
   'back-arrow': backArrowSvg,
+  'bib-green': bibGreenSvg,
   builder: builderSvg,
+  'calendar-star-four-points': calendarStarFourPointsSvg,
   caretaker: caretakerSvg,
   'card-heart': cardHeartSvg,
   check: checkSvg,
-  'check-star': checkStarSvg,
   'check-circle': checkCircleSvg,
   'check-circle-green': checkCircleGreenSvg,
+  'check-decagram': checkDecagramSvg,
+  'check-star': checkStarSvg,
   'chevron-down': chevronDownSvg,
   'chevron-left': chevronLeftSvg,
   'chevron-right': chevronRightSvg,
@@ -122,6 +135,7 @@ export const IconSvgs = {
   'heart-solid': heartSolidSvg,
   holding: holdingSvg,
   info: infoSvg,
+  'lightning-bolt': lightningBoltSvg,
   location: locationSvg,
   lock: lockSvg,
   'logo-cabin': logoCabinSvg,
@@ -129,6 +143,7 @@ export const IconSvgs = {
   menu: menuSvg,
   minus: minusSvg,
   mountain: mountainSvg,
+  mountains: mountainsSvg,
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
@@ -136,6 +151,7 @@ export const IconSvgs = {
   nft: nftSvg,
   offer: offerSvg,
   outpost: outpostSvg,
+  'peace-sign': peaceSignSvg,
   pencil: pencilSvg,
   person: personSvg,
   plus: plusSvg,
@@ -153,12 +169,14 @@ export const IconSvgs = {
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
   trash: trashSvg,
+  'trifold-green': trifoldGreenSvg,
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,
   'right-arrow': rightArrowSvg,
   wallet: walletSvg,
   'x-circle': xCircleSvg,
+  'x-logo': xLogoSvg,
 }
 
 export type IconName = keyof typeof IconSvgs

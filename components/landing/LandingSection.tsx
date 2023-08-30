@@ -6,35 +6,18 @@ import { TextContent } from '@/components/landing/TextSection'
 import theme from '@/styles/theme'
 import Icon, { IconName } from '@/components/core/Icon'
 
-interface LandingSectionProps extends HTMLAttributes<HTMLDivElement> {
+interface LandingSectionProps extends ContainerProps {
   icon?: IconName
   title?: string
   children?: React.ReactNode
-  variant?: LandingSectionVariant
-  noTopPadding?: boolean
-  noBottomPadding?: boolean
-  fullWidth?: boolean
 }
 
-export const LandingSection = ({
-  icon,
-  title,
-  children,
-  variant,
-  noTopPadding,
-  noBottomPadding,
-  fullWidth,
-}: LandingSectionProps) => {
+export const LandingSection = (props: LandingSectionProps) => {
   return (
-    <Container
-      variant={variant}
-      noTopPadding={noTopPadding}
-      noBottomPadding={noBottomPadding}
-      fullWidth={fullWidth}
-    >
-      {icon && <Icon name={icon} size={8} />}
-      {title && <H1 emphasized>{title}</H1>}
-      {children}
+    <Container {...props}>
+      {props.icon && <Icon name={props.icon} size={8} />}
+      {props.title && <H1 emphasized>{props.title}</H1>}
+      {props.children}
     </Container>
   )
 }
@@ -42,11 +25,11 @@ export const LandingSection = ({
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   variant?: LandingSectionVariant
   noTopPadding?: boolean
-  noBottomPadding?: boolean
+  bottomPadding?: string
   fullWidth?: boolean
 }
 
-export const Container = styled.div<ContainerProps>`
+const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -55,17 +38,13 @@ export const Container = styled.div<ContainerProps>`
   background-color: ${({ variant }) => themeColor('bg', variant)};
   width: 100%;
   gap: 2.4rem;
+  
+  padding-bottom: ${({ bottomPadding }) => bottomPadding || '4rem'};
 
   ${({ noTopPadding }) =>
     !noTopPadding &&
     css`
       padding-top: 4rem;
-    `}};
-
-  ${({ noBottomPadding }) =>
-    !noBottomPadding &&
-    css`
-      padding-bottom: 4rem;
     `}};
 
   ${({ fullWidth }) =>
@@ -83,7 +62,7 @@ export const Container = styled.div<ContainerProps>`
   }
 
   ${({ theme }) => theme.bp.md} {
-    gap: 2.4rem;
+    gap: 4rem;
   }
 `
 

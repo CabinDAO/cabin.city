@@ -1,20 +1,22 @@
 import styled from 'styled-components'
+import Link from 'next/link'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
 import { Footer } from '@/components/navigation/Footer'
 import { HeroVideo } from '../core/HeroVideo'
-import { BookingSection } from './BookingSection'
-import { DetailedInfoSection } from './DetailedInfoSection'
-import { JoinSection } from './JoinSection'
-import { LandingDiscordSection } from './LandingDiscordSection'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { SubscribeSection } from './SubscribeSection'
-import { TestimonialSection } from '@/components/landing/TestimonialSection'
-import { HeroSection } from '@/components/landing/HeroSection'
-import { TopLogoSection } from '@/components/landing/TopLogoSection'
-import { LandingSection } from '@/components/landing/LandingSection'
-import Link from 'next/link'
-import { TwitterSection } from '@/components/landing/TwitterSection'
-import { FeaturedInSection } from '@/components/landing/FeaturedInSection'
+import { TestimonialSection } from './TestimonialSection'
+import { HeroSection } from './HeroSection'
+import { TopLogoSection } from './TopLogoSection'
+import { LandingSection } from './LandingSection'
+import { TwitterSection } from './TwitterSection'
+import { FeaturedInSection } from './FeaturedInSection'
+import { LearnMoreSection } from './LearnMoreSection'
+import { H1 } from '@/components/core/Typography'
+import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
+import { HorizontalList } from '@/components/landing/HorizontalList'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const LandingView = () => {
   return (
@@ -43,21 +45,69 @@ export const LandingView = () => {
       </LandingSection>
 
       <LandingSection>
-        <BookingSection />
+        <H1>3 values</H1>
       </LandingSection>
 
       <LandingSection>
-        <DetailedInfoSection />
+        <H1>attend cabin week</H1>
+      </LandingSection>
+
+      <LandingSection title={'Colive at Cabin'} icon={'trifold-green'}>
+        <HorizontalList
+          items={[
+            {
+              title: 'Access to nature',
+              body: 'Breathtaking scenery available outside the front door.',
+              icon: 'mountains',
+            },
+            {
+              title: 'Fast internet',
+              body: 'Reliable, high-speed WiFi to make it easy to connect and do work.',
+              icon: 'lightning-bolt',
+            },
+            {
+              title: 'Strong community',
+              body: 'Good vibes for thoughtful people to live together smoothly.',
+              icon: 'peace-sign',
+            },
+          ]}
+        />
+      </LandingSection>
+
+      <LandingSection>
+        <Link href={EXTERNAL_LINKS.COLIVING_TYPEFORM}>
+          <Button>Apply to colive</Button>
+        </Link>
+      </LandingSection>
+
+      <LandingSection fullWidth>
+        <NeighborhoodShowcase />
       </LandingSection>
 
       <LandingSection
-        id="join"
-        variant="dark"
-        noTopPadding
-        noBottomPadding
-        fullWidth
+        title={'Ways to stay at Cabin'}
+        icon={'bib-green'}
+        bottomPadding={'8rem'}
       >
-        <JoinSection />
+        <HorizontalList
+          items={[
+            {
+              title: 'Attend a Cabin Week',
+              body: 'These 1-2 week long events are our official welcome to the Cabin community and a taste of coliving.',
+              icon: 'calendar-star-four-points',
+            },
+            {
+              title: 'Apply to Colive',
+              body: 'Browse our directory of coliving offers across the network city and apply for your next experience.',
+              icon: 'account-box',
+            },
+            {
+              title: 'Become a Citizen',
+              body: 'Access our full network of coliving options by receiving a vouch from a current citizen and purchasing a membership.',
+              icon: 'check-decagram',
+            },
+          ]}
+        />
       </LandingSection>
 
       <LandingSection title={'What people are saying'} variant={'light'}>
@@ -66,13 +116,22 @@ export const LandingView = () => {
         <FeaturedInSection />
       </LandingSection>
 
-      <LandingSection>
-        <LandingDiscordSection />
+      <LandingSection title={'Want to learn more?'} icon={'hand-wave-green'}>
+        <LearnMoreSection />
       </LandingSection>
 
-      <SubscribeLandingSection>
+      <LandingSection fullWidth bottomPadding={'0'}>
+        <ImageFlex
+          alt="forest-network"
+          src="/images/landing-forest-network.svg"
+          height={32}
+          width={84}
+        />
+      </LandingSection>
+
+      <LandingSection variant={'light'}>
         <SubscribeSection />
-      </SubscribeLandingSection>
+      </LandingSection>
 
       <LandingSection variant="dark">
         <Footer />
@@ -83,8 +142,4 @@ export const LandingView = () => {
 
 const StyledLayout = styled(SingleColumnLayout)`
   margin-bottom: 0rem;
-`
-
-const SubscribeLandingSection = styled(LandingSection)`
-  background-color: ${({ theme }) => theme.colors.yellow100};
 `
