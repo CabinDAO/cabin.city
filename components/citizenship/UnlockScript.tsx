@@ -29,6 +29,7 @@ export const loadUnlockCheckout = async (provider: any) => {
   paywall.setPaywallConfig(paywallConfig)
   paywall.connect(provider)
 
+  console.log('loadinging checkout modal')
   paywall.loadCheckoutModal()
 }
 
@@ -41,7 +42,7 @@ export const UnlockScript = () => {
   const handleStatus = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
-      console.info('Unlock state', e.detail.state)
+      console.info(`Unlock state: ${e.detail.state}`)
       if (
         e.detail.state === 'unlocked' &&
         user?.citizenshipStatus !== CitizenshipStatus.Verified
@@ -54,6 +55,8 @@ export const UnlockScript = () => {
       ) {
         console.info('Unlock status changed to locked. Checking status...')
         checkStatus()
+      } else {
+        console.log(e)
       }
     },
     [checkStatus, user?.citizenshipStatus]
