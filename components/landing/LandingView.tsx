@@ -46,14 +46,6 @@ export const LandingView = () => {
         <BookingSection />
       </LandingSection>
 
-      <LandingSection title={'Who is Cabin for?'} variant={'dark'}>
-        <TextSection>
-          Cabin is for individuals seeking to grow their skills and forge
-          stronger connections with like-minded peers in inspiring locations
-        </TextSection>
-        <TestimonialSection />
-      </LandingSection>
-
       <LandingSection>
         <DetailedInfoSection />
       </LandingSection>
@@ -68,8 +60,8 @@ export const LandingView = () => {
         <JoinSection />
       </LandingSection>
 
-      <LandingSection>
-        <QuotesSection />
+      <LandingSection title={'What people are saying'} variant={'light'}>
+        <TestimonialSection />
       </LandingSection>
 
       <LandingSection>

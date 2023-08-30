@@ -16,7 +16,7 @@ interface SlideshowProps {
   children: ReactElement | ReactElement[]
 }
 
-export const Slideshow = ({ children, className }: SlideshowProps) => {
+export const GradientSlideshow = ({ children, className }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
   const [slidesVisible, setSlidesVisible] = useState(0)
@@ -145,12 +145,34 @@ const SlideshowContainer = styled.div`
   flex-flow: column;
   gap: 4rem;
   position: relative;
-  overflow: hidden;
+
+  ${({ theme }) => theme.bp.lg} {
+    overflow: hidden;
+  }
 `
 
 const SlideshowViewport = styled.div`
   overflow: visible;
   position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 18rem;
+    display: none;
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.colors.green800}00 0%,
+      ${({ theme }) => theme.colors.green800} 100%
+    );
+
+    ${({ theme }) => theme.bp.lg} {
+      display: block;
+    }
+  }
 `
 
 const Slide = styled.div`
@@ -169,7 +191,11 @@ const SlideshowControls = styled.div`
   display: flex;
   flex-flow: row;
   gap: 0.8rem;
-  justify-content: center;
+  justify-content: start;
+
+  ${({ theme }) => theme.bp.lg} {
+    justify-content: center;
+  }
 `
 
 const ControlButton = styled(Button)`

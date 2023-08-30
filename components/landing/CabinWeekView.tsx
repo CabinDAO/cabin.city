@@ -14,6 +14,7 @@ import Icon from '@/components/core/Icon'
 import Link from 'next/link'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { LearnMoreSection } from '@/components/landing/LearnMoreSection'
+import { TestimonialSection } from '@/components/landing/TestimonialSection'
 
 const cabinWeekButton = (
   <Link href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}>
@@ -52,12 +53,12 @@ export const CabinWeekView = () => {
         </TextSection>
       </LandingSection>
 
-      {/*<LandingSection*/}
-      {/*  title={'What people are saying'}*/}
-      {/*  icon={'account-group-green'}*/}
-      {/*>*/}
-      {/*  <TextSection>Video slideshow goes here</TextSection>*/}
-      {/*</LandingSection>*/}
+      <LandingSection
+        title={'What people are saying'}
+        icon={'account-group-green'}
+      >
+        <TestimonialSection />
+      </LandingSection>
 
       <LandingSection
         title={"What's on the schedule?"}
