@@ -43,7 +43,7 @@ export const CabinWeekView = () => {
         />
       </LandingSection>
 
-      <LandingSection title={"What's Cabin Week?"}>
+      <LandingSection title={"What's a Cabin Week?"}>
         <TextSection>
           Connect with fellow digital nomads and remote workers who share a love
           for nature and communal dining. Experience the magic of Cabin Weeks,
