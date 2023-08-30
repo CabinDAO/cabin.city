@@ -7,7 +7,7 @@ export const QuotesSection = () => {
   return (
     <Content>
       {testimonialData.map((i) => (
-        <Item key={i.name} imgUrl={i.imgUrl} name={i.name} text={i.text} />
+        <Item key={i.name} {...i} />
       ))}
     </Content>
   )

@@ -9,12 +9,12 @@ import { JoinSection } from './JoinSection'
 import { LandingDiscordSection } from './LandingDiscordSection'
 import { SubscribeSection } from './SubscribeSection'
 import { TestimonialSection } from '@/components/landing/TestimonialSection'
-import { QuotesSection } from '@/components/landing/QuotesSection'
 import { HeroSection } from '@/components/landing/HeroSection'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { LandingSection } from '@/components/landing/LandingSection'
 import Link from 'next/link'
-import { TextSection } from '@/components/landing/TextSection'
+import { TwitterSection } from '@/components/landing/TwitterSection'
+import { FeaturedInSection } from '@/components/landing/FeaturedInSection'
 
 export const LandingView = () => {
   return (
@@ -62,6 +62,8 @@ export const LandingView = () => {
 
       <LandingSection title={'What people are saying'} variant={'light'}>
         <TestimonialSection />
+        <TwitterSection />
+        <FeaturedInSection />
       </LandingSection>
 
       <LandingSection>
