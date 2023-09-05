@@ -54,6 +54,7 @@ export const LandingView = () => {
 
       <LandingSection title={'Colive at Cabin'} icon={'trifold-green'}>
         <HorizontalList
+          centered
           items={[
             {
               title: 'Access to nature',
@@ -90,6 +91,7 @@ export const LandingView = () => {
         bottomPadding={'8rem'}
       >
         <HorizontalList
+          centered
           items={[
             {
               title: 'Attend a Cabin Week',
