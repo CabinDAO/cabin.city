@@ -3,13 +3,66 @@ import { Body1, Body2, H4 } from '@/components/core/Typography'
 import Image from 'next/image'
 import Icon from '@/components/core/Icon'
 import Link from 'next/link'
+import { useEffect, useRef, useState } from 'react'
 
 export const TwitterSection = () => {
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  const [xOffset, setXOffset] = useState(0)
+
+  useEffect(() => {
+    const onScroll = () => {
+      // get viewport height, and how far down the viewport we scrolled.
+      // scrolling starts when bottom of tweets is 10% above viewport bottom
+      // scrolling ends when tweet top is 10% below viewport top
+
+      const viewportWidth = window.innerWidth
+      const contentWidth =
+        contentRef.current?.getBoundingClientRect().width ?? 0
+
+      if (viewportWidth > contentWidth) {
+        return
+      }
+
+      const viewportHeight = window.innerHeight
+      const contentTop = contentRef.current?.getBoundingClientRect().top ?? 0
+      const contentBottom =
+        contentRef.current?.getBoundingClientRect().bottom ?? 0
+      const contentHeight = contentBottom - contentTop
+
+      const scrollStart = (viewportHeight - contentHeight) * 0.2
+      const scrollEnd = (viewportHeight - contentHeight) * 0.9
+      const scrollProgress = Math.max(
+        0,
+        Math.min(1, (contentTop - scrollStart) / (scrollEnd - scrollStart))
+      )
+
+      const parentLeft =
+        contentRef.current?.parentElement?.getBoundingClientRect().left ?? 0
+
+      const leftOverflow = (contentWidth - viewportWidth + parentLeft) / 2
+
+      const xOffset = scrollProgress * leftOverflow * 2 - leftOverflow
+      setXOffset(xOffset)
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+    }
+  })
+
   return (
     <Content>
-      {tweets.map((i) => (
-        <Item key={i.name} {...i} />
-      ))}
+      <Slider
+        ref={contentRef}
+        style={{ transform: `translateX(${xOffset}px)` }}
+      >
+        {tweets.map((i) => (
+          <Item key={i.name} {...i} />
+        ))}
+      </Slider>
     </Content>
   )
 }
@@ -85,22 +138,34 @@ const Item = (props: Tweet) => {
 
 const Content = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1.6rem;
-  width: 31rem;
+  width: 100%;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    flex-direction: row;
-    width: 80rem;
-    gap: 2.4rem;
+    width: 100%;
   }
 `
+
+const Slider = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.lg} {
+    flex-direction: row;
+    gap: 2.4rem;
+    width: auto;
+  }
+`
+
 const StyledItem = styled.div`
   display: flex;
   flex-shrink: 0;
