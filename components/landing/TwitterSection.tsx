@@ -21,6 +21,7 @@ export const TwitterSection = () => {
         contentRef.current?.getBoundingClientRect().width ?? 0
 
       if (viewportWidth > contentWidth) {
+        setXOffset(0)
         return
       }
 
