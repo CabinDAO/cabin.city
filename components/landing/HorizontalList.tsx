@@ -14,9 +14,9 @@ export const HorizontalList = ({ items }: { items: ListItemProps[] }) => {
   return (
     <StyledHorizontalList>
       <Items>
-        {items.map((i) => {
+        {items.map((i, index) => {
           const item = (
-            <Item>
+            <Item key={index}>
               <Icon name={i.icon} size={2.4} />
               {i.link && (
                 <ArrowIcon
