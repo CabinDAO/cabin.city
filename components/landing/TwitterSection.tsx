@@ -112,9 +112,10 @@ const StyledItem = styled.div`
   padding: 2.4rem;
 
   ${({ theme }) => theme.bp.lg} {
+    align-self: stretch;
     width: 42rem;
     gap: 2.6rem;
-    padding: 3.2rem 3.2rem 5.2rem;
+    padding: 3.2rem;
   }
 `
 
