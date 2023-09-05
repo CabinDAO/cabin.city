@@ -9,7 +9,7 @@ export const TestimonialSection = () => {
 
   return (
     <Content>
-      <Slideshow key={deviceSize}>
+      <Slideshow key={deviceSize} loop>
         {testimonials.map((i) => (
           <Item key={i.name} {...i} />
         ))}

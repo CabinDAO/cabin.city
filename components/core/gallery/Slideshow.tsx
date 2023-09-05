@@ -14,31 +14,37 @@ import events from '@/lib/googleAnalytics/events'
 interface SlideshowProps {
   className?: string
   children: ReactElement | ReactElement[]
+  loop?: boolean
 }
 
-export const Slideshow = ({ children, className }: SlideshowProps) => {
+export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
   const [slidesVisible, setSlidesVisible] = useState(0)
   const [slideSizes, setSlideSizes] = useState<DOMRect[]>([])
-  const [startingSlide, setStartingSlide] = useState(0)
+  const [currSlide, setCurrSlide] = useState(0)
   const firstSlideSize = slideSizes[0]
-  const startingSlideSize = slideSizes[startingSlide]
-  const startingSlideOffset =
-    (firstSlideSize?.x ?? 0) - (startingSlideSize?.x ?? 0)
-  const canNavigateNext = startingSlide < slideSizes.length - slidesVisible
-  const canNavigatePrevious = startingSlide > 0
+  const currSlideSize = slideSizes[currSlide]
+  const currSlideOffset = (firstSlideSize?.x ?? 0) - (currSlideSize?.x ?? 0)
+  const canNavigateNext = loop || currSlide < slideSizes.length - slidesVisible
+  const canNavigatePrevious = loop || currSlide > 0
 
   const onNextSlide = () => {
     events.roleCardsSlideshowEvent()
-    setStartingSlide(
-      Math.min(slideSizes.length - slidesVisible, startingSlide + 1)
-    )
+    let nextSlide = Math.min(slideSizes.length - slidesVisible, currSlide + 1)
+    if (loop && nextSlide == currSlide) {
+      nextSlide = 0
+    }
+    setCurrSlide(nextSlide)
   }
 
   const onPreviousSlide = () => {
     events.roleCardsSlideshowEvent()
-    setStartingSlide(Math.max(0, startingSlide - 1))
+    let prevSlide = Math.max(0, currSlide - 1)
+    if (loop && prevSlide == currSlide) {
+      prevSlide = slideSizes.length - slidesVisible
+    }
+    setCurrSlide(prevSlide)
   }
 
   const calculateSizes = useCallback(() => {
@@ -64,17 +70,14 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
         _slidesVisible != slidesVisible ||
         _slideSizes.length != slideSizes.length
       ) {
-        setStartingSlide(
-          Math.max(
-            Math.min(slideSizes.length - _slidesVisible, startingSlide),
-            0
-          )
+        setCurrSlide(
+          Math.max(Math.min(slideSizes.length - _slidesVisible, currSlide), 0)
         )
         setSlideSizes(_slideSizes)
         setSlidesVisible(_slidesVisible)
       }
     }
-  }, [startingSlide, slideSizes, slidesVisible])
+  }, [currSlide, slideSizes, slidesVisible])
 
   useEffect(() => {
     calculateSizes()
@@ -100,7 +103,7 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
     >
       <SlideshowViewport ref={viewportRef}>
         <SlideshowReel
-          style={{ transform: `translateX(${startingSlideOffset}px)` }}
+          style={{ transform: `translateX(${currSlideOffset}px)` }}
         >
           {Children.map(children, (child, index) => (
             <Slide
@@ -119,7 +122,7 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
       <SlideshowControls>
         <ControlButton
           variant="secondary"
-          aria-label="Previous Slide"
+          aria-label="Previous"
           onClick={onPreviousSlide}
           disabled={!canNavigatePrevious}
         >
@@ -128,7 +131,7 @@ export const Slideshow = ({ children, className }: SlideshowProps) => {
 
         <ControlButton
           variant="secondary"
-          aria-label="Next Slide"
+          aria-label="Next"
           onClick={onNextSlide}
           disabled={!canNavigateNext}
         >
