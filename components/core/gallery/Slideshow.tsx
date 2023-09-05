@@ -20,18 +20,22 @@ interface SlideshowProps {
 export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
-  const [slidesVisible, setSlidesVisible] = useState(0)
+  const [numSlidesVisible, setNumSlidesVisible] = useState(0)
   const [slideSizes, setSlideSizes] = useState<DOMRect[]>([])
   const [currSlide, setCurrSlide] = useState(0)
   const firstSlideSize = slideSizes[0]
   const currSlideSize = slideSizes[currSlide]
   const currSlideOffset = (firstSlideSize?.x ?? 0) - (currSlideSize?.x ?? 0)
-  const canNavigateNext = loop || currSlide < slideSizes.length - slidesVisible
+  const canNavigateNext =
+    loop || currSlide < slideSizes.length - numSlidesVisible
   const canNavigatePrevious = loop || currSlide > 0
 
   const onNextSlide = () => {
     events.roleCardsSlideshowEvent()
-    let nextSlide = Math.min(slideSizes.length - slidesVisible, currSlide + 1)
+    let nextSlide = Math.min(
+      slideSizes.length - numSlidesVisible,
+      currSlide + 1
+    )
     if (loop && nextSlide == currSlide) {
       nextSlide = 0
     }
@@ -42,42 +46,49 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
     events.roleCardsSlideshowEvent()
     let prevSlide = Math.max(0, currSlide - 1)
     if (loop && prevSlide == currSlide) {
-      prevSlide = slideSizes.length - slidesVisible
+      prevSlide = slideSizes.length - numSlidesVisible
     }
     setCurrSlide(prevSlide)
   }
 
   const calculateSizes = useCallback(() => {
-    if (viewportRef.current && slidesRef.current) {
-      const viewportSize = viewportRef.current.getBoundingClientRect()
-      const _slideSizes = slidesRef.current.map(
-        (slide) => slide?.getBoundingClientRect() ?? new DOMRect()
-      )
-      const firstSlide = _slideSizes[0]
-      let _slidesVisible = Math.min(1, _slideSizes.length - 1)
-
-      while (
-        _slidesVisible < _slideSizes.length &&
-        _slideSizes[_slidesVisible].x +
-          _slideSizes[_slidesVisible].width -
-          firstSlide.x <=
-          viewportSize.width
-      ) {
-        _slidesVisible += 1
-      }
-
-      if (
-        _slidesVisible != slidesVisible ||
-        _slideSizes.length != slideSizes.length
-      ) {
-        setCurrSlide(
-          Math.max(Math.min(slideSizes.length - _slidesVisible, currSlide), 0)
-        )
-        setSlideSizes(_slideSizes)
-        setSlidesVisible(_slidesVisible)
-      }
+    if (!viewportRef.current || !slidesRef.current) {
+      return
     }
-  }, [currSlide, slideSizes, slidesVisible])
+
+    const viewportSize = viewportRef.current.getBoundingClientRect()
+    const newSlideSizes = slidesRef.current.map(
+      (slide) => slide?.getBoundingClientRect() ?? new DOMRect()
+    )
+    const newFirstSlideSize = newSlideSizes[0]
+
+    let newSlidesVisible = Math.min(1, newSlideSizes.length - 1)
+    while (
+      newSlidesVisible < newSlideSizes.length &&
+      newSlideSizes[newSlidesVisible].x +
+        newSlideSizes[newSlidesVisible].width -
+        newFirstSlideSize.x <=
+        viewportSize.width
+    ) {
+      newSlidesVisible += 1
+    }
+
+    const slideSizeChanged =
+      (firstSlideSize?.width ?? 0) != (newFirstSlideSize?.width ?? 0) ||
+      (firstSlideSize?.height ?? 0) != (newFirstSlideSize?.height ?? 0)
+
+    if (
+      newSlidesVisible != numSlidesVisible ||
+      newSlideSizes.length != slideSizes.length ||
+      slideSizeChanged
+    ) {
+      setCurrSlide(
+        Math.max(Math.min(slideSizes.length - newSlidesVisible, currSlide), 0)
+      )
+      setSlideSizes(newSlideSizes)
+      setNumSlidesVisible(newSlidesVisible)
+    }
+  }, [currSlide, slideSizes, numSlidesVisible])
 
   useEffect(() => {
     calculateSizes()

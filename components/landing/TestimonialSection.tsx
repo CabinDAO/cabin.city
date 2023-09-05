@@ -46,7 +46,7 @@ const Item = (props: Datum) => {
   return (
     <StyledItem>
       <H3>{props.name}</H3>
-      <TextContent>
+      <ItemContent>
         <PFP
           src={props.imgUrl}
           alt={props.name}
@@ -55,7 +55,7 @@ const Item = (props: Datum) => {
           style={{ width: '11.2rem', height: '11.2rem' }}
         />
         <Text>{props.text}</Text>
-      </TextContent>
+      </ItemContent>
     </StyledItem>
   )
 }
@@ -64,7 +64,7 @@ const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 31rem;
+  width: calc(100vw - 8rem); // 4rem padding on each side. THIS IS A HACK :(
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
@@ -81,14 +81,14 @@ const StyledItem = styled.div`
   gap: 2.4rem;
 `
 
-const TextContent = styled.div`
+const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2.4rem;
   flex-shrink: 0;
-  width: 31rem;
+  width: calc(100vw - 8rem);
   height: 44rem;
   background-color: ${({ theme }) => theme.colors.yellow400};
 
@@ -112,4 +112,5 @@ const Text = styled(Body1)`
   opacity: 75%;
   text-align: center;
   padding: 0 2rem;
+  width: 100%;
 `
