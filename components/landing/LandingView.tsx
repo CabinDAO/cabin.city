@@ -118,6 +118,9 @@ export const LandingView = () => {
       <LandingSection title={'What people are saying'} variant={'light'}>
         <TestimonialSection />
         <TwitterSection />
+      </LandingSection>
+
+      <LandingSection variant={'light'} bottomPadding={'8rem'}>
         <FeaturedInSection />
       </LandingSection>
 

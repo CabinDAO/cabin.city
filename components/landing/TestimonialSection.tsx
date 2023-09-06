@@ -65,6 +65,7 @@ const Content = styled.div`
   align-items: center;
   justify-content: center;
   width: calc(100vw - 8rem); // 4rem padding on each side. THIS IS A HACK :(
+  margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;

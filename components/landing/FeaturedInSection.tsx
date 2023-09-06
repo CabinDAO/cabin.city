@@ -3,34 +3,25 @@ import Image from 'next/image'
 import { H3 } from '@/components/core/Typography'
 import Link from 'next/link'
 
+import ftLogo from './logos/ft.png'
+import newYorkerLogo from './logos/new-yorker.png'
+import coindeskLogo from './logos/coindesk.png'
+
 export const FeaturedInSection = () => {
   return (
     <Content>
       <H3>Featured In:</H3>
-      <Link href={'ft.com'}>
-        <Image
-          src={'https://placebear.com/190/60'}
-          alt={'Financial Times'}
-          width={160}
-          height={90}
-        />
-      </Link>
-      <Link href={'newyorker.com'}>
-        <Image
-          src={'https://placebear.com/g/190/60'}
-          alt={'Financial Times'}
-          width={160}
-          height={90}
-        />
-      </Link>
-      <Link href={'coindesk.com'}>
-        <Image
-          src={'https://placekitten.com/190/60'}
-          alt={'Financial Times'}
-          width={160}
-          height={90}
-        />
-      </Link>
+      <div>
+        <Link href={'ft.com'}>
+          <Image src={ftLogo} alt={'Financial Times'} />
+        </Link>
+        <Link href={'newyorker.com'}>
+          <Image src={newYorkerLogo} alt={'New Yorker'} />
+        </Link>
+        <Link href={'coindesk.com'}>
+          <Image src={coindeskLogo} alt={'Coindesk'} />
+        </Link>
+      </div>
     </Content>
   )
 }
@@ -43,12 +34,28 @@ const Content = styled.div`
   width: 31rem;
   gap: 5rem;
 
+  > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+  }
+
+  ${H3} {
+    white-space: nowrap;
+  }
+
   ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
     width: 50rem;
+    > div {
+      flex-direction: row;
+      gap: 5rem;
+    }
   }
 
   ${({ theme }) => theme.bp.lg} {
+    flex-direction: row;
     width: 80rem;
   }
 `
