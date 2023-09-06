@@ -7,8 +7,8 @@ import accountBoxSvg from './svg/account-box.svg'
 import accountGroupSvg from './svg/account-group.svg'
 import accountGroupGreenSvg from './svg/account-group-green.svg'
 import alertSvg from './svg/alert.svg'
+import backpackGreenSvg from './svg/backpack-green.svg'
 import backArrowSvg from './svg/back-arrow.svg'
-import bibGreenSvg from './svg/bib-green.svg'
 import builderSvg from './svg/builder.svg'
 import calendarStarFourPointsSvg from './svg/calendar-star-four-points.svg'
 import caretakerSvg from './svg/caretaker.svg'
@@ -51,6 +51,7 @@ import lightningBoltSvg from './svg/lightning-bolt.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
+import mapGreenSvg from './svg/map-green.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import minusSvg from './svg/minus.svg'
@@ -81,7 +82,6 @@ import staySvg from './svg/stay.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
 import trashSvg from './svg/trash.svg'
-import trifoldGreenSvg from './svg/trifold-green.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
 import upRightArrowSvg from './svg/up-right-arrow.svg'
@@ -95,8 +95,8 @@ export const IconSvgs = {
   'account-group': accountGroupSvg,
   'account-group-green': accountGroupGreenSvg,
   alert: alertSvg,
+  'backpack-green': backpackGreenSvg,
   'back-arrow': backArrowSvg,
-  'bib-green': bibGreenSvg,
   builder: builderSvg,
   'calendar-star-four-points': calendarStarFourPointsSvg,
   caretaker: caretakerSvg,
@@ -139,6 +139,7 @@ export const IconSvgs = {
   location: locationSvg,
   lock: lockSvg,
   'logo-cabin': logoCabinSvg,
+  'map-green': mapGreenSvg,
   members: membersSvg,
   menu: menuSvg,
   minus: minusSvg,
@@ -169,7 +170,6 @@ export const IconSvgs = {
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
   trash: trashSvg,
-  'trifold-green': trifoldGreenSvg,
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,
   'up-right-arrow': upRightArrowSvg,

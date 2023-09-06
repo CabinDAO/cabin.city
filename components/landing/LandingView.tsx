@@ -52,7 +52,7 @@ export const LandingView = () => {
         <H1>attend cabin week</H1>
       </LandingSection>
 
-      <LandingSection title={'Colive at Cabin'} icon={'trifold-green'}>
+      <LandingSection title={'Colive at Cabin'} icon={'map-green'}>
         <HorizontalList
           centered
           items={[
@@ -87,7 +87,7 @@ export const LandingView = () => {
 
       <LandingSection
         title={'Ways to stay at Cabin'}
-        icon={'bib-green'}
+        icon={'backpack-green'}
         bottomPadding={'8rem'}
       >
         <HorizontalList
@@ -110,6 +110,9 @@ export const LandingView = () => {
             },
           ]}
         />
+        <Link href="/cabin-week">
+          <Button>Try it out</Button>
+        </Link>
       </LandingSection>
 
       <LandingSection title={'What people are saying'} variant={'light'}>
