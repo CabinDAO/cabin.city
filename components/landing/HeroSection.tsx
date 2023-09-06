@@ -1,10 +1,6 @@
-import {
-  LandingContentNoPadding,
-  SectionContent,
-  StyledHHero,
-} from '@/components/landing/styles'
+import { SectionContent } from '@/components/landing/styles'
 import styled from 'styled-components'
-import { Body1 } from '@/components/core/Typography'
+import { Body1, HHero } from '@/components/core/Typography'
 
 interface HeroSectionProps {
   title: string
@@ -34,7 +30,23 @@ export const HeroSection = (props: HeroSectionProps) => {
   )
 }
 
-const LandingContent = styled(LandingContentNoPadding)`
+export const StyledHHero = styled(HHero)`
+  width: 28.8rem;
+  text-align: center;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
+    font-size: 4rem;
+    line-height: 1.25;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    padding-top: 2rem;
+    font-size: 4rem;
+  }
+`
+
+const LandingContent = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;

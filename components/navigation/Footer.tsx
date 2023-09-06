@@ -4,7 +4,7 @@ import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
-import { LandingContent } from '@/components/landing/styles'
+import { LandingContentNoPadding } from '@/components/landing/styles'
 
 interface FooterProps {
   className?: string
@@ -106,6 +106,27 @@ export const Footer = ({ children, className }: FooterProps) => (
     </FooterContainer>
   </LandingContent>
 )
+
+export const LandingContent = styled(LandingContentNoPadding)`
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  padding: 8rem 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    align-self: flex-start;
+    box-sizing: content-box;
+    padding: 8rem 2.4rem 8rem 12.8rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    align-self: center;
+    padding: 8rem 4rem;
+  }
+`
 
 export const FooterContainer = styled.div`
   display: flex;

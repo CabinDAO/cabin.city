@@ -1,3 +1,17 @@
+const padding = {
+  sm: '1.6rem',
+  md: '2.4rem',
+  lg: '4rem',
+  xl: '8rem',
+}
+
+const containerWidths = {
+  sm: '100%',
+  md: '50rem', // or 61.2rem ???
+  lg: '80rem', // or 84rem ???
+  full: '100%',
+}
+
 const screenSizes = {
   sm: 320,
   md: 760,

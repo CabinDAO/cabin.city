@@ -12,13 +12,25 @@ export const FeaturedInSection = () => {
     <Content>
       <H3>Featured In:</H3>
       <div>
-        <Link href={'ft.com'}>
+        <Link
+          href={
+            'https://www.ft.com/content/def2b5cb-d0e1-4005-96c5-d8fe0d1613b8'
+          }
+        >
           <Image src={ftLogo} alt={'Financial Times'} />
         </Link>
-        <Link href={'newyorker.com'}>
+        <Link
+          href={
+            'https://www.newyorker.com/culture/infinite-scroll/the-promise-of-daos-the-latest-craze-in-crypto'
+          }
+        >
           <Image src={newYorkerLogo} alt={'New Yorker'} />
         </Link>
-        <Link href={'coindesk.com'}>
+        <Link
+          href={
+            'https://www.coindesk.com/business/2023/05/23/coliving-project-cabin-wants-to-put-digital-nomads-in-nature/'
+          }
+        >
           <Image src={coindeskLogo} alt={'Coindesk'} />
         </Link>
       </div>

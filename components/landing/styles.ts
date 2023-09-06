@@ -1,9 +1,11 @@
 import styled from 'styled-components'
-import { HHero } from '../core/Typography'
 import { HTMLAttributes } from 'react'
 
 export type LandingSectionVariant = 'default' | 'light' | 'dark'
 
+/**
+ * @deprecated Use a normal div instead
+ */
 export const LandingContentNoPadding = styled.div`
   display: flex;
   height: 100%;
@@ -16,43 +18,6 @@ export const LandingContentNoPadding = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     width: 84rem;
-  }
-`
-
-export const LandingContent = styled(LandingContentNoPadding)`
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-  gap: 2.4rem;
-  padding: 8rem 2.4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-start;
-    box-sizing: content-box;
-    padding: 8rem 2.4rem 8rem 12.8rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-    padding: 8rem 4rem;
-  }
-`
-
-export const StyledHHero = styled(HHero)`
-  width: 28.8rem;
-  text-align: center;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 100%;
-    font-size: 4rem;
-    line-height: 1.25;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    padding-top: 2rem;
-    font-size: 4rem;
   }
 `
 
@@ -90,8 +55,4 @@ export const LandingSectionContent = styled.div<LandingSectionContentProps>`
     padding-left: 12rem;
     padding-right: 4rem;
   }
-
-  // ${({ theme }) => theme.bp.lg} {
-  //   padding: 8rem 4rem;
-  // }
 `
