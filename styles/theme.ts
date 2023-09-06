@@ -22,7 +22,7 @@ const screenSizes = {
 export const queries = {
   base: '(min-width: 0px)',
   sm: `(min-width: ${screenSizes.sm}px)`,
-  sm_max: `(min-width: ${screenSizes.sm - 1}px)`,
+  sm_max: `(max-width: ${screenSizes.sm - 1}px)`,
   md: `(min-width: ${screenSizes.md}px)`,
   md_max: `(max-width: ${screenSizes.md - 1}px)`,
   lg: `(min-width: ${screenSizes.lg}px)`,
@@ -36,6 +36,7 @@ const theme = {
   bp: {
     base: `@media only screen and ${queries.base}`,
     sm: `@media only screen and ${queries.sm}`,
+    sm_max: `@media only screen and ${queries.sm_max}`,
     sm_landscape: `@media only screen and ${queries.sm} and ${queries.landscape}`,
     md: `@media only screen and ${queries.md}`,
     md_max: `@media only screen and ${queries.md_max}`,

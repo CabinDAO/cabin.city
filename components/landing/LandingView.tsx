@@ -17,6 +17,7 @@ import { H1 } from '@/components/core/Typography'
 import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { HorizontalList } from '@/components/landing/HorizontalList'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { ValuesSection } from '@/components/landing/ValuesSection'
 
 export const LandingView = () => {
   return (
@@ -45,7 +46,7 @@ export const LandingView = () => {
       </LandingSection>
 
       <LandingSection>
-        <H1>3 values</H1>
+        <ValuesSection />
       </LandingSection>
 
       <LandingSection>
