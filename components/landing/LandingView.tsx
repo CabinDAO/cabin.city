@@ -18,6 +18,7 @@ import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { HorizontalList } from '@/components/landing/HorizontalList'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { ValuesSection } from '@/components/landing/ValuesSection'
+import { IntroExperienceSection } from '@/components/landing/IntroExperienceSection'
 
 export const LandingView = () => {
   return (
@@ -49,8 +50,13 @@ export const LandingView = () => {
         <ValuesSection />
       </LandingSection>
 
-      <LandingSection>
-        <H1>attend cabin week</H1>
+      <LandingSection
+        fullWidth
+        noTopPadding
+        bottomPadding={'0'}
+        variant={'light'}
+      >
+        <IntroExperienceSection />
       </LandingSection>
 
       <LandingSection title={'Colive at Cabin'} icon={'map-green'}>
