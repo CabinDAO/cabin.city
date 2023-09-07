@@ -122,7 +122,7 @@ const Items = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   margin-top: 4rem;
 
