@@ -5,6 +5,11 @@ import Icon from '@/components/core/Icon'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
+import lucaPFP from './luca.jpg'
+import eileenPFP from './eileenvert.jpg'
+import zoyaPFP from './zoya.jpg'
+import adrianPFP from './adrian.jpg'
+
 export const TwitterSection = () => {
   const contentRef = useRef<HTMLDivElement>(null)
 
@@ -79,7 +84,7 @@ type Tweet = {
 
 const tweets: Tweet[] = [
   {
-    pfpUrl: '/images/testimonial-charlie.jpg',
+    pfpUrl: eileenPFP.src,
     name: 'Eileen',
     handle: '@eileenvert',
     text: 'I am so grateful to have found @Montaialife through @cabindotcity last year. Now I am back! This place rly is a home, a basecamp, a taproot to return to.',
@@ -87,7 +92,7 @@ const tweets: Tweet[] = [
     srcUrl: 'https://twitter.com/eileenvert/status/1667764485288005632',
   },
   {
-    pfpUrl: '/images/testimonial-charlie.jpg',
+    pfpUrl: lucaPFP.src,
     name: 'Luca',
     handle: '@luca_tomescu',
     text: 'One of the coolest opportunities out there. No matter who you are or what you want to build',
@@ -95,7 +100,7 @@ const tweets: Tweet[] = [
     srcUrl: 'https://twitter.com/luca_tomescu',
   },
   {
-    pfpUrl: '/images/testimonial-charlie.jpg',
+    pfpUrl: zoyaPFP.src,
     name: 'Zoya Yaseka',
     handle: '@zoyayaseka',
     text: 'The way this opportunity is changing lives and setting the foundation for new ways to live and commune 🥰✨👏🏾',
@@ -103,7 +108,7 @@ const tweets: Tweet[] = [
     srcUrl: 'https://twitter.com/zoyayaseka',
   },
   {
-    pfpUrl: '/images/testimonial-charlie.jpg',
+    pfpUrl: adrianPFP.src,
     name: 'Adrian Seneca',
     handle: '@adrian_seneca',
     text: 'it has been an incredibly expansive and nourishing experience. Connecting, weaving and integrating with community while surrounded by land is 100% my vibe.',
