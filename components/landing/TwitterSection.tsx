@@ -36,8 +36,8 @@ export const TwitterSection = () => {
         contentRef.current?.getBoundingClientRect().bottom ?? 0
       const contentHeight = contentBottom - contentTop
 
-      const scrollStart = (viewportHeight - contentHeight) * 0.2
-      const scrollEnd = (viewportHeight - contentHeight) * 0.9
+      const scrollStart = (viewportHeight - contentHeight) * 0.4
+      const scrollEnd = (viewportHeight - contentHeight) * 0.8
       const scrollProgress = Math.max(
         0,
         Math.min(1, (contentTop - scrollStart) / (scrollEnd - scrollStart))
@@ -164,6 +164,7 @@ const Slider = styled.div`
   justify-content: center;
   gap: 1.6rem;
   width: 100%;
+  transition: transform 0.7s cubic-bezier(0.5, 1, 0.89, 1); // https://easings.net/#easeOutQuad
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
