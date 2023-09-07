@@ -14,81 +14,67 @@ import events from '@/lib/googleAnalytics/events'
 interface SlideshowProps {
   className?: string
   children: ReactElement | ReactElement[]
-  loop?: boolean
 }
 
-export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
+export const GradientSlideshow = ({ children, className }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
-  const [numSlidesVisible, setNumSlidesVisible] = useState(0)
+  const [slidesVisible, setSlidesVisible] = useState(0)
   const [slideSizes, setSlideSizes] = useState<DOMRect[]>([])
-  const [currSlide, setCurrSlide] = useState(0)
+  const [startingSlide, setStartingSlide] = useState(0)
   const firstSlideSize = slideSizes[0]
-  const currSlideSize = slideSizes[currSlide]
-  const currSlideOffset = (firstSlideSize?.x ?? 0) - (currSlideSize?.x ?? 0)
-  const canNavigateNext =
-    loop || currSlide < slideSizes.length - numSlidesVisible
-  const canNavigatePrevious = loop || currSlide > 0
+  const startingSlideSize = slideSizes[startingSlide]
+  const startingSlideOffset =
+    (firstSlideSize?.x ?? 0) - (startingSlideSize?.x ?? 0)
+  const canNavigateNext = startingSlide < slideSizes.length - slidesVisible
+  const canNavigatePrevious = startingSlide > 0
 
   const onNextSlide = () => {
     events.roleCardsSlideshowEvent()
-    let nextSlide = Math.min(
-      slideSizes.length - numSlidesVisible,
-      currSlide + 1
+    setStartingSlide(
+      Math.min(slideSizes.length - slidesVisible, startingSlide + 1)
     )
-    if (loop && nextSlide == currSlide) {
-      nextSlide = 0
-    }
-    setCurrSlide(nextSlide)
   }
 
   const onPreviousSlide = () => {
     events.roleCardsSlideshowEvent()
-    let prevSlide = Math.max(0, currSlide - 1)
-    if (loop && prevSlide == currSlide) {
-      prevSlide = slideSizes.length - numSlidesVisible
-    }
-    setCurrSlide(prevSlide)
+    setStartingSlide(Math.max(0, startingSlide - 1))
   }
 
   const calculateSizes = useCallback(() => {
-    if (!viewportRef.current || !slidesRef.current) {
-      return
-    }
-
-    const viewportSize = viewportRef.current.getBoundingClientRect()
-    const newSlideSizes = slidesRef.current.map(
-      (slide) => slide?.getBoundingClientRect() ?? new DOMRect()
-    )
-    const newFirstSlideSize = newSlideSizes[0]
-
-    let newSlidesVisible = Math.min(1, newSlideSizes.length - 1)
-    while (
-      newSlidesVisible < newSlideSizes.length &&
-      newSlideSizes[newSlidesVisible].x +
-        newSlideSizes[newSlidesVisible].width -
-        newFirstSlideSize.x <=
-        viewportSize.width
-    ) {
-      newSlidesVisible += 1
-    }
-
-    const slideSizeChanged =
-      (firstSlideSize?.width ?? 0) != (newFirstSlideSize?.width ?? 0) ||
-      (firstSlideSize?.height ?? 0) != (newFirstSlideSize?.height ?? 0)
-
-    if (
-      newSlidesVisible != numSlidesVisible ||
-      newSlideSizes.length != slideSizes.length ||
-      slideSizeChanged
-    ) {
-      setCurrSlide(
-        Math.max(Math.min(slideSizes.length - newSlidesVisible, currSlide), 0)
+    if (viewportRef.current && slidesRef.current) {
+      const viewportSize = viewportRef.current.getBoundingClientRect()
+      const _slideSizes = slidesRef.current.map(
+        (slide) => slide?.getBoundingClientRect() ?? new DOMRect()
       )
-      setSlideSizes(newSlideSizes)
-      setNumSlidesVisible(newSlidesVisible)
+      const firstSlide = _slideSizes[0]
+      let _slidesVisible = Math.min(1, _slideSizes.length - 1)
+
+      while (
+        _slidesVisible < _slideSizes.length &&
+        _slideSizes[_slidesVisible].x +
+          _slideSizes[_slidesVisible].width -
+          firstSlide.x <=
+          viewportSize.width
+      ) {
+        _slidesVisible += 1
+      }
+
+      if (
+        _slidesVisible != slidesVisible ||
+        _slideSizes.length != slideSizes.length
+      ) {
+        setStartingSlide(
+          Math.max(
+            Math.min(slideSizes.length - _slidesVisible, startingSlide),
+            0
+          )
+        )
+        setSlideSizes(_slideSizes)
+        setSlidesVisible(_slidesVisible)
+      }
     }
-  }, [currSlide, slideSizes, numSlidesVisible])
+  }, [startingSlide, slideSizes, slidesVisible])
 
   useEffect(() => {
     calculateSizes()
@@ -114,7 +100,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
     >
       <SlideshowViewport ref={viewportRef}>
         <SlideshowReel
-          style={{ transform: `translateX(${currSlideOffset}px)` }}
+          style={{ transform: `translateX(${startingSlideOffset}px)` }}
         >
           {Children.map(children, (child, index) => (
             <Slide
@@ -133,7 +119,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
       <SlideshowControls>
         <ControlButton
           variant="secondary"
-          aria-label="Previous"
+          aria-label="Previous Slide"
           onClick={onPreviousSlide}
           disabled={!canNavigatePrevious}
         >
@@ -142,7 +128,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
 
         <ControlButton
           variant="secondary"
-          aria-label="Next"
+          aria-label="Next Slide"
           onClick={onNextSlide}
           disabled={!canNavigateNext}
         >
@@ -159,12 +145,34 @@ const SlideshowContainer = styled.div`
   flex-flow: column;
   gap: 4rem;
   position: relative;
-  overflow: hidden;
+
+  ${({ theme }) => theme.bp.lg} {
+    overflow: hidden;
+  }
 `
 
 const SlideshowViewport = styled.div`
   overflow: visible;
   position: relative;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 18rem;
+    display: none;
+    background: linear-gradient(
+      90deg,
+      ${({ theme }) => theme.colors.green800}00 0%,
+      ${({ theme }) => theme.colors.green800} 100%
+    );
+
+    ${({ theme }) => theme.bp.lg} {
+      display: block;
+    }
+  }
 `
 
 const Slide = styled.div`
@@ -183,7 +191,11 @@ const SlideshowControls = styled.div`
   display: flex;
   flex-flow: row;
   gap: 0.8rem;
-  justify-content: center;
+  justify-content: start;
+
+  ${({ theme }) => theme.bp.lg} {
+    justify-content: center;
+  }
 `
 
 const ControlButton = styled(Button)`

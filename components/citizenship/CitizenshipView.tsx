@@ -21,15 +21,25 @@ export const CitizenshipView = () => {
   const { sendEmail } = useEmail()
 
   const performMint = async () => {
+    console.log('performMint() called')
+
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
     )
 
-    if (!currentUserWallet) return
+    if (!currentUserWallet) {
+      console.warn(
+        `performMint(): No wallet found for ${externalUser?.wallet?.address}`
+      )
+      return
+    }
 
     const provider = await currentUserWallet.getEthereumProvider()
 
-    if (!provider) return
+    if (!provider) {
+      console.warn(`performMint(): could not get eth provider for wallet`)
+      return
+    }
 
     loadUnlockCheckout(provider)
   }

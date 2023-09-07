@@ -54,11 +54,10 @@ const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  min-width: 100vw;
+  min-width: 100%;
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  margin-bottom: 10rem;
 `
 
 export const ActionBarContainer = styled.div`

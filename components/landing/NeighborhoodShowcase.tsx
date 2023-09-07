@@ -51,7 +51,7 @@ export const NeighborhoodShowcase = () => {
               <Link href={`/experience/${cabinWeek._id}`}>
                 <Image
                   alt={`Cabin Week at ${cabinWeek.location.name}`}
-                  src={imgURL ?? 'https://placehold.it/500'}
+                  src={imgURL ?? 'https://fakeimg.pl/500/'}
                   fill={true}
                   sizes="100vw"
                   style={{

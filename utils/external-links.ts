@@ -7,6 +7,8 @@ export const EXTERNAL_LINKS = {
     'https://cabin-fellowship.notion.site/Passports-and-Stamps-01e0adce6fa441768d884de3e1283e64',
   VISION:
     'https://creators.mirror.xyz/zHox-AfvHbX0Q2JxAbcfwiAmOXRy7BzYafhZNlvHnmM',
+  PRINCIPLES:
+    'https://creators.mirror.xyz/2-Feb6ft2PCWQ5-I5lFe8caSZTpSQALOLSvIFlnYSHc',
   PRIVACY_AND_TERMS:
     'https://cabin-fellowship.notion.site/Privacy-Policy-and-Terms-of-Service-af00c235b7c149ec9bd7c8cd807c3b7b',
   CABIN_INSTAGRAM: 'https://www.instagram.com/cabindotcity',

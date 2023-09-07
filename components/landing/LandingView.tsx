@@ -1,29 +1,26 @@
 import styled from 'styled-components'
+import Link from 'next/link'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { Button } from '@/components/core/Button'
 import { Footer } from '@/components/navigation/Footer'
 import { HeroVideo } from '../core/HeroVideo'
-import { BookingSection } from './BookingSection'
-import { DetailedInfoSection } from './DetailedInfoSection'
-import { JoinSection } from './JoinSection'
-import { LandingDiscordSection } from './LandingDiscordSection'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { SubscribeSection } from './SubscribeSection'
-import { TestimonialSection } from '@/components/landing/TestimonialSection'
-import { HeroSection } from '@/components/landing/HeroSection'
-import { TopLogoSection } from '@/components/landing/TopLogoSection'
-import { TextSection } from '@/components/landing/TextSection'
-import { LandingSection } from '@/components/landing/LandingSection'
-import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { RoleCard } from '@/components/core/RoleCard'
-import { useDeviceSize } from '../hooks/useDeviceSize'
-import { roleInfoFromType } from '@/utils/roles'
-import { ProfileRoleLevelType, ProfileRoleType } from '@/generated/graphql'
-import { levelInfoFromType } from '@/utils/levels'
-import Link from 'next/link'
+import { TestimonialSection } from './TestimonialSection'
+import { HeroSection } from './HeroSection'
+import { TopLogoSection } from './TopLogoSection'
+import { LandingSection } from './LandingSection'
+import { TwitterSection } from './TwitterSection'
+import { FeaturedInSection } from './FeaturedInSection'
+import { LearnMoreSection } from './LearnMoreSection'
+import { H1 } from '@/components/core/Typography'
+import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
+import { HorizontalList } from '@/components/landing/HorizontalList'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { ValuesSection } from '@/components/landing/ValuesSection'
+import { IntroExperienceSection } from '@/components/landing/IntroExperienceSection'
 
 export const LandingView = () => {
-  const { deviceSize } = useDeviceSize()
-
   return (
     <StyledLayout variant="full">
       <TopLogoSection />
@@ -50,53 +47,106 @@ export const LandingView = () => {
       </LandingSection>
 
       <LandingSection>
-        <BookingSection />
-      </LandingSection>
-
-      <LandingSection variant="dark" title={'Who is Cabin for?'}>
-        <TextSection variant="dark">
-          Cabin is for individuals seeking to grow their skills and forge
-          stronger connections with like-minded peers in inspiring locations
-        </TextSection>
-        <SlideshowContainer>
-          <Slideshow key={deviceSize}>
-            {Object.values(ProfileRoleType).map((role) => (
-              <RoleCard
-                key={`${role}-${deviceSize}`}
-                variant={deviceSize === 'desktop' ? 'default' : 'small'}
-                roleInfo={roleInfoFromType(ProfileRoleType[role])}
-                levelInfo={levelInfoFromType(ProfileRoleLevelType.Custodian)}
-              />
-            ))}
-          </Slideshow>
-        </SlideshowContainer>
-      </LandingSection>
-
-      <LandingSection>
-        <DetailedInfoSection />
+        <ValuesSection />
       </LandingSection>
 
       <LandingSection
-        id="join"
-        variant="dark"
-        noTopPadding
-        noBottomPadding
         fullWidth
+        noTopPadding
+        bottomPadding={'0'}
+        variant={'light'}
       >
-        <JoinSection />
+        <IntroExperienceSection />
+      </LandingSection>
+
+      <LandingSection title={'Colive at Cabin'} icon={'map-green'}>
+        <HorizontalList
+          centered
+          items={[
+            {
+              title: 'Access to nature',
+              body: 'Breathtaking scenery available outside the front door.',
+              icon: 'mountains',
+            },
+            {
+              title: 'Fast internet',
+              body: 'Reliable, high-speed WiFi to make it easy to connect and do work.',
+              icon: 'lightning-bolt',
+            },
+            {
+              title: 'Strong community',
+              body: 'Good vibes for thoughtful people to live together smoothly.',
+              icon: 'peace-sign',
+            },
+          ]}
+        />
       </LandingSection>
 
       <LandingSection>
+        <Link href={EXTERNAL_LINKS.COLIVING_TYPEFORM}>
+          <Button>Apply to colive</Button>
+        </Link>
+      </LandingSection>
+
+      <LandingSection fullWidth>
+        <NeighborhoodShowcase />
+      </LandingSection>
+
+      <LandingSection
+        title={'Ways to stay at Cabin'}
+        icon={'backpack-green'}
+        bottomPadding={'8rem'}
+      >
+        <HorizontalList
+          centered
+          items={[
+            {
+              title: 'Attend a Cabin Week',
+              body: 'These 1-2 week long events are our official welcome to the Cabin community and a taste of coliving.',
+              icon: 'calendar-star-four-points',
+            },
+            {
+              title: 'Apply to Colive',
+              body: 'Browse our directory of coliving offers across the network city and apply for your next experience.',
+              icon: 'account-box',
+            },
+            {
+              title: 'Become a Citizen',
+              body: 'Access our full network of coliving options by receiving a vouch from a current citizen and purchasing a membership.',
+              icon: 'check-decagram',
+            },
+          ]}
+        />
+        <Link href="/cabin-week">
+          <Button>Try it out</Button>
+        </Link>
+      </LandingSection>
+
+      <LandingSection title={'What people are saying'} variant={'light'}>
         <TestimonialSection />
+        <TwitterSection />
       </LandingSection>
 
-      <LandingSection>
-        <LandingDiscordSection />
+      <LandingSection variant={'light'} bottomPadding={'8rem'}>
+        <FeaturedInSection />
       </LandingSection>
 
-      <SubscribeLandingSection>
+      <LandingSection title={'Want to learn more?'} icon={'hand-wave-green'}>
+        <LearnMoreSection />
+      </LandingSection>
+
+      <LandingSection fullWidth bottomPadding={'0'}>
+        <ImageFlex
+          alt="forest-network"
+          src="/images/landing-forest-network.svg"
+          height={32}
+          width={84}
+        />
+      </LandingSection>
+
+      <LandingSection variant={'light'}>
         <SubscribeSection />
-      </SubscribeLandingSection>
+      </LandingSection>
 
       <LandingSection variant="dark">
         <Footer />
@@ -107,26 +157,4 @@ export const LandingView = () => {
 
 const StyledLayout = styled(SingleColumnLayout)`
   margin-bottom: 0rem;
-`
-
-const SubscribeLandingSection = styled(LandingSection)`
-  background-color: ${({ theme }) => theme.colors.yellow100};
-`
-
-const SlideshowContainer = styled.div`
-  display: flex;
-  align-items: center;
-  align-self: center;
-  justify-content: center;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    align-self: flex-start;
-    box-sizing: content-box;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-    width: 80rem;
-  }
 `

@@ -1,13 +1,34 @@
+const padding = {
+  sm: '1.6rem',
+  md: '2.4rem',
+  lg: '4rem',
+  xl: '8rem',
+}
+
+const containerWidths = {
+  sm: '100%',
+  md: '50rem', // or 61.2rem ???
+  lg: '80rem', // or 84rem ???
+  full: '100%',
+}
+
+const screenSizes = {
+  sm: 320,
+  md: 760,
+  lg: 1025,
+  xl: 1441,
+}
+
 export const queries = {
   base: '(min-width: 0px)',
-  sm: '(min-width: 320px)',
-  sm_max: '(min-width: 319px)',
-  md: '(min-width: 760px)',
-  md_max: '(max-width: 759px)',
-  lg: '(min-width: 1025px)',
-  lg_max: '(max-width: 1024px)',
-  xl: '(min-width: 1441px)',
-  xl_max: '(max-width: 1440px)',
+  sm: `(min-width: ${screenSizes.sm}px)`,
+  sm_max: `(max-width: ${screenSizes.sm - 1}px)`,
+  md: `(min-width: ${screenSizes.md}px)`,
+  md_max: `(max-width: ${screenSizes.md - 1}px)`,
+  lg: `(min-width: ${screenSizes.lg}px)`,
+  lg_max: `(max-width: ${screenSizes.lg - 1}px)`,
+  xl: `(min-width: ${screenSizes.xl}px)`,
+  xl_max: `(max-width: ${screenSizes.xl - 1}px)`,
   portrait: '(orientation: portrait)',
   landscape: '(orientation: landscape)',
 }
@@ -15,6 +36,7 @@ const theme = {
   bp: {
     base: `@media only screen and ${queries.base}`,
     sm: `@media only screen and ${queries.sm}`,
+    sm_max: `@media only screen and ${queries.sm_max}`,
     sm_landscape: `@media only screen and ${queries.sm} and ${queries.landscape}`,
     md: `@media only screen and ${queries.md}`,
     md_max: `@media only screen and ${queries.md_max}`,

@@ -1,14 +1,19 @@
 import styled from 'styled-components'
-// import theme from '@/styles/theme'
-import { Body2, H4 } from '../core/Typography'
-import { LandingSectionContent } from './styles'
+import { Slideshow } from '@/components/core/gallery/Slideshow'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { Body1, H3 } from '@/components/core/Typography'
+import Image from 'next/image'
 
 export const TestimonialSection = () => {
+  const { deviceSize } = useDeviceSize()
+
   return (
     <Content>
-      {testimonialData.map((i) => (
-        <Item key={i.name} imgUrl={i.imgUrl} name={i.name} text={i.text} />
-      ))}
+      <Slideshow key={deviceSize} loop>
+        {testimonials.map((i) => (
+          <Item key={i.name} {...i} />
+        ))}
+      </Slideshow>
     </Content>
   )
 }
@@ -19,73 +24,94 @@ type Datum = {
   text: string
 }
 
-const testimonialData: Datum[] = [
+const testimonials: Datum[] = [
   {
-    imgUrl: '/images/testimonial-ddwchen.jpg',
-    name: '@ddwchen',
-    text: 'This experience made me feel like we were all family. I formed lifelong friendships this week, which is pretty special and rare when you’re normally working remotely and can feel pretty isolated.',
+    imgUrl: '/images/testimonial-charlie.jpg',
+    name: 'Charlie',
+    text: '“People who are initially strangers come together and build something together. This leaves a real sense of camaraderie and a sense of accomplishment.”',
   },
   {
-    imgUrl: '/images/testimonial-richiebonilla.jpg',
-    name: '@richiebonilla',
-    text: 'A unique combination of intentional gathering, deeply thoughtful discussion, and barefoot child-like play. I’m still processing and integrating this very special experience.',
+    imgUrl: '/images/testimonial-estefania.jpg',
+    name: 'Estefania',
+    text: '“Cabin was life-changing for many reasons. The people are able to put ego aside to connect and work towards a greater good.”',
   },
   {
-    imgUrl: '/images/testimonial-spengrah.jpg',
-    name: '@spengrah',
-    text: 'One of the most fulfilling experiences I’ve had in a long time. The opportunity to connect with, jam, and become friends with so many impressive people was a thrill and an honor.',
+    imgUrl: '/images/testimonial-rudi.jpg',
+    name: 'Rudi',
+    text: '“All of the people I met at Cabin inspired me in different ways.”',
   },
 ]
 
 const Item = (props: Datum) => {
   return (
-    <ItemContent>
-      <PFP src={props.imgUrl} />
-      <H4>{props.name}</H4>
-      <Body2>{props.text}</Body2>
-    </ItemContent>
+    <StyledItem>
+      <H3>{props.name}</H3>
+      <ItemContent>
+        <PFP
+          src={props.imgUrl}
+          alt={props.name}
+          width={400}
+          height={400}
+          style={{ width: '11.2rem', height: '11.2rem' }}
+        />
+        <Text>{props.text}</Text>
+      </ItemContent>
+    </StyledItem>
   )
 }
 
-const Content = styled(LandingSectionContent)`
-  gap: 2.5rem;
-  padding-bottom: 0;
-`
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100vw - 8rem); // 4rem padding on each side. THIS IS A HACK :(
+  margin-bottom: 4rem;
 
-const PFP = styled.img`
-  border-radius: 50%;
-  width: 64px;
-  filter: drop-shadow(4px 4px 0 ${({ theme }) => theme.colors.yellow500});
+  ${({ theme }) => theme.bp.md} {
+    width: 50rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 80rem;
+  }
+`
+const StyledItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4rem;
 `
 
 const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
   gap: 2.4rem;
-  padding: 2.5rem;
-  border: 0.1rem solid ${({ theme }) => theme.colors.yellow500};
-  background-color: ${({ theme }) => theme.colors.yellow100};
-
-  ${Body2} {
-    font-size: 1.6rem;
-    line-height: 2.4rem;
-    flex-grow: 1;
-  }
+  flex-shrink: 0;
+  width: calc(100vw - 8rem);
+  height: 44rem;
+  background-color: ${({ theme }) => theme.colors.yellow400};
 
   ${({ theme }) => theme.bp.md} {
-    padding-right: 5rem;
-    ${PFP} {
-      width: 75px;
-    }
+    width: 50rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    ${PFP} {
-      width: 100px;
-    }
-    width: 26.4rem;
-    padding-bottom: 5rem;
+    width: 80rem;
   }
+`
+
+const PFP = styled(Image)`
+  border-radius: 50%;
+  width: 64px;
+  filter: drop-shadow(4px 4px 0 ${({ theme }) => theme.colors.yellow500});
+`
+
+const Text = styled(Body1)`
+  max-width: 42rem;
+  opacity: 75%;
+  text-align: center;
+  padding: 0 2rem;
+  width: 100%;
 `

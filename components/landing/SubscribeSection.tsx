@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { Body1, H4 } from '../core/Typography'
-import { LandingContentNoPadding } from './styles'
 import { SubscribeForm } from './SubscribeForm'
 
 export const SubscribeSection = () => {
@@ -17,16 +16,22 @@ export const SubscribeSection = () => {
   )
 }
 
-const SubscribeSectionContainer = styled(LandingContentNoPadding)`
+const SubscribeSectionContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   gap: 2.4rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50rem;
+  }
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
     gap: 0;
     padding: 4rem 0rem;
+    width: 80rem;
   }
 `
 
