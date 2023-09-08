@@ -2,7 +2,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import { Body1, Caption, H1, H3, H4 } from '@/components/core/Typography'
+import {
+  Body1,
+  Caption,
+  H1,
+  H3,
+  H4,
+  Overline,
+} from '@/components/core/Typography'
 
 import {
   LocationMediaCategory,
@@ -24,6 +31,7 @@ import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
 import events from '@/lib/googleAnalytics/events'
 import { ExperienceList } from '../offers/ExperienceList'
+import { useProfile } from '@/components/auth/useProfile'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -134,10 +142,14 @@ export const LocationView = ({
     !!galleryPreviewSleepingUrl &&
     !!galleryPreviewWorkingUrl &&
     !!galleryPreviewFeaturesUrl
+
   const bannerWidth = deviceSize === 'tablet' ? 610 : 998
   const bannerHeight = deviceSize === 'tablet' ? 256 : 420
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
+
+  const { user } = useProfile()
+  const isEditable = user?.isAdmin || user?._id === location.caretaker._id
 
   return (
     <LocationContent>
@@ -167,6 +179,7 @@ export const LocationView = ({
             />
           }
         ></LocationTypeTag>
+
         <StyledContentCard shadow={true}>
           <LocationHeader>
             <LocationHeaderTitle>
@@ -195,6 +208,16 @@ export const LocationView = ({
               </VoteButton>
             </VotesContainer>
           </LocationHeader>
+          {isEditable && (
+            <EditBar>
+              <Link href={`/location/${location._id}/edit`}>
+                <Button variant={'link'}>
+                  <Icon name="pencil" size={1.2} />
+                  <Overline>Edit Listing</Overline>
+                </Button>
+              </Link>
+            </EditBar>
+          )}
         </StyledContentCard>
       </LocationDetailsContainer>
 
@@ -446,6 +469,14 @@ const LocationBanner = styled(Image)`
   }
 `
 
+const EditBar = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  width: 100%;
+  border-top: solid 1px ${({ theme }) => theme.colors.green900};
+`
+
 interface LocationDetailsContainerProps {
   hasBanner: boolean
 }
@@ -464,7 +495,7 @@ const LocationDetailsContainer = styled.div<LocationDetailsContainerProps>`
 `
 
 const StyledContentCard = styled(ContentCard)`
-  padding: 3.2rem 2.4rem;
+  flex-direction: column;
 `
 
 const LocationHeader = styled.div`
@@ -473,6 +504,7 @@ const LocationHeader = styled.div`
   gap: 1.6rem;
   justify-content: space-between;
   width: 100%;
+  padding: 3.2rem 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
     display: flex;
