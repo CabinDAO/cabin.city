@@ -16,6 +16,7 @@ import { PrivyWagmiConnector } from '@privy-io/wagmi-connector'
 import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
+import { Analytics } from '@vercel/analytics/react'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleLogin } = useAuth()
@@ -52,6 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
                       <GoogleAnalytics />
                       <Reload />
                       <Component {...pageProps} />
+                      <Analytics />
                     </NavigationProvider>
                   </CitizenshipProvider>
                 </ModalProvider>
