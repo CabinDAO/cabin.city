@@ -1,34 +1,111 @@
-const padding = {
-  sm: '1.6rem',
-  md: '2.4rem',
-  lg: '4rem',
-  xl: '8rem',
+import { css, FlattenSimpleInterpolation } from 'styled-components'
+
+type ScreenWidth = 'narrow' | 'mid' | 'wide' // | 'full'
+type PaddingSize = `none` | `xs` | 'sm' | 'md' | 'lg' | 'xl' | 'xl_half' // | 'full'
+
+const paddingSizesRem: {
+  [key in ScreenWidth]: { [key in PaddingSize]: number }
+} = {
+  narrow: {
+    none: 0,
+    xs: 1.6,
+    sm: 1.6,
+    md: 2.4,
+    lg: 4,
+    xl: 6.4,
+    xl_half: 3.2,
+  },
+  mid: {
+    none: 0,
+    xs: 1.6,
+    sm: 2.4,
+    md: 2.4,
+    lg: 4,
+    xl: 6.4,
+    xl_half: 3.2,
+  },
+  wide: {
+    none: 0,
+    xs: 1.6,
+    sm: 2.4,
+    md: 4,
+    lg: 6.4,
+    xl: 8,
+    xl_half: 4,
+  },
 }
 
-const containerWidths = {
-  sm: '100%',
-  md: '50rem', // or 61.2rem ???
-  lg: '80rem', // or 84rem ???
+const padding = function (
+  a: PaddingSize,
+  b?: PaddingSize,
+  c?: PaddingSize,
+  d?: PaddingSize
+): FlattenSimpleInterpolation {
+  const narrow = [],
+    mid = [],
+    wide = []
+
+  for (const i of [a, b, c, d]) {
+    if (i === undefined) break
+    narrow.push(`${paddingSizesRem['narrow'][i]}rem`)
+    mid.push(`${paddingSizesRem['mid'][i]}rem`)
+    wide.push(`${paddingSizesRem['wide'][i]}rem`)
+  }
+
+  return css`
+    padding: ${narrow.join(' ')};
+    ${theme.bp.md} {
+      padding: ${mid.join(' ')};
+    }
+    ${theme.bp.lg} {
+      padding: ${wide.join(' ')};
+    }
+  `
+}
+
+padding.one = (dir: 'left' | 'right' | 'top' | 'bottom', size: PaddingSize) =>
+  css`
+    padding-${dir}: ${paddingSizesRem['narrow'][size]}rem;
+    ${theme.bp.md} {
+      padding-${dir}: ${paddingSizesRem['mid'][size]}rem;
+    }
+    ${theme.bp.lg} {
+      padding-${dir}: ${paddingSizesRem['wide'][size]}rem;
+    }
+  `
+
+padding.top = (size: PaddingSize) => padding.one('top', size)
+padding.bottom = (size: PaddingSize) => padding.one('bottom', size)
+padding.left = (size: PaddingSize) => padding.one('left', size)
+padding.right = (size: PaddingSize) => padding.one('right', size)
+
+export { padding }
+
+type ContainerWidth = ScreenWidth | 'full'
+
+const containerWidths: { [key in ContainerWidth]: string } = {
+  narrow: '100%',
+  mid: '50rem',
+  wide: '80rem',
   full: '100%',
 }
 
-const screenSizes = {
-  sm: 320,
-  md: 760,
-  lg: 1025,
-  xl: 1441,
+const breakpoints: {
+  [key in ScreenWidth]: number
+} = {
+  narrow: 320,
+  mid: 760,
+  wide: 1025,
 }
 
 export const queries = {
   base: '(min-width: 0px)',
-  sm: `(min-width: ${screenSizes.sm}px)`,
-  sm_max: `(max-width: ${screenSizes.sm - 1}px)`,
-  md: `(min-width: ${screenSizes.md}px)`,
-  md_max: `(max-width: ${screenSizes.md - 1}px)`,
-  lg: `(min-width: ${screenSizes.lg}px)`,
-  lg_max: `(max-width: ${screenSizes.lg - 1}px)`,
-  xl: `(min-width: ${screenSizes.xl}px)`,
-  xl_max: `(max-width: ${screenSizes.xl - 1}px)`,
+  sm: `(min-width: ${breakpoints.narrow}px)`,
+  sm_max: `(max-width: ${breakpoints.narrow - 1}px)`,
+  md: `(min-width: ${breakpoints.mid}px)`,
+  md_max: `(max-width: ${breakpoints.mid - 1}px)`,
+  lg: `(min-width: ${breakpoints.wide}px)`,
+  lg_max: `(max-width: ${breakpoints.wide - 1}px)`,
   portrait: '(orientation: portrait)',
   landscape: '(orientation: landscape)',
 }
@@ -43,8 +120,6 @@ const theme = {
     md_landscape: `@media only screen and ${queries.md} and ${queries.landscape}`,
     lg: `@media only screen and ${queries.lg}`,
     lg_max: `@media only screen and ${queries.lg_max}`,
-    xl: `@media only screen and ${queries.xl}`,
-    xl_max: `@media only screen and ${queries.xl_max}`,
     portrait: `@media only screen and ${queries.portrait}`,
     landscape: `@media only screen and ${queries.landscape}`,
   },

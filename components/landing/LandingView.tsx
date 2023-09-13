@@ -13,7 +13,6 @@ import { LandingSection } from './LandingSection'
 import { TwitterSection } from './TwitterSection'
 import { FeaturedInSection } from './FeaturedInSection'
 import { LearnMoreSection } from './LearnMoreSection'
-import { H1 } from '@/components/core/Typography'
 import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { HorizontalList } from '@/components/landing/HorizontalList'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
@@ -42,20 +41,15 @@ export const LandingView = () => {
         />
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection fullWidth noVertPadding>
         <HeroVideo />
       </LandingSection>
 
-      <LandingSection>
+      <LandingSection precedesNoVertPadding>
         <ValuesSection />
       </LandingSection>
 
-      <LandingSection
-        fullWidth
-        noTopPadding
-        bottomPadding={'0'}
-        variant={'light'}
-      >
+      <LandingSection fullWidth noVertPadding variant={'light'}>
         <IntroExperienceSection />
       </LandingSection>
 
@@ -92,11 +86,7 @@ export const LandingView = () => {
         <NeighborhoodShowcase />
       </LandingSection>
 
-      <LandingSection
-        title={'Ways to stay at Cabin'}
-        icon={'backpack-green'}
-        bottomPadding={'8rem'}
-      >
+      <LandingSection title={'Ways to stay at Cabin'} icon={'backpack-green'}>
         <HorizontalList
           centered
           items={[
@@ -127,15 +117,19 @@ export const LandingView = () => {
         <TwitterSection />
       </LandingSection>
 
-      <LandingSection variant={'light'} bottomPadding={'8rem'}>
+      <LandingSection variant={'light'}>
         <FeaturedInSection />
       </LandingSection>
 
-      <LandingSection title={'Want to learn more?'} icon={'hand-wave-green'}>
+      <LandingSection
+        title={'Want to learn more?'}
+        icon={'hand-wave-green'}
+        precedesNoVertPadding
+      >
         <LearnMoreSection />
       </LandingSection>
 
-      <LandingSection fullWidth bottomPadding={'0'}>
+      <LandingSection fullWidth noVertPadding>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"

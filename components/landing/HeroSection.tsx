@@ -1,6 +1,6 @@
-import { SectionContent } from '@/components/landing/styles'
 import styled from 'styled-components'
 import { Body1, HHero } from '@/components/core/Typography'
+import { padding } from '@/styles/theme'
 
 interface HeroSectionProps {
   title: string
@@ -10,23 +10,23 @@ interface HeroSectionProps {
 
 export const HeroSection = (props: HeroSectionProps) => {
   return (
-    <LandingContent>
-      <SectionContent>
-        <HeroDescriptionContainer>
+    <ExtraPadding>
+      <Wrapper>
+        <Text>
           <StyledHHero>{props.title}</StyledHHero>
-          <SectionGrowDescription>
+          <Description>
             <Body1>{props.body}</Body1>
-          </SectionGrowDescription>
-        </HeroDescriptionContainer>
-        <SectionHeader>
-          <SectionGrowSignup>
+          </Description>
+        </Text>
+        <ButtonWrapper>
+          <Buttons>
             {props.buttons.map((button) => {
               return button
             })}
-          </SectionGrowSignup>
-        </SectionHeader>
-      </SectionContent>
-    </LandingContent>
+          </Buttons>
+        </ButtonWrapper>
+      </Wrapper>
+    </ExtraPadding>
   )
 }
 
@@ -39,41 +39,33 @@ export const StyledHHero = styled(HHero)`
     font-size: 4rem;
     line-height: 1.25;
   }
-
-  ${({ theme }) => theme.bp.lg} {
-    padding-top: 2rem;
-    font-size: 4rem;
-  }
 `
 
-const LandingContent = styled.div`
+const ExtraPadding = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
-  padding: 8rem 2.4rem;
+  ${padding('xl', 'md')};
 
   ${({ theme }) => theme.bp.md} {
-    align-self: flex-start;
-    box-sizing: content-box;
-    padding: 8rem 2.4rem 8rem 12.8rem;
+    width: 50rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-    padding: 8rem 4rem;
+    width: 80rem;
   }
 `
 
-const SectionGrowDescription = styled.div`
+const Description = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
 `
 
-const SectionGrowSignup = styled.div`
+const Buttons = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -93,7 +85,7 @@ const SectionGrowSignup = styled.div`
   }
 `
 
-const SectionHeader = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
   flex-flow: column;
   gap: 0.8rem;
@@ -105,7 +97,18 @@ const SectionHeader = styled.div`
   }
 `
 
-export const HeroDescriptionContainer = styled.div`
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4rem;
+  }
+`
+
+export const Text = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;

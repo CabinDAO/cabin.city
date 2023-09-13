@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { CollapsibleInfoSection } from './CollapsibleInfoSection'
 import { collapsibleData } from '@/utils/landing'
-import { LandingContentNoPadding } from './styles'
 
 export const DetailedInfoSection = () => {
   const [leftData, rightData] = collapsibleData
@@ -14,7 +13,7 @@ export const DetailedInfoSection = () => {
   )
 }
 
-const Container = styled(LandingContentNoPadding)`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;

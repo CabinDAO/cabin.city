@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react'
 import { LandingSectionVariant } from '@/components/landing/styles'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
-import theme from '@/styles/theme'
+import theme, { padding } from '@/styles/theme'
 import Icon, { IconName } from '@/components/core/Icon'
 
 interface LandingSectionProps extends ContainerProps {
@@ -14,7 +14,10 @@ interface LandingSectionProps extends ContainerProps {
 
 export const LandingSection = (props: LandingSectionProps) => {
   return (
-    <Container {...props}>
+    <Container
+      className={props.noVertPadding ? 'noVertPadding' : undefined}
+      {...props}
+    >
       {props.icon && <Icon name={props.icon} size={8} />}
       {props.title && <H1 emphasized>{props.title}</H1>}
       {props.children}
@@ -24,8 +27,8 @@ export const LandingSection = (props: LandingSectionProps) => {
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   variant?: LandingSectionVariant
-  noTopPadding?: boolean
-  bottomPadding?: string
+  noVertPadding?: boolean
+  precedesNoVertPadding?: boolean
   fullWidth?: boolean
 }
 
@@ -38,22 +41,17 @@ const Container = styled.div<ContainerProps>`
   background-color: ${({ variant }) => themeColor('bg', variant)};
   width: 100%;
   gap: 2.4rem;
-  
-  padding-bottom: ${({ bottomPadding }) => bottomPadding || '4rem'};
 
-  ${({ noTopPadding }) =>
-    !noTopPadding &&
-    css`
-      padding-top: 4rem;
-    `}};
+  ${({ noVertPadding, precedesNoVertPadding, fullWidth }) =>
+    padding(
+      noVertPadding ? 'none' : 'xl_half',
+      fullWidth ? 'none' : 'lg',
+      precedesNoVertPadding ? 'xl' : noVertPadding ? 'none' : 'xl_half'
+    )};
 
-  ${({ fullWidth }) =>
-    !fullWidth &&
-    css`
-      padding-left: 4rem;
-      padding-right: 4rem;
-    `}};
-
+  &.noVertPadding + & {
+    ${padding.top('xl')};
+  }
 
   ${H1}, ${TextContent} {
     font-family: ${fonts.poppins};
