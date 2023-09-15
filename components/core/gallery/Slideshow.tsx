@@ -88,7 +88,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
       setSlideSizes(newSlideSizes)
       setNumSlidesVisible(newSlidesVisible)
     }
-  }, [currSlide, slideSizes, numSlidesVisible])
+  }, [currSlide, slideSizes, numSlidesVisible, firstSlideSize])
 
   useEffect(() => {
     calculateSizes()

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "analyze": "NODE_ENV=development ANALYZE=true next build",
     "start": "next start",
     "fauna": "fgu",
     "fauna:gen": "fgu --data --codegen",
@@ -54,6 +55,7 @@
     "react-dom": "18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-use": "^17.4.0",
+    "sharp": "^0.32.5",
     "siwe": "^1.1.6",
     "slate": "^0.93.0",
     "slate-react": "^0.93.0",
@@ -67,6 +69,7 @@
     "@graphql-codegen/client-preset": "^1.3.0",
     "@graphql-codegen/gql-tag-operations-preset": "^1.7.4",
     "@graphql-codegen/typescript-react-apollo": "^3.3.7",
+    "@next/bundle-analyzer": "^13.4.19",
     "@typechain/ethers-v5": "^10.2.0",
     "@types/google.maps": "^3.52.5",
     "@types/gtag.js": "^0.0.12",

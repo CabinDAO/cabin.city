@@ -1,6 +1,6 @@
 import { OfferPrice, OfferPriceUnit } from '@/generated/graphql'
 import styled, { css } from 'styled-components'
-import { captionStyles, h1Styles, fonts } from '@/components/core/Typography'
+import { captionStyles, h1Styles } from '@/components/core/Typography'
 
 interface PriceProps {
   price: OfferPrice

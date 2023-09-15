@@ -6,7 +6,7 @@ import {
   ProfileRoleConstraint,
 } from '@/generated/graphql'
 import styled from 'styled-components'
-import { Caption, captionStyles, h1Styles, H2, Subline1 } from './Typography'
+import { Caption, H2, Subline1 } from './Typography'
 import { offerInfoFromType } from '@/utils/offer'
 import { H6 } from '@/components/core/Typography'
 import { formatRange } from '@/utils/display-utils'
