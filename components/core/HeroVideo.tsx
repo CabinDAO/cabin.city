@@ -25,29 +25,10 @@ interface VideoContainerProps {
 
 const VideoContainer = styled.div<VideoContainerProps>`
   position: relative;
-  height: 0;
-  width: 100vw;
-  padding-top: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    overflow: hidden;
-    padding-top: 0;
-    height: ${({ aspectRatio }) => `calc(100vw / ${aspectRatio})`};
-  }
+  width: 100%;
 
   video {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-
-    ${({ theme }) => theme.bp.md} {
-      object-fit: initial;
-      height: auto;
-      position: inherit;
-      margin-top: -10%;
-    }
+    height: auto;
   }
 `

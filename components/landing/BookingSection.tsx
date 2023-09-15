@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Body1, HHero } from '../core/Typography'
 import { NeighborhoodsTop6List } from './NeighborhoodsTop6List'
-import { LandingContentNoPadding, SectionContent } from './styles'
+import { SectionContent } from './styles'
 
 export const BookingSection = () => {
   return (
@@ -20,7 +20,7 @@ export const BookingSection = () => {
   )
 }
 
-const BookingSectionContainer = styled(LandingContentNoPadding)`
+const BookingSectionContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;

@@ -3,24 +3,6 @@ import { HTMLAttributes } from 'react'
 
 export type LandingSectionVariant = 'default' | 'light' | 'dark'
 
-/**
- * @deprecated Use a normal div instead
- */
-export const LandingContentNoPadding = styled.div`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  margin: auto;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 61.2rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 84rem;
-  }
-`
-
 export const SectionContent = styled.div`
   display: flex;
   flex-direction: column;

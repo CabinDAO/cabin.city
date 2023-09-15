@@ -110,7 +110,7 @@ export const CabinWeekView = () => {
         <LearnMoreSection />
       </LandingSection>
 
-      <LandingSection fullWidth bottomPadding={'0'}>
+      <LandingSection fullWidth noVertPadding>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"
