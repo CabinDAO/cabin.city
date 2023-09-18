@@ -254,8 +254,8 @@ export enum BadgeSpec_orderBy {
   raft__createdBy = 'raft__createdBy',
   raft__id = 'raft__id',
   raft__tokenId = 'raft__tokenId',
-  raft__totalBadgeHoldersCount = 'raft__totalBadgeHoldersCount',
   raft__totalBadgesCount = 'raft__totalBadgesCount',
+  raft__totalMembersCount = 'raft__totalMembersCount',
   raft__totalSpecsCount = 'raft__totalSpecsCount',
   raft__transactionHash = 'raft__transactionHash',
   raft__uri = 'raft__uri',
@@ -476,6 +476,7 @@ export enum Badge_orderBy {
   owner = 'owner',
   owner__id = 'owner__id',
   owner__totalBadgesCount = 'owner__totalBadgesCount',
+  owner__totalCommunitiesCount = 'owner__totalCommunitiesCount',
   spec = 'spec',
   spec__createdAt = 'spec__createdAt',
   spec__createdBy = 'spec__createdBy',
@@ -631,12 +632,13 @@ export type Raft = {
   createdAt: Scalars['Int'];
   createdBy: Scalars['String'];
   id: Scalars['ID'];
+  members: Array<User>;
   metadata?: Maybe<RaftMetadata>;
   owner: User;
   specs: Array<BadgeSpec>;
   tokenId: Scalars['BigInt'];
-  totalBadgeHoldersCount: Scalars['Int'];
   totalBadgesCount: Scalars['Int'];
+  totalMembersCount: Scalars['Int'];
   totalSpecsCount: Scalars['Int'];
   transactionHash: Scalars['String'];
   uri: Scalars['String'];
@@ -644,6 +646,15 @@ export type Raft = {
 
 
 export type RaftadminsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<User_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<User_filter>;
+};
+
+
+export type RaftmembersArgs = {
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<User_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
@@ -797,6 +808,13 @@ export type Raft_filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  members?: InputMaybe<Array<Scalars['String']>>;
+  members_?: InputMaybe<User_filter>;
+  members_contains?: InputMaybe<Array<Scalars['String']>>;
+  members_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  members_not?: InputMaybe<Array<Scalars['String']>>;
+  members_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  members_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   metadata?: InputMaybe<Scalars['String']>;
   metadata_?: InputMaybe<RaftMetadata_filter>;
   metadata_contains?: InputMaybe<Scalars['String']>;
@@ -849,14 +867,6 @@ export type Raft_filter = {
   tokenId_lte?: InputMaybe<Scalars['BigInt']>;
   tokenId_not?: InputMaybe<Scalars['BigInt']>;
   tokenId_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
-  totalBadgeHoldersCount?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_gt?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_gte?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_in?: InputMaybe<Array<Scalars['Int']>>;
-  totalBadgeHoldersCount_lt?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_lte?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_not?: InputMaybe<Scalars['Int']>;
-  totalBadgeHoldersCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
   totalBadgesCount?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_gt?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_gte?: InputMaybe<Scalars['Int']>;
@@ -865,6 +875,14 @@ export type Raft_filter = {
   totalBadgesCount_lte?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalMembersCount?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_gt?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_gte?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalMembersCount_lt?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_lte?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_not?: InputMaybe<Scalars['Int']>;
+  totalMembersCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
   totalSpecsCount?: InputMaybe<Scalars['Int']>;
   totalSpecsCount_gt?: InputMaybe<Scalars['Int']>;
   totalSpecsCount_gte?: InputMaybe<Scalars['Int']>;
@@ -920,6 +938,7 @@ export enum Raft_orderBy {
   createdAt = 'createdAt',
   createdBy = 'createdBy',
   id = 'id',
+  members = 'members',
   metadata = 'metadata',
   metadata__description = 'metadata__description',
   metadata__id = 'metadata__id',
@@ -928,10 +947,11 @@ export enum Raft_orderBy {
   owner = 'owner',
   owner__id = 'owner__id',
   owner__totalBadgesCount = 'owner__totalBadgesCount',
+  owner__totalCommunitiesCount = 'owner__totalCommunitiesCount',
   specs = 'specs',
   tokenId = 'tokenId',
-  totalBadgeHoldersCount = 'totalBadgeHoldersCount',
   totalBadgesCount = 'totalBadgesCount',
+  totalMembersCount = 'totalMembersCount',
   totalSpecsCount = 'totalSpecsCount',
   transactionHash = 'transactionHash',
   uri = 'uri'
@@ -1213,8 +1233,10 @@ export type User = {
   adminOfCommunities?: Maybe<Array<Raft>>;
   badges?: Maybe<Array<Badge>>;
   id: Scalars['Bytes'];
+  memberOfCommunities?: Maybe<Array<Raft>>;
   ownerOfCommunities?: Maybe<Array<Raft>>;
   totalBadgesCount: Scalars['Int'];
+  totalCommunitiesCount: Scalars['Int'];
 };
 
 
@@ -1233,6 +1255,15 @@ export type UserbadgesArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Badge_filter>;
+};
+
+
+export type UsermemberOfCommunitiesArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Raft_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Raft_filter>;
 };
 
 
@@ -1260,6 +1291,7 @@ export type User_filter = {
   id_not?: InputMaybe<Scalars['Bytes']>;
   id_not_contains?: InputMaybe<Scalars['Bytes']>;
   id_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  memberOfCommunities_?: InputMaybe<Raft_filter>;
   or?: InputMaybe<Array<InputMaybe<User_filter>>>;
   ownerOfCommunities_?: InputMaybe<Raft_filter>;
   totalBadgesCount?: InputMaybe<Scalars['Int']>;
@@ -1270,14 +1302,24 @@ export type User_filter = {
   totalBadgesCount_lte?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not?: InputMaybe<Scalars['Int']>;
   totalBadgesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalCommunitiesCount?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_gt?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_gte?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_in?: InputMaybe<Array<Scalars['Int']>>;
+  totalCommunitiesCount_lt?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_lte?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_not?: InputMaybe<Scalars['Int']>;
+  totalCommunitiesCount_not_in?: InputMaybe<Array<Scalars['Int']>>;
 };
 
 export enum User_orderBy {
   adminOfCommunities = 'adminOfCommunities',
   badges = 'badges',
   id = 'id',
+  memberOfCommunities = 'memberOfCommunities',
   ownerOfCommunities = 'ownerOfCommunities',
-  totalBadgesCount = 'totalBadgesCount'
+  totalBadgesCount = 'totalBadgesCount',
+  totalCommunitiesCount = 'totalCommunitiesCount'
 }
 
 export type _Block_ = {
