@@ -25,24 +25,14 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
 
   switch (offer.offerType) {
     case OfferType.Residency:
-      if (!user) {
-        return (
-          <AuthenticatedLink>
-            <ApplyNowButton>Sign In to Apply</ApplyNowButton>
-          </AuthenticatedLink>
-        )
-      } else if (!isEligible(user, offer)) {
-        return (
-          <ApplyNowButton
-            startAdornment={<Icon name="lock" size={1.6} />}
-            disabled
-          >
-            Not Eligible to Apply
-          </ApplyNowButton>
-        )
-      } else {
-        applicationURL = formatUrl(offer.applicationUrl)
-      }
+      return (
+        <ApplyNowButton
+          startAdornment={<Icon name="lock" size={1.6} />}
+          disabled
+        >
+          Disabled
+        </ApplyNowButton>
+      )
       break
 
     case OfferType.PaidColiving:
@@ -75,9 +65,11 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
 }
 
 const isEligible = (user: MeFragment, offer: OfferFragment) => {
-  const requiresCitizenship =
-    offer.offerType === OfferType.PaidColiving ||
-    (offer.offerType == OfferType.Residency && offer.citizenshipRequired)
+  if (offer.offerType == OfferType.Residency) {
+    return false
+  }
+
+  const requiresCitizenship = offer.offerType === OfferType.PaidColiving
 
   if (
     requiresCitizenship &&

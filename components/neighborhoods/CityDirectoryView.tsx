@@ -53,11 +53,6 @@ export const CityDirectoryView = (props: CityDirectoryViewProps) => {
             selected={offerType === OfferType.PaidColiving}
             onClick={() => router.push('/city-directory/coliving')}
           />
-          <ChipFilter
-            label="Residencies"
-            selected={offerType === OfferType.Residency}
-            onClick={() => router.push('/city-directory/residency')}
-          />
         </ChipFilterBar>
         <LocationListFilter locationType={locationType} offerType={offerType} />
       </Content>
