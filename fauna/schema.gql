@@ -175,6 +175,7 @@ enum ProfileContactFieldType {
   Telegram
   Lens
   Website
+  Farcaster
 }
 
 input UpdateProfileInput {

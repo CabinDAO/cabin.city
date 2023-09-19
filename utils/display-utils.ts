@@ -79,6 +79,7 @@ const contactFieldTypeUrlMap: Partial<Record<ProfileContactFieldType, string>> =
     [ProfileContactFieldType.Instagram]: 'https://instagram.com/',
     [ProfileContactFieldType.LinkedIn]: 'https://linkedin.com/in/',
     [ProfileContactFieldType.Lens]: 'https://lenster.xyz/u/',
+    [ProfileContactFieldType.Farcaster]: 'https://warpcast.com/',
   }
 
 export const getUrlFromContactField = (field: ProfileContactField) => {
@@ -119,6 +120,7 @@ export const formatContactField = (
       return shortenedValue
     }
   }
+
   if (
     [ProfileContactFieldType.Email, ProfileContactFieldType.Website].includes(
       field.type

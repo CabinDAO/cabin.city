@@ -38,4 +38,5 @@ export const contactFieldDisplayNameMapping = {
   [ProfileContactFieldType.Telegram]: 'Telegram Username',
   [ProfileContactFieldType.Lens]: 'Lens Username',
   [ProfileContactFieldType.Website]: 'Website URL',
+  [ProfileContactFieldType.Farcaster]: 'Farcaster Username',
 }
