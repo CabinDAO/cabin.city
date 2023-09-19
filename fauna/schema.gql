@@ -168,14 +168,14 @@ type ProfileContactField @embedded {
 
 enum ProfileContactFieldType {
   Email
+  Website
   Discord
+  Farcaster
   Twitter
   Instagram
-  LinkedIn
   Telegram
   Lens
-  Website
-  Farcaster
+  LinkedIn
 }
 
 input UpdateProfileInput {

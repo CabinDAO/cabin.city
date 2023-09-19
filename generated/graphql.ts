@@ -1683,14 +1683,14 @@ export type ProfileContactField = {
 
 export enum ProfileContactFieldType {
   Email = 'Email',
+  Website = 'Website',
   Discord = 'Discord',
+  Farcaster = 'Farcaster',
   Twitter = 'Twitter',
   Instagram = 'Instagram',
-  LinkedIn = 'LinkedIn',
   Telegram = 'Telegram',
   Lens = 'Lens',
-  Website = 'Website',
-  Farcaster = 'Farcaster'
+  LinkedIn = 'LinkedIn'
 }
 
 /** The pagination object for elements of type 'Profile'. */
