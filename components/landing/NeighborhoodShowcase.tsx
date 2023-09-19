@@ -101,20 +101,12 @@ const Neighborhoods = styled.div`
   display: grid;
   gap: 0;
   width: 100%;
-  grid-auto-rows: 100vw;
-  grid-auto-columns: 100vw;
-  grid-template-areas:
-    'a'
-    'b'
-    'c'
-    'd';
+  grid-template-columns: 100vw; // there's exactly one column of 100vw
+  grid-auto-rows: 100vw; // infinite rows at 100vw each
 
   ${({ theme }) => theme.bp.md} {
-    grid-auto-rows: 50vw;
-    grid-auto-columns: 50vw;
-    grid-template-areas:
-      'a b'
-      'c d';
+    grid-template-columns: repeat(2, 50vw); // exactly 2 columns of 50vw each
+    grid-auto-rows: 50vw; // infinite rows at 50vw each
   }
 `
 
