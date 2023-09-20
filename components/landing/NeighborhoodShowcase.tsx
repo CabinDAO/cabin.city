@@ -13,8 +13,6 @@ import { formatOfferPrice } from '@/components/offers/Price'
 const cabinWeekIDs =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? [
-        '373883889220845648', // Elkenmist
-        '373884974581940305', // N0
         '373885328800350288', // Mana
         '373885641076768848', // TDF
         '376233981159407697', // N0
