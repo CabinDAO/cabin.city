@@ -68,6 +68,9 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
           <ListEmptyState iconName="offer" />
         ) : (
           offers.map((offer) => {
+            if (offer.offerType == OfferType.Residency) {
+              return null
+            }
             const offerProps = offerListItemPropsFromFragment(offer, user)
             return <ExperienceCard key={offer._id} {...offerProps} />
           })

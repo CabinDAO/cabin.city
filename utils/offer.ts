@@ -25,7 +25,7 @@ export const OfferPriceUnitMap: Record<OfferPriceUnit, string | null> = {
   [OfferPriceUnit.FlatFee]: null,
 }
 
-export const OfferInfoByType: Record<OfferType, OfferInfo> = {
+const OfferInfoByType: Record<OfferType, OfferInfo> = {
   [OfferType.PaidColiving]: {
     name: 'Colive',
   },

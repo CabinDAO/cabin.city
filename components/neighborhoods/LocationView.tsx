@@ -148,6 +148,12 @@ export const LocationView = ({
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
+  const shownOffers = offers.filter(
+    (offer) =>
+      (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+      offer.offerType !== OfferType.Residency
+  )
+
   const { user } = useProfile()
   const isEditable = user?.isAdmin || user?._id === location.caretaker._id
 
@@ -278,12 +284,12 @@ export const LocationView = ({
         )}
       </GalleryPreviewContainer>
 
-      {!!offers.length && (
+      {!!shownOffers.length && (
         <Section>
           <SectionHeader>
             <H3>Experience</H3>
           </SectionHeader>
-          <ExperienceList offers={offers} />
+          <ExperienceList offers={shownOffers} />
         </Section>
       )}
       <Section>
