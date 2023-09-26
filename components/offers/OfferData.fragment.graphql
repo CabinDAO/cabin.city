@@ -1,4 +1,4 @@
-fragment Offer on Offer {
+fragment OfferData on Offer {
   _id
   offerType
   title

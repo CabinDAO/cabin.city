@@ -20,7 +20,7 @@ import { DiscardChangesModal } from '../core/DiscardChangesModal'
 export const EditOfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable, isUserCaretaker } = useGetOffer(`${offerId}`)
+  const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
   const [updateOffer] = useUpdateOfferMutation()
   const { history } = useNavigation()
   const backRoute = history[history.length - 2]

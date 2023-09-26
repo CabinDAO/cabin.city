@@ -2549,7 +2549,7 @@ export type GetOffersCountQueryVariables = Exact<{
 
 export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
-export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } };
+export type OfferDataFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } };
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } };
 
@@ -2961,8 +2961,8 @@ export const LodgingTypeFragmentDoc = gql`
   price
 }
     `;
-export const OfferFragmentDoc = gql`
-    fragment Offer on Offer {
+export const OfferDataFragmentDoc = gql`
+    fragment OfferData on Offer {
   _id
   offerType
   title
@@ -3920,10 +3920,10 @@ export type UpdateLocationMutationOptions = Apollo.BaseMutationOptions<UpdateLoc
 export const CreateOfferDocument = gql`
     mutation CreateOffer($data: CreateOfferInput!) {
   createOffer(data: $data) {
-    ...Offer
+    ...OfferData
   }
 }
-    ${OfferFragmentDoc}`;
+    ${OfferDataFragmentDoc}`;
 export type CreateOfferMutationFn = Apollo.MutationFunction<CreateOfferMutation, CreateOfferMutationVariables>;
 
 /**
@@ -3953,10 +3953,10 @@ export type CreateOfferMutationOptions = Apollo.BaseMutationOptions<CreateOfferM
 export const GetOfferByIdDocument = gql`
     query GetOfferById($id: ID!) {
   findOfferByID(id: $id) {
-    ...Offer
+    ...OfferData
   }
 }
-    ${OfferFragmentDoc}`;
+    ${OfferDataFragmentDoc}`;
 
 /**
  * __useGetOfferByIdQuery__
@@ -4096,10 +4096,10 @@ export type GetOffersCountQueryResult = Apollo.QueryResult<GetOffersCountQuery, 
 export const DeleteOfferDocument = gql`
     mutation DeleteOffer($id: ID!) {
   deleteOffer(id: $id) {
-    ...Offer
+    ...OfferData
   }
 }
-    ${OfferFragmentDoc}`;
+    ${OfferDataFragmentDoc}`;
 export type DeleteOfferMutationFn = Apollo.MutationFunction<DeleteOfferMutation, DeleteOfferMutationVariables>;
 
 /**
@@ -4129,10 +4129,10 @@ export type DeleteOfferMutationOptions = Apollo.BaseMutationOptions<DeleteOfferM
 export const UpdateOfferDocument = gql`
     mutation UpdateOffer($offerId: ID!, $data: UpdateOfferInput!) {
   updateOffer(id: $offerId, data: $data) {
-    ...Offer
+    ...OfferData
   }
 }
-    ${OfferFragmentDoc}`;
+    ${OfferDataFragmentDoc}`;
 export type UpdateOfferMutationFn = Apollo.MutationFunction<UpdateOfferMutation, UpdateOfferMutationVariables>;
 
 /**

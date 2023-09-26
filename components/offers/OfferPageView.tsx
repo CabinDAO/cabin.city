@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 export const OfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable, isPublished } = useGetOffer(`${offerId}`)
+  const { offer, isEditable, isPublished } = useGetOffer(offerId as string)
   const { showModal } = useModal()
 
   if (!offer) {

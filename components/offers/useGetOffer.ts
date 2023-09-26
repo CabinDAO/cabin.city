@@ -55,7 +55,7 @@ export const useGetOffer = (offerId: string) => {
   const { user } = useProfile()
   const { data } = useGetOfferByIdQuery({
     variables: {
-      id: `${offerId}`,
+      id: offerId,
     },
     skip: !offerId,
   })
