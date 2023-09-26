@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { notch } from '../layouts/common.styles'
+import { notch, NotchPosition } from '../layouts/common.styles'
 import { NotchOutline } from './NotchOutline'
 
 type ContainerShape = 'default' | 'notch' | 'curve' | 'notch-all'
@@ -12,6 +12,7 @@ interface ContainerProps {
   fillType?: ContainerFillType
   className?: string
   notchSize?: number
+  notchPosition?: NotchPosition
   maxWidth?: string
 }
 
@@ -21,10 +22,10 @@ const BaseContainer = styled.div<ContainerProps>`
   background-color: ${({ theme }) => theme.colors.yellow200};
   width: 100%;
 
-  ${({ shape, notchSize }) => {
+  ${({ shape, notchSize, notchPosition }) => {
     switch (shape) {
       case 'notch':
-        return notch(notchSize, 'top-left')
+        return notch(notchSize, notchPosition ?? 'top-left')
       case 'notch-all':
         return notch(notchSize, 'all')
       case 'curve':
@@ -72,6 +73,7 @@ export const ContentCard = ({
   fillType,
   className,
   notchSize = 1.6,
+  notchPosition = 'top-left',
   maxWidth,
 }: ContainerProps) => {
   return (
@@ -82,10 +84,11 @@ export const ContentCard = ({
       shape={shape ?? 'default'}
       fillType={fillType ?? 'outline'}
       notchSize={notchSize}
+      notchPosition={notchPosition}
     >
       <>
         {shape === 'notch' ? (
-          <NotchOutline notchPosition="top-left" notchSize={notchSize} />
+          <NotchOutline notchPosition={notchPosition} notchSize={notchSize} />
         ) : null}
         {shape === 'notch-all' ? (
           <NotchAllContent notchSize={notchSize} />
