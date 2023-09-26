@@ -63,6 +63,8 @@ type Mutation {
     @resolver(name: "create_text_activity")
   createLocation: Location @resolver(name: "create_location")
   createOffer(data: CreateOfferInput!): Offer @resolver(name: "create_offer")
+  createCart(data: CreateCartInput!): Cart @resolver(name: "create_cart")
+  updateCart(id: ID!, data: UpdateCartInput): Cart! @resolver(name: "update_cart")
   deleteLocation(id: ID!): Location! @resolver(name: "delete_location")
   deleteOffer(id: ID!): Offer! @resolver(name: "delete_offer")
   publishLocation(id: ID!): Location! @resolver(name: "publish_location")
@@ -357,6 +359,7 @@ type Location {
   addressInfo: String # Rich text
   referrer: Profile @relation(name: "referredLocations")
   offerTypes: [OfferType!] # Denormalized for more efficient queries
+  lodgingTypes: [LodgingType!] @relation
 }
 
 enum LocationType {
@@ -394,6 +397,23 @@ enum LocationMediaCategory {
   Sleeping
   Working
   Features
+}
+
+type LodgingType {
+  location: Location! @relation
+  description: String!
+  quantity: Int!
+  price: Int!
+  # TODO: denormalize: number paid for?
+}
+
+type Cart {
+  profile: Profile!
+  offer: Offer!
+  lodgingType: LodgingType!
+  amount: Int!
+  stripePaymentIntentClientSecret: String
+  notes: String
 }
 
 type Offer {
@@ -449,4 +469,15 @@ input GetOffersInput @embedded {
 input CreateOfferInput {
   offerType: OfferType!
   locationId: ID!
+}
+
+input CreateCartInput {
+  profileId: ID!
+  offerId: ID!
+  lodgingTypeId: ID!
+  price: Int!
+}
+
+input UpdateCartInput {
+  notes: String
 }

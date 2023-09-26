@@ -38,6 +38,14 @@ export interface OfferViewProps {
     caretaker: {
       _id: string
     }
+    lodgingTypes: {
+      data: Array<{
+        _id: string
+        description: string
+        quantity: number
+        price: number
+      }>
+    }
   }
   rawFragment: OfferFragment
 }

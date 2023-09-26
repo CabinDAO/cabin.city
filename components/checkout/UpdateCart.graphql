@@ -1,0 +1,8 @@
+mutation UpdateCart(
+    $id: ID!
+    $data: UpdateCartInput
+) {
+    updateCart(id: $id, data: $data) {
+        ...Cart
+    }
+}

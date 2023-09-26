@@ -173,10 +173,51 @@ export type BlockSyncAttemptInput = {
   status: BlockSyncAttemptStatus;
 };
 
+/** 'Cart' input values */
+export type CartInput = {
+  profile?: InputMaybe<CartProfileRelation>;
+  offer?: InputMaybe<CartOfferRelation>;
+  lodgingType?: InputMaybe<CartLodgingTypeRelation>;
+  amount: Scalars['Int'];
+  stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+};
+
+/** Allow manipulating the relationship between the types 'Cart' and 'LodgingType' using the field 'Cart.lodgingType'. */
+export type CartLodgingTypeRelation = {
+  /** Create a document of type 'LodgingType' and associate it with the current document. */
+  create?: InputMaybe<LodgingTypeInput>;
+  /** Connect a document of type 'LodgingType' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'Cart' and 'Offer' using the field 'Cart.offer'. */
+export type CartOfferRelation = {
+  /** Create a document of type 'Offer' and associate it with the current document. */
+  create?: InputMaybe<OfferInput>;
+  /** Connect a document of type 'Offer' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
+/** Allow manipulating the relationship between the types 'Cart' and 'Profile' using the field 'Cart.profile'. */
+export type CartProfileRelation = {
+  /** Create a document of type 'Profile' and associate it with the current document. */
+  create?: InputMaybe<ProfileInput>;
+  /** Connect a document of type 'Profile' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
 /** 'CitizenshipMetadata' input values */
 export type CitizenshipMetadataInput = {
   tokenId?: InputMaybe<Scalars['String']>;
   mintedAt?: InputMaybe<Scalars['Time']>;
+};
+
+export type CreateCartInput = {
+  profileId: Scalars['ID'];
+  offerId: Scalars['ID'];
+  lodgingTypeId: Scalars['ID'];
+  price: Scalars['Int'];
 };
 
 export type CreateOfferInput = {
@@ -248,6 +289,17 @@ export type LocationInput = {
   addressInfo?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<LocationReferrerRelation>;
   offerTypes?: InputMaybe<Array<OfferType>>;
+  lodgingTypes?: InputMaybe<LocationLodgingTypesRelation>;
+};
+
+/** Allow manipulating the relationship between the types 'Location' and 'LodgingType'. */
+export type LocationLodgingTypesRelation = {
+  /** Create one or more documents of type 'LodgingType' and associate them with the current document. */
+  create?: InputMaybe<Array<InputMaybe<LodgingTypeInput>>>;
+  /** Connect one or more documents of type 'LodgingType' with the current document using their IDs. */
+  connect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
+  /** Disconnect the given documents of type 'LodgingType' from the current document using their IDs. */
+  disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
 /** 'LocationMediaItem' input values */
@@ -309,10 +361,31 @@ export type LocationVotesRelation = {
   disconnect?: InputMaybe<Array<InputMaybe<Scalars['ID']>>>;
 };
 
+/** 'LodgingType' input values */
+export type LodgingTypeInput = {
+  location?: InputMaybe<LodgingTypeLocationRelation>;
+  description: Scalars['String'];
+  quantity: Scalars['Int'];
+  price: Scalars['Int'];
+};
+
+/** Allow manipulating the relationship between the types 'LodgingType' and 'Location' using the field 'LodgingType.location'. */
+export type LodgingTypeLocationRelation = {
+  /** Create a document of type 'Location' and associate it with the current document. */
+  create?: InputMaybe<LocationInput>;
+  /** Connect a document of type 'Location' with the current document using its ID. */
+  connect?: InputMaybe<Scalars['ID']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Delete an existing document in the collection of 'Profile' */
   deleteProfile?: Maybe<Profile>;
+  updateCart: Cart;
+  /** Update an existing document in the collection of 'LodgingType' */
+  updateLodgingType?: Maybe<LodgingType>;
+  /** Create a new document in the collection of 'LodgingType' */
+  createLodgingType: LodgingType;
   /** Partially updates an existing document in the collection of 'Account'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateAccount?: Maybe<Account>;
   /** Partially updates an existing document in the collection of 'Offer'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
@@ -321,6 +394,8 @@ export type Mutation = {
   deleteOtterspaceBadge?: Maybe<OtterspaceBadge>;
   /** Update an existing document in the collection of 'BlockSyncAttempt' */
   updateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
+  /** Delete an existing document in the collection of 'Cart' */
+  deleteCart?: Maybe<Cart>;
   /** Create a new document in the collection of 'Activity' */
   createActivity: Activity;
   /** Update an existing document in the collection of 'ProfileVouch' */
@@ -339,6 +414,8 @@ export type Mutation = {
   partialUpdateLocation?: Maybe<Location>;
   /** Delete an existing document in the collection of 'TrackingEvent' */
   deleteTrackingEvent?: Maybe<TrackingEvent>;
+  /** Delete an existing document in the collection of 'LodgingType' */
+  deleteLodgingType?: Maybe<LodgingType>;
   /** Partially updates an existing document in the collection of 'OtterspaceBadgeSpec'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
   /** Update an existing document in the collection of 'OtterspaceBadge' */
@@ -362,6 +439,8 @@ export type Mutation = {
   partialUpdateActivityReaction?: Maybe<ActivityReaction>;
   /** Delete an existing document in the collection of 'ProfileVouch' */
   deleteProfileVouch?: Maybe<ProfileVouch>;
+  /** Partially updates an existing document in the collection of 'LodgingType'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateLodgingType?: Maybe<LodgingType>;
   /** Partially updates an existing document in the collection of 'BlockSyncAttempt'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
   partialUpdateBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   /** Create a new document in the collection of 'LocationVote' */
@@ -395,6 +474,7 @@ export type Mutation = {
   createProfile: Profile;
   /** Create a new document in the collection of 'OtterspaceBadgeSpec' */
   createOtterspaceBadgeSpec: OtterspaceBadgeSpec;
+  createCart?: Maybe<Cart>;
   /** Delete an existing document in the collection of 'OtterspaceBadgeSpec' */
   deleteOtterspaceBadgeSpec?: Maybe<OtterspaceBadgeSpec>;
   /** Delete an existing document in the collection of 'LocationVote' */
@@ -410,6 +490,8 @@ export type Mutation = {
   deleteBlockSyncAttempt?: Maybe<BlockSyncAttempt>;
   toggleSignal: Profile;
   vouchProfile: Profile;
+  /** Partially updates an existing document in the collection of 'Cart'. It only modifies the values that are specified in the arguments. During execution, it verifies that required fields are not set to 'null'. */
+  partialUpdateCart?: Maybe<Cart>;
   updateProfile: Profile;
   /** Create a new document in the collection of 'ProfileVouch' */
   createProfileVouch: ProfileVouch;
@@ -422,6 +504,23 @@ export type Mutation = {
 
 export type MutationDeleteProfileArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationUpdateCartArgs = {
+  id: Scalars['ID'];
+  data?: InputMaybe<UpdateCartInput>;
+};
+
+
+export type MutationUpdateLodgingTypeArgs = {
+  id: Scalars['ID'];
+  data: LodgingTypeInput;
+};
+
+
+export type MutationCreateLodgingTypeArgs = {
+  data: LodgingTypeInput;
 };
 
 
@@ -445,6 +544,11 @@ export type MutationDeleteOtterspaceBadgeArgs = {
 export type MutationUpdateBlockSyncAttemptArgs = {
   id: Scalars['ID'];
   data: BlockSyncAttemptInput;
+};
+
+
+export type MutationDeleteCartArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -498,6 +602,11 @@ export type MutationPartialUpdateLocationArgs = {
 
 
 export type MutationDeleteTrackingEventArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteLodgingTypeArgs = {
   id: Scalars['ID'];
 };
 
@@ -566,6 +675,12 @@ export type MutationPartialUpdateActivityReactionArgs = {
 
 export type MutationDeleteProfileVouchArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationPartialUpdateLodgingTypeArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateLodgingTypeInput;
 };
 
 
@@ -674,6 +789,11 @@ export type MutationCreateOtterspaceBadgeSpecArgs = {
 };
 
 
+export type MutationCreateCartArgs = {
+  data: CreateCartInput;
+};
+
+
 export type MutationDeleteOtterspaceBadgeSpecArgs = {
   id: Scalars['ID'];
 };
@@ -712,6 +832,12 @@ export type MutationDeleteBlockSyncAttemptArgs = {
 
 export type MutationVouchProfileArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationPartialUpdateCartArgs = {
+  id: Scalars['ID'];
+  data: PartialUpdateCartInput;
 };
 
 
@@ -868,6 +994,16 @@ export type PartialUpdateBlockSyncAttemptInput = {
   status?: InputMaybe<BlockSyncAttemptStatus>;
 };
 
+/** 'Cart' input values */
+export type PartialUpdateCartInput = {
+  profile?: InputMaybe<CartProfileRelation>;
+  offer?: InputMaybe<CartOfferRelation>;
+  lodgingType?: InputMaybe<CartLodgingTypeRelation>;
+  amount?: InputMaybe<Scalars['Int']>;
+  stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
+  notes?: InputMaybe<Scalars['String']>;
+};
+
 /** 'CitizenshipMetadata' input values */
 export type PartialUpdateCitizenshipMetadataInput = {
   tokenId?: InputMaybe<Scalars['String']>;
@@ -920,6 +1056,7 @@ export type PartialUpdateLocationInput = {
   addressInfo?: InputMaybe<Scalars['String']>;
   referrer?: InputMaybe<LocationReferrerRelation>;
   offerTypes?: InputMaybe<Array<OfferType>>;
+  lodgingTypes?: InputMaybe<LocationLodgingTypesRelation>;
 };
 
 /** 'LocationMediaItem' input values */
@@ -933,6 +1070,14 @@ export type PartialUpdateLocationVoteInput = {
   location?: InputMaybe<LocationVoteLocationRelation>;
   profile?: InputMaybe<LocationVoteProfileRelation>;
   count?: InputMaybe<Scalars['Int']>;
+};
+
+/** 'LodgingType' input values */
+export type PartialUpdateLodgingTypeInput = {
+  location?: InputMaybe<LodgingTypeLocationRelation>;
+  description?: InputMaybe<Scalars['String']>;
+  quantity?: InputMaybe<Scalars['Int']>;
+  price?: InputMaybe<Scalars['Int']>;
 };
 
 /** 'Offer' input values */
@@ -1178,6 +1323,10 @@ export type TrackingEventProfileRelation = {
   connect?: InputMaybe<Scalars['ID']>;
 };
 
+export type UpdateCartInput = {
+  notes?: InputMaybe<Scalars['String']>;
+};
+
 export type UpdateOfferInput = {
   title?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
@@ -1345,6 +1494,20 @@ export enum BlockSyncAttemptStatus {
   Failed = 'Failed'
 }
 
+export type Cart = {
+  __typename?: 'Cart';
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  amount: Scalars['Int'];
+  profile: Profile;
+  stripePaymentIntentClientSecret?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+  offer: Offer;
+  lodgingType: LodgingType;
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
 export type CitizenshipMetadata = {
   __typename?: 'CitizenshipMetadata';
   tokenId?: Maybe<Scalars['String']>;
@@ -1407,6 +1570,7 @@ export type Location = {
   bannerImageIpfsHash?: Maybe<Scalars['String']>;
   votes: LocationVotePage;
   caretaker: Profile;
+  lodgingTypes: LodgingTypePage;
   offerTypes?: Maybe<Array<OfferType>>;
   description?: Maybe<Scalars['String']>;
   /** The document's ID. */
@@ -1429,6 +1593,12 @@ export type Location = {
 
 
 export type LocationVotesArgs = {
+  _size?: InputMaybe<Scalars['Int']>;
+  _cursor?: InputMaybe<Scalars['String']>;
+};
+
+
+export type LocationLodgingTypesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
 };
@@ -1499,6 +1669,29 @@ export type LocationVotePage = {
   __typename?: 'LocationVotePage';
   /** The elements of type 'LocationVote' in this page. */
   data: Array<Maybe<LocationVote>>;
+  /** A cursor for elements coming after the current page. */
+  after?: Maybe<Scalars['String']>;
+  /** A cursor for elements coming before the current page. */
+  before?: Maybe<Scalars['String']>;
+};
+
+export type LodgingType = {
+  __typename?: 'LodgingType';
+  quantity: Scalars['Int'];
+  location: Location;
+  description: Scalars['String'];
+  /** The document's ID. */
+  _id: Scalars['ID'];
+  price: Scalars['Int'];
+  /** The document's timestamp. */
+  _ts: Scalars['Long'];
+};
+
+/** The pagination object for elements of type 'LodgingType'. */
+export type LodgingTypePage = {
+  __typename?: 'LodgingTypePage';
+  /** The elements of type 'LodgingType' in this page. */
+  data: Array<Maybe<LodgingType>>;
   /** A cursor for elements coming after the current page. */
   after?: Maybe<Scalars['String']>;
   /** A cursor for elements coming before the current page. */
@@ -1771,6 +1964,8 @@ export type Query = {
   __typename?: 'Query';
   /** Find a document from the collection of 'OtterspaceBadge' by its id. */
   findOtterspaceBadgeByID?: Maybe<OtterspaceBadge>;
+  /** Find a document from the collection of 'LodgingType' by its id. */
+  findLodgingTypeByID?: Maybe<LodgingType>;
   getLocationsByIds: Array<Location>;
   /** Find a document from the collection of 'ProfileVouch' by its id. */
   findProfileVouchByID?: Maybe<ProfileVouch>;
@@ -1818,12 +2013,19 @@ export type Query = {
   allBadges: OtterspaceBadgePage;
   /** Find a document from the collection of 'ActivityReaction' by its id. */
   findActivityReactionByID?: Maybe<ActivityReaction>;
+  /** Find a document from the collection of 'Cart' by its id. */
+  findCartByID?: Maybe<Cart>;
   tokenHoldersCount: Scalars['Int'];
   allHats: HatPage;
 };
 
 
 export type QueryFindOtterspaceBadgeByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type QueryFindLodgingTypeByIdArgs = {
   id: Scalars['ID'];
 };
 
@@ -2011,6 +2213,11 @@ export type QueryFindActivityReactionByIdArgs = {
 };
 
 
+export type QueryFindCartByIdArgs = {
+  id: Scalars['ID'];
+};
+
+
 export type QueryAllHatsArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
@@ -2123,6 +2330,30 @@ export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Profile', _id:
 export type MeFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, externalUserId?: string | null, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, isAdmin?: boolean | null, features?: Array<string> | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, locations: { __typename?: 'LocationPage', data: Array<{ __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null> }, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string }, trackingEvents: { __typename?: 'TrackingEventPage', data: Array<{ __typename?: 'TrackingEvent', _id: string, key: string, count: number } | null> }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null };
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
+
+export type CartFragment = { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } };
+
+export type CreateCartMutationVariables = Exact<{
+  data: CreateCartInput;
+}>;
+
+
+export type CreateCartMutation = { __typename?: 'Mutation', createCart?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
+
+export type GetCartQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetCartQuery = { __typename?: 'Query', findCartByID?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
+
+export type UpdateCartMutationVariables = Exact<{
+  id: Scalars['ID'];
+  data?: InputMaybe<UpdateCartInput>;
+}>;
+
+
+export type UpdateCartMutation = { __typename?: 'Mutation', updateCart: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } };
 
 export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
 
@@ -2257,6 +2488,8 @@ export type LocationFragment = { __typename?: 'Location', _id: string, locationT
 
 export type LocationItemFragment = { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } };
 
+export type LodgingTypeFragment = { __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number };
+
 export type MyLocationVotesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2284,14 +2517,14 @@ export type CreateOfferMutationVariables = Exact<{
 }>;
 
 
-export type CreateOfferMutation = { __typename?: 'Mutation', createOffer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } | null };
+export type CreateOfferMutation = { __typename?: 'Mutation', createOffer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } } | null };
 
 export type GetOfferByIdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetOfferByIdQuery = { __typename?: 'Query', findOfferByID?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } | null };
+export type GetOfferByIdQuery = { __typename?: 'Query', findOfferByID?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } } | null };
 
 export type GetOffersQueryVariables = Exact<{
   input: GetOffersInput;
@@ -2316,7 +2549,7 @@ export type GetOffersCountQueryVariables = Exact<{
 
 export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
-export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } };
+export type OfferFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } };
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } };
 
@@ -2325,7 +2558,7 @@ export type DeleteOfferMutationVariables = Exact<{
 }>;
 
 
-export type DeleteOfferMutation = { __typename?: 'Mutation', deleteOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } };
+export type DeleteOfferMutation = { __typename?: 'Mutation', deleteOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } } };
 
 export type UpdateOfferMutationVariables = Exact<{
   offerId: Scalars['ID'];
@@ -2333,7 +2566,7 @@ export type UpdateOfferMutationVariables = Exact<{
 }>;
 
 
-export type UpdateOfferMutation = { __typename?: 'Mutation', updateOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } } };
+export type UpdateOfferMutation = { __typename?: 'Mutation', updateOffer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } } };
 
 export type GetProfileByIdFragment = { __typename?: 'Profile', _id: string, name: string, email: string, bio?: string | null, location?: string | null, createdAt: any, citizenshipStatus?: CitizenshipStatus | null, cabinTokenBalanceInt: number, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType, hatId?: string | null }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null, account: { __typename?: 'Account', _id: string, address: string, badges: { __typename?: 'OtterspaceBadgePage', data: Array<{ __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', _id: string, name: string, description: string, image: string } } | null> } }, contactFields: Array<{ __typename?: 'ProfileContactField', type: ProfileContactFieldType, value: string }>, receivedVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', voucher: { __typename?: 'Profile', _id: string, name: string } } | null> }, givenVouches: { __typename?: 'ProfileVouchPage', data: Array<{ __typename?: 'ProfileVouch', vouchee: { __typename?: 'Profile', _id: string, name: string } } | null> }, citizenshipMetadata?: { __typename?: 'CitizenshipMetadata', tokenId?: string | null, mintedAt?: any | null } | null };
 
@@ -2496,6 +2729,35 @@ export const MeFragmentDoc = gql`
 }
     ${LocationItemFragmentDoc}
 ${TrackingEventFragmentDoc}`;
+export const CartFragmentDoc = gql`
+    fragment Cart on Cart {
+  _id
+  profile {
+    _id
+  }
+  offer {
+    _id
+    offerType
+    title
+    description
+    imageIpfsHash
+    location {
+      _id
+      bannerImageIpfsHash
+    }
+  }
+  lodgingType {
+    location {
+      _id
+    }
+    description
+    quantity
+    price
+  }
+  stripePaymentIntentClientSecret
+  notes
+}
+    `;
 export const OfferItemFragmentDoc = gql`
     fragment OfferItem on Offer {
   _id
@@ -2691,6 +2953,14 @@ export const LocationVoteFragmentDoc = gql`
   count
 }
     `;
+export const LodgingTypeFragmentDoc = gql`
+    fragment LodgingType on LodgingType {
+  _id
+  description
+  quantity
+  price
+}
+    `;
 export const OfferFragmentDoc = gql`
     fragment Offer on Offer {
   _id
@@ -2725,9 +2995,14 @@ export const OfferFragmentDoc = gql`
     caretaker {
       _id
     }
+    lodgingTypes {
+      data {
+        ...LodgingType
+      }
+    }
   }
 }
-    `;
+    ${LodgingTypeFragmentDoc}`;
 export const GetProfileByIdFragmentDoc = gql`
     fragment GetProfileById on Profile {
   _id
@@ -2822,6 +3097,108 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const CreateCartDocument = gql`
+    mutation CreateCart($data: CreateCartInput!) {
+  createCart(data: $data) {
+    ...Cart
+  }
+}
+    ${CartFragmentDoc}`;
+export type CreateCartMutationFn = Apollo.MutationFunction<CreateCartMutation, CreateCartMutationVariables>;
+
+/**
+ * __useCreateCartMutation__
+ *
+ * To run a mutation, you first call `useCreateCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCartMutation, { data, loading, error }] = useCreateCartMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCartMutation(baseOptions?: Apollo.MutationHookOptions<CreateCartMutation, CreateCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCartMutation, CreateCartMutationVariables>(CreateCartDocument, options);
+      }
+export type CreateCartMutationHookResult = ReturnType<typeof useCreateCartMutation>;
+export type CreateCartMutationResult = Apollo.MutationResult<CreateCartMutation>;
+export type CreateCartMutationOptions = Apollo.BaseMutationOptions<CreateCartMutation, CreateCartMutationVariables>;
+export const GetCartDocument = gql`
+    query GetCart($id: ID!) {
+  findCartByID(id: $id) {
+    ...Cart
+  }
+}
+    ${CartFragmentDoc}`;
+
+/**
+ * __useGetCartQuery__
+ *
+ * To run a query within a React component, call `useGetCartQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCartQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCartQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCartQuery(baseOptions: Apollo.QueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, options);
+      }
+export function useGetCartLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCartQuery, GetCartQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCartQuery, GetCartQueryVariables>(GetCartDocument, options);
+        }
+export type GetCartQueryHookResult = ReturnType<typeof useGetCartQuery>;
+export type GetCartLazyQueryHookResult = ReturnType<typeof useGetCartLazyQuery>;
+export type GetCartQueryResult = Apollo.QueryResult<GetCartQuery, GetCartQueryVariables>;
+export const UpdateCartDocument = gql`
+    mutation UpdateCart($id: ID!, $data: UpdateCartInput) {
+  updateCart(id: $id, data: $data) {
+    ...Cart
+  }
+}
+    ${CartFragmentDoc}`;
+export type UpdateCartMutationFn = Apollo.MutationFunction<UpdateCartMutation, UpdateCartMutationVariables>;
+
+/**
+ * __useUpdateCartMutation__
+ *
+ * To run a mutation, you first call `useUpdateCartMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCartMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCartMutation, { data, loading, error }] = useUpdateCartMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateCartMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCartMutation, UpdateCartMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCartMutation, UpdateCartMutationVariables>(UpdateCartDocument, options);
+      }
+export type UpdateCartMutationHookResult = ReturnType<typeof useUpdateCartMutation>;
+export type UpdateCartMutationResult = Apollo.MutationResult<UpdateCartMutation>;
+export type UpdateCartMutationOptions = Apollo.BaseMutationOptions<UpdateCartMutation, UpdateCartMutationVariables>;
 export const CreateTextActivityDocument = gql`
     mutation CreateTextActivity($text: String!) {
   createTextActivity(text: $text) {

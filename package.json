@@ -8,6 +8,7 @@
     "analyze": "NODE_ENV=development ANALYZE=true next build",
     "start": "next start",
     "fauna": "fgu",
+    "fauna:replace": "fgu -m replace",
     "fauna:gen": "fgu --data --codegen",
     "format": "prettier --write .",
     "lint": "npm run lint:types && npm run lint:eslint && npm run lint:next",

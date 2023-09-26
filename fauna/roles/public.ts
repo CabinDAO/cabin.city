@@ -13,6 +13,12 @@ const publicRole: RoleResource = {
       },
     },
     {
+      resource: q.Collection('LodgingType'),
+      actions: {
+        read: true,
+      },
+    },
+    {
       resource: q.Index('account_by_address_casefold'),
       actions: {
         read: true,

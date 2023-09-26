@@ -1,3 +1,6 @@
+import React from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import Icon from '@/components/core/Icon'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
@@ -9,58 +12,74 @@ import {
   MeFragment,
   OfferFragment,
   OfferType,
+  useCreateCartMutation,
 } from '@/generated/graphql'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { formatUrl } from '@/utils/display-utils'
-import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 interface ApplyButtonProps {
   offer: OfferViewProps
 }
 
 export const ApplyButton = ({ offer }: ApplyButtonProps) => {
+  const router = useRouter()
   const { user } = useProfile()
+  const [createCart] = useCreateCartMutation()
 
-  let applicationURL: string | null = null
+  const handleReserveClick = async (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+
+    if (!user) return
+
+    try {
+      const lodgingType = offer.location.lodgingTypes.data[0]
+
+      await createCart({
+        variables: {
+          data: {
+            profileId: user._id,
+            offerId: offer._id,
+            lodgingTypeId: lodgingType._id,
+            price: lodgingType.price,
+          },
+        },
+      }).then((res) => {
+        router.push(`/checkout/${res.data?.createCart?._id}`)
+      })
+    } catch (error) {}
+  }
 
   switch (offer.offerType) {
     case OfferType.Residency:
       return (
-        <ApplyNowButton
-          startAdornment={<Icon name="lock" size={1.6} />}
-          disabled
-        >
+        <BuyButton startAdornment={<Icon name="lock" size={1.6} />} disabled>
           Disabled
-        </ApplyNowButton>
+        </BuyButton>
       )
       break
 
     case OfferType.PaidColiving:
-      if (!user || !isEligible(user, offer)) {
-        applicationURL = EXTERNAL_LINKS.COLIVING_TYPEFORM
-      } else {
-        applicationURL = formatUrl(offer.applicationUrl)
-      }
+      const applicationURL =
+        !user || !isEligible(user, offer)
+          ? EXTERNAL_LINKS.COLIVING_TYPEFORM
+          : formatUrl(offer.applicationUrl)
+      return (
+        <a
+          onClick={() => events.applyToExperienceEvent(offer._id)}
+          href={applicationURL ?? ''}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <BuyButton>Apply now</BuyButton>
+        </a>
+      )
       break
-
-    case OfferType.CabinWeek:
-      applicationURL = EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM
-      break
-  }
-
-  if (!applicationURL) {
-    return null
   }
 
   return (
-    <a
-      onClick={() => events.applyToExperienceEvent(offer._id)}
-      href={applicationURL}
-      target="_blank"
-      rel="noreferrer"
-    >
-      <ApplyNowButton>Apply now</ApplyNowButton>
-    </a>
+    <Link href={`/experience/${offer._id}/reserve`}>
+      <BuyButton onClick={handleReserveClick}>Reserve</BuyButton>
+    </Link>
   )
 }
 
@@ -99,7 +118,7 @@ const isEligible = (user: MeFragment, offer: OfferFragment) => {
   return true
 }
 
-const ApplyNowButton = styled(Button)`
+const BuyButton = styled(Button)`
   width: 100%;
 
   ${({ theme }) => theme.bp.lg_max} {

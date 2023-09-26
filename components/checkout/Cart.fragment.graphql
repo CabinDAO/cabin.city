@@ -1,0 +1,27 @@
+fragment Cart on Cart {
+    _id
+    profile {
+        _id
+    }
+    offer {
+        _id
+        offerType
+        title
+        description
+        imageIpfsHash
+        location {
+            _id
+            bannerImageIpfsHash
+        }
+    }
+    lodgingType {
+        location {
+            _id
+        }
+        description
+        quantity
+        price
+    }
+    stripePaymentIntentClientSecret
+    notes
+}

@@ -31,5 +31,10 @@ fragment Offer on Offer {
     caretaker {
       _id
     }
+    lodgingTypes {
+      data {
+        ...LodgingType
+      }
+    }
   }
 }
