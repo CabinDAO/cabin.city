@@ -4,7 +4,7 @@ export const readOnlyBy = (fieldKeys: string | string[]) => {
   const keyPath = ['data'].concat(
     Array.isArray(fieldKeys) ? fieldKeys : [fieldKeys]
   )
-  return q.Query((oldData, newData, ref) =>
+  return q.Query((ref) =>
     q.Let(
       {
         canRead: q.Equals(q.CurrentIdentity(), q.Select(keyPath, q.Get(ref))),
