@@ -1,0 +1,173 @@
+import { Elements } from '@stripe/react-stripe-js'
+import {
+  Layout,
+  loadStripe,
+  StripeElementsOptionsMode,
+} from '@stripe/stripe-js'
+import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
+import styled from 'styled-components'
+import React, { FormEvent } from 'react'
+import { appDomainWithProto } from '@/utils/display-utils'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { StripeElementsOptionsClientSecret } from '@stripe/stripe-js/types/stripe-js/elements-group'
+import { Button } from '@/components/core/Button'
+import { Body1 } from '@/components/core/Typography'
+import Link from 'next/link'
+import { CreatePaymentIntentBody } from '@/pages/api/create-payment-intent'
+import { CartFragment } from '@/generated/graphql'
+
+// Call this outside the render to avoid recreating the `Stripe` object on every render.
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''
+)
+
+export const CheckoutForm = ({ cart }: { cart: CartFragment }) => {
+  // const [clientSecret, setClientSecret] = React.useState('')
+
+  // React.useEffect(() => {
+  //   // Create PaymentIntent as soon as the page loads
+  //
+  //   const reqBody: CreatePaymentIntentBody = props
+  //
+  //   fetch('/api/create-payment-intent', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(reqBody),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => setClientSecret(data.clientSecret))
+  // }, [])
+
+  const options: StripeElementsOptionsMode = {
+    // clientSecret: clientSecret,
+    mode: 'payment',
+    amount: cart.lodgingType.price,
+    currency: 'usd',
+    appearance: {
+      theme: 'stripe',
+    },
+  }
+
+  return (
+    <>
+      {/*{clientSecret && (*/}
+      <Elements stripe={stripePromise} options={options}>
+        <StripeForm />
+      </Elements>
+      {/*)}*/}
+    </>
+  )
+}
+
+const StripeForm = () => {
+  const stripe = useStripe()
+  const elements = useElements()
+
+  const [message, setMessage] = React.useState('')
+  const [isLoading, setIsLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    if (!stripe) {
+      return
+    }
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      'payment_intent_client_secret'
+    )
+
+    if (!clientSecret) {
+      return
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent?.status) {
+        case 'succeeded':
+          setMessage('Payment succeeded!')
+          break
+        case 'processing':
+          setMessage('Your payment is processing.')
+          break
+        case 'requires_payment_method':
+          setMessage('Your payment was not successful, please try again.')
+          break
+        default:
+          setMessage('Something went wrong.')
+          break
+      }
+    })
+  }, [stripe])
+
+  const handleSubmit = async (event: FormEvent) => {
+    // We don't want to let default form submission happen here,
+    // which would refresh the page.
+    event.preventDefault()
+
+    if (!stripe || !elements) {
+      // Stripe.js hasn't yet loaded.
+      // Make sure to disable form submission until Stripe.js has loaded.
+      return
+    }
+
+    setIsLoading(true)
+
+    // create the Trip in our system
+
+    const { error } = await stripe.confirmPayment({
+      //`Elements` instance that was used to create the Payment Element
+      elements,
+      confirmParams: {
+        return_url: appDomainWithProto + '/debug',
+      },
+    })
+
+    // This point will only be reached if there is an immediate error when
+    // confirming the payment. Otherwise, your customer will be redirected to
+    // your `return_url`. For some payment methods like iDEAL, your customer will
+    // be redirected to an intermediate site first to authorize the payment, then
+    // redirected to the `return_url`.
+
+    console.log(error)
+    // Show error to your customer (for example, payment details incomplete)
+    if (error.type === 'card_error' || error.type === 'validation_error') {
+      setMessage(
+        error.message ?? 'An unexpected card or validation error occurred.'
+      )
+    } else {
+      setMessage('An unexpected error occurred.')
+    }
+
+    setIsLoading(false)
+  }
+
+  const paymentElementOptions: { layout: Layout } = {
+    layout: 'tabs',
+  }
+
+  return (
+    <Container>
+      <form onSubmit={handleSubmit}>
+        <PaymentElement options={paymentElementOptions} />
+
+        <Body1>
+          I have read and agree to Cabin’s{' '}
+          <Link href={''}>Liability Policy</Link>
+        </Body1>
+
+        <Button disabled={isLoading || !stripe || !elements}>
+          {isLoading ? <LoadingSpinner /> : 'Book now'}
+        </Button>
+
+        {message && <Body1>{message}</Body1>}
+      </form>
+    </Container>
+  )
+}
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 2.4rem;
+`

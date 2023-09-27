@@ -46,6 +46,7 @@ export const Avatar = ({
 
 const StyledCircle = styled(Circle)`
   cursor: pointer;
+  position: relative; // need this because the image inside has 'fill' attribute
 `
 
 const StyledImage = styled(Image)`

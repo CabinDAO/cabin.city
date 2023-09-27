@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Availability } from './Availability'
 import { Eligibility } from './Eligibility'
 import {
-  OfferFragment,
+  OfferDataFragment,
   OfferType,
   ProfileRoleConstraintInput,
   UpdateOfferInput,
@@ -37,7 +37,7 @@ import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
 
 interface EditOfferFormProps {
-  offer: OfferFragment
+  offer: OfferDataFragment
   onEdit: (updateOfferInput: UpdateOfferInput) => void
   updateOfferInput: UpdateOfferInput
   highlightErrors?: boolean

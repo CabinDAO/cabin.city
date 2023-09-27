@@ -3,7 +3,7 @@ import { OfferListItemProps } from '@/components/core/OfferListItem'
 import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
   MeFragment,
-  OfferFragment,
+  OfferDataFragment,
   OfferItemFragment,
   OfferPrice,
   OfferPriceUnit,
@@ -78,7 +78,7 @@ export const offerListItemPropsFromFragment = (
 }
 
 export const offerViewPropsFromFragment = (
-  fragment: OfferFragment
+  fragment: OfferDataFragment
 ): OfferViewProps => {
   return {
     _id: fragment._id,

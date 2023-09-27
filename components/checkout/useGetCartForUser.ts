@@ -7,7 +7,7 @@ export const useGetCartForUser = (
   // const { user } = useProfile()
   const { data } = useGetCartQuery({
     variables: {
-      id: `${cartId}`,
+      id: cartId,
     },
     skip: !cartId,
   })

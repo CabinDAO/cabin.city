@@ -8,6 +8,7 @@ import {
   Caption,
   H2,
   H3,
+  Subline1,
   Subline2,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
@@ -90,15 +91,6 @@ export const OfferView = ({
 
   if (!offerType) return null
 
-  const CabinWeekPrice = ({ price }: { price: OfferPrice }) => {
-    return (
-      <OfferCabinWeekDetailsSection>
-        <Price price={price} />
-        <Body1>{formatRange(startDate, endDate)}</Body1>
-      </OfferCabinWeekDetailsSection>
-    )
-  }
-
   return (
     <>
       <TitleCard
@@ -149,7 +141,15 @@ export const OfferView = ({
                 </OfferDetailsOverview>
 
                 {offerType == OfferType.CabinWeek && offer.price && (
-                  <CabinWeekPrice price={offer.price} />
+                  <OfferCabinWeekDetailsSection>
+                    <Subline1>Dates</Subline1>
+                    <DateRange>
+                      <Icon name={'date'} size={2} />
+                      {formatRange(startDate, endDate)}
+                    </DateRange>
+                    <Subline1>Select One</Subline1>
+                    <Price price={offer.price} />
+                  </OfferCabinWeekDetailsSection>
                 )}
 
                 <Actions>
@@ -287,6 +287,15 @@ const OfferDetailsHeader = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     flex-flow: column;
   }
+`
+
+const DateRange = styled(Body1)`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 0.8rem;
+  border: solid 1px ${({ theme }) => theme.colors.green900};
+  padding: 1.4rem;
 `
 
 const Actions = styled.div`

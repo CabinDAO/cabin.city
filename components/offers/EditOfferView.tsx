@@ -2,14 +2,14 @@ import styled from 'styled-components'
 import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
 import { EditOfferForm } from './edit-offer/EditOfferForm'
-import { OfferFragment, UpdateOfferInput } from '@/generated/graphql'
+import { OfferDataFragment, UpdateOfferInput } from '@/generated/graphql'
 import { useState } from 'react'
 import { useModal } from '../hooks/useModal'
 import { useRouter } from 'next/router'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 interface EditOfferViewProps {
-  offer: OfferFragment
+  offer: OfferDataFragment
   updateOfferInput: UpdateOfferInput
   onEdit: (updateOfferInput: UpdateOfferInput) => void
   highlightErrors?: boolean

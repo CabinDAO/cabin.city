@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Icon from '@/components/core/Icon'
 import events from '@/lib/googleAnalytics/events'
@@ -10,12 +9,13 @@ import { useProfile } from '@/components/auth/useProfile'
 import {
   CitizenshipStatus,
   MeFragment,
-  OfferFragment,
+  OfferDataFragment,
   OfferType,
   useCreateCartMutation,
 } from '@/generated/graphql'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { formatUrl } from '@/utils/display-utils'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 interface ApplyButtonProps {
   offer: OfferViewProps
@@ -26,9 +26,7 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
   const { user } = useProfile()
   const [createCart] = useCreateCartMutation()
 
-  const handleReserveClick = async (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-
+  const handleReserveClick = async () => {
     if (!user) return
 
     try {
@@ -77,13 +75,13 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
   }
 
   return (
-    <Link href={`/experience/${offer._id}/reserve`}>
-      <BuyButton onClick={handleReserveClick}>Reserve</BuyButton>
-    </Link>
+    <AuthenticatedLink onClick={handleReserveClick}>
+      <BuyButton>Reserve</BuyButton>
+    </AuthenticatedLink>
   )
 }
 
-const isEligible = (user: MeFragment, offer: OfferFragment) => {
+const isEligible = (user: MeFragment, offer: OfferDataFragment) => {
   if (offer.offerType == OfferType.Residency) {
     return false
   }

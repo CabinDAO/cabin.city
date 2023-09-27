@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import {
   LocationType,
-  OfferFragment,
+  OfferDataFragment,
   OfferPriceUnit,
   OfferType,
   ProfileRoleConstraint,
@@ -47,7 +47,7 @@ export interface OfferViewProps {
       }>
     }
   }
-  rawFragment: OfferFragment
+  rawFragment: OfferDataFragment
 }
 
 export const useGetOffer = (offerId: string) => {

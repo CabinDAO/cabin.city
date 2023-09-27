@@ -2549,7 +2549,7 @@ export type GetOffersCountQueryVariables = Exact<{
 
 export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
-export type OfferDataFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } };
+export type OfferDataFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } };
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } };
 
@@ -2943,6 +2943,14 @@ export const LocationFragmentDoc = gql`
     ${ProfileFragmentDoc}
 ${CaretakerFragmentDoc}
 ${OfferItemFragmentDoc}`;
+export const LodgingTypeFragmentDoc = gql`
+    fragment LodgingType on LodgingType {
+  _id
+  description
+  quantity
+  price
+}
+    `;
 export const LocationVoteFragmentDoc = gql`
     fragment LocationVote on LocationVote {
   _id
@@ -2951,14 +2959,6 @@ export const LocationVoteFragmentDoc = gql`
     name
   }
   count
-}
-    `;
-export const LodgingTypeFragmentDoc = gql`
-    fragment LodgingType on LodgingType {
-  _id
-  description
-  quantity
-  price
 }
     `;
 export const OfferDataFragmentDoc = gql`

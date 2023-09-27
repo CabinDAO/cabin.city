@@ -4,6 +4,7 @@ import { readOnlyBy } from './predicates/readOnlyBy'
 import { writeOnlyBy } from './predicates/writeOnlyBy'
 import { deleteOnlyBy } from './predicates/deleteOnlyBy'
 import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
+import { createOnlyFor } from './predicates/createOnlyFor'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
@@ -120,7 +121,7 @@ const authenticatedProfileRole: RoleResource = {
     {
       resource: q.Collection('Cart'),
       actions: {
-        create: true,
+        create: createOnlyFor('profile'),
         read: readOnlyBy(['profile']),
         write: writeOnlyBy(['profile']),
         delete: deleteOnlyBy(['profile']),
