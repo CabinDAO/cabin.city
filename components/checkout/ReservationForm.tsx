@@ -13,6 +13,10 @@ import {
 import { ApolloError } from '@apollo/client'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 import { useProfile } from '@/components/auth/useProfile'
+import { InputTextArea } from '@/components/core/InputTextArea'
+import { MAX_BIO_LENGTH } from '@/components/profile/constants'
+import { Body1, Subline1 } from '@/components/core/Typography'
+import { Checkbox } from '@/components/core/Checkbox'
 
 export const ReservationForm = ({
   onComplete,
@@ -31,7 +35,7 @@ export const ReservationForm = ({
   const [updateCartInput, setUpdateCartInput] = useState<UpdateCartInput>({})
 
   const name = updateProfileInput?.name ?? user?.name
-  const notes = updateCartInput?.notes ?? cart?.notes
+  const notes = updateCartInput?.notes ?? cart?.notes ?? ''
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateProfileInput((prev) => ({
@@ -40,7 +44,7 @@ export const ReservationForm = ({
     }))
   }
 
-  const handleNotesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setUpdateCartInput((prev) => ({
       ...prev,
       ...{ ...updateCartInput, notes: e.target.value },
@@ -103,12 +107,20 @@ export const ReservationForm = ({
           value={name}
           onChange={handleNameChange}
         />
-        <InputText
-          required
+      </InputGroup>
+      <InputGroup>
+        <InputTextArea
+          rows={3}
           label="Notes"
+          placeholder={'Dietary restrictions, housing preferences, etc.'}
           value={notes}
           onChange={handleNotesChange}
         />
+      </InputGroup>
+      <Subline1>Email Preference</Subline1>
+      <InputGroup>
+        <Checkbox selected={false} />
+        <Body1>Email me about future Cabin opportunities</Body1>
       </InputGroup>
       <Button>Continue</Button>
     </Form>

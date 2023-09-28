@@ -8,19 +8,27 @@ fragment Cart on Cart {
         offerType
         title
         description
+        startDate
+        endDate
         imageIpfsHash
         location {
             _id
+            name
             bannerImageIpfsHash
+            address {
+                locality
+                admininstrativeAreaLevel1
+                country
+            }
         }
     }
     lodgingType {
-        location {
-            _id
-        }
         description
         quantity
         price
+        location {
+            _id
+        }
     }
     stripePaymentIntentClientSecret
     notes
