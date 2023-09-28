@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import {
   LocationType,
+  LodgingType,
   OfferDataFragment,
   OfferPriceUnit,
   OfferType,
@@ -39,12 +40,7 @@ export interface OfferViewProps {
       _id: string
     }
     lodgingTypes: {
-      data: Array<{
-        _id: string
-        description: string
-        quantity: number
-        price: number
-      }>
+      data: [LodgingType]
     }
   }
   rawFragment: OfferDataFragment

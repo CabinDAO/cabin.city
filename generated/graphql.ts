@@ -2331,21 +2331,21 @@ export type MeFragment = { __typename?: 'Profile', _id: string, name: string, em
 
 export type TrackingEventFragment = { __typename?: 'TrackingEvent', _id: string, key: string, count: number };
 
-export type CartFragment = { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } };
+export type CartFragment = { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1?: string | null, country?: string | null } | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } };
 
 export type CreateCartMutationVariables = Exact<{
   data: CreateCartInput;
 }>;
 
 
-export type CreateCartMutation = { __typename?: 'Mutation', createCart?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
+export type CreateCartMutation = { __typename?: 'Mutation', createCart?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1?: string | null, country?: string | null } | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
 
 export type GetCartQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetCartQuery = { __typename?: 'Query', findCartByID?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
+export type GetCartQuery = { __typename?: 'Query', findCartByID?: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1?: string | null, country?: string | null } | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } | null };
 
 export type UpdateCartMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -2353,7 +2353,7 @@ export type UpdateCartMutationVariables = Exact<{
 }>;
 
 
-export type UpdateCartMutation = { __typename?: 'Mutation', updateCart: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, bannerImageIpfsHash?: string | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } };
+export type UpdateCartMutation = { __typename?: 'Mutation', updateCart: { __typename?: 'Cart', _id: string, stripePaymentIntentClientSecret?: string | null, notes?: string | null, profile: { __typename?: 'Profile', _id: string }, offer: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1?: string | null, country?: string | null } | null } }, lodgingType: { __typename?: 'LodgingType', description: string, quantity: number, price: number, location: { __typename?: 'Location', _id: string } } } };
 
 export type ActivityFragment = { __typename?: 'Activity', _id: string, timestamp: any, type: ActivityType, text?: string | null, metadata?: { __typename?: 'ActivityMetadata', citizenshipTokenId?: string | null, badge?: { __typename?: 'OtterspaceBadge', _id: string, badgeId: string, spec: { __typename?: 'OtterspaceBadgeSpec', name: string, description: string, image: string } } | null, profileRole?: { __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType } | null, location?: { __typename?: 'Location', _id: string, locationType?: LocationType | null, name?: string | null, tagline?: string | null, sleepCapacity?: number | null, publishedAt?: any | null, internetSpeedMbps?: number | null, bannerImageIpfsHash?: string | null, description?: string | null, voteCount?: number | null, offerCount?: number | null, caretaker: { __typename?: 'Profile', _id: string, name: string }, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, votes: { __typename?: 'LocationVotePage', data: Array<{ __typename?: 'LocationVote', _id: string, count: number, profile: { __typename?: 'Profile', _id: string, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } } | null> } } | null, offer?: { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } } | null } | null, profile: { __typename?: 'Profile', _id: string, name: string, citizenshipStatus?: CitizenshipStatus | null, roles: Array<{ __typename?: 'ProfileRole', role: ProfileRoleType, level: ProfileRoleLevelType }>, avatar?: { __typename?: 'ProfileAvatar', url: string } | null } };
 
@@ -2549,7 +2549,7 @@ export type GetOffersCountQueryVariables = Exact<{
 
 export type GetOffersCountQuery = { __typename?: 'Query', offersCount: number };
 
-export type OfferDataFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string } } };
+export type OfferDataFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, title?: string | null, description?: string | null, startDate?: any | null, endDate?: any | null, citizenshipRequired?: boolean | null, minimunCabinBalance?: number | null, applicationUrl?: string | null, imageIpfsHash?: string | null, locationType: LocationType, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null, caretaker: { __typename?: 'Profile', _id: string }, lodgingTypes: { __typename?: 'LodgingTypePage', data: Array<{ __typename?: 'LodgingType', _id: string, description: string, quantity: number, price: number } | null> } } };
 
 export type OfferItemFragment = { __typename?: 'Offer', _id: string, offerType?: OfferType | null, locationType: LocationType, title?: string | null, startDate?: any | null, endDate?: any | null, imageIpfsHash?: string | null, minimunCabinBalance?: number | null, citizenshipRequired?: boolean | null, profileRoleConstraints?: Array<{ __typename?: 'ProfileRoleConstraint', profileRole: ProfileRoleType, level: ProfileRoleLevelType }> | null, price?: { __typename?: 'OfferPrice', unit: OfferPriceUnit, amountCents: number } | null, location: { __typename?: 'Location', _id: string, name?: string | null, bannerImageIpfsHash?: string | null, publishedAt?: any | null, address?: { __typename?: 'LocationAddress', locality?: string | null, admininstrativeAreaLevel1Short?: string | null, country?: string | null } | null } };
 
@@ -2740,19 +2740,27 @@ export const CartFragmentDoc = gql`
     offerType
     title
     description
+    startDate
+    endDate
     imageIpfsHash
     location {
       _id
+      name
       bannerImageIpfsHash
+      address {
+        locality
+        admininstrativeAreaLevel1
+        country
+      }
     }
   }
   lodgingType {
-    location {
-      _id
-    }
     description
     quantity
     price
+    location {
+      _id
+    }
   }
   stripePaymentIntentClientSecret
   notes
@@ -2943,14 +2951,6 @@ export const LocationFragmentDoc = gql`
     ${ProfileFragmentDoc}
 ${CaretakerFragmentDoc}
 ${OfferItemFragmentDoc}`;
-export const LodgingTypeFragmentDoc = gql`
-    fragment LodgingType on LodgingType {
-  _id
-  description
-  quantity
-  price
-}
-    `;
 export const LocationVoteFragmentDoc = gql`
     fragment LocationVote on LocationVote {
   _id
@@ -2959,6 +2959,14 @@ export const LocationVoteFragmentDoc = gql`
     name
   }
   count
+}
+    `;
+export const LodgingTypeFragmentDoc = gql`
+    fragment LodgingType on LodgingType {
+  _id
+  description
+  quantity
+  price
 }
     `;
 export const OfferDataFragmentDoc = gql`

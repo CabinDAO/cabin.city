@@ -107,14 +107,16 @@ export const offerViewPropsFromFragment = (
       caretaker: {
         _id: fragment.location.caretaker._id,
       },
-      lodgingTypes: fragment.location.lodgingTypes.data.map((lt) => {
-        return {
-          _id: lt?._id ?? '',
-          description: lt?.description ?? '',
-          quantity: lt?.quantity ?? 0,
-          price: lt?.price ?? 0,
-        }
-      }),
+      lodgingTypes: {
+        data: fragment.location.lodgingTypes.data.map((lt) => {
+          return {
+            _id: lt?._id ?? '',
+            description: lt?.description ?? '',
+            quantity: lt?.quantity ?? 0,
+            price: lt?.price ?? 0,
+          }
+        }),
+      },
     },
     rawFragment: fragment,
   }
