@@ -407,12 +407,18 @@ type LodgingType {
   # TODO: denormalize: number paid for?
 }
 
+enum PaymentStatus {
+  Pending
+  Paid
+}
+
 type Cart {
   profile: Profile!
   offer: Offer!
   lodgingType: LodgingType!
   amount: Int!
   stripePaymentIntentClientSecret: String
+  paymentStatus: PaymentStatus!
   notes: String
 }
 
@@ -478,6 +484,7 @@ input CreateCartInput {
 }
 
 input UpdateCartInput {
-  notes: String
   stripePaymentIntentClientSecret: String
+  paymentStatus: PaymentStatus
+  notes: String
 }

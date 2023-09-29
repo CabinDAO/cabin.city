@@ -1,5 +1,6 @@
 import { query as q } from 'faunadb'
 import { FunctionResource } from 'fauna-gql-upload'
+import { PaymentStatus } from '../../generated/graphql'
 
 const createCart: FunctionResource = {
   name: 'create_cart',
@@ -31,6 +32,7 @@ const createCart: FunctionResource = {
               offer: q.Var('offerRef'),
               lodgingType: q.Var('lodgingTypeRef'),
               amount: q.Var('price'),
+              paymentStatus: PaymentStatus.Pending,
             },
           }),
           q.Abort('Not authorized. You can only edit your own cart')

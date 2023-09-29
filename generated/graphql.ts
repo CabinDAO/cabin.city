@@ -180,6 +180,7 @@ export type CartInput = {
   lodgingType?: InputMaybe<CartLodgingTypeRelation>;
   amount: Scalars['Int'];
   stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
+  paymentStatus: PaymentStatus;
   notes?: InputMaybe<Scalars['String']>;
 };
 
@@ -1000,6 +1001,7 @@ export type PartialUpdateCartInput = {
   lodgingType?: InputMaybe<CartLodgingTypeRelation>;
   amount?: InputMaybe<Scalars['Int']>;
   stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
+  paymentStatus?: InputMaybe<PaymentStatus>;
   notes?: InputMaybe<Scalars['String']>;
 };
 
@@ -1323,8 +1325,9 @@ export type TrackingEventProfileRelation = {
 };
 
 export type UpdateCartInput = {
-  notes?: InputMaybe<Scalars['String']>;
   stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
+  paymentStatus?: InputMaybe<PaymentStatus>;
+  notes?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateOfferInput = {
@@ -1496,6 +1499,7 @@ export enum BlockSyncAttemptStatus {
 
 export type Cart = {
   __typename?: 'Cart';
+  paymentStatus: PaymentStatus;
   /** The document's ID. */
   _id: Scalars['ID'];
   amount: Scalars['Int'];
@@ -1791,6 +1795,11 @@ export type OtterspaceBadgeSpecBadgesArgs = {
   _size?: InputMaybe<Scalars['Int']>;
   _cursor?: InputMaybe<Scalars['String']>;
 };
+
+export enum PaymentStatus {
+  Pending = 'Pending',
+  Paid = 'Paid'
+}
 
 export type Profile = {
   __typename?: 'Profile';

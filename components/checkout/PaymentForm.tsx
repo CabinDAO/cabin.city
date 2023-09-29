@@ -13,7 +13,6 @@ import { Button } from '@/components/core/Button'
 import { Body1 } from '@/components/core/Typography'
 import Link from 'next/link'
 import { CartFragment } from '@/generated/graphql'
-import { body1Styles } from '@/components/core/Typography'
 import {
   CreatePaymentIntentReq,
   CreatePaymentIntentRes,
@@ -187,7 +186,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
         </Body1>
 
         <Button disabled={isLoading || !stripe || !elements}>
-          {isLoading ? <LoadingSpinner /> : 'Book now'}
+          {isLoading || !stripe || !elements ? <LoadingSpinner /> : 'Book now'}
         </Button>
       </form>
     </Container>

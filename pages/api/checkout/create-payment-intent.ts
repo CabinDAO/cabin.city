@@ -9,11 +9,9 @@ import {
   CreatePaymentIntentReq,
   CreatePaymentIntentRes,
 } from '@/components/checkout/types'
-import { Cart, UpdateCartInput } from '@/generated/graphql'
-import { UpdateCart } from '@/fauna/lib/UpdateCart'
 import { query as q } from 'faunadb'
 import { ToRef } from '@/fauna/lib/ToRef'
-import { GetProfileById } from '@/fauna/lib/GetProfileById'
+import { updateCart } from '@/lib/fauna-server/updateCart'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -72,7 +70,7 @@ const handler = async (
 
   try {
     cart.data.stripePaymentIntentClientSecret = paymentIntent.client_secret
-    await _updateCart(cartId, cart.data, cartProfileId)
+    await updateCart(cartId, cart.data, cartProfileId)
   } catch (e: any) {
     const error = e as Error
 
@@ -110,12 +108,6 @@ function _getCartForUser(id: string, externalUserId: string) {
       },
       q.If(q.Var('isMe'), q.Var('cart'), null)
     )
-  )
-}
-
-function _updateCart(id: string, data: UpdateCartInput, currProfileId: string) {
-  return faunaServerClient.query(
-    UpdateCart(id, data, GetProfileById(currProfileId))
   )
 }
 
