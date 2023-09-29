@@ -14,7 +14,6 @@ import { ApolloError } from '@apollo/client'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 import { useProfile } from '@/components/auth/useProfile'
 import { InputTextArea } from '@/components/core/InputTextArea'
-import { MAX_BIO_LENGTH } from '@/components/profile/constants'
 import { Body1, Subline1 } from '@/components/core/Typography'
 import { Checkbox } from '@/components/core/Checkbox'
 
@@ -30,12 +29,19 @@ export const ReservationForm = ({
   const [updateCart] = useUpdateCartMutation()
 
   const [errorMessage, setErrorMessage] = useState('')
-  const [updateProfileInput, setUpdateProfileInput] =
-    useState<UpdateProfileInput>({})
-  const [updateCartInput, setUpdateCartInput] = useState<UpdateCartInput>({})
+  const [updateProfileInput, setUpdateProfileInput] = useState({
+    name: user?.name,
+  } as UpdateProfileInput)
+  const [updateCartInput, setUpdateCartInput] = useState({
+    notes: cart.notes,
+  } as UpdateCartInput)
 
-  const name = updateProfileInput?.name ?? user?.name
-  const notes = updateCartInput?.notes ?? cart?.notes ?? ''
+  if (!user) {
+    return null
+  } else if (updateProfileInput.name === undefined) {
+    // if user doesnt load til later, this can get stuck on empty
+    setUpdateProfileInput({ ...updateProfileInput, name: user.name })
+  }
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateProfileInput((prev) => ({
@@ -104,7 +110,7 @@ export const ReservationForm = ({
         <InputText
           required
           label="Name"
-          value={name}
+          value={updateProfileInput?.name ?? ''}
           onChange={handleNameChange}
         />
       </InputGroup>
@@ -113,7 +119,7 @@ export const ReservationForm = ({
           rows={3}
           label="Notes"
           placeholder={'Dietary restrictions, housing preferences, etc.'}
-          value={notes}
+          value={updateCartInput?.notes ?? ''}
           onChange={handleNotesChange}
         />
       </InputGroup>

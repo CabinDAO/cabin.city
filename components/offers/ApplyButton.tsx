@@ -38,7 +38,6 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
             profileId: user._id,
             offerId: offer._id,
             lodgingTypeId: lodgingType._id,
-            price: lodgingType.price,
           },
         },
       }).then((res) => {

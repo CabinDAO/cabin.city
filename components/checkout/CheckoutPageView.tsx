@@ -5,7 +5,7 @@ import { Body1, Caption, H2, H3, H4, H5 } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
 import { TwoColumnLayout } from '@/components/layouts/TwoColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
-import { CheckoutForm } from '@/components/checkout/CheckoutForm'
+import { PaymentForm } from '@/components/checkout/PaymentForm'
 import { ReservationForm } from '@/components/checkout/ReservationForm'
 import { Button } from '@/components/core/Button'
 import { useGetCartForUser } from '@/components/checkout/useGetCartForUser'
@@ -17,6 +17,8 @@ import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatRange } from '@/utils/display-utils'
 import { parseISO } from 'date-fns'
 import Icon from '@/components/core/Icon'
+import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { usePrivy } from '@privy-io/react-auth'
 
 type StepProps = {
   onComplete: () => void
@@ -47,7 +49,7 @@ const StepPayment = ({ cart }: StepProps) => {
     <>
       <H2>Payment</H2>
       <FormContainer>
-        <CheckoutForm cart={cart} />
+        <PaymentForm cart={cart} />
       </FormContainer>
     </>
   )
@@ -59,6 +61,8 @@ const steps: Step[] = [StepDetails, StepPolicies, StepPayment]
 
 const CheckoutPageView = () => {
   const router = useRouter()
+  // const { confirmLoggedIn } = useConfirmLoggedIn()
+  // const { getAccessToken } = usePrivy()
   const { user } = useProfile()
 
   const { cartId } = router.query

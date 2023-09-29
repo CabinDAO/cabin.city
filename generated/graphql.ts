@@ -217,7 +217,6 @@ export type CreateCartInput = {
   profileId: Scalars['ID'];
   offerId: Scalars['ID'];
   lodgingTypeId: Scalars['ID'];
-  price: Scalars['Int'];
 };
 
 export type CreateOfferInput = {
@@ -1325,6 +1324,7 @@ export type TrackingEventProfileRelation = {
 
 export type UpdateCartInput = {
   notes?: InputMaybe<Scalars['String']>;
+  stripePaymentIntentClientSecret?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateOfferInput = {

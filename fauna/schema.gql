@@ -475,9 +475,9 @@ input CreateCartInput {
   profileId: ID!
   offerId: ID!
   lodgingTypeId: ID!
-  price: Int!
 }
 
 input UpdateCartInput {
   notes: String
+  stripePaymentIntentClientSecret: String
 }

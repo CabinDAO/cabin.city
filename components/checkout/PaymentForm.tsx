@@ -9,19 +9,24 @@ import styled from 'styled-components'
 import React, { FormEvent } from 'react'
 import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
-import { StripeElementsOptionsClientSecret } from '@stripe/stripe-js/types/stripe-js/elements-group'
 import { Button } from '@/components/core/Button'
 import { Body1 } from '@/components/core/Typography'
 import Link from 'next/link'
-import { CreatePaymentIntentBody } from '@/pages/api/create-payment-intent'
 import { CartFragment } from '@/generated/graphql'
+import { body1Styles } from '@/components/core/Typography'
+import {
+  CreatePaymentIntentReq,
+  CreatePaymentIntentRes,
+} from '@/components/checkout/types'
+import { usePrivy } from '@privy-io/react-auth'
+import { useError } from '@/components/hooks/useError'
 
 // Call this outside the render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''
 )
 
-export const CheckoutForm = ({ cart }: { cart: CartFragment }) => {
+export const PaymentForm = ({ cart }: { cart: CartFragment }) => {
   // const [clientSecret, setClientSecret] = React.useState('')
 
   // React.useEffect(() => {
@@ -29,7 +34,7 @@ export const CheckoutForm = ({ cart }: { cart: CartFragment }) => {
   //
   //   const reqBody: CreatePaymentIntentBody = props
   //
-  //   fetch('/api/create-payment-intent', {
+  //   fetch('/api/checkout/create-payment-intent', {
   //     method: 'POST',
   //     headers: { 'Content-Type': 'application/json' },
   //     body: JSON.stringify(reqBody),
@@ -52,50 +57,52 @@ export const CheckoutForm = ({ cart }: { cart: CartFragment }) => {
     <>
       {/*{clientSecret && (*/}
       <Elements stripe={stripePromise} options={options}>
-        <StripeForm />
+        <StripeForm cart={cart} />
       </Elements>
       {/*)}*/}
     </>
   )
 }
 
-const StripeForm = () => {
+const StripeForm = ({ cart }: { cart: CartFragment }) => {
   const stripe = useStripe()
   const elements = useElements()
+  const { showError } = useError()
 
-  const [message, setMessage] = React.useState('')
+  const { getAccessToken } = usePrivy()
+
   const [isLoading, setIsLoading] = React.useState(false)
 
-  React.useEffect(() => {
-    if (!stripe) {
-      return
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret'
-    )
-
-    if (!clientSecret) {
-      return
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent?.status) {
-        case 'succeeded':
-          setMessage('Payment succeeded!')
-          break
-        case 'processing':
-          setMessage('Your payment is processing.')
-          break
-        case 'requires_payment_method':
-          setMessage('Your payment was not successful, please try again.')
-          break
-        default:
-          setMessage('Something went wrong.')
-          break
-      }
-    })
-  }, [stripe])
+  // React.useEffect(() => {
+  //   if (!stripe) {
+  //     return
+  //   }
+  //
+  //   const clientSecret = new URLSearchParams(window.location.search).get(
+  //     'payment_intent_client_secret'
+  //   )
+  //
+  //   if (!clientSecret) {
+  //     return
+  //   }
+  //
+  //   stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+  //     switch (paymentIntent?.status) {
+  //       case 'succeeded':
+  //         setMessage('Payment succeeded!')
+  //         break
+  //       case 'processing':
+  //         setMessage('Your payment is processing.')
+  //         break
+  //       case 'requires_payment_method':
+  //         setMessage('Your payment was not successful, please try again.')
+  //         break
+  //       default:
+  //         setMessage('Something went wrong.')
+  //         break
+  //     }
+  //   })
+  // }, [stripe])
 
   const handleSubmit = async (event: FormEvent) => {
     // We don't want to let default form submission happen here,
@@ -110,13 +117,39 @@ const StripeForm = () => {
 
     setIsLoading(true)
 
-    // create the Trip in our system
+    const { error: submitError } = await elements.submit()
+    if (submitError) {
+      console.log('stripe elements submit error', submitError)
+      showError(submitError.message ?? 'An unexpected stripe error occurred.')
+      setIsLoading(false)
+      return
+    }
+
+    const token = await getAccessToken()
+    const intentRes = await fetch('/api/checkout/create-payment-intent', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        cartId: cart._id,
+      } as CreatePaymentIntentReq),
+    })
+
+    if (!intentRes.ok) {
+      showError('An unexpected error occurred while creating payment intent.')
+      setIsLoading(false)
+      return
+    }
+
+    const { clientSecret } = (await intentRes.json()) as CreatePaymentIntentRes
 
     const { error } = await stripe.confirmPayment({
-      //`Elements` instance that was used to create the Payment Element
       elements,
+      clientSecret,
       confirmParams: {
-        return_url: appDomainWithProto + '/debug',
+        return_url: appDomainWithProto + '/checkout/success',
       },
     })
 
@@ -129,11 +162,11 @@ const StripeForm = () => {
     console.log(error)
     // Show error to your customer (for example, payment details incomplete)
     if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(
+      showError(
         error.message ?? 'An unexpected card or validation error occurred.'
       )
     } else {
-      setMessage('An unexpected error occurred.')
+      showError('An unexpected error occurred.')
     }
 
     setIsLoading(false)
@@ -156,8 +189,6 @@ const StripeForm = () => {
         <Button disabled={isLoading || !stripe || !elements}>
           {isLoading ? <LoadingSpinner /> : 'Book now'}
         </Button>
-
-        {message && <Body1>{message}</Body1>}
       </form>
     </Container>
   )

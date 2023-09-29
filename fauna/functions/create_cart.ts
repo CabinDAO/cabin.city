@@ -11,17 +11,21 @@ const createCart: FunctionResource = {
           profileId: q.Select(['profileId'], q.Var('input')),
           offerId: q.Select(['offerId'], q.Var('input')),
           lodgingTypeId: q.Select(['lodgingTypeId'], q.Var('input')),
-          price: q.Select(['price'], q.Var('input')),
 
           profileRef: q.Ref(q.Collection('Profile'), q.Var('profileId')),
           offerRef: q.Ref(q.Collection('Offer'), q.Var('offerId')),
-          offer: q.Get(q.Var('offerRef')),
           lodgingTypeRef: q.Ref(
             q.Collection('LodgingType'),
             q.Var('lodgingTypeId')
           ),
-          lodgingType: q.Get(q.Var('lodgingTypeRef')),
-          cartRef: q.Create(q.Collection('Cart'), {
+
+          isMe: q.Equals(q.CurrentIdentity(), q.Var('profileRef')),
+
+          price: q.Select(['data', 'price'], q.Get(q.Var('lodgingTypeRef'))),
+        },
+        q.If(
+          q.Var('isMe'),
+          q.Create(q.Collection('Cart'), {
             data: {
               profile: q.Var('profileRef'),
               offer: q.Var('offerRef'),
@@ -29,8 +33,8 @@ const createCart: FunctionResource = {
               amount: q.Var('price'),
             },
           }),
-        },
-        q.Var('cartRef')
+          q.Abort('Not authorized. You can only edit your own cart')
+        )
       )
     )
   ),
