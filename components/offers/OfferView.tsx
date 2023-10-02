@@ -17,7 +17,6 @@ import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import {
-  OfferPrice,
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,

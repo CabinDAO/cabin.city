@@ -55,7 +55,7 @@ const handler = async (
   const cartProfileId = cart.data.profile.value.id
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: cart.data.amount,
+    amount: cart.data.amountCents,
     currency: 'usd',
     statement_descriptor: 'cabin.city',
     metadata: {

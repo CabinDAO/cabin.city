@@ -30,6 +30,7 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
     if (!user) return
 
     try {
+      // TODO: selected lodging type should be passed in when we have more than one of them
       const lodgingType = offer.location.lodgingTypes.data[0]
 
       await createCart({

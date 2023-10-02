@@ -1,5 +1,8 @@
 fragment Cart on Cart {
     _id
+    amountCents
+    stripePaymentIntentClientSecret
+    notes
     profile {
         _id
     }
@@ -25,11 +28,9 @@ fragment Cart on Cart {
     lodgingType {
         description
         quantity
-        price
+        priceCents
         location {
             _id
         }
     }
-    stripePaymentIntentClientSecret
-    notes
 }

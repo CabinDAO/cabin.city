@@ -113,7 +113,7 @@ export const offerViewPropsFromFragment = (
             _id: lt?._id ?? '',
             description: lt?.description ?? '',
             quantity: lt?.quantity ?? 0,
-            price: lt?.price ?? 0,
+            priceCents: lt?.priceCents ?? 0,
           }
         }),
       },

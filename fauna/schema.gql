@@ -403,7 +403,7 @@ type LodgingType {
   location: Location! @relation
   description: String!
   quantity: Int!
-  price: Int!
+  priceCents: Int!
   # TODO: denormalize: number paid for?
 }
 
@@ -416,7 +416,7 @@ type Cart {
   profile: Profile!
   offer: Offer!
   lodgingType: LodgingType!
-  amount: Int!
+  amountCents: Int!
   stripePaymentIntentClientSecret: String
   paymentStatus: PaymentStatus!
   notes: String

@@ -22,7 +22,10 @@ const createCart: FunctionResource = {
 
           isMe: q.Equals(q.CurrentIdentity(), q.Var('profileRef')),
 
-          price: q.Select(['data', 'price'], q.Get(q.Var('lodgingTypeRef'))),
+          priceCents: q.Select(
+            ['data', 'priceCents'],
+            q.Get(q.Var('lodgingTypeRef'))
+          ),
         },
         q.If(
           q.Var('isMe'),
@@ -31,7 +34,7 @@ const createCart: FunctionResource = {
               profile: q.Var('profileRef'),
               offer: q.Var('offerRef'),
               lodgingType: q.Var('lodgingTypeRef'),
-              amount: q.Var('price'),
+              amountCents: q.Var('priceCents'),
               paymentStatus: PaymentStatus.Pending,
             },
           }),

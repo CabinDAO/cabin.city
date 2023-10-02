@@ -45,7 +45,7 @@ export const PaymentForm = ({ cart }: { cart: CartFragment }) => {
   const options: StripeElementsOptionsMode = {
     // clientSecret: clientSecret,
     mode: 'payment',
-    amount: cart.lodgingType.price,
+    amount: cart.amountCents,
     currency: 'usd',
     appearance: {
       theme: 'stripe',
