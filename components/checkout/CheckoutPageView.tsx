@@ -123,7 +123,7 @@ const CheckoutPageView = () => {
           <H5>Booking summary</H5>
           <Row>
             <Caption emphasized>{lodgingType.description}</Caption>
-            <Caption emphasized>${lodgingType.priceCents}</Caption>
+            <Caption emphasized>${lodgingType.priceCents / 100}</Caption>
           </Row>
           <Row>
             <Caption emphasized>
@@ -138,7 +138,7 @@ const CheckoutPageView = () => {
           </Row>
           <Row className={'total'}>
             <H4>Total</H4>
-            <H4>${lodgingType.priceCents}</H4>
+            <H4>${lodgingType.priceCents / 100}</H4>
           </Row>
         </BookingSummary>
       </RightSide>

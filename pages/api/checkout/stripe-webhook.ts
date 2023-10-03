@@ -106,7 +106,8 @@ const _getCartByIntentSecret = async (
     return null
   }
 
-  return faunaServerClient.query(
+  // TODO: use a proper type here
+  return faunaServerClient.query<any>(
     q.Get(
       q.Match(
         q.Index('cart_by_stripe_client_secret'),

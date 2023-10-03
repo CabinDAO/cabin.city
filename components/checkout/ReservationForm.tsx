@@ -31,6 +31,7 @@ export const ReservationForm = ({
   const [errorMessage, setErrorMessage] = useState('')
   const [updateProfileInput, setUpdateProfileInput] = useState({
     name: user?.name,
+    location: user?.location,
   } as UpdateProfileInput)
   const [updateCartInput, setUpdateCartInput] = useState({
     notes: cart.notes,
@@ -39,14 +40,25 @@ export const ReservationForm = ({
   if (!user) {
     return null
   } else if (updateProfileInput.name === undefined) {
-    // if user doesnt load til later, this can get stuck on empty
-    setUpdateProfileInput({ ...updateProfileInput, name: user.name })
+    // if user doesn't load til later, this can get stuck on empty
+    setUpdateProfileInput({
+      ...updateProfileInput,
+      name: user.name,
+      location: user.location,
+    })
   }
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUpdateProfileInput((prev) => ({
       ...prev,
       ...{ ...updateProfileInput, name: e.target.value },
+    }))
+  }
+
+  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUpdateProfileInput((prev) => ({
+      ...prev,
+      ...{ ...updateProfileInput, location: e.target.value },
     }))
   }
 
@@ -114,6 +126,13 @@ export const ReservationForm = ({
           onChange={handleNameChange}
         />
       </InputGroup>
+      <InputText
+        required
+        label="Location"
+        value={updateProfileInput?.location ?? ''}
+        onChange={handleLocationChange}
+      />
+      <InputGroup></InputGroup>
       <InputGroup>
         <InputTextArea
           rows={3}
