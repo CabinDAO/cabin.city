@@ -404,12 +404,13 @@ type LodgingType {
   description: String!
   quantity: Int!
   priceCents: Int!
-  # TODO: denormalize: number paid for?
+  spotsTaken: Int! # denormalized for easy querying
 }
 
 enum PaymentStatus {
   Pending
   Paid
+  Error
 }
 
 type Cart {

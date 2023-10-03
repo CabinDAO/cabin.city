@@ -2,7 +2,7 @@ import theme from '@/styles/theme'
 import { motion } from 'framer-motion'
 import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
-import { MouseEventHandler } from 'react'
+import React, { MouseEventHandler } from 'react'
 
 type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 'link-slim'
 
@@ -109,6 +109,7 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
 
 export interface ButtonProps {
   children: React.ReactNode
+  className?: string
   variant?: ButtonVariant
   onClick?: MouseEventHandler<HTMLButtonElement>
   startAdornment?: React.ReactNode
@@ -120,6 +121,7 @@ export interface ButtonProps {
 
 export const Button = ({
   children,
+  className,
   variant = 'primary',
   isActive = false,
   isFullWidth,
@@ -186,8 +188,9 @@ export const Button = ({
 
   return (
     <StyledButton
-      full={isFullWidth ? 'true' : 'false'}
       key={variant + isActive}
+      className={className}
+      full={isFullWidth ? 'true' : 'false'}
       initial={initial}
       whileTap={{
         ...tapAnimation,

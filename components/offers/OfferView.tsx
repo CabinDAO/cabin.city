@@ -3,13 +3,13 @@ import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
-  Body1,
   body1Styles,
   Caption,
-  H2,
+  H1,
   H3,
+  H4,
+  H5,
   Subline1,
-  Subline2,
 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { roleConstraintInfoFromType } from '@/utils/roles'
@@ -17,18 +17,21 @@ import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import {
+  OfferPrice,
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,
 } from '@/generated/graphql'
 import { isNotNull } from '@/lib/data'
-import { formatRange } from '@/utils/display-utils'
+import { daysBetween, formatRange } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { ApplyButton } from '@/components/offers/ApplyButton'
 import Icon from '@/components/core/Icon'
 import { Price } from '@/components/offers/Price'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { MEMBERSHIP_PRICE_DOLLARS } from '@/components/checkout/constants'
 
 const EMPTY = '—'
 
@@ -129,31 +132,71 @@ export const OfferView = ({
             <OfferDetails>
               <OfferDetailsHeader>
                 <OfferDetailsOverview>
-                  <H2>{offerInfo?.name ?? EMPTY}</H2>
-                  <LocationSubline2>
-                    at{' '}
-                    <a href={`/location/${location._id}`}>
-                      <u>{location.name}</u>
-                    </a>{' '}
+                  <H5>{formatRange(startDate, endDate)}</H5>
+                  <H1>{offerInfo?.name ?? EMPTY}</H1>
+                  <Location>
+                    {offerType == OfferType.CabinWeek && offer.price && (
+                      <>
+                        {daysBetween(startDate, endDate)} nights {''}
+                      </>
+                    )}
                     in {location.shortAddress}
-                  </LocationSubline2>
+                  </Location>
+                  <Price price={offer.price as OfferPrice} />
                 </OfferDetailsOverview>
 
                 {offerType == OfferType.CabinWeek && offer.price && (
                   <OfferCabinWeekDetailsSection>
-                    <Subline1>Dates</Subline1>
-                    <DateRange>
-                      <Icon name={'date'} size={2} />
-                      {formatRange(startDate, endDate)}
-                    </DateRange>
-                    <Subline1>Select One</Subline1>
-                    <Price price={offer.price} />
+                    <Subline1>Accomodations</Subline1>
+                    {offer.location.lodgingTypes.data.map((lt) => {
+                      return (
+                        <LodgingType key={lt._id}>
+                          <LodgingTypeTop>
+                            <Subline1>{lt.description}</Subline1>
+                            {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
+                          </LodgingTypeTop>
+                          <Caption>
+                            {Math.max(0, lt.quantity - lt.spotsTaken)} available
+                          </Caption>
+                        </LodgingType>
+                      )
+                    })}
                   </OfferCabinWeekDetailsSection>
                 )}
 
                 <Actions>
                   <ApplyButton offer={offer} />
+                  <Caption emphasized>You won’t be charged yet</Caption>
                 </Actions>
+
+                <CostBreakdown>
+                  <CostLine>
+                    <Caption emphasized>
+                      {daysBetween(startDate, endDate)} nights
+                    </Caption>
+                    <Caption emphasized>
+                      ${(offer.price?.amountCents ?? 0) / 100}
+                    </Caption>
+                  </CostLine>
+                  <CostLine>
+                    <Caption emphasized>
+                      1yr Cabin Citizenship{' '}
+                      <Icon name={'info'} size={1.2} inline />
+                    </Caption>
+                    <Caption emphasized>${MEMBERSHIP_PRICE_DOLLARS}</Caption>
+                  </CostLine>
+                  <CostLine>
+                    <Caption emphasized>Cabin Week Discount</Caption>
+                    <Caption emphasized $color={'green700'}>
+                      -${MEMBERSHIP_PRICE_DOLLARS}
+                    </Caption>
+                  </CostLine>
+                  <HorizontalDivider />
+                  <CostLine>
+                    <H4>Total</H4>
+                    <H4>${(offer.price?.amountCents ?? 0) / 100}</H4>
+                  </CostLine>
+                </CostBreakdown>
               </OfferDetailsHeader>
 
               {offerType !== OfferType.CabinWeek && (
@@ -288,19 +331,12 @@ const OfferDetailsHeader = styled.div`
   }
 `
 
-const DateRange = styled(Body1)`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  gap: 0.8rem;
-  border: solid 1px ${({ theme }) => theme.colors.green900};
-  padding: 1.4rem;
-`
-
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.6rem;
+  width: 100%;
 `
 
 const OfferDetailsOverview = styled.div`
@@ -350,6 +386,43 @@ const OfferDetailsPricing = styled.div`
   }
 `
 
-const LocationSubline2 = styled(Subline2)`
+const Location = styled(Caption)`
   line-height: 1.6;
+  margin-bottom: 1rem;
+`
+
+const LodgingType = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 0.3rem;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  border: solid 1px rgba(29, 43, 42, 0.12); // green900 at 12% opacity
+`
+
+const LodgingTypeTop = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`
+
+const CostBreakdown = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 2.4rem;
+  margin-top: 2.4rem;
+`
+
+const CostLine = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `

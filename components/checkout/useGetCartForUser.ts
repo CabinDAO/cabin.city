@@ -1,22 +1,37 @@
-import { useGetCartQuery } from '@/generated/graphql'
+import {
+  CartFragment,
+  GetCartQuery,
+  GetCartQueryVariables,
+  useGetCartQuery,
+} from '@/generated/graphql'
+import { ApolloQueryResult } from '@apollo/client/core/types'
+
+interface r {
+  cart: CartFragment | null
+  refetch: (
+    variables?: Partial<GetCartQueryVariables>
+  ) => Promise<ApolloQueryResult<GetCartQuery>>
+  startPolling: (pollInterval: number) => void
+  stopPolling: () => void
+}
 
 export const useGetCartForUser = (
   cartId: string,
   userId: string | undefined
-) => {
-  // const { user } = useProfile()
-  const { data } = useGetCartQuery({
+): r => {
+  console.log('getCartFOrUser', cartId, userId)
+  const { data, refetch, startPolling, stopPolling } = useGetCartQuery({
     variables: {
       id: cartId,
     },
-    skip: !cartId,
+    skip: !cartId || !userId || cartId == 'undefined',
   })
 
   const cart = data?.findCartByID ?? null
 
   if (!cart || !userId || cart?.profile._id != userId) {
-    return null
+    return { cart: null, refetch, startPolling, stopPolling }
   }
 
-  return cart
+  return { cart, refetch, startPolling, stopPolling }
 }

@@ -170,3 +170,11 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
     )}`
   }
 }
+
+export const daysBetween = (startDate?: Date | null, endDate?: Date | null) => {
+  if (!startDate || !endDate) return 0
+
+  return Math.floor(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+  )
+}

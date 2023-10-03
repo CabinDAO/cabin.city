@@ -135,7 +135,7 @@ export const ReservationForm = ({
       <InputGroup></InputGroup>
       <InputGroup>
         <InputTextArea
-          rows={3}
+          rows={4}
           label="Notes"
           placeholder={'Dietary restrictions, housing preferences, etc.'}
           value={updateCartInput?.notes ?? ''}

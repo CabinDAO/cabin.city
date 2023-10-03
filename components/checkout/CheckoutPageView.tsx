@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Body1, Caption, H2, H3, H4, H5 } from '@/components/core/Typography'
+import { Caption, H2, H3, H4, H5 } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
 import { TwoColumnLayout } from '@/components/layouts/TwoColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -10,15 +10,13 @@ import { ReservationForm } from '@/components/checkout/ReservationForm'
 import { Button } from '@/components/core/Button'
 import { useGetCartForUser } from '@/components/checkout/useGetCartForUser'
 import { useProfile } from '@/components/auth/useProfile'
-import { CartFragment } from '@/generated/graphql'
+import { CartFragment, PaymentStatus } from '@/generated/graphql'
 import Image from 'next/image'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatRange } from '@/utils/display-utils'
 import { parseISO } from 'date-fns'
-import Icon from '@/components/core/Icon'
-import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
-import { usePrivy } from '@privy-io/react-auth'
+import { MEMBERSHIP_PRICE_DOLLARS } from '@/components/checkout/constants'
 
 type StepProps = {
   onComplete: () => void
@@ -61,16 +59,19 @@ const steps: Step[] = [StepDetails, StepPolicies, StepPayment]
 
 const CheckoutPageView = () => {
   const router = useRouter()
-  // const { confirmLoggedIn } = useConfirmLoggedIn()
-  // const { getAccessToken } = usePrivy()
   const { user } = useProfile()
 
   const { cartId } = router.query
-  const cart = useGetCartForUser(cartId as string, user?._id)
+  const { cart } = useGetCartForUser(cartId as string, user?._id)
 
   const [currentStep, setCurrentStep] = useState(0)
 
   if (!user || !cart) {
+    return null
+  }
+
+  if (cart.paymentStatus == PaymentStatus.Paid) {
+    router.push(`/checkout/${cart._id}/confirmation`).then()
     return null
   }
 
@@ -130,11 +131,11 @@ const CheckoutPageView = () => {
               1 yr cabin citizenship
               {/*<Icon name={'info'} size={1.6} />*/}
             </Caption>
-            <Caption emphasized>$399</Caption>
+            <Caption emphasized>${MEMBERSHIP_PRICE_DOLLARS}</Caption>
           </Row>
           <Row>
             <Caption emphasized>Discount</Caption>
-            <Caption emphasized>-$399</Caption>
+            <Caption emphasized>-${MEMBERSHIP_PRICE_DOLLARS}</Caption>
           </Row>
           <Row className={'total'}>
             <H4>Total</H4>

@@ -75,9 +75,9 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
   }
 
   return (
-    <AuthenticatedLink onClick={handleReserveClick}>
+    <StyledLink onClick={handleReserveClick}>
       <BuyButton>Reserve</BuyButton>
-    </AuthenticatedLink>
+    </StyledLink>
   )
 }
 
@@ -118,12 +118,8 @@ const isEligible = (user: MeFragment, offer: OfferDataFragment) => {
 
 const BuyButton = styled(Button)`
   width: 100%;
+`
 
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 18.9rem;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    width: 100%;
-  }
+const StyledLink = styled(AuthenticatedLink)`
+  width: 100%;
 `

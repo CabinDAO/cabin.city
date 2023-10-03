@@ -3,4 +3,5 @@ fragment LodgingType on LodgingType {
     description
     quantity
     priceCents
+    spotsTaken
 }

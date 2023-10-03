@@ -114,6 +114,7 @@ export const offerViewPropsFromFragment = (
             description: lt?.description ?? '',
             quantity: lt?.quantity ?? 0,
             priceCents: lt?.priceCents ?? 0,
+            spotsTaken: lt?.spotsTaken ?? 0,
           }
         }),
       },

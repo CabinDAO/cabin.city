@@ -44,6 +44,7 @@ export interface OfferViewProps {
         description: string
         quantity: number
         priceCents: number
+        spotsTaken: number
       }[]
     }
   }

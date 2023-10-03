@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream'
 import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
 import { query as q } from 'faunadb'
-import { updateCart } from '@/lib/fauna-server/updateCart'
+import { updateCart } from '@/lib/fauna-server/checkout'
 import { PaymentStatus } from '@/generated/graphql'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
@@ -60,7 +60,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   switch (event.type) {
     case 'payment_intent.succeeded':
-      await handlePaymentIntentSucceeded(res, event.data.object)
+      await handlePaymentIntentNewStatus(
+        res,
+        event.data.object,
+        PaymentStatus.Paid
+      )
+      break
+    case 'payment_intent.payment_failed':
+      console.log(event)
+      await handlePaymentIntentNewStatus(
+        res,
+        event.data.object,
+        PaymentStatus.Error
+      )
       break
     default:
       console.log(`Got unhandled stripe event of type ${event.type}`)
@@ -73,9 +85,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 }
 
-const handlePaymentIntentSucceeded = async (
+const handlePaymentIntentNewStatus = async (
   res: NextApiResponse,
-  paymentIntent: Stripe.PaymentIntent
+  paymentIntent: Stripe.PaymentIntent,
+  status: PaymentStatus
 ) => {
   const cart = await _getCartByIntentSecret(paymentIntent.client_secret ?? '')
 
@@ -88,7 +101,7 @@ const handlePaymentIntentSucceeded = async (
   try {
     await updateCart(
       cart.ref.value.id,
-      { paymentStatus: PaymentStatus.Paid },
+      { paymentStatus: status },
       cart.data.profile.value.id
     )
   } catch (e: any) {

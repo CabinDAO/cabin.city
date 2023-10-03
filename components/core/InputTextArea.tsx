@@ -52,6 +52,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   onChange?: (_e: ChangeEvent<HTMLTextAreaElement>) => void
   textSize?: InputTextSize
   helperTextPosition?: HelperTextPosition
+  rows?: number
 }
 
 export const InputTextArea = ({
@@ -69,6 +70,7 @@ export const InputTextArea = ({
   textSize = 'medium',
   onChange,
   helperTextPosition = 'top',
+  rows,
   ...props
 }: InputTextProps) => {
   const inputRef = useRef() as MutableRefObject<HTMLTextAreaElement>
@@ -101,6 +103,7 @@ export const InputTextArea = ({
         placeholder={placeholder}
         value={value}
         disabled={disabled}
+        rows={rows}
         {...props}
       />
     </InputBase>

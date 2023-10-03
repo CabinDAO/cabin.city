@@ -7,6 +7,7 @@ import accountBoxSvg from './svg/account-box.svg'
 import accountGroupSvg from './svg/account-group.svg'
 import accountGroupGreenSvg from './svg/account-group-green.svg'
 import alertSvg from './svg/alert.svg'
+import backpackSvg from './svg/backpack.svg'
 import backpackGreenSvg from './svg/backpack-green.svg'
 import backArrowSvg from './svg/back-arrow.svg'
 import builderSvg from './svg/builder.svg'
@@ -29,6 +30,7 @@ import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
 import draftProposalSvg from './svg/draft-proposal.svg'
+import exclamationMarkSvg from './svg/exclamation-mark.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
 import formatBold from './svg/format-bold.svg'
@@ -95,6 +97,7 @@ export const IconSvgs = {
   'account-group': accountGroupSvg,
   'account-group-green': accountGroupGreenSvg,
   alert: alertSvg,
+  backpack: backpackSvg,
   'backpack-green': backpackGreenSvg,
   'back-arrow': backArrowSvg,
   builder: builderSvg,
@@ -117,6 +120,7 @@ export const IconSvgs = {
   dashboard: dashboardSvg,
   date: dateSvg,
   'draft-proposal': draftProposalSvg,
+  'exclamation-mark': exclamationMarkSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
   'format-bold': formatBold,
@@ -185,10 +189,11 @@ interface IconWrapProps {
   $size?: number
   $color?: ColorName | undefined
   className?: string
+  $inline?: boolean
 }
 
 const IconWrap = styled.span<IconWrapProps>`
-  display: flex;
+  display: ${({ $inline }) => ($inline ? 'inline-block' : 'flex')};
   align-items: center;
   justify-content: center;
   width: 10rem;
@@ -219,9 +224,10 @@ interface IconProps extends HTMLAttributes<HTMLSpanElement> {
   size?: number
   color?: ColorName | undefined
   className?: string
+  inline?: boolean
 }
 
-const Icon = ({ name, size, color, style, className }: IconProps) => {
+const Icon = ({ name, size, color, style, className, inline }: IconProps) => {
   const IconComponent = IconSvgs[name]
   if (!IconComponent) {
     throw new Error(`There is no icon named: ${name}.`)
@@ -234,6 +240,7 @@ const Icon = ({ name, size, color, style, className }: IconProps) => {
       style={style}
       $color={color}
       $size={size}
+      $inline={inline}
     >
       <IconComponent />
     </IconWrap>

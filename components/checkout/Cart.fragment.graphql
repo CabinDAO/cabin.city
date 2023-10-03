@@ -1,6 +1,7 @@
 fragment Cart on Cart {
     _id
     amountCents
+    paymentStatus
     stripePaymentIntentClientSecret
     notes
     profile {
@@ -29,6 +30,7 @@ fragment Cart on Cart {
         description
         quantity
         priceCents
+        spotsTaken
         location {
             _id
         }

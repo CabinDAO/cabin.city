@@ -3,6 +3,7 @@ import {
   Layout,
   loadStripe,
   StripeElementsOptionsMode,
+  StripePaymentElement,
 } from '@stripe/stripe-js'
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js'
 import styled from 'styled-components'
@@ -70,7 +71,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
 
   const { getAccessToken } = usePrivy()
 
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
 
   // React.useEffect(() => {
   //   if (!stripe) {
@@ -148,7 +149,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
       elements,
       clientSecret,
       confirmParams: {
-        return_url: appDomainWithProto + '/checkout/success',
+        return_url: appDomainWithProto + `/checkout/${cart._id}/confirmation`,
       },
     })
 
@@ -171,6 +172,10 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
     setIsLoading(false)
   }
 
+  const handleOnReady = async (element: StripePaymentElement) => {
+    setIsLoading(false)
+  }
+
   const paymentElementOptions: { layout: Layout } = {
     layout: 'tabs',
   }
@@ -178,7 +183,10 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
   return (
     <Container>
       <form onSubmit={handleSubmit}>
-        <PaymentElement options={paymentElementOptions} />
+        <PaymentElement
+          options={paymentElementOptions}
+          onReady={handleOnReady}
+        />
 
         <Body1>
           I have read and agree to Cabin’s{' '}

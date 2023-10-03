@@ -4,14 +4,12 @@ import withAuth from '@/utils/api/withAuth'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { ironOptions } from '@/lib/next-server/iron-options'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
-import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
 import {
   CreatePaymentIntentReq,
   CreatePaymentIntentRes,
 } from '@/components/checkout/types'
-import { query as q } from 'faunadb'
-import { ToRef } from '@/fauna/lib/ToRef'
-import { updateCart } from '@/lib/fauna-server/updateCart'
+import { updateCart, getCartForUser } from '@/lib/fauna-server/checkout'
+import { PaymentStatus } from '@/generated/graphql'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -41,7 +39,7 @@ const handler = async (
 
   let cart: any
   try {
-    cart = await _getCartForUser(body.cartId, externalUserId)
+    cart = await getCartForUser(body.cartId, externalUserId)
     if (!cart) {
       res.status(400).end({ error: 'Cart not found' })
       return
@@ -69,6 +67,7 @@ const handler = async (
   }
 
   try {
+    cart.data.paymentStatus = PaymentStatus.Pending // always reset to pending in case it errored in the past
     cart.data.stripePaymentIntentClientSecret = paymentIntent.client_secret
     await updateCart(cartId, cart.data, cartProfileId)
   } catch (e: any) {
@@ -88,27 +87,6 @@ const handler = async (
   res.send({
     clientSecret: paymentIntent.client_secret,
   } as CreatePaymentIntentRes)
-}
-
-function _getCartForUser(id: string, externalUserId: string) {
-  return faunaServerClient.query(
-    q.Let(
-      {
-        cartRef: q.Ref(q.Collection('Cart'), id),
-        cart: q.Get(q.Var('cartRef')),
-        currIdRef: ToRef(q.Call('profile_by_external_user_id', externalUserId)),
-        isMe: q.If(
-          q.IsNull(q.Var('currIdRef')),
-          false,
-          q.Equals(
-            q.Var('currIdRef'),
-            q.Select(['data', 'profile'], q.Var('cart'))
-          )
-        ),
-      },
-      q.If(q.Var('isMe'), q.Var('cart'), null)
-    )
-  )
 }
 
 export default withIronSessionApiRoute(withAuth(handler), ironOptions)
