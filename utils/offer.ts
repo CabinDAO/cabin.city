@@ -95,12 +95,14 @@ export const offerViewPropsFromFragment = (
       fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
       true
     ),
+    mediaItems: fragment.mediaItems,
     citizenshipRequired: fragment.citizenshipRequired,
     minimunCabinBalance: fragment.minimunCabinBalance,
     location: {
       _id: fragment.location._id,
-      name: fragment.location.name,
+      name: fragment.location.name ?? '',
       shortAddress: formatShortAddress(fragment.location.address),
+      bannerImageIpfsHash: fragment.location.bannerImageIpfsHash ?? '',
       publishedAt: fragment.location.publishedAt
         ? parseISO(fragment.location.publishedAt)
         : null,

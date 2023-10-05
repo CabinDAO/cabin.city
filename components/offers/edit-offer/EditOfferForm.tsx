@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import { Availability } from './Availability'
 import { Eligibility } from './Eligibility'
 import {
+  InputMaybe,
+  LocationMediaCategory,
   OfferDataFragment,
   OfferType,
   ProfileRoleConstraintInput,
@@ -17,10 +19,11 @@ import {
   MAX_OFFER_TITLE_LENGTH,
   PHOTO_UPLOAD_INSTRUCTIONS,
 } from '../offer-constants'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Pricing } from './Pricing'
 import { validateTitle } from '@/components/neighborhoods/validations'
 import {
+  PHOTO_REQUIRED_ERROR,
   REQUIRED_FIELD_ERROR,
   REQUIRED_SECTION_ERROR,
   truthyString,
@@ -53,6 +56,7 @@ export const EditOfferForm = ({
     onEdit({ description: JSON.stringify(val) })
   }
   const [uploadingBanner, setUploadingBanner] = useState(false)
+  const [uploadingGallery, setUploadingGallery] = useState(false)
   const [eligibilityChecked, setEligibilityChecked] = useState(false)
   const { showModal } = useModal()
   const [deleteOffer] = useDeleteOfferMutation()
@@ -119,7 +123,7 @@ export const EditOfferForm = ({
     !truthyString(updateOfferInput.description) ||
     updateOfferInput.description === JSON.stringify(defaultSlateValue)
 
-  const handleFilesUploaded = async (
+  const handleBannerUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
     setUploadingBanner(false)
@@ -128,13 +132,43 @@ export const EditOfferForm = ({
     })
   }
 
+  const handleGalleryUploaded = async (
+    fileNameIpfsHashMap: FileNameIpfsHashMap
+  ) => {
+    setUploadingGallery(false)
+    const newMediaItems = {
+      mediaItems: (updateOfferInput.mediaItems ?? []).concat({
+        ipfsHash: fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
+      }),
+    }
+    console.log('old update offer input', updateOfferInput)
+    console.log('new media items', newMediaItems)
+    onEdit(newMediaItems)
+  }
+
+  const deleteByIpfsHash = (ipfsHash: InputMaybe<string> | undefined) => {
+    const foundCreatedMediaItem = updateOfferInput.mediaItems?.find(
+      (mediaItem) => mediaItem?.ipfsHash === ipfsHash
+    )
+
+    if (foundCreatedMediaItem) {
+      onEdit({
+        mediaItems: updateOfferInput.mediaItems?.filter(
+          (mediaItem) => mediaItem?.ipfsHash !== foundCreatedMediaItem?.ipfsHash
+        ),
+      })
+    }
+  }
+
   return (
     <Container>
       <Pair>
         <H3>Experience Type</H3>
         <OfferTypeSummary offerType={offer.offerType} />
       </Pair>
+
       <HorizontalDivider />
+
       <GalleryUploadSection
         onStartUploading={() => setUploadingBanner(true)}
         ipfsHashList={
@@ -144,14 +178,33 @@ export const EditOfferForm = ({
         isBanner
         instructions={PHOTO_UPLOAD_INSTRUCTIONS}
         title="banner image"
-        onFilesUploaded={handleFilesUploaded}
+        onFilesUploaded={handleBannerUploaded}
         errorMessage={
           highlightErrors && !updateOfferInput.imageIpfsHash
             ? REQUIRED_SECTION_ERROR
             : undefined
         }
       />
+
       <HorizontalDivider />
+
+      <GalleryUploadSection
+        onStartUploading={() => setUploadingGallery(true)}
+        uploading={uploadingGallery}
+        onFilesUploaded={handleGalleryUploaded}
+        onDelete={deleteByIpfsHash}
+        title="image gallery"
+        instructions="Share images of the available sleeping arrangements at your place to provide potential guests with an idea of where they can rest. Choose JPG or PNG file formats no larger than 5 MB."
+        ipfsHashList={offer.mediaItems?.map((item) => item.ipfsHash) || []}
+        errorMessage={
+          highlightErrors && !updateOfferInput.mediaItems?.length
+            ? PHOTO_REQUIRED_ERROR
+            : undefined
+        }
+      />
+
+      <HorizontalDivider />
+
       <Pair>
         <H3>Details</H3>
         <OpaqueBody2>

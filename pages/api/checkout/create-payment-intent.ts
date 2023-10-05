@@ -37,15 +37,53 @@ const handler = async (
     return
   }
 
-  let cart: any
-  try {
-    cart = await getCartForUser(body.cartId, externalUserId)
-    if (!cart) {
-      res.status(400).end({ error: 'Cart not found' })
-      return
+  type ref = {
+    value: {
+      id: string
+      collection?: any // idk what this is
     }
+  }
+
+  let cart: {
+    ref: ref
+    ts: number
+    data: {
+      profile: ref
+      offer: ref
+      lodgingType: ref
+      amountCents: number
+      paymentStatus: PaymentStatus
+      stripePaymentIntentClientSecret?: string
+      notes?: string
+    }
+  } | null
+
+  let lodgingType: {
+    ref: ref
+    ts: number
+    data: {
+      location: ref
+      description: string
+      quantity: number
+      priceCents: number
+      spotsTaken: number
+    }
+  } | null
+
+  try {
+    ;[cart, lodgingType] = await getCartForUser(body.cartId, externalUserId)
   } catch (e: any) {
     res.status(400).end({ error: e })
+    return
+  }
+
+  if (!cart || !lodgingType) {
+    res.status(400).end({ error: 'Cart not found' })
+    return
+  }
+
+  if (lodgingType.data.spotsTaken >= lodgingType.data.quantity) {
+    res.status(500).end({ error: 'This experience is sold out' })
     return
   }
 

@@ -5,46 +5,40 @@ import { Body2, H4, Subline1 } from '../core/Typography'
 import { ModalActionBar } from '../core/modals/ModalActionBar'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
+import Icon from '@/components/core/Icon'
+import Link from 'next/link'
 
 export const CitizenshipModal = () => {
   return (
     <CitizenshipModalContainer>
       <ModalTitle text="Citizenship" />
       <CitizenshipModalContent>
-        <H4>3 ways to unlock Citizenship</H4>
-        <StepList>
-          <Step>
-            <Subline1>Obtain a Vouch & Purchase</Subline1>
-            <Body2>
-              Join our community events, whether online or in real life, and
-              gain the endorsement of a Citizen. Once vouched for, you can
-              purchase Citizenship.
-            </Body2>
-          </Step>
-          <Step>
-            <Subline1>Attend a Cabin Week</Subline1>
-            <Body2>
-              Participate in a 1-2 week coliving experience with fellow Cabin
-              members. Find upcoming Cabin Weeks to apply for after signing into
-              the app.
-            </Body2>
-          </Step>
-          <Step>
-            <Subline1>Hold 1000 ₡ABIN</Subline1>
-            <Body2>
-              Collect and hold 1000 ₡ABIN tokens by participating in various
-              bounties across the community.
-            </Body2>
-          </Step>
-        </StepList>
+        <StyledIcon name={'check-decagram'} size={9.6} />
+        <Body2>
+          Cabin Citizenship is an annual subscription membership for remote
+          workers who love nature. Citizens are issued digital and physical
+          passports that give them access to our community’s global adventures.
+        </Body2>
+        <H4>2 ways to unlock Citizenship</H4>
+        <Body2>
+          1. You earn Citizenship for free by attending a Cabin Week at a
+          neighborhood.
+        </Body2>
+        <Body2>
+          2. You can buy Citizenship IF an existing Citizen has vouched for you.
+        </Body2>
+        <Body2>
+          Questions?{' '}
+          <StyledLink
+            href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=citizenshipmodal`}
+            target={'_blank'}
+            rel={'noreferer nofollow'}
+          >
+            Let's chat
+          </StyledLink>
+          .
+        </Body2>
       </CitizenshipModalContent>
-      <ModalActionBar
-        text="Contact Us"
-        locationHref={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=citizenshipmodal`}
-        onActionClick={() =>
-          events.externalLinkEvent(EXTERNAL_LINKS.CALENDLY_CALL_URL)
-        }
-      />
     </CitizenshipModalContainer>
   )
 }
@@ -53,35 +47,32 @@ const CitizenshipModalContainer = styled(ModalContainer)`
   height: min-content;
   width: 40.8rem;
   height: 54rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 `
 
 const CitizenshipModalContent = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 2.4rem;
   gap: 2.4rem;
   width: 100%;
-  align-items: center;
-  overflow-y: scroll;
-  margin-bottom: 10rem;
-`
 
-const StepList = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 1.2rem;
-`
-
-const Step = styled.div`
-  border: 1px solid rgba(29, 43, 42, 0.12);
-  padding: 1.8rem 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-
-  ${Body2} {
-    opacity: 0.75;
+  ${Body2}:first-of-type {
+    text-align: center;
   }
+  ${Body2}:last-of-type {
+    width: 100%;
+    text-align: left;
+  }
+`
+
+const StyledLink = styled(Link)`
+  text-decoration: underline;
+`
+
+const StyledIcon = styled(Icon)`
+  padding: 2.4rem;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.yellow300};
 `

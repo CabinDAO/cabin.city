@@ -1,13 +1,12 @@
-import { Circle } from './Circle'
 import styled from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
+import { Circle } from './Circle'
 import LoadingSpinner from './LoadingSpinner'
-import { remToPx } from '@/utils/display-utils'
 
 interface AvatarProps {
   src?: string
-  size?: number
+  size: number
   hoverShadow?: boolean
   onClick?: () => void
   color?: ColorName
@@ -26,33 +25,32 @@ export const Avatar = ({
   return (
     <StyledCircle
       onClick={onClick}
-      size={size ?? 3.2}
+      size={size}
       shadowMode={hoverShadow ? 'hover' : 'never'}
       color={color}
     >
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <StyledImage
-          fill
-          sizes={`${remToPx(size ?? 3.2)}px`}
+        <Image
           alt="Avatar"
           src={src ?? '/images/default-avatar.png'}
+          width={size * 10}
+          height={size * 10}
+          style={{
+            objectFit: 'cover',
+            objectPosition: 'center',
+            borderRadius: '50%',
+          }}
         />
       )}
     </StyledCircle>
   )
 }
 
-const StyledCircle = styled(Circle)`
-  cursor: pointer;
+const StyledCircle = styled(Circle)<{
+  onClick?: () => void
+}>`
+  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   position: relative; // need this because the image inside has 'fill' attribute
-`
-
-const StyledImage = styled(Image)`
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  width: auto;
-  height: auto;
 `

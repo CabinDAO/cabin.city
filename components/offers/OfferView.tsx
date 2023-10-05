@@ -1,8 +1,22 @@
 import styled from 'styled-components'
-import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
-import { TitleCard } from '@/components/core/TitleCard'
-import { ContentCard } from '@/components/core/ContentCard'
+import { useRouter } from 'next/router'
+import { useModal } from '@/components/hooks/useModal'
 import {
+  OfferPrice,
+  OfferType,
+  ProfileRoleLevelType,
+  ProfileRoleType,
+} from '@/generated/graphql'
+import { OfferViewProps } from './useGetOffer'
+import Icon from '@/components/core/Icon'
+import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
+import { stringToSlateValue } from '../core/slate/slate-utils'
+import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
+import { isNotNull } from '@/lib/data'
+import { daysBetween, formatRange } from '@/utils/display-utils'
+import { roleConstraintInfoFromType } from '@/utils/roles'
+import {
+  Body1,
   body1Styles,
   Caption,
   H1,
@@ -11,27 +25,24 @@ import {
   H5,
   Subline1,
 } from '@/components/core/Typography'
+import { TitleCard } from '@/components/core/TitleCard'
+import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
-import { roleConstraintInfoFromType } from '@/utils/roles'
-import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
-import { stringToSlateValue } from '../core/slate/slate-utils'
-import {
-  OfferPrice,
-  OfferType,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-} from '@/generated/graphql'
-import { isNotNull } from '@/lib/data'
-import { daysBetween, formatRange } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
-import { useRouter } from 'next/router'
 import { ApplyButton } from '@/components/offers/ApplyButton'
-import Icon from '@/components/core/Icon'
 import { Price } from '@/components/offers/Price'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { MEMBERSHIP_PRICE_DOLLARS } from '@/components/checkout/constants'
+import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
+import { CitizenshipModal } from '@/components/landing/CitizenshipModal'
+import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
+import { LocationLink } from '@/components/neighborhoods/LocationLink'
+import Link from 'next/link'
+import { HostCard } from '@/components/neighborhoods/HostCard'
+import { isAfter, isBefore } from 'date-fns'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 const EMPTY = '—'
 
@@ -42,8 +53,11 @@ export const OfferView = ({
   offer: OfferViewProps
   isEditable: boolean
 }) => {
+  const router = useRouter()
+  const { showModal } = useModal()
+  const { deviceSize } = useDeviceSize()
+
   const {
-    title,
     description,
     offerType,
     location,
@@ -54,7 +68,11 @@ export const OfferView = ({
     citizenshipRequired,
     minimunCabinBalance,
     imageUrl,
+    mediaItems,
   } = offer
+
+  if (!offerType) return null
+
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const levelsByRole = profileRoleConstraints?.reduce(
     (acc, { profileRole, level }) => ({
@@ -63,7 +81,6 @@ export const OfferView = ({
     }),
     {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
   )
-  const router = useRouter()
 
   const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
     .flatMap(
@@ -91,12 +108,45 @@ export const OfferView = ({
   const displayMatchOne = rolesMatchOne.length > 0
   const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
 
-  if (!offerType) return null
+  // TODO: let them actually select one
+  const selectedLodgingType = offer.location.lodgingTypes.data[0]
+
+  const galleryImages = (mediaItems ?? []).map((image) => ({
+    ...image,
+    name: `${image.ipfsHash}`,
+  }))
+
+  const handleCitizenshipInfoClick = () => {
+    showModal(() => <CitizenshipModal />)
+  }
+
+  const handleImageClick = (image: TempImage) => {
+    // TODO: looks broken on mobile
+    // if (deviceSize === 'mobile') {
+    //   return
+    // }
+
+    if (!galleryImages) {
+      return
+    }
+
+    const index = galleryImages.findIndex(
+      (img) => img.ipfsHash === image.ipfsHash
+    )
+
+    showModal(() => (
+      <ImageBrowserModal images={galleryImages} initialImageIndex={index} />
+    ))
+  }
 
   return (
     <>
+      {imageUrl && deviceSize !== 'mobile' && (
+        <BannerHeader imageUrl={imageUrl} />
+      )}
+
       <TitleCard
-        title={title ?? EMPTY}
+        title={'Experience'}
         icon="offer"
         end={
           isEditable ? (
@@ -116,16 +166,31 @@ export const OfferView = ({
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
           <DescriptionDetails>
-            {imageUrl && (
-              <ImageFlex
+            {galleryImages && (
+              <GalleryImage
+                src={getImageUrlByIpfsHash(galleryImages[0].ipfsHash) ?? ''}
+                onClick={() => handleImageClick(galleryImages[0])}
                 aspectRatio={1.5}
                 fill
                 sizes="451px"
-                src={imageUrl}
-                alt={title ?? ''}
+                alt={'Click for image gallery'}
+                style={{ cursor: 'pointer' }}
               />
             )}
+            <LocationLink location={offer.location} />
+            <H4>Description</H4>
             <SlateRenderer value={stringToSlateValue(description)} />
+            <H4>Meet your hosts</H4>
+            {_getHostIds(offer).map((hostId) => (
+              <HostCard key={hostId} profileId={hostId}></HostCard>
+            ))}
+            <H4>Cancellation policy</H4>
+            <Body1>
+              For a full refund, guests must cancel within 48 hours of booking
+              and at least 28 days before check-in. Email{' '}
+              <Link href={'mailto:home@cabin.city'}>home@cabin.city</Link> for
+              more information.
+            </Body1>
           </DescriptionDetails>
 
           <OfferDetailsContainer>
@@ -165,7 +230,10 @@ export const OfferView = ({
                 )}
 
                 <Actions>
-                  <ApplyButton offer={offer} />
+                  <ApplyButton
+                    offer={offer}
+                    lodgingType={selectedLodgingType}
+                  />
                   <Caption emphasized>You won’t be charged yet</Caption>
                 </Actions>
 
@@ -181,7 +249,12 @@ export const OfferView = ({
                   <CostLine>
                     <Caption emphasized>
                       1yr Cabin Citizenship{' '}
-                      <Icon name={'info'} size={1.2} inline />
+                      <a
+                        onClick={handleCitizenshipInfoClick}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <Icon name={'info'} size={1.2} inline />
+                      </a>
                     </Caption>
                     <Caption emphasized>${MEMBERSHIP_PRICE_DOLLARS}</Caption>
                   </CostLine>
@@ -231,6 +304,26 @@ export const OfferView = ({
   )
 }
 
+const _getHostIds = (offer: OfferViewProps): string[] => {
+  const charlie =
+    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+      ? '362368728841584721'
+      : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' ||
+        process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
+      ? '359768139021418582'
+      : '373424375382147584'
+
+  const gatherer =
+    offer.offerType !== OfferType.CabinWeek ||
+    !offer.startDate ||
+    isAfter(offer.startDate, new Date('2024-012-01')) ||
+    isBefore(offer.startDate, new Date('2023-12-01'))
+      ? ''
+      : charlie
+
+  return [offer.location.caretaker._id, gatherer].filter((i) => !!i)
+}
+
 const StyledContentCard = styled(ContentCard)`
   padding: 3.2rem 2.4rem;
   margin-top: 1.6rem;
@@ -254,6 +347,10 @@ const DescriptionDetails = styled.div`
   gap: 2.4rem;
   width: 45.1rem;
 
+  ${Body1} {
+    opacity: 0.75;
+  }
+
   ${({ theme }) => theme.bp.md_max} {
     width: 100%;
   }
@@ -261,8 +358,6 @@ const DescriptionDetails = styled.div`
   ${({ theme }) => theme.bp.lg_max} {
     width: 100%;
     order: 2;
-    border-left: none;
-    border-top: 1px solid ${({ theme }) => theme.colors.green900}1e;
     padding-left: 0;
     padding-top: 3.2rem;
   }
@@ -292,6 +387,10 @@ const DescriptionDetails = styled.div`
   }
 `
 
+const GalleryImage = styled(ImageFlex)`
+  margin-bottom: 2rem;
+`
+
 const OfferDetailsContainer = styled.div`
   display: flex;
   flex-flow: column;
@@ -309,10 +408,8 @@ const OfferDetails = styled.div`
   flex-flow: column;
   padding-left: 3.2rem;
   gap: 2.4rem;
-  border-left: 1px solid ${({ theme }) => theme.colors.green900}1e;
 
   ${({ theme }) => theme.bp.lg_max} {
-    border-left: none;
     padding-left: 0;
   }
 `
@@ -398,7 +495,7 @@ const LodgingType = styled.div`
   justify-content: space-between;
   width: 100%;
   padding: 1.2rem 1.6rem;
-  border: solid 1px rgba(29, 43, 42, 0.12); // green900 at 12% opacity
+  border: 1px solid ${({ theme }) => theme.colors.green900}12; // green900 at 12% opacity
 `
 
 const LodgingTypeTop = styled.div`

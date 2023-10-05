@@ -19,20 +19,19 @@ import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 interface ApplyButtonProps {
   offer: OfferViewProps
+  lodgingType?: OfferViewProps['location']['lodgingTypes']['data'][0]
 }
 
-export const ApplyButton = ({ offer }: ApplyButtonProps) => {
+export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
   const router = useRouter()
   const { user } = useProfile()
   const [createCart] = useCreateCartMutation()
 
   const handleReserveClick = async () => {
-    if (!user) return
+    if (!user || !lodgingType || lodgingType.spotsTaken >= lodgingType.quantity)
+      return
 
     try {
-      // TODO: selected lodging type should be passed in when we have more than one of them
-      const lodgingType = offer.location.lodgingTypes.data[0]
-
       await createCart({
         variables: {
           data: {
@@ -72,6 +71,10 @@ export const ApplyButton = ({ offer }: ApplyButtonProps) => {
         </a>
       )
       break
+  }
+
+  if (lodgingType && lodgingType?.spotsTaken >= lodgingType?.quantity) {
+    return <BuyButton disabled>Sold Out</BuyButton>
   }
 
   return (

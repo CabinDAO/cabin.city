@@ -204,6 +204,7 @@ input UpdateOfferInput {
   profileRoleConstraints: [ProfileRoleConstraintInput]
   applicationUrl: String
   imageIpfsHash: String
+  mediaItems: [OfferMediaItemInput!]
   citizenshipRequired: Boolean
   minimunCabinBalance: Int
 }
@@ -437,7 +438,18 @@ type Offer {
   imageIpfsHash: String
   citizenshipRequired: Boolean
   minimunCabinBalance: Int
+  mediaItems: [OfferMediaItem!]
 }
+
+type OfferMediaItem @embedded {
+  ipfsHash: String
+}
+
+input OfferMediaItemInput {
+  ipfsHash: String
+}
+
+
 
 enum OfferType {
   PaidColiving

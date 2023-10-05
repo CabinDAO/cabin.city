@@ -17,6 +17,9 @@ fragment OfferData on Offer {
   minimunCabinBalance
   applicationUrl
   imageIpfsHash
+  mediaItems {
+    ipfsHash
+  }
   locationType
   location {
     _id

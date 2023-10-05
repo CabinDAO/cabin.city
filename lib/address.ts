@@ -8,7 +8,7 @@ interface FormatShortAddressParams {
 
 export const formatShortAddress = (
   address: FormatShortAddressParams | null | undefined
-) => {
+): string => {
   if (!address) return EMPTY
 
   if (!address.locality && !address.admininstrativeAreaLevel1Short) {

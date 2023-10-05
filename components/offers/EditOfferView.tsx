@@ -45,7 +45,7 @@ export const EditOfferView = ({
       <TitleCard
         title="Edit Experience"
         icon="close"
-        iconOnClick={handleBack}
+        onIconClick={handleBack}
       />
       <StyledContentCard shape="notch">
         <EditOfferForm

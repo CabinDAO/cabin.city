@@ -78,6 +78,10 @@ const CheckoutPageView = () => {
   const location = cart.offer.location
   const lodgingType = cart.lodgingType
 
+  if (lodgingType.spotsTaken >= lodgingType.quantity) {
+    return <H4>Sold Out</H4>
+  }
+
   const advanceStep = () => {
     const isLastStep = currentStep >= steps.length - 1
 

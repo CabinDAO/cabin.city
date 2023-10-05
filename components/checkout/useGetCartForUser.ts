@@ -19,7 +19,6 @@ export const useGetCartForUser = (
   cartId: string,
   userId: string | undefined
 ): r => {
-  console.log('getCartFOrUser', cartId, userId)
   const { data, refetch, startPolling, stopPolling } = useGetCartQuery({
     variables: {
       id: cartId,

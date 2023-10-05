@@ -4,6 +4,7 @@ import { useProfile } from '../auth/useProfile'
 import {
   LocationType,
   OfferDataFragment,
+  OfferMediaItem,
   OfferPriceUnit,
   OfferType,
   ProfileRoleConstraint,
@@ -30,10 +31,12 @@ export interface OfferViewProps {
   applicationUrl: string | null | undefined
   price: OfferPrice | null | undefined
   profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
+  mediaItems: OfferMediaItem[] | null | undefined
   location: {
     _id: string
-    name: string | null | undefined
-    shortAddress: string | null | undefined
+    name: string
+    shortAddress: string
+    bannerImageIpfsHash: string
     publishedAt: Date | null | undefined
     caretaker: {
       _id: string

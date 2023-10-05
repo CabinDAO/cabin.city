@@ -15,7 +15,10 @@ export const updateCart = async (
   )
 }
 
-export const getCartForUser = async (id: string, externalUserId: string) => {
+export const getCartForUser = async (
+  id: string,
+  externalUserId: string
+): Promise<[any, any]> => {
   return faunaServerClient.query(
     q.Let(
       {
@@ -31,7 +34,14 @@ export const getCartForUser = async (id: string, externalUserId: string) => {
           )
         ),
       },
-      q.If(q.Var('isMe'), q.Var('cart'), null)
+      q.If(
+        q.Var('isMe'),
+        [
+          q.Var('cart'),
+          q.Get(q.Select(['data', 'lodgingType'], q.Var('cart'))),
+        ],
+        [null, null]
+      )
     )
   )
 }

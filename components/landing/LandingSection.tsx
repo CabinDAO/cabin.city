@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components'
-import { HTMLAttributes } from 'react'
+import React, { HTMLAttributes } from 'react'
 import { LandingSectionVariant } from '@/components/landing/styles'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
