@@ -1,12 +1,14 @@
 import styled from 'styled-components'
-import { LocationAddress } from '@/generated/graphql'
 import Image from 'next/image'
 import Link from 'next/link'
 import { padding } from '@/styles/theme'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { Caption, H4 } from '@/components/core/Typography'
+import { OfferType } from '@/generated/graphql'
+import { offerInfoFromType } from '@/utils/offer'
+import { formatRange } from '@/utils/display-utils'
 
-interface LocationLinkProps {
+interface LocationLinkCardProps {
   location: {
     _id: string
     name: string
@@ -15,7 +17,7 @@ interface LocationLinkProps {
   }
 }
 
-export const LocationLink = ({ location }: LocationLinkProps) => {
+export const LocationLinkCard = ({ location }: LocationLinkCardProps) => {
   return (
     <Container href={`/location/${location._id}`}>
       <Image
@@ -28,6 +30,36 @@ export const LocationLink = ({ location }: LocationLinkProps) => {
         <FaintCaption>Location</FaintCaption>
         <H4>{location.name}</H4>
         <Caption>{location.shortAddress}</Caption>
+      </Info>
+    </Container>
+  )
+}
+
+interface OfferLinkCardProps {
+  offer: {
+    _id: string
+    offerType: OfferType
+    startDate: Date
+    endDate: Date
+    shortAddress: string
+    imageIpfsHash: string
+  }
+}
+
+export const OfferLinkCard = ({ offer }: OfferLinkCardProps) => {
+  const offerType = offerInfoFromType(offer.offerType).name
+  return (
+    <Container href={`/experience/${offer._id}`}>
+      <Image
+        src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+        alt={offerType}
+        width={72}
+        height={72}
+      ></Image>
+      <Info>
+        <FaintCaption>{offerType}</FaintCaption>
+        <H4>{formatRange(offer.startDate, offer.endDate)}</H4>
+        <Caption>{offer.shortAddress}</Caption>
       </Info>
     </Container>
   )

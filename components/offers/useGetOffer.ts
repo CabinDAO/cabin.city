@@ -2,6 +2,7 @@ import { offerViewPropsFromFragment } from '@/utils/offer'
 import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import {
+  LocationAddress,
   LocationType,
   OfferDataFragment,
   OfferMediaItem,
@@ -35,6 +36,7 @@ export interface OfferViewProps {
   location: {
     _id: string
     name: string
+    address: LocationAddress | null | undefined
     shortAddress: string
     bannerImageIpfsHash: string
     publishedAt: Date | null | undefined

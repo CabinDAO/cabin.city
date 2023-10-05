@@ -101,6 +101,7 @@ const CheckoutPageView = () => {
       icon="back-arrow"
       iconHref={`/experience/${cart.offer._id}`}
       subheader={`Step ${currentStep + 1} of ${steps.length}`}
+      withFooter
     >
       <LeftSide shape="notch" notchSize={1.6}>
         <CurrentComponent cart={cart} onComplete={advanceStep} />

@@ -123,9 +123,7 @@ export const CabinWeekView = () => {
         <SubscribeSection />
       </LandingSection>
 
-      <LandingSection variant="dark">
-        <Footer />
-      </LandingSection>
+      <Footer />
     </StyledLayout>
   )
 }

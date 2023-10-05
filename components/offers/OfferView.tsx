@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
 import {
-  OfferPrice,
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,
@@ -11,18 +10,16 @@ import { OfferViewProps } from './useGetOffer'
 import Icon from '@/components/core/Icon'
 import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
 import { stringToSlateValue } from '../core/slate/slate-utils'
-import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
+import { RoleConstraintType } from '@/utils/offer'
 import { isNotNull } from '@/lib/data'
-import { daysBetween, formatRange } from '@/utils/display-utils'
+import { formatRange } from '@/utils/display-utils'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
   body1Styles,
   Caption,
-  H1,
   H3,
   H4,
-  H5,
   Subline1,
 } from '@/components/core/Typography'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -33,18 +30,17 @@ import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
 import { ApplyButton } from '@/components/offers/ApplyButton'
 import { Price } from '@/components/offers/Price'
-import { HorizontalDivider } from '@/components/core/Divider'
-import { MEMBERSHIP_PRICE_DOLLARS } from '@/components/checkout/constants'
 import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
-import { CitizenshipModal } from '@/components/landing/CitizenshipModal'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
-import { LocationLink } from '@/components/neighborhoods/LocationLink'
+import { LocationLinkCard } from '@/components/neighborhoods/LinkCards'
 import Link from 'next/link'
 import { HostCard } from '@/components/neighborhoods/HostCard'
 import { isAfter, isBefore } from 'date-fns'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-
-const EMPTY = '—'
+import { CostBreakdown } from '@/components/checkout/CostBreakdown'
+import { EMPTY } from '@/utils/display-utils'
+import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const OfferView = ({
   offer,
@@ -60,7 +56,6 @@ export const OfferView = ({
   const {
     description,
     offerType,
-    location,
     startDate,
     endDate,
     price,
@@ -73,7 +68,6 @@ export const OfferView = ({
 
   if (!offerType) return null
 
-  const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const levelsByRole = profileRoleConstraints?.reduce(
     (acc, { profileRole, level }) => ({
       ...acc,
@@ -115,10 +109,6 @@ export const OfferView = ({
     ...image,
     name: `${image.ipfsHash}`,
   }))
-
-  const handleCitizenshipInfoClick = () => {
-    showModal(() => <CitizenshipModal />)
-  }
 
   const handleImageClick = (image: TempImage) => {
     // TODO: looks broken on mobile
@@ -165,7 +155,7 @@ export const OfferView = ({
 
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
-          <DescriptionDetails>
+          <Left>
             {galleryImages && (
               <GalleryImage
                 src={getImageUrlByIpfsHash(galleryImages[0].ipfsHash) ?? ''}
@@ -177,7 +167,7 @@ export const OfferView = ({
                 style={{ cursor: 'pointer' }}
               />
             )}
-            <LocationLink location={offer.location} />
+            <LocationLinkCard location={offer.location} />
             <H4>Description</H4>
             <SlateRenderer value={stringToSlateValue(description)} />
             <H4>Meet your hosts</H4>
@@ -188,116 +178,73 @@ export const OfferView = ({
             <Body1>
               For a full refund, guests must cancel within 48 hours of booking
               and at least 28 days before check-in. Email{' '}
-              <Link href={'mailto:home@cabin.city'}>home@cabin.city</Link> for
-              more information.
+              <Link href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}>
+                {EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}
+              </Link>{' '}
+              for more information.
             </Body1>
-          </DescriptionDetails>
+          </Left>
 
-          <OfferDetailsContainer>
-            <OfferDetails>
-              <OfferDetailsHeader>
-                <OfferDetailsOverview>
-                  <H5>{formatRange(startDate, endDate)}</H5>
-                  <H1>{offerInfo?.name ?? EMPTY}</H1>
-                  <Location>
-                    {offerType == OfferType.CabinWeek && offer.price && (
-                      <>
-                        {daysBetween(startDate, endDate)} nights {''}
-                      </>
-                    )}
-                    in {location.shortAddress}
-                  </Location>
-                  <Price price={offer.price as OfferPrice} />
-                </OfferDetailsOverview>
+          <Right>
+            <RightContent>
+              <OfferNameAndDates offer={offer} withPrice />
 
-                {offerType == OfferType.CabinWeek && offer.price && (
-                  <OfferCabinWeekDetailsSection>
-                    <Subline1>Accomodations</Subline1>
-                    {offer.location.lodgingTypes.data.map((lt) => {
-                      return (
-                        <LodgingType key={lt._id}>
-                          <LodgingTypeTop>
-                            <Subline1>{lt.description}</Subline1>
-                            {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
-                          </LodgingTypeTop>
-                          <Caption>
-                            {Math.max(0, lt.quantity - lt.spotsTaken)} available
-                          </Caption>
-                        </LodgingType>
-                      )
-                    })}
-                  </OfferCabinWeekDetailsSection>
-                )}
-
-                <Actions>
-                  <ApplyButton
-                    offer={offer}
-                    lodgingType={selectedLodgingType}
-                  />
-                  <Caption emphasized>You won’t be charged yet</Caption>
-                </Actions>
-
-                <CostBreakdown>
-                  <CostLine>
-                    <Caption emphasized>
-                      {daysBetween(startDate, endDate)} nights
-                    </Caption>
-                    <Caption emphasized>
-                      ${(offer.price?.amountCents ?? 0) / 100}
-                    </Caption>
-                  </CostLine>
-                  <CostLine>
-                    <Caption emphasized>
-                      1yr Cabin Citizenship{' '}
-                      <a
-                        onClick={handleCitizenshipInfoClick}
-                        style={{ cursor: 'pointer' }}
-                      >
-                        <Icon name={'info'} size={1.2} inline />
-                      </a>
-                    </Caption>
-                    <Caption emphasized>${MEMBERSHIP_PRICE_DOLLARS}</Caption>
-                  </CostLine>
-                  <CostLine>
-                    <Caption emphasized>Cabin Week Discount</Caption>
-                    <Caption emphasized $color={'green700'}>
-                      -${MEMBERSHIP_PRICE_DOLLARS}
-                    </Caption>
-                  </CostLine>
-                  <HorizontalDivider />
-                  <CostLine>
-                    <H4>Total</H4>
-                    <H4>${(offer.price?.amountCents ?? 0) / 100}</H4>
-                  </CostLine>
-                </CostBreakdown>
-              </OfferDetailsHeader>
-
-              {offerType !== OfferType.CabinWeek && (
-                <OfferDetailsSection>
-                  <H3>AVAILABILITY</H3>
-
-                  <OfferDetailsPricing>
-                    <Caption>{formatRange(startDate, endDate)}</Caption>
-                    {price ? <Price small price={price} /> : EMPTY}
-                  </OfferDetailsPricing>
-                </OfferDetailsSection>
+              {offerType == OfferType.CabinWeek && offer.price && (
+                <CabinWeekDetails>
+                  <Subline1>Accomodations</Subline1>
+                  {offer.location.lodgingTypes.data.map((lt) => {
+                    return (
+                      <LodgingType key={lt._id}>
+                        <LodgingTypeTop>
+                          <Subline1>{lt.description}</Subline1>
+                          {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
+                        </LodgingTypeTop>
+                        <Caption>
+                          {Math.max(0, lt.quantity - lt.spotsTaken)} available
+                        </Caption>
+                      </LodgingType>
+                    )
+                  })}
+                </CabinWeekDetails>
               )}
 
-              {(displayMatchAll ||
-                displayMatchOne ||
-                offerType === OfferType.PaidColiving) && (
-                <OfferDetailsSection>
-                  <EligibilityDisplay
-                    rolesMatchOne={rolesMatchOne}
-                    displayMatchAll={displayMatchAll}
-                    displayMatchOne={displayMatchOne}
-                    citizenshipRequired={!!citizenshipRequired}
-                    minimunCabinBalance={minimunCabinBalance}
-                  />
-                </OfferDetailsSection>
-              )}
-            </OfferDetails>
-          </OfferDetailsContainer>
+              <Actions>
+                <ApplyButton offer={offer} lodgingType={selectedLodgingType} />
+                <Caption emphasized>You won’t be charged yet</Caption>
+              </Actions>
+
+              <CostBreakdown
+                lodgingType={selectedLodgingType}
+                startDate={startDate ?? null}
+                endDate={endDate ?? null}
+              />
+            </RightContent>
+
+            {offerType !== OfferType.CabinWeek && (
+              <DetailsSection>
+                <H3>AVAILABILITY</H3>
+
+                <Pricing>
+                  <Caption>{formatRange(startDate, endDate)}</Caption>
+                  {price ? <Price small price={price} /> : EMPTY}
+                </Pricing>
+              </DetailsSection>
+            )}
+
+            {(displayMatchAll ||
+              displayMatchOne ||
+              offerType === OfferType.PaidColiving) && (
+              <DetailsSection>
+                <EligibilityDisplay
+                  rolesMatchOne={rolesMatchOne}
+                  displayMatchAll={displayMatchAll}
+                  displayMatchOne={displayMatchOne}
+                  citizenshipRequired={!!citizenshipRequired}
+                  minimunCabinBalance={minimunCabinBalance}
+                />
+              </DetailsSection>
+            )}
+          </Right>
         </DescriptionTwoColumn>
       </StyledContentCard>
     </>
@@ -340,7 +287,7 @@ const DescriptionTwoColumn = styled.div`
   }
 `
 
-const DescriptionDetails = styled.div`
+const Left = styled.div`
   display: flex;
   position: relative;
   flex-flow: column;
@@ -391,7 +338,7 @@ const GalleryImage = styled(ImageFlex)`
   margin-bottom: 2rem;
 `
 
-const OfferDetailsContainer = styled.div`
+const Right = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
@@ -403,28 +350,14 @@ const OfferDetailsContainer = styled.div`
   }
 `
 
-const OfferDetails = styled.div`
-  display: flex;
-  flex-flow: column;
-  padding-left: 3.2rem;
-  gap: 2.4rem;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    padding-left: 0;
-  }
-`
-
-const OfferDetailsHeader = styled.div`
+const RightContent = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
+  padding-left: 0;
 
-  ${({ theme }) => theme.bp.lg_max} {
-    flex-flow: row;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    flex-flow: column;
+  ${({ theme }) => theme.bp.lg} {
+    padding-left: 3.2rem;
   }
 `
 
@@ -436,23 +369,13 @@ const Actions = styled.div`
   width: 100%;
 `
 
-const OfferDetailsOverview = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.4rem;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 100%;
-  }
-`
-
-const OfferDetailsSection = styled.div`
+const DetailsSection = styled.div`
   display: flex;
   flex-flow: column;
   gap: 1.6rem;
 `
 
-const OfferCabinWeekDetailsSection = styled.div`
+const CabinWeekDetails = styled.div`
   display: flex;
   flex-flow: column;
   gap: 1.6rem;
@@ -467,7 +390,7 @@ const OfferCabinWeekDetailsSection = styled.div`
   }
 `
 
-const OfferDetailsPricing = styled.div`
+const Pricing = styled.div`
   display: flex;
   flex-flow: row;
   gap: 1.6rem;
@@ -483,11 +406,6 @@ const OfferDetailsPricing = styled.div`
   }
 `
 
-const Location = styled(Caption)`
-  line-height: 1.6;
-  margin-bottom: 1rem;
-`
-
 const LodgingType = styled.div`
   display: flex;
   flex-flow: column;
@@ -499,24 +417,6 @@ const LodgingType = styled.div`
 `
 
 const LodgingTypeTop = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`
-
-const CostBreakdown = styled.div`
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  gap: 2.4rem;
-  margin-top: 2.4rem;
-`
-
-const CostLine = styled.div`
   display: flex;
   flex-flow: row;
   justify-content: space-between;

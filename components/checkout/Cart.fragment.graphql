@@ -15,14 +15,19 @@ fragment Cart on Cart {
         startDate
         endDate
         imageIpfsHash
+        price {
+            amountCents
+            unit
+        }
         location {
             _id
             name
             bannerImageIpfsHash
             address {
                 locality
-                admininstrativeAreaLevel1
+                admininstrativeAreaLevel1Short
                 country
+                formattedAddress
             }
         }
     }

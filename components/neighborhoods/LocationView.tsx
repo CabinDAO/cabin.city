@@ -32,6 +32,7 @@ import events from '@/lib/googleAnalytics/events'
 import { ExperienceList } from '../offers/ExperienceList'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
+import { EMPTY } from '@/utils/display-utils'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -93,8 +94,6 @@ export interface LocationProps {
   votes: LocationVote[] | null | undefined
   publishedAt: Date | null | undefined
 }
-
-const EMPTY = '—'
 
 export const LocationView = ({
   location,

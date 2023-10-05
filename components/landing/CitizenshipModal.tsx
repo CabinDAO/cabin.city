@@ -32,7 +32,7 @@ export const CitizenshipModal = () => {
           <StyledLink
             href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=citizenshipmodal`}
             target={'_blank'}
-            rel={'noreferer nofollow'}
+            rel={'noreferer'}
           >
             Let's chat
           </StyledLink>

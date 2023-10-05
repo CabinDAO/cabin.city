@@ -1,4 +1,5 @@
 export const EXTERNAL_LINKS = {
+  GENERAL_EMAIL_ADDRESS: 'home@cabin.city',
   CITIZENSHIP:
     'https://cabin-fellowship.notion.site/Cabin-Citizenship-071295e889284c12a3aeb6f66ffc2d65',
   ROLES:

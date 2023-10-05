@@ -4,7 +4,8 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { Navbar } from '../core/Navbar'
 import { MainContent, NavbarContainer } from './common.styles'
-import { HTMLAttributes } from 'react'
+import React, { HTMLAttributes } from 'react'
+import { Footer } from '@/components/navigation/Footer'
 
 export type LayoutVariant = 'default' | 'full'
 
@@ -15,6 +16,7 @@ interface LayoutProps {
   actionBar?: React.ReactNode
   className?: string
   variant?: LayoutVariant
+  withFooter?: boolean
 }
 
 export const SingleColumnLayout = ({
@@ -24,36 +26,42 @@ export const SingleColumnLayout = ({
   hideNavbar,
   className,
   variant,
+  withFooter,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
   return (
-    <OuterContainer className={className}>
-      {displayLaunchBanner && <LaunchBanner />}
-      <Container variant={variant}>
-        <MainContent variant={variant}>{children}</MainContent>
-        {!hideNavbar && (
-          <>
-            {isMobile ? (
-              <MobileFloatingMenu />
-            ) : (
-              <NavbarContainer variant={variant}>
-                <Navbar />
-              </NavbarContainer>
-            )}
-          </>
-        )}
-      </Container>
-      <ActionBarContainer>{actionBar}</ActionBarContainer>
-    </OuterContainer>
+    <>
+      <OuterContainer className={className} withFooter={withFooter}>
+        {displayLaunchBanner && <LaunchBanner />}
+        <Container variant={variant}>
+          <MainContent variant={variant}>{children}</MainContent>
+          {!hideNavbar && (
+            <>
+              {isMobile ? (
+                <MobileFloatingMenu />
+              ) : (
+                <NavbarContainer variant={variant}>
+                  <Navbar />
+                </NavbarContainer>
+              )}
+            </>
+          )}
+        </Container>
+        <ActionBarContainer>{actionBar}</ActionBarContainer>
+      </OuterContainer>
+      {withFooter && <Footer />}
+    </>
   )
 }
 
-const OuterContainer = styled.div`
+const OuterContainer = styled.div<{
+  withFooter?: boolean
+}>`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: ${({ withFooter }) => (withFooter ? '76vh' : '100vh')};
   min-width: 100%;
   justify-content: flex-start;
   align-items: center;

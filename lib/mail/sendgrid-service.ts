@@ -2,6 +2,7 @@ import { MailService, MailDataRequired } from '@sendgrid/mail'
 import { MailData } from '@sendgrid/helpers/classes/mail'
 import { EmailPayload, EmailType, VouchRequstedPayload } from './types'
 import { appDomainWithProto } from '@/utils/display-utils'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export class SendgridService {
   private client: MailService
@@ -27,7 +28,7 @@ export class SendgridService {
           throw new Error('required fields: name, email, profileId')
         }
         Object.assign(md, {
-          to: 'home@cabin.city',
+          to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
           subject: `${d.name} requested a vouch`,
           html: `<div>
             <a href="${appDomainWithProto}/profile/${d.profileId}">${d.name}</a> (<a href="mailto:${d.email}">${d.email}</a>) requested a vouch.
