@@ -6,7 +6,7 @@ import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 
 export const appDomain =
-  process.env.NODE_ENV === 'production'
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? 'cabin.city'
     : process.env.NEXT_PUBLIC_VERCEL_URL
 
