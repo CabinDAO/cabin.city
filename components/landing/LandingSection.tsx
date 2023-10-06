@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import React, { HTMLAttributes } from 'react'
 import { LandingSectionVariant } from '@/components/landing/styles'
 import { H1, fonts } from '@/components/core/Typography'

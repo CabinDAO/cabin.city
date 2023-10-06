@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useGetProfileByIdQuery } from '@/generated/graphql'
 import { padding } from '@/styles/theme'
-import { Body1, Caption, H4 } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import { ProfileContact } from '@/components/core/ProfileContact'
 
 export const HostCard = ({ profileId }: { profileId: string }) => {

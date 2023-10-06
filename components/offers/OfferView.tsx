@@ -17,7 +17,6 @@ import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
   body1Styles,
-  Body2,
   Caption,
   H3,
   H4,
