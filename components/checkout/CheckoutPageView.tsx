@@ -7,7 +7,6 @@ import { TwoColumnLayout } from '@/components/layouts/TwoColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
 import { PaymentForm } from '@/components/checkout/PaymentForm'
 import { ReservationForm } from '@/components/checkout/ReservationForm'
-import { Button } from '@/components/core/Button'
 import { useGetCartForUser } from '@/components/checkout/useGetCartForUser'
 import { useProfile } from '@/components/auth/useProfile'
 import { CartFragment, PaymentStatus } from '@/generated/graphql'
@@ -16,6 +15,7 @@ import { parseISO } from 'date-fns'
 import { CostBreakdown } from '@/components/checkout/CostBreakdown'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
+import { COCForm } from '@/components/checkout/COCForm'
 
 type StepProps = {
   onComplete: () => void
@@ -31,11 +31,11 @@ const StepDetails = ({ cart, onComplete }: StepProps) => {
   )
 }
 
-const StepPolicies = ({ onComplete }: StepProps) => {
+const StepPolicies = ({ cart, onComplete }: StepProps) => {
   return (
     <>
-      <H2>Safety & Policies</H2>
-      <Button onClick={onComplete}>Agree & Continue</Button>
+      <H2>Code of Conduct</H2>
+      <COCForm cart={cart} onComplete={onComplete} />
     </>
   )
 }
@@ -148,7 +148,7 @@ const LeftSide = styled(ContentCard)`
   width: 100%;
   ${padding('md', 'sm')};
 
-  ${({ theme }) => theme.bp.md_max} {
+  ${({ theme }) => theme.bp.lg_max} {
     order: 2;
   }
 `
@@ -172,5 +172,5 @@ const BookingSummary = styled.div`
 
 const FormContainer = styled.div`
   display: flex;
-  width: auto;
+  width: 100%;
 `

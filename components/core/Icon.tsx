@@ -33,6 +33,7 @@ import draftProposalSvg from './svg/draft-proposal.svg'
 import exclamationMarkSvg from './svg/exclamation-mark.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
+import flowerSvg from './svg/flower.svg'
 import formatBold from './svg/format-bold.svg'
 import formatHeader1 from './svg/format-header1.svg'
 import formatHeader2 from './svg/format-header2.svg'
@@ -43,6 +44,7 @@ import formatQuote from './svg/format-quote.svg'
 import formatUnderline from './svg/format-underline.svg'
 import forumSvg from './svg/forum.svg'
 import gathererSvg from './svg/gatherer.svg'
+import handSvg from './svg/hand.svg'
 import handWaveSvg from './svg/hand-wave.svg'
 import handWaveGreenSvg from './svg/hand-wave-green.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
@@ -75,8 +77,9 @@ import profile2Svg from './svg/profile2.svg'
 import publishSvg from './svg/publish.svg'
 import raceSvg from './svg/race.svg'
 import residentSvg from './svg/resident.svg'
-import searchSvg from './svg/search.svg'
 import scheduleGreenSvg from './svg/schedule-green.svg'
+import searchSvg from './svg/search.svg'
+import shieldSvg from './svg/shield.svg'
 import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
@@ -123,6 +126,7 @@ export const IconSvgs = {
   'exclamation-mark': exclamationMarkSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
+  flower: flowerSvg,
   'format-bold': formatBold,
   'format-header1': formatHeader1,
   'format-header2': formatHeader2,
@@ -133,6 +137,7 @@ export const IconSvgs = {
   'format-underline': formatUnderline,
   forum: forumSvg,
   gatherer: gathererSvg,
+  hand: handSvg,
   'hand-wave': handWaveSvg,
   'hand-wave-green': handWaveGreenSvg,
   'heart-outline': heartOutlineSvg,
@@ -167,6 +172,7 @@ export const IconSvgs = {
   resident: residentSvg,
   'schedule-green': scheduleGreenSvg,
   search: searchSvg,
+  shield: shieldSvg,
   'sign-out': signOutSvg,
   sleep: sleepSvg,
   stamp: stampSvg,

@@ -97,6 +97,7 @@ type Profile {
   locationVotes: [LocationVote!] @relation
   features: [String!]
   isAdmin: Boolean
+  mailingListOptIn: Boolean
 }
 
 type ProfileVouch {
@@ -188,6 +189,7 @@ input UpdateProfileInput {
   contactFields: [ProfileContactFieldInput!]
   avatar: ProfileAvatarInput
   features: [String!]
+  mailingListOptIn: Boolean
 }
 
 input OfferPriceInput {
@@ -421,6 +423,8 @@ type Cart {
   amountCents: Int!
   stripePaymentIntentClientSecret: String
   paymentStatus: PaymentStatus!
+  agreedToCOC: Boolean!
+  agreedToTerms: Boolean!
   notes: String
 }
 
@@ -500,4 +504,6 @@ input UpdateCartInput {
   stripePaymentIntentClientSecret: String
   paymentStatus: PaymentStatus
   notes: String
+  agreedToCOC: Boolean
+  agreedToTerms: Boolean
 }

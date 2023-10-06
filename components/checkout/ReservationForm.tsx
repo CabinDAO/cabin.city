@@ -32,6 +32,7 @@ export const ReservationForm = ({
   const [updateProfileInput, setUpdateProfileInput] = useState({
     name: user?.name,
     location: user?.location,
+    mailingListOptIn: user?.mailingListOptIn,
   } as UpdateProfileInput)
   const [updateCartInput, setUpdateCartInput] = useState({
     notes: cart.notes,
@@ -45,6 +46,7 @@ export const ReservationForm = ({
       ...updateProfileInput,
       name: user.name,
       location: user.location,
+      mailingListOptIn: user.mailingListOptIn,
     })
   }
 
@@ -59,6 +61,16 @@ export const ReservationForm = ({
     setUpdateProfileInput((prev) => ({
       ...prev,
       ...{ ...updateProfileInput, location: e.target.value },
+    }))
+  }
+
+  const handleMailingListOptInChange = () => {
+    setUpdateProfileInput((prev) => ({
+      ...prev,
+      ...{
+        ...updateProfileInput,
+        mailingListOptIn: !updateProfileInput.mailingListOptIn,
+      },
     }))
   }
 
@@ -144,8 +156,17 @@ export const ReservationForm = ({
       </InputGroup>
       <Subline1>Email Preference</Subline1>
       <InputGroup>
-        <Checkbox selected={false} />
-        <Body1>Email me about future Cabin opportunities</Body1>
+        <CheckboxRow>
+          <Checkbox
+            selected={!!updateProfileInput.mailingListOptIn}
+            onClick={handleMailingListOptInChange}
+          />
+          <Body1>
+            <span onClick={handleMailingListOptInChange}>
+              Email me about future Cabin opportunities
+            </span>
+          </Body1>
+        </CheckboxRow>
       </InputGroup>
       <Button>Continue</Button>
     </Form>
@@ -166,15 +187,20 @@ const InputGroup = styled.div`
   align-items: flex-end;
   width: 100%;
 
-  button {
-    width: 100%;
-  }
-
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
+  }
+`
 
-    button {
-      width: auto;
-    }
+const CheckboxRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 1.6rem;
+
+  > :first-child {
+    flex-shrink: 0;
   }
 `

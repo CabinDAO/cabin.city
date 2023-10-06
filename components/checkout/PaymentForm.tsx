@@ -12,7 +12,6 @@ import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { Button } from '@/components/core/Button'
 import { Body1 } from '@/components/core/Typography'
-import Link from 'next/link'
 import { CartFragment } from '@/generated/graphql'
 import {
   CreatePaymentIntentReq,
@@ -20,6 +19,9 @@ import {
 } from '@/components/checkout/types'
 import { usePrivy } from '@privy-io/react-auth'
 import { useError } from '@/components/hooks/useError'
+import { useModal } from '@/components/hooks/useModal'
+import { LiabilityPolicyModal } from '@/components/checkout/LiabilityPolicyModal'
+import { Checkbox } from '@/components/core/Checkbox'
 
 // Call this outside the render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(
@@ -66,6 +68,9 @@ export const PaymentForm = ({ cart }: { cart: CartFragment }) => {
         // colorText: '#30313d',
         // colorDanger: '#df1b41',
       },
+      // rules: {
+      // p-Fade: { margin-bottom: 2.4rem } // bottom of zip code gets cut off on mobile
+      // },
     },
   }
 
@@ -84,10 +89,18 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
   const stripe = useStripe()
   const elements = useElements()
   const { showError } = useError()
+  const { showModal } = useModal()
 
   const { getAccessToken } = usePrivy()
 
   const [isLoading, setIsLoading] = React.useState(true)
+
+  const [checkboxChecked, setCheckboxChecked] = React.useState(false)
+  const formDisabled = isLoading || !stripe || !elements
+
+  const handleModalClick = () => {
+    showModal(() => <LiabilityPolicyModal />)
+  }
 
   // React.useEffect(() => {
   //   if (!stripe) {
@@ -133,6 +146,14 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
 
     setIsLoading(true)
 
+    if (!checkboxChecked) {
+      showError(
+        'Please read the Liability Policy and check the box indicating you agree to it.'
+      )
+      setIsLoading(false)
+      return
+    }
+
     const { error: submitError } = await elements.submit()
     if (submitError) {
       console.log('stripe elements submit error', submitError)
@@ -150,6 +171,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
       },
       body: JSON.stringify({
         cartId: cart._id,
+        agreedToTerms: checkboxChecked,
       } as CreatePaymentIntentReq),
     })
 
@@ -204,18 +226,53 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
           onReady={handleOnReady}
         />
 
-        <Body1>
-          I have read and agree to Cabin’s{' '}
-          <Link href={''}>Liability Policy</Link>
-        </Body1>
+        <CheckboxRow>
+          <Checkbox
+            selected={checkboxChecked}
+            onClick={() => {
+              setCheckboxChecked(!checkboxChecked)
+            }}
+            disabled={formDisabled}
+          />
+          <Body1>
+            <span
+              onClick={() => {
+                setCheckboxChecked(!checkboxChecked)
+              }}
+            >
+              I have read and agree to Cabin’s
+            </span>{' '}
+            <a
+              onClick={handleModalClick}
+              style={{ cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Liability Policy
+            </a>
+          </Body1>
+        </CheckboxRow>
 
-        <Button disabled={isLoading || !stripe || !elements}>
-          {isLoading || !stripe || !elements ? <LoadingSpinner /> : 'Book now'}
+        <Button disabled={formDisabled}>
+          {formDisabled ? <LoadingSpinner /> : 'Book now'}
         </Button>
       </form>
     </Container>
   )
 }
+
+const CheckboxRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 1.6rem;
+  margin-top: 2.4rem;
+  margin-bottom: 2.4rem;
+
+  > :first-child {
+    flex-shrink: 0;
+  }
+`
 
 const Container = styled.div`
   display: flex;
@@ -224,4 +281,8 @@ const Container = styled.div`
   justify-content: center;
   width: 100%;
   gap: 2.4rem;
+
+  > form {
+    width: 100%;
+  }
 `

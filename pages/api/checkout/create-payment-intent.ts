@@ -53,6 +53,7 @@ const handler = async (
       lodgingType: ref
       amountCents: number
       paymentStatus: PaymentStatus
+      agreedToTerms: boolean
       stripePaymentIntentClientSecret?: string
       notes?: string
     }
@@ -107,6 +108,7 @@ const handler = async (
   try {
     cart.data.paymentStatus = PaymentStatus.Pending // always reset to pending in case it errored in the past
     cart.data.stripePaymentIntentClientSecret = paymentIntent.client_secret
+    cart.data.agreedToTerms = body.agreedToTerms
     await updateCart(cartId, cart.data, cartProfileId)
   } catch (e: any) {
     const error = e as Error

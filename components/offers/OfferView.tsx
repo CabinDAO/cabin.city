@@ -156,7 +156,7 @@ export const OfferView = ({
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
           <Left>
-            {galleryImages && (
+            {galleryImages?.length > 0 && (
               <GalleryImage
                 src={getImageUrlByIpfsHash(galleryImages[0].ipfsHash) ?? ''}
                 onClick={() => handleImageClick(galleryImages[0])}

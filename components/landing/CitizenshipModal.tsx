@@ -44,9 +44,6 @@ export const CitizenshipModal = () => {
 }
 
 const CitizenshipModalContainer = styled(ModalContainer)`
-  height: min-content;
-  width: 40.8rem;
-  height: 54rem;
   overflow-y: auto;
 `
 
