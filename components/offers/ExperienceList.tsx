@@ -1,34 +1,111 @@
 import styled from 'styled-components'
 import { OfferItemFragment } from '@/generated/graphql'
-import { offerListItemPropsFromFragment } from '@/utils/offer'
-import { useProfile } from '../auth/useProfile'
-import { ExperienceListContainer } from './styles'
-import { ExperienceCard } from '../core/ExperienceCard'
+import { Button } from '@/components/core/Button'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
+import { formatShortAddress } from '@/lib/address'
+import Image from 'next/image'
+import { padding } from '@/styles/theme'
+import { stringToSlateValue } from '@/components/core/slate/slate-utils'
+import { SlateRenderer } from '@/components/core/slate/SlateRenderer'
+import ShowMoreText from '@/components/showmore/ShowMoreText'
+import { body2Styles } from '@/components/core/Typography'
+import Link from 'next/link'
 
 export interface ExperienceListProps {
   offers: OfferItemFragment[]
-  actionsEnabled?: boolean
+  actionButtonText: string
 }
 
 export const ExperienceList = ({
   offers,
-  actionsEnabled = false,
+  actionButtonText,
 }: ExperienceListProps) => {
-  const { user } = useProfile()
   return (
-    <ExperienceListContainerNoBorder>
+    <>
       {offers.map((offer) => (
-        <ExperienceCard
-          key={offer._id}
-          {...offerListItemPropsFromFragment(offer, user)}
-          variant="no-icon"
-          actionsEnabled={actionsEnabled}
-        />
+        <Item key={offer._id}>
+          <StyledImage
+            src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+            alt={offer.offerType ?? ''}
+            width={200}
+            height={200}
+          />
+          <Details>
+            <OfferNameAndDates
+              offer={{
+                startDate: offer.startDate ?? null,
+                endDate: offer.endDate ?? null,
+                offerType: offer.offerType ?? null,
+                price: offer.price ?? null,
+                location: {
+                  shortAddress: formatShortAddress(
+                    offer.location.address ?? null
+                  ),
+                },
+              }}
+            />
+            <Expandable
+              more={
+                <span
+                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  show more
+                </span>
+              }
+              less={
+                <span
+                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  show less
+                </span>
+              }
+            >
+              <SlateRenderer value={stringToSlateValue(offer.description)} />
+            </Expandable>
+          </Details>
+          <Buttons>
+            <Link href={`/experience/${offer._id}`}>
+              <Button>{actionButtonText}</Button>
+            </Link>
+          </Buttons>
+        </Item>
       ))}
-    </ExperienceListContainerNoBorder>
+    </>
   )
 }
 
-const ExperienceListContainerNoBorder = styled(ExperienceListContainer)`
+const Expandable = styled(ShowMoreText)`
+  ${body2Styles}
+`
+
+const Item = styled.div`
   border: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.yellow200};
+  gap: 2.4rem;
+  ${padding('sm')}
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
+`
+
+const Details = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`
+
+const StyledImage = styled(Image)`
+  flex: 0;
+`
+
+const Buttons = styled.div`
+  flex: 0;
+  display: flex;
+  flex-direction: column;
 `
