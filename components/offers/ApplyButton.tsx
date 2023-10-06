@@ -16,6 +16,7 @@ import {
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { formatUrl } from '@/utils/display-utils'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { useError } from '@/components/hooks/useError'
 
 interface ApplyButtonProps {
   offer: OfferViewProps
@@ -26,10 +27,21 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
   const router = useRouter()
   const { user } = useProfile()
   const [createCart] = useCreateCartMutation()
+  const { showError } = useError()
 
   const handleReserveClick = async () => {
-    if (!user || !lodgingType || lodgingType.spotsTaken >= lodgingType.quantity)
+    if (!lodgingType) {
+      console.log('button clicked but no lodging type')
+    }
+
+    if (!user || !lodgingType) {
       return
+    }
+
+    if (lodgingType.spotsTaken >= lodgingType.quantity) {
+      showError('This option is sold out')
+      return
+    }
 
     try {
       await createCart({
