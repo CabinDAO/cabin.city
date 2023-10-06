@@ -78,6 +78,9 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
           href={applicationURL ?? ''}
           target="_blank"
           rel="noreferrer"
+          style={{
+            width: '100%',
+          }}
         >
           <BuyButton>Apply now</BuyButton>
         </a>
@@ -97,6 +100,9 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
         href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}
         target="_blank"
         rel="noreferrer"
+        style={{
+          width: '100%',
+        }}
       >
         <BuyButton>Apply now</BuyButton>
       </a>

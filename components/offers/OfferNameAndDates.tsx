@@ -4,7 +4,7 @@ import { isDate, parseISO } from 'date-fns'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { OfferPrice, OfferType } from '@/generated/graphql'
 import { offerInfoFromType } from '@/utils/offer'
-import { daysBetween, formatRange, EMPTY } from '@/utils/display-utils'
+import { daysBetween, EMPTY, formatRange } from '@/utils/display-utils'
 import { Caption, H1, H5 } from '@/components/core/Typography'
 import { Price } from '@/components/offers/Price'
 
@@ -30,6 +30,8 @@ export const OfferNameAndDates = ({
 }) => {
   const offerInfo = offer.offerType ? offerInfoFromType(offer.offerType) : null
 
+  const showDates = offer.offerType !== OfferType.PaidColiving
+
   const startDate = isDate(offer.startDate)
     ? offer.startDate
     : typeof offer.startDate === 'string'
@@ -43,9 +45,11 @@ export const OfferNameAndDates = ({
     : null
 
   const duration =
-    !small && offer.offerType == OfferType.CabinWeek
-      ? `${daysBetween(startDate, endDate)} nights in`
-      : ''
+    offer.offerType == OfferType.CabinWeek
+      ? small
+        ? ''
+        : `${daysBetween(startDate, endDate)} nights in`
+      : 'In'
 
   return (
     <Container>
@@ -58,7 +62,9 @@ export const OfferNameAndDates = ({
         ></Image>
       )}
       <Details>
-        <Date small={small}>{formatRange(startDate, endDate)}</Date>
+        {showDates && (
+          <Date small={small}>{formatRange(startDate, endDate)}</Date>
+        )}
         <H1>{offerInfo?.name ?? EMPTY}</H1>
         <Location small={small}>
           {duration} {offer.location.shortAddress}

@@ -2,9 +2,12 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
 import {
+  OfferPrice,
+  OfferPriceUnit,
   OfferType,
   ProfileRoleLevelType,
   ProfileRoleType,
+  Scalars,
 } from '@/generated/graphql'
 import { OfferViewProps } from './useGetOffer'
 import Icon from '@/components/core/Icon'
@@ -12,7 +15,7 @@ import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { RoleConstraintType } from '@/utils/offer'
 import { isNotNull } from '@/lib/data'
-import { formatRange } from '@/utils/display-utils'
+import { EMPTY, formatRange } from '@/utils/display-utils'
 import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
@@ -38,7 +41,6 @@ import { HostCard } from '@/components/neighborhoods/HostCard'
 import { isAfter, isBefore } from 'date-fns'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { CostBreakdown } from '@/components/checkout/CostBreakdown'
-import { EMPTY } from '@/utils/display-utils'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
@@ -104,6 +106,9 @@ export const OfferView = ({
 
   // TODO: let them actually select one
   const selectedLodgingType = offer.location.lodgingTypes.data[0]
+  const isSoldOut =
+    selectedLodgingType &&
+    selectedLodgingType.spotsTaken >= selectedLodgingType.quantity
 
   const galleryImages = (mediaItems ?? []).map((image) => ({
     ...image,
@@ -187,25 +192,39 @@ export const OfferView = ({
 
           <Right>
             <RightContent>
-              <OfferNameAndDates offer={offer} withPrice />
+              <OfferNameAndDates
+                offer={offer}
+                withPrice={offerType === OfferType.PaidColiving}
+              />
 
               {offerType == OfferType.CabinWeek && offer.price && (
-                <CabinWeekDetails>
-                  <Subline1>Accomodations</Subline1>
-                  {offer.location.lodgingTypes.data.map((lt) => {
-                    return (
-                      <LodgingType key={lt._id}>
-                        <LodgingTypeTop>
-                          <Subline1>{lt.description}</Subline1>
-                          {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
-                        </LodgingTypeTop>
-                        <Caption>
-                          {Math.max(0, lt.quantity - lt.spotsTaken)} available
-                        </Caption>
-                      </LodgingType>
-                    )
-                  })}
-                </CabinWeekDetails>
+                <>
+                  {/* TODO: HUGE HACK TILL WE FINISH MIGRATING TO LODGING TYPES */}
+                  <Price
+                    price={
+                      {
+                        unit: offer.price.unit,
+                        amountCents: selectedLodgingType.priceCents,
+                      } as OfferPrice
+                    }
+                  />
+                  <CabinWeekDetails>
+                    <Subline1>Accomodations</Subline1>
+                    {offer.location.lodgingTypes.data.map((lt) => {
+                      return (
+                        <LodgingType key={lt._id}>
+                          <LodgingTypeTop>
+                            <Subline1>{lt.description}</Subline1>
+                            {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
+                          </LodgingTypeTop>
+                          <Caption>
+                            {Math.max(0, lt.quantity - lt.spotsTaken)} available
+                          </Caption>
+                        </LodgingType>
+                      )
+                    })}
+                  </CabinWeekDetails>
+                </>
               )}
 
               <Actions>
@@ -213,13 +232,15 @@ export const OfferView = ({
                 <Caption emphasized>You won’t be charged yet</Caption>
               </Actions>
 
-              {selectedLodgingType && (
-                <CostBreakdown
-                  lodgingType={selectedLodgingType}
-                  startDate={startDate ?? null}
-                  endDate={endDate ?? null}
-                />
-              )}
+              {offerType == OfferType.CabinWeek &&
+                selectedLodgingType &&
+                !isSoldOut && (
+                  <CostBreakdown
+                    lodgingType={selectedLodgingType}
+                    startDate={startDate ?? null}
+                    endDate={endDate ?? null}
+                  />
+                )}
             </RightContent>
 
             {offerType !== OfferType.CabinWeek && (
