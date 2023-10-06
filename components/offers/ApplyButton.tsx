@@ -77,7 +77,7 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
     return <BuyButton disabled>Sold Out</BuyButton>
   }
 
-  const USE_NEW_FLOW_FLAG = process.env.NODE_ENV !== 'production'
+  const USE_NEW_FLOW_FLAG = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
   if (!USE_NEW_FLOW_FLAG) {
     return (
       <a
