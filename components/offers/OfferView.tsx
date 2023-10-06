@@ -317,15 +317,6 @@ const Left = styled.div`
     gap: 2.4rem;
   }
 
-  > h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-bottom: 1.6rem;
-  }
-
   ul {
   }
 
