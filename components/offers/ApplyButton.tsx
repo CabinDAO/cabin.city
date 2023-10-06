@@ -77,6 +77,20 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
     return <BuyButton disabled>Sold Out</BuyButton>
   }
 
+  const USE_NEW_FLOW_FLAG = process.env.NODE_ENV !== 'production'
+  if (!USE_NEW_FLOW_FLAG) {
+    return (
+      <a
+        onClick={() => events.applyToExperienceEvent(offer._id)}
+        href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <BuyButton>Apply now</BuyButton>
+      </a>
+    )
+  }
+
   return (
     <StyledLink onClick={handleReserveClick}>
       <BuyButton>Reserve</BuyButton>
