@@ -17,6 +17,7 @@ import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
   body1Styles,
+  Body2,
   Caption,
   H3,
   H4,
@@ -213,11 +214,13 @@ export const OfferView = ({
                 <Caption emphasized>You won’t be charged yet</Caption>
               </Actions>
 
-              <CostBreakdown
-                lodgingType={selectedLodgingType}
-                startDate={startDate ?? null}
-                endDate={endDate ?? null}
-              />
+              {selectedLodgingType && (
+                <CostBreakdown
+                  lodgingType={selectedLodgingType}
+                  startDate={startDate ?? null}
+                  endDate={endDate ?? null}
+                />
+              )}
             </RightContent>
 
             {offerType !== OfferType.CabinWeek && (

@@ -63,7 +63,9 @@ export const OfferNameAndDates = ({
         <Location small={small}>
           {duration} {offer.location.shortAddress}
         </Location>
-        {withPrice && <Price price={offer.price as OfferPrice} />}
+        {withPrice && offer.price && (
+          <Price price={offer.price as OfferPrice} />
+        )}
       </Details>
     </Container>
   )
