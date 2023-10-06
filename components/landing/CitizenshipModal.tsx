@@ -34,7 +34,7 @@ export const CitizenshipModal = () => {
             target={'_blank'}
             rel={'noreferer'}
           >
-            Let's chat
+            Let&apos;s chat
           </StyledLink>
           .
         </Body2>

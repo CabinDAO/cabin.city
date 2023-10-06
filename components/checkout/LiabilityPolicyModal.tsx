@@ -70,16 +70,17 @@ export const LiabilityPolicyModal = () => {
           Agreement.
         </Body2>
 
-        <H4>7. ARM'S LENGTH AGREEMENT</H4>
+        <H4>7. ARM&apos;S LENGTH AGREEMENT</H4>
         <Body2>
-          This Agreement and each of its terms are the product of an arm's
+          This Agreement and each of its terms are the product of an arm&apos;s
           length negotiation between the Parties. In the event any ambiguity is
           found to exist in the interpretation of this Agreement, or any of its
           provisions, the Parties, and each of them, explicitly reject the
           application of any legal or equitable rule of interpretation which
-          would lead to a construction either "for" or "against" a particular
-          party based upon their status as the drafter of a specific term,
-          language, or provision giving rise to such ambiguity.
+          would lead to a construction either &quot;for&quot; or
+          &quot;against&quot; a particular party based upon their status as the
+          drafter of a specific term, language, or provision giving rise to such
+          ambiguity.
         </Body2>
 
         <H4>8. ENFORCEABILITY</H4>
