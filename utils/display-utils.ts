@@ -8,6 +8,8 @@ import { enUS } from 'date-fns/locale'
 export const appDomain =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? 'cabin.city'
+    : process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'dev'
+    ? 'dev.cabin.city'
     : process.env.NEXT_PUBLIC_VERCEL_URL
 
 export const appDomainWithProto =
