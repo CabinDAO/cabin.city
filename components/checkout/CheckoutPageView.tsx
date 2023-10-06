@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Caption, H2, H3, H4, H5 } from '@/components/core/Typography'
+import { Body2, H2, H4, H5 } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
 import { TwoColumnLayout } from '@/components/layouts/TwoColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -11,12 +11,11 @@ import { Button } from '@/components/core/Button'
 import { useGetCartForUser } from '@/components/checkout/useGetCartForUser'
 import { useProfile } from '@/components/auth/useProfile'
 import { CartFragment, PaymentStatus } from '@/generated/graphql'
-import Image from 'next/image'
 import { formatShortAddress } from '@/lib/address'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { formatRange } from '@/utils/display-utils'
 import { parseISO } from 'date-fns'
-import { MEMBERSHIP_PRICE_DOLLARS } from '@/components/checkout/constants'
+import { CostBreakdown } from '@/components/checkout/CostBreakdown'
+import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 type StepProps = {
   onComplete: () => void
@@ -46,6 +45,10 @@ const StepPayment = ({ cart }: StepProps) => {
   return (
     <>
       <H2>Payment</H2>
+      <Body2>
+        If you prefer paying in USDC or ETH,{' '}
+        <ContactUsLink>contact us</ContactUsLink> to complete your booking.
+      </Body2>
       <FormContainer>
         <PaymentForm cart={cart} />
       </FormContainer>
@@ -75,7 +78,6 @@ const CheckoutPageView = () => {
     return null
   }
 
-  const location = cart.offer.location
   const lodgingType = cart.lodgingType
 
   if (lodgingType.spotsTaken >= lodgingType.quantity) {
@@ -107,45 +109,28 @@ const CheckoutPageView = () => {
         <CurrentComponent cart={cart} onComplete={advanceStep} />
       </LeftSide>
       <RightSide shape="notch" notchPosition={'top-right'} notchSize={1.6}>
-        <Location>
-          <Image
-            src={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
-            alt={location.name ?? ''}
-            width={72}
-            height={72}
-          />
-          <LocationText>
-            <H3>{location.name}</H3>
-            <Caption emphasized>
-              {formatRange(
-                parseISO(cart.offer.startDate),
-                parseISO(cart.offer.endDate)
-              )}
-            </Caption>
-            <Caption>{formatShortAddress(location.address)}</Caption>
-          </LocationText>
-        </Location>
+        <OfferNameAndDates
+          small
+          offer={{
+            startDate: cart.offer.startDate ?? null,
+            endDate: cart.offer.endDate ?? null,
+            offerType: cart.offer.offerType ?? null,
+            price: cart.offer.price ?? null,
+            imageIpfsHash: cart.offer.imageIpfsHash ?? null,
+            location: {
+              shortAddress: formatShortAddress(
+                cart.offer.location.address ?? null
+              ),
+            },
+          }}
+        />
         <BookingSummary>
           <H5>Booking summary</H5>
-          <Row>
-            <Caption emphasized>{lodgingType.description}</Caption>
-            <Caption emphasized>${lodgingType.priceCents / 100}</Caption>
-          </Row>
-          <Row>
-            <Caption emphasized>
-              1 yr cabin citizenship
-              {/*<Icon name={'info'} size={1.6} />*/}
-            </Caption>
-            <Caption emphasized>${MEMBERSHIP_PRICE_DOLLARS}</Caption>
-          </Row>
-          <Row>
-            <Caption emphasized>Discount</Caption>
-            <Caption emphasized>-${MEMBERSHIP_PRICE_DOLLARS}</Caption>
-          </Row>
-          <Row className={'total'}>
-            <H4>Total</H4>
-            <H4>${lodgingType.priceCents / 100}</H4>
-          </Row>
+          <CostBreakdown
+            lodgingType={lodgingType}
+            startDate={parseISO(cart.offer.startDate)}
+            endDate={parseISO(cart.offer.endDate)}
+          />
         </BookingSummary>
       </RightSide>
     </TwoColumnLayout>
@@ -162,6 +147,10 @@ const LeftSide = styled(ContentCard)`
   justify-content: flex-start;
   width: 100%;
   ${padding('md', 'sm')};
+
+  ${({ theme }) => theme.bp.md_max} {
+    order: 2;
+  }
 `
 
 const RightSide = styled(ContentCard)`
@@ -172,17 +161,6 @@ const RightSide = styled(ContentCard)`
   ${padding('xs', 'xs')};
 `
 
-const Location = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.6rem;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-`
-
-const LocationText = styled.div``
-
 const BookingSummary = styled.div`
   display: flex;
   flex-direction: column;
@@ -190,21 +168,6 @@ const BookingSummary = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-`
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  &:nth-last-child(2) {
-    padding-bottom: 0.8rem; // target padding is 2.4rem but parent has 1.6rem gap
-  }
-
-  &:last-child {
-    ${padding.top('sm')};
-    border-top: 1px solid ${({ theme }) => theme.colors.green900};
-  }
 `
 
 const FormContainer = styled.div`

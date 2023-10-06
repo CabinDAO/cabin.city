@@ -367,6 +367,7 @@ const Actions = styled.div`
   align-items: center;
   gap: 1.6rem;
   width: 100%;
+  margin-bottom: 2rem;
 `
 
 const DetailsSection = styled.div`

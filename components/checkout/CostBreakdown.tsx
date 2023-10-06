@@ -29,7 +29,9 @@ export const CostBreakdown = ({
   return (
     <Summary>
       <Row>
-        <Caption emphasized>{daysBetween(startDate, endDate)} nights</Caption>
+        <Caption emphasized>
+          {daysBetween(startDate, endDate)} nights ({lodgingType.description})
+        </Caption>
         <Caption emphasized>${(lodgingType.priceCents ?? 0) / 100}</Caption>
       </Row>
       <Row>

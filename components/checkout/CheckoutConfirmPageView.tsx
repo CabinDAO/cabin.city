@@ -23,6 +23,7 @@ import {
   OfferLinkCard,
 } from '@/components/neighborhoods/LinkCards'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 const CheckoutConfirmPageView = () => {
   const router = useRouter()
@@ -187,16 +188,8 @@ const Paid = ({
           </Body2>
           <H4>Have a question?</H4>
           <Body2>
-            Don’t hesitate to{' '}
-            <Link
-              href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-              style={{ textDecoration: 'underline' }}
-              target={'_blank'}
-              rel={'noreferer'}
-            >
-              contact us
-            </Link>{' '}
-            with any questions or concerns.
+            Don’t hesitate to <ContactUsLink>contact us</ContactUsLink> with any
+            questions or concerns.
           </Body2>
           <HorizontalDivider />
           <OfferLinkCard

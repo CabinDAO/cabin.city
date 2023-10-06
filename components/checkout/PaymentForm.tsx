@@ -48,8 +48,24 @@ export const PaymentForm = ({ cart }: { cart: CartFragment }) => {
     mode: 'payment',
     amount: cart.amountCents,
     currency: 'usd',
+    fonts: [
+      {
+        cssSrc:
+          'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@600&display=swap',
+      },
+    ],
+    // https://stripe.com/docs/elements/appearance-api?platform=web#variables
     appearance: {
       theme: 'stripe',
+      variables: {
+        fontFamily: 'IBM Plex Mono', // make sure you import this font above too
+        // fontSizeBase: '10px',
+        fontWeightMedium: '600',
+        // colorPrimary: '#0570de',
+        // colorBackground: '#ffffff',
+        // colorText: '#30313d',
+        // colorDanger: '#df1b41',
+      },
     },
   }
 

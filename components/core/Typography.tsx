@@ -32,6 +32,7 @@ export const fonts = {
   inter: inter.style.fontFamily,
   ibmPlexMono: ibmPlexMono.style.fontFamily,
   poppins: poppins.style.fontFamily,
+  // FYI there are some hardcoded fonts on the stripe payment form
 }
 
 export const typographySharedStyles = css<TypographyProps>`
