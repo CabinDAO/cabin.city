@@ -176,14 +176,9 @@ const Paid = ({
           <Body2>
             For a full refund, guests must cancel within 48 hours of booking and
             at least 28 days before check-in. Email{' '}
-            <Link
-              href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-              style={{ textDecoration: 'underline' }}
-              target={'_blank'}
-              rel={'noreferer'}
-            >
+            <ContactUsLink>
               {EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}
-            </Link>{' '}
+            </ContactUsLink>{' '}
             for more information.
           </Body2>
           <H4>Have a question?</H4>
@@ -243,7 +238,7 @@ const Error = ({ cart }: { cart: CartFragment }) => {
       <ErrorIcon name={'exclamation-mark'} size={9.6} color={'red600'} />
       <H2>Error processing payment</H2>
       <Body2>Please check your card details and try again.</Body2>
-      <Link href={`/checkout/${cart._id}`}>
+      <Link href={`/checkout/${cart._id}?step=3`}>
         <Button className={'error-button'}>Back to payment selection</Button>
       </Link>
     </Content>

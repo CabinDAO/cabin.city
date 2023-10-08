@@ -16,6 +16,7 @@ import { useProfile } from '@/components/auth/useProfile'
 import { InputTextArea } from '@/components/core/InputTextArea'
 import { Body1, Subline1 } from '@/components/core/Typography'
 import { Checkbox } from '@/components/core/Checkbox'
+import { useError } from '@/components/hooks/useError'
 
 export const ReservationForm = ({
   onComplete,
@@ -27,8 +28,8 @@ export const ReservationForm = ({
   const { user } = useProfile()
   const [updateProfile] = useUpdateProfileMutation()
   const [updateCart] = useUpdateCartMutation()
+  const { showError } = useError()
 
-  const [errorMessage, setErrorMessage] = useState('')
   const [updateProfileInput, setUpdateProfileInput] = useState({
     name: user?.name,
     location: user?.location,
@@ -86,8 +87,8 @@ export const ReservationForm = ({
 
     if (!user || !updateProfileInput) return
 
-    if (!validateProfileInput(updateProfileInput)) {
-      setErrorMessage(`invalid profile input`)
+    if (!validateProfileInput(updateProfileInput, true)) {
+      showError(`Name and Location are required`)
       return
     }
 
@@ -116,20 +117,19 @@ export const ReservationForm = ({
             FAUNA_ERROR_TO_MESSAGE_MAPPING[extensions?.code as string]
 
           if (mappedError) {
-            setErrorMessage(`error: ${mappedError}`)
+            showError(`error: ${mappedError}`)
           } else {
-            setErrorMessage(`error updating profile or cart`)
+            showError(`error updating profile or cart`)
           }
         }
       } else {
-        setErrorMessage(`error updating profile or cart`)
+        showError(`error updating profile or cart`)
       }
     }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      {errorMessage && <div>{errorMessage}</div>}
       <InputGroup>
         <InputText
           required
@@ -168,7 +168,9 @@ export const ReservationForm = ({
           </Body1>
         </CheckboxRow>
       </InputGroup>
-      <Button>Continue</Button>
+      <InputGroup>
+        <Button>Continue</Button>
+      </InputGroup>
     </Form>
   )
 }

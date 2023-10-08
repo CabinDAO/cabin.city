@@ -102,6 +102,7 @@ const Details = styled.div`
 
 const StyledImage = styled(Image)`
   flex: 0;
+  object-fit: cover;
 `
 
 const Buttons = styled.div`

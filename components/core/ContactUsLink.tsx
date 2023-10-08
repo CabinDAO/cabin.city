@@ -7,6 +7,7 @@ export const ContactUsLink = ({ children }: { children: React.ReactNode }) => {
   return (
     <StyledLink
       href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+      style={{ textDecoration: 'underline' }}
       target={'_blank'}
       rel={'noreferer'}
     >

@@ -14,6 +14,7 @@ interface LayoutProps {
   title: string
   icon?: IconName
   iconHref?: string
+  onIconClick?: () => void
   subheader?: string
   withFooter?: boolean
 }
@@ -23,6 +24,7 @@ export const TwoColumnLayout = ({
   title,
   icon,
   iconHref,
+  onIconClick,
   subheader,
   withFooter,
 }: LayoutProps) => {
@@ -37,6 +39,7 @@ export const TwoColumnLayout = ({
             title={title}
             icon={icon ?? 'logo-cabin'}
             iconHref={iconHref}
+            onIconClick={onIconClick}
           />
           {subheader && <H3>{subheader}</H3>}
           <ColumnsContainer>{children}</ColumnsContainer>

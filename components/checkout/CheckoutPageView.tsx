@@ -67,10 +67,21 @@ const CheckoutPageView = () => {
   const { cartId } = router.query
   const { cart } = useGetCartForUser(cartId as string, user?._id)
 
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(1)
 
   if (!user || !cart) {
     return null
+  }
+
+  if (router.query.step) {
+    // step cant be less than 1
+    const stepInQuery = Math.min(
+      Math.max(parseInt(router.query.step as string), 1),
+      steps.length
+    )
+    if (stepInQuery != currentStep) {
+      setCurrentStep(stepInQuery)
+    }
   }
 
   if (cart.paymentStatus == PaymentStatus.Paid) {
@@ -85,24 +96,36 @@ const CheckoutPageView = () => {
   }
 
   const advanceStep = () => {
-    const isLastStep = currentStep >= steps.length - 1
+    const isLastStep = currentStep >= steps.length
 
     if (isLastStep) {
       // on the last step, the stripe form redirects them to the confirm page
       // router.push(`/trip/${offer._id}`)
     } else {
       setCurrentStep(currentStep + 1)
+      router.query.step = `${currentStep + 1}`
+      router.push({ query: router.query }).then()
     }
   }
 
-  const CurrentComponent = steps[currentStep]
+  const handleBackClick = () => {
+    if (currentStep == 1) {
+      router.push(`/experience/${cart.offer._id}`).then()
+    } else {
+      setCurrentStep(currentStep - 1)
+      router.query.step = `${currentStep - 1}`
+      router.push({ query: router.query }).then()
+    }
+  }
+
+  const CurrentComponent = steps[currentStep - 1]
 
   return (
     <TwoColumnLayout
       title={'Reservation'}
       icon="back-arrow"
-      iconHref={`/experience/${cart.offer._id}`}
-      subheader={`Step ${currentStep + 1} of ${steps.length}`}
+      onIconClick={handleBackClick}
+      subheader={`Step ${currentStep} of ${steps.length}`}
       withFooter
     >
       <LeftSide shape="notch" notchSize={1.6}>

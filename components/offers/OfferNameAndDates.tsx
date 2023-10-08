@@ -5,7 +5,7 @@ import { getImageUrlByIpfsHash } from '@/lib/image'
 import { OfferPrice, OfferType } from '@/generated/graphql'
 import { offerInfoFromType } from '@/utils/offer'
 import { daysBetween, EMPTY, formatRange } from '@/utils/display-utils'
-import { Caption, H1, H5 } from '@/components/core/Typography'
+import { Caption, H1, H4, H5 } from '@/components/core/Typography'
 import { Price } from '@/components/offers/Price'
 
 interface OfferNameAndDatesProps {
@@ -59,16 +59,27 @@ export const OfferNameAndDates = ({
           alt={offer.offerType ?? ''}
           width={72}
           height={72}
+          style={{
+            objectFit: 'cover',
+          }}
         ></Image>
       )}
+
       <Details>
         {showDates && (
           <Date small={small}>{formatRange(startDate, endDate)}</Date>
         )}
-        <H1>{offerInfo?.name ?? EMPTY}</H1>
+
+        {small ? (
+          <H4>{offerInfo?.name ?? EMPTY}</H4>
+        ) : (
+          <H1>{offerInfo?.name ?? EMPTY}</H1>
+        )}
+
         <Location small={small}>
           {duration} {offer.location.shortAddress}
         </Location>
+
         {withPrice && offer.price && (
           <Price price={offer.price as OfferPrice} />
         )}
