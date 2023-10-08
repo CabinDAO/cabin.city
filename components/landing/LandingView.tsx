@@ -45,6 +45,10 @@ export const LandingView = () => {
         <HeroVideo />
       </LandingSection>
 
+      <LandingSection variant={'light'}>
+        <SubscribeSection />
+      </LandingSection>
+
       <LandingSection precedesNoVertPadding>
         <ValuesSection />
       </LandingSection>
@@ -136,10 +140,6 @@ export const LandingView = () => {
           height={32}
           width={84}
         />
-      </LandingSection>
-
-      <LandingSection variant={'light'}>
-        <SubscribeSection />
       </LandingSection>
 
       <LandingSection variant="dark">
