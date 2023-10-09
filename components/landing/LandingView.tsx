@@ -34,9 +34,6 @@ export const LandingView = () => {
             <Link key="1" href="/cabin-week">
               <Button>Try it out</Button>
             </Link>,
-            <a key="2" href="mailto:home@cabin.city">
-              <Button variant="secondary">Contact us</Button>
-            </a>,
           ]}
         />
       </LandingSection>
