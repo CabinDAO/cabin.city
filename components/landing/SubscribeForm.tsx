@@ -59,7 +59,14 @@ export const SubscribeForm = () => {
           onChange={handleEmailChange}
         />
         <StyledButton disabled={isLoading}>
-          {isLoading ? <LoadingSpinner /> : 'Subscribe'}
+          {isLoading ? (
+            <>
+              <LoadingSpinner />
+              &nbsp; {/* this keeps the button height from collapsing */}
+            </>
+          ) : (
+            'Subscribe'
+          )}
         </StyledButton>
       </InputGroup>
     </Form>
