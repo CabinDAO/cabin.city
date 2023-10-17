@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import { Body1, HHero } from '@/components/core/Typography'
+import { Body1, H4, HHero } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
+import { SubscribeForm } from '@/components/landing/SubscribeForm'
 
 interface HeroSectionProps {
   title: string
@@ -26,6 +27,8 @@ export const HeroSection = (props: HeroSectionProps) => {
           </Buttons>
         </ButtonWrapper>
       </Wrapper>
+      <H4>Subscribe to our newsletter</H4>
+      <SubscribeForm />
     </ExtraPadding>
   )
 }
@@ -55,7 +58,7 @@ const ExtraPadding = styled.div`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
+    width: 65rem;
   }
 `
 

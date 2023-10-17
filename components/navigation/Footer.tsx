@@ -7,7 +7,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
-import { padding } from '@/styles/theme'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 export const Footer = () => (
   <Container>
@@ -16,22 +16,12 @@ export const Footer = () => (
         <TextSections>
           <Section>
             <Header>Product</Header>
-            <AppLink location="/cabin-week" iconSize={0}>
-              <Name>Cabin Weeks</Name>
-            </AppLink>
             <AppLink
               onClick={() => events.viewCityDirectoryEvent()}
               location="/city-directory"
               iconSize={0}
             >
               <Name>City Directory</Name>
-            </AppLink>
-            <AppLink
-              onClick={() => events.viewExperiencesEvent()}
-              location="/experiences"
-              iconSize={0}
-            >
-              <Name>Experiences</Name>
             </AppLink>
             <AppLink
               external
@@ -54,6 +44,13 @@ export const Footer = () => (
             >
               <Name>Privacy & Terms</Name>
             </AppLink>
+            <AppLink
+              external
+              location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+              iconSize={0}
+            >
+              <Name>Contact Us</Name>
+            </AppLink>
           </Section>
 
           <Section>
@@ -70,6 +67,9 @@ export const Footer = () => (
             <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
               <Name>Support Wiki</Name>
             </AppLink>
+            <AppLink external location={EXTERNAL_LINKS.STORE} iconSize={0}>
+              <Name>Store</Name>
+            </AppLink>
           </Section>
 
           <Section>
@@ -80,6 +80,9 @@ export const Footer = () => (
               iconSize={0}
             >
               <Name>Discord</Name>
+            </AppLink>
+            <AppLink external location={EXTERNAL_LINKS.FORUM} iconSize={0}>
+              <Name>Forum</Name>
             </AppLink>
             <AppLink
               external

@@ -32,4 +32,7 @@ export const EXTERNAL_LINKS = {
     'https://cabindotcity.typeform.com/to/ZhyOQyQM?utm_source=cabin.city&utm_medium=web',
   CARETAKER_TYPEFORM:
     'https://cabindotcity.typeform.com/to/CgI1OjLD?utm_source=cabin.city-footer&utm_medium=web',
+  SUPPER_CLUB_LUMA: 'https://lu.ma/cabinsupperclubs',
+  STORE: 'https://cabingeneralstore.myshopify.com',
+  FORUM: 'https://forum.cabin.city',
 }
