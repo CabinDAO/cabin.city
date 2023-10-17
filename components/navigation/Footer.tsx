@@ -7,6 +7,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 export const Footer = () => (
   <Container>
@@ -42,6 +43,13 @@ export const Footer = () => (
               iconSize={0}
             >
               <Name>Privacy & Terms</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+              iconSize={0}
+            >
+              <Name>Contact Us</Name>
             </AppLink>
           </Section>
 

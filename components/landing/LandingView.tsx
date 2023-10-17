@@ -42,67 +42,67 @@ export const LandingView = () => {
         <ValuesSection />
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding variant={'light'}>
-        <SupperClubSection />
-      </LandingSection>
+      {/*<LandingSection fullWidth noVertPadding variant={'light'}>*/}
+      {/*  <SupperClubSection />*/}
+      {/*</LandingSection>*/}
 
-      <LandingSection
-        title={'Participate in Cabin'}
-        icon={'map-green'}
-        precedesNoVertPadding
-      >
-        <Body>
-          Join the community online, break bread at supper club, or visit one of
-          the beautiful properties in the directory to be apart of the journey.{' '}
-        </Body>
-        <HorizontalList
-          centered
-          items={[
-            {
-              title: 'Easy',
-              body: 'Check out our newsletter, blog, and podcast content and join our discord community.',
-              icon: 'mountains',
-              button: (
-                <Link
-                  href={EXTERNAL_LINKS.CABIN_DISCORD}
-                  style={{ padding: '0' }}
-                >
-                  <ActionButton variant={'tertiary'}>Join Discord</ActionButton>
-                </Link>
-              ),
-            },
-            {
-              title: 'Medium',
-              body: 'Foster meaningful connections and discussions by hosting a Supper Club in your area.',
-              icon: 'lightning-bolt',
-              button: (
-                <Link
-                  href={EXTERNAL_LINKS.CABIN_DISCORD}
-                  style={{ padding: '0' }}
-                >
-                  <ActionButton variant={'tertiary'}>
-                    Become a Host
-                  </ActionButton>
-                </Link>
-              ),
-            },
-            {
-              title: 'Hard',
-              body: 'Become a Citizen to expand Cabin and unlock access to properties in the directory.',
-              icon: 'peace-sign',
-              button: (
-                <Link
-                  href={EXTERNAL_LINKS.CABIN_DISCORD}
-                  style={{ padding: '0' }}
-                >
-                  <ActionButton variant={'tertiary'}>Learn More</ActionButton>
-                </Link>
-              ),
-            },
-          ]}
-        />
-        <Spacer />
-      </LandingSection>
+      {/*<LandingSection*/}
+      {/*  title={'Participate in Cabin'}*/}
+      {/*  icon={'map-green'}*/}
+      {/*  precedesNoVertPadding*/}
+      {/*>*/}
+      {/*  <Body>*/}
+      {/*    Join the community online, break bread at supper club, or visit one of*/}
+      {/*    the beautiful properties in the directory to be apart of the journey.{' '}*/}
+      {/*  </Body>*/}
+      {/*  <HorizontalList*/}
+      {/*    centered*/}
+      {/*    items={[*/}
+      {/*      {*/}
+      {/*        title: 'Easy',*/}
+      {/*        body: 'Check out our newsletter, blog, and podcast content and join our discord community.',*/}
+      {/*        icon: 'mountains',*/}
+      {/*        button: (*/}
+      {/*          <Link*/}
+      {/*            href={EXTERNAL_LINKS.CABIN_DISCORD}*/}
+      {/*            style={{ padding: '0' }}*/}
+      {/*          >*/}
+      {/*            <ActionButton variant={'tertiary'}>Join Discord</ActionButton>*/}
+      {/*          </Link>*/}
+      {/*        ),*/}
+      {/*      },*/}
+      {/*      {*/}
+      {/*        title: 'Medium',*/}
+      {/*        body: 'Foster meaningful connections and discussions by hosting a Supper Club in your area.',*/}
+      {/*        icon: 'lightning-bolt',*/}
+      {/*        button: (*/}
+      {/*          <Link*/}
+      {/*            href={EXTERNAL_LINKS.CABIN_DISCORD}*/}
+      {/*            style={{ padding: '0' }}*/}
+      {/*          >*/}
+      {/*            <ActionButton variant={'tertiary'}>*/}
+      {/*              Become a Host*/}
+      {/*            </ActionButton>*/}
+      {/*          </Link>*/}
+      {/*        ),*/}
+      {/*      },*/}
+      {/*      {*/}
+      {/*        title: 'Hard',*/}
+      {/*        body: 'Become a Citizen to expand Cabin and unlock access to properties in the directory.',*/}
+      {/*        icon: 'peace-sign',*/}
+      {/*        button: (*/}
+      {/*          <Link*/}
+      {/*            href={EXTERNAL_LINKS.CABIN_DISCORD}*/}
+      {/*            style={{ padding: '0' }}*/}
+      {/*          >*/}
+      {/*            <ActionButton variant={'tertiary'}>Learn More</ActionButton>*/}
+      {/*          </Link>*/}
+      {/*        ),*/}
+      {/*      },*/}
+      {/*    ]}*/}
+      {/*  />*/}
+      {/*  <Spacer />*/}
+      {/*</LandingSection>*/}
 
       <LandingSection fullWidth noVertPadding>
         <NeighborhoodShowcase />
