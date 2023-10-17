@@ -88,6 +88,11 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
       break
   }
 
+  const CABIN_WEEKS_DISABLED = true
+  if (CABIN_WEEKS_DISABLED) {
+    return <BuyButton disabled>Not Available</BuyButton>
+  }
+
   if (lodgingType && lodgingType?.spotsTaken >= lodgingType?.quantity) {
     return <BuyButton disabled>Sold Out</BuyButton>
   }
