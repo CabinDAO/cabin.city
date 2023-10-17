@@ -7,6 +7,8 @@ import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
 import { query as q } from 'faunadb'
 import { updateCart } from '@/lib/fauna-server/checkout'
 import { PaymentStatus } from '@/generated/graphql'
+import { SendgridService } from '@/lib/mail/sendgrid-service'
+import { EmailType } from '@/lib/mail/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -109,6 +111,19 @@ const handlePaymentIntentNewStatus = async (
       `Got payment_intent.succeeded event but failed to update cart: ${e}`
     )
     res.status(400).end(`Failed to update cart: ${e}`)
+    return
+  }
+
+  if (status === PaymentStatus.Paid) {
+    const sendgrid = new SendgridService()
+    try {
+      await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {
+        cartId: cart.ref.value.id,
+      })
+      console.log(`Sent us a new purchase email`)
+    } catch (e: any) {
+      console.log(`Failed to send new purchase email: ${e}`)
+    }
   }
 }
 

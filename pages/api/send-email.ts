@@ -3,10 +3,10 @@ import { ironOptions } from '@/lib/next-server/iron-options'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import withAuth from '@/utils/api/withAuth'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
-import { EmailPayload, EmailType } from '@/lib/mail/types'
+import { EmailType } from '@/lib/mail/types'
 
-export interface EmailParams<T extends EmailPayload> {
-  data: T
+export interface EmailParams {
+  data: object
   type: EmailType
 }
 
@@ -22,7 +22,7 @@ async function handler(
     return
   }
 
-  const body = req.body as EmailParams<EmailPayload>
+  const body = req.body as EmailParams
   const sendgrid = new SendgridService()
 
   try {
