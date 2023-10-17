@@ -1,5 +1,5 @@
 query GetOfferById($id: ID!) {
   findOfferByID(id: $id) {
-    ...Offer
+    ...OfferData
   }
 }

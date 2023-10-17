@@ -6,13 +6,17 @@ import {
 } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 
-export const validateProfileInput = (editProfileInput: UpdateProfileInput) => {
+export const validateProfileInput = (
+  editProfileInput: UpdateProfileInput,
+  locationRequired = false
+) => {
   const { name, email, bio, location } = editProfileInput
 
   const invalid =
     (editProfileInput.hasOwnProperty('name') && !validName(name)) ||
     (editProfileInput.hasOwnProperty('bio') && !validBio(bio)) ||
-    (editProfileInput.hasOwnProperty('location') && !validLocation(location)) ||
+    (editProfileInput.hasOwnProperty('location') &&
+      !validLocation(location, locationRequired)) ||
     (editProfileInput.hasOwnProperty('email') && !validEmail(email))
 
   return !invalid
@@ -32,8 +36,14 @@ export const validBio = (bio: ConditionalString) => {
   return (bio?.length ?? 0) <= MAX_BIO_LENGTH
 }
 
-export const validLocation = (location: ConditionalString) => {
-  return (location?.length ?? 0) <= MAX_LOCATION_LENGTH
+export const validLocation = (
+  location: ConditionalString,
+  locationRequired = false
+) => {
+  return (
+    (location?.length ?? 0) <= MAX_LOCATION_LENGTH &&
+    (!locationRequired || (location?.length ?? 0) > 0)
+  )
 }
 
 export const validEmail = (email: ConditionalString) => {

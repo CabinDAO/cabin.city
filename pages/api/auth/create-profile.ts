@@ -39,7 +39,6 @@ const handler = async (
 
       try {
         const roles = await _getProfileRolesForAccount(body.address)
-        console.info('roles', roles)
 
         const profile = await _createProfile({
           address: body.address,

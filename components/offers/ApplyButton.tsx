@@ -1,3 +1,5 @@
+import React from 'react'
+import { useRouter } from 'next/router'
 import Icon from '@/components/core/Icon'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
@@ -7,64 +9,114 @@ import { useProfile } from '@/components/auth/useProfile'
 import {
   CitizenshipStatus,
   MeFragment,
-  OfferFragment,
+  OfferDataFragment,
   OfferType,
+  useCreateCartMutation,
 } from '@/generated/graphql'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { formatUrl } from '@/utils/display-utils'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { useError } from '@/components/hooks/useError'
 
 interface ApplyButtonProps {
   offer: OfferViewProps
+  lodgingType?: OfferViewProps['location']['lodgingTypes']['data'][0]
 }
 
-export const ApplyButton = ({ offer }: ApplyButtonProps) => {
+export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
+  const router = useRouter()
   const { user } = useProfile()
+  const [createCart] = useCreateCartMutation()
+  const { showError } = useError()
 
-  let applicationURL: string | null = null
+  const handleReserveClick = async () => {
+    if (!lodgingType) {
+      console.log('button clicked but no lodging type')
+    }
+
+    if (!user || !lodgingType) {
+      return
+    }
+
+    if (lodgingType.spotsTaken >= lodgingType.quantity) {
+      showError('This option is sold out')
+      return
+    }
+
+    try {
+      await createCart({
+        variables: {
+          data: {
+            profileId: user._id,
+            offerId: offer._id,
+            lodgingTypeId: lodgingType._id,
+          },
+        },
+      }).then((res) => {
+        router.push(`/checkout/${res.data?.createCart?._id}`)
+      })
+    } catch (error) {}
+  }
 
   switch (offer.offerType) {
     case OfferType.Residency:
       return (
-        <ApplyNowButton
-          startAdornment={<Icon name="lock" size={1.6} />}
-          disabled
-        >
+        <BuyButton startAdornment={<Icon name="lock" size={1.6} />} disabled>
           Disabled
-        </ApplyNowButton>
+        </BuyButton>
       )
       break
 
     case OfferType.PaidColiving:
-      if (!user || !isEligible(user, offer)) {
-        applicationURL = EXTERNAL_LINKS.COLIVING_TYPEFORM
-      } else {
-        applicationURL = formatUrl(offer.applicationUrl)
-      }
-      break
-
-    case OfferType.CabinWeek:
-      applicationURL = EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM
+      const applicationURL =
+        !user || !isEligible(user, offer)
+          ? EXTERNAL_LINKS.COLIVING_TYPEFORM
+          : formatUrl(offer.applicationUrl)
+      return (
+        <a
+          onClick={() => events.applyToExperienceEvent(offer._id)}
+          href={applicationURL ?? ''}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            width: '100%',
+          }}
+        >
+          <BuyButton>Apply now</BuyButton>
+        </a>
+      )
       break
   }
 
-  if (!applicationURL) {
-    return null
+  if (lodgingType && lodgingType?.spotsTaken >= lodgingType?.quantity) {
+    return <BuyButton disabled>Sold Out</BuyButton>
+  }
+
+  const USE_NEW_FLOW_FLAG = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
+  if (!USE_NEW_FLOW_FLAG) {
+    return (
+      <a
+        onClick={() => events.applyToExperienceEvent(offer._id)}
+        href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}
+        target="_blank"
+        rel="noreferrer"
+        style={{
+          width: '100%',
+        }}
+      >
+        <BuyButton>Apply now</BuyButton>
+      </a>
+    )
   }
 
   return (
-    <a
-      onClick={() => events.applyToExperienceEvent(offer._id)}
-      href={applicationURL}
-      target="_blank"
-      rel="noreferrer"
-    >
-      <ApplyNowButton>Apply now</ApplyNowButton>
-    </a>
+    <StyledLink onClick={handleReserveClick}>
+      <BuyButton>Reserve</BuyButton>
+    </StyledLink>
   )
 }
 
-const isEligible = (user: MeFragment, offer: OfferFragment) => {
+const isEligible = (user: MeFragment, offer: OfferDataFragment) => {
   if (offer.offerType == OfferType.Residency) {
     return false
   }
@@ -99,14 +151,10 @@ const isEligible = (user: MeFragment, offer: OfferFragment) => {
   return true
 }
 
-const ApplyNowButton = styled(Button)`
+const BuyButton = styled(Button)`
   width: 100%;
+`
 
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 18.9rem;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    width: 100%;
-  }
+const StyledLink = styled(AuthenticatedLink)`
+  width: 100%;
 `

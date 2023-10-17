@@ -1,8 +1,10 @@
 import { RoleResource } from 'fauna-gql-upload'
 import { query as q } from 'faunadb'
+import { readOnlyBy } from './predicates/readOnlyBy'
 import { writeOnlyBy } from './predicates/writeOnlyBy'
 import { deleteOnlyBy } from './predicates/deleteOnlyBy'
 import { publicOrAuthenticatedPrivileges } from '../lib/role-utils'
+import { createOnlyFor } from './predicates/createOnlyFor'
 
 const authenticatedProfileRole: RoleResource = {
   name: 'authenticated-profile',
@@ -105,6 +107,24 @@ const authenticatedProfileRole: RoleResource = {
       actions: {
         read: true,
         delete: true,
+      },
+    },
+    {
+      resource: q.Collection('LodgingType'),
+      actions: {
+        create: true,
+        read: true,
+        write: writeOnlyBy(['location', 'caretaker']),
+        delete: deleteOnlyBy(['location', 'caretaker']),
+      },
+    },
+    {
+      resource: q.Collection('Cart'),
+      actions: {
+        create: createOnlyFor('profile'),
+        read: readOnlyBy(['profile']),
+        write: writeOnlyBy(['profile']),
+        delete: deleteOnlyBy(['profile']),
       },
     },
     /* Indexes */
@@ -395,6 +415,18 @@ const authenticatedProfileRole: RoleResource = {
     },
     {
       resource: q.Function('create_offer'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('create_cart'),
+      actions: {
+        call: true,
+      },
+    },
+    {
+      resource: q.Function('update_cart'),
       actions: {
         call: true,
       },

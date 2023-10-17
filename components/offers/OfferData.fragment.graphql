@@ -1,4 +1,4 @@
-fragment Offer on Offer {
+fragment OfferData on Offer {
   _id
   offerType
   title
@@ -17,6 +17,9 @@ fragment Offer on Offer {
   minimunCabinBalance
   applicationUrl
   imageIpfsHash
+  mediaItems {
+    ipfsHash
+  }
   locationType
   location {
     _id
@@ -30,6 +33,11 @@ fragment Offer on Offer {
     }
     caretaker {
       _id
+    }
+    lodgingTypes {
+      data {
+        ...LodgingType
+      }
     }
   }
 }

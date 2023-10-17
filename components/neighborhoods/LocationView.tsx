@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
@@ -32,6 +31,8 @@ import { VoteButton } from './styles'
 import events from '@/lib/googleAnalytics/events'
 import { ExperienceList } from '../offers/ExperienceList'
 import { useProfile } from '@/components/auth/useProfile'
+import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
+import { EMPTY } from '@/utils/display-utils'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -94,8 +95,6 @@ export interface LocationProps {
   publishedAt: Date | null | undefined
 }
 
-const EMPTY = '—'
-
 export const LocationView = ({
   location,
   onVote,
@@ -143,15 +142,19 @@ export const LocationView = ({
     !!galleryPreviewWorkingUrl &&
     !!galleryPreviewFeaturesUrl
 
-  const bannerWidth = deviceSize === 'tablet' ? 610 : 998
-  const bannerHeight = deviceSize === 'tablet' ? 256 : 420
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const shownOffers = offers.filter(
+  const bookableOffers = offers.filter(
     (offer) =>
       (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
       offer.offerType !== OfferType.Residency
+  )
+  const bookableCabinWeeks = bookableOffers.filter(
+    (offer) => offer.offerType === OfferType.CabinWeek
+  )
+  const bookableColiving = bookableOffers.filter(
+    (offer) => offer.offerType === OfferType.PaidColiving
   )
 
   const { user } = useProfile()
@@ -160,18 +163,10 @@ export const LocationView = ({
   return (
     <LocationContent>
       {bannerImageUrl && (
-        <LocationBannerContainer>
-          <LocationBanner
-            priority
-            src={bannerImageUrl}
-            alt="Location Banner"
-            width={bannerWidth}
-            height={bannerHeight}
-          />
-        </LocationBannerContainer>
+        <BannerHeader imageUrl={bannerImageUrl} reduceTopPad={1.8} />
       )}
 
-      <LocationDetailsContainer hasBanner={!!bannerImageUrl}>
+      <LocationDetailsContainer>
         <LocationTypeTag
           label={
             isNeighborhood ? 'Verified Neighborhood' : 'Registered Outpost'
@@ -284,14 +279,29 @@ export const LocationView = ({
         )}
       </GalleryPreviewContainer>
 
-      {!!shownOffers.length && (
+      {!!bookableCabinWeeks.length && (
         <Section>
           <SectionHeader>
-            <H3>Experience</H3>
+            <H3>Cabin Weeks</H3>
           </SectionHeader>
-          <ExperienceList offers={shownOffers} />
+          <ExperienceList
+            offers={bookableCabinWeeks}
+            actionButtonText={'Attend'}
+          />
         </Section>
       )}
+      {!!bookableColiving.length && (
+        <Section>
+          <SectionHeader>
+            <H3>Flexible Stays</H3>
+          </SectionHeader>
+          <ExperienceList
+            offers={bookableColiving}
+            actionButtonText={'Reserve a stay'}
+          />
+        </Section>
+      )}
+
       <Section>
         <SectionHeader>
           <H3>Description</H3>
@@ -317,6 +327,7 @@ export const LocationView = ({
                   onContact={() => events.contactCaretakerEvent(caretaker._id)}
                   caretakerEmail={caretakerEmail}
                   profile={caretaker}
+                  showContactButton
                 />
               </CaretakerDetails>
             </CaretakerDetailsContainer>
@@ -414,25 +425,6 @@ const LocationHeaderHorizontalBar = styled.div`
   }
 `
 
-const LocationBannerContainer = styled.div`
-  position: absolute;
-  top: 0;
-  z-index: -1;
-  transform: translateX(-50%);
-  left: 50%;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 100%;
-    top: -2.4rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: calc(84rem + 2 * 8rem);
-    top: 0;
-  }
-`
-
 const LocationContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -459,22 +451,6 @@ const LocationContent = styled.div`
   }
 `
 
-const LocationBanner = styled(Image)`
-  object-fit: cover;
-  object-position: center;
-  width: 100vw;
-  height: 28rem;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 100%;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 100%;
-    height: 42rem;
-  }
-`
-
 const EditBar = styled.div`
   display: flex;
   flex-flow: row;
@@ -483,21 +459,8 @@ const EditBar = styled.div`
   border-top: solid 1px ${({ theme }) => theme.colors.green900};
 `
 
-interface LocationDetailsContainerProps {
-  hasBanner: boolean
-}
-
-const LocationDetailsContainer = styled.div<LocationDetailsContainerProps>`
+const LocationDetailsContainer = styled.div`
   width: 100%;
-  margin-top: ${({ hasBanner }) => (hasBanner ? '21rem' : '0')};
-
-  ${({ theme }) => theme.bp.md} {
-    margin-top: ${({ hasBanner }) => (hasBanner ? '20rem' : '0')};
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    margin-top: ${({ hasBanner }) => (hasBanner ? '33rem' : '0')};
-  }
 `
 
 const StyledContentCard = styled(ContentCard)`

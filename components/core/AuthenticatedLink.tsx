@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
@@ -29,7 +30,9 @@ export const AuthenticatedLink = ({
   const handleClick = () => {
     confirmLoggedIn(() => {
       router.push(path)
-      refetchProfile()
+      refetchProfile().then(() => {
+        if (onClick) onClick()
+      })
     })
   }
 

@@ -63,6 +63,8 @@ type Mutation {
     @resolver(name: "create_text_activity")
   createLocation: Location @resolver(name: "create_location")
   createOffer(data: CreateOfferInput!): Offer @resolver(name: "create_offer")
+  createCart(data: CreateCartInput!): Cart @resolver(name: "create_cart")
+  updateCart(id: ID!, data: UpdateCartInput): Cart! @resolver(name: "update_cart")
   deleteLocation(id: ID!): Location! @resolver(name: "delete_location")
   deleteOffer(id: ID!): Offer! @resolver(name: "delete_offer")
   publishLocation(id: ID!): Location! @resolver(name: "publish_location")
@@ -95,6 +97,7 @@ type Profile {
   locationVotes: [LocationVote!] @relation
   features: [String!]
   isAdmin: Boolean
+  mailingListOptIn: Boolean
 }
 
 type ProfileVouch {
@@ -168,14 +171,14 @@ type ProfileContactField @embedded {
 
 enum ProfileContactFieldType {
   Email
+  Website
   Discord
+  Farcaster
   Twitter
   Instagram
-  LinkedIn
   Telegram
   Lens
-  Website
-  Farcaster
+  LinkedIn
 }
 
 input UpdateProfileInput {
@@ -186,6 +189,7 @@ input UpdateProfileInput {
   contactFields: [ProfileContactFieldInput!]
   avatar: ProfileAvatarInput
   features: [String!]
+  mailingListOptIn: Boolean
 }
 
 input OfferPriceInput {
@@ -202,6 +206,7 @@ input UpdateOfferInput {
   profileRoleConstraints: [ProfileRoleConstraintInput]
   applicationUrl: String
   imageIpfsHash: String
+  mediaItems: [OfferMediaItemInput!]
   citizenshipRequired: Boolean
   minimunCabinBalance: Int
 }
@@ -357,6 +362,7 @@ type Location {
   addressInfo: String # Rich text
   referrer: Profile @relation(name: "referredLocations")
   offerTypes: [OfferType!] # Denormalized for more efficient queries
+  lodgingTypes: [LodgingType!] @relation
 }
 
 enum LocationType {
@@ -396,6 +402,32 @@ enum LocationMediaCategory {
   Features
 }
 
+type LodgingType {
+  location: Location! @relation
+  description: String!
+  quantity: Int!
+  priceCents: Int!
+  spotsTaken: Int! # denormalized for easy querying
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Error
+}
+
+type Cart {
+  profile: Profile!
+  offer: Offer!
+  lodgingType: LodgingType!
+  amountCents: Int!
+  stripePaymentIntentClientSecret: String
+  paymentStatus: PaymentStatus!
+  agreedToCOC: Boolean!
+  agreedToTerms: Boolean!
+  notes: String
+}
+
 type Offer {
   offerType: OfferType
   title: String
@@ -410,7 +442,18 @@ type Offer {
   imageIpfsHash: String
   citizenshipRequired: Boolean
   minimunCabinBalance: Int
+  mediaItems: [OfferMediaItem!]
 }
+
+type OfferMediaItem @embedded {
+  ipfsHash: String
+}
+
+input OfferMediaItemInput {
+  ipfsHash: String
+}
+
+
 
 enum OfferType {
   PaidColiving
@@ -449,4 +492,18 @@ input GetOffersInput @embedded {
 input CreateOfferInput {
   offerType: OfferType!
   locationId: ID!
+}
+
+input CreateCartInput {
+  profileId: ID!
+  offerId: ID!
+  lodgingTypeId: ID!
+}
+
+input UpdateCartInput {
+  stripePaymentIntentClientSecret: String
+  paymentStatus: PaymentStatus
+  notes: String
+  agreedToCOC: Boolean
+  agreedToTerms: Boolean
 }

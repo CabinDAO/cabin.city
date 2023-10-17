@@ -1,0 +1,5 @@
+mutation CreateCart($data: CreateCartInput!) {
+    createCart(data: $data) {
+        ...Cart
+    }
+}

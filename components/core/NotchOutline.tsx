@@ -17,10 +17,12 @@ export const NotchOutline = ({
 
 const Container = styled.div<NotchOutlineProps>`
   position: absolute;
-  --calculated-color: var(--border-color, ${({ theme, color }) =>
-    theme.colors[color ?? 'black']});
-  width: ${(props) => props.notchSize}rem};
-  height: ${(props) => props.notchSize}rem};
+  --calculated-color: var(
+    --border-color,
+    ${({ theme, color }) => theme.colors[color ?? 'black']}
+  );
+  width: ${(props) => props.notchSize}rem;
+  height: ${(props) => props.notchSize}rem;
   background-color: var(--calculated-color);
   border: solid 1px var(--calculated-color);
   ${({ notchPosition }) => {

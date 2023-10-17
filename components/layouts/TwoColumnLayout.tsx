@@ -5,11 +5,64 @@ import { Navbar } from '../core/Navbar'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
+import { H3 } from '@/components/core/Typography'
+import React from 'react'
+import { Footer } from '@/components/navigation/Footer'
 
-const Container = styled.div`
+interface LayoutProps {
+  children: React.ReactNode
+  title: string
+  icon?: IconName
+  iconHref?: string
+  onIconClick?: () => void
+  subheader?: string
+  withFooter?: boolean
+}
+
+export const TwoColumnLayout = ({
+  children,
+  title,
+  icon,
+  iconHref,
+  onIconClick,
+  subheader,
+  withFooter,
+}: LayoutProps) => {
+  const { deviceSize } = useDeviceSize()
+  const isMobile = deviceSize === 'mobile'
+
+  return (
+    <>
+      <Container withFooter={withFooter}>
+        <FixedWidthMainContent>
+          <TitleCard
+            title={title}
+            icon={icon ?? 'logo-cabin'}
+            iconHref={iconHref}
+            onIconClick={onIconClick}
+          />
+          {subheader && <H3>{subheader}</H3>}
+          <ColumnsContainer>{children}</ColumnsContainer>
+        </FixedWidthMainContent>
+        {isMobile ? (
+          <MobileFloatingMenu />
+        ) : (
+          <NavbarContainer>
+            <Navbar />
+          </NavbarContainer>
+        )}
+      </Container>
+      {withFooter && <Footer />}
+    </>
+  )
+}
+
+const Container = styled.div<{
+  withFooter?: boolean
+}>`
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  min-height: ${({ withFooter }) => (withFooter ? '76vh' : '100vh')};
   min-width: 100vw;
   justify-content: flex-start;
   align-items: flex-start;
@@ -27,6 +80,13 @@ const Container = styled.div`
     gap: 4.8rem;
     padding: 4rem;
   }
+
+  ${FixedWidthMainContent} {
+    align-items: flex-start;
+    > ${H3} {
+      margin-top: 4rem;
+    }
+  }
 `
 
 const ColumnsContainer = styled.div`
@@ -42,32 +102,3 @@ const ColumnsContainer = styled.div`
     grid-gap: 3.5rem;
   }
 `
-
-interface LayoutProps {
-  children: React.ReactNode
-  title: string
-  iconName?: IconName
-}
-
-export const TwoColumnLayout = ({ children, title, iconName }: LayoutProps) => {
-  const { deviceSize } = useDeviceSize()
-  const isMobile = deviceSize === 'mobile'
-
-  return (
-    <>
-      <Container>
-        <FixedWidthMainContent>
-          <TitleCard title={title} icon={iconName ?? 'logo-cabin'} />
-          <ColumnsContainer>{children}</ColumnsContainer>
-        </FixedWidthMainContent>
-        {isMobile ? (
-          <MobileFloatingMenu />
-        ) : (
-          <NavbarContainer>
-            <Navbar />
-          </NavbarContainer>
-        )}
-      </Container>
-    </>
-  )
-}

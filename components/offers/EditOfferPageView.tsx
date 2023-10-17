@@ -19,18 +19,20 @@ import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
-  const { offerId } = router.query
-  const { offer, isEditable, isUserCaretaker } = useGetOffer(`${offerId}`)
-  const [updateOffer] = useUpdateOfferMutation()
+  const { showError } = useError()
+  const { showModal } = useModal()
+
   const { history } = useNavigation()
   const backRoute = history[history.length - 2]
 
+  const { offerId } = router.query
+  const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
   const offerFragment = offer?.rawFragment
+  const [updateOffer] = useUpdateOfferMutation()
+
   const [highlightErrors, setHighlightErrors] = useState(false)
-  const { showError } = useError()
   const [unsavedChanges, setUnsavedChanges] = useState(false)
   const [updateOfferInput, setUpdateOfferInput] = useState<UpdateOfferInput>({})
-  const { showModal } = useModal()
 
   useEffect(() => {
     if (offerFragment) {
@@ -45,6 +47,11 @@ export const EditOfferPageView = () => {
           unit: offerFragment.price?.unit ?? OfferPriceUnit.FlatFee,
         },
         applicationUrl: offerFragment.applicationUrl,
+        mediaItems: (offerFragment?.mediaItems ?? []).map((i) => {
+          return {
+            ipfsHash: i.ipfsHash,
+          }
+        }),
       })
     }
   }, [offerFragment])

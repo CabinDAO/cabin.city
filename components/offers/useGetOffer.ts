@@ -2,8 +2,10 @@ import { offerViewPropsFromFragment } from '@/utils/offer'
 import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import {
+  LocationAddress,
   LocationType,
-  OfferFragment,
+  OfferDataFragment,
+  OfferMediaItem,
   OfferPriceUnit,
   OfferType,
   ProfileRoleConstraint,
@@ -30,16 +32,28 @@ export interface OfferViewProps {
   applicationUrl: string | null | undefined
   price: OfferPrice | null | undefined
   profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
+  mediaItems: OfferMediaItem[] | null | undefined
   location: {
     _id: string
-    name: string | null | undefined
-    shortAddress: string | null | undefined
+    name: string
+    address: LocationAddress | null | undefined
+    shortAddress: string
+    bannerImageIpfsHash: string
     publishedAt: Date | null | undefined
     caretaker: {
       _id: string
     }
+    lodgingTypes: {
+      data: {
+        _id: string
+        description: string
+        quantity: number
+        priceCents: number
+        spotsTaken: number
+      }[]
+    }
   }
-  rawFragment: OfferFragment
+  rawFragment: OfferDataFragment
 }
 
 export const useGetOffer = (offerId: string) => {
@@ -47,7 +61,7 @@ export const useGetOffer = (offerId: string) => {
   const { user } = useProfile()
   const { data } = useGetOfferByIdQuery({
     variables: {
-      id: `${offerId}`,
+      id: offerId,
     },
     skip: !offerId,
   })

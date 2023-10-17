@@ -1,110 +1,134 @@
+import React from 'react'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
 import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
+import { H1, fonts } from '@/components/core/Typography'
+import { TextContent } from '@/components/landing/TextSection'
+import { padding } from '@/styles/theme'
 
-interface FooterProps {
-  className?: string
-  children?: React.ReactNode
-}
+export const Footer = () => (
+  <Container>
+    <LandingContent>
+      <FooterContainer>
+        <TextSections>
+          <Section>
+            <Header>Product</Header>
+            <AppLink location="/cabin-week" iconSize={0}>
+              <Name>Cabin Weeks</Name>
+            </AppLink>
+            <AppLink
+              onClick={() => events.viewCityDirectoryEvent()}
+              location="/city-directory"
+              iconSize={0}
+            >
+              <Name>City Directory</Name>
+            </AppLink>
+            <AppLink
+              onClick={() => events.viewExperiencesEvent()}
+              location="/experiences"
+              iconSize={0}
+            >
+              <Name>Experiences</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
+              iconSize={0}
+            >
+              <Name>List Your Property</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.CITIZENSHIP}
+              iconSize={0}
+            >
+              <Name>Citizenship</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
+              iconSize={0}
+            >
+              <Name>Privacy & Terms</Name>
+            </AppLink>
+          </Section>
 
-export const Footer = ({ children, className }: FooterProps) => (
-  <LandingContent>
-    <FooterContainer className={className}>
-      <FooterNavigation>
-        <FooterNavigationList>
-          <FooterNavigationHeader>Product</FooterNavigationHeader>
-          <AppLink location="/cabin-week" iconSize={0}>
-            <FooterItem>Cabin Weeks</FooterItem>
-          </AppLink>
-          <AppLink
-            onClick={() => events.viewCityDirectoryEvent()}
-            location="/city-directory"
-            iconSize={0}
-          >
-            <FooterItem>City Directory</FooterItem>
-          </AppLink>
-          <AppLink
-            onClick={() => events.viewExperiencesEvent()}
-            location="/experiences"
-            iconSize={0}
-          >
-            <FooterItem>Experiences</FooterItem>
-          </AppLink>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
-            iconSize={0}
-          >
-            <FooterItem>List Your Property</FooterItem>
-          </AppLink>
-          <AppLink external location={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
-            <FooterItem>Citizenship</FooterItem>
-          </AppLink>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
-            iconSize={0}
-          >
-            <FooterItem>Privacy & Terms</FooterItem>
-          </AppLink>
-        </FooterNavigationList>
+          <Section>
+            <Header>Resources</Header>
+            <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
+              <Name>Vision</Name>
+            </AppLink>
+            <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
+              <Name>Blog</Name>
+            </AppLink>
+            <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
+              <Name>Podcast</Name>
+            </AppLink>
+            <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
+              <Name>Support Wiki</Name>
+            </AppLink>
+          </Section>
 
-        <FooterNavigationList>
-          <FooterNavigationHeader>Resources</FooterNavigationHeader>
-          <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
-            <FooterItem>Vision</FooterItem>
-          </AppLink>
-          <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
-            <FooterItem>Blog</FooterItem>
-          </AppLink>
-          <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
-            <FooterItem>Podcast</FooterItem>
-          </AppLink>
-          <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
-            <FooterItem>Support Wiki</FooterItem>
-          </AppLink>
-        </FooterNavigationList>
+          <Section>
+            <Header>Social</Header>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.CABIN_DISCORD}
+              iconSize={0}
+            >
+              <Name>Discord</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.CABIN_TWITTER}
+              iconSize={0}
+            >
+              <Name>Twitter</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
+              iconSize={0}
+            >
+              <Name>Instagram</Name>
+            </AppLink>
+          </Section>
+        </TextSections>
 
-        <FooterNavigationList>
-          <FooterNavigationHeader>Social</FooterNavigationHeader>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CABIN_DISCORD}
-            iconSize={0}
-          >
-            <FooterItem>Discord</FooterItem>
-          </AppLink>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CABIN_TWITTER}
-            iconSize={0}
-          >
-            <FooterItem>Twitter</FooterItem>
-          </AppLink>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
-            iconSize={0}
-          >
-            <FooterItem>Instagram</FooterItem>
-          </AppLink>
-        </FooterNavigationList>
-      </FooterNavigation>
-
-      <FooterNavigationList>
-        <FooterLogo>
-          <Icon name="logo-cabin" size={3.8} color="green400" />
-          <IconText>Cabin</IconText>
-        </FooterLogo>
-      </FooterNavigationList>
-
-      {children}
-    </FooterContainer>
-  </LandingContent>
+        <Section>
+          <FooterLogo>
+            <Icon name="logo-cabin" size={3.8} color="green400" />
+            <IconText>Cabin</IconText>
+          </FooterLogo>
+        </Section>
+      </FooterContainer>
+    </LandingContent>
+  </Container>
 )
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: ${({ theme }) => theme.colors.green800};
+  width: 100%;
+  gap: 2.4rem;
+
+  ${H1}, ${TextContent} {
+    font-family: ${fonts.poppins};
+    text-align: center;
+    color: ${({ theme }) => theme.colors.yellow100};
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4rem;
+  }
+`
 
 export const LandingContent = styled.div`
   display: flex;
@@ -113,10 +137,13 @@ export const LandingContent = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
+  padding: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     align-self: center;
     width: 50rem;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   ${({ theme }) => theme.bp.lg} {
@@ -136,7 +163,7 @@ export const FooterContainer = styled.div`
   }
 `
 
-export const FooterNavigation = styled.div`
+export const TextSections = styled.div`
   display: flex;
   gap: 4rem;
   flex-direction: column;
@@ -147,18 +174,18 @@ export const FooterNavigation = styled.div`
   }
 `
 
-export const FooterNavigationList = styled.div`
+export const Section = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
 `
 
-export const FooterNavigationHeader = styled(H3)`
+export const Header = styled(H3)`
   color: ${({ theme }) => theme.colors.yellow100};
   text-transform: uppercase;
 `
 
-export const FooterItem = styled(Subline2)`
+export const Name = styled(Subline2)`
   color: ${({ theme }) => theme.colors.yellow100};
   opacity: 0.8;
 `

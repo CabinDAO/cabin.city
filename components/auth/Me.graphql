@@ -17,6 +17,7 @@ fragment Me on Profile {
   citizenshipStatus
   cabinTokenBalanceInt
   isAdmin
+  mailingListOptIn
   roles {
     role
     level

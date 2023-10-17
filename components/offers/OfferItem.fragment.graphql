@@ -3,6 +3,7 @@ fragment OfferItem on Offer {
   offerType
   locationType
   title
+  description
   startDate
   endDate
   imageIpfsHash

@@ -1,36 +1,48 @@
 import styled from 'styled-components'
-import { offerInfoFromType, RoleConstraintType } from '@/utils/offer'
-import { TitleCard } from '@/components/core/TitleCard'
-import { ContentCard } from '@/components/core/ContentCard'
+import { useRouter } from 'next/router'
+import { useModal } from '@/components/hooks/useModal'
+import {
+  OfferPrice,
+  OfferPriceUnit,
+  OfferType,
+  ProfileRoleLevelType,
+  ProfileRoleType,
+  Scalars,
+} from '@/generated/graphql'
+import { OfferViewProps } from './useGetOffer'
+import Icon from '@/components/core/Icon'
+import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
+import { stringToSlateValue } from '../core/slate/slate-utils'
+import { RoleConstraintType } from '@/utils/offer'
+import { isNotNull } from '@/lib/data'
+import { EMPTY, formatRange } from '@/utils/display-utils'
+import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
   body1Styles,
   Caption,
-  H2,
   H3,
-  Subline2,
+  H4,
+  Subline1,
 } from '@/components/core/Typography'
+import { TitleCard } from '@/components/core/TitleCard'
+import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
-import { roleConstraintInfoFromType } from '@/utils/roles'
-import { OfferViewProps } from './useGetOffer'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
-import { stringToSlateValue } from '../core/slate/slate-utils'
-import {
-  OfferPrice,
-  OfferType,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-} from '@/generated/graphql'
-import { isNotNull } from '@/lib/data'
-import { formatRange } from '@/utils/display-utils'
 import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
-import { useRouter } from 'next/router'
 import { ApplyButton } from '@/components/offers/ApplyButton'
-import Icon from '@/components/core/Icon'
 import { Price } from '@/components/offers/Price'
-
-const EMPTY = '—'
+import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
+import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
+import { LocationLinkCard } from '@/components/neighborhoods/LinkCards'
+import Link from 'next/link'
+import { HostCard } from '@/components/neighborhoods/HostCard'
+import { isAfter, isBefore } from 'date-fns'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { CostBreakdown } from '@/components/checkout/CostBreakdown'
+import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const OfferView = ({
   offer,
@@ -39,11 +51,13 @@ export const OfferView = ({
   offer: OfferViewProps
   isEditable: boolean
 }) => {
+  const router = useRouter()
+  const { showModal } = useModal()
+  const { deviceSize } = useDeviceSize()
+
   const {
-    title,
     description,
     offerType,
-    location,
     startDate,
     endDate,
     price,
@@ -51,8 +65,11 @@ export const OfferView = ({
     citizenshipRequired,
     minimunCabinBalance,
     imageUrl,
+    mediaItems,
   } = offer
-  const offerInfo = offerType ? offerInfoFromType(offerType) : null
+
+  if (!offerType) return null
+
   const levelsByRole = profileRoleConstraints?.reduce(
     (acc, { profileRole, level }) => ({
       ...acc,
@@ -60,7 +77,6 @@ export const OfferView = ({
     }),
     {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
   )
-  const router = useRouter()
 
   const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
     .flatMap(
@@ -88,21 +104,44 @@ export const OfferView = ({
   const displayMatchOne = rolesMatchOne.length > 0
   const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
 
-  if (!offerType) return null
+  // TODO: let them actually select one
+  const selectedLodgingType = offer.location.lodgingTypes.data[0]
+  const isSoldOut =
+    selectedLodgingType &&
+    selectedLodgingType.spotsTaken >= selectedLodgingType.quantity
 
-  const CabinWeekPrice = ({ price }: { price: OfferPrice }) => {
-    return (
-      <OfferCabinWeekDetailsSection>
-        <Price price={price} />
-        <Body1>{formatRange(startDate, endDate)}</Body1>
-      </OfferCabinWeekDetailsSection>
+  const galleryImages = (mediaItems ?? []).map((image) => ({
+    ...image,
+    name: `${image.ipfsHash}`,
+  }))
+
+  const handleImageClick = (image: TempImage) => {
+    // TODO: looks broken on mobile
+    // if (deviceSize === 'mobile') {
+    //   return
+    // }
+
+    if (!galleryImages) {
+      return
+    }
+
+    const index = galleryImages.findIndex(
+      (img) => img.ipfsHash === image.ipfsHash
     )
+
+    showModal(() => (
+      <ImageBrowserModal images={galleryImages} initialImageIndex={index} />
+    ))
   }
 
   return (
     <>
+      {imageUrl && deviceSize !== 'mobile' && (
+        <BannerHeader imageUrl={imageUrl} />
+      )}
+
       <TitleCard
-        title={title ?? EMPTY}
+        title={'Experience'}
         icon="offer"
         end={
           isEditable ? (
@@ -121,72 +160,138 @@ export const OfferView = ({
 
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
-          <DescriptionDetails>
-            {imageUrl && (
-              <ImageFlex
+          <Left>
+            {galleryImages?.length > 0 && (
+              <GalleryImage
+                src={getImageUrlByIpfsHash(galleryImages[0].ipfsHash) ?? ''}
+                onClick={() => handleImageClick(galleryImages[0])}
                 aspectRatio={1.5}
                 fill
                 sizes="451px"
-                src={imageUrl}
-                alt={title ?? ''}
+                alt={'Click for image gallery'}
+                style={{ cursor: 'pointer' }}
               />
             )}
+            <LocationLinkCard location={offer.location} />
+            <H4>Description</H4>
             <SlateRenderer value={stringToSlateValue(description)} />
-          </DescriptionDetails>
+            <H4>Meet your hosts</H4>
+            {_getHostIds(offer).map((hostId) => (
+              <HostCard key={hostId} profileId={hostId}></HostCard>
+            ))}
+            <H4>Cancellation policy</H4>
+            <Body1>
+              For a full refund, guests must cancel within 48 hours of booking
+              and at least 28 days before check-in. Email{' '}
+              <Link href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}>
+                {EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}
+              </Link>{' '}
+              for more information.
+            </Body1>
+          </Left>
 
-          <OfferDetailsContainer>
-            <OfferDetails>
-              <OfferDetailsHeader>
-                <OfferDetailsOverview>
-                  <H2>{offerInfo?.name ?? EMPTY}</H2>
-                  <LocationSubline2>
-                    at{' '}
-                    <a href={`/location/${location._id}`}>
-                      <u>{location.name}</u>
-                    </a>{' '}
-                    in {location.shortAddress}
-                  </LocationSubline2>
-                </OfferDetailsOverview>
+          <Right>
+            <RightContent>
+              <OfferNameAndDates
+                offer={offer}
+                withPrice={offerType === OfferType.PaidColiving}
+              />
 
-                {offerType == OfferType.CabinWeek && offer.price && (
-                  <CabinWeekPrice price={offer.price} />
-                )}
-
-                <Actions>
-                  <ApplyButton offer={offer} />
-                </Actions>
-              </OfferDetailsHeader>
-
-              {offerType !== OfferType.CabinWeek && (
-                <OfferDetailsSection>
-                  <H3>AVAILABILITY</H3>
-
-                  <OfferDetailsPricing>
-                    <Caption>{formatRange(startDate, endDate)}</Caption>
-                    {price ? <Price small price={price} /> : EMPTY}
-                  </OfferDetailsPricing>
-                </OfferDetailsSection>
-              )}
-
-              {(displayMatchAll ||
-                displayMatchOne ||
-                offerType === OfferType.PaidColiving) && (
-                <OfferDetailsSection>
-                  <EligibilityDisplay
-                    rolesMatchOne={rolesMatchOne}
-                    displayMatchAll={displayMatchAll}
-                    displayMatchOne={displayMatchOne}
-                    citizenshipRequired={!!citizenshipRequired}
-                    minimunCabinBalance={minimunCabinBalance}
+              {offerType == OfferType.CabinWeek && offer.price && (
+                <>
+                  {/* TODO: HUGE HACK TILL WE FINISH MIGRATING TO LODGING TYPES */}
+                  <Price
+                    price={
+                      {
+                        unit: offer.price.unit,
+                        amountCents: selectedLodgingType.priceCents,
+                      } as OfferPrice
+                    }
                   />
-                </OfferDetailsSection>
+                  <CabinWeekDetails>
+                    <Subline1>Accomodations</Subline1>
+                    {offer.location.lodgingTypes.data.map((lt) => {
+                      return (
+                        <LodgingType key={lt._id}>
+                          <LodgingTypeTop>
+                            <Subline1>{lt.description}</Subline1>
+                            {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
+                          </LodgingTypeTop>
+                          <Caption>
+                            {Math.max(0, lt.quantity - lt.spotsTaken)} available
+                          </Caption>
+                        </LodgingType>
+                      )
+                    })}
+                  </CabinWeekDetails>
+                </>
               )}
-            </OfferDetails>
-          </OfferDetailsContainer>
+
+              <Actions>
+                <ApplyButton offer={offer} lodgingType={selectedLodgingType} />
+                <Caption emphasized>You won’t be charged yet</Caption>
+              </Actions>
+
+              {offerType == OfferType.CabinWeek &&
+                selectedLodgingType &&
+                !isSoldOut && (
+                  <CostBreakdown
+                    lodgingType={selectedLodgingType}
+                    startDate={startDate ?? null}
+                    endDate={endDate ?? null}
+                  />
+                )}
+            </RightContent>
+
+            {offerType !== OfferType.CabinWeek && (
+              <DetailsSection>
+                <H3>AVAILABILITY</H3>
+
+                <Pricing>
+                  <Caption>{formatRange(startDate, endDate)}</Caption>
+                  {price ? <Price small price={price} /> : EMPTY}
+                </Pricing>
+              </DetailsSection>
+            )}
+
+            {(displayMatchAll ||
+              displayMatchOne ||
+              offerType === OfferType.PaidColiving) && (
+              <DetailsSection>
+                <EligibilityDisplay
+                  rolesMatchOne={rolesMatchOne}
+                  displayMatchAll={displayMatchAll}
+                  displayMatchOne={displayMatchOne}
+                  citizenshipRequired={!!citizenshipRequired}
+                  minimunCabinBalance={minimunCabinBalance}
+                />
+              </DetailsSection>
+            )}
+          </Right>
         </DescriptionTwoColumn>
       </StyledContentCard>
     </>
   )
+}
+
+const _getHostIds = (offer: OfferViewProps): string[] => {
+  const charlie =
+    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+      ? '362368728841584721'
+      : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' ||
+        process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
+      ? '359768139021418582'
+      : '373424375382147584'
+
+  const gatherer =
+    offer.offerType !== OfferType.CabinWeek ||
+    !offer.startDate ||
+    isAfter(offer.startDate, new Date('2024-012-01')) ||
+    isBefore(offer.startDate, new Date('2023-12-01'))
+      ? ''
+      : charlie
+
+  return [offer.location.caretaker._id, gatherer].filter((i) => !!i)
 }
 
 const StyledContentCard = styled(ContentCard)`
@@ -205,12 +310,16 @@ const DescriptionTwoColumn = styled.div`
   }
 `
 
-const DescriptionDetails = styled.div`
+const Left = styled.div`
   display: flex;
   position: relative;
   flex-flow: column;
   gap: 2.4rem;
   width: 45.1rem;
+
+  ${Body1} {
+    opacity: 0.75;
+  }
 
   ${({ theme }) => theme.bp.md_max} {
     width: 100%;
@@ -219,8 +328,6 @@ const DescriptionDetails = styled.div`
   ${({ theme }) => theme.bp.lg_max} {
     width: 100%;
     order: 2;
-    border-left: none;
-    border-top: 1px solid ${({ theme }) => theme.colors.green900}1e;
     padding-left: 0;
     padding-top: 3.2rem;
   }
@@ -229,15 +336,6 @@ const DescriptionDetails = styled.div`
     display: flex;
     flex-flow: column;
     gap: 2.4rem;
-  }
-
-  > h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin-bottom: 1.6rem;
   }
 
   ul {
@@ -250,7 +348,11 @@ const DescriptionDetails = styled.div`
   }
 `
 
-const OfferDetailsContainer = styled.div`
+const GalleryImage = styled(ImageFlex)`
+  margin-bottom: 2rem;
+`
+
+const Right = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
@@ -262,56 +364,33 @@ const OfferDetailsContainer = styled.div`
   }
 `
 
-const OfferDetails = styled.div`
-  display: flex;
-  flex-flow: column;
-  padding-left: 3.2rem;
-  gap: 2.4rem;
-  border-left: 1px solid ${({ theme }) => theme.colors.green900}1e;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    border-left: none;
-    padding-left: 0;
-  }
-`
-
-const OfferDetailsHeader = styled.div`
+const RightContent = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
+  padding-left: 0;
 
-  ${({ theme }) => theme.bp.lg_max} {
-    flex-flow: row;
-  }
-
-  ${({ theme }) => theme.bp.md_max} {
-    flex-flow: column;
+  ${({ theme }) => theme.bp.lg} {
+    padding-left: 3.2rem;
   }
 `
 
 const Actions = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.6rem;
+  width: 100%;
+  margin-bottom: 2rem;
 `
 
-const OfferDetailsOverview = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.4rem;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 100%;
-  }
-`
-
-const OfferDetailsSection = styled.div`
+const DetailsSection = styled.div`
   display: flex;
   flex-flow: column;
   gap: 1.6rem;
 `
 
-const OfferCabinWeekDetailsSection = styled.div`
+const CabinWeekDetails = styled.div`
   display: flex;
   flex-flow: column;
   gap: 1.6rem;
@@ -326,7 +405,7 @@ const OfferCabinWeekDetailsSection = styled.div`
   }
 `
 
-const OfferDetailsPricing = styled.div`
+const Pricing = styled.div`
   display: flex;
   flex-flow: row;
   gap: 1.6rem;
@@ -342,6 +421,20 @@ const OfferDetailsPricing = styled.div`
   }
 `
 
-const LocationSubline2 = styled(Subline2)`
-  line-height: 1.6;
+const LodgingType = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 0.3rem;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.2rem 1.6rem;
+  border: 1px solid ${({ theme }) => theme.colors.green900}12; // green900 at 12% opacity
+`
+
+const LodgingTypeTop = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
 `

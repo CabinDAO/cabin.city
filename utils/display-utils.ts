@@ -6,8 +6,10 @@ import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 
 export const appDomain =
-  process.env.NODE_ENV === 'production'
+  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
     ? 'cabin.city'
+    : process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'dev'
+    ? 'dev.cabin.city'
     : process.env.NEXT_PUBLIC_VERCEL_URL
 
 export const appDomainWithProto =
@@ -169,4 +171,12 @@ export const formatRange = (startDate?: Date | null, endDate?: Date | null) => {
       EMPTY
     )}`
   }
+}
+
+export const daysBetween = (startDate?: Date | null, endDate?: Date | null) => {
+  if (!startDate || !endDate) return 0
+
+  return Math.floor(
+    (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+  )
 }

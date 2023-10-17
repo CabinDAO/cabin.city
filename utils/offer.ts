@@ -3,7 +3,7 @@ import { OfferListItemProps } from '@/components/core/OfferListItem'
 import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
   MeFragment,
-  OfferFragment,
+  OfferDataFragment,
   OfferItemFragment,
   OfferPrice,
   OfferPriceUnit,
@@ -78,7 +78,7 @@ export const offerListItemPropsFromFragment = (
 }
 
 export const offerViewPropsFromFragment = (
-  fragment: OfferFragment
+  fragment: OfferDataFragment
 ): OfferViewProps => {
   return {
     _id: fragment._id,
@@ -95,17 +95,31 @@ export const offerViewPropsFromFragment = (
       fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
       true
     ),
+    mediaItems: fragment.mediaItems,
     citizenshipRequired: fragment.citizenshipRequired,
     minimunCabinBalance: fragment.minimunCabinBalance,
     location: {
       _id: fragment.location._id,
-      name: fragment.location.name,
+      name: fragment.location.name ?? '',
+      address: fragment.location.address,
       shortAddress: formatShortAddress(fragment.location.address),
+      bannerImageIpfsHash: fragment.location.bannerImageIpfsHash ?? '',
       publishedAt: fragment.location.publishedAt
         ? parseISO(fragment.location.publishedAt)
         : null,
       caretaker: {
         _id: fragment.location.caretaker._id,
+      },
+      lodgingTypes: {
+        data: fragment.location.lodgingTypes.data.map((lt) => {
+          return {
+            _id: lt?._id ?? '',
+            description: lt?.description ?? '',
+            quantity: lt?.quantity ?? 0,
+            priceCents: lt?.priceCents ?? 0,
+            spotsTaken: lt?.spotsTaken ?? 0,
+          }
+        }),
       },
     },
     rawFragment: fragment,
