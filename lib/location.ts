@@ -51,7 +51,6 @@ export const locationViewPropsFromFragment = (
     sleepCapacity: fragment.sleepCapacity,
     internetSpeedMbps: fragment.internetSpeedMbps,
     voteCount: fragment.voteCount,
-    offers: fragment.offers.data.filter(isNotNull),
     votes: fragment.votes.data
       .filter((v) => v && v?.count > 0)
       .filter(isNotNull),

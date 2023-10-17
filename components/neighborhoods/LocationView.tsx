@@ -90,7 +90,6 @@ export interface LocationProps {
   sleepCapacity: number | null | undefined
   internetSpeedMbps: number | null | undefined
   voteCount: number | null | undefined
-  offers: OfferItem[]
   votes: LocationVote[] | null | undefined
   publishedAt: Date | null | undefined
 }
@@ -116,7 +115,6 @@ export const LocationView = ({
     locationType,
     voteCount,
     votes,
-    offers,
     caretakerEmail,
   } = location
   const isNeighborhood = locationType === LocationType.Neighborhood
@@ -144,18 +142,6 @@ export const LocationView = ({
 
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
-
-  const bookableOffers = offers.filter(
-    (offer) =>
-      (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-      offer.offerType !== OfferType.Residency
-  )
-  const bookableCabinWeeks = bookableOffers.filter(
-    (offer) => offer.offerType === OfferType.CabinWeek
-  )
-  const bookableColiving = bookableOffers.filter(
-    (offer) => offer.offerType === OfferType.PaidColiving
-  )
 
   const { user } = useProfile()
   const isEditable = user?.isAdmin || user?._id === location.caretaker._id
@@ -278,29 +264,6 @@ export const LocationView = ({
           </GalleryPreviewList>
         )}
       </GalleryPreviewContainer>
-
-      {!!bookableCabinWeeks.length && (
-        <Section>
-          <SectionHeader>
-            <H3>Cabin Weeks</H3>
-          </SectionHeader>
-          <ExperienceList
-            offers={bookableCabinWeeks}
-            actionButtonText={'Attend'}
-          />
-        </Section>
-      )}
-      {!!bookableColiving.length && (
-        <Section>
-          <SectionHeader>
-            <H3>Flexible Stays</H3>
-          </SectionHeader>
-          <ExperienceList
-            offers={bookableColiving}
-            actionButtonText={'Reserve a stay'}
-          />
-        </Section>
-      )}
 
       <Section>
         <SectionHeader>
