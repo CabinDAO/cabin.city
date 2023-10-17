@@ -7,7 +7,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 import pic from './people-circle-mountains.jpg'
 
-export const IntroExperienceSection = () => {
+export const SupperClubSection = () => {
   return (
     <>
       <Content>
@@ -21,19 +21,21 @@ export const IntroExperienceSection = () => {
         />
 
         <Text style={{ gridArea: 'c' }}>
-          <Subline1>Getting started</Subline1>
-          <Title>Attend an Intro Cabin Experience</Title>
+          <Subline1>Supper Club</Subline1>
+          <Title>
+            You can’t build a city if you’ve never hosted a dinner party.
+          </Title>
           <Body>
-            These 1-2 week long events are our official welcome to the Cabin
-            community and a taste of coliving grounded in collaboration,
-            connection, and contribution.
+            Supper Club is the kindling to our fire, a get together with friends
+            to grow community, discuss your favorite topics, and start fanning
+            the flame of new ways of living.
           </Body>
           <Buttons>
-            <Link href={EXTERNAL_LINKS.CABIN_WEEK_BOOKING_TYPEFORM}>
-              <Button variant={'primary'}>Join a Cabin Week</Button>
+            <Link href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}>
+              <Button variant={'primary'}>Attend a Supper Club</Button>
             </Link>
-            <Link href={'/cabin-week'}>
-              <Button variant={'secondary'}>Learn more</Button>
+            <Link href={'mailto:home@cabin.city'}>
+              <Button variant={'secondary'}>Become a host</Button>
             </Link>
           </Buttons>
         </Text>

@@ -11,6 +11,8 @@ import theme from '@/styles/theme'
 import { useEvent } from 'react-use'
 import events from '@/lib/googleAnalytics/events'
 
+const FORM_ID = 5111496 // just in case
+
 export const SubscribeForm = () => {
   const contentRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement | null>(null)
