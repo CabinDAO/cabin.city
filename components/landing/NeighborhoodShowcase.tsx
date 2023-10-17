@@ -1,53 +1,38 @@
 import Link from 'next/link'
-import styled from 'styled-components'
-import { useGetOffersByIdsQuery } from '@/generated/graphql'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import Image from 'next/image'
+import styled from 'styled-components'
+import {
+  LocationItemFragment,
+  useGetLocationsSortedByVoteCountQuery,
+} from '@/generated/graphql'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 import { fonts } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import { formatShortAddress } from '@/lib/address'
-import { formatRange } from '@/utils/display-utils'
-import { parseISO } from 'date-fns'
-import { formatOfferPrice } from '@/components/offers/Price'
-
-const cabinWeekIDs =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? [
-        '373885328800350288', // Mana
-        '373885641076768848', // TDF
-        '376233981159407697', // N0
-        '376332972085739600', // N0
-      ]
-    : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' ||
-      process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
-    ? [
-        '373340699343454289',
-        '373689242991198289',
-        '373340554520428625',
-        '373412722869534801',
-      ]
-    : ['373344986613154304', '373068568228528640', '373070482102026752']
 
 export const NeighborhoodShowcase = () => {
-  const { data } = useGetOffersByIdsQuery({
-    variables: {
-      ids: cabinWeekIDs,
-    },
+  const { data } = useGetLocationsSortedByVoteCountQuery({
+    variables: { size: 4, cursor: null },
   })
+
+  const locations =
+    data?.locationsSortedByVoteCount.data.filter(
+      (l): l is LocationItemFragment => !!l
+    ) ?? []
 
   return (
     <Container>
       <Neighborhoods>
-        {data?.getOffersByIds.map((cabinWeek, index) => {
-          const imgURL = getImageUrlByIpfsHash(cabinWeek.imageIpfsHash, true)
-          const price = cabinWeek.price
-            ? formatOfferPrice(cabinWeek.price).join(' ')
-            : '-'
+        {locations.map((location, index) => {
+          const imgURL = getImageUrlByIpfsHash(
+            location.bannerImageIpfsHash,
+            true
+          )
           return (
             <ImageContainer key={index}>
-              <Link href={`/experience/${cabinWeek._id}`}>
+              <Link href={`/location/${location._id}`}>
                 <Image
-                  alt={`Cabin Week at ${cabinWeek.location.name}`}
+                  alt={location.name ?? 'A Cabin neighborhood'}
                   src={imgURL ?? 'https://fakeimg.pl/500/'}
                   fill={true}
                   sizes="100vw"
@@ -58,20 +43,10 @@ export const NeighborhoodShowcase = () => {
                 />
                 <TextContainer>
                   <BigText>
-                    {formatRange(
-                      parseISO(cabinWeek.startDate),
-                      parseISO(cabinWeek.endDate)
-                    )}
-                  </BigText>
-                  <BigText>
-                    <Name>
-                      {formatShortAddress(cabinWeek.location.address)}
-                    </Name>
+                    <Name>{location.name}</Name>
                     <Icon name={'right-arrow'} size={3} color={'white'} />
                   </BigText>
-                  <SmallText>
-                    {price} | {cabinWeek.title}
-                  </SmallText>
+                  <SmallText>{formatShortAddress(location.address)}</SmallText>
                 </TextContainer>
               </Link>
             </ImageContainer>
