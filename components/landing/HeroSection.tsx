@@ -58,7 +58,7 @@ const ExtraPadding = styled.div`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
+    width: 65rem;
   }
 `
 

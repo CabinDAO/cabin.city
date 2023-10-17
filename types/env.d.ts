@@ -22,6 +22,10 @@ export interface Env {
   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: string
   SENDGRID_API_KEY: string
   SENDGRID_FROM_EMAIL: string
+  STRIPE_SECRET_KEY: string
+  STRIPE_WEBHOOK_SECRET: string
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string
+  CONVERTKIT_API_KEY: string
 }
 
 declare global {

@@ -1,194 +1,96 @@
-import Script from 'next/script'
 import styled from 'styled-components'
-import { useEffect, useRef, useState } from 'react'
-import {
-  H1,
-  buttonStyles,
-  subline1Styles,
-  subline2Styles,
-} from '@/components/core/Typography'
-import theme from '@/styles/theme'
-import { useEvent } from 'react-use'
+import React, { FormEvent, useState } from 'react'
+import { InputText } from '@/components/core/InputText'
 import events from '@/lib/googleAnalytics/events'
-
-const FORM_ID = 5111496 // just in case
+import { Button } from '@/components/core/Button'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { useError } from '@/components/hooks/useError'
+import { Body1 } from '@/components/core/Typography'
 
 export const SubscribeForm = () => {
-  const contentRef = useRef<HTMLDivElement>(null)
-  const formRef = useRef<HTMLFormElement | null>(null)
-  const [isFormReady, setIsFormReady] = useState(false)
+  const { showError } = useError()
 
-  useEvent(
-    'click',
-    (e) => {
-      if (formRef.current) {
-        const button = formRef.current.querySelector('button')
+  const [email, setEmail] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSubscribed, setIsSubscribed] = useState(false)
 
-        if (button && button.contains(e.target as Node)) {
-          const input = formRef.current.querySelector('input')
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
 
-          if (input && input.value) {
-            events.subscribeToNewsletterEvent(input.value)
-          }
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    events.subscribeToNewsletterEvent(email)
 
-          e.stopPropagation()
-        }
-      }
-    },
-    formRef.current
-  )
+    const res: any = await fetch('/api/newsletter/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email }),
+    })
 
-  useEffect(() => {
-    if (
-      isFormReady &&
-      contentRef.current &&
-      formRef.current &&
-      contentRef.current !== formRef.current.parentElement
-    ) {
-      contentRef.current.appendChild(formRef.current)
-      formRef.current.style.display = 'block'
+    if (!res.ok) {
+      showError('An unexpected error occurred.')
+      setIsLoading(false)
+      return
     }
 
-    return () => {
-      if (formRef.current) {
-        formRef.current.style.display = 'none'
+    const resBody = await res.json()
 
-        document.body.appendChild(formRef.current)
-      }
+    if (resBody && resBody.success) {
+      setIsSubscribed(true)
+    } else {
+      setIsLoading(false)
+      showError(resBody.message)
     }
-  }, [isFormReady])
+  }
 
-  return (
-    <SubscribeEmailContainer>
-      <SubscribeEmailContent ref={contentRef}>
-        {!isFormReady && <H1>...</H1>}
-
-        <Script
-          async
-          onReady={() => {
-            formRef.current = document.querySelectorAll<HTMLFormElement>(
-              "form[data-uid='c4a002dfe9']"
-            )[0]
-
-            formRef.current.style.display = 'none'
-
-            const input = formRef.current.querySelector('input')
-
-            if (input) {
-              input.placeholder = 'Email'
-            }
-
-            const button = formRef.current.querySelector('button')
-
-            if (button) {
-              const span = button.querySelector('span')
-
-              if (span) {
-                span.textContent = 'Subscribe'
-              }
-            }
-
-            setIsFormReady(true)
-          }}
-          data-uid="c4a002dfe9"
-          src="https://creatorcabins.ck.page/c4a002dfe9/index.js"
+  return isSubscribed ? (
+    <Body1 $color={'green700'}>Thanks for subscribing!</Body1>
+  ) : (
+    <Form onSubmit={handleSubmit}>
+      <InputGroup>
+        <InputText
+          required
+          value={email}
+          placeholder={'Email'}
+          onChange={handleEmailChange}
         />
-      </SubscribeEmailContent>
-    </SubscribeEmailContainer>
+        <StyledButton disabled={isLoading}>
+          {isLoading ? <LoadingSpinner /> : 'Subscribe'}
+        </StyledButton>
+      </InputGroup>
+    </Form>
   )
 }
 
-interface BoxShadow {
-  top?: number
-  right?: number
-  bottom?: number
-  left?: number
-}
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
 
-const buildBoxShadow = ({
-  top = 0.2,
-  right = 0.2,
-  bottom = 0.2,
-  left = 0.2,
-}: BoxShadow) => {
-  return `inset 0 ${top}rem 0 0 ${theme.colors.green900},
-  inset 0 -${bottom}rem 0 0 ${theme.colors.green900},
-  inset -${right}rem 0 0 0 ${theme.colors.green900},
-  inset ${left}rem 0 0 0 ${theme.colors.green900}`
-}
-
-const SubscribeEmailContainer = styled.div`
-  height: min-content;
-
-  .formkit-hero {
-    display: none;
-  }
-
-  form,
-  .formkit-container {
-    background-color: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0rem !important;
-    margin: 0rem !important;
-  }
-
-  .formkit-powered-by-convertkit-container {
-    display: none !important;
-  }
-
-  input,
-  button {
-    border: none !important;
-  }
-
-  .formkit-submit {
-    line-height: 1.3 !important;
-  }
-
-  button {
-    span {
-      ${buttonStyles}
-    }
-    background-color: ${theme.colors.yellow100} !important;
-    box-shadow: ${buildBoxShadow({
-      top: 0.1,
-      right: 0.1,
-      bottom: 0.1,
-      left: 0,
-    })};
-  }
-
-  input {
-    width: 18rem !important;
-    ${subline2Styles}
-    box-shadow: ${buildBoxShadow({
-      top: 0.1,
-      right: 0.1,
-      bottom: 0.1,
-      left: 0.1,
-    })};
-
-    ${theme.bp.md} {
-      width: 25rem !important;
-    }
-  }
-
-  .formkit-alert {
-    margin: 0rem !important;
-    width: 35rem !important;
-    ${subline1Styles}
-  }
-
-  .formkit-alert-success {
-    color: ${theme.colors.green900} !important;
-    border-color: ${theme.colors.green900} !important;
-    background-color: ${theme.colors.green100} !important;
+  ${({ theme }) => theme.bp.md} {
+    width: 50rem;
   }
 `
 
-const SubscribeEmailContent = styled.div`
+const InputGroup = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
+  gap: 0.8rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+`
+
+const StyledButton = styled(Button)`
+  ${({ theme }) => theme.bp.sm_max} {
+    width: 100%;
+  }
 `
