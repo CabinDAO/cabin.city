@@ -45,6 +45,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/supperclub',
+        destination: 'https://cabindotcity.typeform.com/to/HMM3R4hg',
+        permanent: false,
+      },
+    ]
+  },
 }
 
 if (isDevEnv) {
