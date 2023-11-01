@@ -22,7 +22,7 @@ export const ProfileContent = ({
   activityItems,
 }: ProfileContentProps) => {
   const { user: me } = useProfile()
-  if (!me && profile._id !== '361917941542813776') return null
+  if (!me) return null
 
   const isOwnProfile = me?._id === profile._id
 
