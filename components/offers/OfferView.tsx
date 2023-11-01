@@ -204,7 +204,7 @@ export const OfferView = ({
                     price={
                       {
                         unit: offer.price.unit,
-                        amountCents: selectedLodgingType.priceCents,
+                        amountCents: selectedLodgingType?.priceCents ?? 1000, // TODO: 1000 is a fake number. will remove later
                       } as OfferPrice
                     }
                   />
