@@ -18,12 +18,15 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useProfile } from '../auth/useProfile'
 import { useEffect } from 'react'
 import { useNavigation } from '../hooks/useNavigation'
+import { EmailType, NewLocationPayload } from '@/lib/mail/types'
+import { useEmail } from '@/components/hooks/useEmail'
 
 export const NewLocationView = () => {
   const router = useRouter()
   const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
   const { user } = useProfile({ redirectTo: '/' })
+  const { sendEmail } = useEmail()
 
   const { goBack } = useNavigation()
   const canCreateListings =
@@ -34,6 +37,15 @@ export const NewLocationView = () => {
       const location = await createLocation()
 
       const id = location.data?.createLocation?._id
+
+      if (id) {
+        await sendEmail({
+          type: EmailType.NEW_LOCATION,
+          data: {
+            locationId: id,
+          } as NewLocationPayload,
+        })
+      }
 
       id
         ? router.push(`/location/${id}/edit?created=true`)

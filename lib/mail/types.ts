@@ -1,6 +1,8 @@
 export enum EmailType {
   VOUCH_REQUESTED = 'VOUCH_REQUESTED',
   NEW_PURCHASE = 'NEW_PURCHASE',
+  NEW_LOCATION = 'NEW_LOCATION',
+  NEW_CITIZENSHIP = 'NEW_CITIZENSHIP',
 }
 
 export class VouchRequstedPayload {
@@ -11,4 +13,12 @@ export class VouchRequstedPayload {
 
 export class NewPurchasePayload {
   cartId = ''
+}
+
+export class NewLocationPayload {
+  locationId = ''
+}
+
+export class NewCitizenshipPayload {
+  profileId = ''
 }

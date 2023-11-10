@@ -1,6 +1,12 @@
 import { MailService, MailDataRequired } from '@sendgrid/mail'
 import { MailData } from '@sendgrid/helpers/classes/mail'
-import { EmailType, NewPurchasePayload, VouchRequstedPayload } from './types'
+import {
+  EmailType,
+  NewCitizenshipPayload,
+  NewLocationPayload,
+  NewPurchasePayload,
+  VouchRequstedPayload,
+} from './types'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
@@ -54,6 +60,46 @@ export class SendgridService {
           subject: 'New cabin.city Purchase',
           html: `<div>
             <a href="${appDomainWithProto}/checkout/${d.cartId}">new purchase</a>.
+          </div>`,
+          trackingSettings: {
+            clickTracking: { enable: false },
+            openTracking: { enable: false },
+            subscriptionTracking: { enable: false },
+          },
+        })
+        break
+
+      case EmailType.NEW_LOCATION:
+        d = data as NewLocationPayload
+
+        if (!d.locationId) {
+          throw new Error('required fields: locationId')
+        }
+        Object.assign(md, {
+          to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
+          subject: 'New cabin.city Location',
+          html: `<div>
+            <a href="${appDomainWithProto}/location/${d.locationId}">new location listed</a>.
+          </div>`,
+          trackingSettings: {
+            clickTracking: { enable: false },
+            openTracking: { enable: false },
+            subscriptionTracking: { enable: false },
+          },
+        })
+        break
+
+      case EmailType.NEW_CITIZENSHIP:
+        d = data as NewCitizenshipPayload
+
+        if (!d.profileId) {
+          throw new Error('required fields: profileId')
+        }
+        Object.assign(md, {
+          to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
+          subject: 'New Citizen Alert!',
+          html: `<div>
+            <a href="${appDomainWithProto}/profile/${d.profileId}">see who it is</a>.
           </div>`,
           trackingSettings: {
             clickTracking: { enable: false },
