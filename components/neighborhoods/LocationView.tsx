@@ -29,7 +29,6 @@ import { stringToSlateValue } from '../core/slate/slate-utils'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
 import events from '@/lib/googleAnalytics/events'
-import { ExperienceList } from '../offers/ExperienceList'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { EMPTY } from '@/utils/display-utils'
@@ -287,10 +286,9 @@ export const LocationView = ({
             <CaretakerDetailsContainer>
               <CaretakerDetails>
                 <ProfileContact
-                  onContact={() => events.contactCaretakerEvent(caretaker._id)}
-                  caretakerEmail={caretakerEmail}
                   profile={caretaker}
-                  showContactButton
+                  caretakerEmail={caretakerEmail}
+                  onContact={() => events.contactCaretakerEvent(caretaker._id)}
                 />
               </CaretakerDetails>
             </CaretakerDetailsContainer>

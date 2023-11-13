@@ -1,30 +1,34 @@
 import Link from 'next/link'
-import { ProfileFragment } from '@/generated/graphql'
+import { MeFragment, ProfileFragment } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
 import { Avatar } from './Avatar'
 import { ProfileIcons } from './ProfileIcons'
-import { Caption, H4 } from './Typography'
+import { Body1, Caption, H4 } from './Typography'
 import { Button } from '@/components/core/Button'
 import { NoWrap } from './NoWrap'
 import { AuthenticatedLink } from './AuthenticatedLink'
+import { useProfile } from '@/components/auth/useProfile'
+import Icon from '@/components/core/Icon'
+import theme from '@/styles/theme'
+import { CaretakerContactModal } from '@/components/core/CaretakerContactModal'
+import { useModal } from '@/components/hooks/useModal'
 
 interface ProfileContactProps {
   profile: ProfileFragment
   caretakerEmail?: string | null | undefined
   onContact?: () => void
-  variant?: 'default' | 'small'
-  showContactButton?: boolean
 }
 
 export const ProfileContact = ({
   profile,
   caretakerEmail,
   onContact,
-  variant = 'default',
-  showContactButton = false,
 }: ProfileContactProps) => {
+  const { showModal } = useModal()
+  const { user } = useProfile()
+
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.role)
   )
@@ -33,44 +37,89 @@ export const ProfileContact = ({
 
   return (
     <Container>
-      <Top flexDir={variant == 'default' ? 'column' : 'row'}>
-        <Link href={`/profile/${profile._id}`}>
-          <Avatar
-            src={profile.avatar?.url}
-            size={variant == 'default' ? 8.8 : 7.2}
-          />
-        </Link>
+      <Top flexDir={'row'}>
+        {user ? (
+          <Link href={`/profile/${profile._id}`}>
+            <Avatar src={profile.avatar?.url} size={7.2} />
+          </Link>
+        ) : (
+          <div
+            style={{
+              width: '7.2rem',
+              height: '7.2rem',
+              backgroundColor: theme.colors.yellow100,
+              border: `1px solid ${theme.colors.green900}`,
+              borderRadius: '50%',
+              display: 'flex',
+              flexShrink: 0,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Icon name={'silhouette'} size={4} />
+          </div>
+        )}
 
         <Info>
           <Name wrapToNextLine={wrapToNextLine}>
-            <Link href={`/profile/${profile._id}`}>
-              <NoWrap>
-                <H4>{profile.name}</H4>
-              </NoWrap>
-            </Link>
-            <ProfileIcons
-              size={1.6}
-              citizenshipStatus={profile.citizenshipStatus}
-              roleInfos={roleInfos}
-            />
+            {user ? (
+              <>
+                <Link href={`/profile/${profile._id}`}>
+                  <NoWrap>
+                    <H4>{profile.name}</H4>
+                  </NoWrap>
+                </Link>
+                <ProfileIcons
+                  size={1.6}
+                  citizenshipStatus={profile.citizenshipStatus}
+                  roleInfos={roleInfos}
+                />
+              </>
+            ) : (
+              <>
+                <NoWrap>
+                  <H4>Caretaker</H4>
+                </NoWrap>
+                <Icon name={'check-star'} size={1.6} />
+              </>
+            )}
           </Name>
           <Caption>
-            {(profile.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
-            ₡ABIN&nbsp;·&nbsp;Joined{' '}
-            {format(parseISO(profile.createdAt), 'yyyy')}
+            {user ? (
+              <>
+                {(profile.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
+                ₡ABIN&nbsp;·&nbsp;Joined{' '}
+                {format(parseISO(profile.createdAt), 'yyyy')}
+              </>
+            ) : (
+              <>
+                Become a Citizen to connect with the property&apos;s caretaker.
+              </>
+            )}
           </Caption>
         </Info>
       </Top>
 
-      {showContactButton && (
-        <ContactContainer>
+      <Body1>{user ? profile?.bio : ''}</Body1>
+
+      <ContactContainer>
+        {user ? (
           <AuthenticatedLink href={`mailto:${caretakerEmail ?? profile.email}`}>
             <ContactButton onClick={onContact} variant="tertiary">
               Contact
             </ContactButton>
           </AuthenticatedLink>
-        </ContactContainer>
-      )}
+        ) : (
+          <ContactButton
+            onClick={() => {
+              showModal(() => <CaretakerContactModal />)
+            }}
+            variant="tertiary"
+          >
+            Learn More
+          </ContactButton>
+        )}
+      </ContactContainer>
     </Container>
   )
 }
@@ -79,7 +128,11 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
-  gap: 0.8rem;
+  gap: 1.6rem;
+
+  ${Body1} {
+    opacity: 0.75;
+  }
 `
 
 const Top = styled.div<{

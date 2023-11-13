@@ -80,6 +80,7 @@ import residentSvg from './svg/resident.svg'
 import scheduleGreenSvg from './svg/schedule-green.svg'
 import searchSvg from './svg/search.svg'
 import shieldSvg from './svg/shield.svg'
+import silhouette from './svg/silhouette.svg'
 import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
@@ -173,6 +174,7 @@ export const IconSvgs = {
   'schedule-green': scheduleGreenSvg,
   search: searchSvg,
   shield: shieldSvg,
+  silhouette: silhouette,
   'sign-out': signOutSvg,
   sleep: sleepSvg,
   stamp: stampSvg,
