@@ -29,6 +29,8 @@ export const ProfileContact = ({
   const { showModal } = useModal()
   const { user } = useProfile()
 
+  const isCitizen = user && user.citizenshipStatus === 'Verified'
+
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.role)
   )
@@ -38,7 +40,7 @@ export const ProfileContact = ({
   return (
     <Container>
       <Top flexDir={'row'}>
-        {user ? (
+        {isCitizen ? (
           <Link href={`/profile/${profile._id}`}>
             <Avatar src={profile.avatar?.url} size={7.2} />
           </Link>
@@ -62,7 +64,7 @@ export const ProfileContact = ({
 
         <Info>
           <Name wrapToNextLine={wrapToNextLine}>
-            {user ? (
+            {isCitizen ? (
               <>
                 <Link href={`/profile/${profile._id}`}>
                   <NoWrap>
@@ -85,7 +87,7 @@ export const ProfileContact = ({
             )}
           </Name>
           <Caption>
-            {user ? (
+            {isCitizen ? (
               <>
                 {(profile.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
                 ₡ABIN&nbsp;·&nbsp;Joined{' '}
@@ -100,10 +102,10 @@ export const ProfileContact = ({
         </Info>
       </Top>
 
-      <Body1>{user ? profile?.bio : ''}</Body1>
+      <Body1>{isCitizen ? profile?.bio : ''}</Body1>
 
       <ContactContainer>
-        {user ? (
+        {isCitizen ? (
           <AuthenticatedLink href={`mailto:${caretakerEmail ?? profile.email}`}>
             <ContactButton onClick={onContact} variant="tertiary">
               Contact
