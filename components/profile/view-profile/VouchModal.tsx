@@ -2,18 +2,11 @@ import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
-import {
-  Body1,
-  Body2,
-  Caption,
-  H4,
-  Subline1,
-} from '@/components/core/Typography'
+import { Body2, H4 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import {
   CitizenshipStatus,
   GetProfileByIdFragment,
-  useMyVouchesThisYearQuery,
   useUnvouchProfileMutation,
   useVouchProfileMutation,
 } from '@/generated/graphql'
@@ -23,10 +16,7 @@ interface VouchModalProps {
   profile: GetProfileByIdFragment
 }
 
-const MAX_VOUCHES_PER_YEAR = 10
-
 export const VouchModal = ({ profile }: VouchModalProps) => {
-  const { data } = useMyVouchesThisYearQuery()
   const [vouched, setVouched] = useState(false)
   const [vouchProfile] = useVouchProfileMutation({
     refetchQueries: ['MyVouchesThisYear'],
@@ -63,10 +53,6 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
     }
   }
 
-  if (!data) return null
-
-  const vouchesRemaining = MAX_VOUCHES_PER_YEAR - data.myVouchesThisYear
-
   return (
     <VouchModalContainer>
       <ModalTitle text="Vouch" />
@@ -82,15 +68,6 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
             a Citizenship NFT and become a verified citizen of Cabin.
           </Body2>
         </DescriptionContainer>
-        <VouchLimitContainer>
-          <div>
-            <Subline1>Vouches remaining</Subline1>
-            <Caption>Replenishes annually</Caption>
-          </div>
-          <div>
-            <Body1>{`${vouchesRemaining}/${MAX_VOUCHES_PER_YEAR}`}</Body1>
-          </div>
-        </VouchLimitContainer>
         {vouched ? (
           <VouchButton
             startAdornment={<Icon name="check" size={1.7} />}
@@ -100,11 +77,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
             Vouched for
           </VouchButton>
         ) : (
-          <VouchButton
-            variant="primary"
-            onClick={onVouch}
-            disabled={vouchesRemaining <= 0}
-          >
+          <VouchButton variant="primary" onClick={onVouch}>
             Send vouch
           </VouchButton>
         )}
@@ -153,13 +126,4 @@ const Circle = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
-
-const VouchLimitContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.gray300};
-  padding: 1.6rem;
 `
