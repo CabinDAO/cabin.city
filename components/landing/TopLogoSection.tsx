@@ -71,7 +71,7 @@ const Content = styled.div`
   }
 
   ${({ theme }) => theme.bp.md} {
-    padding: 8rem 2.4rem 8rem 12.8rem;
+    padding: 3.2rem 2.4rem 3.2rem 12.8rem;
     max-width: 128rem;
 
     #cabin-logo {

@@ -52,7 +52,7 @@ export const TwitterSection = () => {
       setXOffset(xOffset)
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('scroll', onScroll)
 
     return () => {
       window.removeEventListener('scroll', onScroll)

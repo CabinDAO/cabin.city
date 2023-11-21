@@ -44,13 +44,6 @@ export const Footer = () => (
             >
               <Name>Privacy & Terms</Name>
             </AppLink>
-            <AppLink
-              external
-              location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-              iconSize={0}
-            >
-              <Name>Contact Us</Name>
-            </AppLink>
           </Section>
 
           <Section>
@@ -64,38 +57,30 @@ export const Footer = () => (
             <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
               <Name>Podcast</Name>
             </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.WIKI} iconSize={0}>
-              <Name>Support Wiki</Name>
-            </AppLink>
             <AppLink external location={EXTERNAL_LINKS.STORE} iconSize={0}>
               <Name>Store</Name>
+            </AppLink>
+            <AppLink
+              external
+              location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+              iconSize={0}
+            >
+              <Name>Contact Us</Name>
             </AppLink>
           </Section>
 
           <Section>
             <Header>Social</Header>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.CABIN_DISCORD}
-              iconSize={0}
-            >
+            <AppLink external location={EXTERNAL_LINKS.DISCORD} iconSize={0}>
               <Name>Discord</Name>
             </AppLink>
             <AppLink external location={EXTERNAL_LINKS.FORUM} iconSize={0}>
               <Name>Forum</Name>
             </AppLink>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.CABIN_TWITTER}
-              iconSize={0}
-            >
+            <AppLink external location={EXTERNAL_LINKS.TWITTER} iconSize={0}>
               <Name>Twitter</Name>
             </AppLink>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.CABIN_INSTAGRAM}
-              iconSize={0}
-            >
+            <AppLink external location={EXTERNAL_LINKS.INSTAGRAM} iconSize={0}>
               <Name>Instagram</Name>
             </AppLink>
           </Section>

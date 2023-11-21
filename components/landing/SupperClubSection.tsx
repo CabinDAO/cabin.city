@@ -5,7 +5,7 @@ import { Body1, H4, Subline1 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
-import pic from './people-circle-mountains.jpg'
+import pic from './supperclub.jpg'
 
 export const SupperClubSection = () => {
   return (
@@ -15,18 +15,16 @@ export const SupperClubSection = () => {
           src={pic}
           alt={'Intro Cabin Experience'}
           style={{
-            objectFit: 'contain',
+            objectFit: 'cover',
             objectPosition: 'center',
           }}
         />
 
-        <Text style={{ gridArea: 'c' }}>
-          <Subline1>Supper Club</Subline1>
-          <Title>
-            You can’t build a city if you’ve never hosted a dinner party.
-          </Title>
+        <Text>
+          <Subline1>Get started</Subline1>
+          <Title>Make meaningful connections in the Cabin community</Title>
           <Body>
-            Supper Club is the kindling to our fire, a get together with friends
+            Supper Club is the kindling to our fire. Get together with friends
             to grow community, discuss your favorite topics, and start fanning
             the flame of new ways of living.
           </Body>
@@ -34,8 +32,8 @@ export const SupperClubSection = () => {
             <Link href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}>
               <Button variant={'primary'}>Attend a Supper Club</Button>
             </Link>
-            <Link href={'mailto:home@cabin.city'}>
-              <Button variant={'secondary'}>Become a host</Button>
+            <Link href={EXTERNAL_LINKS.SUPPER_CLUB_INFO}>
+              <Button variant={'secondary'}>Learn more</Button>
             </Link>
           </Buttons>
         </Text>
@@ -59,6 +57,7 @@ const Content = styled.div`
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
     gap: 4rem;
+    max-height: 700px;
     img {
       width: 50%;
     }
@@ -115,4 +114,13 @@ const Buttons = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   gap: 0.8rem;
+  margin-top: 1.6rem;
+
+  ${({ theme }) => theme.bp.md_max} {
+    flex-direction: column;
+    width: 100%;
+    * {
+      width: 100%;
+    }
+  }
 `

@@ -4,8 +4,6 @@ import { padding } from '@/styles/theme'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
 
 interface HeroSectionProps {
-  title: string
-  body: string
   buttons: JSX.Element[]
 }
 
@@ -14,21 +12,22 @@ export const HeroSection = (props: HeroSectionProps) => {
     <ExtraPadding>
       <Wrapper>
         <Text>
-          <StyledHHero>{props.title}</StyledHHero>
-          <Description>
-            <Body1>{props.body}</Body1>
-          </Description>
+          <StyledHHero>
+            Internet friends building a network of modern villages
+          </StyledHHero>
         </Text>
-        <ButtonWrapper>
-          <Buttons>
-            {props.buttons.map((button) => {
-              return button
-            })}
-          </Buttons>
-        </ButtonWrapper>
+        {/*<ButtonWrapper>*/}
+        {/*  <Buttons>*/}
+        {/*    {props.buttons.map((button) => {*/}
+        {/*      return button*/}
+        {/*    })}*/}
+        {/*  </Buttons>*/}
+        {/*</ButtonWrapper>*/}
       </Wrapper>
-      <H4>Subscribe to our newsletter</H4>
-      <SubscribeForm />
+      <Newsletter>
+        <H4>Subscribe to our newsletter</H4>
+        <SubscribeForm />
+      </Newsletter>
     </ExtraPadding>
   )
 }
@@ -39,7 +38,7 @@ export const StyledHHero = styled(HHero)`
 
   ${({ theme }) => theme.bp.md} {
     width: 100%;
-    font-size: 4rem;
+    font-size: 3.2rem;
     line-height: 1.25;
   }
 `
@@ -50,15 +49,16 @@ const ExtraPadding = styled.div`
   align-self: center;
   justify-content: center;
   align-items: center;
-  gap: 2.4rem;
-  ${padding('xl', 'md')};
+  gap: 4rem;
+  margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
+    gap: 4.8rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 65rem;
+    width: 57rem;
   }
 `
 
@@ -109,6 +109,15 @@ const Wrapper = styled.div`
   ${({ theme }) => theme.bp.md} {
     gap: 4rem;
   }
+`
+
+const Newsletter = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  width: 100%;
 `
 
 export const Text = styled.div`

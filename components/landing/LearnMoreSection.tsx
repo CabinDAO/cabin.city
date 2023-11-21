@@ -33,7 +33,7 @@ export const LearnMoreSection = () => {
             title: 'Join our online community',
             body: 'Discord is our Town Hall where our community gathers to make plans and memes.',
             icon: 'forum',
-            link: EXTERNAL_LINKS.CABIN_DISCORD,
+            link: EXTERNAL_LINKS.DISCORD,
           },
         ]}
       />

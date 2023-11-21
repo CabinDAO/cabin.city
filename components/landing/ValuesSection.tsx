@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body1, H4 } from '@/components/core/Typography'
+import { Body1, H2, H4, fonts } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import value1 from './value1.jpg'
@@ -11,6 +11,7 @@ import value3 from './value3.jpg'
 export const ValuesSection = () => {
   return (
     <>
+      <Title>What we believe</Title>
       <Content>
         <Value style={{ gridArea: 'a' }}>
           <ValueTitle>
@@ -84,6 +85,12 @@ export const ValuesSection = () => {
     </>
   )
 }
+
+const Title = styled(H2)`
+  font-family: ${fonts.inter};
+  font-size: 3.2rem;
+  margin-bottom: 2rem;
+`
 
 const Content = styled.div`
   display: grid;

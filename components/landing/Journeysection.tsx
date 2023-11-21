@@ -1,0 +1,303 @@
+import styled from 'styled-components'
+import Image from 'next/image'
+import Link from 'next/link'
+import { body1Styles, H2, H4, fonts } from '@/components/core/Typography'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import pic1 from './journey1.png'
+import pic2 from './journey2.png'
+import pic3 from './journey3.png'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { useEffect, useState } from 'react'
+import Icon from '@/components/core/Icon'
+
+export const JourneySection = () => {
+  const [scrollPercentage, setScrollPercentage] = useState(0)
+
+  useEffect(() => {
+    const wrapperDiv = document.getElementById('progressBarWrapper')
+    if (!wrapperDiv) return
+
+    const handleScroll = () => {
+      const divHeight = wrapperDiv.clientHeight
+      const divOffsetTop = wrapperDiv.offsetTop
+      const scrollPosition = window.scrollY + 300
+      const percentage = ((scrollPosition - divOffsetTop) / divHeight) * 100
+
+      const clampedPercentage = Math.min(100, Math.max(10, percentage))
+      setScrollPercentage(clampedPercentage)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  return (
+    <>
+      <Header>
+        <Icon name={'backpack-green'} size={8} />
+        <Title>Join us on our journey</Title>
+        <BodyText>
+          Cabin is pioneering a new way of living rooted in meaningful
+          connection between people and places.
+        </BodyText>
+      </Header>
+
+      <ProgressBarWrapper id={'progressBarWrapper'}>
+        <ProgressBar scrollPercent={scrollPercentage} />
+
+        <Content>
+          <Value style={{ gridArea: 'a' }}>
+            <ValueTitle>Meet at the trailhead</ValueTitle>
+            <BodyText>
+              Learn more about Cabin and cross paths with community members to
+              connect and exchange ideas.
+              <ul>
+                <li>
+                  <Link href={EXTERNAL_LINKS.BLOG}>Read our blog</Link>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.PODCAST}>
+                    Listen to our podcast
+                  </Link>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.DISCORD}>Join the Discord</Link>
+                </li>
+              </ul>
+            </BodyText>
+          </Value>
+
+          <Image
+            src={pic1}
+            alt={'One'}
+            style={{
+              gridArea: 'b',
+              margin: 'auto',
+              width: '80%',
+              height: '80%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+            }}
+          />
+
+          <Value style={{ gridArea: 'c' }}>
+            <ValueTitle>Connect and contribute</ValueTitle>
+            <BodyText>
+              Co-create Cabin’s future by joining community members in your
+              local area and participating online.
+              <ul>
+                <li>
+                  <Link href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}>
+                    Attend a Supper Club
+                  </Link>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.FORUM}>
+                    Participate on the forum
+                  </Link>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.DISCORD}>
+                    Sign in and create your profile
+                  </Link>
+                </li>
+              </ul>
+            </BodyText>
+          </Value>
+
+          <Image
+            src={pic2}
+            alt={'Two'}
+            style={{
+              gridArea: 'd',
+              margin: 'auto',
+              width: '80%',
+              height: '80%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+            }}
+          />
+
+          <Value style={{ gridArea: 'e' }}>
+            <ValueTitle>Reach the summit</ValueTitle>
+            <BodyText>
+              Become a Citizen to explore our City Directory, a network of
+              connected properties, and be a part of building a modern village
+              for families.
+              <ul>
+                <li>
+                  <Link href={'/citizenship'}>
+                    Earn a vouch and become a Citizen
+                  </Link>
+                </li>
+                <li>
+                  <AuthenticatedLink href={'/city-directory'}>
+                    Explore the City Directory
+                  </AuthenticatedLink>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.SNAPSHOT}>Vote on proposals</Link>
+                </li>
+                <li>
+                  <Link href={EXTERNAL_LINKS.SUPPER_CLUB_INFO}>
+                    Host a Supper Club
+                  </Link>
+                </li>
+              </ul>
+            </BodyText>
+          </Value>
+
+          <Image
+            src={pic3}
+            alt={'Three'}
+            style={{
+              gridArea: 'f',
+              margin: 'auto',
+              width: '80%',
+              height: '80%',
+              objectFit: 'contain',
+              objectPosition: 'center',
+            }}
+          />
+        </Content>
+      </ProgressBarWrapper>
+    </>
+  )
+}
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4rem;
+  text-align: center;
+  margin-bottom: 4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 40rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 56rem;
+  }
+`
+
+const Title = styled(H2)`
+  font-family: ${fonts.inter};
+  font-size: 3.2rem;
+`
+
+const ProgressBarWrapper = styled.div`
+  position: relative;
+`
+
+const ProgressBar = styled.div<{ scrollPercent: number }>`
+  position: absolute;
+  height: 100%;
+  width: 10px;
+  top: 0;
+  right: calc(50% - 5px); // subtract half the width of the bar itself
+  background: linear-gradient(
+    to bottom,
+    #324841,
+    #06774c,
+    #06df59 ${(props) => props.scrollPercent}%,
+    ${({ theme }) => theme.colors.green900 + '1F'}
+      ${(props) => props.scrollPercent}%,
+    ${({ theme }) => theme.colors.green900 + '1F'}
+  );
+  z-index: 10;
+
+  display: none;
+  ${({ theme }) => theme.bp.md} {
+    display: block;
+  }
+`
+
+const Content = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template: repeat(3, auto 1fr) / 100%;
+  grid-template-areas:
+    'a'
+    'b'
+    'c'
+    'd'
+    'e'
+    'f';
+  row-gap: 2.4rem;
+  margin-bottom: 4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50rem;
+    column-gap: 8rem;
+    grid-template: repeat(3, 1fr) / calc(50% - 4rem) calc(50% - 4rem); // subtract half the column-gap from each
+    grid-template-areas:
+      'a b'
+      'd c'
+      'e f';
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 80rem;
+    row-gap: 8rem;
+  }
+`
+
+const Value = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.sm_max} {
+    &:not(:first-of-type) {
+      margin-top: 6.4rem;
+    }
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    &:nth-of-type(2n) {
+      padding-left: 4rem;
+    }
+    &:nth-of-type(2n-1) {
+      padding-right: 4rem;
+    }
+  }
+`
+
+const ValueTitle = styled(H4)`
+  font-size: 2.4rem;
+  line-height: 120%; /* 3.84rem */
+  font-weight: 600;
+
+  ${({ theme }) => theme.bp.lg} {
+    font-size: 3.2rem;
+  }
+`
+
+const BodyText = styled.div`
+  ${body1Styles}
+
+  opacity: 0.75;
+
+  ul {
+    margin-top: 4rem;
+    margin-left: 1rem;
+    list-style: inside;
+
+    li {
+      margin-top: 1.6rem;
+    }
+  }
+
+  a {
+    text-decoration: underline;
+  }
+`

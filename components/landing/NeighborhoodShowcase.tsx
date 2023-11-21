@@ -7,7 +7,7 @@ import {
 } from '@/generated/graphql'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
-import { fonts } from '@/components/core/Typography'
+import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 
 export const NeighborhoodShowcase = () => {
@@ -22,6 +22,9 @@ export const NeighborhoodShowcase = () => {
 
   return (
     <Container>
+      <Icon name={'map-green'} size={8} />
+      <Subline1>Citizenship unlocks the City Directory</Subline1>
+      <H2>Our network of connected properties</H2>
       <Neighborhoods>
         {locations.map((location, index) => {
           const imgURL = getImageUrlByIpfsHash(
@@ -53,6 +56,15 @@ export const NeighborhoodShowcase = () => {
           )
         })}
       </Neighborhoods>
+      <H4>
+        View more properties{' '}
+        <Icon
+          name={'right-arrow'}
+          size={2}
+          color={'white'}
+          style={{ display: 'inline-block', verticalAlign: 'middle' }}
+        />
+      </H4>
     </Container>
   )
 }
@@ -63,9 +75,30 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
 
-  H1 {
-    margin: 4rem;
+  > span:first-child {
+    margin-top: 4rem;
+  }
+
+  ${Subline1} {
+    font-family: ${fonts.ibmPlexMono};
+    color: ${({ theme }) => theme.colors.yellow100};
+    margin-top: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  ${H2} {
+    font-size: 3.2rem;
+    margin-bottom: 6.4rem;
     font-family: ${fonts.poppins};
+    color: ${({ theme }) => theme.colors.yellow100};
+  }
+
+  ${H4} {
+    font-size: 2rem;
+    font-family: ${fonts.ibmPlexMono};
+    color: ${({ theme }) => theme.colors.yellow100};
+    margin-top: 4rem;
+    margin-bottom: 0.8rem;
   }
 `
 
