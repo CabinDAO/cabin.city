@@ -106,11 +106,11 @@ export const ProfileContact = ({
 
       <ContactContainer>
         {isCitizen ? (
-          <AuthenticatedLink href={`mailto:${caretakerEmail ?? profile.email}`}>
+          <Link href={`mailto:${caretakerEmail ?? profile.email}`}>
             <ContactButton onClick={onContact} variant="tertiary">
               Contact
             </ContactButton>
-          </AuthenticatedLink>
+          </Link>
         ) : (
           <ContactButton
             onClick={() => {

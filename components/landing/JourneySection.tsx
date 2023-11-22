@@ -100,9 +100,9 @@ export const JourneySection = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href={EXTERNAL_LINKS.DISCORD}>
+                  <AuthenticatedLink href={'/dashboard'}>
                     Sign in and create your profile
-                  </Link>
+                  </AuthenticatedLink>
                 </li>
               </ul>
             </BodyText>
@@ -129,14 +129,14 @@ export const JourneySection = () => {
               for families.
               <ul>
                 <li>
-                  <Link href={'/citizenship'}>
+                  <AuthenticatedLink href={'/citizenship'}>
                     Earn a vouch and become a Citizen
-                  </Link>
+                  </AuthenticatedLink>
                 </li>
                 <li>
-                  <AuthenticatedLink href={'/city-directory'}>
+                  <Link href={'/city-directory'}>
                     Explore the City Directory
-                  </AuthenticatedLink>
+                  </Link>
                 </li>
                 <li>
                   <Link href={EXTERNAL_LINKS.SNAPSHOT}>Vote on proposals</Link>
@@ -297,7 +297,8 @@ const BodyText = styled.div`
     }
   }
 
-  a {
+  a,
+  li > span {
     text-decoration: underline;
   }
 `

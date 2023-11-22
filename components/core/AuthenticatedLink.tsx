@@ -51,6 +51,6 @@ export const AuthenticatedLink = ({
   }
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled.span`
   cursor: pointer;
 `

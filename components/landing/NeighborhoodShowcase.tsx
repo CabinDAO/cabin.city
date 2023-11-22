@@ -57,13 +57,15 @@ export const NeighborhoodShowcase = () => {
         })}
       </Neighborhoods>
       <H4>
-        View more properties{' '}
-        <Icon
-          name={'right-arrow'}
-          size={2}
-          color={'white'}
-          style={{ display: 'inline-block', verticalAlign: 'middle' }}
-        />
+        <Link href={'/city-directory'}>
+          View more properties{' '}
+          <Icon
+            name={'right-arrow'}
+            size={2}
+            color={'white'}
+            style={{ display: 'inline-block', verticalAlign: 'middle' }}
+          />
+        </Link>
       </H4>
     </Container>
   )
