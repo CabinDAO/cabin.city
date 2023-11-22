@@ -6,9 +6,7 @@ export const EXTERNAL_LINKS = {
   ROLES: 'https://forum.cabin.city/t/census-and-roles/54',
   PASSPORTS: 'https://forum.cabin.city/t/census-and-roles/54',
   PRIVACY_AND_TERMS:
-    'https://cabin-fellowship.notion.site/Privacy-Policy-and-Terms-of-Service-af00c235b7c149ec9bd7c8cd807c3b7b',
-  CITIZENSHIP_PERKS:
-    'https://cabin-fellowship.notion.site/Citizenship-Perks-and-General-Store-761ab3ab6fef44ac931585784edc3ffc',
+    'https://forum.cabin.city/t/safety-privacy-policy-and-terms-of-service/89',
   VISION:
     'https://creators.mirror.xyz/zHox-AfvHbX0Q2JxAbcfwiAmOXRy7BzYafhZNlvHnmM',
   PRINCIPLES:
