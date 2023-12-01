@@ -32,6 +32,8 @@ import events from '@/lib/googleAnalytics/events'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { EMPTY } from '@/utils/display-utils'
+import { ExperienceList } from '@/components/offers/ExperienceList'
+import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
 
 interface LocationMediaItem {
   category: LocationMediaCategory
@@ -89,6 +91,7 @@ export interface LocationProps {
   sleepCapacity: number | null | undefined
   internetSpeedMbps: number | null | undefined
   voteCount: number | null | undefined
+  offers: OfferItem[]
   votes: LocationVote[] | null | undefined
   publishedAt: Date | null | undefined
 }
@@ -114,6 +117,7 @@ export const LocationView = ({
     locationType,
     voteCount,
     votes,
+    offers,
     caretakerEmail,
   } = location
   const isNeighborhood = locationType === LocationType.Neighborhood
@@ -142,6 +146,12 @@ export const LocationView = ({
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
+  const bookableOffers = offers.filter(
+    (offer) =>
+      (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+      offer.offerType !== OfferType.Residency
+  )
+
   const { user } = useProfile()
   const isEditable = user?.isAdmin || user?._id === location.caretaker._id
 
@@ -152,19 +162,15 @@ export const LocationView = ({
       )}
 
       <LocationDetailsContainer>
-        <LocationTypeTag
-          label={
-            isNeighborhood ? 'Verified Neighborhood' : 'Registered Outpost'
-          }
-          color={isNeighborhood ? 'green400' : 'yellow300'}
-          startAdornment={
-            <Icon
-              name={isNeighborhood ? 'neighborhood' : 'outpost'}
-              size={1.8}
-              color={isNeighborhood ? 'green400' : 'yellow300'}
-            />
-          }
-        ></LocationTypeTag>
+        {(voteCount ?? 0) >= VERIFIED_VOTE_COUNT && (
+          <LocationTypeTag
+            label={'Verified'}
+            color={'green400'}
+            startAdornment={
+              <Icon name={'logo-cabin'} size={1.8} color={'green400'} />
+            }
+          />
+        )}
 
         <StyledContentCard shadow={true}>
           <LocationHeader>
@@ -264,6 +270,18 @@ export const LocationView = ({
         )}
       </GalleryPreviewContainer>
 
+      {!!bookableOffers.length && (
+        <Section>
+          <SectionHeader>
+            <H3>Experiences</H3>
+          </SectionHeader>
+          <ExperienceList
+            offers={bookableOffers}
+            actionButtonText={'Reserve'}
+          />
+        </Section>
+      )}
+
       <Section>
         <SectionHeader>
           <H3>Description</H3>
@@ -304,7 +322,7 @@ const Section = styled.div`
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.yellow200};
   width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.yellow900};
+  border: 1px solid ${({ theme }) => theme.colors.green900};
 `
 
 const SectionContent = styled.div`
@@ -317,7 +335,7 @@ const SectionContent = styled.div`
 const SectionHeader = styled.div`
   display: flex;
   padding: 1.6rem 2.4rem;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.yellow900};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
 `
 
 const LocationTypeTag = styled(Tag)`

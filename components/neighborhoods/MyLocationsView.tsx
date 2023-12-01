@@ -13,7 +13,7 @@ export const MyLocationsView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <SingleColumnLayout withFooter>
       <TitleCard
         icon="draft-proposal"
         title="My Locations"

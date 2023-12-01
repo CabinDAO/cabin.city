@@ -31,7 +31,7 @@ export const editLocationSteps: StepConfig[] = [
     component: PhotoGalleryStep,
   },
   {
-    name: 'Offers',
+    name: 'Experiences',
     component: OffersStep,
   },
 ]

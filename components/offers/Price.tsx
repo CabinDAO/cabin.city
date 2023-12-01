@@ -31,7 +31,7 @@ export const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
       return [dollarString, `/ month`]
     case OfferPriceUnit.FlatFee:
     default:
-      return [dollarString, `all inclusive`]
+      return [dollarString, `total cost`]
   }
 }
 

@@ -58,6 +58,7 @@ export const LocationPageView = () => {
 
   return (
     <SingleColumnLayout
+      withFooter
       actionBar={
         previewMode ? (
           <ActionBar

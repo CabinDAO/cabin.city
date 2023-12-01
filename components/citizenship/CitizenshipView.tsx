@@ -83,7 +83,7 @@ export const CitizenshipView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout>
+    <SingleColumnLayout withFooter>
       <TitleCard
         title="Citizenship"
         icon="back-arrow"

@@ -5,7 +5,6 @@ import { ActionBar } from '../core/ActionBar'
 import { PublishModal } from '../neighborhoods/edit-location/PublishModal'
 import { useModal } from '../hooks/useModal'
 import { useRouter } from 'next/router'
-import { Footer } from '@/components/navigation/Footer'
 
 export const OfferPageView = () => {
   const router = useRouter()
@@ -22,26 +21,24 @@ export const OfferPageView = () => {
   }
 
   return (
-    <>
-      <SingleColumnLayout
-        actionBar={
-          isEditable && !isPublished ? (
-            <ActionBar
-              primaryButton={{
-                label: 'Publish',
-                onClick: handlePublish,
-              }}
-              secondaryButton={{
-                label: 'Back',
-                onClick: () => router.push(`/location/${offer.location._id}`),
-              }}
-            />
-          ) : null
-        }
-      >
-        <OfferView offer={offer} isEditable={isEditable} />
-      </SingleColumnLayout>
-      <Footer />
-    </>
+    <SingleColumnLayout
+      withFooter
+      actionBar={
+        isEditable && !isPublished ? (
+          <ActionBar
+            primaryButton={{
+              label: 'Publish',
+              onClick: handlePublish,
+            }}
+            secondaryButton={{
+              label: 'Back',
+              onClick: () => router.push(`/location/${offer.location._id}`),
+            }}
+          />
+        ) : null
+      }
+    >
+      <OfferView offer={offer} isEditable={isEditable} />
+    </SingleColumnLayout>
   )
 }

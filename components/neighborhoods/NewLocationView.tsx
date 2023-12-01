@@ -9,9 +9,8 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
-import { Body2, H3, H4, Overline } from '../core/Typography'
+import { Body2, H3, Overline } from '../core/Typography'
 import { ContentCard } from '../core/ContentCard'
-import { NoWrap } from '../core/NoWrap'
 import { HorizontalDivider } from '../core/Divider'
 import { AppLink } from '../core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
@@ -82,7 +81,7 @@ export const NewLocationView = () => {
   }
 
   return (
-    <StyledLayout
+    <SingleColumnLayout
       actionBar={
         <ActionBar
           primaryButton={{
@@ -105,7 +104,7 @@ export const NewLocationView = () => {
               <H3>Joining the City Directory</H3>
               <Body2>
                 Cabin&apos;s City Directory is a hub for connecting people and
-                space around the world. If you&apos;re interested in welcoming
+                places around the world. If you&apos;re interested in welcoming
                 residents focused on building better ways to live, create,
                 build, and steward the natural land, this is the place for you.
               </Body2>
@@ -116,47 +115,14 @@ export const NewLocationView = () => {
                 location.
               </Body2>
               <Body2>
-                All properties start out as ‘Outposts’ in the directory, and
-                once they meet the minimum requirements, they level up to
-                ‘Neighborhood’ status to unlock more Cabin features.
+                Properties receive the verified tag when they earn 1,000 votes
+                from the community.
+              </Body2>
+              <Body2>
+                Only Cabin Citizens will be able to contact you through your
+                property listing page.
               </Body2>
             </JoiningTextContainer>
-            <ListingTypeTextContainer>
-              <ListingTextColumn>
-                <NoWrap>
-                  <H4>Outposts:</H4>
-                </NoWrap>
-                <StyledList>
-                  <li>
-                    <Body2>
-                      New listing working to become a ‘Neighborhood’
-                    </Body2>
-                  </li>
-                  <li>
-                    <Body2>
-                      Smaller locations that don’t meet ‘Neighborhood’
-                      requirements
-                    </Body2>
-                  </li>
-                </StyledList>
-              </ListingTextColumn>
-              <ListingTextColumn>
-                <NoWrap>
-                  <H4>Neighborhoods:</H4>
-                </NoWrap>
-                <StyledList>
-                  <li>
-                    <Body2>4 or more beds</Body2>
-                  </li>
-                  <li>
-                    <Body2>20+ mbps internet speed</Body2>
-                  </li>
-                  <li>
-                    <Body2>Earned 1,000 votes from the community</Body2>
-                  </li>
-                </StyledList>
-              </ListingTextColumn>
-            </ListingTypeTextContainer>
           </Content>
           <HorizontalDivider />
           <AppLink
@@ -168,13 +134,9 @@ export const NewLocationView = () => {
           </AppLink>
         </StyledContentCard>
       </Container>
-    </StyledLayout>
+    </SingleColumnLayout>
   )
 }
-
-const StyledLayout = styled(SingleColumnLayout)`
-  // display: none;
-`
 
 const Container = styled.div`
   padding-top: 2.4rem;
@@ -184,18 +146,6 @@ const Container = styled.div`
   width: 100%;
   align-items: flex-start;
   justify-content: center;
-`
-
-const StyledList = styled.ul`
-  list-style: outside disc;
-  margin-left: 2rem;
-  display: flex;
-  flex-direction: column;
-
-  li {
-    padding-left: 2px;
-    opacity: 0.75;
-  }
 `
 
 const StyledContentCard = styled(ContentCard)`
@@ -224,24 +174,4 @@ const JoiningTextContainer = styled.div`
   p {
     opacity: 0.75;
   }
-`
-
-const ListingTypeTextContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 4rem;
-  width: 100%;
-  align-items: flex-start;
-
-  @media ${({ theme }) => theme.bp.md} {
-    grid-template-columns: 1fr 1fr;
-  }
-`
-
-const ListingTextColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  align-items: flex-start;
-  justify-content: flex-start;
 `

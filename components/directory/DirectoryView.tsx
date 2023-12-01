@@ -166,7 +166,7 @@ export const DirectoryView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout>
+    <SingleColumnLayout withFooter>
       <TitleCard title="Census" icon="members"></TitleCard>
       <FilterContainer>
         <SearchContainer>

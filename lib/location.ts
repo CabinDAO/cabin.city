@@ -18,7 +18,6 @@ export const locationCardPropsFromFragment = (
     address: formatShortAddress(fragment.address),
     bannerImageUrl: getImageUrlByIpfsHash(fragment.bannerImageIpfsHash, true),
     caretaker: fragment.caretaker,
-    locationType: fragment.locationType ?? LocationType.Outpost,
     name: fragment.name,
     offerCount: fragment.offerCount,
     publishedAt: fragment.publishedAt ? parseISO(fragment.publishedAt) : null,
@@ -29,7 +28,7 @@ export const locationCardPropsFromFragment = (
       .filter((v) => v && v?.count > 0)
       .filter(isNotNull)
       .map((v) => v.profile),
-    hideNeighborTag: false,
+    hideVerifiedTag: false,
   }
 }
 
@@ -51,6 +50,7 @@ export const locationViewPropsFromFragment = (
     sleepCapacity: fragment.sleepCapacity,
     internetSpeedMbps: fragment.internetSpeedMbps,
     voteCount: fragment.voteCount,
+    offers: fragment.offers.data.filter(isNotNull),
     votes: fragment.votes.data
       .filter((v) => v && v?.count > 0)
       .filter(isNotNull),

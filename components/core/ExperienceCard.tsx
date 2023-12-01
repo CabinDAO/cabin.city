@@ -1,5 +1,4 @@
 import {
-  CitizenshipStatus,
   LocationType,
   OfferPrice,
   OfferType,
@@ -8,14 +7,11 @@ import {
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import { offerInfoFromType } from '@/utils/offer'
-import { H6 } from '@/components/core/Typography'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import { ImageFlex } from './gallery/ImageFlex'
 import { OfferListItemProps } from './OfferListItem'
 import { HorizontalDivider } from './Divider'
-import { ProfileIcons } from './ProfileIcons'
-import { roleInfoFromType } from '@/utils/roles'
 import Link from 'next/link'
 import { Price } from '@/components/offers/Price'
 
@@ -55,31 +51,10 @@ export interface ExperienceCardProps {
 type ExperienceCardVariant = 'default' | 'no-icon'
 
 export const ExperienceCard = (props: ExperienceCardProps) => {
-  const {
-    _id,
-    offerType,
-    title,
-    imageUrl,
-    location,
-    citizenshipRequired,
-    profileRoleConstraints,
-    minimunCabinBalance,
-    price,
-    endDate,
-  } = props
+  const { _id, offerType, title, imageUrl, location, price, endDate } = props
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
-  const roleInfos = Array.from(
-    new Set(
-      profileRoleConstraints?.map((c) => roleInfoFromType(c.profileRole)) ?? []
-    )
-  )
-
-  const isDisplayingEligibility =
-    !!profileRoleConstraints?.length ||
-    citizenshipRequired ||
-    minimunCabinBalance
 
   const offerInfo = offerType ? offerInfoFromType(offerType) : null
   const inactive = endDate && endDate < new Date()
@@ -107,18 +82,6 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
             <Caption emphasized>{offerInfo?.name}</Caption>
             <NameH2>{title}</NameH2>
             <Caption>{formattedLocation}</Caption>
-            {isDisplayingEligibility && (
-              <EligibilityContainer>
-                <H6>Eligibility |&nbsp;</H6>
-                <ProfileIcons
-                  citizenshipStatus={
-                    citizenshipRequired ? CitizenshipStatus.Verified : null
-                  }
-                  roleInfos={roleInfos}
-                  size={1.6}
-                />
-              </EligibilityContainer>
-            )}
           </SummaryContainer>
           {price && price.amountCents > 0 && <Price price={price} />}
         </ContentContainer>
@@ -202,10 +165,4 @@ const TagContainer = styled.div`
   padding: 0.7rem 1.2rem;
   border-radius: 0.4rem;
   width: max-content;
-`
-
-const EligibilityContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  padding-bottom: 0.6rem;
 `

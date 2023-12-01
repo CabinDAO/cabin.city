@@ -5,7 +5,7 @@ import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { Navbar } from '../core/Navbar'
 import { MainContent, NavbarContainer } from './common.styles'
 import React, { HTMLAttributes } from 'react'
-import { Footer } from '@/components/navigation/Footer'
+import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 export type LayoutVariant = 'default' | 'full'
 
@@ -61,7 +61,8 @@ const OuterContainer = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  min-height: ${({ withFooter }) => (withFooter ? '76vh' : '100vh')};
+  min-height: ${({ withFooter }) =>
+    withFooter ? `calc(100vh - ${FOOTER_HEIGHT}px)` : '100vh'};
   min-width: 100%;
   justify-content: flex-start;
   align-items: center;

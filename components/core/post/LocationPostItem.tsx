@@ -3,9 +3,9 @@ import { LocationCardProps } from '../LocationCard'
 import { Caption, H4, Subline1, truncateStyles } from '../Typography'
 import { EMPTY } from '@/utils/display-utils'
 import Icon from '../Icon'
-import { LocationType } from '@/generated/graphql'
 import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
+import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
 
 export const LocationPostItem = ({
   name,
@@ -14,9 +14,9 @@ export const LocationPostItem = ({
   sleepCapacity,
   offerCount,
   tagline,
-  locationType,
+  voteCount,
   _id,
-  hideNeighborTag,
+  hideVerifiedTag,
 }: LocationCardProps) => {
   const offerCountString = offerCount === 1 ? 'Offer' : 'Offers'
   const router = useRouter()
@@ -27,10 +27,10 @@ export const LocationPostItem = ({
 
   return (
     <OuterContainer>
-      {locationType === LocationType.Neighborhood && !hideNeighborTag ? (
+      {(voteCount ?? 0) >= VERIFIED_VOTE_COUNT && !hideVerifiedTag ? (
         <VerifiedContainer>
-          <Icon name="neighborhood" color="green400" size={1.6} />
-          <Subline1 $color="green400">Verified Neighborhood</Subline1>
+          <Icon name="logo-cabin" color="green400" size={1.6} />
+          <Subline1 $color="green400">Verified</Subline1>
         </VerifiedContainer>
       ) : null}
       <Container onClick={handleOnClick}>

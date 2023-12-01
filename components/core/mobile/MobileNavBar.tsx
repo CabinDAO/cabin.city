@@ -18,7 +18,6 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <MobileMenuItem menuItem={'activity'} profileId={profileId} />
         <MobileMenuItem menuItem={'members'} profileId={profileId} />
         <MobileMenuItem menuItem={'neighborhoods'} profileId={profileId} />
-        <MobileMenuItem menuItem={'offers'} profileId={profileId} />
         <StyledDivider />
         <MobileMenuProfileItem />
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />

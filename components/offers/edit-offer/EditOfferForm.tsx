@@ -4,13 +4,10 @@ import { SlateEditor } from '@/components/core/slate/SlateEditor'
 import { Descendant } from 'slate'
 import styled from 'styled-components'
 import { Availability } from './Availability'
-import { Eligibility } from './Eligibility'
 import {
   InputMaybe,
-  LocationMediaCategory,
   OfferDataFragment,
   OfferType,
-  ProfileRoleConstraintInput,
   UpdateOfferInput,
   useDeleteOfferMutation,
 } from '@/generated/graphql'
@@ -30,7 +27,6 @@ import {
 } from '@/utils/validate'
 import { defaultSlateValue } from '@/components/core/slate/slate-utils'
 import { Body2, H3 } from '@/components/core/Typography'
-import { OfferTypeSummary } from './OfferTypeSummary'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
@@ -57,7 +53,6 @@ export const EditOfferForm = ({
   }
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState(false)
-  const [eligibilityChecked, setEligibilityChecked] = useState(false)
   const { showModal } = useModal()
   const [deleteOffer] = useDeleteOfferMutation()
   const router = useRouter()
@@ -78,44 +73,17 @@ export const EditOfferForm = ({
     return updateOfferInput[field] || offer[field]
   }
 
-  const resolveEligibilityChecked = () => {
-    return (
-      !!offerField('citizenshipRequired') ||
-      !!offerField('minimunCabinBalance') ||
-      offerField('profileRoleConstraints')?.length > 0 ||
-      eligibilityChecked
-    )
-  }
-
-  const handleEligibilityChange = (checked: boolean) => {
-    if (checked) {
-      setEligibilityChecked(true)
-    } else {
-      onEdit({
-        citizenshipRequired: false,
-        minimunCabinBalance: null,
-        profileRoleConstraints: [],
-      })
-      setEligibilityChecked(false)
-    }
-  }
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit({ title: e.target.value.slice(0, MAX_OFFER_TITLE_LENGTH) })
   }
 
   const handleAvailabilityChange = (startDate: string, endDate: string) => {
+    console.log('avail change', [startDate, endDate])
     onEdit({ startDate, endDate })
   }
   const slateProps = offerField('description')
     ? { value: JSON.parse(offerField('description')) }
     : {}
-
-  const handleProfileRoleConstraintsChange = (
-    profileRoleConstraints: ProfileRoleConstraintInput[]
-  ) => {
-    onEdit({ profileRoleConstraints })
-  }
 
   const titleValidation = validateTitle(updateOfferInput.title)
 
@@ -162,13 +130,6 @@ export const EditOfferForm = ({
 
   return (
     <Container>
-      <Pair>
-        <H3>Experience Type</H3>
-        <OfferTypeSummary offerType={offer.offerType} />
-      </Pair>
-
-      <HorizontalDivider />
-
       <GalleryUploadSection
         onStartUploading={() => setUploadingBanner(true)}
         ipfsHashList={
@@ -185,9 +146,7 @@ export const EditOfferForm = ({
             : undefined
         }
       />
-
       <HorizontalDivider />
-
       <GalleryUploadSection
         onStartUploading={() => setUploadingGallery(true)}
         uploading={uploadingGallery}
@@ -202,9 +161,7 @@ export const EditOfferForm = ({
             : undefined
         }
       />
-
       <HorizontalDivider />
-
       <Pair>
         <H3>Details</H3>
         <OpaqueBody2>
@@ -237,6 +194,7 @@ export const EditOfferForm = ({
         )}
       </EditorContainer>
       <HorizontalDivider />
+      {/*TODO: make dates optional*/}
       <Availability
         onEdit={handleAvailabilityChange}
         label={
@@ -246,31 +204,14 @@ export const EditOfferForm = ({
         defaultEndDate={offerField('endDate')}
       />
       <HorizontalDivider />
-      {offer.offerType === OfferType.PaidColiving ||
-      offer.offerType === OfferType.CabinWeek ? (
-        <Pricing
-          highlightErrors={highlightErrors}
-          price={updateOfferInput.price}
-          onPriceChange={(price) => {
-            onEdit({ price })
-          }}
-        />
-      ) : (
-        <Eligibility
-          checked={resolveEligibilityChecked()}
-          onProfileRoleConstraintsChange={handleProfileRoleConstraintsChange}
-          onEligibilityChange={handleEligibilityChange}
-          profileRoleConstraints={offerField('profileRoleConstraints')}
-          minimumCabinBalance={offerField('minimunCabinBalance')}
-          citizenshipRequired={offerField('citizenshipRequired')}
-          onCitizenshipRequiredChange={(citizenshipRequired) => {
-            onEdit({ citizenshipRequired })
-          }}
-          onMinimumCabinBalanceChange={(minimunCabinBalance) => {
-            onEdit({ minimunCabinBalance })
-          }}
-        />
-      )}
+      <Pricing
+        highlightErrors={highlightErrors}
+        price={updateOfferInput.price}
+        onPriceChange={(price) => {
+          onEdit({ price })
+        }}
+      />
+      )
       <HorizontalDivider />
       <ApplicationLink
         onEdit={(url) => {

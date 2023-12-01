@@ -29,7 +29,6 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
-import { EligibilityDisplay } from './EligibilityDisplay'
 import { ImageFlex } from '../core/gallery/ImageFlex'
 import { ApplyButton } from '@/components/offers/ApplyButton'
 import { Price } from '@/components/offers/Price'
@@ -61,48 +60,11 @@ export const OfferView = ({
     startDate,
     endDate,
     price,
-    profileRoleConstraints,
-    citizenshipRequired,
-    minimunCabinBalance,
     imageUrl,
     mediaItems,
   } = offer
 
   if (!offerType) return null
-
-  const levelsByRole = profileRoleConstraints?.reduce(
-    (acc, { profileRole, level }) => ({
-      ...acc,
-      [profileRole]: acc[profileRole] ? [...acc[profileRole], level] : [level],
-    }),
-    {} as Record<ProfileRoleType, ProfileRoleLevelType[]>
-  )
-
-  const rolesMatchOne = (Object.keys(levelsByRole ?? {}) ?? [])
-    .flatMap(
-      (profileRole): RoleConstraintType | RoleConstraintType[] | null => {
-        if (!levelsByRole) return null
-
-        if (levelsByRole[profileRole as ProfileRoleType].length === 3) {
-          return roleConstraintInfoFromType({
-            profileRole: profileRole as ProfileRoleType,
-            level: ProfileRoleLevelType.Apprentice,
-            hideLevel: true,
-          })
-        } else {
-          return levelsByRole[profileRole as ProfileRoleType].map((level) =>
-            roleConstraintInfoFromType({
-              profileRole: profileRole as ProfileRoleType,
-              level,
-            })
-          )
-        }
-      }
-    )
-    .filter(isNotNull) as RoleConstraintType[]
-
-  const displayMatchOne = rolesMatchOne.length > 0
-  const displayMatchAll = citizenshipRequired || (minimunCabinBalance ?? 0) > 0
 
   // TODO: let them actually select one
   const selectedLodgingType = offer.location.lodgingTypes.data[0]
@@ -161,6 +123,8 @@ export const OfferView = ({
       <StyledContentCard shape="notch" notchSize={1.6}>
         <DescriptionTwoColumn>
           <Left>
+            {/*TODO: show arrow when there are multiple images in gallery */}
+            {/*TODO: make this image square */}
             {galleryImages?.length > 0 && (
               <GalleryImage
                 src={getImageUrlByIpfsHash(galleryImages[0].ipfsHash) ?? ''}
@@ -179,15 +143,6 @@ export const OfferView = ({
             {_getHostIds(offer).map((hostId) => (
               <HostCard key={hostId} profileId={hostId}></HostCard>
             ))}
-            <H4>Cancellation policy</H4>
-            <Body1>
-              For a full refund, guests must cancel within 48 hours of booking
-              and at least 28 days before check-in. Email{' '}
-              <Link href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}>
-                {EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}
-              </Link>{' '}
-              for more information.
-            </Body1>
           </Left>
 
           <Right>
@@ -229,7 +184,6 @@ export const OfferView = ({
 
               <Actions>
                 <ApplyButton offer={offer} lodgingType={selectedLodgingType} />
-                <Caption emphasized>You won’t be charged yet</Caption>
               </Actions>
 
               {offerType == OfferType.CabinWeek &&
@@ -251,20 +205,6 @@ export const OfferView = ({
                   <Caption>{formatRange(startDate, endDate)}</Caption>
                   {price ? <Price small price={price} /> : EMPTY}
                 </Pricing>
-              </DetailsSection>
-            )}
-
-            {(displayMatchAll ||
-              displayMatchOne ||
-              offerType === OfferType.PaidColiving) && (
-              <DetailsSection>
-                <EligibilityDisplay
-                  rolesMatchOne={rolesMatchOne}
-                  displayMatchAll={displayMatchAll}
-                  displayMatchOne={displayMatchOne}
-                  citizenshipRequired={!!citizenshipRequired}
-                  minimunCabinBalance={minimunCabinBalance}
-                />
               </DetailsSection>
             )}
           </Right>

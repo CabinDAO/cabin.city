@@ -9,7 +9,6 @@ export type MenuItemOption =
   | 'citizenship'
   | 'myLocations'
   | 'signOut'
-  | 'offers'
   | 'signIn'
   | 'admin'
 
@@ -40,12 +39,6 @@ export const MenuItemsAuthenticatedMap: Record<
     icon: 'members',
     path: '/census',
     displayText: 'Census',
-    iconSize: 2.5,
-  },
-  offers: {
-    icon: 'offer',
-    path: '/experiences',
-    displayText: 'Experiences',
     iconSize: 2.5,
   },
   neighborhoods: {
@@ -95,12 +88,6 @@ export const MenuItemsUnauthenticatedMap: Record<
   },
   activity: null,
   members: null,
-  offers: {
-    icon: 'offer',
-    path: '/experiences',
-    displayText: 'Experiences',
-    iconSize: 2.5,
-  },
   neighborhoods: {
     icon: 'neighborhoods',
     path: '/city-directory',

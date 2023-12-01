@@ -16,7 +16,7 @@ const LocationMedia = (props: PostProps) => {
     return (
       <LocationPostItem
         {...locationCardPropsFromFragment(location)}
-        hideNeighborTag
+        hideVerifiedTag
       />
     )
   } else {

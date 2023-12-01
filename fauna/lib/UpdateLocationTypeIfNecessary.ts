@@ -3,12 +3,14 @@ import { ToDoc } from './ToDoc'
 import { ToRef } from './ToRef'
 import { ActivityType, LocationType } from '../../generated/graphql'
 import { UpsertActivity } from './UpsertActivity'
+import { VERIFIED_VOTE_COUNT } from '../../components/neighborhoods/constants'
 
 /**
  * Checks if the location meets the criteria for being a neighborhood and updates the locationType if necessary.
  * @param locationExpr A `Ref` or a `Document` for a Location
  * @returns Document update metadata if the locationType was updated, otherwise null
  */
+// TODO: get rid of this when we get rid of location types
 export const UpdateLocationTypeIfNecessary = (locationExpr: Expr) => {
   return q.Let(
     {
@@ -89,7 +91,7 @@ const MeetsCriteriaForNeighborhood = (location: Expr) =>
   q.And(Has1000Votes(location), Has8SleepingCapacity(location))
 
 const Has1000Votes = (location: Expr) =>
-  q.GTE(q.Select(['data', 'voteCount'], location, 0), 1000)
+  q.GTE(q.Select(['data', 'voteCount'], location, 0), VERIFIED_VOTE_COUNT)
 
 const Has8SleepingCapacity = (location: Expr) =>
   q.GTE(q.Select(['data', 'sleepCapacity'], location, 0), 8)

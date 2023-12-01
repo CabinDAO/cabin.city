@@ -64,9 +64,8 @@ export const PublishModal = ({ locationId }: PublishModalProps) => {
             <Message>
               <H4>Publish to the Cabin City Directory</H4>
               <Body2>
-                Once published, your property listing and experiences will
-                become openly accessible, ready to be shared across various
-                social platforms.
+                After publishing, your property listing will be visible
+                publically and easy to share on social media.
               </Body2>
             </Message>
           </Information>

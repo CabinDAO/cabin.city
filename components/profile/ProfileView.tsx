@@ -32,7 +32,7 @@ export const ProfileView = ({ profileId }: ProfileViewProps) => {
   }
 
   return (
-    <SingleColumnLayout>
+    <SingleColumnLayout withFooter>
       <ProfileContent profile={profile} activityItems={activityItems} />
     </SingleColumnLayout>
   )

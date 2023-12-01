@@ -7,7 +7,7 @@ import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
 import { H3 } from '@/components/core/Typography'
 import React from 'react'
-import { Footer } from '@/components/navigation/Footer'
+import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -62,8 +62,9 @@ const Container = styled.div<{
 }>`
   display: flex;
   flex-direction: column;
-  min-height: ${({ withFooter }) => (withFooter ? '76vh' : '100vh')};
-  min-width: 100vw;
+  min-height: ${({ withFooter }) =>
+    withFooter ? `calc(100vh - ${FOOTER_HEIGHT}px)` : '100vh'};
+  min-width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
   gap: 4.8rem;

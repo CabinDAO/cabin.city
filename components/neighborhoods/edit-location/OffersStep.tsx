@@ -1,26 +1,17 @@
 import { ContentCard } from '../../core/ContentCard'
-import { H3, Overline } from '../../core/Typography'
+import { Body2, H3 } from '../../core/Typography'
 import { StepProps } from './location-wizard-configuration'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ActionBar } from '@/components/core/ActionBar'
-import { Container, FormContainer, StepIndicator } from './styles'
+import { Container, StepIndicator } from './styles'
 import styled from 'styled-components'
 import { EmptyState } from '@/components/core/EmptyState'
-import { Dropdown } from '@/components/core/Dropdown'
-import { HorizontalDivider } from '@/components/core/Divider'
 import { OfferType, useCreateOfferMutation } from '@/generated/graphql'
 import { Button } from '@/components/core/Button'
-import { useState } from 'react'
-import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { useRouter } from 'next/router'
-import { allOfferInfos } from '@/utils/offer'
 import { isNotNull } from '@/lib/data'
 import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffersList'
-import { OfferTypesDescriptionList } from '@/components/offers/OfferTypeExplanation'
-import { AppLink } from '@/components/core/AppLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useProfile } from '@/components/auth/useProfile'
 
 export const OffersStep = ({
   name,
@@ -31,47 +22,26 @@ export const OffersStep = ({
 }: StepProps) => {
   const [createOffer] = useCreateOfferMutation()
   const router = useRouter()
-  const { user } = useProfile()
   const { created } = router.query
   const stepTitle = created ? 'Draft listing' : 'Edit listing'
-  const stepIndicatorText = () => {
-    const names = steps.map((step) => step.name)
-    const currentStepIndex = names.indexOf(name)
-    return `Step ${currentStepIndex + 1} of ${names.length}`
-  }
   const offerList = location?.offers.data.filter(isNotNull) || []
-
-  const [selectedOfferType, setSelectedOfferType] = useState<
-    SelectOption | undefined
-  >()
-
-  const options = allOfferInfos.map((offerInfo) => ({
-    label: offerInfo.name,
-    value: offerInfo.offerType,
-    disabled:
-      offerInfo.offerType === OfferType.Residency ||
-      (offerInfo.offerType === OfferType.CabinWeek && !user?.isAdmin),
-  }))
+  const stepNumber = steps.map((step) => step.name).indexOf(name) + 1
 
   const handleCreateOfferClick = async () => {
-    if (location && location.locationType && selectedOfferType) {
+    if (location && location.locationType) {
       const { data: offer } = await createOffer({
         variables: {
           data: {
-            offerType: selectedOfferType.value as OfferType,
+            offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
             locationId: location._id,
           },
         },
       })
 
       if (offer?.createOffer) {
-        router.push(`/experience/${offer.createOffer._id}/edit`)
+        router.push(`/experience/${offer.createOffer._id}/edit`).then(null)
       }
     }
-  }
-
-  const handleSelectedOption = (option: SelectOption) => {
-    setSelectedOfferType(option)
   }
 
   return (
@@ -93,41 +63,38 @@ export const OffersStep = ({
       <Container>
         <StepIndicator>
           <H3>{name}</H3>
-          <H3>{stepIndicatorText()}</H3>
+          <H3>
+            Step {stepNumber} of {steps.length}
+          </H3>
         </StepIndicator>
         <ContainerGroup>
           <ContentCard shape="notch">
-            <OfferFormContainer>
-              <InputGroup>
-                <StyledDropdown
-                  label="Choose type"
-                  placeholder="Select"
-                  onSelect={handleSelectedOption}
-                  options={options}
-                  selectedOption={selectedOfferType}
-                />
-                <Button variant="secondary" onClick={handleCreateOfferClick}>
-                  Create
+            <TopContent>
+              <Left>
+                <H3>Host Cabin Citizens</H3>
+                <Body2>
+                  Experiences are exclusive invitations to Cabin Citizens to
+                  visit and stay at your property.
+                </Body2>
+              </Left>
+              <Right>
+                <Button
+                  variant="secondary"
+                  onClick={handleCreateOfferClick}
+                  isFullWidth
+                >
+                  New Experience
                 </Button>
-              </InputGroup>
-              <HorizontalDivider />
-              <OfferTypesDescriptionList />
-              <AppLink
-                external
-                location={EXTERNAL_LINKS.CITY_DIRECTORY}
-                iconSize={0.9}
-              >
-                <Overline>Learn More</Overline>
-              </AppLink>
-            </OfferFormContainer>
+              </Right>
+            </TopContent>
           </ContentCard>
           {offerList.length ? (
             <LocationOffersList offers={offerList} location={location} />
           ) : (
             <StyledEmptyState
               icon="file-document"
-              title="No offers yet"
-              description="Create new offers and manage them from here"
+              title="No experiences yet"
+              description="Create new experiences and manage them from here"
             />
           )}
         </ContainerGroup>
@@ -147,32 +114,36 @@ const StyledEmptyState = styled(EmptyState)`
   min-height: 34.6rem;
 `
 
-const OfferFormContainer = styled(FormContainer)`
-  align-items: flex-start;
-  width: 100%;
-`
-
-const InputGroup = styled.div`
+const TopContent = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  align-items: flex-end;
   width: 100%;
-
-  button {
-    width: 100%;
-  }
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 2.4rem;
+  gap: 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
-    width: 55%;
     flex-direction: row;
-
-    button {
-      width: auto;
-    }
   }
 `
 
-const StyledDropdown = styled(Dropdown)`
+const Left = styled.div`
+  display: flex;
   width: 100%;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    max-width: 45rem;
+  }
+`
+
+const Right = styled.div`
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: auto;
+    flex-grow: 0;
+  }
 `

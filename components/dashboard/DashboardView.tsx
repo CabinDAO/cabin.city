@@ -39,7 +39,7 @@ export const DashboardView = () => {
   if (!user) return null
 
   return (
-    <TwoColumnLayout title="Cabin Activity">
+    <TwoColumnLayout withFooter title="Cabin Activity">
       <ActivitiesContainer>
         <TextPost onPost={handleOnPost} />
         <ActivityList />

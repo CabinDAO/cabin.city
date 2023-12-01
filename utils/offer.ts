@@ -5,7 +5,6 @@ import {
   MeFragment,
   OfferDataFragment,
   OfferItemFragment,
-  OfferPrice,
   OfferPriceUnit,
   OfferType,
 } from '@/generated/graphql'
@@ -15,14 +14,6 @@ import { parseISO } from 'date-fns'
 
 export interface OfferInfo {
   name: string
-}
-
-export const OfferPriceUnitMap: Record<OfferPriceUnit, string | null> = {
-  [OfferPriceUnit.Hourly]: 'hour',
-  [OfferPriceUnit.Daily]: 'day',
-  [OfferPriceUnit.Weekly]: 'week',
-  [OfferPriceUnit.Monthly]: 'month',
-  [OfferPriceUnit.FlatFee]: null,
 }
 
 const OfferInfoByType: Record<OfferType, OfferInfo> = {

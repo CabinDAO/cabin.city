@@ -27,13 +27,15 @@ export const ExperienceList = ({
         <Item key={offer._id}>
           <StyledImage
             src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
-            alt={offer.offerType ?? ''}
-            width={200}
-            height={200}
+            alt={offer.title ?? ''}
+            width={0}
+            height={0}
+            sizes="100vw"
           />
           <Details>
             <OfferNameAndDates
               offer={{
+                title: offer.title ?? null,
                 startDate: offer.startDate ?? null,
                 endDate: offer.endDate ?? null,
                 offerType: offer.offerType ?? null,
@@ -44,6 +46,7 @@ export const ExperienceList = ({
                   ),
                 },
               }}
+              withPrice
             />
             <Expandable
               more={
@@ -66,7 +69,7 @@ export const ExperienceList = ({
           </Details>
           <Buttons>
             <Link href={`/experience/${offer._id}`}>
-              <Button>{actionButtonText}</Button>
+              <Button isFullWidth>{actionButtonText}</Button>
             </Link>
           </Buttons>
         </Item>
@@ -91,6 +94,10 @@ const Item = styled.div`
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
   }
+
+  &:not(:last-child) {
+    border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
+  }
 `
 
 const Details = styled.div`
@@ -101,8 +108,16 @@ const Details = styled.div`
 `
 
 const StyledImage = styled(Image)`
-  flex: 0;
-  object-fit: cover;
+  border: solid 1px ${({ theme }) => theme.colors.green900};
+  width: 100%;
+  height: auto;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 200px;
+    height: 200px;
+    flex: 0;
+    object-fit: cover;
+  }
 `
 
 const Buttons = styled.div`

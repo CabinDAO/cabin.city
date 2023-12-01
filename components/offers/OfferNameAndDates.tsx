@@ -3,12 +3,12 @@ import Image from 'next/image'
 import { isDate, parseISO } from 'date-fns'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { OfferPrice, OfferType } from '@/generated/graphql'
-import { offerInfoFromType } from '@/utils/offer'
 import { daysBetween, EMPTY, formatRange } from '@/utils/display-utils'
 import { Caption, H1, H4, H5 } from '@/components/core/Typography'
 import { Price } from '@/components/offers/Price'
 
 interface OfferNameAndDatesProps {
+  title: string | null | undefined
   startDate: Date | null | undefined
   endDate: Date | null | undefined
   offerType: OfferType | null | undefined
@@ -28,8 +28,7 @@ export const OfferNameAndDates = ({
   small?: boolean
   withPrice?: boolean
 }) => {
-  const offerInfo = offer.offerType ? offerInfoFromType(offer.offerType) : null
-
+  // TODO: once dates are optional, always show them (if set)
   const showDates = offer.offerType !== OfferType.PaidColiving
 
   const startDate = isDate(offer.startDate)
@@ -71,9 +70,9 @@ export const OfferNameAndDates = ({
         )}
 
         {small ? (
-          <H4>{offerInfo?.name ?? EMPTY}</H4>
+          <H4>{offer.title ?? EMPTY}</H4>
         ) : (
-          <H1>{offerInfo?.name ?? EMPTY}</H1>
+          <H1>{offer.title ?? EMPTY}</H1>
         )}
 
         <Location small={small}>

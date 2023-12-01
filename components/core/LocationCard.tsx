@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { LocationType, ProfileAvatar } from '@/generated/graphql'
+import { ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Body2, Caption, H2, Subline1, truncateStyles } from './Typography'
 import { IconName } from './Icon'
@@ -16,7 +16,6 @@ import events from '@/lib/googleAnalytics/events'
 
 export interface LocationCardProps {
   _id: string
-  locationType: LocationType
   caretaker: Caretaker
   name: string | null | undefined
   tagline: string | null | undefined
@@ -31,13 +30,14 @@ export interface LocationCardProps {
   onDelete?: () => void
   onEdit?: () => void
   editMode?: boolean
-  hideNeighborTag?: boolean
+  hideVerifiedTag?: boolean
   position?: number
 }
 
 interface Caretaker {
   _id: string
   name: string
+  createdAt: Date
 }
 
 interface Voter {
@@ -97,7 +97,11 @@ export const LocationCard = (props: LocationCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          <LocationTag {...props} />
+          {!publishedAt && (
+            <TagContainer>
+              <Subline1 $color="yellow100">Draft</Subline1>
+            </TagContainer>
+          )}
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
@@ -112,16 +116,17 @@ export const LocationCard = (props: LocationCardProps) => {
             />
             <LocationInfo
               iconName="offer"
-              label={offerCount ? `${offerCount} Offers` : EMPTY}
+              label={offerCount ? `${offerCount} Experiences` : EMPTY}
             />
+          </LocationInfoGroupContainer>
+          <LocationInfoGroupContainer>
             <LocationInfo iconName="caretaker" label={caretaker.name} />
             <LocationInfo
               iconName="date"
-              label={
-                publishedAt
-                  ? `Joined ${format(publishedAt, 'MMM yyyy')}`
-                  : EMPTY
-              }
+              label={`Joined ${format(
+                new Date(caretaker.createdAt),
+                'MMM yyyy'
+              )}`}
             />
           </LocationInfoGroupContainer>
         </ContentContainer>
@@ -151,26 +156,6 @@ export const LocationCard = (props: LocationCardProps) => {
         />
       )}
     </OuterContainer>
-  )
-}
-
-const LocationTag = (props: LocationCardProps) => {
-  const { locationType, publishedAt } = props
-  return (
-    <TagContainer>
-      {!publishedAt ? (
-        <Subline1 $color="yellow100">Draft</Subline1>
-      ) : (
-        <Icon
-          name={
-            locationType === LocationType.Neighborhood
-              ? 'neighborhood'
-              : 'outpost'
-          }
-          size={1.6}
-        />
-      )}
-    </TagContainer>
   )
 }
 

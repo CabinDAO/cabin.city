@@ -18,6 +18,7 @@ import { Button } from './Button'
 import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
+import React from 'react'
 
 export interface OfferListItemProps {
   className?: string
@@ -55,32 +56,18 @@ export const OfferListItem = (props: OfferListItemProps) => {
   const router = useRouter()
   const {
     _id,
-    offerType,
     title,
     startDate,
     endDate,
     imageUrl,
     location,
     className,
-    profileRoleConstraints,
-    citizenshipRequired,
-    minimunCabinBalance,
     variant,
     isLocked,
     actionsEnabled,
   } = props
-  const isDisplayingEligibility =
-    !!profileRoleConstraints?.length ||
-    citizenshipRequired ||
-    minimunCabinBalance
-  const roleInfos = Array.from(
-    new Set(
-      profileRoleConstraints?.map((c) => roleInfoFromType(c.profileRole)) ?? []
-    )
-  )
-  const offerInfo = offerType ? offerInfoFromType(offerType) : null
-  const dateRange = formatRange(startDate, endDate)
-  const formattedDateRange = dateRange ? `${dateRange} · ` : null
+  const dateRange =
+    startDate && endDate ? formatRange(startDate, endDate) : 'Flexible dates'
   const formattedLocation = `${location.name ?? '-'} · ${
     location.shortAddress ?? '-'
   }`
@@ -121,28 +108,13 @@ export const OfferListItem = (props: OfferListItemProps) => {
 
           <ContentContainer>
             <OfferDetails>
-              <Caption emphasized>{`${formattedDateRange ?? ''}${
-                offerInfo?.name
-              }`}</Caption>
+              <Caption emphasized>{dateRange ?? ''}</Caption>
               <TitleContainer>
                 <H4>{title}</H4>
                 {isLocked && <Icon name="lock" size={1.2} />}
               </TitleContainer>
               <Caption>{formattedLocation}</Caption>
             </OfferDetails>
-
-            {isDisplayingEligibility && (
-              <EligibilityContainer>
-                <H6>Eligibility |&nbsp;</H6>
-                <ProfileIcons
-                  citizenshipStatus={
-                    citizenshipRequired ? CitizenshipStatus.Verified : null
-                  }
-                  roleInfos={roleInfos}
-                  size={1.6}
-                />
-              </EligibilityContainer>
-            )}
           </ContentContainer>
         </OfferInfoContainer>
         <RightContent>
@@ -179,12 +151,6 @@ const LocationTag = (props: OfferListItemProps) => {
     </TagContainer>
   )
 }
-
-const EligibilityContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  padding-bottom: 0.6rem;
-`
 
 const ContentContainer = styled.div`
   display: flex;

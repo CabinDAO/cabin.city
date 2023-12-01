@@ -23,7 +23,12 @@ export const EditOfferPageView = () => {
   const { showModal } = useModal()
 
   const { history } = useNavigation()
-  const backRoute = history[history.length - 2]
+  const backRoute = (history[history.length - 2] ?? '[offerId]').includes(
+    '[offerId]'
+  )
+    ? `/experience/${router.query.offerId}`
+    : history[history.length - 2]
+  console.log(backRoute)
 
   const { offerId } = router.query
   const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
