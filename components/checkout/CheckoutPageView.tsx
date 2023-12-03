@@ -135,6 +135,7 @@ const CheckoutPageView = () => {
         <OfferNameAndDates
           small
           offer={{
+            title: cart.offer.title ?? null,
             startDate: cart.offer.startDate ?? null,
             endDate: cart.offer.endDate ?? null,
             offerType: cart.offer.offerType ?? null,
