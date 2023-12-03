@@ -172,7 +172,7 @@ export const LocationView = ({
           />
         )}
 
-        <StyledContentCard shadow={true}>
+        <StyledContentCard shadow>
           <LocationHeader>
             <LocationHeaderTitle>
               <H1>{name ?? EMPTY}</H1>

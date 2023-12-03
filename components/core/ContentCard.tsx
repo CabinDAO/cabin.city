@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 import { notch, NotchPosition } from '../layouts/common.styles'
 import { NotchOutline } from './NotchOutline'
+import React from 'react'
 
 type ContainerShape = 'default' | 'notch' | 'curve' | 'notch-all'
 type ContainerFillType = 'outline' | 'soft' | 'hard'
@@ -59,16 +60,20 @@ const BaseContainer = styled.div<ContainerProps>`
 
   ${({ shadow, theme }) =>
     shadow &&
-    `
-    box-shadow: 0.8rem 0.8rem 0rem ${theme.colors.yellow900};
+    css`
+      box-shadow: 0.8rem 0.8rem 0rem ${theme.colors.yellow900};
     `}
 
-    ${({ maxWidth }) => maxWidth && `max-width: ${maxWidth}rem;`}
+    ${({ maxWidth }) =>
+    maxWidth &&
+    css`
+      max-width: ${maxWidth}rem;
+    `}
 `
 
 export const ContentCard = ({
   children,
-  shadow,
+  shadow = false,
   shape,
   fillType,
   className,
