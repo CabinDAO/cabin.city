@@ -106,6 +106,7 @@ const Paid = ({
   cart: CartFragment
 }) => {
   const offerProps = {
+    title: cart.offer.startDate ?? null,
     startDate: cart.offer.startDate ?? null,
     endDate: cart.offer.endDate ?? null,
     offerType: cart.offer.offerType ?? null,

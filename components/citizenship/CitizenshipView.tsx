@@ -13,12 +13,16 @@ import { useExternalUser } from '../auth/useExternalUser'
 import events from '@/lib/googleAnalytics/events'
 import { useEmail } from '@/components/hooks/useEmail'
 import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
+import { useNavigation } from '@/components/hooks/useNavigation'
+import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 
 export const CitizenshipView = () => {
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useProfile()
   const { externalUser } = useExternalUser()
   const { wallets } = useWallets()
   const { sendEmail } = useEmail()
+  const { goBack } = useNavigation()
+  const { confirmLoggedIn } = useConfirmLoggedIn()
 
   const performMint = async () => {
     console.log('performMint() called')
@@ -47,7 +51,9 @@ export const CitizenshipView = () => {
   const { handleSwitch, rightChain } = useChainSwitch(performMint)
 
   const handleMint = async () => {
-    events.mintEvent(user?._id ?? '')
+    if (!user) return
+
+    events.mintEvent(user._id ?? '')
 
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
@@ -64,40 +70,38 @@ export const CitizenshipView = () => {
   const [toggleSignal] = useToggleSignalMutation()
 
   const handleToggleSignal = () => {
-    if (!user) return
+    confirmLoggedIn(() => {
+      events.signalInterestEvent(user?._id ?? '')
 
-    events.signalInterestEvent(user?._id ?? '')
+      sendEmail({
+        type: EmailType.VOUCH_REQUESTED,
+        data: {
+          name: user?.name,
+          email: user?.email,
+          profileId: user?._id,
+        } as VouchRequstedPayload,
+      })
 
-    sendEmail({
-      type: EmailType.VOUCH_REQUESTED,
-      data: {
-        name: user?.name,
-        email: user?.email,
-        profileId: user?._id,
-      } as VouchRequstedPayload,
+      toggleSignal()
     })
-
-    toggleSignal()
   }
-
-  if (!user) return null
 
   return (
     <SingleColumnLayout withFooter>
       <TitleCard
         title="Citizenship"
         icon="back-arrow"
-        iconHref={`/profile/${user._id}`}
+        onIconClick={() => goBack('goHomeIfNoHistory')}
       />
 
-      {user && user?.citizenshipStatus !== CitizenshipStatus.Verified && (
+      {user?.citizenshipStatus !== CitizenshipStatus.Verified && (
         <CitizenshipStatusBar
           onMint={handleMint}
           onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
-          profileId={user?._id}
+          profileId={user?._id ?? ''}
           approvedDueToCabinBalance={
-            user?.cabinTokenBalanceInt >= MINIMUM_CABIN_BALANCE
+            (user?.cabinTokenBalanceInt ?? 0) >= MINIMUM_CABIN_BALANCE
           }
         />
       )}

@@ -1,9 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
+type noHistoryAction = 'goHomeIfNoHistory' | null
+
 interface NavigationState {
   history: string[]
-  goBack: () => void
+  goBack: (defaultAction?: noHistoryAction) => void
 }
 
 interface NavigationProviderProps {
@@ -23,15 +25,17 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router])
 
-  const goBack = () => {
+  const goBack = (defaultAction?: noHistoryAction) => {
     if (history.length > 0) {
       const lastPath = history[history.length - 2]
       const updatedHistory = [...history]
       updatedHistory.pop()
 
-      router.push(lastPath)
+      router.push(lastPath).then()
 
       setHistory(updatedHistory)
+    } else if (defaultAction === 'goHomeIfNoHistory') {
+      router.push('/').then()
     }
   }
 
