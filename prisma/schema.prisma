@@ -1,0 +1,441 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// TODO: make the schema multisite-enabled
+
+// we're dropping profile role constraints
+// dropping lodging types
+// dropping feature flags
+// dropping referred locations
+// dropping LocationPromoted activity type
+
+// ---------------------------
+// ON-CHAIN STUFF
+// ---------------------------
+
+// this used to be called Account
+model Wallet {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile?
+
+  address           String   @unique @db.Char(42)
+  cabinTokenBalance Decimal? @db.Decimal(78, 18) // uint256 in decimal has up to 78 digits. we store as whole Eth, so use 18 decimals
+
+  hats   Hat[]
+  badges Badge[]
+}
+
+model Hat {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  details  String
+  imageUri String
+  level    Int
+
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+  walletId Int
+
+  role Role?
+}
+
+model Badge {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  wallet   Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  walletId Int
+  spec     BadgeSpec @relation(fields: [specId], references: [id])
+  specId   Int
+
+  activities Activity[]
+
+  @@unique([walletId, specId])
+}
+
+model BadgeSpec {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name        String
+  description String
+  image       String
+
+  Badges Badge[]
+}
+
+// ---------------------------
+// LOCAL STUFF (not on-chain)
+// ---------------------------
+
+model Profile {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique // for external-facing use, e.g. urls
+
+  wallet   Wallet @relation(fields: [walletId], references: [id])
+  walletId Int    @unique
+
+  externalUserId String? @unique // TODO: what is this? is this denormalized from Wallet?
+
+  name             String
+  email            String
+  bio              String
+  contactFields    ProfileContactField[]
+  location         String
+  isAdmin          Boolean               @default(false)
+  mailingListOptIn Boolean?
+
+  voucherId Int?
+  voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
+  vouchees  Profile[] @relation("Vouches")
+
+  Avatar Avatar?
+
+  citizenshipStatus   CitizenshipStatus?
+  citizenshipTokenId  Int?
+  citizenshipMintedAt DateTime?
+
+  roles      Role[]
+  locations  Location[] // TODO: rename to managedLocations??
+  votes      LocationVote[] // used to be called locationVotes
+  events     TrackingEvent[]
+  carts      Cart[]
+  activities Activity[]
+  reactions  ActivityReaction[]
+}
+
+enum CitizenshipStatus {
+  VouchRequested
+  Vouched
+  Verified
+}
+
+model Avatar {
+  Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int     @unique
+
+  url String
+
+  // NFT Metadata
+  contractAddress String? @db.Char(42)
+  network         String?
+  title           String?
+  tokenId         String?
+  tokenUri        String?
+
+  @@id([profileId])
+}
+
+model ProfileContactField {
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int
+
+  type  ProfileContactFieldType
+  value String
+
+  @@id([profileId, type])
+}
+
+enum ProfileContactFieldType {
+  Email
+  Website
+  Discord
+  Farcaster
+  Twitter
+  Instagram
+  Telegram
+  Lens
+  LinkedIn
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int
+
+  // Null if the role is not associated with a hat (e.g. Apprentice role)
+  hat   Hat? @relation(fields: [hatId], references: [id])
+  hatId Int? @unique
+
+  type  RoleType
+  level RoleLevel
+
+  activities Activity[]
+
+  @@unique([profileId, type])
+}
+
+enum RoleType {
+  Caretaker
+  Builder
+  Gatherer
+  Naturalist
+  Creator
+  Resident
+}
+
+enum RoleLevel {
+  Apprentice
+  Artisan
+  Custodian
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique // for external-facing use, e.g. urls
+
+  locationType        LocationType
+  name                String
+  tagline             String
+  description         String // Rich text
+  bannerImageIpfsHash String
+  mediaItems          LocationMediaItem[]
+
+  addressInfo String // Rich text. TODO: how is this different from address field?
+  address     Address?
+
+  caretaker      Profile @relation(fields: [caretakerId], references: [id])
+  caretakerId    Int
+  caretakerEmail String?
+
+  sleepCapacity     Int
+  internetSpeedMbps Int
+  publishedAt       DateTime?
+
+  offers     Offer[]
+  votes      LocationVote[]
+  activities Activity[]
+}
+
+enum LocationType {
+  Outpost
+  Neighborhood
+}
+
+model Address {
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId Int      @unique
+
+  lat                            Float
+  lng                            Float
+  formattedAddress               String
+  streetNumber                   String
+  route                          String // Street, e.g. Cascade Street
+  routeShort                     String // e.g. Cascade St
+  locality                       String // City
+  admininstrativeAreaLevel1      String // State, e.g. Colorado
+  admininstrativeAreaLevel1Short String // e.g. CO
+  country                        String // e.g. Costa Rica
+  countryShort                   String // e.g. CR
+  postalCode                     String
+
+  @@id([locationId])
+}
+
+model LocationVote {
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  Int
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId Int
+
+  count Int
+
+  @@id([profileId, locationId])
+}
+
+model LocationMediaItem {
+  ipfsHash String @id
+
+  Location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId Int
+
+  category LocationMediaCategory
+}
+
+enum LocationMediaCategory {
+  Sleeping
+  Working
+  Features
+}
+
+model Offer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique // for external-facing use, e.g. urls
+
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId Int
+
+  type        OfferType
+  title       String
+  description String // Rich text
+  startDate   DateTime
+  endDate     DateTime
+
+  priceAmountCents Decimal        @db.Decimal(12, 2) // TODO: max price is 9 billion dollars
+  priceUnit        OfferPriceUnit
+
+  applicationUrl String
+  imageIpfsHash  String
+  mediaItems     OfferMediaItem[]
+
+  carts      Cart[]
+  activities Activity[]
+}
+
+model OfferMediaItem {
+  ipfsHash String @id
+  Offer    Offer  @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  offerId  Int
+}
+
+enum OfferType {
+  PaidColiving
+  Residency
+  CabinWeek
+}
+
+enum OfferPriceUnit {
+  FlatFee
+  Hourly
+  Daily
+  Weekly
+  Monthly
+}
+
+model Cart {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique // for external-facing use, e.g. urls
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+  offer     Offer   @relation(fields: [offerId], references: [id])
+  offerId   Int
+
+  amountCents   Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
+  paymentStatus PaymentStatus
+  agreedToCOC   Boolean       @default(false)
+  agreedToTerms Boolean       @default(false)
+  notes         String
+
+  stripePaymentIntentClientSecret String?
+}
+
+enum PaymentStatus {
+  Pending
+  Paid
+  Error
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  key  String       @unique // TODO: there's a better way of doing this
+  type ActivityType
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int
+
+  // metadata. TODO: separate table?
+  text               String // Text
+  badge              Badge?    @relation(fields: [badgeId], references: [id]) // BadgeAdded
+  badgeId            Int?
+  role               Role?     @relation(fields: [roleId], references: [id]) // RoleAdded
+  roleId             Int?
+  roleTransactionId  String? // RoleAdded //TODO: should this go on Badge instead of here?
+  citizenshipTokenId Int? // CitizenshipVerified
+  location           Location? @relation(fields: [locationId], references: [id]) // LocationPublished
+  locationId         Int?
+  offer              Offer?    @relation(fields: [offerId], references: [id]) // OfferCreated
+  offerId            Int?
+  // VouchRequested  None
+  // ProfileCreated  None
+
+  reactions ActivityReaction[]
+
+  // TODO: drop this?
+  // reactedByProfile(profileId: ID!): Boolean
+}
+
+// these are basically likes
+model ActivityReaction {
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  Int
+  activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  activityId Int
+
+  @@id([profileId, activityId])
+}
+
+enum ActivityType {
+  Text
+  ProfileCreated
+  RoleAdded
+  BadgeAdded
+  CitizenshipVerified
+  LocationPublished
+  OfferCreated
+  VouchRequested
+}
+
+model TrackingEvent {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId Int
+
+  key   String
+  count Int
+}
+
+model BlockSyncAttempt {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  key        BlockSyncType
+  startBlock Decimal         @db.Decimal(9, 0)
+  endBlock   Decimal         @db.Decimal(9, 0)
+  status     BlockSyncStatus
+
+  failedAttemptCount Int // TODO: do we need this at all?
+}
+
+enum BlockSyncType {
+  CabinToken
+  Hats
+  Otterspace
+}
+
+enum BlockSyncStatus {
+  Pending
+  Successful
+  Failed
+}

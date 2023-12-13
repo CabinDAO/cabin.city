@@ -7,6 +7,7 @@
     "build": "next build",
     "analyze": "NODE_ENV=development ANALYZE=true next build",
     "start": "next start",
+    "prisma:dev": "CHECKPOINT_DISABLE=1 npx prisma db push && npx prisma generate",
     "fauna": "fgu",
     "fauna:replace": "fgu -m replace",
     "fauna:gen": "fgu --data --codegen",
@@ -24,6 +25,7 @@
     "@apollo/client": "^3.7.5",
     "@next/font": "^13.1.6",
     "@pinata/sdk": "^2.1.0",
+    "@prisma/client": "^5.7.0",
     "@privy-io/react-auth": "^1.29.0",
     "@privy-io/wagmi-connector": "^0.0.10",
     "@sendgrid/mail": "^7.7.0",
@@ -91,6 +93,7 @@
     "faunadb": "^4.7.1",
     "graphql": "^16.6.0",
     "prettier": "^2.8.4",
+    "prisma": "^5.7.0",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typechain": "^8.1.1"
   }
