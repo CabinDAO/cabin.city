@@ -13,7 +13,7 @@ export const EXTERNAL_LINKS = {
     'https://creators.mirror.xyz/2-Feb6ft2PCWQ5-I5lFe8caSZTpSQALOLSvIFlnYSHc',
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   TWITTER: 'https://twitter.com/cabindotcity',
-  DISCORD: 'https://discord.gg/paqg6acbE8',
+  DISCORD: 'https://discord.gg/EfuE8PYuB7',
   BLOG: 'https://creators.mirror.xyz/',
   PODCAST: 'https://campfire-by-cabin.simplecast.com',
   SNAPSHOT: 'https://snapshot.org/#/cabindao.eth',
