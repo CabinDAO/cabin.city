@@ -46,6 +46,9 @@ export const Footer = () => (
             >
               <Name>Privacy & Terms</Name>
             </AppLink>
+            <AppLink location="/security" iconSize={0}>
+              <Name>Security</Name>
+            </AppLink>
           </Section>
 
           <Section>
