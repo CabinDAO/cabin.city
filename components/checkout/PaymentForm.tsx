@@ -210,7 +210,8 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
     setIsLoading(false)
   }
 
-  const handleOnReady = async (element: StripePaymentElement) => {
+  // const handleOnReady = async (element: StripePaymentElement) => {
+  const handleOnReady = async () => {
     setIsLoading(false)
   }
 

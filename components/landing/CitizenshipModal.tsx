@@ -1,10 +1,8 @@
 import styled from 'styled-components'
 import { ModalTitle } from '../core/modals/ModalTitle'
 import { ModalContainer } from '../core/modals/ModalContainer'
-import { Body2, H4, Subline1 } from '../core/Typography'
-import { ModalActionBar } from '../core/modals/ModalActionBar'
+import { Body2, H4 } from '../core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import events from '@/lib/googleAnalytics/events'
 import Icon from '@/components/core/Icon'
 import Link from 'next/link'
 

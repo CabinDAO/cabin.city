@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import {
-  CitizenshipStatus,
   LocationType,
   OfferPrice,
   OfferType,
@@ -9,11 +8,7 @@ import {
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
 import Icon from './Icon'
-import { offerInfoFromType } from '@/utils/offer'
 import { ListItem } from './ListItem'
-import { roleInfoFromType } from '@/utils/roles'
-import { ProfileIcons } from '@/components/core/ProfileIcons'
-import { H6 } from '@/components/core/Typography'
 import { Button } from './Button'
 import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'

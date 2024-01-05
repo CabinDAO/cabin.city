@@ -270,18 +270,6 @@ const FirstTimeSectionPart = styled.div`
   justify-content: center;
   gap: 1.6rem;
 `
-const SideBySide = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.6rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-  }
-`
 
 const Outline = styled(ContentCard)`
   display: flex;
