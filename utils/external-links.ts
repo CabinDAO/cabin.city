@@ -3,6 +3,8 @@ export const EXTERNAL_LINKS = {
   SECURITY_EMAIL_ADDRESS: 'security@cabin.city',
   WIKI: 'https://forum.cabin.city/c/wiki/8',
   CITIZENSHIP: 'https://forum.cabin.city/t/cabin-citizenship/52',
+  CITIZENSHIP_PERKS:
+    'https://cabin-fellowship.notion.site/Citizenship-Perks-and-General-Store-761ab3ab6fef44ac931585784edc3ffc',
   CITY_DIRECTORY: 'https://forum.cabin.city/t/the-city-directory/53',
   ROLES: 'https://forum.cabin.city/t/census-and-roles/54',
   PASSPORTS: 'https://forum.cabin.city/t/census-and-roles/54',

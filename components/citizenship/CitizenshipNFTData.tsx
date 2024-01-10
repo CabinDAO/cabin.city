@@ -38,7 +38,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
     'Renewal Price': { value: `${YEARLY_PRICE_IN_ETH} ETH / year` },
     'Citizen perks': {
       value: 'View my perks',
-      url: EXTERNAL_LINKS.CITIZENSHIP,
+      url: EXTERNAL_LINKS.CITIZENSHIP_PERKS,
       external: true,
     },
   }
