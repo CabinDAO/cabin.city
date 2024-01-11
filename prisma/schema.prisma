@@ -8,6 +8,7 @@ datasource db {
 }
 
 // TODO: make the schema multisite-enabled
+// TODO: add indexes based on fauna indexes/queries
 
 // we're dropping profile role constraints
 // dropping lodging types
@@ -24,13 +25,14 @@ model Wallet {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  faunaId   String?  @unique // TODO: remove this
 
   profile Profile?
 
   address           String   @unique @db.Char(42)
   cabinTokenBalance Decimal? @db.Decimal(78, 18) // uint256 in decimal has up to 78 digits. we store as whole Eth, so use 18 decimals
 
-  hats   Hat[]
+  hats   WalletHat[]
   badges Badge[]
 }
 
@@ -38,22 +40,34 @@ model Hat {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  faunaId   String?  @unique // TODO: remove this
 
-  name     String
-  details  String
-  imageUri String
-  level    Int
+  hatsProtocolId String @unique
+  details        String
+  imageUri       String
+  level          Int
 
-  wallet   Wallet @relation(fields: [walletId], references: [id])
-  walletId Int
+  wallets WalletHat[]
 
   role Role?
+}
+
+model WalletHat {
+  wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  walletId Int
+  hat      Hat    @relation(fields: [hatId], references: [id], onDelete: Cascade)
+  hatId    Int
+
+  @@id([walletId, hatId])
 }
 
 model Badge {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  faunaId   String?  @unique // TODO: remove this
+
+  otterspaceBadgeId String @unique
 
   wallet   Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
   walletId Int
@@ -69,10 +83,12 @@ model BadgeSpec {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  faunaId   String?  @unique // TODO: remove this
 
-  name        String
-  description String
-  image       String
+  otterspaceSpecId String @unique
+  name             String
+  description      String
+  image            String
 
   Badges Badge[]
 }
@@ -90,7 +106,7 @@ model Profile {
   wallet   Wallet @relation(fields: [walletId], references: [id])
   walletId Int    @unique
 
-  externalUserId String? @unique // TODO: what is this? is this denormalized from Wallet?
+  externalUserId String? @unique // this is the privy DID
 
   name             String
   email            String
@@ -142,13 +158,17 @@ model Avatar {
 }
 
 model ProfileContactField {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int
 
   type  ProfileContactFieldType
   value String
 
-  @@id([profileId, type])
+  // @@id([profileId, type])
 }
 
 enum ProfileContactFieldType {
@@ -208,11 +228,9 @@ model Location {
   name                String
   tagline             String
   description         String // Rich text
+  address             Address?
   bannerImageIpfsHash String
   mediaItems          LocationMediaItem[]
-
-  addressInfo String // Rich text. TODO: how is this different from address field?
-  address     Address?
 
   caretaker      Profile @relation(fields: [caretakerId], references: [id])
   caretakerId    Int
@@ -236,18 +254,18 @@ model Address {
   location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int      @unique
 
-  lat                            Float
-  lng                            Float
-  formattedAddress               String
-  streetNumber                   String
-  route                          String // Street, e.g. Cascade Street
-  routeShort                     String // e.g. Cascade St
-  locality                       String // City
-  admininstrativeAreaLevel1      String // State, e.g. Colorado
-  admininstrativeAreaLevel1Short String // e.g. CO
-  country                        String // e.g. Costa Rica
-  countryShort                   String // e.g. CR
-  postalCode                     String
+  lat                            Float?
+  lng                            Float?
+  formattedAddress               String?
+  streetNumber                   String?
+  route                          String? // Street, e.g. Cascade Street
+  routeShort                     String? // e.g. Cascade St
+  locality                       String? // City
+  admininstrativeAreaLevel1      String? // State, e.g. Colorado
+  admininstrativeAreaLevel1Short String? // e.g. CO
+  country                        String? // e.g. Costa Rica
+  countryShort                   String? // e.g. CR
+  postalCode                     String?
 
   @@id([locationId])
 }
@@ -264,12 +282,15 @@ model LocationVote {
 }
 
 model LocationMediaItem {
-  ipfsHash String @id
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  ipfsHash String
+  category LocationMediaCategory
 
   Location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int
-
-  category LocationMediaCategory
 }
 
 enum LocationMediaCategory {
@@ -293,7 +314,7 @@ model Offer {
   startDate   DateTime
   endDate     DateTime
 
-  priceAmountCents Decimal        @db.Decimal(12, 2) // TODO: max price is 9 billion dollars
+  priceAmountCents Decimal        @db.Decimal(12, 2) // TODO: max price is just under 10 billion dollars
   priceUnit        OfferPriceUnit
 
   applicationUrl String
@@ -305,9 +326,14 @@ model Offer {
 }
 
 model OfferMediaItem {
-  ipfsHash String @id
-  Offer    Offer  @relation(fields: [offerId], references: [id], onDelete: Cascade)
-  offerId  Int
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Offer   Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  offerId Int
+
+  ipfsHash String
 }
 
 enum OfferType {
@@ -354,6 +380,7 @@ model Activity {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  faunaId   String?  @unique // TODO: remove this
 
   key  String       @unique // TODO: there's a better way of doing this
   type ActivityType
@@ -388,6 +415,9 @@ model ActivityReaction {
   profileId  Int
   activity   Activity @relation(fields: [activityId], references: [id], onDelete: Cascade)
   activityId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@id([profileId, activityId])
 }
