@@ -27,11 +27,7 @@ export const NeighborhoodsTop6List = () => {
               key={location._id}
               position={index + 1}
               {...locationCardProps}
-              onVote={() =>
-                voteForLocation({
-                  location,
-                })
-              }
+              onVote={() => voteForLocation(location)}
             />
           )
         })}

@@ -101,69 +101,68 @@ const migrateUsers = async (input: MigrateUserInput[]) => {
   return privyAPICall('users/import', 'POST', { users: privyInput })
 }
 
-async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<MigrateUserResponse[]>
-) {
-  const { method } = req
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  res.send('disabled')
+  return
 
-  switch (method) {
-    case 'GET':
-      const pendingMigrationUsers = (await faunaServerClient.query(
-        GetPendingMigrationProfiles()
-      )) as { data: CabinProfile[] }
-
-      const migrationUsers: MigrateUserInput[] = []
-
-      for (const user of pendingMigrationUsers.data) {
-        const account = (await faunaServerClient.query(
-          GetAccountById(user.data.account.id)
-        )) as { data: { address: string } }
-
-        if (!account || !account.data || !account.data.address) {
-          continue
-        }
-
-        // Check if valid address
-        if (!utils.isAddress(account.data.address)) {
-          continue
-        }
-
-        migrationUsers.push({
-          email: user.data.email,
-          address: account.data.address,
-        })
-      }
-
-      const privyResponse = await migrateUsers(migrationUsers)
-
-      const data = (await privyResponse.json()) as {
-        results: PrivyCreateResult[]
-      }
-
-      if (privyResponse.status >= 400) {
-        res.status(422).end(JSON.stringify(data))
-        return
-      }
-
-      const resolveUsers: MigrateUserResponse[] = []
-
-      for (const result of data.results) {
-        if (result.success) {
-          const response = await resolveUser(result.id, migrationUsers)
-
-          if (response) {
-            resolveUsers.push(response)
-          }
-        }
-      }
-
-      res.status(200).json(resolveUsers)
-      break
-    default:
-      res.setHeader('Allow', ['GET'])
-      res.status(405).end(`Method ${method} Not Allowed`)
-  }
+  // const { method } = req
+  // switch (method) {
+  //   case 'GET':
+  //     const pendingMigrationUsers = (await faunaServerClient.query(
+  //       GetPendingMigrationProfiles()
+  //     )) as { data: CabinProfile[] }
+  //
+  //     const migrationUsers: MigrateUserInput[] = []
+  //
+  //     for (const user of pendingMigrationUsers.data) {
+  //       const account = (await faunaServerClient.query(
+  //         GetAccountById(user.data.account.id)
+  //       )) as { data: { address: string } }
+  //
+  //       if (!account || !account.data || !account.data.address) {
+  //         continue
+  //       }
+  //
+  //       // Check if valid address
+  //       if (!utils.isAddress(account.data.address)) {
+  //         continue
+  //       }
+  //
+  //       migrationUsers.push({
+  //         email: user.data.email,
+  //         address: account.data.address,
+  //       })
+  //     }
+  //
+  //     const privyResponse = await migrateUsers(migrationUsers)
+  //
+  //     const data = (await privyResponse.json()) as {
+  //       results: PrivyCreateResult[]
+  //     }
+  //
+  //     if (privyResponse.status >= 400) {
+  //       res.status(422).end(JSON.stringify(data))
+  //       return
+  //     }
+  //
+  //     const resolveUsers: MigrateUserResponse[] = []
+  //
+  //     for (const result of data.results) {
+  //       if (result.success) {
+  //         const response = await resolveUser(result.id, migrationUsers)
+  //
+  //         if (response) {
+  //           resolveUsers.push(response)
+  //         }
+  //       }
+  //     }
+  //
+  //     res.status(200).json(resolveUsers)
+  //     break
+  //   default:
+  //     res.setHeader('Allow', ['GET'])
+  //     res.status(405).end(`Method ${method} Not Allowed`)
+  // }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

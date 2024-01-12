@@ -59,11 +59,7 @@ export const LocationListByType = (props: LocationListByTypeProps) => {
               position={index + 1}
               key={location._id}
               {...locationCardProps}
-              onVote={() =>
-                voteForLocation({
-                  location,
-                })
-              }
+              onVote={() => voteForLocation(location)}
             />
           )
         })}

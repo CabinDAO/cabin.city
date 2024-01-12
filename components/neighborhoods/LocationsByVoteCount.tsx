@@ -53,11 +53,7 @@ export const LocationsByVoteCount = () => {
               position={index + 1}
               key={location._id}
               {...locationCardProps}
-              onVote={() =>
-                voteForLocation({
-                  location,
-                })
-              }
+              onVote={() => voteForLocation(location)}
             />
           )
         })}

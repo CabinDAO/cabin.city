@@ -29,8 +29,8 @@ model Wallet {
 
   profile Profile?
 
-  address           String   @unique @db.Char(42)
-  cabinTokenBalance Decimal? @db.Decimal(78, 18) // uint256 in decimal has up to 78 digits. we store as whole Eth, so use 18 decimals
+  address           String  @unique @db.Char(42)
+  cabinTokenBalance Decimal @db.Decimal(78, 18) // uint256 in decimal has up to 78 digits. we store as whole Eth, so use 18 decimals
 
   hats   WalletHat[]
   badges Badge[]

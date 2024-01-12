@@ -51,9 +51,7 @@ export const LocationPageView = () => {
   const backRoute = `/location/${location._id}/edit`
 
   const handleVote = () => {
-    voteForLocation({
-      location,
-    })
+    voteForLocation(location)
   }
 
   const handlePublish = async () => {

@@ -10,14 +10,14 @@ import { useEffect, useState } from 'react'
 import { useModal } from '../hooks/useModal'
 import { isNil } from '@/lib/isNil'
 import IconButton from './IconButton'
+import { LocationVoteParams } from '@/pages/api/v2/location/vote'
+import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 
 interface LocationVoteModalProps {
   location: Location
   votingPower: number | null | undefined
-  myVotes: LocationVote[]
-  onCastVotes: (
-    voteCountsByLocationId: VoteModifiersByLocationId
-  ) => Promise<unknown> | void
+  myVotes: ProfileVotesResponse['votes']
+  onCastVotes: (reqBody: LocationVoteParams) => Promise<unknown> | void
   isLoading?: boolean
 }
 
@@ -33,10 +33,6 @@ interface LocationVote {
 }
 
 interface VoteCountsByLocationId {
-  [key: string]: number
-}
-
-interface VoteModifiersByLocationId {
   [key: string]: number
 }
 
@@ -138,26 +134,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
   const handleCastVotesButtonClick = async () => {
     setIsCastingVotes(true)
     try {
-      // We only need to send the votes for locations that have changed
-      const voteModifiersByLocationId = Object.entries(
-        voteCountsByLocationId
-      ).reduce((acc, [locationId, count]) => {
-        const priorCount =
-          myVotes.find((vote) => vote.location._id === locationId)?.count ?? 0
-
-        const modifier = count - priorCount
-
-        // We only need to include the modifier if it's non-zero
-        if (Math.abs(modifier) > 0) {
-          return {
-            ...acc,
-            [locationId]: modifier,
-          }
-        }
-        return acc
-      }, {} as VoteCountsByLocationId)
-
-      await onCastVotes(voteModifiersByLocationId)
+      await onCastVotes({ votes: voteCountsByLocationId })
       hideModal()
     } catch (err) {
       console.error(err)

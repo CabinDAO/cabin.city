@@ -1,9 +1,8 @@
 import fs from 'fs'
-import { PrismaClient } from '@prisma/client'
-import { $Enums } from '.prisma/client'
+import prisma from '@/utils/prisma'
+import { $Enums, Prisma } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-
-const prisma = new PrismaClient()
+import Decimal = Prisma.Decimal
 
 // TODO: check that every field in the existing data is imported
 
@@ -138,7 +137,9 @@ async function importAccount(datum: Account) {
       updatedAt: new Date(d.ts / 1000),
       faunaId: d.ref,
       address: d.data.address,
-      cabinTokenBalance: d.data.cabinTokenBalance ?? 0,
+      cabinTokenBalance: d.data.cabinTokenBalance
+        ? new Decimal(d.data.cabinTokenBalance).dividedBy(10 ** 18)
+        : 0,
     },
   })
 }

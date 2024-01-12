@@ -38,11 +38,7 @@ export const MyLocations = () => {
           <LocationCard
             key={location._id}
             {...locationCardProps}
-            onVote={() =>
-              voteForLocation({
-                location,
-              })
-            }
+            onVote={() => voteForLocation(location)}
             editMode
             onDelete={() => deleteLocation(location._id)}
             onEdit={() => editLocation(location._id)}
