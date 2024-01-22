@@ -1,16 +1,16 @@
 import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
 import { DataContainer } from '../core/DataContainer'
 import { ActivityList } from './ActivityList'
-import { useGetActivitySummaryQuery } from '@/generated/graphql'
 import styled from 'styled-components'
 import { TextPost } from './TextPost'
 import { useTextActivity } from './useTextActivity'
-import { useEffect } from 'react'
 import { useProfile } from '../auth/useProfile'
+import { useAPIGet } from '@/utils/api/interface'
+import { ActivitySummaryResponse } from '@/pages/api/v2/activity/summary'
 
 export const DashboardView = () => {
   const { user } = useProfile({ redirectTo: '/logout' })
-  const { data, refetch } = useGetActivitySummaryQuery()
+  const { data } = useAPIGet<ActivitySummaryResponse>('ACTIVITY_SUMMARY')
   const { handleCreateTextActivity } = useTextActivity()
 
   const dashboardItems = [
@@ -31,10 +31,6 @@ export const DashboardView = () => {
   const handleOnPost = (text: string) => {
     handleCreateTextActivity(text)
   }
-
-  useEffect(() => {
-    refetch()
-  }, [refetch])
 
   if (!user) return null
 

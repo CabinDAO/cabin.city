@@ -14,12 +14,13 @@ export const List = (props: ListProps) => {
   const { total, children, sortComponent } = props
 
   const formattedTotal = formatValue(total ?? 0)
+  const pluralized = total === 1 ? 'Result' : 'Results'
 
   return (
     <ContentCard>
       <Container>
         <HeaderContainer>
-          <Overline>{`${formattedTotal} Results`}</Overline>
+          <Overline>{`${formattedTotal} ${pluralized}`}</Overline>
           {sortComponent}
         </HeaderContainer>
         <InnerContainer>{children}</InnerContainer>

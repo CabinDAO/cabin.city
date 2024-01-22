@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
-import prisma from '@/utils/prisma'
+import { prisma } from '@/utils/prisma'
 
 export interface LocationVoteParams {
   locationId?: string

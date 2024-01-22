@@ -1,18 +1,8 @@
-import {
-  CitizenshipStatus,
-  ProfileFragment,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-  ProfileSortType,
-  useGetProfileByAddressLazyQuery,
-  useGetProfilesCountQuery,
-  useGetProfilesQuery,
-} from '@/generated/graphql'
-import { resolveAddressOrName } from '@/lib/ens'
 import { allCitizenshipStatuses } from '@/utils/citizenship'
 import { allLevels } from '@/utils/levels'
 import { allRoles } from '@/utils/roles'
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
 import { Filter, FilterContainer, FilterGroup } from '../core/Filter'
@@ -31,82 +21,74 @@ import { FilterCount } from '../core/FilterCount'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
+import { useAPIGet } from '@/utils/api/interface'
+import {
+  ProfileListParams,
+  ProfileListResponse,
+  ProfileSort,
+  ProfileFragment,
+  RoleType,
+  RoleLevel,
+  CitizenshipStatus,
+  PAGE_SIZE,
+} from '@/utils/types/profile'
 
 export const DirectoryView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
-  const [roleTypes, setRoleTypes] = useState<ProfileRoleType[]>([])
-  const [levelTypes, setLevelTypes] = useState<ProfileRoleLevelType[]>([])
+  const [searchValue] = useDebounce(searchInput, 500)
+  const [roleTypes, setRoleTypes] = useState<RoleType[]>([])
+  const [levelTypes, setLevelTypes] = useState<RoleLevel[]>([])
   const [citizenshipStatuses, setCitizenshipStatuses] = useState<
     CitizenshipStatus[]
   >([])
-  const [addressMatchProfile, setAddressMatchProfile] =
-    useState<ProfileFragment | null>(null)
+  const [profileSortType, setProfileSortType] = useState<ProfileSort>(
+    ProfileSort.CreatedAtDesc
+  )
+  const [page, setPage] = useState(1)
+
   const [profiles, setProfiles] = useState<ProfileFragment[]>([])
   const [totalProfiles, setTotalProfiles] = useState<number>(0)
-  const [profileSortType, setProfileSortType] = useState<ProfileSortType>(
-    ProfileSortType.CreatedAtDesc
-  )
+
   const { deviceSize } = useDeviceSize()
   const { user } = useProfile({ redirectTo: '/' })
 
-  const input = useMemo(() => {
+  const input = useMemo<ProfileListParams>(() => {
     // Only search if there are at least 2 characters
-    const searchQuery = searchInput.length >= 2 ? searchInput : ''
+    const searchQuery = searchValue.length >= 2 ? searchValue : ''
 
     return {
+      searchQuery,
       roleTypes,
       levelTypes,
       citizenshipStatuses,
       sort: profileSortType,
-      searchQuery,
+      page,
     }
-  }, [roleTypes, levelTypes, citizenshipStatuses, profileSortType, searchInput])
+  }, [
+    searchValue,
+    roleTypes,
+    levelTypes,
+    citizenshipStatuses,
+    profileSortType,
+    page,
+  ])
 
-  const { data, fetchMore } = useGetProfilesQuery({
-    variables: {
-      input,
-      size: 30,
-    },
-  })
-
-  const { data: profilesCountData } = useGetProfilesCountQuery({
-    variables: { input },
-  })
-
-  const [getProfileByAddress] = useGetProfileByAddressLazyQuery()
+  const { data } = useAPIGet<ProfileListResponse>('PROFILE_LIST', input)
 
   useEffect(() => {
-    ;(async () => {
-      const resolvedAddress = await resolveAddressOrName(searchInput)
-      if (resolvedAddress) {
-        const result = await getProfileByAddress({
-          variables: { address: resolvedAddress },
-        })
-        if (result.data?.accountByAddress?.profile) {
-          setAddressMatchProfile(result.data.accountByAddress.profile)
-        }
+    if (data) {
+      if (page === 1) {
+        // Reset profiles if first page
+        setProfiles(data.profiles)
       } else {
-        setAddressMatchProfile(null)
+        // Append profiles if not first page
+        setProfiles([...profiles, ...data.profiles])
       }
-    })()
-  }, [searchInput, getProfileByAddress])
-
-  useEffect(() => {
-    if (addressMatchProfile) {
-      // Special handling for address match
-      setProfiles([addressMatchProfile])
-      setTotalProfiles(1)
-    } else if (data) {
-      // Only set profiles if data is available (prevents flickering)
-      setProfiles(
-        data.getProfiles.data.filter((a): a is ProfileFragment => !!a) ?? []
-      )
-      setTotalProfiles(profilesCountData?.profilesCount ?? 0)
+      setTotalProfiles(data.count)
     }
-  }, [data, addressMatchProfile, profilesCountData])
+  }, [data])
 
-  const hasMore = !!data?.getProfiles?.after
-  const dataLength = profiles.length
+  const hasMore = data ? data.count > PAGE_SIZE * (page + 1) : false
 
   const roleOptions = allRoles.map((role) => ({
     label: role.name,
@@ -125,20 +107,24 @@ export const DirectoryView = () => {
 
   const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
+    setPage(1)
   }
 
-  const handleSelectedRoles = (selectedRoles: ProfileRoleType[]) => {
+  const handleSelectedRoles = (selectedRoles: RoleType[]) => {
     setRoleTypes(selectedRoles)
+    setPage(1)
   }
 
-  const handleSelectedLevels = (selectedLevels: ProfileRoleLevelType[]) => {
+  const handleSelectedLevels = (selectedLevels: RoleLevel[]) => {
     setLevelTypes(selectedLevels)
+    setPage(1)
   }
 
   const handleSelectedCitizenshipStatuses = (
     selectedCitizenshipStatuses: CitizenshipStatus[]
   ) => {
     setCitizenshipStatuses(selectedCitizenshipStatuses)
+    setPage(1)
   }
 
   const handleClearFilters = () => {
@@ -146,10 +132,12 @@ export const DirectoryView = () => {
     setRoleTypes([])
     setLevelTypes([])
     setCitizenshipStatuses([])
+    setPage(1)
   }
 
-  const handleSort = (option: SortOption<ProfileSortType>) => {
+  const handleSort = (option: SortOption<ProfileSort>) => {
     setProfileSortType(option.key)
+    setPage(1)
   }
 
   const [open, setOpen] = useState(false)
@@ -232,23 +220,19 @@ export const DirectoryView = () => {
         }
       >
         <InfiniteScroll
-          hasMore={!!hasMore}
-          dataLength={dataLength}
+          hasMore={hasMore}
+          dataLength={profiles.length}
           style={{ overflowX: 'hidden' }}
           next={() => {
-            return fetchMore({
-              variables: {
-                cursor: data?.getProfiles?.after,
-              },
-            })
+            setPage(page + 1)
           }}
           loader="..."
         >
-          {profiles.length === 0 && data && profilesCountData ? (
+          {profiles.length === 0 ? (
             <ListEmptyState iconName="profile2" />
           ) : (
             profiles.map((profile) => (
-              <ProfileListItem key={profile._id} profile={profile} />
+              <ProfileListItem key={profile.externId} profile={profile} />
             ))
           )}
         </InfiniteScroll>

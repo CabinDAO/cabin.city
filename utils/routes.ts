@@ -31,6 +31,7 @@ export const Routes: { [key: string]: string } = {
   ACTIVITY_LIST: `/activity`,
   ACTIVITY_NEW: `/activity/new`,
   ACTIVITY_LIKE: `/activity/[id]/like`,
+  ACTIVITY_SUMMARY: `/activity/summary`,
 
   CART_LIST: `/cart`,
   CART: `/cart/[id]`,

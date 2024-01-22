@@ -5,7 +5,7 @@ import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { usePrivy } from '@privy-io/react-auth'
 import events from '@/lib/googleAnalytics/events'
 import { LocationVoteParams } from '@/pages/api/v2/location/vote'
-import { apiGet, apiPost, useAPIGet } from '@/utils/api/useFetch'
+import { apiGet, apiPost, useAPIGet } from '@/utils/api/interface'
 import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 
 export const useLocationVote = (afterVote?: () => void) => {

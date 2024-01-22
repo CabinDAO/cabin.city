@@ -1,5 +1,0 @@
-query GetActivitySummary {
-  profilesCount
-  tokenHoldersCount
-  citizensCount(status: Verified)
-}

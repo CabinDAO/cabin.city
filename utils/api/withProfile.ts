@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { ironOptions } from '@/lib/next-server/iron-options'
-import withAuth from '@/utils/api/withAuth'
-import prisma from '@/utils/prisma'
+import { prisma } from '@/utils/prisma'
 import { Profile, Wallet } from '@prisma/client'
+import mustAuth from '@/utils/api/mustAuth'
 
 export type ProfileWithWallet = Profile & {
   wallet: Wallet
@@ -20,18 +18,11 @@ const withProfile = (handler: ProfileApiHandler) => {
   const h = async (
     req: NextApiRequest,
     res: NextApiResponse,
-    opts?: { auth: { externalUserId: string } }
+    opts: { auth: { externalUserId: string } }
   ) => {
     try {
-      const externalUserId = opts?.auth?.externalUserId
-
-      if (!externalUserId) {
-        res.status(401).send({ message: 'Unauthorized' })
-        return
-      }
-
       const profile = await prisma.profile.findUnique({
-        where: { externalUserId: externalUserId },
+        where: { externalUserId: opts.auth.externalUserId },
         include: {
           wallet: true,
         },
@@ -50,7 +41,7 @@ const withProfile = (handler: ProfileApiHandler) => {
     }
   }
 
-  return withIronSessionApiRoute(withAuth(h), ironOptions)
+  return mustAuth(h)
 }
 
 export default withProfile

@@ -1,5 +1,5 @@
 import fs from 'fs'
-import prisma from '@/utils/prisma'
+import { prisma } from '../utils/prisma'
 import { $Enums, Prisma } from '@prisma/client'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import Decimal = Prisma.Decimal

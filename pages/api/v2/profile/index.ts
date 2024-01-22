@@ -1,0 +1,250 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '@/utils/prisma'
+import { Prisma } from '@prisma/client'
+import withProfile from '@/utils/api/withProfile'
+import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+import { resolveAddressOrName } from '@/lib/ens'
+
+import {
+  RoleType,
+  RoleLevel,
+  CitizenshipStatus,
+  ProfileSort,
+  ProfileListParams,
+  ProfileListResponse,
+  PAGE_SIZE,
+  ProfileFragment,
+} from '@/utils/types/profile'
+
+// must match the includes on profileQuery below
+type ProfileWithRelations = Prisma.ProfileGetPayload<{
+  include: {
+    Avatar: true
+    wallet: {
+      include: {
+        _count: {
+          select: {
+            badges: true
+          }
+        }
+      }
+    }
+    roles: true
+  }
+}>
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'GET') {
+    res.status(405).send({ message: 'Method not allowed' })
+    return
+  }
+
+  const params: ProfileListParams = {
+    searchQuery: req.query.searchQuery
+      ? (req.query.searchQuery as string)
+      : undefined,
+    roleTypes: toArray<RoleType>(req.query.roleTypes),
+    levelTypes: toArray<RoleLevel>(req.query.levelTypes),
+    citizenshipStatuses: toArray<CitizenshipStatus>(
+      req.query.citizenshipStatuses
+    ),
+    sort: req.query.sort ? (req.query.sort as ProfileSort) : undefined,
+    page: req.query.page ? parseInt(req.query.page as string) : undefined,
+  }
+
+  const resolvedAddress = params.searchQuery
+    ? await resolveAddressOrName(params.searchQuery)
+    : undefined
+
+  console.log('resolvedAddress', resolvedAddress)
+
+  // TODO: data validation
+
+  // console.log(req.query, params)
+
+  const profileQuery: Prisma.ProfileFindManyArgs = {
+    where: {
+      name:
+        !resolvedAddress && params.searchQuery
+          ? {
+              contains: params.searchQuery,
+              mode: 'insensitive',
+            }
+          : undefined,
+      roles:
+        params.roleTypes?.length || params.levelTypes?.length
+          ? {
+              some: {
+                type: params.roleTypes?.length
+                  ? {
+                      in: params.roleTypes,
+                    }
+                  : undefined,
+                level: params.levelTypes?.length
+                  ? {
+                      in: params.levelTypes,
+                    }
+                  : undefined,
+              },
+            }
+          : undefined,
+      citizenshipStatus: params.citizenshipStatuses?.length
+        ? {
+            in: params.citizenshipStatuses,
+          }
+        : undefined,
+      wallet: resolvedAddress
+        ? {
+            address: {
+              equals: resolvedAddress,
+              mode: 'insensitive',
+            },
+          }
+        : undefined,
+    },
+    include: {
+      // includes must match ProfileWithRelations type above
+      Avatar: true,
+      wallet: {
+        include: {
+          _count: {
+            select: {
+              badges: true,
+            },
+          },
+        },
+      },
+      roles: true,
+    },
+    orderBy: sortOrder(params.sort),
+    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
+    take: PAGE_SIZE,
+  }
+
+  try {
+    // await Promise.all() might be even better here because its parallel, while transaction is sequential
+    const [profiles, count] = await prisma.$transaction([
+      prisma.profile.findMany(profileQuery),
+      prisma.profile.count({ where: profileQuery.where }),
+    ])
+
+    // console.log(count, profiles)
+    res.status(200).send({
+      profiles: profilesToFragments(profiles as ProfileWithRelations[]),
+      count,
+    } as ProfileListResponse)
+  } catch (e) {
+    console.log(e)
+    if (e instanceof PrismaClientValidationError) {
+      res.status(200).send({
+        profiles: [],
+        count: 0,
+        error: `PrismaClientValidationError: ${e.message}`,
+      } as ProfileListResponse)
+    } else {
+      res.status(200).send({
+        profiles: [],
+        count: 0,
+        error: e as string,
+      } as ProfileListResponse)
+    }
+  }
+}
+
+const sortOrder = (
+  sortParam: ProfileSort | undefined
+): Prisma.ProfileOrderByWithRelationInput => {
+  switch (sortParam) {
+    case ProfileSort.CabinBalanceAsc:
+      return {
+        wallet: {
+          cabinTokenBalance: 'asc',
+        },
+      }
+    case ProfileSort.CabinBalanceDesc:
+      return {
+        wallet: {
+          cabinTokenBalance: 'desc',
+        },
+      }
+    case ProfileSort.BadgeCountAsc:
+      return {
+        wallet: {
+          badges: {
+            _count: 'asc',
+          },
+        },
+      }
+    case ProfileSort.BadgeCountDesc:
+      return {
+        wallet: {
+          badges: {
+            _count: 'desc',
+          },
+        },
+      }
+    case ProfileSort.CreatedAtDesc:
+      return {
+        createdAt: 'desc',
+      }
+    case ProfileSort.CreatedAtAsc:
+    default:
+      return {
+        createdAt: 'asc',
+      }
+  }
+}
+
+const profilesToFragments = (
+  profiles: ProfileWithRelations[]
+): ProfileFragment[] => {
+  return profiles.map((profile) => {
+    return {
+      createdAt: profile.createdAt,
+      updatedAt: profile.updatedAt,
+      externId: profile.externId,
+      externalUserId: profile.externalUserId,
+      name: profile.name,
+      email: profile.email,
+      bio: profile.bio,
+      location: profile.location,
+      isAdmin: profile.isAdmin,
+      mailingListOptIn: profile.mailingListOptIn,
+      voucherId: profile.voucherId,
+      citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
+      citizenshipTokenId: profile.citizenshipTokenId,
+      citizenshipMintedAt: profile.citizenshipMintedAt,
+      avatar: profile.Avatar
+        ? {
+            profileId: profile.Avatar.profileId,
+            url: profile.Avatar.url,
+            contractAddress: profile.Avatar.contractAddress,
+            network: profile.Avatar.network,
+            title: profile.Avatar.title,
+            tokenId: profile.Avatar.tokenId,
+            tokenUri: profile.Avatar.tokenUri,
+          }
+        : undefined,
+      roles: profile.roles.map((role) => ({
+        hatId: role.hatId,
+        type: role.type as RoleType,
+        level: role.level as RoleLevel,
+      })),
+      badgeCount: profile.wallet._count.badges,
+      cabinTokenBalanceInt: Math.floor(
+        profile.wallet.cabinTokenBalance.toNumber()
+      ),
+    }
+  })
+}
+
+const toArray = <T = any>(param: string | string[] | undefined): T[] => {
+  if (!param) return []
+  if (typeof param === 'string' || param instanceof String) {
+    return param.split(',') as T[]
+  }
+  return param as T[]
+}
+
+// export default withProfile(handler)
+export default handler

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
-import prisma from '@/utils/prisma'
+import { prisma } from '@/utils/prisma'
 
 export type ProfileVotesResponse = {
   votingPower: number
@@ -57,9 +57,9 @@ async function handler(
   }
 
   res.status(200).send({
-    votingPower: profile.wallet.cabinTokenBalance.floor(),
+    votingPower: profile.wallet.cabinTokenBalance.floor().toNumber(),
     votes: voteResp,
-  })
+  } as ProfileVotesResponse)
 }
 
 export default withProfile(handler)

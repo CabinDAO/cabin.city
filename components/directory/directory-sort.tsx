@@ -1,4 +1,4 @@
-import { ProfileSortType } from '@/generated/graphql'
+import { ProfileSort } from '@/utils/types/profile'
 
 export const DIRECTORY_SORT_FIELDS = [
   {
@@ -6,11 +6,11 @@ export const DIRECTORY_SORT_FIELDS = [
     label: 'Join date',
     options: [
       {
-        key: ProfileSortType.CreatedAtDesc,
+        key: ProfileSort.CreatedAtDesc,
         label: 'Newest',
       },
       {
-        key: ProfileSortType.CreatedAtAsc,
+        key: ProfileSort.CreatedAtAsc,
         label: 'Oldest',
       },
     ],
@@ -20,11 +20,11 @@ export const DIRECTORY_SORT_FIELDS = [
     label: '₡ABIN holdings',
     options: [
       {
-        key: ProfileSortType.CabinBalanceAsc,
+        key: ProfileSort.CabinBalanceAsc,
         label: 'Ascending',
       },
       {
-        key: ProfileSortType.CabinBalanceDesc,
+        key: ProfileSort.CabinBalanceDesc,
         label: 'Descending',
       },
     ],
@@ -34,11 +34,11 @@ export const DIRECTORY_SORT_FIELDS = [
     label: 'Stamp Amount',
     options: [
       {
-        key: ProfileSortType.BadgeCountAsc,
+        key: ProfileSort.BadgeCountAsc,
         label: 'Ascending',
       },
       {
-        key: ProfileSortType.BadgeCountDesc,
+        key: ProfileSort.BadgeCountDesc,
         label: 'Descending',
       },
     ],

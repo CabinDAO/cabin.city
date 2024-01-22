@@ -8,10 +8,7 @@ type Query {
     status: BlockSyncAttemptStatus!
   ): BlockSyncAttempt
   syncAttemptsByKey(key: String!): [BlockSyncAttempt!]!
-  allAccounts: [Account!]!
   allProfiles: [Profile!]!
-  allHats: [Hat!]!
-  allBadges: [OtterspaceBadge!]!
   allActivities: [ActivityItem!]!
     @resolver(name: "all_activities", paginated: true)
 
