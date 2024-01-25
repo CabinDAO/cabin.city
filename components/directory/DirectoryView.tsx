@@ -26,7 +26,7 @@ import {
   ProfileListParams,
   ProfileListResponse,
   ProfileSort,
-  ProfileFragment,
+  ProfileListFragment,
   RoleType,
   RoleLevel,
   CitizenshipStatus,
@@ -44,10 +44,10 @@ export const DirectoryView = () => {
   const [profileSortType, setProfileSortType] = useState<ProfileSort>(
     ProfileSort.CreatedAtDesc
   )
-  const [page, setPage] = useState(1)
 
-  const [profiles, setProfiles] = useState<ProfileFragment[]>([])
-  const [totalProfiles, setTotalProfiles] = useState<number>(0)
+  const [profiles, setProfiles] = useState<ProfileListFragment[]>([])
+  const [totalProfiles, setTotalProfiles] = useState(0)
+  const [page, setPage] = useState(1)
 
   const { deviceSize } = useDeviceSize()
   const { user } = useProfile({ redirectTo: '/' })

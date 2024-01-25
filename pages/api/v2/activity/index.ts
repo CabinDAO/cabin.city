@@ -1,0 +1,379 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '@/utils/prisma'
+import { Prisma } from '@prisma/client'
+import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+
+import {
+  PAGE_SIZE,
+  ActivityListParams,
+  ActivityListFragment,
+  ActivityListResponse,
+  ActivityType,
+} from '@/utils/types/activity'
+import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+import { OfferType } from '@/utils/types/offer'
+
+// must match the includes on query below
+type ActivityWithRelations = Prisma.ActivityGetPayload<{
+  include: {
+    profile: {
+      select: {
+        externId: true
+        name: true
+        citizenshipStatus: true
+        citizenshipTokenId: true
+        roles: true
+        Avatar: {
+          select: {
+            url: true
+          }
+        }
+      }
+    }
+    badge: {
+      select: {
+        id: true
+        otterspaceBadgeId: true
+        spec: true
+      }
+    }
+    role: true
+    location: {
+      select: {
+        externId: true
+        name: true
+        tagline: true
+        description: true
+        bannerImageIpfsHash: true
+        sleepCapacity: true
+        caretaker: {
+          select: {
+            externId: true
+            name: true
+            createdAt: true
+          }
+        }
+        publishedAt: true
+        internetSpeedMbps: true
+        address: {
+          select: {
+            locality: true
+            admininstrativeAreaLevel1Short: true
+            country: true
+          }
+        }
+      }
+      // include: {
+      //   _count: {
+      //     select: {
+      //       votes: true
+      //       offers: true
+      //     }
+      //   }
+      // }
+    }
+    offer: {
+      select: {
+        externId: true
+        type: true
+        title: true
+        description: true
+        startDate: true
+        endDate: true
+        imageIpfsHash: true
+        priceAmountCents: true
+        priceUnit: true
+        location: {
+          select: {
+            externId: true
+            name: true
+            bannerImageIpfsHash: true
+            publishedAt: true
+            address: {
+              select: {
+                locality: true
+                admininstrativeAreaLevel1Short: true
+                country: true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}>
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method != 'GET') {
+    res.status(405).send({ message: 'Method not allowed' })
+    return
+  }
+
+  const params: ActivityListParams = {
+    profileId: req.query.profileId
+      ? (req.query.profileId as string)
+      : undefined,
+    page: req.query.page ? parseInt(req.query.page as string) : undefined,
+    pageSize: req.query.pageSize
+      ? Math.max(Math.min(parseInt(req.query.pageSize as string), PAGE_SIZE), 1)
+      : undefined,
+  }
+
+  const activityQuery: Prisma.ActivityFindManyArgs = {
+    where: params.profileId
+      ? {
+          profile: {
+            externId: params.profileId,
+          },
+        }
+      : undefined,
+    include: {
+      profile: {
+        select: {
+          externId: true,
+          name: true,
+          citizenshipStatus: true,
+          citizenshipTokenId: true,
+          roles: true,
+          Avatar: {
+            select: {
+              url: true,
+            },
+          },
+        },
+      },
+      badge: {
+        select: {
+          id: true,
+          otterspaceBadgeId: true,
+          spec: true,
+        },
+      },
+      role: true,
+      location: {
+        select: {
+          externId: true,
+          name: true,
+          tagline: true,
+          description: true,
+          bannerImageIpfsHash: true,
+          sleepCapacity: true,
+          caretaker: {
+            select: {
+              externId: true,
+              name: true,
+              createdAt: true,
+            },
+          },
+          publishedAt: true,
+          internetSpeedMbps: true,
+          address: {
+            select: {
+              locality: true,
+              admininstrativeAreaLevel1Short: true,
+              country: true,
+            },
+          },
+        },
+        // include: {
+        //   _count: {
+        //     select: {
+        //       votes: true,
+        //       offers: true,
+        //     },
+        //   },
+        // },
+      },
+      offer: {
+        select: {
+          externId: true,
+          type: true,
+          title: true,
+          description: true,
+          startDate: true,
+          endDate: true,
+          imageIpfsHash: true,
+          priceAmountCents: true,
+          priceUnit: true,
+          location: {
+            select: {
+              externId: true,
+              name: true,
+              bannerImageIpfsHash: true,
+              publishedAt: true,
+              address: {
+                select: {
+                  locality: true,
+                  admininstrativeAreaLevel1Short: true,
+                  country: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
+    take: params.pageSize ?? PAGE_SIZE,
+  }
+
+  try {
+    // await Promise.all() might be even better here because its parallel, while transaction is sequential
+    const [activities, count] = await prisma.$transaction([
+      prisma.activity.findMany(activityQuery),
+      prisma.activity.count({ where: activityQuery.where }),
+    ])
+
+    // console.log(count, profiles)
+    res.status(200).send({
+      activities: toFragments(activities as ActivityWithRelations[]),
+      count,
+    } as ActivityListResponse)
+  } catch (e) {
+    console.log(e)
+    if (e instanceof PrismaClientValidationError) {
+      res.status(200).send({
+        activities: [],
+        count: 0,
+        error: `PrismaClientValidationError: ${e.message}`,
+      } as ActivityListResponse)
+    } else {
+      res.status(200).send({
+        activities: [],
+        count: 0,
+        error: e as string,
+      } as ActivityListResponse)
+    }
+  }
+}
+
+const toFragments = (
+  activities: ActivityWithRelations[]
+): ActivityListFragment[] => {
+  return activities.map((activity) => {
+    return {
+      externId: activity.externId,
+      createdAt: activity.createdAt.toISOString(),
+      type: activity.type as ActivityType,
+      text: activity.text,
+      metadata: {
+        citizenshipTokenId: activity.profile.citizenshipTokenId ?? undefined,
+        badge: activity.badge
+          ? {
+              id: activity.badge.id,
+              otterspaceBadgeId: activity.badge.otterspaceBadgeId,
+              spec: {
+                name: activity.badge.spec.name,
+                description: activity.badge.spec.description,
+                image: activity.badge.spec.image,
+              },
+            }
+          : undefined,
+        role: activity.role
+          ? {
+              hatId: activity.role.hatId,
+              type: activity.role.type as RoleType,
+              level: activity.role.level as RoleLevel,
+            }
+          : undefined,
+        location: activity.location
+          ? {
+              externId: activity.location.externId,
+              name: activity.location.name,
+              description: activity.location.description,
+              tagline: activity.location.tagline,
+              bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
+              sleepCapacity: activity.location.sleepCapacity,
+              caretaker: {
+                externId: activity.location.caretaker.externId,
+                name: activity.location.caretaker.name,
+                createdAt: activity.location.caretaker.createdAt.toISOString(),
+              },
+              publishedAt: activity.location.publishedAt
+                ? activity.location.publishedAt.toISOString()
+                : null,
+              internetSpeedMbps: activity.location.internetSpeedMbps,
+              address: activity.location.address
+                ? {
+                    locality: activity.location.address.locality ?? '',
+                    admininstrativeAreaLevel1Short:
+                      activity.location.address
+                        .admininstrativeAreaLevel1Short ?? '',
+                    country: activity.location.address.country ?? '',
+                  }
+                : null,
+              // voteCount: activity.location._count.votes,
+              // offerCount: activity.location._count.offers,
+              voteCount: 0,
+              offerCount: 0,
+              recentVoters: [], // TODO: implement. this is for "voters" on ListingCard (and maybe others?)
+              // votes(_size: 3) {
+              //   data {
+              //     _id
+              //     profile {
+              //       _id
+              //       avatar {
+              //         url
+              //       }
+              //     }
+              //     count
+              //   }
+              // }
+            }
+          : undefined,
+        offer: activity.offer
+          ? {
+              externId: activity.offer.externId,
+              type: activity.offer.type as OfferType,
+              title: activity.offer.title,
+              description: activity.offer.description,
+              startDate: activity.offer.startDate.toISOString(),
+              endDate: activity.offer.endDate.toISOString(),
+              imageIpfsHash: activity.offer.imageIpfsHash,
+              price: {
+                unit: activity.offer.priceUnit,
+                amountCents: activity.offer.priceAmountCents.toNumber(),
+              },
+              location: {
+                externId: activity.offer.location.externId,
+                name: activity.offer.location.name,
+                bannerImageIpfsHash:
+                  activity.offer.location.bannerImageIpfsHash,
+                publishedAt: activity.offer.location.publishedAt
+                  ? activity.offer.location.publishedAt.toISOString()
+                  : null,
+                address: activity.offer.location.address
+                  ? {
+                      locality: activity.offer.location.address.locality ?? '',
+                      admininstrativeAreaLevel1Short:
+                        activity.offer.location.address
+                          .admininstrativeAreaLevel1Short ?? '',
+                      country: activity.offer.location.address.country ?? '',
+                    }
+                  : null,
+              },
+            }
+          : undefined,
+      },
+      profile: {
+        externId: activity.profile.externId,
+        name: activity.profile.name,
+        citizenshipStatus: activity.profile
+          .citizenshipStatus as CitizenshipStatus,
+        roles: activity.profile.roles.map((role) => ({
+          hatId: role.hatId,
+          type: role.type as RoleType,
+          level: role.level as RoleLevel,
+        })),
+        avatarUrl: activity.profile.Avatar ? activity.profile.Avatar.url : '',
+      },
+      reactionCount: 0, // activity.reactionCount
+      hasReactionByMe: false, //activity.hasReactionByMe
+    }
+  })
+}
+
+export default handler

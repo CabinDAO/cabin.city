@@ -34,10 +34,21 @@ export enum ProfileSort {
   BadgeCountAsc = 'BadgeCountAsc',
   BadgeCountDesc = 'BadgeCountDesc',
 }
+// must match prisma's $Enums.ProfileContactFieldType
+export enum ContactFieldType {
+  Twitter = 'Twitter',
+  Instagram = 'Instagram',
+  Discord = 'Discord',
+  Telegram = 'Telegram',
+  Email = 'Email',
+  Website = 'Website',
+  Farcaster = 'Farcaster',
+  Lens = 'Lens',
+  LinkedIn = 'LinkedIn',
+}
 
-export type ProfileFragment = {
-  createdAt: Date
-  updatedAt: Date
+export type ProfileListFragment = {
+  createdAt: string
   externId: string
   externalUserId: string | null
   name: string
@@ -49,7 +60,7 @@ export type ProfileFragment = {
   voucherId: number | null
   citizenshipStatus: CitizenshipStatus | null
   citizenshipTokenId: number | null
-  citizenshipMintedAt: Date | null
+  citizenshipMintedAt: string | null
   avatar?: {
     profileId: number
     url: string
@@ -59,11 +70,7 @@ export type ProfileFragment = {
     tokenId: string | null
     tokenUri: string | null
   }
-  roles: {
-    hatId: number | null
-    type: RoleType
-    level: RoleLevel
-  }[]
+  roles: RoleFragment[]
   badgeCount: number
   cabinTokenBalanceInt: number
 }
@@ -78,7 +85,70 @@ export type ProfileListParams = {
 }
 
 export type ProfileListResponse = {
-  profiles: ProfileFragment[]
+  profiles: ProfileListFragment[]
   count: number
-  error: string | undefined
+  error?: string
+}
+
+export type ProfileVouchParams = {
+  externId: string
+  action: 'vouch' | 'unvouch'
+}
+
+export type ProfileVouchResponse = {
+  newStatus: CitizenshipStatus
+  error?: string
+}
+
+export type ProfileResponse = {
+  profile: ProfileFragment | null
+  error?: string
+}
+
+export type ProfileFragment = {
+  createdAt: string
+  externId: string
+  externalUserId: string | null
+  name: string
+  email: string
+  bio: string
+  location: string
+  citizenshipStatus: CitizenshipStatus | null
+  citizenshipTokenId: number | null
+  citizenshipMintedAt: string | null
+  cabinTokenBalanceInt: number
+  avatarUrl: string
+  voucher: {
+    externId: string
+    name: string
+  } | null
+  wallet: {
+    address: string
+    badges: BadgeFragment[]
+  }
+  contactFields: {
+    type: ContactFieldType
+    value: string
+  }[]
+  roles: {
+    hatId: number | null
+    type: RoleType
+    level: RoleLevel
+  }[]
+}
+
+export type RoleFragment = {
+  hatId: number | null
+  type: RoleType
+  level: RoleLevel
+}
+
+export type BadgeFragment = {
+  id: number
+  otterspaceBadgeId: string
+  spec: {
+    name: string
+    description: string
+    image: string
+  }
 }

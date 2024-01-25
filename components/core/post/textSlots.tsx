@@ -3,8 +3,7 @@ import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 
 const TextContent = (props: PostProps) => {
-  const { activityItem } = props
-  const { activity } = activityItem
+  const { activity } = props
 
   return (
     <WordBreak>

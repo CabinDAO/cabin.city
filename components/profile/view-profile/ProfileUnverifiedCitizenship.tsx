@@ -3,7 +3,6 @@ import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { Body2, H2, Overline } from '@/components/core/Typography'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { GetProfileByIdFragment } from '@/generated/graphql'
 import {
   citizenshipInfoFromStatus,
   DEFAULT_CTA_TEXT,
@@ -11,9 +10,10 @@ import {
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import Link from 'next/link'
 import styled from 'styled-components'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileUnverifiedCitizenshipProps {
-  profile: GetProfileByIdFragment
+  profile: ProfileFragment
 }
 
 export const ProfileUnverifiedCitizenship = ({

@@ -1,34 +1,33 @@
-import { useRouter } from 'next/router'
+import Error from 'next/error'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import {
-  ActivityItemFragment,
-  useGetProfileByIdQuery,
-} from '@/generated/graphql'
 import { ProfileContent } from './view-profile/ProfileContent'
+import { useAPIGet } from '@/utils/api/interface'
+import { ProfileResponse } from '@/utils/types/profile'
+import {
+  ActivityListResponse,
+  ActivityListFragment,
+} from '@/utils/types/activity'
 
-interface ProfileViewProps {
-  profileId?: string
-}
+export const ProfileView = ({ externId }: { externId: string }) => {
+  const { data: profileData, isLoading } = useAPIGet<ProfileResponse>(
+    externId ? ['PROFILE', { externId }] : null
+  )
 
-export const ProfileView = ({ profileId }: ProfileViewProps) => {
-  const router = useRouter()
-  const id = (profileId as string) ?? (router.query.id as string)
+  const profile = profileData?.profile
 
-  const { data, loading: loadingProfile } = useGetProfileByIdQuery({
-    variables: { id },
-  })
+  const { data: activityData } = useAPIGet<ActivityListResponse>(
+    profile ? 'ACTIVITY_LIST' : null,
+    { profileId: profile?.externId, pageSize: 2 }
+  )
 
-  const profile = data?.findProfileByID
   const activityItems =
-    data?.activitiesByProfile?.data.filter(
-      (a): a is ActivityItemFragment => !!a
-    ) ?? []
+    activityData?.activities.filter((a): a is ActivityListFragment => !!a) ?? []
 
-  if (loadingProfile) {
+  if (isLoading) {
     return null
   } else if (!profile) {
-    router.push('/logout')
-    return null
+    // todo: should we do useEffect() to redirect to /404? look at how this redirect is done elsewhere
+    return <Error statusCode={404} />
   }
 
   return (

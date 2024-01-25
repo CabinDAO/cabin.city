@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { useGetProfileByIdQuery } from '@/generated/graphql'
+import { ProfileResponse } from '@/utils/types/profile'
 import { padding } from '@/styles/theme'
 import { ProfileContact } from '@/components/core/ProfileContact'
+import { useAPIGet } from '@/utils/api/interface'
 
-export const HostCard = ({ profileId }: { profileId: string }) => {
-  const profileRes = useGetProfileByIdQuery({ variables: { id: profileId } })
-  const profile = profileRes.data?.findProfileByID
+export const HostCard = ({ externId }: { externId: string }) => {
+  const { data } = useAPIGet<ProfileResponse>(['PROFILE', { externId }])
+  const profile = data?.profile
 
   if (!profile) {
     return null

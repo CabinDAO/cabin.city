@@ -380,7 +380,7 @@ model Activity {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  faunaId   String?  @unique // TODO: remove this
+  externId  String   @unique
 
   key  String       @unique // TODO: there's a better way of doing this
   type ActivityType

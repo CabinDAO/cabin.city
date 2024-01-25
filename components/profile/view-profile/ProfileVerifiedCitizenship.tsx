@@ -5,7 +5,6 @@ import {
   Overline,
   Subline2,
 } from '@/components/core/Typography'
-import { GetProfileByIdFragment } from '@/generated/graphql'
 import Image from 'next/image'
 import styled from 'styled-components'
 import { shortenedAddress } from '@/utils/display-utils'
@@ -17,35 +16,36 @@ import { getUnlockOpenseaUrl } from '@/utils/opensea'
 import Icon from '@/components/core/Icon'
 import { useProfile } from '@/components/auth/useProfile'
 import { AppLink } from '@/components/core/AppLink'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileVerifiedCitizenshipProps {
-  profile: GetProfileByIdFragment
+  profile: ProfileFragment
 }
 
 export const ProfileVerifiedCitizenship = ({
   profile,
 }: ProfileVerifiedCitizenshipProps) => {
   const { user } = useProfile()
-  const isOwnProfile = user?._id === profile._id
+  const isOwnProfile = user?._id === profile.externId
   const [hovered, setHovered] = useState(false)
   const router = useRouter()
 
-  const vouchedBy = profile?.receivedVouches?.data[0]?.voucher
+  const vouchedBy = profile.voucher
 
   const handleVouchOnClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault()
     e.stopPropagation()
 
-    if (!vouchedBy?._id) {
+    if (!vouchedBy) {
       return
     }
 
-    router.push(`/profile/${vouchedBy?._id}`)
+    router.push(`/profile/${vouchedBy.externId}`)
   }
 
-  if (!profile.citizenshipMetadata || !profile.citizenshipMetadata.tokenId) {
+  if (!profile.citizenshipTokenId || !profile.citizenshipMintedAt) {
     return null
   }
 
@@ -64,13 +64,13 @@ export const ProfileVerifiedCitizenship = ({
         )}
       </TitleContainer>
       <NFTContainer
-        href={getUnlockOpenseaUrl(profile.citizenshipMetadata.tokenId)}
+        href={getUnlockOpenseaUrl(profile.citizenshipTokenId)}
         target="_blank"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
         <StyledImage
-          alt={profile.citizenshipMetadata?.tokenId}
+          alt={`${profile.citizenshipTokenId}`}
           src={DEFAULT_NFT_IMAGE}
           width={96}
           height={96}
@@ -82,7 +82,7 @@ export const ProfileVerifiedCitizenship = ({
               <H1 $color="yellow100">Cabin Citizen</H1>
             </TitleLine>
             <TitleLine>
-              <H1 $color="yellow100">#{profile.citizenshipMetadata.tokenId}</H1>
+              <H1 $color="yellow100">#{profile.citizenshipTokenId}</H1>
               <ExternalIcon
                 color="yellow100"
                 name="up-right-arrow"
@@ -93,13 +93,9 @@ export const ProfileVerifiedCitizenship = ({
           </NFTNameContainer>
           <Subline2 $color="yellow100">
             Minted{' '}
-            {format(
-              new Date(profile.citizenshipMetadata?.mintedAt),
-              'MM/dd/yyyy',
-              {
-                locale: enUS,
-              }
-            )}
+            {format(new Date(profile.citizenshipMintedAt), 'MM/dd/yyyy', {
+              locale: enUS,
+            })}
           </Subline2>
           <Subline2 $color="yellow100">
             Address {shortenedAddress(unlockConfig.contractAddress)}

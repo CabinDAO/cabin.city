@@ -29,7 +29,7 @@ const withProfile = (handler: ProfileApiHandler) => {
       })
 
       if (!profile) {
-        res.status(401).send({ message: 'Unauthorized' })
+        res.status(401).send({ message: 'Unauthorized: profile not found' })
         return
       }
 

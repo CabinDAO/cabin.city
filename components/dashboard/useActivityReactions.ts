@@ -1,40 +1,35 @@
-import {
-  ActivityItemFragment,
-  useLikeActivityMutation,
-  useUnlikeActivityMutation,
-} from '@/generated/graphql'
 import events from '@/lib/googleAnalytics/events'
-import { useCallback } from 'react'
+import {
+  ActivityReactResponse,
+  ActivityListFragment,
+} from '@/utils/types/activity'
+import { apiPost } from '@/utils/api/interface'
+import { getAccessToken } from '@privy-io/react-auth'
 
 export const useActivityReactions = () => {
-  const [likeActivity] = useLikeActivityMutation()
-  const [unlikeActivity] = useUnlikeActivityMutation()
+  const handleLikeActivity = async (activity: ActivityListFragment) => {
+    const token = await getAccessToken()
 
-  const handleLikeActivity = useCallback(
-    (activityItem: ActivityItemFragment) => {
-      events.reactToPostEvent(activityItem.activity._id, 'like')
+    events.reactToPostEvent(`${activity.externId}`, 'like')
 
-      likeActivity({
-        variables: {
-          id: activityItem.activity._id,
-        },
-      })
-    },
-    [likeActivity]
-  )
+    await apiPost<ActivityReactResponse>(
+      'ACTIVITY_REACT',
+      { externId: activity.externId, action: 'like' },
+      token
+    )
+  }
 
-  const handleUnlikeActivity = useCallback(
-    (activityItem: ActivityItemFragment) => {
-      events.reactToPostEvent(activityItem.activity._id, 'unlike')
+  const handleUnlikeActivity = async (activity: ActivityListFragment) => {
+    const token = await getAccessToken()
 
-      unlikeActivity({
-        variables: {
-          id: activityItem.activity._id,
-        },
-      })
-    },
-    [unlikeActivity]
-  )
+    events.reactToPostEvent(`${activity.externId}`, 'like')
+
+    await apiPost<ActivityReactResponse>(
+      'ACTIVITY_REACT',
+      { externId: activity.externId, action: 'unlike' },
+      token
+    )
+  }
 
   return {
     handleLikeActivity,

@@ -1,4 +1,3 @@
-import { GetProfileByIdFragment } from '@/generated/graphql'
 import styled from 'styled-components'
 import { H3, Overline } from '@/components/core/Typography'
 import { EmptyState } from '../../core/EmptyState'
@@ -7,13 +6,14 @@ import { Badge } from '@/components/core/Badge'
 import IconButton from '@/components/core/IconButton'
 import { PASSPORT_PAGE_SIZE } from '../constants'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfilePassportsProps {
-  profile: GetProfileByIdFragment
+  profile: ProfileFragment
 }
 
 export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
-  const list = profile.account.badges.data
+  const list = profile.wallet.badges
   const count = list.length
   const [currentPage, setCurrentPage] = useState(0)
   const start = PASSPORT_PAGE_SIZE * currentPage
@@ -39,8 +39,8 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
         <PassportsPage>
           {currentBadges.map((badge) => (
             <Badge
-              key={badge?.spec._id}
-              badgeId={badge?.badgeId ?? ''}
+              key={badge?.otterspaceBadgeId}
+              badgeId={badge?.otterspaceBadgeId ?? ''}
               name={badge?.spec.name ?? ''}
               src={badge?.spec.image ?? ''}
             />

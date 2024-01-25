@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import {
   LocationType,
+  MeFragment,
   OfferPrice,
   OfferType,
   ProfileRoleConstraint,
@@ -14,6 +15,9 @@ import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import React from 'react'
+import { OfferItem } from '@/utils/types/offer'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 
 export interface OfferListItemProps {
   className?: string
@@ -47,39 +51,47 @@ export interface OfferListItemProps {
 
 type OfferListItemVariant = 'default' | 'no-icon'
 
-export const OfferListItem = (props: OfferListItemProps) => {
+export const OfferListItem = (props: {
+  offer: OfferItem
+  me: MeFragment | null | undefined
+  className?: string
+  variant?: OfferListItemVariant
+  actionsEnabled?: boolean
+}) => {
   const router = useRouter()
-  const {
-    _id,
-    title,
-    startDate,
-    endDate,
-    imageUrl,
-    location,
-    className,
-    variant,
-    isLocked,
-    actionsEnabled,
-  } = props
+  const { offer, me, className, variant, actionsEnabled } = props
+
+  const imageUrl = getImageUrlByIpfsHash(
+    offer.imageIpfsHash ?? offer.location.bannerImageIpfsHash,
+    true
+  )
+  const isLocked = !me
+
   const dateRange =
-    startDate && endDate ? formatRange(startDate, endDate) : 'Flexible dates'
-  const formattedLocation = `${location.name ?? '-'} · ${
-    location.shortAddress ?? '-'
+    offer.startDate && offer.endDate
+      ? formatRange(new Date(offer.startDate), new Date(offer.endDate))
+      : 'Flexible dates'
+  const formattedLocation = `${offer.location.name ?? '-'} · ${
+    formatShortAddress(offer.location.address) ?? '-'
   }`
   const isDisplayingIcon = variant !== 'no-icon'
-  const inactive = endDate && endDate < new Date()
+  const inactive = offer.endDate && offer.endDate < new Date().toISOString()
 
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push(`/experience/${_id}/edit`)
+    router.push(`/experience/${offer.externId}/edit`)
   }
 
   return (
     <ListItem
       authenticated
-      href={actionsEnabled ? `/experience/${_id}/edit` : `/experience/${_id}`}
-      onClick={() => events.viewExperiencesEvent(_id)}
+      href={
+        actionsEnabled
+          ? `/experience/${offer.externId}/edit`
+          : `/experience/${offer.externId}`
+      }
+      onClick={() => events.viewExperiencesEvent(offer.externId)}
     >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>
@@ -88,7 +100,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
               {imageUrl ? (
                 <StyledImage
                   src={imageUrl}
-                  alt={title ?? 'Offer'}
+                  alt={offer.title ?? 'Offer'}
                   width={64}
                   height={64}
                 />
@@ -97,7 +109,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
                   <Icon name="offer" size={3.2} color="yellow500" />
                 </EmptyImageContainer>
               )}
-              <LocationTag {...props} />
             </ImageContainer>
           )}
 
@@ -105,7 +116,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
             <OfferDetails>
               <Caption emphasized>{dateRange ?? ''}</Caption>
               <TitleContainer>
-                <H4>{title}</H4>
+                <H4>{offer.title}</H4>
                 {isLocked && <Icon name="lock" size={1.2} />}
               </TitleContainer>
               <Caption>{formattedLocation}</Caption>
@@ -128,22 +139,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
         </RightContent>
       </InnerContainer>
     </ListItem>
-  )
-}
-
-const LocationTag = (props: OfferListItemProps) => {
-  const { locationType } = props
-  return (
-    <TagContainer>
-      <Icon
-        name={
-          locationType === LocationType.Neighborhood
-            ? 'neighborhood'
-            : 'outpost'
-        }
-        size={1.2}
-      />
-    </TagContainer>
   )
 }
 

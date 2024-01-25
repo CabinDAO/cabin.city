@@ -1,9 +1,6 @@
-import {
-  ProfileContactField,
-  ProfileContactFieldType,
-} from '@/generated/graphql'
 import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
+import { ContactFieldType, ProfileFragment } from '@/utils/types/profile'
 
 export const appDomain =
   process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
@@ -72,22 +69,23 @@ export const formatUrl = (url?: string | undefined | null) => {
     : `https://${url}`
 }
 
-const contactFieldTypeUrlMap: Partial<Record<ProfileContactFieldType, string>> =
-  {
-    [ProfileContactFieldType.Email]: 'mailto:',
-    [ProfileContactFieldType.Website]: '',
-    [ProfileContactFieldType.Twitter]: 'https://twitter.com/',
-    [ProfileContactFieldType.Telegram]: 'https://t.me/',
-    [ProfileContactFieldType.Instagram]: 'https://instagram.com/',
-    [ProfileContactFieldType.LinkedIn]: 'https://linkedin.com/in/',
-    [ProfileContactFieldType.Lens]: 'https://lenster.xyz/u/',
-    [ProfileContactFieldType.Farcaster]: 'https://warpcast.com/',
-  }
+const contactFieldTypeUrlMap: Partial<Record<ContactFieldType, string>> = {
+  [ContactFieldType.Email]: 'mailto:',
+  [ContactFieldType.Website]: '',
+  [ContactFieldType.Twitter]: 'https://twitter.com/',
+  [ContactFieldType.Telegram]: 'https://t.me/',
+  [ContactFieldType.Instagram]: 'https://instagram.com/',
+  [ContactFieldType.LinkedIn]: 'https://linkedin.com/in/',
+  [ContactFieldType.Lens]: 'https://lenster.xyz/u/',
+  [ContactFieldType.Farcaster]: 'https://warpcast.com/',
+}
 
-export const getUrlFromContactField = (field: ProfileContactField) => {
-  const keys = Object.keys(contactFieldTypeUrlMap) as ProfileContactFieldType[]
+export const getUrlFromContactField = (
+  field: ProfileFragment['contactFields'][0]
+) => {
+  const keys = Object.keys(contactFieldTypeUrlMap) as ContactFieldType[]
 
-  if (field.type === ProfileContactFieldType.Website) {
+  if (field.type === ContactFieldType.Website) {
     return formatUrl(field.value)
   }
 
@@ -106,14 +104,14 @@ export const getUrlFromContactField = (field: ProfileContactField) => {
 }
 
 export const formatContactField = (
-  field: ProfileContactField,
+  field: ProfileFragment['contactFields'][0],
   truncateValue = false
 ) => {
   const shortenedValue = truncateValue
     ? shortenedContactField(field.value)
     : field.value
 
-  if (ProfileContactFieldType.Lens) {
+  if (ContactFieldType.Lens) {
     const lensUrl = 'https://lenster.xyz/u/'
 
     if (field.value.startsWith(lensUrl)) {
@@ -123,14 +121,12 @@ export const formatContactField = (
     }
   }
 
-  if (
-    [ProfileContactFieldType.Email, ProfileContactFieldType.Website].includes(
-      field.type
-    )
-  ) {
+  if ([ContactFieldType.Email, ContactFieldType.Website].includes(field.type)) {
     return shortenedValue
   } else {
-    shortenedValue?.startsWith('@') ? shortenedValue : `@${shortenedValue}`
+    return shortenedValue?.startsWith('@')
+      ? shortenedValue
+      : `@${shortenedValue}`
   }
 }
 

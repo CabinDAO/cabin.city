@@ -464,7 +464,7 @@ async function importActivity(datum: Activity) {
     data: {
       createdAt: new Date(d.ts / 1000),
       updatedAt: new Date(d.ts / 1000),
-      faunaId: d.ref,
+      externId: d.ref,
       key: d.data.key,
       type:
         d.data.type == 'ProfileBadgeAdded'
@@ -531,7 +531,7 @@ async function importActivityReaction(datum: ActivityReaction) {
         },
         activity: {
           connect: {
-            faunaId: d.data.activity.id,
+            externId: d.data.activity.id,
           },
         },
       },

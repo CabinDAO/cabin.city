@@ -1,31 +1,30 @@
 import styled from 'styled-components'
-import { OfferListItemProps } from '../OfferListItem'
 import Image from 'next/image'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY, formatRange } from '@/utils/display-utils'
-import { offerInfoFromType } from '@/utils/offer'
 import Link from 'next/link'
+import { OfferItem, OfferNameByType } from '@/utils/types/offer'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 
 export const OfferPostItem = ({
-  imageUrl,
+  imageIpfsHash,
   title,
+  type,
   startDate,
   endDate,
-  offerType,
   location,
-  _id,
-}: OfferListItemProps) => {
-  const formattedDate = formatRange(startDate, endDate)
-
-  if (!offerType) return null
+  externId,
+}: OfferItem) => {
+  const formattedDate = formatRange(new Date(startDate), new Date(endDate))
 
   return (
-    <Container href={`/experience/${_id}`}>
+    <Container href={`/experience/${externId}`}>
       <ImageContainer>
-        {imageUrl ? (
+        {imageIpfsHash ? (
           <Image
             alt={title ?? 'Experience'}
-            src={imageUrl}
+            src={getImageUrlByIpfsHash(imageIpfsHash) ?? ''}
             width={96}
             height={96}
           />
@@ -35,9 +34,9 @@ export const OfferPostItem = ({
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
         <TruncatedCaption>
-          {`${offerInfoFromType(offerType).name} · ${location.name} · ${
-            location.shortAddress
-          }`}
+          {`${OfferNameByType[type]} · ${location.name} · ${formatShortAddress(
+            location.address
+          )}`}
         </TruncatedCaption>
       </Data>
     </Container>

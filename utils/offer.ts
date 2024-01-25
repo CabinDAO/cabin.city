@@ -11,6 +11,7 @@ import {
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { parseISO } from 'date-fns'
+import { OfferItem } from '@/utils/types/offer'
 
 export interface OfferInfo {
   name: string
@@ -31,11 +32,6 @@ const OfferInfoByType: Record<OfferType, OfferInfo> = {
 export const offerInfoFromType = (offerType: OfferType): OfferInfo => {
   return OfferInfoByType[offerType]
 }
-
-export const allOfferInfos = Object.values(OfferType).map((offerType) => ({
-  ...offerInfoFromType(offerType),
-  offerType,
-}))
 
 export const offerListItemPropsFromFragment = (
   fragment: OfferItemFragment,

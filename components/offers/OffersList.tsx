@@ -1,11 +1,10 @@
 import styled from 'styled-components'
-import { OfferItemFragment } from '@/generated/graphql'
 import { OfferListItem } from '@/components/core/OfferListItem'
-import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { useProfile } from '../auth/useProfile'
+import { OfferItem } from '@/utils/types/offer'
 
 export interface OffersListProps {
-  offers: OfferItemFragment[]
+  offers: OfferItem[]
   actionsEnabled?: boolean
 }
 
@@ -18,8 +17,9 @@ export const OffersList = ({
     <OffersListContainer>
       {offers.map((offer) => (
         <OfferListItem
-          key={offer._id}
-          {...offerListItemPropsFromFragment(offer, user)}
+          key={offer.externId}
+          offer={offer}
+          me={user}
           variant="no-icon"
           actionsEnabled={actionsEnabled}
         />

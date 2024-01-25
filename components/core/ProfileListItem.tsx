@@ -7,10 +7,10 @@ import { Avatar } from './Avatar'
 import { ProfileIcons } from './ProfileIcons'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
-import { ProfileFragment } from '@/utils/types/profile'
+import { ProfileListFragment } from '@/utils/types/profile'
 
 interface ProfileListItemProps {
-  profile: ProfileFragment
+  profile: ProfileListFragment
 }
 
 export const ProfileListItem = (props: ProfileListItemProps) => {

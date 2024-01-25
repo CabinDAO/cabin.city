@@ -141,7 +141,7 @@ export const OfferView = ({
             <SlateRenderer value={stringToSlateValue(description)} />
             <H4>Meet your hosts</H4>
             {_getHostIds(offer).map((hostId) => (
-              <HostCard key={hostId} profileId={hostId}></HostCard>
+              <HostCard key={hostId} externId={hostId}></HostCard>
             ))}
           </Left>
 

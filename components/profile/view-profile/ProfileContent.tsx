@@ -1,7 +1,3 @@
-import {
-  ActivityItemFragment,
-  GetProfileByIdFragment,
-} from '@/generated/graphql'
 import { useProfile } from '../../auth/useProfile'
 import { ProfileSetupSection } from './ProfileSetupSection'
 import { ProfileInnerContainer } from '../profile.styles'
@@ -11,10 +7,12 @@ import { ProfileRolesSection } from './ProfileRolesSection'
 import { ProfilePassportsSection } from './ProfilePassportsSection'
 import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
+import { ProfileFragment } from '@/utils/types/profile'
+import { ActivityListFragment } from '@/utils/types/activity'
 
 interface ProfileContentProps {
-  profile: GetProfileByIdFragment
-  activityItems: ActivityItemFragment[]
+  profile: ProfileFragment
+  activityItems: ActivityListFragment[]
 }
 
 export const ProfileContent = ({
@@ -24,12 +22,14 @@ export const ProfileContent = ({
   const { user: me } = useProfile()
   if (!me) return null
 
-  const isOwnProfile = me?._id === profile._id
+  const isOwnProfile = me?._id === profile.externId
 
   return (
     <ProfileInnerContainer>
       <ProfileHeaderSection profile={profile} isOwnProfile={isOwnProfile} />
-      {isOwnProfile && <ProfileSetupSection profileId={profile._id} me={me} />}
+      {isOwnProfile && (
+        <ProfileSetupSection profileId={profile.externId} me={me} />
+      )}
       <ProfileAboutSection profile={profile} />
       <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
       <ProfileRolesSection profile={profile} />

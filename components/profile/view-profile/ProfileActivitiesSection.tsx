@@ -3,11 +3,11 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { Post } from '@/components/core/post/Post'
 import { H3 } from '@/components/core/Typography'
 import { useActivityReactions } from '@/components/dashboard/useActivityReactions'
-import { ActivityItemFragment } from '@/generated/graphql'
 import styled from 'styled-components'
+import { ActivityListFragment } from '@/utils/types/activity'
 
 interface ProfileActivitiesSectionProps {
-  activityItems: ActivityItemFragment[]
+  activityItems: ActivityListFragment[]
 }
 
 export const ProfileActivitiesSection = ({
@@ -28,14 +28,14 @@ export const ProfileActivitiesSection = ({
       </SectionTitle>
       <StyledDivider />
       <InnerContainer>
-        {activityItems.map((activityItem) => (
+        {activityItems.map((a) => (
           <Post
             variant="compact"
-            key={activityItem.activity._id}
-            activityItem={activityItem}
+            key={a.externId}
+            activity={a}
             baseDate={baseDate}
-            onLike={() => handleLikeActivity(activityItem)}
-            onUnlike={() => handleUnlikeActivity(activityItem)}
+            onLike={() => handleLikeActivity(a)}
+            onUnlike={() => handleUnlikeActivity(a)}
           />
         ))}
       </InnerContainer>

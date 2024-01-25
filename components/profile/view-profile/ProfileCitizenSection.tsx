@@ -1,10 +1,10 @@
 import { ContentCard } from '@/components/core/ContentCard'
-import { CitizenshipStatus, GetProfileByIdFragment } from '@/generated/graphql'
 import { ProfileUnverifiedCitizenship } from './ProfileUnverifiedCitizenship'
 import { ProfileVerifiedCitizenship } from './ProfileVerifiedCitizenship'
+import { ProfileFragment, CitizenshipStatus } from '@/utils/types/profile'
 
 interface ProfileCitizenSectionProps {
-  profile: GetProfileByIdFragment
+  profile: ProfileFragment
   isOwnProfile: boolean
 }
 

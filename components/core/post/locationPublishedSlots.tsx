@@ -10,15 +10,10 @@ const LocationContent = (props: PostProps) => {
 }
 
 const LocationMedia = (props: PostProps) => {
-  const location = props.activityItem.activity.metadata?.location
+  const location = props.activity.metadata?.location
 
   if (location) {
-    return (
-      <LocationPostItem
-        {...locationCardPropsFromFragment(location)}
-        hideVerifiedTag
-      />
-    )
+    return <LocationPostItem {...location} hideVerifiedTag />
   } else {
     return null
   }

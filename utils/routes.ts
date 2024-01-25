@@ -10,9 +10,9 @@ export const Routes: { [key: string]: string } = {
   ACCOUNT_COUNT: `/account/count`,
 
   PROFILE_LIST: `/profile`,
-  PROFILE: `/profile/[id]`,
+  PROFILE: `/profile/[externId]`,
   PROFILE_NEW: `/profile/new`,
-  PROFILE_COUNT: `/profile/count`,
+  PROFILE_COUNT: `/profile/count`, // do we need the count routes?
   PROFILE_VOUCH: `/profile/vouch`,
   PROFILE_VOTES: `/profile/votes`,
   PROFILE_ME: `/me`,
@@ -30,7 +30,7 @@ export const Routes: { [key: string]: string } = {
 
   ACTIVITY_LIST: `/activity`,
   ACTIVITY_NEW: `/activity/new`,
-  ACTIVITY_LIKE: `/activity/[id]/like`,
+  ACTIVITY_REACT: `/activity/react`,
   ACTIVITY_SUMMARY: `/activity/summary`,
 
   CART_LIST: `/cart`,
@@ -79,10 +79,12 @@ POST /trackingEvent
 
 * */
 
-export const route = (name: RouteName, params: Params = {}): string => {
+export const expandRoute = (r: Route): string => {
+  const [name, params] = Array.isArray(r) ? r : [r, {}]
+
   let path = Routes[name]
 
-  const vars = path.match(/\[\w+\]/g)
+  const vars = Array.from(path.matchAll(/\[(\w+)\]/g), (x) => x[1])
 
   if (vars) {
     const missingVars = vars.filter((x) => !Object.keys(params).includes(x))
@@ -90,30 +92,36 @@ export const route = (name: RouteName, params: Params = {}): string => {
 
     if (missingVars.length > 0) {
       throw new Error(
-        `Missing parameter for route ${name}: ${missingVars.join(', ')}`
+        `expandRoute: Missing parameter for route ${name}: ${missingVars.join(
+          ', '
+        )}`
       )
     }
 
     if (extraVars.length > 0) {
       throw new Error(
-        `Extraneous parameter for route ${name}: ${extraVars.join(', ')}`
+        `expandRoute: Extraneous parameter for route ${name}: ${extraVars.join(
+          ', '
+        )}`
       )
     }
 
     for (const k in params) {
-      path = path.replace(k, params[k])
+      path = path.replace(`[${k}]`, params[k])
     }
   }
 
   if (path.includes('[')) {
     throw new Error(
-      `Somehow there's still a [ after replacing params for ${name}`
+      `expandRoute: Somehow there's still a [ after replacing params for ${name}`
     )
   }
 
   return `${prefix}${path}`
 }
 
-export type RouteName = (typeof Routes)[keyof typeof Routes]
+type RouteName = (typeof Routes)[keyof typeof Routes]
 
 type Params = { [key: string]: string }
+
+export type Route = RouteName | [RouteName, Params]

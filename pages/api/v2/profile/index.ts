@@ -13,7 +13,7 @@ import {
   ProfileListParams,
   ProfileListResponse,
   PAGE_SIZE,
-  ProfileFragment,
+  ProfileListFragment,
 } from '@/utils/types/profile'
 
 // must match the includes on profileQuery below
@@ -197,11 +197,10 @@ const sortOrder = (
 
 const profilesToFragments = (
   profiles: ProfileWithRelations[]
-): ProfileFragment[] => {
+): ProfileListFragment[] => {
   return profiles.map((profile) => {
     return {
-      createdAt: profile.createdAt,
-      updatedAt: profile.updatedAt,
+      createdAt: profile.createdAt.toISOString(),
       externId: profile.externId,
       externalUserId: profile.externalUserId,
       name: profile.name,
@@ -213,7 +212,9 @@ const profilesToFragments = (
       voucherId: profile.voucherId,
       citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
       citizenshipTokenId: profile.citizenshipTokenId,
-      citizenshipMintedAt: profile.citizenshipMintedAt,
+      citizenshipMintedAt: profile.citizenshipMintedAt
+        ? profile.citizenshipMintedAt?.toISOString()
+        : null,
       avatar: profile.Avatar
         ? {
             profileId: profile.Avatar.profileId,

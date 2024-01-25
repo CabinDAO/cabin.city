@@ -1,4 +1,3 @@
-import { ActivityItemFragment, ActivityType } from '@/generated/graphql'
 import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
 import Link from 'next/link'
@@ -14,10 +13,11 @@ import { useProfile } from '@/components/auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal'
 import { useTextActivity } from '@/components/dashboard/useTextActivity'
+import { ActivityListFragment, ActivityType } from '@/utils/types/activity'
 
 type PostVariant = 'full' | 'compact'
 export interface PostProps {
-  activityItem: ActivityItemFragment
+  activity: ActivityListFragment
   baseDate: Date
   onLike?: () => void
   onUnlike?: () => void
@@ -26,10 +26,12 @@ export interface PostProps {
 }
 
 export const Post = (props: PostProps) => {
-  const { activityItem, onLike, onUnlike, variant = 'full' } = props
-  const { profile, type } = activityItem.activity
+  const { activity, onLike, onUnlike, variant = 'full' } = props
+  const profile = activity.profile
 
-  const roleInfos = profile.roles.map((role) => roleInfoFromType(role.role))
+  console.log(profile)
+
+  const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
@@ -37,9 +39,9 @@ export const Post = (props: PostProps) => {
   const { showModal } = useModal()
   const { handleDeleteTextActivity } = useTextActivity()
   const [hasReactionByMe, setHasReactionByMe] = useState(
-    activityItem.hasReactionByMe
+    activity.hasReactionByMe
   )
-  const [likesCount, setLikesCount] = useState(activityItem.reactionCount)
+  const [likesCount, setLikesCount] = useState(activity.reactionCount)
 
   const handleLike = () => {
     if (onLike) {
@@ -58,13 +60,13 @@ export const Post = (props: PostProps) => {
   }
 
   const displayMoreMenu =
-    profile._id === user?._id && type === ActivityType.Text
+    profile.externId === user?._id && activity.type === ActivityType.Text
 
   const handleDeletePost = () => {
     showModal(() => (
       <DeleteConfirmationModal
         entityName="post"
-        onDelete={() => handleDeleteTextActivity(activityItem.activity._id)}
+        onDelete={() => handleDeleteTextActivity(activity.externId)}
       />
     ))
   }
@@ -78,8 +80,8 @@ export const Post = (props: PostProps) => {
       <ContentContainer>
         {variant === 'full' && (
           <ProfileContainer>
-            <LeftContainer href={`/profile/${profile._id}`} passHref>
-              <Avatar src={profile.avatar?.url} size={3.2} />
+            <LeftContainer href={`/profile/${profile.externId}`} passHref>
+              <Avatar src={profile.avatarUrl} size={3.2} />
               <ProfileName>{profile.name}</ProfileName>
               <ProfileIcons
                 citizenshipStatus={citizenshipStatus}
@@ -195,10 +197,7 @@ const ReactionsContainer = styled.div`
 
 const ActivityDate = (props: PostProps) => (
   <Caption>
-    {formatDistance(
-      parseISO(props.activityItem.activity.timestamp),
-      props.baseDate
-    )}
+    {formatDistance(parseISO(props.activity.createdAt), props.baseDate)}
     {' ago'}
   </Caption>
 )

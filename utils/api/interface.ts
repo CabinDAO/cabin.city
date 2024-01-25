@@ -1,5 +1,6 @@
-import { route, RouteName } from '@/utils/routes'
+import { expandRoute, Route } from '@/utils/routes'
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 // import {URL} from 'url'
 
 // TODO: use useSWRMutation for POST requests
@@ -15,44 +16,53 @@ type UrlParams =
   | URLSearchParams
 
 export const apiGet = async <Data = any>(
-  routeName: RouteName,
+  route: Route,
   params: UrlParams = {},
   token: string | null = null
 ): Promise<Data> => {
-  return _apiGet(route(routeName), params, token)
+  return _apiGet(expandRoute(route), params, token)
 }
 
 export const apiPost = async <Data = any>(
-  routeName: RouteName,
+  route: Route,
   params: object = {},
   token: string | null = null
 ): Promise<Data> => {
-  return _apiPost(route(routeName), params, token)
+  return _apiPost(expandRoute(route), params, token)
 }
 
 // passing null as first param allows for conditional fetching
 // https://swr.vercel.app/docs/conditional-fetching#conditional
 
 export const useAPIGet = <Data = any>(
-  routeName: RouteName | null,
+  route: Route | null,
   params: UrlParams = {},
   token: string | null = null
 ) => {
   const fetcher = <Data>(args: readonly [any, ...unknown[]]) =>
     _apiGet(args[0] as string, params, token)
+
   return useSWR<Data>(
-    routeName ? [route(routeName), params, token] : null,
+    route ? [expandRoute(route), params, token] : null,
     fetcher
   )
 }
 
 export const useAPIPost = <Data = any>(
-  routeName: RouteName | null,
+  route: Route | null,
   params: object = {},
   token: string | null = null
 ) => {
   const fetcher = (url: string) => _apiPost(url, params, token)
-  return useSWR<Data>(routeName ? route(routeName) : null, fetcher)
+  return useSWRMutation<Data>(route ? expandRoute(route) : null, fetcher)
+}
+
+export const useAPIMutate = <Data = any>(
+  route: Route | null,
+  token: string | null = null
+) => {
+  const fetcher = (url: string, params: object) => _apiPost(url, params, token)
+  return useSWRMutation<Data>(route ? expandRoute(route) : null, fetcher)
 }
 
 const _apiGet = async (

@@ -52,8 +52,6 @@ type Mutation {
     data: UpdateProfileInput
     roleTypes: [ProfileRoleType!]
   ): Profile! @resolver(name: "update_profile")
-  vouchProfile(id: ID!): Profile! @resolver(name: "vouch_profile")
-  unvouchProfile(id: ID!): Profile! @resolver(name: "unvouch_profile")
   likeActivity(id: ID!): ActivityReaction! @resolver(name: "like_activity")
   unlikeActivity(id: ID!): ActivityReaction! @resolver(name: "unlike_activity")
   createTextActivity(text: String!): Activity!
