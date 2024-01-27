@@ -1,5 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
+import { LocationItem } from '@/utils/types/location'
+
 export const PAGE_SIZE = 20
 
 // must match prisma's $Enums.RoleType
@@ -126,15 +128,13 @@ export type ProfileFragment = {
     address: string
     badges: BadgeFragment[]
   }
-  contactFields: {
-    type: ContactFieldType
-    value: string
-  }[]
-  roles: {
-    hatId: number | null
-    type: RoleType
-    level: RoleLevel
-  }[]
+  contactFields: ContactFragment[]
+  roles: RoleFragment[]
+}
+
+export type ContactFragment = {
+  type: ContactFieldType
+  value: string
 }
 
 export type RoleFragment = {
@@ -151,4 +151,50 @@ export type BadgeFragment = {
     description: string
     image: string
   }
+}
+
+// This is a globally used query to get the current user.
+// It should be kept as light as possible, limited to the top-level fields only.
+export type MeFragment = {
+  createdAt: string
+  externId: string
+  externalUserId: string
+  name: string
+  email: string
+  bio: string
+  location: string
+  citizenshipStatus: CitizenshipStatus
+  citizenshipTokenId: number
+  citizenshipMintedAt: string
+  cabinTokenBalanceInt: number
+  isAdmin: boolean
+  mailingListOptIn: boolean | null
+  avatarUrl: string
+  walletAddress: string
+
+  contactFields: ContactFragment[]
+  roles: RoleFragment[]
+  locationCount: number
+  // trackingEvents: {
+  //   _id
+  //   key
+  //   count
+  // }[]
+  // receivedVouches {
+  //   data {
+  //     voucher {
+  //       _id
+  //       name
+  //     }
+  //   }
+  // }
+  // givenVouches {
+  //   data {
+  //     vouchee {
+  //       _id
+  //       name
+  //     }
+  //   }
+  // }
+  // features
 }

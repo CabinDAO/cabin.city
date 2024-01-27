@@ -5,12 +5,15 @@ import styled from 'styled-components'
 import { TextPost } from './TextPost'
 import { useTextActivity } from './useTextActivity'
 import { useProfile } from '../auth/useProfile'
-import { useAPIGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 import { ActivitySummaryResponse } from '@/pages/api/v2/activity/summary'
 
 export const DashboardView = () => {
   const { user } = useProfile({ redirectTo: '/logout' })
-  const { data } = useAPIGet<ActivitySummaryResponse>('ACTIVITY_SUMMARY')
+
+  const { useGet } = useBackend()
+  const { data } = useGet<ActivitySummaryResponse>('ACTIVITY_SUMMARY')
+
   const { handleCreateTextActivity } = useTextActivity()
 
   const dashboardItems = [

@@ -2,10 +2,11 @@ import styled from 'styled-components'
 import { ProfileResponse } from '@/utils/types/profile'
 import { padding } from '@/styles/theme'
 import { ProfileContact } from '@/components/core/ProfileContact'
-import { useAPIGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const HostCard = ({ externId }: { externId: string }) => {
-  const { data } = useAPIGet<ProfileResponse>(['PROFILE', { externId }])
+  const { useGet } = useBackend()
+  const { data } = useGet<ProfileResponse>('PROFILE_GET', { externId })
   const profile = data?.profile
 
   if (!profile) {

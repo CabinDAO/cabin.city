@@ -21,7 +21,7 @@ import { FilterCount } from '../core/FilterCount'
 import { ListEmptyState } from '../core/ListEmptyState'
 import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
-import { useAPIGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileListParams,
   ProfileListResponse,
@@ -51,6 +51,7 @@ export const DirectoryView = () => {
 
   const { deviceSize } = useDeviceSize()
   const { user } = useProfile({ redirectTo: '/' })
+  const { useGet } = useBackend()
 
   const input = useMemo<ProfileListParams>(() => {
     // Only search if there are at least 2 characters
@@ -73,7 +74,7 @@ export const DirectoryView = () => {
     page,
   ])
 
-  const { data } = useAPIGet<ProfileListResponse>('PROFILE_LIST', input)
+  const { data } = useGet<ProfileListResponse>('PROFILE_LIST', input)
 
   useEffect(() => {
     if (data) {

@@ -9,13 +9,15 @@ import {
   ActivityListFragment,
   ActivityListResponse,
 } from '@/utils/types/activity'
-import { useAPIGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const ActivityList = () => {
   const [activities, setActivities] = useState<ActivityListFragment[]>([])
   const [page, setPage] = useState(1)
 
-  const { data } = useAPIGet<ActivityListResponse>('ACTIVITY_LIST', { page })
+  const { useGet } = useBackend()
+
+  const { data } = useGet<ActivityListResponse>('ACTIVITY_LIST', { page })
 
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 

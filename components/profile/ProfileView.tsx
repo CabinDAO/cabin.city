@@ -1,7 +1,7 @@
 import Error from 'next/error'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { ProfileContent } from './view-profile/ProfileContent'
-import { useAPIGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileResponse } from '@/utils/types/profile'
 import {
   ActivityListResponse,
@@ -9,13 +9,15 @@ import {
 } from '@/utils/types/activity'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
-  const { data: profileData, isLoading } = useAPIGet<ProfileResponse>(
-    externId ? ['PROFILE', { externId }] : null
+  const { useGet } = useBackend()
+  const { data: profileData, isLoading } = useGet<ProfileResponse>(
+    externId ? 'PROFILE_GET' : null,
+    { externId }
   )
 
   const profile = profileData?.profile
 
-  const { data: activityData } = useAPIGet<ActivityListResponse>(
+  const { data: activityData } = useGet<ActivityListResponse>(
     profile ? 'ACTIVITY_LIST' : null,
     { profileId: profile?.externId, pageSize: 2 }
   )

@@ -1,40 +1,46 @@
 const prefix = '/api/v2'
 
 export const Routes: { [key: string]: string } = {
-  HAT_LIST: `/hat`,
-  BADGE_LIST: `/badge`,
-  SYNC_ATTEMPT_LIST: `/syncAttempt`,
-  SYNC_ATTEMPT: `/syncAttempt/[key]`,
+  HAT_LIST: `/hat/list`,
+  BADGE_LIST: `/badge/list`,
+  SYNC_ATTEMPT_LIST: `/syncAttempt/list`,
+  SYNC_ATTEMPT_GET: `/syncAttempt/get`,
 
-  ACCOUNT_LIST: `/account`,
+  ACCOUNT_LIST: `/account/list`,
   ACCOUNT_COUNT: `/account/count`,
 
-  PROFILE_LIST: `/profile`,
-  PROFILE: `/profile/[externId]`,
+  PROFILE_LIST: `/profile/list`,
   PROFILE_NEW: `/profile/new`,
+  PROFILE_GET: `/profile/get`,
+  PROFILE_EDIT: `/profile/edit`,
   PROFILE_COUNT: `/profile/count`, // do we need the count routes?
   PROFILE_VOUCH: `/profile/vouch`,
   PROFILE_VOTES: `/profile/votes`,
-  PROFILE_ME: `/me`,
+  PROFILE_ME: `/profile/me`,
+  PROFILE_DID: `/profile/did`, // just for auth
 
-  LOCATION_LIST: `/location`,
-  LOCATION: `/location/[id]`,
+  LOCATION_LIST: `/location/list`,
   LOCATION_NEW: `/location/new`,
+  LOCATION_GET: `/location/get`,
+  LOCATION_EDIT: `/location/edit`,
+  LOCATION_DELETE: `/location/delete`,
   LOCATION_COUNT: `/location/count`,
   LOCATION_VOTE: `/location/vote`,
 
-  OFFER_LIST: `/offer`,
-  OFFER: `/offer/[id]`,
+  OFFER_LIST: `/offer/list`,
   OFFER_NEW: `/offer/new`,
+  OFFER_GET: `/offer/get`,
+  OFFER_EDIT: `/offer/edit`,
+  OFFER_DELETE: `/offer/delete`,
   OFFER_COUNT: `/offer/count`,
 
-  ACTIVITY_LIST: `/activity`,
+  ACTIVITY_LIST: `/activity/list`,
   ACTIVITY_NEW: `/activity/new`,
   ACTIVITY_REACT: `/activity/react`,
   ACTIVITY_SUMMARY: `/activity/summary`,
 
-  CART_LIST: `/cart`,
-  CART: `/cart/[id]`,
+  // CART_LIST: `/cart/list`,
+  // CART_GET: `/cart/get`,
 
   TRACKING_EVENT_NEW: `/track`,
 }
@@ -121,7 +127,8 @@ export const expandRoute = (r: Route): string => {
 }
 
 type RouteName = (typeof Routes)[keyof typeof Routes]
-
 type Params = { [key: string]: string }
-
-export type Route = RouteName | [RouteName, Params]
+// we used to allow params in the url, and we may again in the future
+// but for now we're passing everything as query/body params
+// export type Route = RouteName | [RouteName, Params]
+export type Route = RouteName

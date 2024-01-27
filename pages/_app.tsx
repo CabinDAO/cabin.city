@@ -17,6 +17,7 @@ import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
+import { BackendProvider } from '@/components/contexts/BackendContext'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleLogin } = useAuth()
@@ -46,18 +47,20 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
             <ErrorProvider>
-              <ApolloProvider client={apolloClient}>
-                <ModalProvider>
-                  <CitizenshipProvider>
-                    <NavigationProvider>
-                      <GoogleAnalytics />
-                      <Reload />
-                      <Component {...pageProps} />
-                      <Analytics />
-                    </NavigationProvider>
-                  </CitizenshipProvider>
-                </ModalProvider>
-              </ApolloProvider>
+              <BackendProvider>
+                <ApolloProvider client={apolloClient}>
+                  <ModalProvider>
+                    <CitizenshipProvider>
+                      <NavigationProvider>
+                        <GoogleAnalytics />
+                        <Reload />
+                        <Component {...pageProps} />
+                        <Analytics />
+                      </NavigationProvider>
+                    </CitizenshipProvider>
+                  </ModalProvider>
+                </ApolloProvider>
+              </BackendProvider>
             </ErrorProvider>
           </PrivyWagmiConnector>
         </PrivyProvider>

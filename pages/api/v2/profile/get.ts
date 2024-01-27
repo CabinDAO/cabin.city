@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import mustAuth from '@/utils/api/mustAuth'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
@@ -41,6 +42,11 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
     }
     contactFields: true
     roles: true
+    locations: {
+      select: {
+        _count: true
+      }
+    }
   }
 }>
 
@@ -53,7 +59,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const profile = await prisma.profile.findUnique({
       where: {
-        externId: req.query.id as string,
+        externId: req.query.externId as string,
       },
       include: {
         // must match ProfileWithRelations above
@@ -83,6 +89,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         contactFields: true,
         roles: true,
+        locations: {
+          select: {
+            _count: true,
+          },
+        },
       },
     })
 
@@ -155,7 +166,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
   }
 }
 
-export default handler
+export default mustAuth(handler)
 
 /*
 fragment GetProfileById on Profile {

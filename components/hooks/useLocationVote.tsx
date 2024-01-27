@@ -1,12 +1,13 @@
 import { LocationVoteModal } from '../core/LocationVoteModal'
 import { useModal } from './useModal'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { usePrivy } from '@privy-io/react-auth'
 import events from '@/lib/googleAnalytics/events'
 import { LocationVoteParams } from '@/pages/api/v2/location/vote'
-import { apiGet, apiPost, useAPIGet } from '@/utils/api/interface'
+import { apiGet, apiPost } from '@/utils/api/interface'
 import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
@@ -51,18 +52,8 @@ interface LocationVoteModalWithDataProps {
 }
 
 const LocationVodalModalWithData = (props: LocationVoteModalWithDataProps) => {
-  const [token, setToken] = useState('')
-  const { getAccessToken } = usePrivy()
-  const { data, isLoading } = useAPIGet<ProfileVotesResponse>(
-    token ? `PROFILE_VOTES` : null,
-    {},
-    token
-  )
-
-  if (!token) {
-    getAccessToken().then((token) => setToken(token ?? ''))
-    return null
-  }
+  const { useGet } = useBackend()
+  const { data, isLoading } = useGet<ProfileVotesResponse>(`PROFILE_VOTES`)
 
   const myVotes = data?.votes ?? []
   const votingPower = data?.votingPower ?? 0

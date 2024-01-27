@@ -10,7 +10,7 @@ import {
   ProfileFragment,
   ProfileVouchResponse,
 } from '@/utils/types/profile'
-import { useAPIPost } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 
 interface VouchModalProps {
   profile: ProfileFragment
@@ -18,14 +18,15 @@ interface VouchModalProps {
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
   const [vouched, setVouched] = useState(false)
-  const { trigger: triggerVouch } = useAPIPost<ProfileVouchResponse>(
+  const { usePost } = useBackend()
+  const { trigger: triggerVouch } = usePost<ProfileVouchResponse>(
     'PROFILE_VOUCH',
     {
       externId: profile.externId,
       action: 'vouch',
     }
   )
-  const { trigger: triggerUnvouch } = useAPIPost<ProfileVouchResponse>(
+  const { trigger: triggerUnvouch } = usePost<ProfileVouchResponse>(
     'PROFILE_VOUCH',
     {
       externId: profile.externId,

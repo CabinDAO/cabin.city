@@ -9,7 +9,7 @@ import useSWRMutation from 'swr/mutation'
 // TODO: use useSWRInfinite for pagination
 // https://swr.vercel.app/docs/pagination
 
-type UrlParams =
+export type UrlParams =
   | string[][]
   | Record<string, string | string[] | number | undefined>
   | string
