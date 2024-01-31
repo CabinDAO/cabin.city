@@ -22,7 +22,7 @@ export const ProfileContent = ({
   const { user: me } = useProfile()
   if (!me) return null
 
-  const isOwnProfile = me?._id === profile.externId
+  const isOwnProfile = me?.externId === profile.externId
 
   return (
     <ProfileInnerContainer>

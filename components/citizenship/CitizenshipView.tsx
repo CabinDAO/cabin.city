@@ -53,7 +53,7 @@ export const CitizenshipView = () => {
   const handleMint = async () => {
     if (!user) return
 
-    events.mintEvent(user._id ?? '')
+    events.mintEvent(user.externId ?? '')
 
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
@@ -71,14 +71,14 @@ export const CitizenshipView = () => {
 
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {
-      events.signalInterestEvent(user?._id ?? '')
+      events.signalInterestEvent(user?.externId ?? '')
 
       sendEmail({
         type: EmailType.VOUCH_REQUESTED,
         data: {
           name: user?.name,
           email: user?.email,
-          profileId: user?._id,
+          profileId: user?.externId,
         } as VouchRequstedPayload,
       })
 
@@ -99,7 +99,7 @@ export const CitizenshipView = () => {
           onMint={handleMint}
           onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
-          profileId={user?._id ?? ''}
+          profileId={user?.externId ?? ''}
           approvedDueToCabinBalance={
             (user?.cabinTokenBalanceInt ?? 0) >= MINIMUM_CABIN_BALANCE
           }

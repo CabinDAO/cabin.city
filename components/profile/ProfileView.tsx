@@ -2,7 +2,7 @@ import Error from 'next/error'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { ProfileContent } from './view-profile/ProfileContent'
 import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileResponse } from '@/utils/types/profile'
+import { ProfileGetResponse } from '@/utils/types/profile'
 import {
   ActivityListResponse,
   ActivityListFragment,
@@ -10,9 +10,8 @@ import {
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
-  const { data: profileData, isLoading } = useGet<ProfileResponse>(
-    externId ? 'PROFILE_GET' : null,
-    { externId }
+  const { data: profileData, isLoading } = useGet<ProfileGetResponse>(
+    externId ? ['PROFILE', { externId }] : null
   )
 
   const profile = profileData?.profile

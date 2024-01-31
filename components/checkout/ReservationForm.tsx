@@ -95,7 +95,7 @@ export const ReservationForm = ({
     try {
       await updateProfile({
         variables: {
-          id: user._id,
+          id: user.externId,
           data: updateProfileInput,
         },
       })

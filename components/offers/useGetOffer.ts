@@ -72,7 +72,7 @@ export const useGetOffer = (offerId: string) => {
 
   const isPublished = !!offer?.location.publishedAt
 
-  const isUserCaretaker = user?._id === offer?.location.caretaker._id
+  const isUserCaretaker = user?.externId === offer?.location.caretaker._id
 
   const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
 

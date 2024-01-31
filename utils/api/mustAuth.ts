@@ -8,14 +8,14 @@ import { isLocalDev } from '@/utils/dev'
 type AuthenticatedApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>,
-  opts: { auth: { externalUserId: string } }
+  opts: { auth: { privyDID: string } }
 ) => unknown | Promise<unknown>
 
 const mustAuth = (handler: AuthenticatedApiHandler) => {
   const h = async (
     req: NextApiRequest,
     res: NextApiResponse,
-    opts?: { auth: { externalUserId: string } }
+    opts?: { auth: { privyDID: string } }
   ) => {
     try {
       const spoofedUser = isLocalDev
@@ -25,14 +25,14 @@ const mustAuth = (handler: AuthenticatedApiHandler) => {
       // TODO: withAuth() actually requires authentication so this doesnt do much
       // TODO: split extracting auth info from making auth required? or allow spoofing some other way
 
-      const externalUserId = opts?.auth?.externalUserId ?? spoofedUser
+      const privyDID = opts?.auth?.privyDID ?? spoofedUser
 
-      if (!externalUserId) {
-        res.status(401).send({ message: 'Unauthorized' })
+      if (!privyDID) {
+        res.status(401).send({ error: 'Unauthorized' })
         return
       }
 
-      return handler(req, res, { ...opts, auth: { externalUserId } })
+      return handler(req, res, { ...opts, auth: { privyDID } })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
       res.statusCode = 400

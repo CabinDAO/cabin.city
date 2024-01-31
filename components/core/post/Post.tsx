@@ -29,8 +29,6 @@ export const Post = (props: PostProps) => {
   const { activity, onLike, onUnlike, variant = 'full' } = props
   const profile = activity.profile
 
-  console.log(profile)
-
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
   const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
@@ -60,7 +58,7 @@ export const Post = (props: PostProps) => {
   }
 
   const displayMoreMenu =
-    profile.externId === user?._id && activity.type === ActivityType.Text
+    profile.externId === user?.externId && activity.type === ActivityType.Text
 
   const handleDeletePost = () => {
     showModal(() => (

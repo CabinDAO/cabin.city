@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import {
   LocationType,
-  MeFragment,
   OfferPrice,
   OfferType,
   ProfileRoleConstraint,
 } from '@/generated/graphql'
+import { MeFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
 import Icon from './Icon'

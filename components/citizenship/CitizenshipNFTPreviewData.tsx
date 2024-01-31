@@ -10,7 +10,7 @@ export const CitizenshipNFTPreviewData = () => {
   const { user } = useProfile()
   const { priceInUsd } = usePriceInUsd()
 
-  const vouchedBy = user?.receivedVouches?.data[0]?.voucher
+  const vouchedBy = user?.voucher
 
   if (!user) return null
 
@@ -39,7 +39,7 @@ export const CitizenshipNFTPreviewData = () => {
             data={{
               'Vouched for by': {
                 value: vouchedBy.name || '',
-                url: `/profile/${vouchedBy._id}`,
+                url: `/profile/${vouchedBy.externId}`,
               },
             }}
           />

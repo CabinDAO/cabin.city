@@ -2,17 +2,15 @@ import { LocationVoteModal } from '../core/LocationVoteModal'
 import { useModal } from './useModal'
 import { useCallback } from 'react'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { usePrivy } from '@privy-io/react-auth'
 import events from '@/lib/googleAnalytics/events'
 import { LocationVoteParams } from '@/pages/api/v2/location/vote'
-import { apiGet, apiPost } from '@/utils/api/interface'
 import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 import { useBackend } from '@/components/hooks/useBackend'
 
 export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
-  const { getAccessToken } = usePrivy()
+  const { post } = useBackend()
 
   const voteForLocation = useCallback(
     (location: LocationVoteModalWithDataProps['location']) => {
@@ -22,11 +20,10 @@ export const useLocationVote = (afterVote?: () => void) => {
           <LocationVodalModalWithData
             location={location}
             onCastVotes={async (reqBody: LocationVoteParams) => {
-              const token = await getAccessToken()
-              return apiPost('LOCATION_VOTE', reqBody, token).then((res) => {
-                if (res.ok) {
+              return post('LOCATION_VOTE', reqBody).then((res) => {
+                if (res.votes) {
                   afterVote?.()
-                  return apiGet('LOCATION_VOTE', { locationId: location._id })
+                  // TODO: we used to refetch vote count here?
                 } else {
                   throw new Error('Error casting votes')
                 }
@@ -36,7 +33,7 @@ export const useLocationVote = (afterVote?: () => void) => {
         ))
       })
     },
-    [showModal, confirmLoggedIn, afterVote, getAccessToken]
+    [showModal, confirmLoggedIn, afterVote, post]
   )
 
   return { voteForLocation }

@@ -20,8 +20,8 @@ const INNER_PADDING = '1.2rem 1.6rem'
 export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
   const { user } = useProfile()
 
-  const { ens } = useEns(user?.account.address)
-  const displayCaption = ens ?? shortenedAddress(user?.account.address)
+  const { ens } = useEns(user?.walletAddress)
+  const displayCaption = ens ?? shortenedAddress(user?.walletAddress)
 
   if (!user) {
     return null
@@ -49,7 +49,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
     >
       <ProfileLink
         onClick={() => handleClick('profile')}
-        href={`/profile/${user._id}`}
+        href={`/profile/${user.externId}`}
       >
         <Avatar size={2.4} src={user.avatar?.url} />
         <Name>
@@ -73,9 +73,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
           <Icon name="draft-proposal" size={2} color="green400" />
           <MenuItemWithNote>
             <Subline1 $color="yellow100">My Locations</Subline1>
-            <Caption $color="yellow100">
-              ({user.locations?.data?.length ?? 0})
-            </Caption>
+            <Caption $color="yellow100">({user.locationCount})</Caption>
           </MenuItemWithNote>
         </ProfileMenuItem>
         {user.isAdmin && (

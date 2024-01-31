@@ -1,7 +1,5 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-import { LocationItem } from '@/utils/types/location'
-
 export const PAGE_SIZE = 20
 
 // must match prisma's $Enums.RoleType
@@ -52,7 +50,7 @@ export enum ContactFieldType {
 export type ProfileListFragment = {
   createdAt: string
   externId: string
-  externalUserId: string | null
+  privyDID: string
   name: string
   email: string
   bio: string
@@ -63,15 +61,7 @@ export type ProfileListFragment = {
   citizenshipStatus: CitizenshipStatus | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  avatar?: {
-    profileId: number
-    url: string
-    contractAddress: string | null
-    network: string | null
-    title: string | null
-    tokenId: string | null
-    tokenUri: string | null
-  }
+  avatar?: AvatarFragment
   roles: RoleFragment[]
   badgeCount: number
   cabinTokenBalanceInt: number
@@ -102,7 +92,16 @@ export type ProfileVouchResponse = {
   error?: string
 }
 
-export type ProfileResponse = {
+export type ProfileSetupStateParams = {
+  state: 'finished' | 'dismissed'
+}
+
+export type ProfileSetupStateResponse = {
+  success: boolean
+  error?: string
+}
+
+export type ProfileGetResponse = {
   profile: ProfileFragment | null
   error?: string
 }
@@ -110,7 +109,7 @@ export type ProfileResponse = {
 export type ProfileFragment = {
   createdAt: string
   externId: string
-  externalUserId: string | null
+  privyDID: string
   name: string
   email: string
   bio: string
@@ -119,7 +118,7 @@ export type ProfileFragment = {
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   cabinTokenBalanceInt: number
-  avatarUrl: string
+  avatar: AvatarFragment
   voucher: {
     externId: string
     name: string
@@ -153,48 +152,63 @@ export type BadgeFragment = {
   }
 }
 
+export type AvatarFragment = {
+  url: string
+  contractAddress?: string | null
+  network?: string | null
+  title?: string | null
+  tokenId?: string | null
+  tokenUri?: string | null
+}
+
+export type ProfileMeResponse = {
+  me: MeFragment | null
+  error?: string
+}
+
 // This is a globally used query to get the current user.
 // It should be kept as light as possible, limited to the top-level fields only.
 export type MeFragment = {
   createdAt: string
   externId: string
-  externalUserId: string
+  privyDID: string
   name: string
   email: string
   bio: string
   location: string
   citizenshipStatus: CitizenshipStatus
-  citizenshipTokenId: number
-  citizenshipMintedAt: string
+  citizenshipTokenId: number | null
+  citizenshipMintedAt: string | null
   cabinTokenBalanceInt: number
   isAdmin: boolean
+  isProfileSetupFinished: boolean
+  isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
-  avatarUrl: string
+  avatar: AvatarFragment
   walletAddress: string
+  voucher: {
+    externId: string
+    name: string
+  } | null
 
   contactFields: ContactFragment[]
   roles: RoleFragment[]
   locationCount: number
-  // trackingEvents: {
-  //   _id
-  //   key
-  //   count
-  // }[]
-  // receivedVouches {
-  //   data {
-  //     voucher {
-  //       _id
-  //       name
-  //     }
-  //   }
-  // }
-  // givenVouches {
-  //   data {
-  //     vouchee {
-  //       _id
-  //       name
-  //     }
-  //   }
-  // }
-  // features
+}
+
+export type ProfileEditParams = {
+  data: {
+    name?: string
+    email?: string
+    bio?: string
+    location?: string
+    contactFields?: ContactFragment[]
+    avatar?: AvatarFragment
+  }
+  roleTypes?: RoleType[]
+}
+
+export type ProfileEditResponse = {
+  success: boolean
+  error?: string
 }

@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { unlockConfig } from '@/lib/protocol-config'
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'

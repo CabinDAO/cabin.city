@@ -1,4 +1,4 @@
-import { ProfileRoleType } from '@/generated/graphql'
+import { RoleType } from '@/utils/types/profile'
 import { pxToRem } from '@/utils/display-utils'
 import { roleInfoFromType } from '@/utils/roles'
 import Image from 'next/image'
@@ -13,7 +13,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 
 interface RoleChipProps {
-  roleType: ProfileRoleType
+  roleType: RoleType
   selected?: boolean
   disabled?: boolean
   onSelect?: () => void

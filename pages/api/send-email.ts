@@ -18,7 +18,7 @@ async function handler(
   const externalUserId = opts?.auth?.externalUserId
 
   if (!externalUserId) {
-    res.status(401).send({ message: 'Unauthorized' })
+    res.status(401).send({ error: 'Unauthorized' })
     return
   }
 

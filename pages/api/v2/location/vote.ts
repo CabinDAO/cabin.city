@@ -19,7 +19,7 @@ async function handler(
   const params = req.body as LocationVoteParams
 
   if (!(req.method == 'GET' || req.method == 'POST')) {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
@@ -39,7 +39,7 @@ async function handler(
     })
 
     if (!location) {
-      res.status(404).send({ message: 'Location not found' })
+      res.status(404).send({ error: 'Location not found' })
       return
     }
 
@@ -50,13 +50,13 @@ async function handler(
   }
 
   if (!params.votes) {
-    res.status(400).send({ message: 'Votes not specified' })
+    res.status(400).send({ error: 'Votes not specified' })
     return
   }
 
   const totalVotes = Object.values(params.votes).reduce((a, b) => a + b, 0)
   if (profile.wallet.cabinTokenBalance.lessThan(totalVotes)) {
-    res.status(400).send({ message: 'Not enough tokens for this many votes' })
+    res.status(400).send({ error: 'Not enough tokens for this many votes' })
     return
   }
 
@@ -67,7 +67,7 @@ async function handler(
     })
 
     if (!location) {
-      res.status(404).send({ message: 'Location not found' })
+      res.status(404).send({ error: 'Location not found' })
       return
     }
 

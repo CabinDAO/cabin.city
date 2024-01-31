@@ -21,12 +21,12 @@ export const useTextActivity = () => {
           'GetActivities',
           {
             query: GetProfileByIdDocument,
-            variables: { id: user?._id },
+            variables: { id: user?.externId },
           },
         ],
       })
     },
-    [createTextActivity, user?._id]
+    [createTextActivity, user?.externId]
   )
 
   const handleDeleteTextActivity = useCallback(
@@ -39,12 +39,12 @@ export const useTextActivity = () => {
           'GetActivities',
           {
             query: GetProfileByIdDocument,
-            variables: { id: user?._id },
+            variables: { id: user?.externId },
           },
         ],
       })
     },
-    [deleteTextActivity, user?._id]
+    [deleteTextActivity, user?.externId]
   )
 
   return {

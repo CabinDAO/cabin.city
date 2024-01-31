@@ -44,8 +44,7 @@ const NeighborhoodsItemGroup = styled.div`
 export const Navbar = () => {
   const { user } = useProfile()
 
-  const profileId = user?._id
-  const avatarUrl = user?.avatar?.url
+  const externId = user?.externId
 
   const [profileMenuVisible, setProfileMenuVisible] = useState(false)
 
@@ -53,19 +52,19 @@ export const Navbar = () => {
     <>
       <Container>
         <SingleMenuItem>
-          <MenuItemLink menuItem={'home'} profileId={profileId} />
+          <MenuItemLink menuItem={'home'} profileId={externId} />
         </SingleMenuItem>
         <Divider />
         <NeighborhoodsItemGroup>
-          <MenuItemLink menuItem={'activity'} profileId={profileId} />
-          <MenuItemLink menuItem={'members'} profileId={profileId} />
-          <MenuItemLink menuItem={'neighborhoods'} profileId={profileId} />
+          <MenuItemLink menuItem={'activity'} profileId={externId} />
+          <MenuItemLink menuItem={'members'} profileId={externId} />
+          <MenuItemLink menuItem={'neighborhoods'} profileId={externId} />
         </NeighborhoodsItemGroup>
         <Divider />
         <SingleMenuItem>
-          {profileId && (
+          {externId && (
             <Avatar
-              src={avatarUrl}
+              src={user?.avatar?.url}
               size={3.2}
               onClick={() => setProfileMenuVisible(!profileMenuVisible)}
             />
@@ -73,7 +72,7 @@ export const Navbar = () => {
           <MenuItemLink
             authenticated
             menuItem={'signIn'}
-            profileId={profileId}
+            profileId={externId}
           />
         </SingleMenuItem>
       </Container>

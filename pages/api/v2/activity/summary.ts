@@ -10,7 +10,7 @@ export type ActivitySummaryResponse = {
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'GET') {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 

@@ -20,7 +20,7 @@ export const MobileFloatingMenu = () => {
 
   return (
     <ClickAway onClickAway={() => setOpen(false)}>
-      <MobileNavBar open={open} profileId={user?._id} />
+      <MobileNavBar open={open} profileId={user?.externId} />
       <MobileFloatingMenuButton open={open} onClick={toggleOpen} />
     </ClickAway>
   )

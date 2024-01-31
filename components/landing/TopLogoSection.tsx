@@ -9,8 +9,6 @@ import { useProfile } from '@/components/auth/useProfile'
 export const TopLogoSection = () => {
   const { user } = useProfile()
 
-  const profileId = user?._id
-
   return (
     <Background>
       <Content>
@@ -29,7 +27,7 @@ export const TopLogoSection = () => {
             height={24}
           />
         </Logo>
-        {!profileId && (
+        {!user && (
           <AuthenticatedLink href="/dashboard">
             <Button variant={'link'}>Log in &bull; Sign up</Button>
           </AuthenticatedLink>

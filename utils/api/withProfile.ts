@@ -18,18 +18,18 @@ const withProfile = (handler: ProfileApiHandler) => {
   const h = async (
     req: NextApiRequest,
     res: NextApiResponse,
-    opts: { auth: { externalUserId: string } }
+    opts: { auth: { privyDID: string } }
   ) => {
     try {
       const profile = await prisma.profile.findUnique({
-        where: { externalUserId: opts.auth.externalUserId },
+        where: { privyDID: opts.auth.privyDID },
         include: {
           wallet: true,
         },
       })
 
       if (!profile) {
-        res.status(401).send({ message: 'Unauthorized: profile not found' })
+        res.status(401).send({ error: 'Unauthorized: profile not found' })
         return
       }
 

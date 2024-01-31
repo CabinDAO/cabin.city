@@ -1,7 +1,7 @@
-import { MeFragment, UpdateProfileInput } from '@/generated/graphql'
+import { MeFragment, ProfileEditParams } from '@/utils/types/profile'
 
 export interface UpdateProfileProps {
-  editProfileInput: UpdateProfileInput | null
-  onChange: (input: UpdateProfileInput) => void
   user: MeFragment
+  profileEditParams: ProfileEditParams['data'] | null
+  onChange: (input: ProfileEditParams['data']) => void
 }

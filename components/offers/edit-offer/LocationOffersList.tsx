@@ -1,11 +1,12 @@
 import styled from 'styled-components'
-import { LocationFragment, OfferItemFragment } from '@/generated/graphql'
+import { LocationFragment } from '@/generated/graphql'
+import { OfferItem } from '@/utils/types/offer'
 import { ContentCard } from '@/components/core/ContentCard'
 import { OffersList } from '../OffersList'
 import { useProfile } from '@/components/auth/useProfile'
 
 export interface OffersListProps {
-  offers: OfferItemFragment[]
+  offers: OfferItem[]
   location: LocationFragment
 }
 
@@ -15,7 +16,7 @@ export const LocationOffersList = ({ offers, location }: OffersListProps) => {
     <StyledContentCard>
       <OffersList
         offers={offers}
-        actionsEnabled={user?._id === location.caretaker._id}
+        actionsEnabled={user?.externId === location.caretaker._id}
       />
     </StyledContentCard>
   )

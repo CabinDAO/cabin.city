@@ -65,7 +65,7 @@ const CheckoutPageView = () => {
   const { user } = useProfile()
 
   const { cartId } = router.query
-  const { cart } = useGetCartForUser(cartId as string, user?._id)
+  const { cart } = useGetCartForUser(cartId as string, user?.externId)
 
   const [currentStep, setCurrentStep] = useState(1)
 

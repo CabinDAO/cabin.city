@@ -12,7 +12,7 @@ class AuthenticationError extends Error {
 type AuthApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>,
-  opts?: { auth: { externalUserId: string } }
+  opts?: { auth: { privyDID: string } }
 ) => unknown | Promise<unknown>
 
 const withAuth = (handler: AuthApiHandler) => {
@@ -36,14 +36,14 @@ const withAuth = (handler: AuthApiHandler) => {
         audience: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
       })
 
-      const externalUserId = response.payload.sub
+      const privyDID = response.payload.sub
 
-      if (!externalUserId) {
+      if (!privyDID) {
         throw new AuthenticationError('No external user ID provided.')
       }
 
       // Resume Handler:
-      return handler(req, res, { ...opts, auth: { externalUserId } })
+      return handler(req, res, { ...opts, auth: { privyDID } })
     } catch (error) {
       console.error(error) // eslint-disable-line no-console
       if (error instanceof AuthenticationError) {

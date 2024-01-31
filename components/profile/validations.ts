@@ -1,4 +1,4 @@
-import { UpdateProfileInput } from '@/generated/graphql'
+import { ProfileEditParams } from '@/utils/types/profile'
 import {
   MAX_DISPLAY_NAME_LENGTH,
   MAX_BIO_LENGTH,
@@ -7,13 +7,13 @@ import {
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 
 export const validateProfileInput = (
-  editProfileInput: UpdateProfileInput,
+  editProfileInput: ProfileEditParams['data'],
   locationRequired = false
 ) => {
   const { name, email, bio, location } = editProfileInput
 
   const invalid =
-    (editProfileInput.hasOwnProperty('name') && !validName(name)) ||
+    (editProfileInput.hasOwnProperty('name') && !isValidName(name)) ||
     (editProfileInput.hasOwnProperty('bio') && !validBio(bio)) ||
     (editProfileInput.hasOwnProperty('location') &&
       !validLocation(location, locationRequired)) ||
@@ -24,12 +24,8 @@ export const validateProfileInput = (
 
 type ConditionalString = string | undefined | null
 
-export const validName = (name: ConditionalString, existingRecord = false) => {
-  return (
-    name !== '' &&
-    (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH &&
-    !existingRecord
-  )
+export const isValidName = (name: ConditionalString) => {
+  return name !== '' && (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH
 }
 
 export const validBio = (bio: ConditionalString) => {

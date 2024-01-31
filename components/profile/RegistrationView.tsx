@@ -3,7 +3,6 @@ import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
 import { useRouter } from 'next/router'
-import { CreateProfileBody } from '@/pages/api/auth/create-profile'
 import { ProfileAvatarInput } from '@/generated/graphql'
 import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
@@ -12,6 +11,8 @@ import { useExternalUser } from '../auth/useExternalUser'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '../auth/useProfile'
 import { useEffect } from 'react'
+import { ProfileNewParams } from '@/pages/api/v2/profile/new'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export interface RegistrationParams {
   email: string
@@ -21,10 +22,11 @@ export interface RegistrationParams {
 
 export const RegistrationView = () => {
   const router = useRouter()
+  const { post } = useBackend()
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
-  const { getAccessToken, linkEmail } = usePrivy()
+  const { linkEmail } = usePrivy()
   const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export const RegistrationView = () => {
     }
 
     try {
-      const createProfileBody: CreateProfileBody = {
+      const createProfileBody: ProfileNewParams = {
         address: externalUser.wallet?.address || '',
         name,
         email: externalUser.email?.address || email,
@@ -56,27 +58,19 @@ export const RegistrationView = () => {
         externalUserId: externalUser.id,
       }
 
-      const accessToken = await getAccessToken()
+      const resp = await post('PROFILE_NEW', createProfileBody)
 
-      const resp = await fetch('/api/auth/create-profile', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createProfileBody),
-      })
-      const json = await resp.json()
+      console.log(resp)
 
-      if (!resp.ok) {
+      if (!resp.externId) {
         showModal(() => (
           <ErrorModal
             title="Profile Submission Error"
-            description={json.error}
+            description={resp.error}
           />
         ))
-      } else if (json.profileId) {
-        refetchProfile()
+      } else {
+        await refetchProfile()
       }
     } catch (e) {
       console.error(e)

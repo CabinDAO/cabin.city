@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import mustAuth from '@/utils/api/mustAuth'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
-import withProfile from '@/utils/api/withProfile'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { resolveAddressOrName } from '@/lib/ens'
 
@@ -19,7 +19,7 @@ import {
 // must match the includes on profileQuery below
 type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
-    Avatar: true
+    avatar: true
     wallet: {
       include: {
         _count: {
@@ -35,7 +35,7 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'GET') {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
@@ -104,7 +104,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     },
     include: {
       // includes must match ProfileWithRelations type above
-      Avatar: true,
+      avatar: true,
       wallet: {
         include: {
           _count: {
@@ -202,7 +202,7 @@ const profilesToFragments = (
     return {
       createdAt: profile.createdAt.toISOString(),
       externId: profile.externId,
-      externalUserId: profile.externalUserId,
+      privyDID: profile.privyDID,
       name: profile.name,
       email: profile.email,
       bio: profile.bio,
@@ -215,15 +215,14 @@ const profilesToFragments = (
       citizenshipMintedAt: profile.citizenshipMintedAt
         ? profile.citizenshipMintedAt?.toISOString()
         : null,
-      avatar: profile.Avatar
+      avatar: profile.avatar
         ? {
-            profileId: profile.Avatar.profileId,
-            url: profile.Avatar.url,
-            contractAddress: profile.Avatar.contractAddress,
-            network: profile.Avatar.network,
-            title: profile.Avatar.title,
-            tokenId: profile.Avatar.tokenId,
-            tokenUri: profile.Avatar.tokenUri,
+            url: profile.avatar.url,
+            contractAddress: profile.avatar.contractAddress,
+            network: profile.avatar.network,
+            title: profile.avatar.title,
+            tokenId: profile.avatar.tokenId,
+            tokenUri: profile.avatar.tokenUri,
           }
         : undefined,
       roles: profile.roles.map((role) => ({
@@ -247,5 +246,4 @@ const toArray = <T = any>(param: string | string[] | undefined): T[] => {
   return param as T[]
 }
 
-// export default withProfile(handler)
-export default handler
+export default mustAuth(handler)

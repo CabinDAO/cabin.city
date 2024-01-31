@@ -23,7 +23,7 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
         citizenshipStatus: true
         citizenshipTokenId: true
         roles: true
-        Avatar: {
+        avatar: {
           select: {
             url: true
           }
@@ -105,7 +105,7 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'GET') {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
@@ -135,7 +135,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           citizenshipStatus: true,
           citizenshipTokenId: true,
           roles: true,
-          Avatar: {
+          avatar: {
             select: {
               url: true,
             },
@@ -368,7 +368,7 @@ const toFragments = (
           type: role.type as RoleType,
           level: role.level as RoleLevel,
         })),
-        avatarUrl: activity.profile.Avatar ? activity.profile.Avatar.url : '',
+        avatarUrl: activity.profile.avatar ? activity.profile.avatar.url : '',
       },
       reactionCount: 0, // activity.reactionCount
       hasReactionByMe: false, //activity.hasReactionByMe

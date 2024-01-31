@@ -5,10 +5,10 @@ import { ProgressBar } from '../../core/ProgressBar'
 import { ColorName } from '@/styles/theme'
 import Icon from '../../core/Icon'
 import { useRouter } from 'next/router'
-import { MeFragment, useLogTrackingEventMutation } from '@/generated/graphql'
-import { hasEventOccurred, TrackingEvent } from '@/lib/tracking-events'
 import { Button } from '@/components/core/Button'
 import events from '@/lib/googleAnalytics/events'
+import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
+import { useBackend } from '@/components/hooks/useBackend'
 
 interface ProfileSetupSectionProps {
   profileId: string
@@ -19,30 +19,21 @@ export const ProfileSetupSection = ({
   profileId,
   me,
 }: ProfileSetupSectionProps) => {
-  const complete = hasEventOccurred(me, TrackingEvent.profile_setup_finished)
+  const complete = me.isProfileSetupFinished
   const router = useRouter()
-  const [logTrackingEvent] = useLogTrackingEventMutation()
+  const { post } = useBackend()
   const progress = complete ? 100 : 25
 
-  if (!me) return null
-
-  const hasDismissed = hasEventOccurred(
-    me,
-    TrackingEvent.profile_setup_dismissed
-  )
-
-  if (hasDismissed) return null
+  if (!me || me.isProfileSetupDismissed) return null
 
   const handleSetupClick = () => {
     router.push(`/profile/${profileId}/setup`)
   }
 
   const handleDismissClick = () => {
-    logTrackingEvent({
-      variables: {
-        key: TrackingEvent.profile_setup_dismissed,
-      },
-    })
+    post('PROFILE_SETUP_STATE', {
+      state: 'dismissed',
+    } as ProfileSetupStateParams)
   }
 
   const handleTwitterShareClick = () => {

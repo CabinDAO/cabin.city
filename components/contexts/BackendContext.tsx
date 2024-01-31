@@ -1,10 +1,18 @@
 import { createContext, ReactNode, useEffect } from 'react'
+import { mutate } from 'swr'
 import { usePrivy } from '@privy-io/react-auth'
 import { API_TOKEN_LOCAL_STORAGE_KEY } from '@/lib/auth/constants'
 import { addSeconds, isAfter, parseISO } from 'date-fns'
 import { useLocalStorage } from 'react-use'
 import { Route } from '@/utils/routes'
-import { UrlParams, useAPIGet, useAPIPost } from '@/utils/api/interface'
+import {
+  apiGet,
+  apiPost,
+  UrlParams,
+  useAPIGet,
+  useAPIMutate,
+  useAPIPost,
+} from '@/utils/api/interface'
 
 export const BackendContext = createContext<BackendState | null>(null)
 
@@ -17,6 +25,18 @@ export interface BackendState {
     route: Route | null,
     params: object
   ) => ReturnType<typeof useAPIPost<Data>>
+  useMutate: <Data = any>(
+    route: Route | null
+  ) => ReturnType<typeof useAPIMutate<Data>>
+  get: <Data = any>(
+    route: Route,
+    params?: UrlParams
+  ) => ReturnType<typeof apiGet<Data>>
+  post: <Data = any>(
+    route: Route,
+    params: object
+  ) => ReturnType<typeof apiPost<Data>>
+  revalidate: (key: string) => Promise<any>
 }
 
 interface BackendProviderProps {
@@ -63,7 +83,6 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
   const getToken = () => {
     if (apiToken) {
       const data: AuthData = JSON.parse(apiToken)
-      console.log('auth data is', data)
       return data.jwt
 
       // TODO: detect expiration and renew token
@@ -92,9 +111,29 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
     return useAPIPost<Data>(route, params, getToken())
   }
 
+  const useMutate = <Data = any,>(route: Route | null) => {
+    return useAPIMutate<Data>(route, getToken())
+  }
+
+  const get = <Data = any,>(route: Route, params: UrlParams = {}) => {
+    return apiGet<Data>(route, params, getToken())
+  }
+
+  const post = <Data = any,>(route: Route, params: object = {}) => {
+    return apiPost<Data>(route, params, getToken())
+  }
+
+  const revalidate = (key: string): Promise<any> => {
+    return mutate(key)
+  }
+
   const state = {
     useGet,
     usePost,
+    useMutate,
+    get,
+    post,
+    revalidate,
   }
 
   return (

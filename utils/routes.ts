@@ -1,48 +1,48 @@
 const prefix = '/api/v2'
 
-export const Routes: { [key: string]: string } = {
-  HAT_LIST: `/hat/list`,
-  BADGE_LIST: `/badge/list`,
-  SYNC_ATTEMPT_LIST: `/syncAttempt/list`,
-  SYNC_ATTEMPT_GET: `/syncAttempt/get`,
+enum Routes {
+  HAT_LIST = `/hat/list`,
+  BADGE_LIST = `/badge/list`,
+  SYNC_ATTEMPT_LIST = `/syncAttempt/list`,
+  SYNC_ATTEMPT_GET = `/syncAttempt/get`,
 
-  ACCOUNT_LIST: `/account/list`,
-  ACCOUNT_COUNT: `/account/count`,
+  ACCOUNT_LIST = `/account/list`,
+  ACCOUNT_COUNT = `/account/count`,
 
-  PROFILE_LIST: `/profile/list`,
-  PROFILE_NEW: `/profile/new`,
-  PROFILE_GET: `/profile/get`,
-  PROFILE_EDIT: `/profile/edit`,
-  PROFILE_COUNT: `/profile/count`, // do we need the count routes?
-  PROFILE_VOUCH: `/profile/vouch`,
-  PROFILE_VOTES: `/profile/votes`,
-  PROFILE_ME: `/profile/me`,
-  PROFILE_DID: `/profile/did`, // just for auth
+  PROFILE_LIST = `/profile/list`,
+  PROFILE_NEW = `/profile/new`,
+  PROFILE = `/profile/[externId]`,
+  PROFILE_COUNT = `/profile/count`, // do we need the count routes?
+  PROFILE_VOUCH = `/profile/vouch`,
+  PROFILE_VOTES = `/profile/votes`,
+  PROFILE_ME = `/profile/me`,
+  PROFILE_DID = `/profile/did`, // just for auth
+  PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
 
-  LOCATION_LIST: `/location/list`,
-  LOCATION_NEW: `/location/new`,
-  LOCATION_GET: `/location/get`,
-  LOCATION_EDIT: `/location/edit`,
-  LOCATION_DELETE: `/location/delete`,
-  LOCATION_COUNT: `/location/count`,
-  LOCATION_VOTE: `/location/vote`,
+  LOCATION_LIST = `/location/list`,
+  LOCATION_NEW = `/location/new`,
+  LOCATION_GET = `/location/get`,
+  LOCATION_EDIT = `/location/edit`,
+  LOCATION_DELETE = `/location/delete`,
+  LOCATION_COUNT = `/location/count`,
+  LOCATION_VOTE = `/location/vote`,
 
-  OFFER_LIST: `/offer/list`,
-  OFFER_NEW: `/offer/new`,
-  OFFER_GET: `/offer/get`,
-  OFFER_EDIT: `/offer/edit`,
-  OFFER_DELETE: `/offer/delete`,
-  OFFER_COUNT: `/offer/count`,
+  OFFER_LIST = `/offer/list`,
+  OFFER_NEW = `/offer/new`,
+  OFFER_GET = `/offer/get`,
+  OFFER_EDIT = `/offer/edit`,
+  OFFER_DELETE = `/offer/delete`,
+  OFFER_COUNT = `/offer/count`,
 
-  ACTIVITY_LIST: `/activity/list`,
-  ACTIVITY_NEW: `/activity/new`,
-  ACTIVITY_REACT: `/activity/react`,
-  ACTIVITY_SUMMARY: `/activity/summary`,
+  ACTIVITY_LIST = `/activity/list`,
+  ACTIVITY_NEW = `/activity/new`,
+  ACTIVITY_REACT = `/activity/react`,
+  ACTIVITY_SUMMARY = `/activity/summary`,
 
   // CART_LIST: `/cart/list`,
   // CART_GET: `/cart/get`,
 
-  TRACKING_EVENT_NEW: `/track`,
+  TRACKING_EVENT_NEW = `/track`,
 }
 
 /*
@@ -88,7 +88,7 @@ POST /trackingEvent
 export const expandRoute = (r: Route): string => {
   const [name, params] = Array.isArray(r) ? r : [r, {}]
 
-  let path = Routes[name]
+  let path: string = Routes[name]
 
   const vars = Array.from(path.matchAll(/\[(\w+)\]/g), (x) => x[1])
 
@@ -126,9 +126,9 @@ export const expandRoute = (r: Route): string => {
   return `${prefix}${path}`
 }
 
-type RouteName = (typeof Routes)[keyof typeof Routes]
+type RouteName = keyof typeof Routes
 type Params = { [key: string]: string }
 // we used to allow params in the url, and we may again in the future
 // but for now we're passing everything as query/body params
-// export type Route = RouteName | [RouteName, Params]
-export type Route = RouteName
+// export type Route = RouteName
+export type Route = RouteName | [RouteName, Params]

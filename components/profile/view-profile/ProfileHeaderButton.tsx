@@ -5,7 +5,6 @@ import { Button } from '../../core/Button'
 import Icon from '../../core/Icon'
 import { VouchModal } from './VouchModal'
 import styled from 'styled-components'
-import { hasEventOccurred, TrackingEvent } from '@/lib/tracking-events'
 import { ProfileFragment, CitizenshipStatus } from '@/utils/types/profile'
 
 interface ProfileHeaderButtonProps {
@@ -23,8 +22,6 @@ export const ProfileHeaderButton = ({
 
   if (!user) return null
 
-  const complete = hasEventOccurred(user, TrackingEvent.profile_setup_finished)
-
   const handleProfileHeaderButtonClick = () => {
     if (isOwnProfile) {
       router.push(`/profile/${profile?.externId}/edit`)
@@ -32,7 +29,7 @@ export const ProfileHeaderButton = ({
       showModal(() => <VouchModal profile={profile} />)
     }
   }
-  if (isOwnProfile && complete) {
+  if (isOwnProfile && user.isProfileSetupFinished) {
     return (
       <StyledButton variant="tertiary" onClick={handleProfileHeaderButtonClick}>
         Edit Profile

@@ -20,7 +20,7 @@ async function handler(
   opts: { auth: { profile: ProfileWithWallet } }
 ) {
   if (req.method != 'GET') {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 

@@ -28,7 +28,7 @@ export const ProfileVerifiedCitizenship = ({
   profile,
 }: ProfileVerifiedCitizenshipProps) => {
   const { user } = useProfile()
-  const isOwnProfile = user?._id === profile.externId
+  const isOwnProfile = user?.externId === profile.externId
   const [hovered, setHovered] = useState(false)
   const router = useRouter()
 

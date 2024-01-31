@@ -13,14 +13,14 @@ async function handler(
   opts: { auth: { profile: ProfileWithWallet } }
 ) {
   if (req.method != 'POST') {
-    res.status(405).send({ message: 'Method not allowed' })
+    res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
   const params = req.body as ActivityReactParams
 
   if (!params.action) {
-    res.status(400).send({ message: 'Action required' })
+    res.status(400).send({ error: 'Action required' })
     return
   }
 

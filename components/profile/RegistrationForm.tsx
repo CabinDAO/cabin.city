@@ -1,20 +1,16 @@
-import {
-  ProfileAvatarInput,
-  useGetProfileByNameLazyQuery,
-} from '@/generated/graphql'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '../auth/useProfile'
+import { useExternalUser } from '../auth/useExternalUser'
 import styled from 'styled-components'
+import { DisplayNameInputContainer } from './styles'
+import { AvatarFragment } from '@/utils/types/profile'
 import { Button } from '../core/Button'
 import { InputText } from '../core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
-import { validName } from './validations'
-import { FieldAvailability } from '../core/FieldAvailability'
-import { DisplayNameInputContainer } from './styles'
-import { useExternalUser } from '../auth/useExternalUser'
-import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '../auth/useProfile'
+import { isValidName } from './validations'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
@@ -23,10 +19,7 @@ interface RegistrationFormProps {
 export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
   const [displayName, setDisplayName] = useState('')
   const [email, setEmail] = useState('')
-  const [avatar, setAvatar] = useState<ProfileAvatarInput | undefined>()
-  const [getProfileByName] = useGetProfileByNameLazyQuery()
-  const [isUniqueName, setIsUniqueName] = useState(true)
-  const [displayAvailability, setDisplayAvailability] = useState(false)
+  const [avatar, setAvatar] = useState<AvatarFragment | undefined>()
   const [displayUsernameError, setDisplayUsernameError] = useState(false)
   const { externalUser } = useExternalUser()
   const { linkEmail } = usePrivy()
@@ -38,7 +31,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
       externalUser?.email?.address &&
       externalUser.email.address !== email &&
       !submitted &&
-      validName(displayName, !isUniqueName) &&
+      isValidName(displayName) &&
       !user
     ) {
       onSubmit({
@@ -53,30 +46,17 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     if (externalUser?.email?.address) {
       setEmail(externalUser.email?.address)
     }
-  }, [
-    externalUser,
-    avatar,
-    displayName,
-    email,
-    onSubmit,
-    isUniqueName,
-    user,
-    submitted,
-  ])
+  }, [externalUser, avatar, displayName, email, onSubmit, user, submitted])
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setIsUniqueName(true)
     setDisplayUsernameError(false)
-    setDisplayAvailability(false)
     setDisplayName(e.target.value)
   }
 
   const handleSubmit = async () => {
     setDisplayUsernameError(true)
 
-    const unique = await handleUniqueNameValidation()
-
-    if (validName(displayName, !unique)) {
+    if (isValidName(displayName)) {
       if (externalUser?.email?.address) {
         onSubmit({
           email: email.trim(),
@@ -89,24 +69,6 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     }
   }
 
-  const handleUniqueNameValidation = async () => {
-    const name = await getProfileByName({
-      variables: { name: displayName.trim() },
-    })
-
-    setDisplayUsernameError(true)
-    setDisplayAvailability(true)
-
-    setIsUniqueName(!name.data?.profileByName?._id)
-    return !name.data?.profileByName?._id
-  }
-
-  const handleDisplayNameValidation = async () => {
-    if (!validName(displayName)) return
-
-    handleUniqueNameValidation()
-  }
-
   return (
     <Container>
       <AvatarSetup onNftSelected={setAvatar} avatar={avatar} />
@@ -114,20 +76,14 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
         <DisplayNameInputContainer>
           <InputText
             id="displayName"
-            error={
-              displayUsernameError && !validName(displayName, !isUniqueName)
-            }
+            error={displayUsernameError && !isValidName(displayName)}
             required
             disabled={!!user || submitted}
             label="Display Name"
             value={displayName}
-            onBlur={handleDisplayNameValidation}
             onChange={onDisplayNameChange}
             helperText={`${displayName.length}/${MAX_DISPLAY_NAME_LENGTH}`}
           />
-          {displayAvailability && (
-            <FieldAvailability available={isUniqueName} />
-          )}
         </DisplayNameInputContainer>
       </InputGroup>
       <Submission>

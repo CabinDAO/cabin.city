@@ -29,7 +29,7 @@ export const LocationPageView = () => {
   const hideFromOthersIfPreview =
     location &&
     !location.publishedAt &&
-    user?._id !== location?.caretaker._id &&
+    user?.externId !== location?.caretaker._id &&
     !user?.isAdmin
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const LocationPageView = () => {
 
   const previewMode =
     !location.publishedAt &&
-    (user?._id === location.caretaker._id || user?.isAdmin)
+    (user?.externId === location.caretaker._id || user?.isAdmin)
 
   const backRoute = `/location/${location._id}/edit`
 

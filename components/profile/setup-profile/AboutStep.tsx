@@ -10,7 +10,7 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const [bio, setBio] = useState(user?.bio ?? '')
   const [location, setLocation] = useState(user?.location ?? '')
-  const { updateProfile } = useUpdateProfile(user?._id)
+  const { updateProfile } = useUpdateProfile(user?.externId)
 
   const handleNext = async () => {
     if (!validBio(bio) || !validLocation(location)) {

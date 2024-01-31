@@ -62,8 +62,10 @@ async function postgresImport() {
     fileLoop: for (const datum of data) {
       switch (file) {
         case '_airbyte_raw_BlockSyncAttempt.jsonl':
-          await importBlockSyncAttempt(datum)
-          break
+          // await importBlockSyncAttempt(datum)
+          // break
+          console.log('these are useless. can import later')
+          break fileLoop
         case '_airbyte_raw_Account.jsonl':
           await importAccount(datum)
           break
@@ -111,6 +113,18 @@ async function postgresImport() {
 
     // console.log(data)
     console.log(`finished parsing ${fullPath}`)
+
+    if (process.env.NODE_ENV === 'development') {
+      await prisma.profile.update({
+        data: {
+          privyDID: 'did:privy:cllbg13gx00gvl308y233umlo',
+          externId: '373138526225564160',
+        },
+        where: {
+          externId: '372516445316186185',
+        },
+      })
+    }
   }
 }
 
@@ -187,7 +201,7 @@ async function importProfile(datum: Profile) {
       createdAt: new Date(d.ts / 1000),
       updatedAt: new Date(d.ts / 1000),
       externId: d.ref,
-      externalUserId: d.data.externalUserId,
+      privyDID: d.data.externalUserId,
       name: d.data.name,
       email: d.data.email,
       bio: d.data.bio ?? '',
@@ -203,7 +217,7 @@ async function importProfile(datum: Profile) {
           faunaId: d.data.account.id,
         },
       },
-      Avatar: d.data.avatar
+      avatar: d.data.avatar
         ? {
             create: {
               url: d.data.avatar.url,
@@ -548,27 +562,17 @@ async function importActivityReaction(datum: ActivityReaction) {
 async function importTrackingEvent(datum: TrackingEvent) {
   const d = datum._airbyte_data
 
-  try {
-    await prisma.trackingEvent.create({
-      data: {
-        createdAt: new Date(d.ts / 1000),
-        updatedAt: new Date(d.ts / 1000),
-        profile: {
-          connect: {
-            externId: d.data.profile.id,
-          },
-        },
-        key: d.data.key,
-        count: d.data.count,
-      },
-    })
-  } catch (e) {
-    if (e instanceof PrismaClientKnownRequestError) {
-      // skip this reaction
-    } else {
-      throw e
-    }
-  }
+  await prisma.profile.update({
+    where: {
+      externId: d.data.profile.id,
+    },
+    data: {
+      isProfileSetupFinished:
+        d.data.key == 'profile_setup_finished' ? true : undefined,
+      isProfileSetupDismissed:
+        d.data.key == 'profile_setup_dismissed' ? true : undefined,
+    },
+  })
 }
 
 type AirbyteRaw<T> = {

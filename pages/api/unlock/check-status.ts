@@ -4,7 +4,7 @@ import { ironOptions } from '@/lib/next-server/iron-options'
 import { PublicLock__factory } from '@/generated/contract'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getAlchemyProvider } from '@/lib/alchemy'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { setCitizenshipStatus } from '@/lib/fauna-server/setCitizenshipStatus'
 import withAuth from '@/utils/api/withAuth'
 

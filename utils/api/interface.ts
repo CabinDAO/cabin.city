@@ -3,9 +3,6 @@ import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 // import {URL} from 'url'
 
-// TODO: use useSWRMutation for POST requests
-// https://swr.vercel.app/docs/mutation#useswrmutation
-
 // TODO: use useSWRInfinite for pagination
 // https://swr.vercel.app/docs/pagination
 
@@ -61,8 +58,12 @@ export const useAPIMutate = <Data = any>(
   route: Route | null,
   token: string | null = null
 ) => {
-  const fetcher = (url: string, params: object) => _apiPost(url, params, token)
-  return useSWRMutation<Data>(route ? expandRoute(route) : null, fetcher)
+  const fetcher = async (url: string, options: { arg: object }) =>
+    _apiPost(url, options.arg, token)
+  return useSWRMutation<Data, Error, string | null, object>(
+    route ? expandRoute(route) : null,
+    fetcher
+  )
 }
 
 const _apiGet = async (

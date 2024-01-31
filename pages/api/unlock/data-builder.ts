@@ -1,5 +1,5 @@
 import { CabinToken__factory } from '@/generated/contract'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { getProfileByAddress } from '@/lib/fauna-server/getProfileByAddress'
 import { cabinTokenConfig, unlockConfig } from '@/lib/protocol-config'

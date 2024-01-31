@@ -34,7 +34,7 @@ export const Avatar = ({
       ) : (
         <Image
           alt="Avatar"
-          src={src ?? '/images/default-avatar.png'}
+          src={src || '/images/default-avatar.png'}
           width={size * 10}
           height={size * 10}
           style={{

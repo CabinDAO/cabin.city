@@ -102,25 +102,26 @@ model Profile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
+  privyDID  String   @unique
 
   wallet   Wallet @relation(fields: [walletId], references: [id])
   walletId Int    @unique
 
-  externalUserId String? @unique // this is the privy DID
-
-  name             String
-  email            String
-  bio              String
-  contactFields    ProfileContactField[]
-  location         String
-  isAdmin          Boolean               @default(false)
-  mailingListOptIn Boolean?
+  name                    String
+  email                   String
+  bio                     String
+  contactFields           ProfileContactField[]
+  location                String
+  isAdmin                 Boolean               @default(false)
+  mailingListOptIn        Boolean?
+  isProfileSetupFinished  Boolean               @default(false)
+  isProfileSetupDismissed Boolean               @default(false)
 
   voucherId Int?
   voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
   vouchees  Profile[] @relation("Vouches")
 
-  Avatar Avatar?
+  avatar Avatar?
 
   citizenshipStatus   CitizenshipStatus?
   citizenshipTokenId  Int?
@@ -129,7 +130,6 @@ model Profile {
   roles      Role[]
   locations  Location[] // TODO: rename to managedLocations??
   votes      LocationVote[] // used to be called locationVotes
-  events     TrackingEvent[]
   carts      Cart[]
   activities Activity[]
   reactions  ActivityReaction[]
@@ -142,7 +142,7 @@ enum CitizenshipStatus {
 }
 
 model Avatar {
-  Profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int     @unique
 
   url String
@@ -192,7 +192,7 @@ model Role {
   profileId Int
 
   // Null if the role is not associated with a hat (e.g. Apprentice role)
-  hat   Hat? @relation(fields: [hatId], references: [id])
+  hat   Hat? @relation(fields: [hatId], references: [id], onDelete: Cascade)
   hatId Int? @unique
 
   type  RoleType
@@ -431,18 +431,6 @@ enum ActivityType {
   LocationPublished
   OfferCreated
   VouchRequested
-}
-
-model TrackingEvent {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-
-  key   String
-  count Int
 }
 
 model BlockSyncAttempt {

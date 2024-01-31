@@ -14,9 +14,9 @@ import {
   LocationMediaCategory,
   LocationType,
   OfferType,
-  ProfileFragment,
   ProfileRoleConstraint,
 } from '@/generated/graphql'
+import { ProfileFragment } from '@/utils/types/profile'
 import { ProfileContact } from '@/components/core/ProfileContact'
 import { Tag } from '@/components/core/Tag'
 import Icon from '@/components/core/Icon'
@@ -153,7 +153,8 @@ export const LocationView = ({
   )
 
   const { user } = useProfile()
-  const isEditable = user?.isAdmin || user?._id === location.caretaker._id
+  const isEditable =
+    user?.isAdmin || user?.externId === location.caretaker.externId
 
   return (
     <LocationContent>
@@ -306,7 +307,9 @@ export const LocationView = ({
                 <ProfileContact
                   profile={caretaker}
                   caretakerEmail={caretakerEmail}
-                  onContact={() => events.contactCaretakerEvent(caretaker._id)}
+                  onContact={() =>
+                    events.contactCaretakerEvent(caretaker.externId)
+                  }
                 />
               </CaretakerDetails>
             </CaretakerDetailsContainer>

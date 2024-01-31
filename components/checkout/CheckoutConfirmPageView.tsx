@@ -32,7 +32,7 @@ const CheckoutConfirmPageView = () => {
   const { cartId } = router.query
   const { cart, startPolling, stopPolling } = useGetCartForUser(
     cartId as string,
-    user?._id
+    user?.externId
   )
 
   const [firstTime, setFirstTime] = useState(false)

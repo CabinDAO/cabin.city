@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useProfile } from '../auth/useProfile'

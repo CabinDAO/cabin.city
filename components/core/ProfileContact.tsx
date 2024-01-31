@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ProfileFragment } from '@/utils/types/profile'
+import { CitizenshipStatus, ProfileFragment } from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
@@ -28,7 +28,8 @@ export const ProfileContact = ({
   const { showModal } = useModal()
   const { user } = useProfile()
 
-  const isCitizen = user && user.citizenshipStatus === 'Verified'
+  const isCitizen =
+    user && user.citizenshipStatus === CitizenshipStatus.Verified
 
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.type)
@@ -41,7 +42,7 @@ export const ProfileContact = ({
       <Top flexDir={'row'}>
         {isCitizen ? (
           <Link href={`/profile/${profile.externId}`}>
-            <Avatar src={profile.avatarUrl} size={7.2} />
+            <Avatar src={profile.avatar?.url} size={7.2} />
           </Link>
         ) : (
           <div

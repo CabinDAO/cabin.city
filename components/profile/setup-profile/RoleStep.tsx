@@ -1,32 +1,39 @@
 import { SetupStepForm } from './SetupStepForm'
 import styled from 'styled-components'
 import { Subline1 } from '@/components/core/Typography'
-import { ProfileRole, ProfileRoleType } from '@/generated/graphql'
 import { RoleChip } from '@/components/core/RoleChip'
 import { useState } from 'react'
 import { useProfile } from '@/components/auth/useProfile'
-import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
 import { StepProps } from './step-configuration'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  ProfileEditResponse,
+  RoleFragment,
+  RoleType,
+} from '@/utils/types/profile'
 
 export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
-  const roles = Object.keys(ProfileRoleType) as ProfileRoleType[]
+  const roles = Object.keys(RoleType) as RoleType[]
 
   const allRoles = user?.roles ?? []
-  const currentRoles = [] as ProfileRole[]
-  const onChainRoles = [] as ProfileRole[]
+  const currentRoles = [] as RoleFragment[]
+  const onChainRoles = [] as RoleFragment[]
 
   allRoles.forEach((role) =>
     role.hatId ? onChainRoles.push(role) : currentRoles.push(role)
   )
 
-  const onChainRoleTypes = onChainRoles.map((cr) => cr.role)
+  const onChainRoleTypes = onChainRoles.map((cr) => cr.type)
 
-  const [selectedRoles, setSelectedRoles] = useState<ProfileRoleType[]>(
-    currentRoles.map((cr) => cr.role)
+  const [selectedRoles, setSelectedRoles] = useState<RoleType[]>(
+    currentRoles.map((cr) => cr.type)
   )
 
-  const { updateProfile } = useUpdateProfile(user?._id)
+  const { useMutate } = useBackend()
+  const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
+    user ? ['PROFILE', { externId: user.externId }] : null
+  )
 
   const handleNext = async () => {
     await updateProfile({
@@ -36,7 +43,7 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
     onNext()
   }
 
-  const handleSelectRole = (role: ProfileRoleType) => {
+  const handleSelectRole = (role: RoleType) => {
     if (selectedRoles.includes(role)) {
       setSelectedRoles(selectedRoles.filter((r) => r !== role))
     } else {
