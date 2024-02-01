@@ -3,7 +3,7 @@ import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 // import {URL} from 'url'
 
-// TODO: use useSWRInfinite for pagination
+// TODO: consider using useSWRInfinite for pagination
 // https://swr.vercel.app/docs/pagination
 
 export type UrlParams =
@@ -15,17 +15,17 @@ export type UrlParams =
 export const apiGet = async <Data = any>(
   route: Route,
   params: UrlParams = {},
-  token: string | null = null
+  tokenFn: () => Promise<string | null>
 ): Promise<Data> => {
-  return _apiGet(expandRoute(route), params, token)
+  return _apiGet(expandRoute(route), params, await tokenFn())
 }
 
 export const apiPost = async <Data = any>(
   route: Route,
   params: object = {},
-  token: string | null = null
+  tokenFn: () => Promise<string | null>
 ): Promise<Data> => {
-  return _apiPost(expandRoute(route), params, token)
+  return _apiPost(expandRoute(route), params, await tokenFn())
 }
 
 // passing null as first param allows for conditional fetching
@@ -34,32 +34,33 @@ export const apiPost = async <Data = any>(
 export const useAPIGet = <Data = any>(
   route: Route | null,
   params: UrlParams = {},
-  token: string | null = null
+  tokenFn: () => Promise<string | null>
 ) => {
-  const fetcher = <Data>(args: readonly [any, ...unknown[]]) =>
-    _apiGet(args[0] as string, params, token)
+  const fetcher = async <Data>(args: readonly [any, ...unknown[]]) =>
+    _apiGet(args[0] as string, params, await tokenFn())
 
-  return useSWR<Data>(
-    route ? [expandRoute(route), params, token] : null,
-    fetcher
-  )
+  return useSWR<Data>(route ? [expandRoute(route), params] : null, fetcher)
 }
+
+// I THINK THE DIFF BETWEEN useAPIPost and useAPIMutate is that useAPIMutate is for changing an
+// object thats loaded in memory while post is just for sending a post request
+// BUT PROLLY we can switch to useAPIMutate for everything. then the verbs are "fetch" and "mutate"
 
 export const useAPIPost = <Data = any>(
   route: Route | null,
   params: object = {},
-  token: string | null = null
+  tokenFn: () => Promise<string | null>
 ) => {
-  const fetcher = (url: string) => _apiPost(url, params, token)
+  const fetcher = async (url: string) => _apiPost(url, params, await tokenFn())
   return useSWRMutation<Data>(route ? expandRoute(route) : null, fetcher)
 }
 
 export const useAPIMutate = <Data = any>(
   route: Route | null,
-  token: string | null = null
+  tokenFn: () => Promise<string | null>
 ) => {
   const fetcher = async (url: string, options: { arg: object }) =>
-    _apiPost(url, options.arg, token)
+    _apiPost(url, options.arg, await tokenFn())
   return useSWRMutation<Data, Error, string | null, object>(
     route ? expandRoute(route) : null,
     fetcher

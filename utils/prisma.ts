@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client'
+import { isLocalDev } from '@/utils/dev'
 
 // const getExtendedClient = () => {
 //   return new PrismaClient({
@@ -35,16 +36,18 @@ import { Prisma, PrismaClient } from '@prisma/client'
 //
 // if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
+const options = isLocalDev ? { log: ['query' as Prisma.LogLevel] } : undefined
+
 let prisma: PrismaClient
 
 if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
+  prisma = new PrismaClient(options)
 } else {
   const globalWithPrisma = global as typeof globalThis & {
     prisma: PrismaClient
   }
   if (!globalWithPrisma.prisma) {
-    globalWithPrisma.prisma = new PrismaClient()
+    globalWithPrisma.prisma = new PrismaClient(options)
   }
   prisma = globalWithPrisma.prisma
 

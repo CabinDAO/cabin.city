@@ -12,7 +12,6 @@ enum Routes {
   PROFILE_LIST = `/profile/list`,
   PROFILE_NEW = `/profile/new`,
   PROFILE = `/profile/[externId]`,
-  PROFILE_COUNT = `/profile/count`, // do we need the count routes?
   PROFILE_VOUCH = `/profile/vouch`,
   PROFILE_VOTES = `/profile/votes`,
   PROFILE_ME = `/profile/me`,
@@ -24,7 +23,6 @@ enum Routes {
   LOCATION_GET = `/location/get`,
   LOCATION_EDIT = `/location/edit`,
   LOCATION_DELETE = `/location/delete`,
-  LOCATION_COUNT = `/location/count`,
   LOCATION_VOTE = `/location/vote`,
 
   OFFER_LIST = `/offer/list`,
@@ -32,7 +30,6 @@ enum Routes {
   OFFER_GET = `/offer/get`,
   OFFER_EDIT = `/offer/edit`,
   OFFER_DELETE = `/offer/delete`,
-  OFFER_COUNT = `/offer/count`,
 
   ACTIVITY_LIST = `/activity/list`,
   ACTIVITY_NEW = `/activity/new`,
@@ -41,8 +38,6 @@ enum Routes {
 
   // CART_LIST: `/cart/list`,
   // CART_GET: `/cart/get`,
-
-  TRACKING_EVENT_NEW = `/track`,
 }
 
 /*

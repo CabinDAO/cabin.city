@@ -1,15 +1,16 @@
 import { FAUNA_TOKEN_LOCAL_STORAGE_KEY } from '@/lib/auth/constants'
 import { User, usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/router'
-import { apiGet } from '@/utils/api/interface'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const useAuth = () => {
   const router = useRouter()
   const { logout } = usePrivy()
+  const { get } = useBackend()
 
   const handleLogin = async (user: User) => {
     const privyDID = user.id
-    const resp = await apiGet('PROFILE_DID', { did: privyDID })
+    const resp = await get('PROFILE_DID', { did: privyDID })
 
     const { externId } = await resp
 

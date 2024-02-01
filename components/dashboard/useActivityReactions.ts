@@ -3,32 +3,27 @@ import {
   ActivityReactResponse,
   ActivityListFragment,
 } from '@/utils/types/activity'
-import { apiPost } from '@/utils/api/interface'
-import { getAccessToken } from '@privy-io/react-auth'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const useActivityReactions = () => {
-  const handleLikeActivity = async (activity: ActivityListFragment) => {
-    const token = await getAccessToken()
+  const { post } = useBackend()
 
+  const handleLikeActivity = async (activity: ActivityListFragment) => {
     events.reactToPostEvent(`${activity.externId}`, 'like')
 
-    await apiPost<ActivityReactResponse>(
-      'ACTIVITY_REACT',
-      { externId: activity.externId, action: 'like' },
-      token
-    )
+    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+      externId: activity.externId,
+      action: 'like',
+    })
   }
 
   const handleUnlikeActivity = async (activity: ActivityListFragment) => {
-    const token = await getAccessToken()
-
     events.reactToPostEvent(`${activity.externId}`, 'like')
 
-    await apiPost<ActivityReactResponse>(
-      'ACTIVITY_REACT',
-      { externId: activity.externId, action: 'unlike' },
-      token
-    )
+    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+      externId: activity.externId,
+      action: 'unlike',
+    })
   }
 
   return {
