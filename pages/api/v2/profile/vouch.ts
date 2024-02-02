@@ -1,11 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
-import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
-
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import {
   CitizenshipStatus,
-  ProfileListResponse,
   ProfileVouchParams,
   ProfileVouchResponse,
 } from '@/utils/types/profile'
@@ -13,7 +10,7 @@ import {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { profile: ProfileWithWallet } }
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })
@@ -25,49 +22,32 @@ async function handler(
     return
   }
 
-  const profile = opts.auth.profile
+  const profile = await requireProfile(req, res, opts)
 
   const params: ProfileVouchParams = {
     externId: req.body.externId ? (req.body.externId as string) : '',
     action: req.body.action as ProfileVouchParams['action'],
   }
 
-  try {
-    const vouchedProfile = await prisma.profile.update({
-      data: {
-        voucherId: params.action === 'vouch' ? profile.id : null,
-      },
-      where: {
-        externId: params.externId,
-        voucherId: params.action === 'vouch' ? null : profile.id,
-      },
-      select: {
-        citizenshipStatus: true,
-        _count: true,
-      },
-    })
+  const vouchedProfile = await prisma.profile.update({
+    data: {
+      voucherId: params.action === 'vouch' ? profile.id : null,
+    },
+    where: {
+      externId: params.externId,
+      voucherId: params.action === 'vouch' ? null : profile.id,
+    },
+    select: {
+      citizenshipStatus: true,
+      _count: true,
+    },
+  })
 
-    console.log(vouchedProfile)
+  console.log(vouchedProfile)
 
-    res.status(200).send({
-      newStatus: vouchedProfile.citizenshipStatus as CitizenshipStatus,
-    } as ProfileVouchResponse)
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        profiles: [],
-        count: 0,
-        error: `PrismaClientValidationError: ${e.message}`,
-      } as ProfileListResponse)
-    } else {
-      res.status(200).send({
-        profiles: [],
-        count: 0,
-        error: e as string,
-      } as ProfileListResponse)
-    }
-  }
+  res.status(200).send({
+    newStatus: vouchedProfile.citizenshipStatus as CitizenshipStatus,
+  } as ProfileVouchResponse)
 }
 
-export default withProfile(handler)
+export default withAuth(handler)

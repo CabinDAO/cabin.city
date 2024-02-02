@@ -1,9 +1,7 @@
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { ironOptions } from '@/lib/next-server/iron-options'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import withAuth from '@/utils/api/withAuth'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailType } from '@/lib/mail/types'
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 export interface EmailParams {
   data: object
@@ -13,14 +11,9 @@ export interface EmailParams {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts?: { auth?: { externalUserId?: string } }
+  opts: { auth: AuthData }
 ) {
-  const externalUserId = opts?.auth?.externalUserId
-
-  if (!externalUserId) {
-    res.status(401).send({ error: 'Unauthorized' })
-    return
-  }
+  await requireProfile(req, res, opts)
 
   const body = req.body as EmailParams
   const sendgrid = new SendgridService()
@@ -40,4 +33,4 @@ async function handler(
   }
 }
 
-export default withIronSessionApiRoute(withAuth(handler), ironOptions)
+export default withAuth(handler)

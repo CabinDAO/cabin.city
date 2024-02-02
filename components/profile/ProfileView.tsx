@@ -22,7 +22,8 @@ export const ProfileView = ({ externId }: { externId: string }) => {
   )
 
   const activityItems =
-    activityData?.activities.filter((a): a is ActivityListFragment => !!a) ?? []
+    activityData?.activities?.filter((a): a is ActivityListFragment => !!a) ??
+    []
 
   if (isLoading) {
     return null

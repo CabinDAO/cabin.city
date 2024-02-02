@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
-import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
-
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import {
   ProfileSetupStateParams,
   ProfileSetupStateResponse,
@@ -10,12 +9,14 @@ import {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { profile: ProfileWithWallet } }
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })
     return
   }
+
+  const profile = await requireProfile(req, res, opts)
 
   if (!req.body.state) {
     res.status(400).send({ error: 'State var required' })
@@ -26,28 +27,19 @@ async function handler(
     state: req.body.state as ProfileSetupStateParams['state'],
   }
 
-  try {
-    await prisma.profile.update({
-      data: {
-        isProfileSetupFinished: params.state === 'finished' ? true : undefined,
-        isProfileSetupDismissed:
-          params.state === 'dismissed' ? true : undefined,
-      },
-      where: {
-        id: opts.auth.profile.id,
-      },
-    })
+  await prisma.profile.update({
+    data: {
+      isProfileSetupFinished: params.state === 'finished' ? true : undefined,
+      isProfileSetupDismissed: params.state === 'dismissed' ? true : undefined,
+    },
+    where: {
+      id: profile.id,
+    },
+  })
 
-    res.status(200).send({
-      success: true,
-    } as ProfileSetupStateResponse)
-  } catch (e) {
-    console.log(e)
-    res.status(200).send({
-      success: false,
-      error: e as string,
-    } as ProfileSetupStateResponse)
-  }
+  res.status(200).send({
+    success: true,
+  } as ProfileSetupStateResponse)
 }
 
-export default withProfile(handler)
+export default withAuth(handler)

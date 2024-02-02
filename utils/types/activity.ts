@@ -5,10 +5,8 @@ import {
   CitizenshipStatus,
   RoleFragment,
 } from '@/utils/types/profile'
-import { LocationItem } from '@/utils/types/location'
-import { OfferItem } from '@/utils/types/offer'
-
-export const PAGE_SIZE = 20
+import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
+import { OfferFragment } from '@/utils/types/offer'
 
 // must match prisma's $Enums.ActivityType
 export enum ActivityType {
@@ -31,8 +29,26 @@ export type ActivityListFragment = {
     citizenshipTokenId?: number
     badge?: BadgeFragment
     role?: RoleFragment
-    location?: LocationItem // todo: a lot of the data returned here is not used
-    offer?: OfferItem // todo: a lot of the data returned here is not used
+    location?: Pick<
+      LocationFragment,
+      | 'externId'
+      | 'name'
+      | 'tagline'
+      | 'bannerImageUrl'
+      | 'sleepCapacity'
+      | 'offerCount'
+      | 'voteCount'
+    > & { address: ShortAddressFragment }
+    offer?: Pick<
+      OfferFragment,
+      | 'externId'
+      | 'type'
+      | 'title'
+      | 'imageIpfsHash'
+      | 'startDate'
+      | 'endDate'
+      | 'location'
+    >
   }
 
   profile: {
@@ -54,8 +70,8 @@ export type ActivityListParams = {
 }
 
 export type ActivityListResponse = {
-  activities: ActivityListFragment[]
-  count: number
+  activities?: ActivityListFragment[]
+  count?: number
   error?: string
 }
 
@@ -65,6 +81,5 @@ export type ActivityReactParams = {
 }
 
 export type ActivityReactResponse = {
-  success: boolean
   error?: string
 }

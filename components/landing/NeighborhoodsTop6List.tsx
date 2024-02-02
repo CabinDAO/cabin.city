@@ -1,32 +1,34 @@
 import Link from 'next/link'
-import { useGetNeighborhoodsTop6Query } from '@/generated/graphql'
-
-import { locationCardPropsFromFragment } from '@/lib/location'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  LocationListParams,
+  LocationListResponse,
+  LocationType,
+} from '@/utils/types/location'
 import styled from 'styled-components'
 import { useLocationVote } from '../hooks/useLocationVote'
-import { isNotNull } from '@/lib/data'
 import { Button } from '@/components/core/Button'
 import { ListingCard } from '../core/ListingCard'
 import events from '@/lib/googleAnalytics/events'
 
 export const NeighborhoodsTop6List = () => {
+  const { useGet } = useBackend()
   const { voteForLocation } = useLocationVote()
-  const { data } = useGetNeighborhoodsTop6Query()
-  const locations = data?.locationsByLocationType
-    ? data.locationsByLocationType.data.filter(isNotNull)
-    : []
+  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
+    locationType: LocationType.Neighborhood,
+  } as LocationListParams)
+  const locations = data ? data.locations.slice(0, 6) : []
 
   return (
     <OuterContainer>
       <NeighborhoodsTop6ListContainer>
         {locations.map((location, index) => {
-          const locationCardProps = locationCardPropsFromFragment(location)
           return (
             <ListingCard
               variant="home"
-              key={location._id}
+              key={location.externId}
               position={index + 1}
-              {...locationCardProps}
+              location={location}
               onVote={() => voteForLocation(location)}
             />
           )

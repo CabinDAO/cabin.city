@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
 import { prisma } from '@/utils/prisma'
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 export type ProfileVotesResponse = {
   votingPower: number
   votes: {
     count: number
     location: {
-      _id: string
+      externId: string
       name: string
       publishedAt: string | null
     }
@@ -17,14 +17,14 @@ export type ProfileVotesResponse = {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { profile: ProfileWithWallet } }
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
-  const profile = opts.auth.profile
+  const profile = await requireProfile(req, res, opts)
 
   const votes = await prisma.locationVote.findMany({
     where: {
@@ -47,7 +47,7 @@ async function handler(
     voteResp.push({
       count: v.count,
       location: {
-        _id: v.location.externId,
+        externId: v.location.externId,
         name: v.location.name,
         publishedAt: v.location.publishedAt
           ? v.location.publishedAt.toISOString()
@@ -62,4 +62,4 @@ async function handler(
   } as ProfileVotesResponse)
 }
 
-export default withProfile(handler)
+export default withAuth(handler)

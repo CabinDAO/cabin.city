@@ -22,6 +22,7 @@ import { ListEmptyState } from '../core/ListEmptyState'
 import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
 import { useBackend } from '@/components/hooks/useBackend'
+import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   ProfileListParams,
   ProfileListResponse,
@@ -30,10 +31,9 @@ import {
   RoleType,
   RoleLevel,
   CitizenshipStatus,
-  PAGE_SIZE,
 } from '@/utils/types/profile'
 
-export const DirectoryView = () => {
+export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
   const [searchValue] = useDebounce(searchInput, 500)
   const [roleTypes, setRoleTypes] = useState<RoleType[]>([])
@@ -80,16 +80,16 @@ export const DirectoryView = () => {
     if (data) {
       if (page === 1) {
         // Reset profiles if first page
-        setProfiles(data.profiles)
+        setProfiles(data.profiles ?? [])
       } else {
         // Append profiles if not first page
-        setProfiles([...profiles, ...data.profiles])
+        setProfiles([...profiles, ...(data.profiles ?? [])])
       }
-      setTotalProfiles(data.count)
+      setTotalProfiles(data.count ?? 0)
     }
   }, [data])
 
-  const hasMore = data ? data.count > PAGE_SIZE * (page + 1) : false
+  const hasMore = data ? (data.count ?? 0) > PAGE_SIZE * (page + 1) : false
 
   const roleOptions = allRoles.map((role) => ({
     label: role.name,

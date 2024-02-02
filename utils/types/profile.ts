@@ -1,7 +1,5 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-export const PAGE_SIZE = 20
-
 // must match prisma's $Enums.RoleType
 export enum RoleType {
   Caretaker = 'Caretaker',
@@ -77,8 +75,8 @@ export type ProfileListParams = {
 }
 
 export type ProfileListResponse = {
-  profiles: ProfileListFragment[]
-  count: number
+  profiles?: ProfileListFragment[]
+  count?: number
   error?: string
 }
 
@@ -106,29 +104,32 @@ export type ProfileGetResponse = {
   error?: string
 }
 
-export type ProfileFragment = {
+export type ProfileBasicFragment = {
   createdAt: string
   externId: string
-  privyDID: string
   name: string
   email: string
   bio: string
-  location: string
   citizenshipStatus: CitizenshipStatus | null
+  cabinTokenBalanceInt: number
+  avatar?: AvatarFragment
+  roles: RoleFragment[]
+}
+
+export type ProfileFragment = ProfileBasicFragment & {
+  privyDID: string
+  location: string
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  cabinTokenBalanceInt: number
-  avatar: AvatarFragment
-  voucher: {
-    externId: string
-    name: string
-  } | null
   wallet: {
     address: string
     badges: BadgeFragment[]
   }
+  voucher: {
+    externId: string
+    name: string
+  } | null
   contactFields: ContactFragment[]
-  roles: RoleFragment[]
 }
 
 export type ContactFragment = {
@@ -161,8 +162,33 @@ export type AvatarFragment = {
   tokenUri?: string | null
 }
 
+export type CaretakerFragment = ProfileBasicFragment
+/*
+fragment Caretaker on Profile {
+  _id
+  email
+  name
+  avatar {
+    url
+  }
+  citizenshipStatus
+  cabinTokenBalanceInt
+  account {
+    address
+  }
+  createdAt
+  roles {
+    role
+    level
+  }
+  bio
+  badgeCount
+}
+
+   */
+
 export type ProfileMeResponse = {
-  me: MeFragment | null
+  me?: MeFragment | null
   error?: string
 }
 

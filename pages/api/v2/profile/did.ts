@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method != 'GET') {
@@ -9,28 +9,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return
   }
 
-  try {
-    const profile = await prisma.profile.findUnique({
-      where: {
-        privyDID: req.query.did as string,
-      },
-    })
+  const profile = await prisma.profile.findUnique({
+    where: {
+      privyDID: req.query.did as string,
+    },
+  })
 
-    res.status(profile ? 200 : 404).send({ externId: profile?.externId })
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        profile: null,
-        error: `PrismaClientValidationError: ${e.message}`,
-      })
-    } else {
-      res.status(200).send({
-        profile: null,
-        error: e as string,
-      })
-    }
-  }
+  res.status(profile ? 200 : 404).send({ externId: profile?.externId })
 }
 
-export default handler
+export default withAuth(handler)

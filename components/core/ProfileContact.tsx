@@ -1,5 +1,9 @@
 import Link from 'next/link'
-import { CitizenshipStatus, ProfileFragment } from '@/utils/types/profile'
+import {
+  CitizenshipStatus,
+  ProfileBasicFragment,
+  ProfileFragment,
+} from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
@@ -15,7 +19,7 @@ import { CaretakerContactModal } from '@/components/core/CaretakerContactModal'
 import { useModal } from '@/components/hooks/useModal'
 
 interface ProfileContactProps {
-  profile: ProfileFragment
+  profile: ProfileBasicFragment
   caretakerEmail?: string | null | undefined
   onContact?: () => void
 }

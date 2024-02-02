@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import mustAuth from '@/utils/api/mustAuth'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
-
 import {
   RoleLevel,
   RoleType,
@@ -52,8 +50,8 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
-  opts: { auth: { privyDID: string } }
+  res: NextApiResponse<ProfileMeResponse>,
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -61,64 +59,51 @@ async function handler(
     return
   }
 
-  try {
-    const profile = await prisma.profile.findUnique({
-      where: {
-        privyDID: opts.auth.privyDID,
+  const privyDID = requireAuth(req, res, opts)
+
+  const profile = await prisma.profile.findUnique({
+    where: {
+      privyDID: privyDID,
+    },
+    include: {
+      // must match MyProfileWithRelations above
+      _count: {
+        select: {
+          locations: true,
+        },
       },
-      include: {
-        // must match MyProfileWithRelations above
-        _count: {
-          select: {
-            locations: true,
-          },
+      voucher: {
+        select: {
+          externId: true,
+          name: true,
         },
-        voucher: {
-          select: {
-            externId: true,
-            name: true,
-          },
+      },
+      avatar: {
+        select: {
+          url: true,
         },
-        avatar: {
-          select: {
-            url: true,
-          },
-        },
-        wallet: {
-          select: {
-            address: true,
-            cabinTokenBalance: true,
-            badges: {
-              select: {
-                id: true,
-                otterspaceBadgeId: true,
-                spec: true,
-              },
+      },
+      wallet: {
+        select: {
+          address: true,
+          cabinTokenBalance: true,
+          badges: {
+            select: {
+              id: true,
+              otterspaceBadgeId: true,
+              spec: true,
             },
           },
         },
-        contactFields: true,
-        roles: true,
       },
-    })
+      contactFields: true,
+      roles: true,
+    },
+  })
 
-    res.status(profile ? 200 : 404).send({
-      me: profile ? profileToFragment(profile as MyProfileWithRelations) : null,
-    } as ProfileMeResponse)
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        me: null,
-        error: `PrismaClientValidationError: ${e.message}`,
-      } as ProfileMeResponse)
-    } else {
-      res.status(200).send({
-        me: null,
-        error: e as string,
-      } as ProfileMeResponse)
-    }
-  }
+  res.status(profile ? 200 : 404).send({
+    me: profile ? profileToFragment(profile as MyProfileWithRelations) : null,
+  })
 }
 
 const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
@@ -166,4 +151,4 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
   }
 }
 
-export default mustAuth(handler)
+export default withAuth(handler)

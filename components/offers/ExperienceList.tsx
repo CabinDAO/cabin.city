@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { OfferItemFragment } from '@/generated/graphql'
+import { OfferFragment } from '@/utils/types/offer'
 import { Button } from '@/components/core/Button'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
@@ -13,7 +13,7 @@ import { body2Styles } from '@/components/core/Typography'
 import Link from 'next/link'
 
 export interface ExperienceListProps {
-  offers: OfferItemFragment[]
+  offers: OfferFragment[]
   actionButtonText: string
 }
 
@@ -24,7 +24,7 @@ export const ExperienceList = ({
   return (
     <>
       {offers.map((offer) => (
-        <Item key={offer._id}>
+        <Item key={offer.externId}>
           <StyledImage
             src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
             alt={offer.title ?? ''}
@@ -36,9 +36,9 @@ export const ExperienceList = ({
             <OfferNameAndDates
               offer={{
                 title: offer.title ?? null,
-                startDate: offer.startDate ?? null,
-                endDate: offer.endDate ?? null,
-                offerType: offer.offerType ?? null,
+                startDate: offer.startDate ? new Date(offer.startDate) : null,
+                endDate: offer.endDate ? new Date(offer.endDate) : null,
+                offerType: offer.type ?? null,
                 price: offer.price ?? null,
                 location: {
                   shortAddress: formatShortAddress(
@@ -68,7 +68,7 @@ export const ExperienceList = ({
             </Expandable>
           </Details>
           <Buttons>
-            <Link href={`/experience/${offer._id}`}>
+            <Link href={`/experience/${offer.externId}`}>
               <Button isFullWidth>{actionButtonText}</Button>
             </Link>
           </Buttons>

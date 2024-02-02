@@ -1,7 +1,8 @@
 // import { randomUUID } from 'crypto'
 
 enum Prefixes {
-  profile = 'p',
+  profile = 'pr',
+  location = 'lc',
 }
 
 type PrefixType = keyof typeof Prefixes

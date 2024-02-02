@@ -61,104 +61,106 @@ type Step = ({ onComplete }: StepProps) => JSX.Element | null
 const steps: Step[] = [StepDetails, StepPolicies, StepPayment]
 
 const CheckoutPageView = () => {
-  const router = useRouter()
-  const { user } = useProfile()
+  throw new Error('Not implemented')
 
-  const { cartId } = router.query
-  const { cart } = useGetCartForUser(cartId as string, user?.externId)
-
-  const [currentStep, setCurrentStep] = useState(1)
-
-  if (!user || !cart) {
-    return null
-  }
-
-  if (router.query.step) {
-    // step cant be less than 1
-    const stepInQuery = Math.min(
-      Math.max(parseInt(router.query.step as string), 1),
-      steps.length
-    )
-    if (stepInQuery != currentStep) {
-      setCurrentStep(stepInQuery)
-    }
-  }
-
-  if (cart.paymentStatus == PaymentStatus.Paid) {
-    router.push(`/checkout/${cart._id}/confirmation`).then()
-    return null
-  }
-
-  const lodgingType = cart.lodgingType
-
-  if (lodgingType.spotsTaken >= lodgingType.quantity) {
-    return <H4>Sold Out</H4>
-  }
-
-  const advanceStep = () => {
-    const isLastStep = currentStep >= steps.length
-
-    if (isLastStep) {
-      // on the last step, the stripe form redirects them to the confirm page
-      // router.push(`/trip/${offer._id}`)
-    } else {
-      setCurrentStep(currentStep + 1)
-      router.query.step = `${currentStep + 1}`
-      router.push({ query: router.query }).then()
-    }
-  }
-
-  const handleBackClick = () => {
-    if (currentStep == 1) {
-      router.push(`/experience/${cart.offer._id}`).then()
-    } else {
-      setCurrentStep(currentStep - 1)
-      router.query.step = `${currentStep - 1}`
-      router.push({ query: router.query }).then()
-    }
-  }
-
-  const CurrentComponent = steps[currentStep - 1]
-
-  return (
-    <TwoColumnLayout
-      title={'Reservation'}
-      icon="back-arrow"
-      onIconClick={handleBackClick}
-      subheader={`Step ${currentStep} of ${steps.length}`}
-      withFooter
-    >
-      <LeftSide shape="notch" notchSize={1.6}>
-        <CurrentComponent cart={cart} onComplete={advanceStep} />
-      </LeftSide>
-      <RightSide shape="notch" notchPosition={'top-right'} notchSize={1.6}>
-        <OfferNameAndDates
-          small
-          offer={{
-            title: cart.offer.title ?? null,
-            startDate: cart.offer.startDate ?? null,
-            endDate: cart.offer.endDate ?? null,
-            offerType: cart.offer.offerType ?? null,
-            price: cart.offer.price ?? null,
-            imageIpfsHash: cart.offer.imageIpfsHash ?? null,
-            location: {
-              shortAddress: formatShortAddress(
-                cart.offer.location.address ?? null
-              ),
-            },
-          }}
-        />
-        <BookingSummary>
-          <H5>Booking summary</H5>
-          <CostBreakdown
-            lodgingType={lodgingType}
-            startDate={parseISO(cart.offer.startDate)}
-            endDate={parseISO(cart.offer.endDate)}
-          />
-        </BookingSummary>
-      </RightSide>
-    </TwoColumnLayout>
-  )
+  // const router = useRouter()
+  // const { user } = useProfile()
+  //
+  // const { cartId } = router.query
+  // const { cart } = useGetCartForUser(cartId as string, user?.externId)
+  //
+  // const [currentStep, setCurrentStep] = useState(1)
+  //
+  // if (!user || !cart) {
+  //   return null
+  // }
+  //
+  // if (router.query.step) {
+  //   // step cant be less than 1
+  //   const stepInQuery = Math.min(
+  //     Math.max(parseInt(router.query.step as string), 1),
+  //     steps.length
+  //   )
+  //   if (stepInQuery != currentStep) {
+  //     setCurrentStep(stepInQuery)
+  //   }
+  // }
+  //
+  // if (cart.paymentStatus == PaymentStatus.Paid) {
+  //   router.push(`/checkout/${cart._id}/confirmation`).then()
+  //   return null
+  // }
+  //
+  // const lodgingType = cart.lodgingType
+  //
+  // if (lodgingType.spotsTaken >= lodgingType.quantity) {
+  //   return <H4>Sold Out</H4>
+  // }
+  //
+  // const advanceStep = () => {
+  //   const isLastStep = currentStep >= steps.length
+  //
+  //   if (isLastStep) {
+  //     // on the last step, the stripe form redirects them to the confirm page
+  //     // router.push(`/trip/${offer._id}`)
+  //   } else {
+  //     setCurrentStep(currentStep + 1)
+  //     router.query.step = `${currentStep + 1}`
+  //     router.push({ query: router.query }).then()
+  //   }
+  // }
+  //
+  // const handleBackClick = () => {
+  //   if (currentStep == 1) {
+  //     router.push(`/experience/${cart.offer._id}`).then()
+  //   } else {
+  //     setCurrentStep(currentStep - 1)
+  //     router.query.step = `${currentStep - 1}`
+  //     router.push({ query: router.query }).then()
+  //   }
+  // }
+  //
+  // const CurrentComponent = steps[currentStep - 1]
+  //
+  // return (
+  //   <TwoColumnLayout
+  //     title={'Reservation'}
+  //     icon="back-arrow"
+  //     onIconClick={handleBackClick}
+  //     subheader={`Step ${currentStep} of ${steps.length}`}
+  //     withFooter
+  //   >
+  //     <LeftSide shape="notch" notchSize={1.6}>
+  //       <CurrentComponent cart={cart} onComplete={advanceStep} />
+  //     </LeftSide>
+  //     <RightSide shape="notch" notchPosition={'top-right'} notchSize={1.6}>
+  //       <OfferNameAndDates
+  //         small
+  //         offer={{
+  //           title: cart.offer.title ?? null,
+  //           startDate: cart.offer.startDate ?? null,
+  //           endDate: cart.offer.endDate ?? null,
+  //           offerType: cart.offer.offerType ?? null,
+  //           price: cart.offer.price ?? null,
+  //           imageIpfsHash: cart.offer.imageIpfsHash ?? null,
+  //           location: {
+  //             shortAddress: formatShortAddress(
+  //               cart.offer.location.address ?? null
+  //             ),
+  //           },
+  //         }}
+  //       />
+  //       <BookingSummary>
+  //         <H5>Booking summary</H5>
+  //         <CostBreakdown
+  //           lodgingType={lodgingType}
+  //           startDate={parseISO(cart.offer.startDate)}
+  //           endDate={parseISO(cart.offer.endDate)}
+  //         />
+  //       </BookingSummary>
+  //     </RightSide>
+  //   </TwoColumnLayout>
+  // )
 }
 
 export default CheckoutPageView

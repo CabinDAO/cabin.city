@@ -1,8 +1,6 @@
-import Stripe from 'stripe'
 import { NextApiRequest, NextApiResponse } from 'next'
-import withAuth from '@/utils/api/withAuth'
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { ironOptions } from '@/lib/next-server/iron-options'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
+import Stripe from 'stripe'
 import { FAUNA_ERROR_TO_MESSAGE_MAPPING } from '@/utils/profile-submission'
 import {
   CreatePaymentIntentReq,
@@ -19,8 +17,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse,
-  opts?: { auth: { externalUserId: string } }
+  res: NextApiResponse<CreatePaymentIntentRes | { error: string }>,
+  opts: { auth: AuthData }
 ) => {
   const { method } = req
   if (method !== 'POST') {
@@ -30,12 +28,7 @@ const handler = async (
   }
 
   const body = req.body as CreatePaymentIntentReq
-  const externalUserId = opts?.auth?.externalUserId
-
-  if (!externalUserId) {
-    res.status(401).end({ error: 'Authentication required' })
-    return
-  }
+  const externalUserId = requireAuth(req, res, opts)
 
   type ref = {
     value: {
@@ -126,7 +119,7 @@ const handler = async (
 
   res.send({
     clientSecret: paymentIntent.client_secret,
-  } as CreatePaymentIntentRes)
+  })
 }
 
-export default withIronSessionApiRoute(withAuth(handler), ironOptions)
+export default withAuth(handler)

@@ -1,10 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
-
+import { PAGE_SIZE } from '@/utils/api/backend'
 import {
-  PAGE_SIZE,
   ActivityListParams,
   ActivityListFragment,
   ActivityListResponse,
@@ -12,6 +10,9 @@ import {
 } from '@/utils/types/activity'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { LocationType } from '@/utils/types/location'
+import { withAuth } from '@/utils/api/withAuth'
 
 // must match the includes on query below
 type ActivityWithRelations = Prisma.ActivityGetPayload<{
@@ -41,6 +42,7 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
     location: {
       select: {
         externId: true
+        type: true
         name: true
         tagline: true
         description: true
@@ -63,14 +65,6 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
           }
         }
       }
-      // include: {
-      //   _count: {
-      //     select: {
-      //       votes: true
-      //       offers: true
-      //     }
-      //   }
-      // }
     }
     offer: {
       select: {
@@ -87,6 +81,7 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
           select: {
             externId: true
             name: true
+            type: true
             bannerImageIpfsHash: true
             publishedAt: true
             address: {
@@ -103,7 +98,10 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
   }
 }>
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ActivityListResponse>
+) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
     return
@@ -154,6 +152,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         select: {
           externId: true,
           name: true,
+          type: true,
           tagline: true,
           description: true,
           bannerImageIpfsHash: true,
@@ -175,14 +174,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             },
           },
         },
-        // include: {
-        //   _count: {
-        //     select: {
-        //       votes: true,
-        //       offers: true,
-        //     },
-        //   },
-        // },
       },
       offer: {
         select: {
@@ -199,6 +190,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             select: {
               externId: true,
               name: true,
+              type: true,
               bannerImageIpfsHash: true,
               publishedAt: true,
               address: {
@@ -220,34 +212,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     take: params.pageSize ?? PAGE_SIZE,
   }
 
-  try {
-    // await Promise.all() might be even better here because its parallel, while transaction is sequential
-    const [activities, count] = await prisma.$transaction([
-      prisma.activity.findMany(activityQuery),
-      prisma.activity.count({ where: activityQuery.where }),
-    ])
+  // await Promise.all() might be even better here because its parallel, while transaction is sequential
+  const [activities, count] = await prisma.$transaction([
+    prisma.activity.findMany(activityQuery),
+    prisma.activity.count({ where: activityQuery.where }),
+  ])
 
-    // console.log(count, profiles)
-    res.status(200).send({
-      activities: toFragments(activities as ActivityWithRelations[]),
-      count,
-    } as ActivityListResponse)
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        activities: [],
-        count: 0,
-        error: `PrismaClientValidationError: ${e.message}`,
-      } as ActivityListResponse)
-    } else {
-      res.status(200).send({
-        activities: [],
-        count: 0,
-        error: e as string,
-      } as ActivityListResponse)
-    }
-  }
+  // console.log(count, profiles)
+  res.status(200).send({
+    activities: toFragments(activities as ActivityWithRelations[]),
+    count,
+  })
 }
 
 const toFragments = (
@@ -285,43 +260,19 @@ const toFragments = (
               name: activity.location.name,
               description: activity.location.description,
               tagline: activity.location.tagline,
-              bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
+              bannerImageUrl:
+                getImageUrlByIpfsHash(activity.location.bannerImageIpfsHash) ||
+                '',
               sleepCapacity: activity.location.sleepCapacity,
-              caretaker: {
-                externId: activity.location.caretaker.externId,
-                name: activity.location.caretaker.name,
-                createdAt: activity.location.caretaker.createdAt.toISOString(),
+              address: {
+                locality: activity.location.address?.locality || '',
+                admininstrativeAreaLevel1Short:
+                  activity.location.address?.admininstrativeAreaLevel1Short ||
+                  '',
+                country: activity.location.address?.country || '',
               },
-              publishedAt: activity.location.publishedAt
-                ? activity.location.publishedAt.toISOString()
-                : null,
-              internetSpeedMbps: activity.location.internetSpeedMbps,
-              address: activity.location.address
-                ? {
-                    locality: activity.location.address.locality ?? '',
-                    admininstrativeAreaLevel1Short:
-                      activity.location.address
-                        .admininstrativeAreaLevel1Short ?? '',
-                    country: activity.location.address.country ?? '',
-                  }
-                : null,
-              // voteCount: activity.location._count.votes,
-              // offerCount: activity.location._count.offers,
-              voteCount: 0,
-              offerCount: 0,
-              recentVoters: [], // TODO: implement. this is for "voters" on ListingCard (and maybe others?)
-              // votes(_size: 3) {
-              //   data {
-              //     _id
-              //     profile {
-              //       _id
-              //       avatar {
-              //         url
-              //       }
-              //     }
-              //     count
-              //   }
-              // }
+              voteCount: 0, // TODO: implement
+              offerCount: 0, // TODO: implement
             }
           : undefined,
         offer: activity.offer
@@ -329,17 +280,13 @@ const toFragments = (
               externId: activity.offer.externId,
               type: activity.offer.type as OfferType,
               title: activity.offer.title,
-              description: activity.offer.description,
               startDate: activity.offer.startDate.toISOString(),
               endDate: activity.offer.endDate.toISOString(),
               imageIpfsHash: activity.offer.imageIpfsHash,
-              price: {
-                unit: activity.offer.priceUnit,
-                amountCents: activity.offer.priceAmountCents.toNumber(),
-              },
               location: {
                 externId: activity.offer.location.externId,
                 name: activity.offer.location.name,
+                type: activity.offer.location.type as LocationType,
                 bannerImageIpfsHash:
                   activity.offer.location.bannerImageIpfsHash,
                 publishedAt: activity.offer.location.publishedAt
@@ -347,11 +294,11 @@ const toFragments = (
                   : null,
                 address: activity.offer.location.address
                   ? {
-                      locality: activity.offer.location.address.locality ?? '',
+                      locality: activity.offer.location.address.locality || '',
                       admininstrativeAreaLevel1Short:
                         activity.offer.location.address
-                          .admininstrativeAreaLevel1Short ?? '',
-                      country: activity.offer.location.address.country ?? '',
+                          .admininstrativeAreaLevel1Short || '',
+                      country: activity.offer.location.address.country || '',
                     }
                   : null,
               },
@@ -370,10 +317,10 @@ const toFragments = (
         })),
         avatarUrl: activity.profile.avatar ? activity.profile.avatar.url : '',
       },
-      reactionCount: 0, // activity.reactionCount
-      hasReactionByMe: false, //activity.hasReactionByMe
+      reactionCount: 0, // TODO: implement
+      hasReactionByMe: false, // TODO: implement
     }
   })
 }
 
-export default handler
+export default withAuth(handler)

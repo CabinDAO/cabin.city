@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import mustAuth from '@/utils/api/mustAuth'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
-import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
 import { $Enums, Profile } from '@prisma/client'
+import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
 import { randomId } from '@/utils/random'
 
 export interface ProfileNewParams {
@@ -26,7 +25,7 @@ export interface ProfileNewParams {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { privyDID: string } }
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -34,59 +33,48 @@ async function handler(
     return
   }
 
-  const privyDID = opts.auth.privyDID
+  const privyDID = requireAuth(req, res, opts)
   const body = req.body as ProfileNewParams
 
-  try {
-    const profile = await prisma.profile.create({
-      data: {
-        externId: randomId('profile'),
-        privyDID: privyDID,
-        name: body.name,
-        email: body.email,
-        bio: '',
-        location: '',
-        wallet: {
-          connectOrCreate: {
-            where: {
-              address: body.address,
-            },
-            create: {
-              address: body.address,
-              cabinTokenBalance: '0',
-            },
+  const profile = await prisma.profile.create({
+    data: {
+      externId: randomId('profile'),
+      privyDID: privyDID,
+      name: body.name,
+      email: body.email,
+      bio: '',
+      location: '',
+      wallet: {
+        connectOrCreate: {
+          where: {
+            address: body.address,
+          },
+          create: {
+            address: body.address,
+            cabinTokenBalance: '0',
           },
         },
-        avatar: body.avatar
-          ? {
-              create: {
-                url: body.avatar.url,
-                contractAddress: body.avatar.contractAddress,
-                title: body.avatar.title,
-                tokenId: body.avatar.tokenId,
-                tokenUri: body.avatar.tokenUri,
-                network: body.avatar.network,
-              },
-            }
-          : undefined,
       },
-    })
+      avatar: body.avatar
+        ? {
+            create: {
+              url: body.avatar.url,
+              contractAddress: body.avatar.contractAddress,
+              title: body.avatar.title,
+              tokenId: body.avatar.tokenId,
+              tokenUri: body.avatar.tokenUri,
+              network: body.avatar.network,
+            },
+          }
+        : undefined,
+    },
+  })
 
-    console.log('profile', profile)
+  console.log('profile', profile)
 
-    await createHats(profile)
+  await createHats(profile)
 
-    res.status(200).send({ externId: profile.externId })
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res
-        .status(200)
-        .send({ error: `PrismaClientValidationError: ${e.message}` })
-    } else {
-      res.status(200).send({ error: e as string })
-    }
-  }
+  res.status(200).send({ externId: profile.externId })
 }
 
 async function createHats(profile: Profile) {
@@ -137,4 +125,4 @@ async function createHats(profile: Profile) {
   console.log('roles', roles)
 }
 
-export default mustAuth(handler)
+export default withAuth(handler)

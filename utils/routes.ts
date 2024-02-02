@@ -9,32 +9,31 @@ enum Routes {
   ACCOUNT_LIST = `/account/list`,
   ACCOUNT_COUNT = `/account/count`,
 
-  PROFILE_LIST = `/profile/list`,
-  PROFILE_NEW = `/profile/new`,
   PROFILE = `/profile/[externId]`,
+  PROFILE_NEW = `/profile/new`,
+  PROFILE_LIST = `/profile/list`,
   PROFILE_VOUCH = `/profile/vouch`,
   PROFILE_VOTES = `/profile/votes`,
   PROFILE_ME = `/profile/me`,
   PROFILE_DID = `/profile/did`, // just for auth
   PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
 
-  LOCATION_LIST = `/location/list`,
+  LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,
-  LOCATION_GET = `/location/get`,
-  LOCATION_EDIT = `/location/edit`,
-  LOCATION_DELETE = `/location/delete`,
+  LOCATION_LIST = `/location/list`,
+  LOCATION_MINE = `/location/mine`,
   LOCATION_VOTE = `/location/vote`,
 
-  OFFER_LIST = `/offer/list`,
+  OFFER = `/offer/[externId]`,
   OFFER_NEW = `/offer/new`,
-  OFFER_GET = `/offer/get`,
-  OFFER_EDIT = `/offer/edit`,
-  OFFER_DELETE = `/offer/delete`,
+  OFFER_LIST = `/offer/list`,
 
   ACTIVITY_LIST = `/activity/list`,
   ACTIVITY_NEW = `/activity/new`,
   ACTIVITY_REACT = `/activity/react`,
   ACTIVITY_SUMMARY = `/activity/summary`,
+
+  EMAIL_SEND = '/email/send',
 
   // CART_LIST: `/cart/list`,
   // CART_GET: `/cart/get`,

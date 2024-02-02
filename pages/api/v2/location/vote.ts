@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
 import { prisma } from '@/utils/prisma'
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 export interface LocationVoteParams {
   locationId?: string
@@ -12,9 +12,9 @@ export interface LocationVoteParams {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { profile: ProfileWithWallet } }
+  opts: { auth: AuthData }
 ) {
-  const profile = opts.auth.profile
+  const profile = await requireProfile(req, res, opts)
 
   const params = req.body as LocationVoteParams
 
@@ -104,4 +104,4 @@ async function handler(
   res.status(200).send({ message: 'OK' })
 }
 
-export default withProfile(handler)
+export default withAuth(handler)

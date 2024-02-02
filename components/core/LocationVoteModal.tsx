@@ -22,9 +22,9 @@ interface LocationVoteModalProps {
 }
 
 interface Location {
-  _id: string
+  externId: string
   name?: string | null | undefined
-  publishedAt?: Date | null | undefined
+  publishedAt?: string | null | undefined
 }
 
 interface LocationVote {
@@ -93,9 +93,9 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
       myVotes.reduce(
         (acc, vote) => ({
           ...acc,
-          [vote.location._id]: vote.count,
+          [vote.location.externId]: vote.count,
         }),
-        { [location._id]: 0 }
+        { [location.externId]: 0 }
       )
     )
 
@@ -116,7 +116,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
   }, [exceededVotingPower])
 
   const otherLocations = myVotes
-    .filter((vote) => vote.location._id !== location._id)
+    .filter((vote) => vote.location.externId !== location.externId)
     .map((vote) => vote.location)
 
   const displayedLocations = [
@@ -176,11 +176,11 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
           <LocationsContainer>
             {displayedLocations.map((location) => (
               <LocationVoteSelector
-                key={location._id}
+                key={location.externId}
                 label={location.name}
-                count={voteCountsByLocationId[location._id]}
+                count={voteCountsByLocationId[location.externId]}
                 onCountChange={(count) =>
-                  handleCountChange(location._id, count)
+                  handleCountChange(location.externId, count)
                 }
                 error={exceededVotingPower}
               />

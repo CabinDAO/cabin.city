@@ -1,4 +1,16 @@
 import Link from 'next/link'
+import { EMPTY } from '@/utils/display-utils'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  LocationType,
+  LocationMediaCategory,
+  LocationFragment,
+} from '@/utils/types/location'
+import { OfferListResponse, OfferType } from '@/utils/types/offer'
+import { CaretakerFragment } from '@/utils/types/profile'
+import { formatShortAddress } from '@/lib/address'
+import { resolveImageUrl } from '@/lib/image'
+import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
@@ -9,29 +21,18 @@ import {
   H4,
   Overline,
 } from '@/components/core/Typography'
-
-import {
-  LocationMediaCategory,
-  LocationType,
-  OfferType,
-  ProfileRoleConstraint,
-} from '@/generated/graphql'
-import { ProfileFragment } from '@/utils/types/profile'
-import { ProfileContact } from '@/components/core/ProfileContact'
-import { Tag } from '@/components/core/Tag'
-import Icon from '@/components/core/Icon'
-import { ProfilesCount } from '@/components/core/ProfilesCount'
-import { Button } from '@/components/core/Button'
-import { resolveImageUrl } from '@/lib/image'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
+import { Tag } from '@/components/core/Tag'
+import Icon from '@/components/core/Icon'
+import { ProfileContact } from '@/components/core/ProfileContact'
+import { ProfilesCount } from '@/components/core/ProfilesCount'
+import { Button } from '@/components/core/Button'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { VoteButton } from './styles'
-import events from '@/lib/googleAnalytics/events'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
-import { EMPTY } from '@/utils/display-utils'
 import { ExperienceList } from '@/components/offers/ExperienceList'
 import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
 
@@ -40,13 +41,14 @@ interface LocationMediaItem {
   ipfsHash?: string | null | undefined
 }
 
-interface ProfileAvatar {
-  url: string
-}
-
 interface Profile {
-  _id: string
-  avatar?: ProfileAvatar | null | undefined
+  externId: string
+  avatar?:
+    | {
+        url: string
+      }
+    | null
+    | undefined
 }
 
 interface LocationVote {
@@ -54,7 +56,7 @@ interface LocationVote {
 }
 
 interface OfferLocation {
-  _id: string
+  externId: string
   name?: string | null | undefined
   address?: OfferLocationAddress | null | undefined
 }
@@ -65,22 +67,21 @@ interface OfferLocationAddress {
 }
 
 interface OfferItem {
-  _id: string
+  externId: string
   offerType?: OfferType | null | undefined
   locationType: LocationType
   title?: string | null | undefined
   startDate?: string | null | undefined
   endDate?: string | null | undefined
   ipfsHash?: string | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
   location: OfferLocation
 }
 
 export interface LocationProps {
-  _id: string
+  externId: string
   address: string | null | undefined
   bannerImageUrl: string | null | undefined
-  caretaker: ProfileFragment
+  caretaker: CaretakerFragment
   caretakerEmail: string | null | undefined
   description: string | null | undefined
   locationType: LocationType
@@ -100,28 +101,18 @@ export const LocationView = ({
   location,
   onVote,
 }: {
-  location: LocationProps
+  location: LocationFragment
   onVote?: () => void
 }) => {
-  const {
-    _id: id,
-    name,
-    address,
-    description,
-    sleepCapacity,
-    offerCount,
-    mediaItems,
-    bannerImageUrl,
-    internetSpeedMbps,
-    caretaker,
-    locationType,
-    voteCount,
-    votes,
-    offers,
-    caretakerEmail,
-  } = location
-  const isNeighborhood = locationType === LocationType.Neighborhood
-  const voteProfiles = (votes ?? []).map(({ profile }) => profile)
+  const { externId, offerCount, mediaItems, caretaker, caretakerEmail } =
+    location
+
+  const { useGet } = useBackend()
+  const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
+    locationId: externId,
+  })
+  const offers = offerData?.offers ?? []
+
   const galleryPreviewSleeping = mediaItems.find(
     ({ category }) => category === LocationMediaCategory.Sleeping
   )
@@ -149,7 +140,7 @@ export const LocationView = ({
   const bookableOffers = offers.filter(
     (offer) =>
       (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-      offer.offerType !== OfferType.Residency
+      offer.type !== OfferType.Residency
   )
 
   const { user } = useProfile()
@@ -158,12 +149,12 @@ export const LocationView = ({
 
   return (
     <LocationContent>
-      {bannerImageUrl && (
-        <BannerHeader imageUrl={bannerImageUrl} reduceTopPad={1.8} />
+      {location.bannerImageUrl && (
+        <BannerHeader imageUrl={location.bannerImageUrl} reduceTopPad={1.8} />
       )}
 
       <LocationDetailsContainer>
-        {(voteCount ?? 0) >= VERIFIED_VOTE_COUNT && (
+        {(location.voteCount ?? 0) >= VERIFIED_VOTE_COUNT && (
           <LocationTypeTag
             label={'Verified'}
             color={'green400'}
@@ -176,10 +167,10 @@ export const LocationView = ({
         <StyledContentCard shadow>
           <LocationHeader>
             <LocationHeaderTitle>
-              <H1>{name ?? EMPTY}</H1>
+              <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
-                <span>{address ?? EMPTY}</span>
-                <span>Sleeps {sleepCapacity ?? EMPTY}</span>
+                <span>{formatShortAddress(location.address) ?? EMPTY}</span>
+                <span>Sleeps {location.sleepCapacity ?? EMPTY}</span>
                 <span>
                   {offerCount} {offerCount === 1 ? 'Experience' : 'Experiences'}
                 </span>
@@ -191,9 +182,10 @@ export const LocationView = ({
             <VotesContainer>
               <VotesAvatarContainer>
                 <Caption>
-                  {voteCount} {voteCount === 1 ? 'Vote' : 'Votes'}
+                  {location.voteCount}{' '}
+                  {location.voteCount === 1 ? 'Vote' : 'Votes'}
                 </Caption>
-                <ProfilesCount profiles={voteProfiles} />
+                <ProfilesCount profiles={location.recentVoters ?? []} />
               </VotesAvatarContainer>
 
               <VoteButton variant="secondary" onClick={onVote}>
@@ -203,7 +195,7 @@ export const LocationView = ({
           </LocationHeader>
           {isEditable && (
             <EditBar>
-              <Link href={`/location/${location._id}/edit`}>
+              <Link href={`/location/${externId}/edit`}>
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
                   <Overline>Edit Listing</Overline>
@@ -221,7 +213,7 @@ export const LocationView = ({
               {galleryPreviewFeaturesUrl && (
                 <StyledLink
                   key={LocationMediaCategory.Features}
-                  href={`/location/${id}/photos?gallery=features`}
+                  href={`/location/${externId}/photos?gallery=features`}
                 >
                   <ImageFlex
                     sizes={imageSizesString}
@@ -235,7 +227,7 @@ export const LocationView = ({
               {galleryPreviewSleepingUrl && (
                 <StyledLink
                   key={LocationMediaCategory.Sleeping}
-                  href={`/location/${id}/photos?gallery=sleeping`}
+                  href={`/location/${externId}/photos?gallery=sleeping`}
                 >
                   <ImageFlex
                     sizes={imageSizesString}
@@ -249,7 +241,7 @@ export const LocationView = ({
               {galleryPreviewWorkingUrl && (
                 <StyledLink
                   key={LocationMediaCategory.Working}
-                  href={`/location/${id}/photos?gallery=working`}
+                  href={`/location/${externId}/photos?gallery=working`}
                 >
                   <ImageFlex
                     sizes={imageSizesString}
@@ -262,7 +254,7 @@ export const LocationView = ({
               )}
             </GalleryPreviewListImages>
 
-            <Link href={`/location/${id}/photos`}>
+            <Link href={`/location/${externId}/photos`}>
               <GalleryPreviewButton variant="secondary">
                 <Icon name="right-arrow" size={2.4} />
               </GalleryPreviewButton>
@@ -290,14 +282,16 @@ export const LocationView = ({
         <SectionContent>
           <DescriptionTwoColumn>
             <DescriptionDetails>
-              <SlateRenderer value={stringToSlateValue(description)} />
+              <SlateRenderer value={stringToSlateValue(location.description)} />
 
               <HorizontalBar />
 
               <InternetSpeed>
                 <H4>Internet speed</H4>
                 <Body1>
-                  {internetSpeedMbps ? `${internetSpeedMbps} Mbps` : EMPTY}
+                  {location.internetSpeedMbps
+                    ? `${location.internetSpeedMbps} Mbps`
+                    : EMPTY}
                 </Body1>
               </InternetSpeed>
             </DescriptionDetails>

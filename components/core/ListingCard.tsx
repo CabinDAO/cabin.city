@@ -1,4 +1,3 @@
-import { ProfileAvatar } from '@/generated/graphql'
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import Icon from './Icon'
@@ -11,20 +10,21 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
+import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
+import { formatShortAddress } from '@/lib/address'
 
 type CardVariant = 'home' | 'city-directory'
-export interface LocationCardProps {
-  _id: string
-  caretaker: Caretaker
-  name: string | null | undefined
-  tagline: string | null | undefined
-  bannerImageUrl: string | null | undefined
-  voteCount: number | null | undefined
-  voters: Voter[] | null | undefined
-  address: string | null | undefined
-  sleepCapacity: number | null | undefined
-  offerCount: number | null | undefined
-  publishedAt: Date | null | undefined
+interface ListingCardProps {
+  location: {
+    externId: string
+    name: string | null | undefined
+    bannerImageUrl: string | null | undefined
+    voteCount: number | null | undefined
+    recentVoters: LocationFragment['recentVoters'] | null | undefined
+    address: ShortAddressFragment | null | undefined
+    sleepCapacity: number | null | undefined
+    offerCount: number | null | undefined
+  }
   onVote?: () => void
   onDelete?: () => void
   onEdit?: () => void
@@ -35,26 +35,11 @@ export interface LocationCardProps {
   variant?: CardVariant
 }
 
-interface Caretaker {
-  _id: string
-  name: string
-}
-
-interface Voter {
-  _id: string
-  avatar?: ProfileAvatar | null | undefined
-}
-
 const BANNER_IMAGE_HEIGHT = 258
 
-export const ListingCard = (props: LocationCardProps) => {
+export const ListingCard = (props: ListingCardProps) => {
   const {
-    _id,
-    bannerImageUrl,
-    voteCount,
-    voters,
-    address,
-    sleepCapacity,
+    location,
     onDelete,
     onEdit,
     className,
@@ -62,7 +47,16 @@ export const ListingCard = (props: LocationCardProps) => {
     editMode = false,
   } = props
 
-  const name = props.name ?? 'New Listing'
+  const {
+    externId,
+    bannerImageUrl,
+    voteCount,
+    recentVoters,
+    address,
+    sleepCapacity,
+  } = location
+
+  const name = props.location.name ?? 'New Listing'
 
   const { deviceSize } = useDeviceSize()
 
@@ -73,10 +67,10 @@ export const ListingCard = (props: LocationCardProps) => {
   return (
     <OuterContainer variant={variant} widthPx={cardWidth} className={className}>
       <ContainerLink
-        href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
+        href={editMode ? `/location/${externId}/edit` : `/location/${externId}`}
         shallow
         passHref
-        onClick={() => events.viewCityDirectoryEvent(_id)}
+        onClick={() => events.viewCityDirectoryEvent(externId)}
       >
         <ImageContainer widthPx={cardWidth}>
           {bannerImageUrl ? (
@@ -92,19 +86,19 @@ export const ListingCard = (props: LocationCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          <ExperienceCountTag {...props} />
+          <ExperienceCountTag offerCount={location.offerCount ?? 0} />
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
             <NameH2>{truncatedName}</NameH2>
             <Caption>
-              {address ?? EMPTY} · Sleeps {sleepCapacity}
+              {formatShortAddress(address) ?? EMPTY} · Sleeps {sleepCapacity}
             </Caption>
           </SummaryContainer>
           <AggregatedDataContainer>
             <ListingTypeTag {...props} />
             <VotersContainer>
-              {<ProfilesCount profiles={voters ?? []} />}
+              {<ProfilesCount profiles={recentVoters ?? []} />}
               <Caption emphasized>{`(${
                 voteCount?.toLocaleString() ?? 0
               } Votes)`}</Caption>
@@ -123,15 +117,12 @@ export const ListingCard = (props: LocationCardProps) => {
   )
 }
 
-const ExperienceCountTag = (props: LocationCardProps) => {
-  const { offerCount } = props
-
-  const plural = offerCount === 1 ? '' : 's'
-
+const ExperienceCountTag = ({ offerCount }: { offerCount: number }) => {
   if (!offerCount || offerCount === 0) {
     return null
   }
 
+  const plural = offerCount === 1 ? '' : 's'
   return (
     <TagContainer>
       <Subline1>
@@ -141,7 +132,7 @@ const ExperienceCountTag = (props: LocationCardProps) => {
   )
 }
 
-const ListingTypeTag = (props: LocationCardProps) => {
+const ListingTypeTag = (props: ListingCardProps) => {
   const { position } = props
   return (
     <LocationTagContainer>

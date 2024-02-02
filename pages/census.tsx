@@ -1,7 +1,7 @@
-import { DirectoryView } from '@/components/directory/DirectoryView'
+import { CensusView } from '@/components/directory/CensusView'
 
 const CensusPage = () => {
-  return <DirectoryView />
+  return <CensusView />
 }
 
 export default CensusPage

@@ -1,28 +1,25 @@
-import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { query as q } from 'faunadb'
 import { FaunaTokenResponse } from '@/types/fauna-server'
 import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
-import { ironOptions } from '@/lib/next-server/iron-options'
-import withAuth from '@/utils/api/withAuth'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 
 const TOKEN_TTL = 900 // 15 minutes
 
 const handler = async (
   req: NextApiRequest,
   res: NextApiResponse<FaunaTokenResponse | { message: string }>,
-  opts?: { auth?: { externalUserId?: string } }
+  opts: { auth: AuthData }
 ) => {
   const { method } = req
 
   switch (method) {
     case 'GET':
       try {
-        const externalUserId = opts?.auth?.externalUserId
-
+        const privyDID = requireAuth(req, res, opts)
         const resp = (await faunaServerClient.query(
           q.Call(q.Function('create_access_token_by_external_id'), [
-            externalUserId,
+            privyDID,
             TOKEN_TTL,
           ])
         )) as FaunaTokenResponse
@@ -45,4 +42,4 @@ const handler = async (
   }
 }
 
-export default withIronSessionApiRoute(withAuth(handler), ironOptions)
+export default withAuth(handler)

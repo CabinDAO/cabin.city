@@ -1,4 +1,3 @@
-import { locationCardPropsFromFragment } from '@/lib/location'
 import { Body1 } from '../Typography'
 import { LocationPostItem } from './LocationPostItem'
 import { PostProps } from './Post'
@@ -13,7 +12,7 @@ const LocationMedia = (props: PostProps) => {
   const location = props.activity.metadata?.location
 
   if (location) {
-    return <LocationPostItem {...location} hideVerifiedTag />
+    return <LocationPostItem location={location} hideVerifiedTag />
   } else {
     return null
   }

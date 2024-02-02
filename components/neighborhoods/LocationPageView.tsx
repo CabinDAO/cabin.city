@@ -1,6 +1,4 @@
 import { useRouter } from 'next/router'
-import { useGetLocationByIdQuery } from '@/generated/graphql'
-import { locationViewPropsFromFragment } from '@/lib/location'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { useEffect } from 'react'
@@ -9,6 +7,8 @@ import { useLocationVote } from '../hooks/useLocationVote'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
 import { PublishModal } from './edit-location/PublishModal'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationGetResponse } from '@/utils/types/location'
 
 export const LocationPageView = () => {
   const router = useRouter()
@@ -16,20 +16,17 @@ export const LocationPageView = () => {
   const { user } = useProfile()
   const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
-  const { data } = useGetLocationByIdQuery({
-    variables: {
-      id: `${id}`,
-    },
-    skip: !id,
-  })
-  const location = data?.findLocationByID
-    ? locationViewPropsFromFragment(data?.findLocationByID)
-    : null
+  const { useGet } = useBackend()
+  const { data } = useGet<LocationGetResponse>(
+    id ? ['LOCATION', { externId: `${id}` }] : null
+  )
+
+  const location = data?.location
 
   const hideFromOthersIfPreview =
     location &&
     !location.publishedAt &&
-    user?.externId !== location?.caretaker._id &&
+    user?.externId !== location?.caretaker.externId &&
     !user?.isAdmin
 
   useEffect(() => {
@@ -46,16 +43,16 @@ export const LocationPageView = () => {
 
   const previewMode =
     !location.publishedAt &&
-    (user?.externId === location.caretaker._id || user?.isAdmin)
+    (user?.externId === location.caretaker.externId || user?.isAdmin)
 
-  const backRoute = `/location/${location._id}/edit`
+  const backRoute = `/location/${location.externId}/edit`
 
   const handleVote = () => {
     voteForLocation(location)
   }
 
   const handlePublish = async () => {
-    showModal(() => <PublishModal locationId={location._id} />)
+    showModal(() => <PublishModal locationId={location.externId} />)
   }
 
   return (

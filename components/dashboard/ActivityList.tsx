@@ -4,8 +4,8 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { Post } from '../core/post/Post'
 import { useActivityReactions } from './useActivityReactions'
 import { useEffect, useState } from 'react'
+import { PAGE_SIZE } from '@/utils/api/backend'
 import {
-  PAGE_SIZE,
   ActivityListFragment,
   ActivityListResponse,
 } from '@/utils/types/activity'

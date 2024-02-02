@@ -224,7 +224,7 @@ model Location {
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
 
-  locationType        LocationType
+  type                LocationType
   name                String
   tagline             String
   description         String // Rich text

@@ -4,14 +4,13 @@ import { OfferViewProps } from '@/components/offers/useGetOffer'
 import {
   MeFragment,
   OfferDataFragment,
-  OfferItemFragment,
   OfferPriceUnit,
   OfferType,
 } from '@/generated/graphql'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { parseISO } from 'date-fns'
-import { OfferItem } from '@/utils/types/offer'
+import { OfferFragment } from '@/utils/types/offer'
 
 export interface OfferInfo {
   name: string
@@ -34,7 +33,7 @@ export const offerInfoFromType = (offerType: OfferType): OfferInfo => {
 }
 
 export const offerListItemPropsFromFragment = (
-  fragment: OfferItemFragment,
+  fragment: OfferFragment,
   me: MeFragment | null | undefined
 ): OfferListItemProps => {
   return {

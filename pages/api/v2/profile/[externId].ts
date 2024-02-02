@@ -1,8 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import withProfile, { ProfileWithWallet } from '@/utils/api/withProfile'
 import { prisma } from '@/utils/prisma'
 import { $Enums, Prisma } from '@prisma/client'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+import {
+  AuthData,
+  requireProfile,
+  withAuth,
+  ProfileWithWallet,
+} from '@/utils/api/withAuth'
 import {
   ProfileGetResponse,
   RoleLevel,
@@ -54,32 +58,20 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: { profile: ProfileWithWallet } }
+  opts: { auth: AuthData }
 ) {
-  try {
-    switch (req.method) {
-      case 'GET':
-        await handleGet(req, res)
-        return
-      case 'POST':
-        await handlePost(req, res, opts.auth.profile)
-        return
-      default:
-        res.setHeader('Allow', ['GET', 'POST'])
-        res.status(405).send({ error: 'Method not allowed' })
-        return
-    }
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        error: `PrismaClientValidationError: ${e.message}`,
-      })
-    } else {
-      res.status(200).send({
-        error: e as string,
-      })
-    }
+  switch (req.method) {
+    case 'GET':
+      await handleGet(req, res)
+      return
+    case 'POST':
+      const profile = await requireProfile(req, res, opts)
+      await handlePost(req, res, profile)
+      return
+    default:
+      res.setHeader('Allow', ['GET', 'POST'])
+      res.status(405).send({ error: 'Method not allowed' })
+      return
   }
 }
 
@@ -310,4 +302,4 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
   }
 }
 
-export default withProfile(handler)
+export default withAuth(handler)

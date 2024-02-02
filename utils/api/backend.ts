@@ -3,6 +3,8 @@ import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 // import {URL} from 'url'
 
+export const PAGE_SIZE = 20
+
 // TODO: consider using useSWRInfinite for pagination
 // https://swr.vercel.app/docs/pagination
 
@@ -80,9 +82,9 @@ const _apiGet = async (
     headers['Authorization'] = `Bearer ${token}`
   }
 
-  const queryString = params
-    ? '?' + new URLSearchParams(cleanParams(params))
-    : ''
+  const queryString = (
+    params ? '?' + new URLSearchParams(cleanParams(params)) : ''
+  ).replace(/\?$/, '')
 
   const res = await fetch(url + queryString, {
     method: 'GET',

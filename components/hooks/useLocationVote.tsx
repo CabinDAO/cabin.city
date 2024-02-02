@@ -14,7 +14,7 @@ export const useLocationVote = (afterVote?: () => void) => {
 
   const voteForLocation = useCallback(
     (location: LocationVoteModalWithDataProps['location']) => {
-      events.voteModalEvent(location._id)
+      events.voteModalEvent(location.externId)
       confirmLoggedIn(() => {
         showModal(() => (
           <LocationVodalModalWithData
@@ -41,9 +41,9 @@ export const useLocationVote = (afterVote?: () => void) => {
 
 interface LocationVoteModalWithDataProps {
   location: {
-    _id: string
+    externId: string
     name?: string | null | undefined
-    publishedAt?: Date | null | undefined
+    publishedAt?: string | null | undefined
   }
   onCastVotes: (reqBody: LocationVoteParams) => Promise<unknown> | void
 }

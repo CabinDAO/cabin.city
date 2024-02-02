@@ -1,12 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { withIronSessionApiRoute } from 'iron-session/next'
-import { ironOptions } from '@/lib/next-server/iron-options'
+import { withAuth } from '@/utils/api/withAuth'
 import { PublicLock__factory } from '@/generated/contract'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { setCitizenshipStatus } from '@/lib/fauna-server/setCitizenshipStatus'
-import withAuth from '@/utils/api/withAuth'
 
 type ResponseJson = {
   updated?: boolean
@@ -66,4 +64,4 @@ async function handler(
   }
 }
 
-export default withIronSessionApiRoute(withAuth(handler), ironOptions)
+export default withAuth(handler)

@@ -15,7 +15,7 @@ import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import React from 'react'
-import { OfferItem } from '@/utils/types/offer'
+import { OfferFragment } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
 
@@ -52,7 +52,7 @@ export interface OfferListItemProps {
 type OfferListItemVariant = 'default' | 'no-icon'
 
 export const OfferListItem = (props: {
-  offer: OfferItem
+  offer: OfferFragment
   me: MeFragment | null | undefined
   className?: string
   variant?: OfferListItemVariant

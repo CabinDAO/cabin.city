@@ -1,16 +1,18 @@
 import { FAUNA_TOKEN_LOCAL_STORAGE_KEY } from '@/lib/auth/constants'
 import { User, usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/router'
-import { useBackend } from '@/components/hooks/useBackend'
+import { apiGet } from '@/utils/api/backend'
 
 export const useAuth = () => {
   const router = useRouter()
   const { logout } = usePrivy()
-  const { get } = useBackend()
 
   const handleLogin = async (user: User) => {
     const privyDID = user.id
-    const resp = await get('PROFILE_DID', { did: privyDID })
+    // todo: security issue? this call lets anyone know we have an account for a did
+    const resp = await apiGet('PROFILE_DID', { did: privyDID }, async () => {
+      return null
+    })
 
     const { externId } = await resp
 

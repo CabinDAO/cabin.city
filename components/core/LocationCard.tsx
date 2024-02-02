@@ -1,31 +1,34 @@
+import Link from 'next/link'
 import Image from 'next/image'
-import { ProfileAvatar } from '@/generated/graphql'
+import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
+import { CaretakerFragment } from '@/utils/types/profile'
+import { useDeviceSize } from '../hooks/useDeviceSize'
+import { formatShortAddress } from '@/lib/address'
+import { emptyFunction } from '@/utils/general'
+import { EMPTY, truncate } from '@/utils/display-utils'
+import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
-import { Body2, Caption, H2, Subline1, truncateStyles } from './Typography'
-import { IconName } from './Icon'
-import Icon from './Icon'
 import { format } from 'date-fns'
+import { Body2, Caption, H2, Subline1, truncateStyles } from './Typography'
+import Icon, { IconName } from './Icon'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
-import { emptyFunction } from '@/utils/general'
-import { EMPTY, truncate } from '@/utils/display-utils'
-import { useDeviceSize } from '../hooks/useDeviceSize'
-import Link from 'next/link'
-import events from '@/lib/googleAnalytics/events'
 
-export interface LocationCardProps {
-  _id: string
-  caretaker: Caretaker
-  name: string | null | undefined
-  tagline: string | null | undefined
-  bannerImageUrl: string | null | undefined
-  voteCount: number | null | undefined
-  voters: Voter[] | null | undefined
-  address: string | null | undefined
-  sleepCapacity: number | null | undefined
-  offerCount: number | null | undefined
-  publishedAt: Date | null | undefined
+interface LocationCardProps {
+  location: {
+    externId: string
+    name: string | null | undefined
+    tagline: string | null | undefined
+    publishedAt: string | null | undefined
+    bannerImageUrl: string | null | undefined
+    voteCount: number | null | undefined
+    recentVoters: LocationFragment['recentVoters'] | null | undefined
+    address: ShortAddressFragment | null | undefined
+    sleepCapacity: number | null | undefined
+    offerCount: number | null | undefined
+    caretaker: CaretakerFragment
+  }
   onVote?: () => void
   onDelete?: () => void
   onEdit?: () => void
@@ -34,60 +37,38 @@ export interface LocationCardProps {
   position?: number
 }
 
-interface Caretaker {
-  _id: string
-  name: string
-  createdAt: Date
-}
-
-interface Voter {
-  _id: string
-  avatar?: ProfileAvatar | null | undefined
-}
-
 const BANNER_IMAGE_SIZE = 190
 
 export const LocationCard = (props: LocationCardProps) => {
-  const {
-    _id,
-    caretaker,
-    tagline,
-    bannerImageUrl,
-    voteCount,
-    voters,
-    address,
-    sleepCapacity,
-    offerCount,
-    publishedAt,
-    onVote,
-    onDelete,
-    onEdit,
-    editMode = false,
-  } = props
+  const { location, onVote, onDelete, onEdit, editMode = false } = props
 
-  const name = props.name ?? 'New Listing'
+  const name = location.name ?? 'New Listing'
 
   const { deviceSize } = useDeviceSize()
 
   const shortTagline =
     deviceSize === 'tablet'
-      ? truncate(tagline ?? EMPTY, 40)
-      : truncate(tagline ?? EMPTY, 100)
+      ? truncate(location.tagline ?? EMPTY, 40)
+      : truncate(location.tagline ?? EMPTY, 100)
 
   const truncatedName = deviceSize === 'tablet' ? truncate(name, 30) : name
 
   return (
     <OuterContainer>
       <ContainerLink
-        href={editMode ? `/location/${_id}/edit` : `/location/${_id}`}
+        href={
+          editMode
+            ? `/location/${location.externId}/edit`
+            : `/location/${location.externId}`
+        }
         shallow
-        onClick={() => events.viewCityDirectoryEvent(_id)}
+        onClick={() => events.viewCityDirectoryEvent(location.externId)}
       >
         <ImageContainer>
-          {bannerImageUrl ? (
+          {location.bannerImageUrl ? (
             <StyledImage
               quality={40}
-              src={bannerImageUrl}
+              src={location.bannerImageUrl}
               sizes={`${BANNER_IMAGE_SIZE}px`}
               fill
               alt={name}
@@ -97,7 +78,7 @@ export const LocationCard = (props: LocationCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          {!publishedAt && (
+          {!location.publishedAt && (
             <TagContainer>
               <Subline1 $color="yellow100">Draft</Subline1>
             </TagContainer>
@@ -109,22 +90,36 @@ export const LocationCard = (props: LocationCardProps) => {
             <StyledBody2>{shortTagline}</StyledBody2>
           </SummaryContainer>
           <LocationInfoGroupContainer>
-            <LocationInfo iconName="location" label={address ?? EMPTY} />
+            <LocationInfo
+              iconName="location"
+              label={formatShortAddress(location.address) ?? EMPTY}
+            />
             <LocationInfo
               iconName="sleep"
-              label={sleepCapacity ? `Sleeps ${sleepCapacity}` : EMPTY}
+              label={
+                location.sleepCapacity
+                  ? `Sleeps ${location.sleepCapacity}`
+                  : EMPTY
+              }
             />
             <LocationInfo
               iconName="offer"
-              label={offerCount ? `${offerCount} Experiences` : EMPTY}
+              label={
+                location.offerCount
+                  ? `${location.offerCount} Experiences`
+                  : EMPTY
+              }
             />
           </LocationInfoGroupContainer>
           <LocationInfoGroupContainer>
-            <LocationInfo iconName="caretaker" label={caretaker.name} />
+            <LocationInfo
+              iconName="caretaker"
+              label={location.caretaker.name}
+            />
             <LocationInfo
               iconName="date"
               label={`Joined ${format(
-                new Date(caretaker.createdAt),
+                new Date(location.caretaker.createdAt),
                 'MMM yyyy'
               )}`}
             />
@@ -133,9 +128,9 @@ export const LocationCard = (props: LocationCardProps) => {
         <VotesContainer>
           <VotersContainer>
             <Caption emphasized>{`${
-              voteCount?.toLocaleString() ?? 0
+              location.voteCount?.toLocaleString() ?? 0
             } Votes`}</Caption>
-            {<ProfilesCount profiles={voters ?? []} />}
+            {<ProfilesCount profiles={location.recentVoters ?? []} />}
           </VotersContainer>
 
           <VoteButton

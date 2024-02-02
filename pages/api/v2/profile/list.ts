@@ -1,10 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import mustAuth from '@/utils/api/mustAuth'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
-import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { resolveAddressOrName } from '@/lib/ens'
-
+import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   RoleType,
   RoleLevel,
@@ -12,7 +11,6 @@ import {
   ProfileSort,
   ProfileListParams,
   ProfileListResponse,
-  PAGE_SIZE,
   ProfileListFragment,
 } from '@/utils/types/profile'
 
@@ -33,11 +31,17 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
   }
 }>
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ProfileListResponse>,
+  opts: { auth: AuthData }
+) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
     return
   }
+
+  requireAuth(req, res, opts)
 
   const params: ProfileListParams = {
     searchQuery: req.query.searchQuery
@@ -56,11 +60,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     ? await resolveAddressOrName(params.searchQuery)
     : undefined
 
-  console.log('resolvedAddress', resolvedAddress)
-
   // TODO: data validation
-
-  // console.log(req.query, params)
 
   const profileQuery: Prisma.ProfileFindManyArgs = {
     where: {
@@ -121,34 +121,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     take: PAGE_SIZE,
   }
 
-  try {
-    // await Promise.all() might be even better here because its parallel, while transaction is sequential
-    const [profiles, count] = await prisma.$transaction([
-      prisma.profile.findMany(profileQuery),
-      prisma.profile.count({ where: profileQuery.where }),
-    ])
+  // await Promise.all() might be even better here because its parallel, while transaction is sequential
+  const [profiles, count] = await prisma.$transaction([
+    prisma.profile.findMany(profileQuery),
+    prisma.profile.count({ where: profileQuery.where }),
+  ])
 
-    // console.log(count, profiles)
-    res.status(200).send({
-      profiles: profilesToFragments(profiles as ProfileWithRelations[]),
-      count,
-    } as ProfileListResponse)
-  } catch (e) {
-    console.log(e)
-    if (e instanceof PrismaClientValidationError) {
-      res.status(200).send({
-        profiles: [],
-        count: 0,
-        error: `PrismaClientValidationError: ${e.message}`,
-      } as ProfileListResponse)
-    } else {
-      res.status(200).send({
-        profiles: [],
-        count: 0,
-        error: e as string,
-      } as ProfileListResponse)
-    }
-  }
+  // console.log(count, profiles)
+  res.status(200).send({
+    profiles: profilesToFragments(profiles as ProfileWithRelations[]),
+    count,
+  })
 }
 
 const sortOrder = (
@@ -246,4 +229,4 @@ const toArray = <T = any>(param: string | string[] | undefined): T[] => {
   return param as T[]
 }
 
-export default mustAuth(handler)
+export default withAuth(handler)

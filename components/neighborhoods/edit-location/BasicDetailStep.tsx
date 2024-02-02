@@ -1,9 +1,6 @@
+import React, { useState } from 'react'
 import { LocationStepWrapper } from './LocationStepWrapper'
-import {
-  Subline2,
-  h4Styles,
-  subline2Styles,
-} from '@/components/core/Typography'
+import { Subline2 } from '@/components/core/Typography'
 import styled from 'styled-components'
 import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
@@ -12,13 +9,7 @@ import {
   MAX_LOCATION_BIO_LENGTH,
   MAX_LOCATION_TITLE_LENGTH,
 } from '../constants'
-import {
-  LocationAddressInput,
-  PartialUpdateLocationInput,
-  useGetProfileByAddressLazyQuery,
-  useGetProfilesLazyQuery,
-} from '@/generated/graphql'
-import { useEffect, useState } from 'react'
+import { PartialUpdateLocationInput } from '@/generated/graphql'
 import { HorizontalDivider } from '@/components/core/Divider'
 import {
   validateBio,
@@ -27,10 +18,6 @@ import {
   validateTitle,
 } from '../validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { Dropdown } from '@/components/core/Dropdown'
-import { resolveAddressOrName } from '@/lib/ens'
-import { SelectOption } from '@/components/hooks/useDropdownLogic'
-import { isNotNull } from '@/lib/data'
 import {
   REQUIRED_FIELDS_TOAST_ERROR,
   REQUIRED_FIELD_ERROR,
@@ -38,6 +25,7 @@ import {
   truthyString,
 } from '@/utils/validate'
 import { useError } from '@/components/hooks/useError'
+import { AddressFragment } from '@/utils/types/location'
 
 export const BasicDetailStep = ({
   name,
@@ -46,39 +34,15 @@ export const BasicDetailStep = ({
   location,
   steps,
 }: StepProps) => {
-  const { updateLocation } = useUpdateLocation(location._id)
+  const { updateLocation } = useUpdateLocation(location.externId)
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { __typename, ...currentAddress } = location?.address ?? {}
-
-  const [address, setAddress] = useState<LocationAddressInput | null>(
-    currentAddress ?? {}
+  const [address, setAddress] = useState<AddressFragment | null>(
+    location?.address
   )
 
   const [highlightErrors, setHighlightErrors] = useState(false)
 
   const { showError } = useError()
-
-  useEffect(() => {
-    if (location.referrer) {
-      const option: SelectOption = {
-        label: location.referrer.name,
-        value: location.referrer._id,
-        imageSrc: location.referrer.avatar?.url,
-      }
-
-      setOptions([option])
-      setSelectedOption(option)
-    }
-  }, [location.referrer])
-
-  const [searchProfiles] = useGetProfilesLazyQuery({})
-  const [getProfileByAddress] = useGetProfileByAddressLazyQuery()
-  const [options, setOptions] = useState<SelectOption[]>([])
-  const [searching, setSearching] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<
-    SelectOption | undefined
-  >(undefined)
 
   const [locationInput, setLocationInput] =
     useState<PartialUpdateLocationInput>({
@@ -131,14 +95,7 @@ export const BasicDetailStep = ({
     }))
   }
 
-  const handleLocationChange = (value: LocationAddressInput) => {
-    // Nullify undefined values so that they are deleted from DB
-    Object.keys(value).forEach((key) => {
-      if (!value[key as keyof LocationAddressInput]) {
-        value[key as keyof LocationAddressInput] = null
-      }
-    })
-
+  const handleLocationChange = (value: AddressFragment) => {
     setAddress(value)
   }
 
@@ -152,70 +109,6 @@ export const BasicDetailStep = ({
     }
   }
 
-  const handleSearch = async (value: string) => {
-    setSearching(true)
-    const resolvedAddress = await resolveAddressOrName(value)
-    if (resolvedAddress) {
-      const result = await getProfileByAddress({
-        variables: { address: resolvedAddress },
-      })
-      if (
-        result.data?.accountByAddress?.profile &&
-        result.data?.accountByAddress?.profile?._id !== location.caretaker._id
-      ) {
-        setOptions([
-          {
-            label: result.data.accountByAddress.profile.name,
-            value: result.data.accountByAddress.profile._id,
-            imageSrc:
-              result.data.accountByAddress.profile?.avatar?.url ??
-              '/images/default-avatar.png',
-          },
-        ])
-      }
-    } else {
-      const result = await searchProfiles({
-        variables: {
-          input: {
-            searchQuery: value,
-            roleTypes: [],
-            levelTypes: [],
-            citizenshipStatuses: [],
-          },
-          size: 3,
-        },
-      })
-
-      if (result.data?.getProfiles?.data) {
-        setOptions(
-          result.data?.getProfiles?.data
-            .filter(isNotNull)
-            .map((profile) => ({
-              label: profile?.name,
-              value: profile?._id,
-              imageSrc: profile?.avatar?.url ?? '/images/default-avatar.png',
-            }))
-            .filter((option) => option.value !== location.caretaker._id)
-        )
-      }
-    }
-  }
-
-  const handleOnSelect = (option: SelectOption) => {
-    setSelectedOption(option)
-
-    setSearching(false)
-
-    if (option.value) {
-      setLocationInput((prev) => ({
-        ...prev,
-        referrer: {
-          connect: option.value.toLocaleString(),
-        },
-      }))
-    }
-  }
-
   return (
     <StyledLocationStepWrapper
       name={name}
@@ -223,7 +116,7 @@ export const BasicDetailStep = ({
       onBack={onBack}
       steps={steps}
     >
-      <InputCoupleContainer>
+      <FullWidthInputContainer>
         <InputText
           required
           value={locationInput.name ?? ''}
@@ -236,7 +129,7 @@ export const BasicDetailStep = ({
           error={highlightErrors && !nameValidation.valid}
           errorMessage={nameValidation.error}
         />
-      </InputCoupleContainer>
+      </FullWidthInputContainer>
       <InputCoupleContainer>
         <InputText
           placeholder={location.caretaker.name ?? ''}
@@ -297,45 +190,15 @@ export const BasicDetailStep = ({
         />
       </InputCoupleContainer>
       <HorizontalDivider />
-      <InputCoupleContainer>
-        <StyledDropdown
-          searching={searching}
-          enableSearch
-          onSearch={handleSearch}
-          label="Did someone at Cabin refer you?"
-          placeholder="Name"
-          options={options}
-          selectedOption={selectedOption}
-          onSelect={handleOnSelect}
-        />
-      </InputCoupleContainer>
     </StyledLocationStepWrapper>
   )
 }
-
-interface InputContainerProps {
-  fullWidth?: boolean
-}
-
-interface StyledDropdownProps {
-  searching?: boolean
-}
-
-const StyledDropdown = styled(Dropdown)<StyledDropdownProps>`
-  ${Subline2} {
-    ${h4Styles}
-  }
-
-  input {
-    ${({ searching }) => (searching ? subline2Styles : h4Styles)}
-  }
-`
 
 const StyledLocationStepWrapper = styled(LocationStepWrapper)`
   min-height: calc(100vh - 4.8rem);
 `
 
-const InputCoupleContainer = styled.div<InputContainerProps>`
+const InputCoupleContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 2.4rem;

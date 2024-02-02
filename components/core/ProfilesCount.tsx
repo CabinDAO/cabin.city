@@ -1,18 +1,10 @@
+import { RecentVoterFragment } from '@/utils/types/location'
 import styled from 'styled-components'
 import { Avatar } from './Avatar'
 import { Caption } from '@/components/core/Typography'
 
-interface ProfileAvatar {
-  url: string
-}
-
-interface Profile {
-  _id: string
-  avatar?: ProfileAvatar | null | undefined
-}
-
 interface ProfilesCountProps {
-  profiles: Profile[]
+  profiles: RecentVoterFragment[]
 }
 
 export const ProfilesCount = ({ profiles }: ProfilesCountProps) => {
@@ -23,8 +15,8 @@ export const ProfilesCount = ({ profiles }: ProfilesCountProps) => {
   return (
     <ProfilesCountContainer>
       {topProfiles.map((profile) => (
-        <AvatarContainer key={profile._id}>
-          <Avatar src={profile.avatar?.url} size={2.4} color="yellow300" />
+        <AvatarContainer key={profile.externId}>
+          <Avatar src={profile.avatar.url} size={2.4} color="yellow300" />
         </AvatarContainer>
       ))}
 

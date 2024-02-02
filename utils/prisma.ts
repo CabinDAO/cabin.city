@@ -1,5 +1,4 @@
 import { Prisma, PrismaClient } from '@prisma/client'
-import { isLocalDev } from '@/utils/dev'
 
 // const getExtendedClient = () => {
 //   return new PrismaClient({
@@ -36,7 +35,10 @@ import { isLocalDev } from '@/utils/dev'
 //
 // if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-const options = isLocalDev ? { log: ['query' as Prisma.LogLevel] } : undefined
+const options =
+  process.env.NODE_ENV === 'development' && !process.env.NEXT_PUBLIC_VERCEL_ENV
+    ? { log: ['query' as Prisma.LogLevel] }
+    : undefined
 
 let prisma: PrismaClient
 

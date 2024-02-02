@@ -1,62 +1,59 @@
-import {
-  CitizenshipStatus,
-  useCreateLocationMutation,
-} from '@/generated/graphql'
-import { ActionBar } from '../core/ActionBar'
-import { TitleCard } from '../core/TitleCard'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import styled from 'styled-components'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useModal } from '../hooks/useModal'
-import { ErrorModal } from '../ErrorModal'
+import { useProfile } from '../auth/useProfile'
+import { useNavigation } from '../hooks/useNavigation'
+import { useEmail } from '@/components/hooks/useEmail'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationNewResponse } from '@/utils/types/location'
+import { CitizenshipStatus } from '@/utils/types/profile'
+import { EmailType, NewLocationPayload } from '@/lib/mail/types'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import styled from 'styled-components'
 import { Body2, H3, Overline } from '../core/Typography'
+import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { ActionBar } from '../core/ActionBar'
+import { TitleCard } from '../core/TitleCard'
+import { ErrorModal } from '../ErrorModal'
 import { ContentCard } from '../core/ContentCard'
 import { HorizontalDivider } from '../core/Divider'
 import { AppLink } from '../core/AppLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useProfile } from '../auth/useProfile'
-import { useEffect } from 'react'
-import { useNavigation } from '../hooks/useNavigation'
-import { EmailType, NewLocationPayload } from '@/lib/mail/types'
-import { useEmail } from '@/components/hooks/useEmail'
 
 export const NewLocationView = () => {
   const router = useRouter()
-  const [createLocation] = useCreateLocationMutation()
   const { showModal } = useModal()
   const { user } = useProfile({ redirectTo: '/' })
   const { sendEmail } = useEmail()
-
   const { goBack } = useNavigation()
+  const { post } = useBackend()
+
   const canCreateListings =
     user?.citizenshipStatus === CitizenshipStatus.Verified
 
   const handlePrimaryButtonClick = async () => {
     try {
-      const location = await createLocation()
+      const data = await post<LocationNewResponse>('LOCATION_NEW', {})
 
-      const id = location.data?.createLocation?._id
+      const externId = data.locationExternId
 
-      if (id) {
+      if (externId) {
         await sendEmail({
           type: EmailType.NEW_LOCATION,
           data: {
-            locationId: id,
+            locationId: externId,
           } as NewLocationPayload,
         })
+        router.push(`/location/${externId}/edit?created=true`)
+      } else {
+        showModal(() => (
+          <ErrorModal
+            title="Location Creation Error"
+            description="There was an error creating your location"
+          />
+        ))
       }
-
-      id
-        ? router.push(`/location/${id}/edit?created=true`)
-        : showModal(() => (
-            <ErrorModal
-              title="Location Creation Error"
-              description="There was an error creating your location"
-            />
-          ))
     } catch (error) {
       console.error(error)
-
       showModal(() => (
         <ErrorModal
           title="Location Creation Error"
