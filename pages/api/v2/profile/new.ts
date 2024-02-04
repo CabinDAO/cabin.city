@@ -4,6 +4,7 @@ import { prisma } from '@/utils/prisma'
 import { $Enums, Profile } from '@prisma/client'
 import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
 import { randomId } from '@/utils/random'
+import { ProfileNewResponse } from '@/utils/types/profile'
 
 export interface ProfileNewParams {
   address: string
@@ -74,7 +75,7 @@ async function handler(
 
   await createHats(profile)
 
-  res.status(200).send({ externId: profile.externId })
+  res.status(200).send({ externId: profile.externId } as ProfileNewResponse)
 }
 
 async function createHats(profile: Profile) {

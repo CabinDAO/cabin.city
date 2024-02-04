@@ -25,11 +25,10 @@ async function handler(
       await handleGet(req, res)
       return
     case 'POST':
-      const profile = await requireProfile(req, res, opts)
-      await handlePost(req, res, profile)
+      await handlePost(req, res, await requireProfile(req, res, opts))
       return
     case 'DELETE':
-      res.status(400).send({ error: 'Not implemented yet' })
+      await handleDelete(req, res, await requireProfile(req, res, opts))
       return
     default:
       res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
@@ -90,4 +89,32 @@ async function handlePost(
   console.log(req.body)
 }
 
+async function handleDelete(
+  req: NextApiRequest,
+  res: NextApiResponse<LocationGetResponse>,
+  profile: ProfileWithWallet
+) {
+  const externId = req.query.externId as string
+
+  const locationToDelete = await prisma.location.findUnique({
+    where: { externId },
+    include: { caretaker: true },
+  })
+
+  if (!locationToDelete) {
+    res.status(404).send({ error: 'Location not found' })
+    return
+  }
+
+  if (locationToDelete.caretaker.id !== profile.id && !profile.isAdmin) {
+    res
+      .status(403)
+      .send({ error: 'Only caretakers can delete their locations' })
+    return
+  }
+
+  await prisma.location.delete({ where: { id: locationToDelete.id } })
+
+  res.status(200).send({})
+}
 export default withAuth(handler)

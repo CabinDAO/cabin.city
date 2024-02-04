@@ -1,16 +1,17 @@
-import { ModalTitle } from '@/components/core/modals/ModalTitle'
-import { ModalContainer } from '@/components/core/modals/ModalContainer'
-import styled from 'styled-components'
-import Icon from '@/components/core/Icon'
-import { Body2, H4 } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
 import { useState } from 'react'
+import { useBackend } from '@/components/hooks/useBackend'
 import {
   CitizenshipStatus,
   ProfileFragment,
+  ProfileVouchParams,
   ProfileVouchResponse,
 } from '@/utils/types/profile'
-import { useBackend } from '@/components/hooks/useBackend'
+import styled from 'styled-components'
+import { ModalTitle } from '@/components/core/modals/ModalTitle'
+import { ModalContainer } from '@/components/core/modals/ModalContainer'
+import Icon from '@/components/core/Icon'
+import { Body2, H4 } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
 
 interface VouchModalProps {
   profile: ProfileFragment
@@ -18,31 +19,23 @@ interface VouchModalProps {
 
 export const VouchModal = ({ profile }: VouchModalProps) => {
   const [vouched, setVouched] = useState(false)
-  const { usePost } = useBackend()
-  const { trigger: triggerVouch } = usePost<ProfileVouchResponse>(
-    'PROFILE_VOUCH',
-    {
-      externId: profile.externId,
-      action: 'vouch',
-    }
-  )
-  const { trigger: triggerUnvouch } = usePost<ProfileVouchResponse>(
-    'PROFILE_VOUCH',
-    {
-      externId: profile.externId,
-      action: 'unvouch',
-    }
-  )
+  const { post } = useBackend()
 
   const onVouch = async () => {
-    const result = await triggerVouch()
+    const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
+      externId: profile.externId,
+      action: 'vouch',
+    } as ProfileVouchParams)
     if (result.newStatus === CitizenshipStatus.Vouched) {
       setVouched(true)
     }
   }
 
   const onUnvouch = async () => {
-    const result = await triggerUnvouch()
+    const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
+      externId: profile.externId,
+      action: 'unvouch',
+    } as ProfileVouchParams)
     if (result.newStatus === CitizenshipStatus.VouchRequested) {
       setVouched(false)
     }

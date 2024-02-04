@@ -80,6 +80,11 @@ export type ProfileListResponse = {
   error?: string
 }
 
+export type ProfileNewResponse = {
+  externId?: string
+  error?: string
+}
+
 export type ProfileVouchParams = {
   externId: string
   action: 'vouch' | 'unvouch'

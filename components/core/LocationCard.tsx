@@ -4,7 +4,6 @@ import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
 import { CaretakerFragment } from '@/utils/types/profile'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { formatShortAddress } from '@/lib/address'
-import { emptyFunction } from '@/utils/general'
 import { EMPTY, truncate } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
@@ -14,6 +13,8 @@ import Icon, { IconName } from './Icon'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
+import { useLocationActions } from '@/components/hooks/useLocationActions'
+import { useLocationVote } from '@/components/hooks/useLocationVote'
 
 interface LocationCardProps {
   location: {
@@ -29,18 +30,24 @@ interface LocationCardProps {
     offerCount: number | null | undefined
     caretaker: CaretakerFragment
   }
-  onVote?: () => void
-  onDelete?: () => void
-  onEdit?: () => void
   editMode?: boolean
   hideVerifiedTag?: boolean
   position?: number
+  revalidateLocationsFn: () => Promise<any>
 }
 
 const BANNER_IMAGE_SIZE = 190
 
 export const LocationCard = (props: LocationCardProps) => {
-  const { location, onVote, onDelete, onEdit, editMode = false } = props
+  const { location, editMode = false } = props
+
+  const { editLocation: onEdit, deleteLocation: onDelete } = useLocationActions(
+    location.externId,
+    props.revalidateLocationsFn
+  )
+  const { voteForLocation: onVote } = useLocationVote(
+    props.revalidateLocationsFn
+  )
 
   const name = location.name ?? 'New Listing'
 
@@ -137,19 +144,16 @@ export const LocationCard = (props: LocationCardProps) => {
             variant="secondary"
             onClick={(e) => {
               e.preventDefault()
-              onVote?.()
+              if (onVote) {
+                onVote(location)
+              }
             }}
           >
             <Icon name="chevron-up" size={1.6} />
           </VoteButton>
         </VotesContainer>
       </ContainerLink>
-      {editMode && (
-        <CardActions
-          onDelete={onDelete ?? emptyFunction}
-          onEdit={onEdit ?? emptyFunction}
-        />
-      )}
+      {editMode && <CardActions onDelete={onDelete} onEdit={onEdit} />}
     </OuterContainer>
   )
 }

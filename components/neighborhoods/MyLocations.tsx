@@ -1,7 +1,5 @@
 import Link from 'next/link'
 import { useBackend } from '@/components/hooks/useBackend'
-import { useLocationVote } from '../hooks/useLocationVote'
-import { useLocationActions } from '../hooks/useLocationActions'
 import { LocationMineResponse } from '@/utils/types/location'
 import styled from 'styled-components'
 import { LocationCard } from '../core/LocationCard'
@@ -9,11 +7,9 @@ import { EmptyState } from '../core/EmptyState'
 import { Button } from '../core/Button'
 
 export const MyLocations = () => {
-  const { voteForLocation } = useLocationVote()
-  const { editLocation, deleteLocation } = useLocationActions()
-
   const { useGet } = useBackend()
-  const { data: locationData } = useGet<LocationMineResponse>('LOCATION_MINE')
+  const { data: locationData, mutate } =
+    useGet<LocationMineResponse>('LOCATION_MINE')
 
   const locations = locationData?.locations ?? []
 
@@ -37,10 +33,8 @@ export const MyLocations = () => {
           <LocationCard
             key={location.externId}
             location={location}
-            onVote={() => voteForLocation(location)}
+            revalidateLocationsFn={mutate}
             editMode
-            onDelete={() => deleteLocation(location.externId)}
-            onEdit={() => editLocation(location.externId)}
           />
         )
       })}

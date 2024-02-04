@@ -1,23 +1,23 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '../auth/useProfile'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileNewParams } from '@/pages/api/v2/profile/new'
+import { AvatarFragment, ProfileNewResponse } from '@/utils/types/profile'
+import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { useExternalUser } from '../auth/useExternalUser'
+import { useModal } from '../hooks/useModal'
 import { OnboardingLayout } from '../layouts/OnboardingLayout'
 import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
-import { useRouter } from 'next/router'
-import { ProfileAvatarInput } from '@/generated/graphql'
-import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
-import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { useExternalUser } from '../auth/useExternalUser'
-import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '../auth/useProfile'
-import { useEffect } from 'react'
-import { ProfileNewParams } from '@/pages/api/v2/profile/new'
-import { useBackend } from '@/components/hooks/useBackend'
 
 export interface RegistrationParams {
   email: string
   displayName: string
-  avatar: ProfileAvatarInput | undefined
+  avatar: AvatarFragment | undefined
 }
 
 export const RegistrationView = () => {
@@ -58,7 +58,10 @@ export const RegistrationView = () => {
         externalUserId: externalUser.id,
       }
 
-      const resp = await post('PROFILE_NEW', createProfileBody)
+      const resp = await post<ProfileNewResponse>(
+        'PROFILE_NEW',
+        createProfileBody
+      )
 
       console.log(resp)
 
@@ -66,7 +69,7 @@ export const RegistrationView = () => {
         showModal(() => (
           <ErrorModal
             title="Profile Submission Error"
-            description={resp.error}
+            description={resp.error ?? 'Error submitting profile'}
           />
         ))
       } else {

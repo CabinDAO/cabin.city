@@ -1,28 +1,36 @@
 import { createContext, ReactNode } from 'react'
 import { mutate } from 'swr'
 import { usePrivy } from '@privy-io/react-auth'
-import { Route } from '@/utils/routes'
+import { expandRoute, Route } from '@/utils/routes'
 import {
   UrlParams,
   apiGet,
   apiPost,
   useAPIGet,
   useAPIMutate,
-  useAPIPost,
 } from '@/utils/api/backend'
 
 export const BackendContext = createContext<BackendState | null>(null)
+
+/*
+NOTES TO MYSELF:
+
+- think of SWR much more as a cache. it fetches and stores data for keys, and reports its own state
+- make sure your URLs correspond to cache keys
+- isLoading only happens once, the very first time data is loaded into the cache
+- isValidating happens every time data is being updated (aka revalidated)
+
+ */
 
 export interface BackendState {
   useGet: <Data = any>(
     route: Route | null,
     params?: UrlParams
   ) => ReturnType<typeof useAPIGet<Data>>
-  usePost: <Data = any>(
-    route: Route | null,
-    params: object
-  ) => ReturnType<typeof useAPIPost<Data>>
   useMutate: <Data = any>(
+    route: Route | null
+  ) => ReturnType<typeof useAPIMutate<Data>>
+  useDelete: <Data = any>(
     route: Route | null
   ) => ReturnType<typeof useAPIMutate<Data>>
   get: <Data = any>(
@@ -33,7 +41,7 @@ export interface BackendState {
     route: Route,
     params: object
   ) => ReturnType<typeof apiPost<Data>>
-  revalidate: (key: string) => Promise<any>
+  // revalidate: (route: Route) => Promise<any>
 }
 
 interface BackendProviderProps {
@@ -47,12 +55,12 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
     return useAPIGet<Data>(route, params, getAccessToken)
   }
 
-  const usePost = <Data = any,>(route: Route | null, params: object = {}) => {
-    return useAPIPost<Data>(route, params, getAccessToken)
+  const useMutate = <Data = any,>(route: Route | null) => {
+    return useAPIMutate<Data>(route, 'POST', getAccessToken)
   }
 
-  const useMutate = <Data = any,>(route: Route | null) => {
-    return useAPIMutate<Data>(route, getAccessToken)
+  const useDelete = <Data = any,>(route: Route | null) => {
+    return useAPIMutate<Data>(route, 'DELETE', getAccessToken)
   }
 
   const get = <Data = any,>(route: Route, params: UrlParams = {}) => {
@@ -63,18 +71,17 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
     return apiPost<Data>(route, params, getAccessToken)
   }
 
-  //todo: unused?
-  const revalidate = (key: string): Promise<any> => {
-    return mutate(key)
-  }
+  // const revalidate = (route: Route): Promise<any> => {
+  //   return mutate(expandRoute(route))
+  // }
 
   const state = {
     useGet,
-    usePost,
     useMutate,
+    useDelete,
     get,
     post,
-    revalidate,
+    // revalidate,
   }
 
   return (

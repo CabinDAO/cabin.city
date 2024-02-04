@@ -13,11 +13,14 @@ import events from '@/lib/googleAnalytics/events'
 
 export const NeighborhoodsTop6List = () => {
   const { useGet } = useBackend()
-  const { voteForLocation } = useLocationVote()
-  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
-    locationType: LocationType.Neighborhood,
-  } as LocationListParams)
-  const locations = data ? data.locations.slice(0, 6) : []
+  const { data, mutate: refetchLocations } = useGet<LocationListResponse>(
+    'LOCATION_LIST',
+    {
+      locationType: LocationType.Neighborhood,
+    } as LocationListParams
+  )
+  const locations = data?.locations ? data.locations.slice(0, 6) : []
+  const { voteForLocation } = useLocationVote(refetchLocations)
 
   return (
     <OuterContainer>

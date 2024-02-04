@@ -1,25 +1,25 @@
-import { useRouter } from 'next/router'
-import { LocationView } from '@/components/neighborhoods/LocationView'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationGetResponse } from '@/utils/types/location'
 import { useProfile } from '@/components/auth/useProfile'
 import { useLocationVote } from '../hooks/useLocationVote'
+import { LocationView } from '@/components/neighborhoods/LocationView'
+import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
 import { PublishModal } from './edit-location/PublishModal'
-import { useBackend } from '@/components/hooks/useBackend'
-import { LocationGetResponse } from '@/utils/types/location'
 
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
   const { user } = useProfile()
-  const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
   const { useGet } = useBackend()
-  const { data } = useGet<LocationGetResponse>(
+  const { data, mutate: refetchLocation } = useGet<LocationGetResponse>(
     id ? ['LOCATION', { externId: `${id}` }] : null
   )
+  const { voteForLocation } = useLocationVote(refetchLocation)
 
   const location = data?.location
 

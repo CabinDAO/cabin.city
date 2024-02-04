@@ -26,7 +26,7 @@ export const useProfile = ({
   const {
     data: meData,
     isLoading: isMeLoading,
-    mutate: mutateMe,
+    mutate: refetchProfile,
   } = useGet<ProfileMeResponse>('PROFILE_ME')
 
   const me = ready && !privyUser ? null : meData?.me
@@ -55,6 +55,6 @@ export const useProfile = ({
   return {
     user: me,
     isUserLoading: isMeLoading,
-    refetchProfile: mutateMe,
+    refetchProfile,
   }
 }

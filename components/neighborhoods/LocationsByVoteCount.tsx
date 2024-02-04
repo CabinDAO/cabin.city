@@ -17,35 +17,39 @@ export const LocationsByVoteCount = () => {
   const [locations, setLocations] = useState<LocationFragment[]>([])
   const [page, setPage] = useState(1)
 
-  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
-    sort: 'votesDesc',
-    page: page,
-  } as LocationListParams)
+  const { data, mutate: refetchLocations } = useGet<LocationListResponse>(
+    'LOCATION_LIST',
+    {
+      sort: 'votesDesc',
+      page: page,
+    } as LocationListParams
+  )
 
   useEffect(() => {
     if (data) {
       if (page === 1) {
         // Reset locations if first page
-        setLocations(data.locations)
-      } else {
+        setLocations(data.locations ?? [])
+      } else if (data.locations) {
         // Append locations if not first page
         setLocations([...locations, ...data.locations])
       }
     }
   }, [data])
 
-  const hasMore = data ? data.count > PAGE_SIZE * (page + 1) : false
+  const hasMore =
+    data && data.count ? data.count > PAGE_SIZE * (page + 1) : false
   const dataLength = locations?.length ?? 0
 
-  // const [refetchList, setRefetchList] = useState(false)
+  const [isRefetchNeeded, setIsRefetchNeeded] = useState(false)
   const { voteForLocation } = useLocationVote(() => {
-    // setRefetchList(true)
+    setIsRefetchNeeded(true)
   })
-  // useEffect(() => {
-  //   if (refetchList) {
-  //     refetch()
-  //   }
-  // }, [refetchList, refetch])
+  useEffect(() => {
+    if (isRefetchNeeded) {
+      refetchLocations()
+    }
+  }, [isRefetchNeeded, refetchLocations])
 
   return (
     <LocationListContainer>

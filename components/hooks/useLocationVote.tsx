@@ -21,11 +21,11 @@ export const useLocationVote = (afterVote?: () => void) => {
             location={location}
             onCastVotes={async (reqBody: LocationVoteParams) => {
               return post('LOCATION_VOTE', reqBody).then((res) => {
-                if (res.votes) {
-                  afterVote?.()
-                  // TODO: we used to refetch vote count here?
-                } else {
+                if (!res || res.error) {
                   throw new Error('Error casting votes')
+                } else {
+                  afterVote?.()
+                  // TODO: we used to refetch vote count here? now we need to refetch the whole location? where does vote count come from?
                 }
               })
             }}
