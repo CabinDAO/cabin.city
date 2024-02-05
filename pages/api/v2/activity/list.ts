@@ -260,9 +260,7 @@ const toFragments = (
               name: activity.location.name,
               description: activity.location.description,
               tagline: activity.location.tagline,
-              bannerImageUrl:
-                getImageUrlByIpfsHash(activity.location.bannerImageIpfsHash) ||
-                '',
+              bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
               sleepCapacity: activity.location.sleepCapacity,
               address: {
                 locality: activity.location.address?.locality || '',

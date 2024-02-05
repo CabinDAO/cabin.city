@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  // previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -291,6 +292,8 @@ model LocationMediaItem {
 
   Location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int
+
+  @@unique([locationId, category, ipfsHash])
 }
 
 enum LocationMediaCategory {

@@ -1,31 +1,30 @@
 import React, { useState } from 'react'
-import { LocationStepWrapper } from './LocationStepWrapper'
-import { Subline2 } from '@/components/core/Typography'
-import styled from 'styled-components'
-import { StepProps } from './location-wizard-configuration'
 import { useUpdateLocation } from '../useUpdateLocation'
-import { InputText } from '@/components/core/InputText'
+import { AddressFragment, LocationEditParams } from '@/utils/types/location'
+import { useError } from '@/components/hooks/useError'
 import {
   MAX_LOCATION_BIO_LENGTH,
   MAX_LOCATION_TITLE_LENGTH,
 } from '../constants'
-import { PartialUpdateLocationInput } from '@/generated/graphql'
-import { HorizontalDivider } from '@/components/core/Divider'
-import {
-  validateBio,
-  validateEmail,
-  validateLocationInput,
-  validateTitle,
-} from '../validations'
-import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import {
   REQUIRED_FIELDS_TOAST_ERROR,
   REQUIRED_FIELD_ERROR,
   isNumber,
   truthyString,
 } from '@/utils/validate'
-import { useError } from '@/components/hooks/useError'
-import { AddressFragment } from '@/utils/types/location'
+import {
+  validateBio,
+  validateEmail,
+  validateLocationInput,
+  validateTitle,
+} from '../validations'
+import { StepProps } from './location-wizard-configuration'
+import styled from 'styled-components'
+import { Subline2 } from '@/components/core/Typography'
+import { InputText } from '@/components/core/InputText'
+import { LocationStepWrapper } from './LocationStepWrapper'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 
 export const BasicDetailStep = ({
   name,
@@ -44,14 +43,13 @@ export const BasicDetailStep = ({
 
   const { showError } = useError()
 
-  const [locationInput, setLocationInput] =
-    useState<PartialUpdateLocationInput>({
-      name: location.name,
-      caretakerEmail: location.caretakerEmail,
-      tagline: location.tagline,
-      sleepCapacity: location.sleepCapacity,
-      internetSpeedMbps: location.internetSpeedMbps,
-    })
+  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+    name: location.name,
+    caretakerEmail: location.caretakerEmail,
+    tagline: location.tagline,
+    sleepCapacity: location.sleepCapacity,
+    internetSpeedMbps: location.internetSpeedMbps,
+  })
 
   const nameValidation = validateTitle(locationInput.name)
   const contactEmailValidation = validateEmail(locationInput.caretakerEmail)
@@ -59,7 +57,7 @@ export const BasicDetailStep = ({
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof PartialUpdateLocationInput
+    field: keyof LocationEditParams
   ) => {
     const intFields = ['sleepCapacity', 'internetSpeedMbps']
 

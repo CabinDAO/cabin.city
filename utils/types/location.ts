@@ -55,7 +55,7 @@ export type LocationFragment = {
   tagline: string
   description: string
   address: AddressFragment | null
-  bannerImageUrl: string
+  bannerImageIpfsHash: string
   sleepCapacity: number
   internetSpeedMbps: number
   caretaker: ProfileBasicFragment
@@ -102,13 +102,27 @@ export type LocationNewResponse = {
 }
 
 export type LocationEditParams = {
-  externId: string
   name?: string
   tagline?: string
   description?: string
-  address?: AddressFragment
+  address?: AddressFragment | null
   sleepCapacity?: number
   internetSpeedMbps?: number
+  caretakerEmail?: string | null
+  bannerImageIpfsHash?: string
+  mediaItems?: {
+    category: LocationMediaCategory
+    ipfsHash: string
+  }[]
+}
+
+export type LocationEditResponse = {
+  location?: LocationFragment | null
+  error?: string
+}
+
+export type LocationDeleteResponse = {
+  error?: string
 }
 
 // must match LocationQueryInclude below

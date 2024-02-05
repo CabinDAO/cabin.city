@@ -1,22 +1,21 @@
-import { LocationStepWrapper } from './LocationStepWrapper'
-import { StepProps } from './location-wizard-configuration'
-import { useUpdateLocation } from '../useUpdateLocation'
 import { useState } from 'react'
-import { HorizontalDivider } from '@/components/core/Divider'
-import { GalleryUploadSection } from '../../core/GalleryUploadSection'
-import {
-  InputMaybe,
-  LocationMediaCategory,
-  PartialUpdateLocationInput,
-} from '@/generated/graphql'
+import { useError } from '@/components/hooks/useError'
+import { useUpdateLocation } from '../useUpdateLocation'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { unique } from '@/utils/array'
+import {
+  LocationEditParams,
+  LocationMediaCategory,
+} from '@/utils/types/location'
 import {
   PHOTO_REQUIRED_ERROR,
   REQUIRED_SECTIONS_TOAST_ERROR,
   REQUIRED_SECTION_ERROR,
 } from '@/utils/validate'
-import { useError } from '@/components/hooks/useError'
+import { unique } from '@/utils/array'
+import { StepProps } from './location-wizard-configuration'
+import { LocationStepWrapper } from './LocationStepWrapper'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { GalleryUploadSection } from '../../core/GalleryUploadSection'
 
 export const PhotoGalleryStep = ({
   name,
@@ -25,7 +24,7 @@ export const PhotoGalleryStep = ({
   location,
   steps,
 }: StepProps) => {
-  const { updateLocation } = useUpdateLocation(location._id)
+  const { updateLocation } = useUpdateLocation(location.externId)
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [highlightErrors, setHighlightErrors] = useState(false)
   const [uploadingByCategory, setUploadingByCategory] = useState<{
@@ -36,14 +35,13 @@ export const PhotoGalleryStep = ({
     [LocationMediaCategory.Features]: false,
   })
 
-  const [locationInput, setLocationInput] =
-    useState<PartialUpdateLocationInput>({
-      bannerImageIpfsHash: location.bannerImageIpfsHash,
-      mediaItems: location.mediaItems?.map((mediaItem) => ({
-        ipfsHash: mediaItem?.ipfsHash,
-        category: mediaItem?.category,
-      })),
-    })
+  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+    bannerImageIpfsHash: location.bannerImageIpfsHash,
+    mediaItems: location.mediaItems?.map((mediaItem) => ({
+      ipfsHash: mediaItem?.ipfsHash,
+      category: mediaItem?.category,
+    })),
+  })
 
   const getImagesForCategory = (category: LocationMediaCategory) => {
     const imagesForCategory = locationInput.mediaItems?.filter(
@@ -111,7 +109,7 @@ export const PhotoGalleryStep = ({
     }))
   }
 
-  const deleteByIpfsHash = (ipfsHash: InputMaybe<string> | undefined) => {
+  const deleteByIpfsHash = (ipfsHash: string) => {
     const foundCreatedMediaItem = locationInput.mediaItems?.find(
       (mediaItem) => mediaItem?.ipfsHash === ipfsHash
     )

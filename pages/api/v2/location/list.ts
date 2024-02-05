@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
 import { PAGE_SIZE } from '@/utils/api/backend'
@@ -14,8 +15,6 @@ import {
 } from '@/utils/types/location'
 import { OfferType } from '@/utils/types/offer'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
@@ -127,7 +126,7 @@ export const locationToFragment = (
           postalCode: loc.address.postalCode,
         }
       : null,
-    bannerImageUrl: getImageUrlByIpfsHash(loc.bannerImageIpfsHash) ?? '',
+    bannerImageIpfsHash: loc.bannerImageIpfsHash,
     sleepCapacity: loc.sleepCapacity,
     internetSpeedMbps: loc.internetSpeedMbps,
     caretaker: {

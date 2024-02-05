@@ -1,6 +1,5 @@
 import { FileUploadButton } from '@/components/core/FileUploadButton'
 import { Body2, Caption, H3 } from '@/components/core/Typography'
-import { InputMaybe } from '@/generated/graphql'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
 import { BannerPreview } from '../neighborhoods/edit-location/BannerPreview'
@@ -12,8 +11,8 @@ interface GalleryUploadSectionProps {
   instructions: string
   isBanner?: boolean
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  ipfsHashList?: (InputMaybe<string> | undefined)[]
-  onDelete?: (ipfsHash: InputMaybe<string> | undefined) => void
+  ipfsHashList?: string[]
+  onDelete?: (ipfsHash: string) => void
   onStartUploading?: () => void
   uploading?: boolean
   errorMessage?: string

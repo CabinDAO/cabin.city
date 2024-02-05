@@ -6,6 +6,7 @@ import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
 import { LocationFragment } from '@/utils/types/location'
+import { getImageUrlByIpfsHash } from '@/lib/image'
 
 export const LocationPostItem = ({
   location,
@@ -16,7 +17,7 @@ export const LocationPostItem = ({
 }) => {
   const {
     name,
-    bannerImageUrl,
+    bannerImageIpfsHash,
     address,
     sleepCapacity,
     offerCount,
@@ -42,10 +43,10 @@ export const LocationPostItem = ({
       ) : null}
       <Container onClick={handleOnClick}>
         <ImageContainer>
-          {bannerImageUrl ? (
+          {bannerImageIpfsHash ? (
             <ImageFlex
               alt={name ?? 'Location'}
-              src={bannerImageUrl ?? ''}
+              src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
               width={9.6}
               sizes={`96px`}
             />

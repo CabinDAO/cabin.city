@@ -8,7 +8,9 @@ import {
 import { prisma } from '@/utils/prisma'
 import { Prisma } from '@prisma/client'
 import {
+  LocationDeleteResponse,
   LocationEditParams,
+  LocationEditResponse,
   LocationGetResponse,
   LocationQueryInclude,
   LocationWithRelations,
@@ -60,7 +62,7 @@ async function handleGet(
 
 async function handlePost(
   req: NextApiRequest,
-  res: NextApiResponse<LocationGetResponse>,
+  res: NextApiResponse<LocationEditResponse>,
   profile: ProfileWithWallet
 ) {
   const externId = req.query.externId as string
@@ -71,6 +73,7 @@ async function handlePost(
     },
     include: {
       caretaker: true,
+      mediaItems: true,
     },
   })
 
@@ -86,12 +89,81 @@ async function handlePost(
 
   const params: LocationEditParams = req.body
 
-  console.log(req.body)
+  const mediaItemsToDelete: number[] = []
+  if (params.mediaItems) {
+    for (const mediaItem of locationToEdit.mediaItems) {
+      if (
+        !params.mediaItems.find(
+          (newMediaItem) =>
+            newMediaItem.category === mediaItem.category &&
+            newMediaItem.ipfsHash === mediaItem.ipfsHash
+        )
+      ) {
+        mediaItemsToDelete.push(mediaItem.id)
+      }
+    }
+  }
+
+  const [_, updatedLocation] = await prisma.$transaction([
+    prisma.locationMediaItem.deleteMany({
+      where: { id: { in: mediaItemsToDelete } },
+    }),
+    prisma.location.update({
+      where: {
+        id: locationToEdit.id,
+      },
+      include: LocationQueryInclude,
+      data: {
+        name: params.name,
+        tagline: params.tagline,
+        description: params.description,
+        sleepCapacity: params.sleepCapacity,
+        internetSpeedMbps: params.internetSpeedMbps,
+        caretakerEmail: params.caretakerEmail,
+        bannerImageIpfsHash: params.bannerImageIpfsHash,
+        mediaItems: params.mediaItems
+          ? {
+              connectOrCreate: params.mediaItems.map((mediaItem) => ({
+                where: {
+                  locationId_category_ipfsHash: {
+                    locationId: locationToEdit.id,
+                    category: mediaItem.category,
+                    ipfsHash: mediaItem.ipfsHash,
+                  },
+                },
+                create: {
+                  category: mediaItem.category,
+                  ipfsHash: mediaItem.ipfsHash,
+                },
+              })),
+            }
+          : undefined,
+        address: params.address
+          ? {
+              upsert: {
+                create: {
+                  ...params.address,
+                },
+                update: {
+                  ...params.address,
+                },
+              },
+            }
+          : undefined,
+      },
+    }),
+  ])
+
+  res.status(200).send({
+    location: locationToFragment(
+      updatedLocation as unknown as LocationWithRelations
+    ),
+  })
 }
 
 async function handleDelete(
   req: NextApiRequest,
-  res: NextApiResponse<LocationGetResponse>,
+  res: NextApiResponse<LocationDeleteResponse>,
   profile: ProfileWithWallet
 ) {
   const externId = req.query.externId as string

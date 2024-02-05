@@ -15,6 +15,7 @@ import { CardActions } from './CardActions'
 import { VoteButton } from '../neighborhoods/styles'
 import { useLocationActions } from '@/components/hooks/useLocationActions'
 import { useLocationVote } from '@/components/hooks/useLocationVote'
+import { getImageUrlByIpfsHash } from '@/lib/image'
 
 interface LocationCardProps {
   location: {
@@ -22,7 +23,7 @@ interface LocationCardProps {
     name: string | null | undefined
     tagline: string | null | undefined
     publishedAt: string | null | undefined
-    bannerImageUrl: string | null | undefined
+    bannerImageIpfsHash: string | null | undefined
     voteCount: number | null | undefined
     recentVoters: LocationFragment['recentVoters'] | null | undefined
     address: ShortAddressFragment | null | undefined
@@ -72,10 +73,10 @@ export const LocationCard = (props: LocationCardProps) => {
         onClick={() => events.viewCityDirectoryEvent(location.externId)}
       >
         <ImageContainer>
-          {location.bannerImageUrl ? (
+          {location.bannerImageIpfsHash ? (
             <StyledImage
               quality={40}
-              src={location.bannerImageUrl}
+              src={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
               sizes={`${BANNER_IMAGE_SIZE}px`}
               fill
               alt={name}

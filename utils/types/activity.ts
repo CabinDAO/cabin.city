@@ -34,7 +34,7 @@ export type ActivityListFragment = {
       | 'externId'
       | 'name'
       | 'tagline'
-      | 'bannerImageUrl'
+      | 'bannerImageIpfsHash'
       | 'sleepCapacity'
       | 'offerCount'
       | 'voteCount'

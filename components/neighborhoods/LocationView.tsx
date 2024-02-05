@@ -1,15 +1,10 @@
 import Link from 'next/link'
 import { EMPTY } from '@/utils/display-utils'
 import { useBackend } from '@/components/hooks/useBackend'
-import {
-  LocationType,
-  LocationMediaCategory,
-  LocationFragment,
-} from '@/utils/types/location'
+import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
 import { OfferListResponse, OfferType } from '@/utils/types/offer'
-import { CaretakerFragment } from '@/utils/types/profile'
 import { formatShortAddress } from '@/lib/address'
-import { resolveImageUrl } from '@/lib/image'
+import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -35,67 +30,6 @@ import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { ExperienceList } from '@/components/offers/ExperienceList'
 import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
-
-interface LocationMediaItem {
-  category: LocationMediaCategory
-  ipfsHash?: string | null | undefined
-}
-
-interface Profile {
-  externId: string
-  avatar?:
-    | {
-        url: string
-      }
-    | null
-    | undefined
-}
-
-interface LocationVote {
-  profile: Profile
-}
-
-interface OfferLocation {
-  externId: string
-  name?: string | null | undefined
-  address?: OfferLocationAddress | null | undefined
-}
-
-interface OfferLocationAddress {
-  locality?: string | null | undefined
-  admininstrativeAreaLevel1Short?: string | null | undefined
-}
-
-interface OfferItem {
-  externId: string
-  offerType?: OfferType | null | undefined
-  locationType: LocationType
-  title?: string | null | undefined
-  startDate?: string | null | undefined
-  endDate?: string | null | undefined
-  ipfsHash?: string | null | undefined
-  location: OfferLocation
-}
-
-export interface LocationProps {
-  externId: string
-  address: string | null | undefined
-  bannerImageUrl: string | null | undefined
-  caretaker: CaretakerFragment
-  caretakerEmail: string | null | undefined
-  description: string | null | undefined
-  locationType: LocationType
-  mediaItems: LocationMediaItem[]
-  name: string | null | undefined
-  tagline: string | null | undefined
-  offerCount: number
-  sleepCapacity: number | null | undefined
-  internetSpeedMbps: number | null | undefined
-  voteCount: number | null | undefined
-  offers: OfferItem[]
-  votes: LocationVote[] | null | undefined
-  publishedAt: Date | null | undefined
-}
 
 export const LocationView = ({
   location,
@@ -149,8 +83,11 @@ export const LocationView = ({
 
   return (
     <LocationContent>
-      {location.bannerImageUrl && (
-        <BannerHeader imageUrl={location.bannerImageUrl} reduceTopPad={1.8} />
+      {location.bannerImageIpfsHash && (
+        <BannerHeader
+          imageUrl={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
+          reduceTopPad={1.8}
+        />
       )}
 
       <LocationDetailsContainer>

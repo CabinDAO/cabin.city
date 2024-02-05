@@ -320,6 +320,21 @@ async function importBadge(datum: Badge) {
 async function importLocation(datum: Location) {
   const d = datum._airbyte_data
 
+  const dupeCheck: { [n: string]: number } = {}
+  if (d.data.mediaItems) {
+    for (let i = 0; i < d.data.mediaItems.length; i++) {
+      if (
+        !dupeCheck[
+          `${d.data.mediaItems[i].ipfsHash}-${d.data.mediaItems[i].category}`
+        ]
+      ) {
+        dupeCheck[
+          `${d.data.mediaItems[i].ipfsHash}-${d.data.mediaItems[i].category}`
+        ] = i
+      }
+    }
+  }
+
   await prisma.location.create({
     data: {
       createdAt: new Date(d.ts / 1000),
@@ -331,12 +346,17 @@ async function importLocation(datum: Location) {
       description: d.data.description ?? '',
       bannerImageIpfsHash: d.data.bannerImageIpfsHash ?? '',
       mediaItems: {
-        create: d.data.mediaItems?.map((mi) => ({
-          createdAt: new Date(d.ts / 1000),
-          updatedAt: new Date(d.ts / 1000),
-          category: mi.category,
-          ipfsHash: mi.ipfsHash,
-        })),
+        create: d.data.mediaItems
+          ?.filter(
+            // only keep first of duplicates
+            (mi, i, a) => dupeCheck[`${mi.ipfsHash}-${mi.category}`] == i
+          )
+          .map((mi) => ({
+            createdAt: new Date(d.ts / 1000),
+            updatedAt: new Date(d.ts / 1000),
+            category: mi.category,
+            ipfsHash: mi.ipfsHash,
+          })),
       },
       address:
         d.data.address && d.data.address.country

@@ -1,25 +1,20 @@
+import { useBackend } from '@/components/hooks/useBackend'
 import {
-  PartialUpdateLocationInput,
-  useUpdateLocationMutation,
-} from '@/generated/graphql'
+  LocationEditParams,
+  LocationEditResponse,
+} from '@/utils/types/location'
 
 export function useUpdateLocation(locationId: string | undefined) {
-  const [updateLocationMutation] = useUpdateLocationMutation()
+  const { useMutate } = useBackend()
+  const { trigger: mutateLocation } = useMutate<LocationEditResponse>(
+    locationId ? ['LOCATION', { externId: locationId }] : null
+  )
 
-  const updateLocation = async (inputData: PartialUpdateLocationInput = {}) => {
+  const updateLocation = async (inputData: LocationEditParams = {}) => {
     if (locationId) {
-      const { data } = await updateLocationMutation({
-        variables: {
-          id: locationId,
-          data: inputData,
-        },
-      })
+      const data = await mutateLocation(inputData)
 
-      if (data?.partialUpdateLocation) {
-        return data.partialUpdateLocation
-      } else {
-        return null
-      }
+      return data?.location || null
     }
   }
 

@@ -12,13 +12,14 @@ import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
 import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
+import { getImageUrlByIpfsHash } from '@/lib/image'
 
 type CardVariant = 'home' | 'city-directory'
 interface ListingCardProps {
   location: {
     externId: string
     name: string | null | undefined
-    bannerImageUrl: string | null | undefined
+    bannerImageIpfsHash: string | null | undefined
     voteCount: number | null | undefined
     recentVoters: LocationFragment['recentVoters'] | null | undefined
     address: ShortAddressFragment | null | undefined
@@ -49,7 +50,7 @@ export const ListingCard = (props: ListingCardProps) => {
 
   const {
     externId,
-    bannerImageUrl,
+    bannerImageIpfsHash,
     voteCount,
     recentVoters,
     address,
@@ -73,12 +74,12 @@ export const ListingCard = (props: ListingCardProps) => {
         onClick={() => events.viewCityDirectoryEvent(externId)}
       >
         <ImageContainer widthPx={cardWidth}>
-          {bannerImageUrl ? (
+          {bannerImageIpfsHash ? (
             <ImageFlex
               sizes={`${cardWidth}px`}
               quality={40}
               aspectRatio={cardWidth / BANNER_IMAGE_HEIGHT}
-              src={bannerImageUrl}
+              src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
               alt={name}
             />
           ) : (
