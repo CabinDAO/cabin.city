@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 // const getExtendedClient = () => {
 //   return new PrismaClient({
@@ -58,4 +59,7 @@ if (process.env.NODE_ENV === 'production') {
   globalThis.prisma = prisma
 }
 
-export { prisma }
+const onchainAmountToDecimal = (balance: string) =>
+  new Decimal(balance).dividedBy(10 ** 18)
+
+export { prisma, onchainAmountToDecimal }

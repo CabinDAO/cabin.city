@@ -1,34 +1,38 @@
-import { BigNumber, providers } from 'ethers'
-import { Expr } from 'faunadb'
+import { providers } from 'ethers'
 import { NextApiResponse } from 'next'
-import { createSyncAttempt } from '../fauna-server/createSyncAttempt'
-import { getLatestSyncAttempts } from '../fauna-server/getLatestSyncAttempts'
-import { updateSyncAttemptStatus } from '../fauna-server/updateSyncAttemptStatus'
+import { prisma } from '@/utils/prisma'
+import { $Enums, BlockSyncAttempt } from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 const SAFE_BLOCK_THRESHOLD = 30
 
 export interface SyncAttemptInput {
   provider: providers.Provider
-  key: string
-  initialBlock: BigNumber
-  blockCount: BigNumber
+  type: $Enums.BlockSyncType
+  initialBlock: Decimal
+  blockCount: Decimal
   res: NextApiResponse
   handler: (state: SyncAttemptState) => Promise<object | void>
 }
 
 export interface SyncAttemptState {
-  key: string
   provider: providers.Provider
-  ref: Expr
-  startBlock: BigNumber
-  endBlock: BigNumber
+  startBlock: Decimal
+  endBlock: Decimal
 }
 
 export async function attemptSync(input: SyncAttemptInput) {
-  const { key, provider, res, handler } = input
+  const { type, provider, res, handler } = input
 
-  const { latestPendingAttempt, latestSuccessfulAttempt, latestFailedAttempt } =
-    await getLatestSyncAttempts(key)
+  const latest = await prisma.blockSyncAttempt.findMany({
+    where: { type },
+    distinct: ['status'],
+    orderBy: { createdAt: 'desc' },
+  })
+
+  const latestPendingAttempt = latest.find((a) => a.status === 'Pending')
+  const latestSuccessfulAttempt = latest.find((a) => a.status === 'Successful')
+  const latestFailedAttempt = latest.find((a) => a.status === 'Failed')
 
   // Short circuit if there are any pending sync attempts
   if (latestPendingAttempt) {
@@ -57,27 +61,26 @@ export async function attemptSync(input: SyncAttemptInput) {
   }
 
   try {
-    const startBlock = BigNumber.from(syncAttempt.data.startBlock)
-    const endBlock = BigNumber.from(syncAttempt.data.endBlock)
-    const blocksTillLatest = BigNumber.from(latestBlockNumber).sub(endBlock)
+    const blocksTillLatest = new Decimal(latestBlockNumber).sub(
+      syncAttempt.endBlock
+    )
 
-    const state = {
-      key,
+    const result = await handler({
       provider,
-      ref: syncAttempt.ref,
-      startBlock,
-      endBlock,
-    }
+      startBlock: syncAttempt.startBlock,
+      endBlock: syncAttempt.endBlock,
+    })
 
-    const result = await handler(state)
+    await completeSync(syncAttempt.id)
+
     res.status(200).send(
       JSON.stringify(
         {
-          key,
-          startBlock: startBlock.toString(),
-          endBlock: endBlock.toString(),
+          type,
+          id: syncAttempt.id,
+          startBlock: syncAttempt.startBlock.toString(),
+          endBlock: syncAttempt.endBlock.toString(),
           blocksTillLatest: blocksTillLatest.toString(),
-          ref: syncAttempt.ref,
           result,
         },
         null,
@@ -87,7 +90,15 @@ export async function attemptSync(input: SyncAttemptInput) {
   } catch (error) {
     console.error(error)
     try {
-      await updateSyncAttemptStatus(syncAttempt.ref, 'Failed')
+      await prisma.blockSyncAttempt.update({
+        where: {
+          id: syncAttempt.id,
+          status: 'Pending',
+        },
+        data: {
+          status: 'Failed',
+        },
+      })
 
       res
         .status(400)
@@ -110,10 +121,9 @@ export async function attemptSync(input: SyncAttemptInput) {
 async function _tryCreateNewSyncAttempt(
   input: SyncAttemptInput,
   latestBlockNumber: number,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  latestSuccessfulAttempt: any
+  latestSuccessfulAttempt: BlockSyncAttempt | undefined
 ) {
-  const { key, initialBlock, blockCount } = input
+  const { type, initialBlock, blockCount } = input
 
   // Find the latest safe block number
   const maxSafeBlock = latestBlockNumber - SAFE_BLOCK_THRESHOLD
@@ -121,24 +131,39 @@ async function _tryCreateNewSyncAttempt(
   let startBlock
   if (latestSuccessfulAttempt) {
     // If we're already up to date, there is nothing to attempt
-    if (latestSuccessfulAttempt.data.endBlock === maxSafeBlock.toString()) {
+    if (latestSuccessfulAttempt.endBlock.eq(maxSafeBlock)) {
       return null
     }
-    startBlock = BigNumber.from(latestSuccessfulAttempt.data.endBlock).add(1)
+    startBlock = latestSuccessfulAttempt.endBlock.add(1)
   } else {
     startBlock = initialBlock
   }
 
   // Find the end block (don't exceed the max safe block)
   const endBlock = startBlock.add(blockCount).gt(maxSafeBlock)
-    ? BigNumber.from(maxSafeBlock)
+    ? new Decimal(maxSafeBlock)
     : startBlock.add(blockCount)
 
   // Create a new sync attempt for the next N blocks in pending state
-  return await createSyncAttempt(
-    key,
-    'Pending',
-    startBlock.toString(),
-    endBlock.toString()
-  )
+  return prisma.blockSyncAttempt.create({
+    data: {
+      type,
+      status: 'Pending',
+      startBlock: startBlock,
+      endBlock: endBlock,
+      failedAttemptCount: 0,
+    },
+  })
+}
+
+export async function completeSync(syncAttemptId: number) {
+  return prisma.blockSyncAttempt.update({
+    where: {
+      id: syncAttemptId,
+      status: 'Pending',
+    },
+    data: {
+      status: 'Successful',
+    },
+  })
 }

@@ -44,7 +44,11 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     contactFields: true
-    roles: true
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
   }
 }>
 
@@ -97,7 +101,11 @@ async function handler(
         },
       },
       contactFields: true,
-      roles: true,
+      roles: {
+        include: {
+          walletHat: true,
+        },
+      },
     },
   })
 
@@ -144,7 +152,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
       : null,
 
     roles: profile.roles.map((role) => ({
-      hatId: role.hatId,
+      hatId: role.walletHat?.hatId || null,
       type: role.type as RoleType,
       level: role.level as RoleLevel,
     })),

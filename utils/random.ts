@@ -3,6 +3,7 @@
 enum Prefixes {
   profile = 'pr',
   location = 'lc',
+  activity = 'ac',
 }
 
 type PrefixType = keyof typeof Prefixes

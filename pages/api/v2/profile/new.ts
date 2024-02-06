@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
 import { $Enums, Profile } from '@prisma/client'
-import { getProfileRoleFromHat } from '@/lib/hats/hats-utils'
+import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { randomId } from '@/utils/random'
 import { ProfileNewResponse } from '@/utils/types/profile'
 
@@ -79,35 +79,30 @@ async function handler(
 }
 
 async function createHats(profile: Profile) {
-  const hats = await prisma.hat.findMany({
+  const walletHats = await prisma.walletHat.findMany({
     where: {
-      wallets: {
-        some: {
-          walletId: profile.walletId,
-        },
-      },
+      walletId: profile.walletId,
+    },
+    include: {
+      hat: true,
     },
   })
 
-  console.log('hats', hats)
+  console.log('wallet hats', walletHats)
 
-  if (!hats.length) return
+  if (!walletHats.length) return
 
-  const rolesToAdd = hats
-    .map((hat) => {
-      const r = getProfileRoleFromHat({
-        id: `${hat.id}`,
-        prettyId: hat.hatsProtocolId,
-      })
+  const rolesToAdd = walletHats
+    .map((wh) => {
+      const r = getRoleInfoFromHat(wh.hat.hatsProtocolId)
+
       return {
-        hatId: hat.id,
-        type: r?.role,
+        walletHatId: wh.id,
+        type: r?.type,
         level: r?.level,
       }
     })
-    .filter((r) => {
-      return r.type && r.level
-    })
+    .filter((r) => r.type && r.level)
 
   console.log('rolesToAdd', rolesToAdd)
 
@@ -115,7 +110,7 @@ async function createHats(profile: Profile) {
     data: rolesToAdd.map((r) => {
       return {
         profileId: profile.id,
-        hatId: r.hatId,
+        walletHatId: r.walletHatId,
         type: r.type as $Enums.RoleType,
         level: r.level as $Enums.RoleLevel,
       }

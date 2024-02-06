@@ -46,7 +46,11 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     contactFields: true
-    roles: true
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
     locations: {
       select: {
         _count: true
@@ -107,7 +111,11 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       contactFields: true,
-      roles: true,
+      roles: {
+        include: {
+          walletHat: true,
+        },
+      },
       locations: {
         select: {
           _count: true,
@@ -295,7 +303,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
       value: cf.value,
     })),
     roles: profile.roles.map((role) => ({
-      hatId: role.hatId,
+      hatId: role.walletHat?.hatId || null,
       type: role.type as RoleType,
       level: role.level as RoleLevel,
     })),

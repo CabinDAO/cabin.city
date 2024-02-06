@@ -1,4 +1,6 @@
-import { ProfileRoleLevelType, ProfileRoleType } from 'generated/graphql'
+import { prisma } from '@/utils/prisma'
+import { $Enums, Profile } from '@prisma/client'
+import { ProfileWithWallet } from '@/utils/api/withAuth'
 
 const CARETAKER_ID = '0001'
 const GATHERER_ID = '0002'
@@ -7,18 +9,13 @@ const NATURALIST_ID = '0004'
 const CREATOR_ID = '0005'
 const RESIDENT_ID = '0006'
 
-const ID_TO_ROLE: Record<string, ProfileRoleType> = {
-  [CARETAKER_ID]: ProfileRoleType.Caretaker,
-  [BUILDER_ID]: ProfileRoleType.Builder,
-  [GATHERER_ID]: ProfileRoleType.Gatherer,
-  [NATURALIST_ID]: ProfileRoleType.Naturalist,
-  [CREATOR_ID]: ProfileRoleType.Creator,
-  [RESIDENT_ID]: ProfileRoleType.Resident,
-}
-
-interface GetProfileRoleHat {
-  id: string
-  prettyId: string
+const ID_TO_TYPE: Record<string, $Enums.RoleType> = {
+  [CARETAKER_ID]: $Enums.RoleType.Caretaker,
+  [BUILDER_ID]: $Enums.RoleType.Builder,
+  [GATHERER_ID]: $Enums.RoleType.Gatherer,
+  [NATURALIST_ID]: $Enums.RoleType.Naturalist,
+  [CREATOR_ID]: $Enums.RoleType.Creator,
+  [RESIDENT_ID]: $Enums.RoleType.Resident,
 }
 
 /*
@@ -27,22 +24,20 @@ interface GetProfileRoleHat {
         0x00000002.0001: Caretaker Custodian
         0x00000002.0001.0001: Caretaker Artisan
 */
-export const getProfileRoleFromHat = (hat: GetProfileRoleHat) => {
-  const split = hat.prettyId.split('.')
+export const getRoleInfoFromHat = (hatPrettyId: string) => {
+  const split = hatPrettyId.split('.')
   if (split.length < 2) {
     // Most likely top hat
     return null
   }
-  const roleId = split[1]
-  const role = ID_TO_ROLE[roleId]
-  if (!role) {
-    return null // 🤷🏻‍♂️
+  const typeId = split[1]
+  const type = ID_TO_TYPE[typeId]
+  if (!type) {
+    return null
   }
 
   const level =
-    split.length === 2
-      ? ProfileRoleLevelType.Custodian
-      : ProfileRoleLevelType.Artisan
+    split.length === 2 ? $Enums.RoleLevel.Custodian : $Enums.RoleLevel.Artisan
 
-  return { hatId: hat.id, role, level }
+  return { type, level }
 }

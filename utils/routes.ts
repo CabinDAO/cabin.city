@@ -1,14 +1,6 @@
 const prefix = '/api/v2'
 
 enum Routes {
-  HAT_LIST = `/hat/list`,
-  BADGE_LIST = `/badge/list`,
-  SYNC_ATTEMPT_LIST = `/syncAttempt/list`,
-  SYNC_ATTEMPT_GET = `/syncAttempt/get`,
-
-  ACCOUNT_LIST = `/account/list`,
-  ACCOUNT_COUNT = `/account/count`,
-
   PROFILE = `/profile/[externId]`,
   PROFILE_NEW = `/profile/new`,
   PROFILE_LIST = `/profile/list`,
@@ -29,7 +21,6 @@ enum Routes {
   OFFER_LIST = `/offer/list`,
 
   ACTIVITY_LIST = `/activity/list`,
-  ACTIVITY_NEW = `/activity/new`,
   ACTIVITY_REACT = `/activity/react`,
   ACTIVITY_SUMMARY = `/activity/summary`,
 

@@ -1,8 +1,10 @@
 import fs from 'fs'
 import { prisma } from '../utils/prisma'
-import { $Enums, Prisma } from '@prisma/client'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import Decimal = Prisma.Decimal
+import { $Enums } from '@prisma/client'
+import {
+  Decimal,
+  PrismaClientKnownRequestError,
+} from '@prisma/client/runtime/library'
 
 // TODO: check that every field in the existing data is imported
 
@@ -62,11 +64,8 @@ async function postgresImport() {
     fileLoop: for (const datum of data) {
       switch (file) {
         case '_airbyte_raw_BlockSyncAttempt.jsonl':
-          // await importBlockSyncAttempt(datum)
-          // break
-          console.log(
-            'THESE ARE USELESS. can import later (or just import the ones that did not succeed)'
-          )
+          await importBlockSyncAttempt(datum)
+          break
           break fileLoop
         case '_airbyte_raw_Account.jsonl':
           await importAccount(datum)
@@ -132,11 +131,21 @@ async function postgresImport() {
 
 async function importBlockSyncAttempt(datum: BlockSyncAttempt) {
   const d = datum._airbyte_data
+
+  const oldSync =
+    (d.data.key == 'HatsProtocol' &&
+      new Decimal(d.data.endBlock).lt('115560565')) ||
+    (d.data.key == 'Otterspace' &&
+      new Decimal(d.data.endBlock).lt('115560295')) ||
+    (d.data.key == 'CabinToken' && new Decimal(d.data.endBlock).lt('19127732'))
+
+  if (d.data.status == 'Successful' && oldSync) return
+
   await prisma.blockSyncAttempt.create({
     data: {
       createdAt: new Date(d.ts / 1000),
       updatedAt: new Date(d.ts / 1000),
-      key: d.data.key == 'HatsProtocol' ? 'Hats' : d.data.key,
+      type: d.data.key == 'HatsProtocol' ? 'Hats' : d.data.key,
       startBlock: d.data.startBlock,
       endBlock: d.data.endBlock,
       status: d.data.status,
@@ -198,6 +207,23 @@ async function importAccountHat(datum: AccountHat) {
 async function importProfile(datum: Profile) {
   const d = datum._airbyte_data
 
+  const wallet = await prisma.wallet.findUnique({
+    where: {
+      faunaId: d.data.account.id,
+    },
+    include: {
+      hats: {
+        include: {
+          hat: true,
+        },
+      },
+    },
+  })
+
+  if (!wallet) {
+    throw new Error(`wallet not found for fauna id ${d.data.account.id}`)
+  }
+
   await prisma.profile.create({
     data: {
       createdAt: new Date(d.ts / 1000),
@@ -214,11 +240,7 @@ async function importProfile(datum: Profile) {
         ? parseInt(d.data.citizenshipMetadata.tokenId)
         : undefined,
       citizenshipMintedAt: d.data.citizenshipMetadata?.mintedAt,
-      wallet: {
-        connect: {
-          faunaId: d.data.account.id,
-        },
-      },
+      walletId: wallet.id,
       avatar: d.data.avatar
         ? {
             create: {
@@ -238,17 +260,19 @@ async function importProfile(datum: Profile) {
         })),
       },
       roles: {
-        create: d.data.roles.map((r) => ({
-          type: r.role,
-          level: r.level,
-          hat: r.hatId
-            ? {
-                connect: {
-                  hatsProtocolId: r.hatId,
-                },
-              }
-            : undefined,
-        })),
+        create: d.data.roles.map((r) => {
+          const walletHat = r.hatId
+            ? wallet.hats.find((h) => h.hat.hatsProtocolId == r.hatId)
+            : null
+          if (r.hatId && !walletHat) {
+            throw new Error(`wallethat not found for r.hatId ${r.hatId}`)
+          }
+          return {
+            type: r.role,
+            level: r.level,
+            walletHatId: walletHat ? walletHat.id : undefined,
+          }
+        }),
       },
     },
   })

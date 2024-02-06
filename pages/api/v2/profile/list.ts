@@ -27,7 +27,11 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
         }
       }
     }
-    roles: true
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
   }
 }>
 
@@ -114,7 +118,11 @@ async function handler(
           },
         },
       },
-      roles: true,
+      roles: {
+        include: {
+          walletHat: true,
+        },
+      },
     },
     orderBy: sortOrder(params.sort),
     skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
@@ -209,7 +217,7 @@ const profilesToFragments = (
           }
         : undefined,
       roles: profile.roles.map((role) => ({
-        hatId: role.hatId,
+        hatId: role.walletHat?.hatId || null,
         type: role.type as RoleType,
         level: role.level as RoleLevel,
       })),

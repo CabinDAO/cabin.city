@@ -49,17 +49,18 @@ model Hat {
   level          Int
 
   wallets WalletHat[]
-
-  role Role?
 }
 
 model WalletHat {
+  id       Int    @id @default(autoincrement())
   wallet   Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
   walletId Int
   hat      Hat    @relation(fields: [hatId], references: [id], onDelete: Cascade)
   hatId    Int
 
-  @@id([walletId, hatId])
+  role Role?
+
+  @@unique([walletId, hatId])
 }
 
 model Badge {
@@ -193,8 +194,8 @@ model Role {
   profileId Int
 
   // Null if the role is not associated with a hat (e.g. Apprentice role)
-  hat   Hat? @relation(fields: [hatId], references: [id], onDelete: Cascade)
-  hatId Int? @unique
+  walletHat   WalletHat? @relation(fields: [walletHatId], references: [id], onDelete: Cascade)
+  walletHatId Int?       @unique
 
   type  RoleType
   level RoleLevel
@@ -391,7 +392,6 @@ model Activity {
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int
 
-  // metadata. TODO: separate table?
   text               String // Text
   badge              Badge?    @relation(fields: [badgeId], references: [id]) // BadgeAdded
   badgeId            Int?
@@ -441,12 +441,14 @@ model BlockSyncAttempt {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  key        BlockSyncType
+  type       BlockSyncType
   startBlock Decimal         @db.Decimal(9, 0)
   endBlock   Decimal         @db.Decimal(9, 0)
   status     BlockSyncStatus
 
   failedAttemptCount Int // TODO: do we need this at all?
+
+  @@index([type, status])
 }
 
 enum BlockSyncType {
