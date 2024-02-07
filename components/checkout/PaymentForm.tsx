@@ -14,9 +14,9 @@ import { Button } from '@/components/core/Button'
 import { Body1 } from '@/components/core/Typography'
 import { CartFragment } from '@/generated/graphql'
 import {
-  CreatePaymentIntentReq,
-  CreatePaymentIntentRes,
-} from '@/components/checkout/types'
+  CreatePaymentIntentParams,
+  CreatePaymentIntentResponse,
+} from '@/pages/api/v2/checkout/create-payment-intent'
 import { usePrivy } from '@privy-io/react-auth'
 import { useError } from '@/components/hooks/useError'
 import { useModal } from '@/components/hooks/useModal'
@@ -172,7 +172,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
       body: JSON.stringify({
         cartId: cart._id,
         agreedToTerms: checkboxChecked,
-      } as CreatePaymentIntentReq),
+      } as CreatePaymentIntentParams),
     })
 
     if (!intentRes.ok) {
@@ -181,7 +181,8 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
       return
     }
 
-    const { clientSecret } = (await intentRes.json()) as CreatePaymentIntentRes
+    const { clientSecret } =
+      (await intentRes.json()) as CreatePaymentIntentResponse
 
     const { error } = await stripe.confirmPayment({
       elements,

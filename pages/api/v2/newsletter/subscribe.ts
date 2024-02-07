@@ -2,11 +2,19 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { subscribe } from '@/utils/convertkit'
 import { AxiosError } from 'axios'
 
-type SubscribeData = {
+export type SubscribeResponse = {
+  success: boolean
+  message: string
+}
+
+export type SubscribeData = {
   email: string
 }
 
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<SubscribeResponse>
+) {
   const { method } = req
   if (method !== 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -22,8 +30,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const { data } = await subscribe(email)
-    res.send({ success: true, data: data })
+    await subscribe(email)
+    res.send({ success: true, message: 'Subscribed' })
   } catch (e: any) {
     if (e instanceof AxiosError) {
       // console.log(e.response?.data)
@@ -32,8 +40,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       console.error(e)
       res.send({
         success: false,
-        message: 'An unexpected error occurred.',
-        error: e,
+        message: `An unexpected error occurred: ${e}`,
       })
     }
   }

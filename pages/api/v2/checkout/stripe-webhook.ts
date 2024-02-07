@@ -1,12 +1,10 @@
 /// <reference types="stripe-event-types" />
 
-import Stripe from 'stripe'
 import { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream'
-import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
-import { query as q } from 'faunadb'
-import { updateCart } from '@/lib/fauna-server/checkout'
-import { PaymentStatus } from '@/generated/graphql'
+import { $Enums } from '@prisma/client'
+import { prisma } from '@/utils/prisma'
+import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailType } from '@/lib/mail/types'
 
@@ -65,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await handlePaymentIntentNewStatus(
         res,
         event.data.object,
-        PaymentStatus.Paid
+        $Enums.PaymentStatus.Paid
       )
       break
     case 'payment_intent.payment_failed':
@@ -73,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await handlePaymentIntentNewStatus(
         res,
         event.data.object,
-        PaymentStatus.Error
+        $Enums.PaymentStatus.Error
       )
       break
     default:
@@ -90,9 +88,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 const handlePaymentIntentNewStatus = async (
   res: NextApiResponse,
   paymentIntent: Stripe.PaymentIntent,
-  status: PaymentStatus
+  status: $Enums.PaymentStatus
 ) => {
-  const cart = await _getCartByIntentSecret(paymentIntent.client_secret ?? '')
+  const clientSecret = paymentIntent.client_secret
+  if (!clientSecret) {
+    res.status(400).end(`No client secret in payment intent`)
+    return
+  }
+
+  const cart = await prisma.cart.findUnique({
+    where: { stripePaymentIntentClientSecret: clientSecret },
+    include: { profile: true },
+  })
 
   if (!cart) {
     console.log(`Got payment_intent.succeeded event with no matching cart`)
@@ -101,11 +108,10 @@ const handlePaymentIntentNewStatus = async (
   }
 
   try {
-    await updateCart(
-      cart.ref.value.id,
-      { paymentStatus: status },
-      cart.data.profile.value.id
-    )
+    await prisma.cart.update({
+      where: { id: cart.id },
+      data: { paymentStatus: status },
+    })
   } catch (e: any) {
     console.log(
       `Got payment_intent.succeeded event but failed to update cart: ${e}`
@@ -114,35 +120,17 @@ const handlePaymentIntentNewStatus = async (
     return
   }
 
-  if (status === PaymentStatus.Paid) {
+  if (status === $Enums.PaymentStatus.Paid) {
     const sendgrid = new SendgridService()
     try {
       await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {
-        cartId: cart.ref.value.id,
+        cartId: cart.id,
       })
       console.log(`Sent us a new purchase email`)
     } catch (e: any) {
       console.log(`Failed to send new purchase email: ${e}`)
     }
   }
-}
-
-const _getCartByIntentSecret = async (
-  stripePaymentIntentClientSecret: string
-) => {
-  if (!stripePaymentIntentClientSecret) {
-    return null
-  }
-
-  // TODO: use a proper type here
-  return faunaServerClient.query<any>(
-    q.Get(
-      q.Match(
-        q.Index('cart_by_stripe_client_secret'),
-        stripePaymentIntentClientSecret
-      )
-    )
-  )
 }
 
 export default handler

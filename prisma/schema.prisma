@@ -365,13 +365,13 @@ model Cart {
   offer     Offer   @relation(fields: [offerId], references: [id])
   offerId   Int
 
-  amountCents   Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
+  amount        Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
   paymentStatus PaymentStatus
   agreedToCOC   Boolean       @default(false)
   agreedToTerms Boolean       @default(false)
   notes         String
 
-  stripePaymentIntentClientSecret String?
+  stripePaymentIntentClientSecret String? @unique
 }
 
 enum PaymentStatus {

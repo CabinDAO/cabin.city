@@ -25,9 +25,13 @@ enum Routes {
   ACTIVITY_SUMMARY = `/activity/summary`,
 
   EMAIL_SEND = '/email/send',
+  NEWSLETTER_SUBSCRIBE = '/newsletter/subscribe',
 
-  // CART_LIST: `/cart/list`,
-  // CART_GET: `/cart/get`,
+  // not implemented yet
+  // CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
+  // CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook',
+  // CART_NEW: `/cart/new`,
+  // CART_GET: `/cart/[externId]`,
 }
 
 /*
