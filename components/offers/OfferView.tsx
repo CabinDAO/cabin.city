@@ -39,7 +39,6 @@ import Link from 'next/link'
 import { HostCard } from '@/components/neighborhoods/HostCard'
 import { isAfter, isBefore } from 'date-fns'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { CostBreakdown } from '@/components/checkout/CostBreakdown'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 

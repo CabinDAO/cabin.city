@@ -1,1 +1,0 @@
-export const MEMBERSHIP_PRICE_DOLLARS = 399
