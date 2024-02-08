@@ -33,21 +33,7 @@ export const ExperienceList = ({
             sizes="100vw"
           />
           <Details>
-            <OfferNameAndDates
-              offer={{
-                title: offer.title ?? null,
-                startDate: offer.startDate ? new Date(offer.startDate) : null,
-                endDate: offer.endDate ? new Date(offer.endDate) : null,
-                offerType: offer.type ?? null,
-                price: offer.price ?? null,
-                location: {
-                  shortAddress: formatShortAddress(
-                    offer.location.address ?? null
-                  ),
-                },
-              }}
-              withPrice
-            />
+            <OfferNameAndDates offer={offer} withPrice />
             <Expandable
               more={
                 <span

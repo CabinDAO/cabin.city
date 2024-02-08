@@ -2,7 +2,7 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream'
-import { $Enums } from '@prisma/client'
+import { PaymentStatus } from '@prisma/client'
 import { prisma } from '@/utils/prisma'
 import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
@@ -63,7 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await handlePaymentIntentNewStatus(
         res,
         event.data.object,
-        $Enums.PaymentStatus.Paid
+        PaymentStatus.Paid
       )
       break
     case 'payment_intent.payment_failed':
@@ -71,7 +71,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       await handlePaymentIntentNewStatus(
         res,
         event.data.object,
-        $Enums.PaymentStatus.Error
+        PaymentStatus.Error
       )
       break
     default:
@@ -88,7 +88,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 const handlePaymentIntentNewStatus = async (
   res: NextApiResponse,
   paymentIntent: Stripe.PaymentIntent,
-  status: $Enums.PaymentStatus
+  status: PaymentStatus
 ) => {
   const clientSecret = paymentIntent.client_secret
   if (!clientSecret) {
@@ -120,7 +120,7 @@ const handlePaymentIntentNewStatus = async (
     return
   }
 
-  if (status === $Enums.PaymentStatus.Paid) {
+  if (status === PaymentStatus.Paid) {
     const sendgrid = new SendgridService()
     try {
       await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {

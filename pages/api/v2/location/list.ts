@@ -144,7 +144,7 @@ export const locationToFragment = (
           }
         : undefined,
       roles: loc.caretaker.roles.map((role) => ({
-        hatId: role.hatId,
+        hatId: role.walletHat?.hatId || null,
         type: role.type as RoleType,
         level: role.level as RoleLevel,
       })),

@@ -125,6 +125,11 @@ export type LocationDeleteResponse = {
   error?: string
 }
 
+export type LocationPublishResponse = {
+  publishedAt?: string
+  error?: string
+}
+
 // must match LocationQueryInclude below
 export type LocationWithRelations = Prisma.LocationGetPayload<{
   include: {
@@ -141,7 +146,11 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
             cabinTokenBalance: true
           }
         }
-        roles: true
+        roles: {
+          include: {
+            walletHat: true
+          }
+        }
       }
     }
     mediaItems: true
@@ -169,7 +178,7 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
 }>
 
 // must match LocationWithRelations type above
-export const LocationQueryInclude: Prisma.LocationInclude = {
+export const LocationQueryInclude = {
   address: true,
   caretaker: {
     include: {
@@ -183,7 +192,11 @@ export const LocationQueryInclude: Prisma.LocationInclude = {
           cabinTokenBalance: true,
         },
       },
-      roles: true,
+      roles: {
+        include: {
+          walletHat: true,
+        },
+      },
     },
   },
   mediaItems: true,
@@ -207,4 +220,4 @@ export const LocationQueryInclude: Prisma.LocationInclude = {
       offers: true,
     },
   },
-}
+} satisfies Prisma.LocationInclude

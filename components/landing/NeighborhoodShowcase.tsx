@@ -1,24 +1,23 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import styled from 'styled-components'
+import { useBackend } from '@/components/hooks/useBackend'
 import {
-  LocationItemFragment,
-  useGetLocationsSortedByVoteCountQuery,
-} from '@/generated/graphql'
+  LocationListParams,
+  LocationListResponse,
+} from '@/utils/types/location'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
+import styled from 'styled-components'
 import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 
 export const NeighborhoodShowcase = () => {
-  const { data } = useGetLocationsSortedByVoteCountQuery({
-    variables: { size: 4, cursor: null },
-  })
+  const { useGet } = useBackend()
+  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
+    sort: 'votesDesc',
+  } as LocationListParams)
 
-  const locations =
-    data?.locationsSortedByVoteCount.data.filter(
-      (l): l is LocationItemFragment => !!l
-    ) ?? []
+  const locations = data?.locations?.slice(0, 4) ?? []
 
   return (
     <Container>
@@ -33,7 +32,7 @@ export const NeighborhoodShowcase = () => {
           )
           return (
             <ImageContainer key={index}>
-              <Link href={`/location/${location._id}`}>
+              <Link href={`/location/${location.externId}`}>
                 <Image
                   alt={location.name ?? 'A Cabin neighborhood'}
                   src={imgURL ?? 'https://fakeimg.pl/500/'}

@@ -35,7 +35,7 @@ export const Post = (props: PostProps) => {
   const [hovered, setHovered] = useState(false)
   const { user } = useProfile()
   const { showModal } = useModal()
-  const { handleDeleteTextActivity } = useTextActivity()
+  const { handleDeleteTextActivity } = useTextActivity(activity.externId)
   const [hasReactionByMe, setHasReactionByMe] = useState(
     activity.hasReactionByMe
   )
@@ -64,7 +64,7 @@ export const Post = (props: PostProps) => {
     showModal(() => (
       <DeleteConfirmationModal
         entityName="post"
-        onDelete={() => handleDeleteTextActivity(activity.externId)}
+        onDelete={() => handleDeleteTextActivity}
       />
     ))
   }

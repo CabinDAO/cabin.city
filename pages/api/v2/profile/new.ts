@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
-import { $Enums, Profile } from '@prisma/client'
+import { Profile, RoleType, RoleLevel } from '@prisma/client'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { randomId } from '@/utils/random'
 import { ProfileNewResponse } from '@/utils/types/profile'
@@ -111,8 +111,8 @@ async function createHats(profile: Profile) {
       return {
         profileId: profile.id,
         walletHatId: r.walletHatId,
-        type: r.type as $Enums.RoleType,
-        level: r.level as $Enums.RoleLevel,
+        type: r.type as RoleType,
+        level: r.level as RoleLevel,
       }
     }),
     skipDuplicates: true,

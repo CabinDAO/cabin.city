@@ -9,17 +9,21 @@ enum Routes {
   PROFILE_ME = `/profile/me`,
   PROFILE_DID = `/profile/did`, // just for auth
   PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
+  PROFILE_SIGNAL_INTEREST = `/profile/signal-interest`,
 
   LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,
   LOCATION_LIST = `/location/list`,
   LOCATION_MINE = `/location/mine`,
   LOCATION_VOTE = `/location/vote`,
+  LOCATION_PUBLISH = `/location/[externId]/publish`,
 
   OFFER = `/offer/[externId]`,
   OFFER_NEW = `/offer/new`,
   OFFER_LIST = `/offer/list`,
 
+  ACTIVITY = `/activity/[externId]`,
+  ACTIVITY_NEW = `/activity/new`,
   ACTIVITY_LIST = `/activity/list`,
   ACTIVITY_REACT = `/activity/react`,
   ACTIVITY_SUMMARY = `/activity/summary`,
@@ -27,52 +31,15 @@ enum Routes {
   EMAIL_SEND = '/email/send',
   NEWSLETTER_SUBSCRIBE = '/newsletter/subscribe',
 
+  UNLOCK_DATA_BUILDER = '/unlock/data-builder',
+  UNLOCK_REFETCH_STATUS = '/unlock/refetch-status',
+
   // not implemented yet
   // CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
   // CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook',
   // CART_NEW: `/cart/new`,
   // CART_GET: `/cart/[externId]`,
 }
-
-/*
-GET /hats
-GET /badges
-
-GET /syncAttempt?key,status
-DELETE /syncAttempt/[key]
-
-
-GET /accounts?address
-GET /accounts/count?tokenHoldersOnly
-
-GET /locations?id,type,offerType,sortByVote,paginate
-GET/POST/DELETE /location/[id]
-POST /location/new
-GET /locations/count
-
-GET/offers?id,offerType,paginate
-GET/POST/DELETE /offer/[id]
-POST /offer/new
-GET /offers/count?offerType
-
-
-GET /profiles?query,name,externalUserId,email,roleTypes,levelTypes,citizenshipStatuses,sort
-GET /me
-GET/POST /profile/[id]
-POST /profile/new
-GET /profiles/count?query,roleTypes,levelTypes,citizenshipStatuses,sort
-POST/DELETE /profile/vouch
-
-GET /activities?profileId
-POST /activity/new
-POST/DELETE /activity/[id]/like
-
-GET /cart
-GET/POST /cart/[id]
-
-POST /trackingEvent
-
-* */
 
 export const expandRoute = (r: Route): string => {
   const [name, params] = Array.isArray(r) ? r : [r, {}]

@@ -1,5 +1,5 @@
 import { createContext, ReactNode } from 'react'
-import { mutate } from 'swr'
+import { mutate, useSWRConfig } from 'swr'
 import { usePrivy } from '@privy-io/react-auth'
 import { expandRoute, Route } from '@/utils/routes'
 import {
@@ -41,7 +41,7 @@ export interface BackendState {
     route: Route,
     params: object
   ) => ReturnType<typeof apiPost<Data>>
-  // revalidate: (route: Route) => Promise<any>
+  revalidate: (route: Route) => Promise<any>
 }
 
 interface BackendProviderProps {
@@ -50,6 +50,7 @@ interface BackendProviderProps {
 
 export const BackendProvider = ({ children }: BackendProviderProps) => {
   const { getAccessToken } = usePrivy()
+  const { mutate } = useSWRConfig()
 
   const useGet = <Data = any,>(route: Route | null, params: UrlParams = {}) => {
     return useAPIGet<Data>(route, params, getAccessToken)
@@ -71,9 +72,9 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
     return apiPost<Data>(route, params, getAccessToken)
   }
 
-  // const revalidate = (route: Route): Promise<any> => {
-  //   return mutate(expandRoute(route))
-  // }
+  const revalidate = (route: Route): Promise<any> => {
+    return mutate(route ? expandRoute(route) : null)
+  }
 
   const state = {
     useGet,
@@ -81,7 +82,7 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
     useDelete,
     get,
     post,
-    // revalidate,
+    revalidate,
   }
 
   return (

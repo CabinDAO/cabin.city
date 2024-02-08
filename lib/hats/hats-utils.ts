@@ -1,6 +1,4 @@
-import { prisma } from '@/utils/prisma'
-import { $Enums, Profile } from '@prisma/client'
-import { ProfileWithWallet } from '@/utils/api/withAuth'
+import { RoleType, RoleLevel } from '@prisma/client'
 
 const CARETAKER_ID = '0001'
 const GATHERER_ID = '0002'
@@ -9,13 +7,13 @@ const NATURALIST_ID = '0004'
 const CREATOR_ID = '0005'
 const RESIDENT_ID = '0006'
 
-const ID_TO_TYPE: Record<string, $Enums.RoleType> = {
-  [CARETAKER_ID]: $Enums.RoleType.Caretaker,
-  [BUILDER_ID]: $Enums.RoleType.Builder,
-  [GATHERER_ID]: $Enums.RoleType.Gatherer,
-  [NATURALIST_ID]: $Enums.RoleType.Naturalist,
-  [CREATOR_ID]: $Enums.RoleType.Creator,
-  [RESIDENT_ID]: $Enums.RoleType.Resident,
+const ID_TO_TYPE: Record<string, RoleType> = {
+  [CARETAKER_ID]: RoleType.Caretaker,
+  [BUILDER_ID]: RoleType.Builder,
+  [GATHERER_ID]: RoleType.Gatherer,
+  [NATURALIST_ID]: RoleType.Naturalist,
+  [CREATOR_ID]: RoleType.Creator,
+  [RESIDENT_ID]: RoleType.Resident,
 }
 
 /*
@@ -36,8 +34,7 @@ export const getRoleInfoFromHat = (hatPrettyId: string) => {
     return null
   }
 
-  const level =
-    split.length === 2 ? $Enums.RoleLevel.Custodian : $Enums.RoleLevel.Artisan
+  const level = split.length === 2 ? RoleLevel.Custodian : RoleLevel.Artisan
 
   return { type, level }
 }

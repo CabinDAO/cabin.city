@@ -8,7 +8,7 @@ import { LocationView } from '@/components/neighborhoods/LocationView'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
-import { PublishModal } from './edit-location/PublishModal'
+import { PublishLocationModal } from './edit-location/PublishLocationModal'
 
 export const LocationPageView = () => {
   const router = useRouter()
@@ -31,9 +31,9 @@ export const LocationPageView = () => {
 
   useEffect(() => {
     if (data && !location) {
-      router.push('/404')
+      router.push('/404').then()
     } else if (user && hideFromOthersIfPreview) {
-      router.push('/city-directory')
+      router.push('/city-directory').then()
     }
   }, [data, location, router, hideFromOthersIfPreview, user])
 
@@ -52,7 +52,12 @@ export const LocationPageView = () => {
   }
 
   const handlePublish = async () => {
-    showModal(() => <PublishModal locationId={location.externId} />)
+    showModal(() => (
+      <PublishLocationModal
+        locationId={location.externId}
+        refetchLocation={refetchLocation}
+      />
+    ))
   }
 
   return (

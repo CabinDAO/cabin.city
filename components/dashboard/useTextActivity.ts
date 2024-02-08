@@ -1,51 +1,31 @@
-import {
-  GetProfileByIdDocument,
-  useCreateTextActivityMutation,
-  useDeleteActivityMutation,
-} from '@/generated/graphql'
 import { useCallback } from 'react'
 import { useProfile } from '../auth/useProfile'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ActivityNewParams, ActivityNewResponse } from '@/utils/types/activity'
 
-export const useTextActivity = () => {
-  const [createTextActivity] = useCreateTextActivityMutation()
-  const [deleteTextActivity] = useDeleteActivityMutation()
-  const { user } = useProfile()
+export const useTextActivity = (activityId?: string) => {
+  const { refetchProfile } = useProfile()
+  const { useMutate, useDelete } = useBackend()
+
+  const { trigger: createTextActivity } =
+    useMutate<ActivityNewResponse>('ACTIVITY_NEW')
 
   const handleCreateTextActivity = useCallback(
-    (text: string) => {
-      createTextActivity({
-        variables: {
-          text,
-        },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: user?.externId },
-          },
-        ],
-      })
+    async (text: string) => {
+      await createTextActivity({ text: text } as ActivityNewParams)
+      await refetchProfile()
     },
-    [createTextActivity, user?.externId]
+    [createTextActivity, refetchProfile]
   )
 
-  const handleDeleteTextActivity = useCallback(
-    (activityId: string) => {
-      deleteTextActivity({
-        variables: {
-          id: activityId,
-        },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: user?.externId },
-          },
-        ],
-      })
-    },
-    [deleteTextActivity, user?.externId]
+  const { trigger: deleteTextActivity } = useDelete(
+    activityId ? ['ACTIVITY', { externId: activityId }] : null
   )
+
+  const handleDeleteTextActivity = useCallback(async () => {
+    await deleteTextActivity({})
+    await refetchProfile()
+  }, [deleteTextActivity, refetchProfile])
 
   return {
     handleCreateTextActivity,

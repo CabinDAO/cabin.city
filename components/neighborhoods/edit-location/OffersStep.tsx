@@ -1,18 +1,23 @@
+import { useRouter } from 'next/router'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  OfferType,
+  OfferListParams,
+  OfferListResponse,
+  OfferNewParams,
+  OfferNewResponse,
+} from '@/utils/types/offer'
+import { StepProps } from './location-wizard-configuration'
+import styled from 'styled-components'
+import { Container, StepIndicator } from './styles'
 import { ContentCard } from '../../core/ContentCard'
 import { Body2, H3 } from '../../core/Typography'
-import { StepProps } from './location-wizard-configuration'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ActionBar } from '@/components/core/ActionBar'
-import { Container, StepIndicator } from './styles'
-import styled from 'styled-components'
 import { EmptyState } from '@/components/core/EmptyState'
-import { OfferType, useCreateOfferMutation } from '@/generated/graphql'
 import { Button } from '@/components/core/Button'
-import { useRouter } from 'next/router'
 import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffersList'
-import { useBackend } from '@/components/hooks/useBackend'
-import { OfferListParams, OfferListResponse } from '@/utils/types/offer'
 
 export const OffersStep = ({
   name,
@@ -21,13 +26,12 @@ export const OffersStep = ({
   location,
   steps,
 }: StepProps) => {
-  const [createOffer] = useCreateOfferMutation()
   const router = useRouter()
   const { created } = router.query
   const stepTitle = created ? 'Draft listing' : 'Edit listing'
   const stepNumber = steps.map((step) => step.name).indexOf(name) + 1
 
-  const { useGet } = useBackend()
+  const { useGet, useMutate } = useBackend()
   const { data: offersData } = useGet<OfferListResponse>(
     location ? 'OFFER_LIST' : null,
     {
@@ -36,19 +40,17 @@ export const OffersStep = ({
   )
   const offerList = offersData?.offers || []
 
+  const { trigger: createOffer } = useMutate<OfferNewResponse>('OFFER_NEW')
+
   const handleCreateOfferClick = async () => {
     if (location && location.type) {
-      const { data: offer } = await createOffer({
-        variables: {
-          data: {
-            offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
-            locationId: location.externId,
-          },
-        },
-      })
+      const data = await createOffer({
+        locationExternId: location.externId,
+        offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
+      } as OfferNewParams)
 
-      if (offer?.createOffer) {
-        router.push(`/experience/${offer.createOffer._id}/edit`).then(null)
+      if (data?.offerExternId) {
+        router.push(`/experience/${data.offerExternId}/edit`).then(null)
       }
     }
   }

@@ -440,6 +440,16 @@ async function importLocationVote(datum: LocationVote) {
 
 async function importOffer(datum: Offer) {
   const d = datum._airbyte_data
+
+  const dupeCheck: { [n: string]: number } = {}
+  if (d.data.mediaItems) {
+    for (let i = 0; i < d.data.mediaItems.length; i++) {
+      if (!dupeCheck[d.data.mediaItems[i].ipfsHash]) {
+        dupeCheck[d.data.mediaItems[i].ipfsHash] = i
+      }
+    }
+  }
+
   await prisma.offer.create({
     data: {
       createdAt: new Date(d.ts / 1000),
@@ -454,8 +464,8 @@ async function importOffer(datum: Offer) {
       endDate: d.data.endDate
         ? new Date(d.data.endDate)
         : new Date('1970-01-01'),
-      priceAmountCents: d.data.price ? d.data.price.amountCents : 0,
-      priceUnit: d.data.price ? d.data.price.unit : 'FlatFee',
+      price: d.data.price ? d.data.price.amountCents / 100 : 0,
+      priceInterval: d.data.price ? d.data.price.unit : 'FlatFee',
       applicationUrl: d.data.applicationUrl ?? '',
       imageIpfsHash: d.data.imageIpfsHash ?? '',
       location: {
@@ -464,11 +474,16 @@ async function importOffer(datum: Offer) {
         },
       },
       mediaItems: {
-        create: d.data.mediaItems?.map((mi) => ({
-          createdAt: new Date(d.ts / 1000),
-          updatedAt: new Date(d.ts / 1000),
-          ipfsHash: mi.ipfsHash,
-        })),
+        create: d.data.mediaItems
+          ?.filter(
+            // only keep first of duplicates
+            (mi, i) => dupeCheck[mi.ipfsHash] == i
+          )
+          .map((mi) => ({
+            createdAt: new Date(d.ts / 1000),
+            updatedAt: new Date(d.ts / 1000),
+            ipfsHash: mi.ipfsHash,
+          })),
       },
     },
   })
@@ -534,7 +549,7 @@ async function importActivity(datum: Activity) {
           : d.data.type == 'VerifiedCitizenship'
           ? 'CitizenshipVerified'
           : d.data.type,
-      text: d.data.text ?? '',
+      text: d.data.text,
       profile: {
         connect: {
           externId: d.data.profile.id,

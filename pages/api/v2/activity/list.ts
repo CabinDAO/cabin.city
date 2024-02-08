@@ -10,7 +10,6 @@ import {
 } from '@/utils/types/activity'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import { LocationType } from '@/utils/types/location'
 import { withAuth } from '@/utils/api/withAuth'
 
@@ -23,7 +22,11 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
         name: true
         citizenshipStatus: true
         citizenshipTokenId: true
-        roles: true
+        roles: {
+          include: {
+            walletHat: true
+          }
+        }
         avatar: {
           select: {
             url: true
@@ -38,7 +41,11 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
         spec: true
       }
     }
-    role: true
+    role: {
+      include: {
+        walletHat: true
+      }
+    }
     location: {
       select: {
         externId: true
@@ -75,8 +82,8 @@ type ActivityWithRelations = Prisma.ActivityGetPayload<{
         startDate: true
         endDate: true
         imageIpfsHash: true
-        priceAmountCents: true
-        priceUnit: true
+        price: true
+        priceInterval: true
         location: {
           select: {
             externId: true
@@ -132,7 +139,11 @@ async function handler(
           name: true,
           citizenshipStatus: true,
           citizenshipTokenId: true,
-          roles: true,
+          roles: {
+            include: {
+              walletHat: true,
+            },
+          },
           avatar: {
             select: {
               url: true,
@@ -147,7 +158,11 @@ async function handler(
           spec: true,
         },
       },
-      role: true,
+      role: {
+        include: {
+          walletHat: true,
+        },
+      },
       location: {
         select: {
           externId: true,
@@ -184,8 +199,8 @@ async function handler(
           startDate: true,
           endDate: true,
           imageIpfsHash: true,
-          priceAmountCents: true,
-          priceUnit: true,
+          price: true,
+          priceInterval: true,
           location: {
             select: {
               externId: true,
@@ -249,7 +264,7 @@ const toFragments = (
           : undefined,
         role: activity.role
           ? {
-              hatId: activity.role.hatId,
+              hatId: activity.role.walletHat?.hatId || null,
               type: activity.role.type as RoleType,
               level: activity.role.level as RoleLevel,
             }
@@ -309,7 +324,7 @@ const toFragments = (
         citizenshipStatus: activity.profile
           .citizenshipStatus as CitizenshipStatus,
         roles: activity.profile.roles.map((role) => ({
-          hatId: role.hatId,
+          hatId: role.walletHat?.hatId || null,
           type: role.type as RoleType,
           level: role.level as RoleLevel,
         })),

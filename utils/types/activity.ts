@@ -83,3 +83,16 @@ export type ActivityReactParams = {
 export type ActivityReactResponse = {
   error?: string
 }
+
+export type ActivityNewParams = {
+  text: string
+}
+
+export type ActivityNewResponse = {
+  externId: string
+  error?: string
+}
+
+export type ActivityDeleteResponse = {
+  error?: string
+}

@@ -32,7 +32,7 @@ export const DashboardView = () => {
   ]
 
   const handleOnPost = (text: string) => {
-    handleCreateTextActivity(text)
+    handleCreateTextActivity(text).then()
   }
 
   if (!user) return null

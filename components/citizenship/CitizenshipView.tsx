@@ -1,7 +1,6 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { useProfile } from '../auth/useProfile'
-import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { loadUnlockCheckout } from './UnlockScript'
@@ -15,6 +14,8 @@ import { useEmail } from '@/components/hooks/useEmail'
 import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 import { useNavigation } from '@/components/hooks/useNavigation'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { CitizenshipStatus } from '@/utils/types/profile'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const CitizenshipView = () => {
   const { user } = useProfile()
@@ -67,7 +68,8 @@ export const CitizenshipView = () => {
     performMint()
   }
 
-  const [toggleSignal] = useToggleSignalMutation()
+  const { useMutate } = useBackend()
+  const { trigger: toggleSignal } = useMutate('PROFILE_SIGNAL_INTEREST')
 
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {
@@ -82,7 +84,7 @@ export const CitizenshipView = () => {
         } as VouchRequstedPayload,
       })
 
-      toggleSignal()
+      toggleSignal({})
     })
   }
 

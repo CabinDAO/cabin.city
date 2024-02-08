@@ -1,14 +1,15 @@
-import { OfferPrice, OfferPriceUnit } from '@/generated/graphql'
+import { OfferFragment, OfferPriceInterval } from '@/utils/types/offer'
 import styled, { css } from 'styled-components'
 import { captionStyles, h1Styles } from '@/components/core/Typography'
 
 interface PriceProps {
-  price: OfferPrice
+  price: OfferFragment['price']
+  priceInterval: OfferFragment['priceInterval']
   small?: boolean
 }
 
-export const Price = ({ price, small }: PriceProps) => {
-  const [amount, unit] = formatOfferPrice(price)
+export const Price = ({ price, priceInterval, small }: PriceProps) => {
+  const [amount, unit] = formatOfferPrice(price, priceInterval)
 
   return (
     <StyledPrice small={small}>
@@ -18,18 +19,21 @@ export const Price = ({ price, small }: PriceProps) => {
   )
 }
 
-export const formatOfferPrice = (offerPrice: OfferPrice): [string, string] => {
-  const dollarString = `$${offerPrice.amountCents / 100}`
-  switch (offerPrice.unit) {
-    case OfferPriceUnit.Hourly:
+const formatOfferPrice = (
+  price: OfferFragment['price'],
+  priceInterval: OfferFragment['priceInterval']
+): [string, string] => {
+  const dollarString = `$${price}`
+  switch (priceInterval) {
+    case OfferPriceInterval.Hourly:
       return [dollarString, `/ hour`]
-    case OfferPriceUnit.Daily:
+    case OfferPriceInterval.Daily:
       return [dollarString, `/ day`]
-    case OfferPriceUnit.Weekly:
+    case OfferPriceInterval.Weekly:
       return [dollarString, `/ week`]
-    case OfferPriceUnit.Monthly:
+    case OfferPriceInterval.Monthly:
       return [dollarString, `/ month`]
-    case OfferPriceUnit.FlatFee:
+    case OfferPriceInterval.FlatFee:
     default:
       return [dollarString, `total cost`]
   }

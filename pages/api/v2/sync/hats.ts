@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { prisma } from '@/utils/prisma'
-import { $Enums } from '@prisma/client'
+import {
+  ActivityType,
+  BlockSyncType,
+  RoleLevel,
+  RoleType,
+} from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { randomId } from '@/utils/random'
@@ -17,7 +22,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await attemptSync({
-    type: $Enums.BlockSyncType.Hats,
+    type: BlockSyncType.Hats,
     provider: getAlchemyProvider(hatsConfig.networkName),
     initialBlock: new Decimal(hatsConfig.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
@@ -174,8 +179,7 @@ async function addHats(hatsToAdd: HatToAdd[]) {
       create: {
         key: hatToAdd.activity.key,
         externId: randomId('activity'),
-        type: $Enums.ActivityType.RoleAdded,
-        text: '',
+        type: ActivityType.RoleAdded,
         profile: {
           connect: {
             id: walletHat.wallet.profile.id,
@@ -196,8 +200,8 @@ async function addHats(hatsToAdd: HatToAdd[]) {
 export interface HatToRemove {
   address: string
   hatsProtocolId: string
-  type: $Enums.RoleType
-  level: $Enums.RoleLevel
+  type: RoleType
+  level: RoleLevel
 }
 
 async function removeHats(hatsToRemove: HatToRemove[]) {

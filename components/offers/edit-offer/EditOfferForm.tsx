@@ -1,44 +1,39 @@
-import { HorizontalDivider } from '@/components/core/Divider'
-import { InputText } from '@/components/core/InputText'
-import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { Descendant } from 'slate'
-import styled from 'styled-components'
-import { Availability } from './Availability'
-import {
-  InputMaybe,
-  OfferDataFragment,
-  OfferType,
-  UpdateOfferInput,
-  useDeleteOfferMutation,
-} from '@/generated/graphql'
-import { ApplicationLink } from './ApplicationLink'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useModal } from '@/components/hooks/useModal'
+import { OfferEditParams, OfferFragment, OfferType } from '@/utils/types/offer'
 import {
   MAX_OFFER_TITLE_LENGTH,
   PHOTO_UPLOAD_INSTRUCTIONS,
 } from '../offer-constants'
-import React, { useState } from 'react'
-import { Pricing } from './Pricing'
-import { validateTitle } from '@/components/neighborhoods/validations'
 import {
   PHOTO_REQUIRED_ERROR,
   REQUIRED_FIELD_ERROR,
   REQUIRED_SECTION_ERROR,
   truthyString,
 } from '@/utils/validate'
-import { defaultSlateValue } from '@/components/core/slate/slate-utils'
-import { Body2, H3 } from '@/components/core/Typography'
-import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import styled from 'styled-components'
+import { Descendant } from 'slate'
+import { SlateEditor } from '@/components/core/slate/SlateEditor'
+import { defaultSlateValue } from '@/components/core/slate/slate-utils'
 import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
-import { useRouter } from 'next/router'
-import { useModal } from '@/components/hooks/useModal'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { InputText } from '@/components/core/InputText'
+import { Body2, H3 } from '@/components/core/Typography'
+import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
+import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import { validateTitle } from '@/components/neighborhoods/validations'
+import { Availability } from './Availability'
+import { ApplicationLink } from './ApplicationLink'
+import { Pricing } from './Pricing'
+import { useBackend } from '@/components/hooks/useBackend'
 
 interface EditOfferFormProps {
-  offer: OfferDataFragment
-  onEdit: (updateOfferInput: UpdateOfferInput) => void
-  updateOfferInput: UpdateOfferInput
+  offer: OfferFragment
+  updateOfferInput: OfferEditParams
+  onEdit: (updateOfferInput: OfferEditParams) => void
   highlightErrors?: boolean
 }
 
@@ -54,7 +49,12 @@ export const EditOfferForm = ({
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState(false)
   const { showModal } = useModal()
-  const [deleteOffer] = useDeleteOfferMutation()
+  const { useDelete } = useBackend()
+  const { trigger: deleteOffer } = useDelete([
+    'OFFER',
+    { externId: `${offer.externId}` },
+  ])
+
   const router = useRouter()
 
   const handleDelete = () => {
@@ -62,15 +62,11 @@ export const EditOfferForm = ({
       <DeleteConfirmationModal
         entityName="experience"
         onDelete={async () => {
-          await deleteOffer({ variables: { id: offer._id } })
-          router.push(`/location/${offer.location._id}/edit?step=3`)
+          await deleteOffer({})
+          router.push(`/location/${offer.location.externId}/edit?step=3`).then()
         }}
       />
     ))
-  }
-
-  const offerField = (field: keyof UpdateOfferInput) => {
-    return updateOfferInput[field] || offer[field]
   }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,12 +74,11 @@ export const EditOfferForm = ({
   }
 
   const handleAvailabilityChange = (startDate: string, endDate: string) => {
-    console.log('avail change', [startDate, endDate])
     onEdit({ startDate, endDate })
   }
-  const slateProps = offerField('description')
-    ? { value: JSON.parse(offerField('description')) }
-    : {}
+
+  const description = updateOfferInput.description || offer.description
+  const slateProps = description ? { value: JSON.parse(description) } : {}
 
   const titleValidation = validateTitle(updateOfferInput.title)
 
@@ -114,7 +109,7 @@ export const EditOfferForm = ({
     onEdit(newMediaItems)
   }
 
-  const deleteByIpfsHash = (ipfsHash: InputMaybe<string> | undefined) => {
+  const deleteByIpfsHash = (ipfsHash: string | undefined) => {
     const foundCreatedMediaItem = updateOfferInput.mediaItems?.find(
       (mediaItem) => mediaItem?.ipfsHash === ipfsHash
     )
@@ -197,18 +192,16 @@ export const EditOfferForm = ({
       {/*TODO: make dates optional*/}
       <Availability
         onEdit={handleAvailabilityChange}
-        label={
-          offer.offerType === OfferType.CabinWeek ? 'Date Range' : undefined
-        }
-        defaultStartDate={offerField('startDate')}
-        defaultEndDate={offerField('endDate')}
+        label={offer.type === OfferType.CabinWeek ? 'Date Range' : undefined}
+        defaultStartDate={updateOfferInput.startDate || offer.startDate}
+        defaultEndDate={updateOfferInput.endDate || offer.endDate}
       />
       <HorizontalDivider />
       <Pricing
         highlightErrors={highlightErrors}
         price={updateOfferInput.price}
-        onPriceChange={(price) => {
-          onEdit({ price })
+        onPriceChange={(price, priceInterval) => {
+          onEdit({ price, priceInterval })
         }}
       />
       )

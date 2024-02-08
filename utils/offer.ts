@@ -1,16 +1,5 @@
 import { IconName } from '@/components/core/Icon'
-import { OfferListItemProps } from '@/components/core/OfferListItem'
-import { OfferViewProps } from '@/components/offers/useGetOffer'
-import {
-  MeFragment,
-  OfferDataFragment,
-  OfferPriceUnit,
-  OfferType,
-} from '@/generated/graphql'
-import { formatShortAddress } from '@/lib/address'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { parseISO } from 'date-fns'
-import { OfferFragment } from '@/utils/types/offer'
+import { OfferType } from '@/utils/types/offer'
 
 export interface OfferInfo {
   name: string
@@ -30,102 +19,6 @@ const OfferInfoByType: Record<OfferType, OfferInfo> = {
 
 export const offerInfoFromType = (offerType: OfferType): OfferInfo => {
   return OfferInfoByType[offerType]
-}
-
-export const offerListItemPropsFromFragment = (
-  fragment: OfferFragment,
-  me: MeFragment | null | undefined
-): OfferListItemProps => {
-  return {
-    _id: fragment._id,
-    offerType: fragment.offerType,
-    locationType: fragment.locationType,
-    title: fragment.title,
-    profileRoleConstraints: fragment.profileRoleConstraints ?? [],
-    citizenshipRequired: fragment.citizenshipRequired,
-    minimunCabinBalance: fragment.minimunCabinBalance,
-    startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
-    endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
-    imageUrl: getImageUrlByIpfsHash(
-      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
-      true
-    ),
-    location: {
-      _id: fragment.location._id,
-      name: fragment.location.name,
-      shortAddress: formatShortAddress(fragment.location.address),
-      publishedAt: fragment.location.publishedAt
-        ? parseISO(fragment.location.publishedAt)
-        : null,
-    },
-    isLocked: !me,
-    price: fragment.price,
-  }
-}
-
-export const offerViewPropsFromFragment = (
-  fragment: OfferDataFragment
-): OfferViewProps => {
-  return {
-    _id: fragment._id,
-    offerType: fragment.offerType,
-    locationType: fragment.locationType,
-    price: fragment.price,
-    applicationUrl: fragment.applicationUrl,
-    title: fragment.title,
-    description: fragment.description,
-    profileRoleConstraints: fragment.profileRoleConstraints ?? [],
-    startDate: fragment.startDate ? parseISO(fragment.startDate) : null,
-    endDate: fragment.endDate ? parseISO(fragment.endDate) : null,
-    imageUrl: getImageUrlByIpfsHash(
-      fragment.imageIpfsHash ?? fragment.location.bannerImageIpfsHash,
-      true
-    ),
-    mediaItems: fragment.mediaItems,
-    citizenshipRequired: fragment.citizenshipRequired,
-    minimunCabinBalance: fragment.minimunCabinBalance,
-    location: {
-      _id: fragment.location._id,
-      name: fragment.location.name ?? '',
-      address: fragment.location.address,
-      shortAddress: formatShortAddress(fragment.location.address),
-      bannerImageIpfsHash: fragment.location.bannerImageIpfsHash ?? '',
-      publishedAt: fragment.location.publishedAt
-        ? parseISO(fragment.location.publishedAt)
-        : null,
-      caretaker: {
-        _id: fragment.location.caretaker._id,
-      },
-      lodgingTypes: {
-        data: fragment.location.lodgingTypes.data.map((lt) => {
-          return {
-            _id: lt?._id ?? '',
-            description: lt?.description ?? '',
-            quantity: lt?.quantity ?? 0,
-            priceCents: lt?.priceCents ?? 0,
-            spotsTaken: lt?.spotsTaken ?? 0,
-          }
-        }),
-      },
-    },
-    rawFragment: fragment,
-  }
-}
-
-export const labelByOfferPriceUnit = (unit: OfferPriceUnit): string => {
-  switch (unit) {
-    case OfferPriceUnit.Hourly:
-      return 'Per Hour'
-    case OfferPriceUnit.Daily:
-      return 'Per Day'
-    case OfferPriceUnit.Weekly:
-      return 'Per Week'
-    case OfferPriceUnit.Monthly:
-      return 'Per Month'
-    case OfferPriceUnit.FlatFee:
-    default:
-      return 'Total Cost'
-  }
 }
 
 export type RoleConstraintType = {

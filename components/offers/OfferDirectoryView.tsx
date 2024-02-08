@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
-import { OfferType } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { OfferTabList } from './OfferTabList'
 import { ChipFilter, ChipFilterBar } from '../core/ChipFilterBar'
+import { OfferType } from '@/utils/types/offer'
 
 const SlugOfferTypeMap: Record<string, OfferType> = {
   coliving: OfferType.PaidColiving,

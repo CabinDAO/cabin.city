@@ -9,7 +9,6 @@ datasource db {
 }
 
 // TODO: make the schema multisite-enabled
-// TODO: add indexes based on fauna indexes/queries
 
 // we're dropping profile role constraints
 // dropping lodging types
@@ -312,15 +311,13 @@ model Offer {
   location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int
 
-  type        OfferType
-  title       String
-  description String // Rich text
-  startDate   DateTime
-  endDate     DateTime
-
-  priceAmountCents Decimal        @db.Decimal(12, 2) // TODO: max price is just under 10 billion dollars
-  priceUnit        OfferPriceUnit
-
+  type           OfferType
+  title          String
+  description    String // Rich text
+  startDate      DateTime
+  endDate        DateTime
+  price          Decimal            @db.Decimal(12, 2) // TODO: max price is just under 10 billion dollars
+  priceInterval  OfferPriceInterval
   applicationUrl String
   imageIpfsHash  String
   mediaItems     OfferMediaItem[]
@@ -338,6 +335,8 @@ model OfferMediaItem {
   offerId Int
 
   ipfsHash String
+
+  @@unique([offerId, ipfsHash])
 }
 
 enum OfferType {
@@ -346,7 +345,7 @@ enum OfferType {
   CabinWeek
 }
 
-enum OfferPriceUnit {
+enum OfferPriceInterval {
   FlatFee
   Hourly
   Daily
@@ -392,7 +391,7 @@ model Activity {
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId Int
 
-  text               String // Text
+  text               String? // Text
   badge              Badge?    @relation(fields: [badgeId], references: [id]) // BadgeAdded
   badgeId            Int?
   role               Role?     @relation(fields: [roleId], references: [id]) // RoleAdded

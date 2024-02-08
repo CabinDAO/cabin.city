@@ -1,23 +1,23 @@
-import { ProfileAvatarInput } from '@/generated/graphql'
-import { getImageUrlFromNft } from '@/lib/image'
+import { useState } from 'react'
 import { Network, OwnedNft } from 'alchemy-sdk'
+import { ProfileEditParams } from '@/utils/types/profile'
+import { getImageUrlFromNft } from '@/lib/image'
+import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useModal } from '../hooks/useModal'
 import styled from 'styled-components'
 import { Avatar } from '../core/Avatar'
 import { Button } from '../core/Button'
-import { useDeviceSize } from '../hooks/useDeviceSize'
-import { useModal } from '../hooks/useModal'
 import { AvatarModal } from './AvatarModal'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { useState } from 'react'
 
 export type ExtendedOwnedNft = OwnedNft & {
   network: Network
 }
 
 interface AvatarSetupProps {
-  onNftSelected: (nft: ProfileAvatarInput | undefined) => void
-  avatar?: ProfileAvatarInput | undefined | null
+  onNftSelected: (nft: ProfileEditParams['data']['avatar'] | undefined) => void
+  avatar?: ProfileEditParams['data']['avatar'] | undefined | null
 }
 
 export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {

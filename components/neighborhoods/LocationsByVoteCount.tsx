@@ -57,7 +57,6 @@ export const LocationsByVoteCount = () => {
         hasMore={hasMore}
         dataLength={dataLength}
         next={() => {
-          console.log('next')
           setPage(page + 1)
         }}
         loader="..."

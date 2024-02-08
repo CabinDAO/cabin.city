@@ -10,7 +10,7 @@ import {
   OfferQueryInclude,
   OfferType,
   OfferWithRelations,
-  OfferPriceUnit,
+  OfferPriceInterval,
 } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
 
@@ -80,10 +80,8 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
     startDate: offer.startDate.toISOString(),
     endDate: offer.endDate.toISOString(),
     imageIpfsHash: offer.imageIpfsHash,
-    price: {
-      unit: offer.priceUnit as OfferPriceUnit,
-      amountCents: offer.priceAmountCents.toNumber(),
-    },
+    price: offer.price.toNumber(),
+    priceInterval: offer.priceInterval as OfferPriceInterval,
     location: {
       externId: offer.location.externId,
       name: offer.location.name,

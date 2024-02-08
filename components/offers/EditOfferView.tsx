@@ -1,17 +1,17 @@
+import { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useModal } from '../hooks/useModal'
+import { OfferEditParams, OfferFragment } from '@/utils/types/offer'
 import styled from 'styled-components'
 import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
 import { EditOfferForm } from './edit-offer/EditOfferForm'
-import { OfferDataFragment, UpdateOfferInput } from '@/generated/graphql'
-import { useState } from 'react'
-import { useModal } from '../hooks/useModal'
-import { useRouter } from 'next/router'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 interface EditOfferViewProps {
-  offer: OfferDataFragment
-  updateOfferInput: UpdateOfferInput
-  onEdit: (updateOfferInput: UpdateOfferInput) => void
+  offer: OfferFragment
+  updateOfferInput: OfferEditParams
+  onEdit: (updateOfferInput: OfferEditParams) => void
   highlightErrors?: boolean
 }
 
@@ -21,22 +21,21 @@ export const EditOfferView = ({
   updateOfferInput,
   highlightErrors,
 }: EditOfferViewProps) => {
-  const locationId = offer.location._id
   const [unsavedChanges, setUnsavedChanges] = useState(false)
   const { showModal } = useModal()
   const router = useRouter()
 
-  const handleEdit = (updateOfferInput: UpdateOfferInput) => {
+  const handleEdit = (updateOfferInput: OfferEditParams) => {
     setUnsavedChanges(true)
     onEdit(updateOfferInput)
   }
 
   const handleBack = () => {
-    const url = `/location/${locationId}/edit?step=3`
+    const url = `/location/${offer.location.externId}/edit?step=3`
     if (unsavedChanges) {
       showModal(() => <DiscardChangesModal leaveUrl={url} />)
     } else {
-      router.push(url)
+      router.push(url).then()
     }
   }
 

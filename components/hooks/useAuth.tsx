@@ -1,4 +1,3 @@
-import { FAUNA_TOKEN_LOCAL_STORAGE_KEY } from '@/lib/auth/constants'
 import { User, usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/router'
 import { apiGet } from '@/utils/api/backend'
@@ -17,21 +16,20 @@ export const useAuth = () => {
     const { externId } = await resp
 
     if (!externId) {
-      router.push(`/registration`)
+      router.push(`/registration`).then()
     } else {
       const currentPath = router.asPath
 
       if (currentPath === '/') {
-        router.push('/dashboard')
+        router.push('/dashboard').then()
       } else {
-        router.push(router.asPath)
+        router.push(router.asPath).then()
       }
     }
   }
 
   const handleLogout = async () => {
     await logout()
-    localStorage.removeItem(FAUNA_TOKEN_LOCAL_STORAGE_KEY)
 
     // Force reload to clear apollo cache and prevent weird state updates
     ;(window as Window).location = '/'

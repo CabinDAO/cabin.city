@@ -1,10 +1,4 @@
 import Image from 'next/image'
-import {
-  LocationType,
-  OfferPrice,
-  OfferType,
-  ProfileRoleConstraint,
-} from '@/generated/graphql'
 import { MeFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
@@ -18,36 +12,6 @@ import React from 'react'
 import { OfferFragment } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
-
-export interface OfferListItemProps {
-  className?: string
-  variant?: OfferListItemVariant
-  _id: string
-  offerType: OfferType | null | undefined
-  locationType: LocationType
-  title: string | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  imageUrl: string | null | undefined
-  price: OfferPrice | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
-  citizenshipRequired?: boolean | null | undefined
-  minimunCabinBalance?: number | null | undefined
-  location: {
-    _id: string
-    name: string | null | undefined
-    publishedAt: Date | null | undefined
-    shortAddress: string | null | undefined
-    caretaker?:
-      | {
-          _id: string
-        }
-      | null
-      | undefined
-  }
-  isLocked?: boolean
-  actionsEnabled?: boolean
-}
 
 type OfferListItemVariant = 'default' | 'no-icon'
 

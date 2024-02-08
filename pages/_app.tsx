@@ -1,7 +1,6 @@
 import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
 import { AppHead } from '@/components/shared/head'
-import { apolloClient } from '@/lib/apollo/apollo-client'
 import theme from '@/styles/theme'
 import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
@@ -48,18 +47,18 @@ export default function App({ Component, pageProps }: AppProps) {
           <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
             <ErrorProvider>
               <BackendProvider>
-                <ApolloProvider client={apolloClient}>
-                  <ModalProvider>
-                    <CitizenshipProvider>
-                      <NavigationProvider>
-                        <GoogleAnalytics />
-                        <Reload />
-                        <Component {...pageProps} />
-                        <Analytics />
-                      </NavigationProvider>
-                    </CitizenshipProvider>
-                  </ModalProvider>
-                </ApolloProvider>
+                {/*<ApolloProvider client={apolloClient}>*/}
+                <ModalProvider>
+                  <CitizenshipProvider>
+                    <NavigationProvider>
+                      <GoogleAnalytics />
+                      <Reload />
+                      <Component {...pageProps} />
+                      <Analytics />
+                    </NavigationProvider>
+                  </CitizenshipProvider>
+                </ModalProvider>
+                {/*</ApolloProvider>*/}
               </BackendProvider>
             </ErrorProvider>
           </PrivyWagmiConnector>

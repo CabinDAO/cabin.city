@@ -1,8 +1,3 @@
-import {
-  OfferType,
-  PartialUpdateLocationInput,
-  UpdateOfferInput,
-} from '@/generated/graphql'
 import { MAX_LOCATION_TITLE_LENGTH, MAX_LOCATION_BIO_LENGTH } from './constants'
 import {
   EMAIL_VALID_REGEX,
@@ -12,6 +7,8 @@ import {
   truthyString,
 } from '@/utils/validate'
 import { emptyEditorValue } from '../core/slate/slate-utils'
+import { OfferEditParams, OfferType } from '@/utils/types/offer'
+import { LocationEditParams } from '@/utils/types/location'
 
 export type ValidationType = 'missing' | 'invalid' | 'valid'
 
@@ -20,9 +17,7 @@ type ValidationResult = {
   valid: boolean
 }
 
-export const validateLocationInput = (
-  editProfileInput: PartialUpdateLocationInput
-) => {
+export const validateLocationInput = (values: LocationEditParams) => {
   const {
     name,
     tagline,
@@ -31,42 +26,37 @@ export const validateLocationInput = (
     address,
     sleepCapacity,
     internetSpeedMbps,
-  } = editProfileInput
+  } = values
 
   const invalid =
-    (editProfileInput.hasOwnProperty('name') && !validateTitle(name).valid) ||
-    (editProfileInput.hasOwnProperty('tagline') &&
-      !validateBio(tagline).valid) ||
-    (editProfileInput.hasOwnProperty('description') &&
-      !validateBio(description).valid) ||
-    (editProfileInput.hasOwnProperty('caretakerEmail') &&
+    (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
+    (values.hasOwnProperty('tagline') && !validateBio(tagline).valid) ||
+    (values.hasOwnProperty('description') && !validateBio(description).valid) ||
+    (values.hasOwnProperty('caretakerEmail') &&
       !validateEmail(caretakerEmail).valid) ||
-    (editProfileInput.hasOwnProperty('address') &&
+    (values.hasOwnProperty('address') &&
       !truthyString(address?.formattedAddress)) ||
-    (editProfileInput.hasOwnProperty('internetSpeedMbps') &&
+    (values.hasOwnProperty('internetSpeedMbps') &&
       !isNumber(internetSpeedMbps)) ||
-    (editProfileInput.hasOwnProperty('sleepCapacity') &&
-      !isNumber(sleepCapacity))
+    (values.hasOwnProperty('sleepCapacity') && !isNumber(sleepCapacity))
 
   return !invalid
 }
 
 export const validateOfferInput = (
-  offerInput: UpdateOfferInput,
-  offerType: OfferType
+  type: OfferType,
+  newValues: OfferEditParams
 ) => {
-  const { title, description, applicationUrl, price, imageIpfsHash } =
-    offerInput
-
   const invalid =
-    !validateTitle(title).valid ||
-    emptyEditorValue(description) ||
-    (offerInput.hasOwnProperty('applicationUrl') &&
-      !truthyString(applicationUrl)) ||
-    (offerType === OfferType.PaidColiving &&
-      offerInput.hasOwnProperty('price') &&
-      !isNumber(price?.amountCents)) ||
-    (offerInput.hasOwnProperty('imageIpfsHash') && !truthyString(imageIpfsHash))
+    !validateTitle(newValues.title).valid ||
+    emptyEditorValue(newValues.description) ||
+    (newValues.hasOwnProperty('applicationUrl') &&
+      !truthyString(newValues.applicationUrl)) ||
+    (type === OfferType.PaidColiving &&
+      newValues.hasOwnProperty('price') &&
+      !isNumber(newValues.price)) ||
+    (newValues.hasOwnProperty('imageIpfsHash') &&
+      !truthyString(newValues.imageIpfsHash))
 
   return !invalid
 }

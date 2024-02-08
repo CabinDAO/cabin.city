@@ -1,9 +1,5 @@
 import { IconName } from '@/components/core/Icon'
-import {
-  ProfileRoleConstraint,
-  ProfileRoleLevelType,
-} from '@/generated/graphql'
-import { RoleType } from '@/utils/types/profile'
+import { RoleLevel, RoleType } from '@/utils/types/profile'
 
 export interface RoleInfo {
   name: string
@@ -17,15 +13,10 @@ export interface LevelInfo {
   name: string
 }
 
-export type RoleConstraintInfo = RoleInfo &
-  LevelInfo & {
-    constraintName: string
-  }
-
-export const LevelInfoByType: Record<ProfileRoleLevelType, LevelInfo> = {
-  [ProfileRoleLevelType.Apprentice]: { name: 'Apprentice' },
-  [ProfileRoleLevelType.Artisan]: { name: 'Artisan' },
-  [ProfileRoleLevelType.Custodian]: { name: 'Custodian' },
+export const LevelInfoByType: Record<RoleLevel, LevelInfo> = {
+  [RoleLevel.Apprentice]: { name: 'Apprentice' },
+  [RoleLevel.Artisan]: { name: 'Artisan' },
+  [RoleLevel.Custodian]: { name: 'Custodian' },
 }
 
 export const RoleInfoByType: Record<RoleType, RoleInfo> = {
@@ -80,25 +71,6 @@ export const RoleInfoByType: Record<RoleType, RoleInfo> = {
 
 export const roleInfoFromType = (roleType: RoleType): RoleInfo => {
   return RoleInfoByType[roleType]
-}
-
-type RoleConstraintInfoParams = ProfileRoleConstraint & { hideLevel?: boolean }
-
-export const roleConstraintInfoFromType = ({
-  profileRole,
-  level,
-  hideLevel = false,
-}: RoleConstraintInfoParams): RoleConstraintInfo => {
-  const roleInfo = RoleInfoByType[profileRole]
-  const levelInfo = LevelInfoByType[level]
-
-  return {
-    ...roleInfo,
-    ...levelInfo,
-    constraintName: `${roleInfo.name}${
-      hideLevel ? '' : ` ${levelInfo.name.toLowerCase()}`
-    }`,
-  }
 }
 
 export const allRoles = Object.values(RoleType).map((roleType) => ({

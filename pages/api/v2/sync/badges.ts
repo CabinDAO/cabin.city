@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { prisma } from '@/utils/prisma'
-import { $Enums } from '@prisma/client'
+import { BlockSyncType, ActivityType } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getAlchemyProvider } from '@/lib/alchemy'
 import { randomId } from '@/utils/random'
@@ -16,7 +16,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   await attemptSync({
-    type: $Enums.BlockSyncType.Otterspace,
+    type: BlockSyncType.Otterspace,
     provider: getAlchemyProvider(otterspaceConfig.networkName),
     initialBlock: new Decimal(otterspaceConfig.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
@@ -101,7 +101,7 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
         create: {
           key: badge.otterspaceBadgeId,
           externId: randomId('activity'),
-          type: $Enums.ActivityType.BadgeAdded,
+          type: ActivityType.BadgeAdded,
           text: '',
           profile: {
             connect: {

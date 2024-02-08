@@ -155,9 +155,7 @@ async function handlePost(
   ])
 
   res.status(200).send({
-    location: locationToFragment(
-      updatedLocation as unknown as LocationWithRelations
-    ),
+    location: locationToFragment(updatedLocation as LocationWithRelations),
   })
 }
 

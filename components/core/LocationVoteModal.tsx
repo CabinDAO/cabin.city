@@ -8,14 +8,13 @@ import { Button } from './Button'
 import Icon from './Icon'
 import { useEffect, useState } from 'react'
 import { useModal } from '../hooks/useModal'
-import { isNil } from '@/lib/isNil'
 import IconButton from './IconButton'
 import { LocationVoteParams } from '@/pages/api/v2/location/vote'
 import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 
 interface LocationVoteModalProps {
   location: Location
-  votingPower: number | null | undefined
+  votingPower: number
   myVotes: ProfileVotesResponse['votes']
   onCastVotes: (reqBody: LocationVoteParams) => Promise<unknown> | void
   isLoading?: boolean
@@ -25,11 +24,6 @@ interface Location {
   externId: string
   name?: string | null | undefined
   publishedAt?: string | null | undefined
-}
-
-interface LocationVote {
-  location: Location
-  count: number
 }
 
 interface VoteCountsByLocationId {
@@ -103,9 +97,6 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
     (acc, count) => acc + count,
     0
   )
-  if (isNil(votingPower)) {
-    throw new Error('Voting power is required')
-  }
   const remainingVotes = votingPower - distributedVotes
   const exceededVotingPower = remainingVotes < 0
 
