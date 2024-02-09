@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
+  // output   = "./generated/client" // if you do this, replace imports of '@prisma/client' with './prisma/generated/client'
   // previewFeatures = ["relationJoins"]
 }
 
