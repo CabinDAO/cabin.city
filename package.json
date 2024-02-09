@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "npx prisma generate && ([[ -n $POSTGRES_URL ]] && npx prisma migrate deploy || true)",
+    "postinstall": "npx prisma generate",
     "dev": "next dev",
     "build": "next build",
     "analyze": "NODE_ENV=development ANALYZE=true next build",
