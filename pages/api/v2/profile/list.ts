@@ -229,7 +229,9 @@ const profilesToFragments = (
   })
 }
 
-const toArray = <T = any>(param: string | string[] | undefined): T[] => {
+const toArray = <T = RoleType | RoleLevel | CitizenshipStatus>(
+  param: string | string[] | undefined
+): T[] => {
   if (!param) return []
   if (typeof param === 'string' || param instanceof String) {
     return param.split(',') as T[]

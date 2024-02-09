@@ -104,7 +104,7 @@ async function handlePost(
     }
   }
 
-  const [_, updatedLocation] = await prisma.$transaction([
+  const [, updatedLocation] = await prisma.$transaction([
     prisma.locationMediaItem.deleteMany({
       where: { id: { in: mediaItemsToDelete } },
     }),

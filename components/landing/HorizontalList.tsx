@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Icon, { IconName } from '@/components/core/Icon'
 import { Body1, H4 } from '@/components/core/Typography'
 import React from 'react'
-import { Button } from '@/components/core/Button'
 
 interface ListItemProps {
   title: string

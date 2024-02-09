@@ -13,7 +13,7 @@ import { ModalTitle } from '@/components/core/modals/ModalTitle'
 
 interface PublishModalProps {
   locationId: string
-  refetchLocation: () => Promise<any>
+  refetchLocation: () => void
 }
 
 export const PublishLocationModal = ({

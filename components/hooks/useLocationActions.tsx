@@ -5,7 +5,7 @@ import { DeleteConfirmationModal } from '../core/DeleteConfirmationModal'
 
 export const useLocationActions = (
   locationExternId: string,
-  afterDelete: () => Promise<any>
+  afterDelete: () => Promise<unknown>
 ) => {
   const router = useRouter()
   const { showModal } = useModal()

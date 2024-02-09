@@ -34,7 +34,7 @@ interface LocationCardProps {
   editMode?: boolean
   hideVerifiedTag?: boolean
   position?: number
-  revalidateLocationsFn: () => Promise<any>
+  revalidateLocationsFn: () => Promise<unknown>
 }
 
 const BANNER_IMAGE_SIZE = 190

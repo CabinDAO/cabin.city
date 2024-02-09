@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
+import { ResponseError } from '@sendgrid/helpers/classes'
 import { EmailType } from '@/lib/mail/types'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
@@ -20,16 +21,26 @@ async function handler(
 
   try {
     const response = await sendgrid.sendEmail(body.type, body.data)
-    console.info('sendgrid response', response)
+    console.info('sendgrid sendEmail response', response)
     res.status(200).send({ message: 'OK' })
-  } catch (error: any) {
-    console.error('sendgrid error', error, error.response?.body)
-    res.status(500).send({
-      message:
-        process.env.NODE_ENV === 'production'
-          ? 'Internal Server Error'
-          : error.message,
-    })
+  } catch (e: unknown) {
+    if (e instanceof ResponseError) {
+      console.error('sendgrid ResponseError', e, e.response?.body)
+      res.status(500).send({
+        message:
+          process.env.NODE_ENV === 'production'
+            ? 'Internal Server Error'
+            : `Sendgrid ResponseError: ${e.message}`,
+      })
+    } else {
+      console.error(e)
+      res.status(500).send({
+        message:
+          process.env.NODE_ENV === 'production'
+            ? 'Internal Server Error'
+            : `${e}`,
+      })
+    }
   }
 }
 

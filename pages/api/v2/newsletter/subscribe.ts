@@ -32,7 +32,7 @@ async function handler(
   try {
     await subscribe(email)
     res.send({ success: true, message: 'Subscribed' })
-  } catch (e: any) {
+  } catch (e: unknown) {
     if (e instanceof AxiosError) {
       // console.log(e.response?.data)
       res.send({ success: false, message: e.response?.data.message })

@@ -158,7 +158,7 @@ async function handlePost(
     return
   }
 
-  const txns: Prisma.PrismaPromise<any>[] = [
+  const txns: Prisma.PrismaPromise<unknown>[] = [
     prisma.profile.update({
       data: {
         name: params.data.name,

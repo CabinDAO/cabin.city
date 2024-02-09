@@ -87,7 +87,7 @@ export const CensusView = () => {
       }
       setTotalProfiles(data.count ?? 0)
     }
-  }, [data])
+  }, [data, page, profiles])
 
   const hasMore = data ? (data.count ?? 0) > PAGE_SIZE * (page + 1) : false
 

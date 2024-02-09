@@ -183,15 +183,15 @@ const OfferDetails = styled.div`
   gap: 0.4rem;
 `
 
-const TagContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.4rem;
-  background-color: ${({ theme }) => theme.colors.green900};
-  border-radius: 50%;
-  border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
-`
+// const TagContainer = styled.div`
+//   position: absolute;
+//   bottom: 0;
+//   right: 0;
+//   padding: 0.4rem;
+//   background-color: ${({ theme }) => theme.colors.green900};
+//   border-radius: 50%;
+//   border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
+// `
 
 const TitleContainer = styled.div`
   display: flex;

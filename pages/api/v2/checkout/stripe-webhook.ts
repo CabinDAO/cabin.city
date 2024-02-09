@@ -52,9 +52,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       req.headers['stripe-signature'] ?? '',
       webhookSecret
     ) as Stripe.DiscriminatedEvent
-  } catch (err: any) {
-    console.log(`Stripe webhook signature error: ${err.message}`)
-    res.status(400).send(`Webhook Error: ${err.message}`)
+  } catch (err: unknown) {
+    if (err instanceof Stripe.errors.StripeError) {
+      console.log(`Stripe webhook signature error: ${err.message}`)
+      res.status(400).send(`Webhook Error: ${err.message}`)
+    } else {
+      console.log(`Stripe webhook unknown error: ${err}`)
+      res.status(400).send(`Webhook Error: ${err}`)
+    }
     return
   }
 
@@ -112,7 +117,7 @@ const handlePaymentIntentNewStatus = async (
       where: { id: cart.id },
       data: { paymentStatus: status },
     })
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.log(
       `Got payment_intent.succeeded event but failed to update cart: ${e}`
     )
@@ -127,7 +132,7 @@ const handlePaymentIntentNewStatus = async (
         cartId: cart.id,
       })
       console.log(`Sent us a new purchase email`)
-    } catch (e: any) {
+    } catch (e: unknown) {
       console.log(`Failed to send new purchase email: ${e}`)
     }
   }

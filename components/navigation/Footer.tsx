@@ -7,7 +7,6 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
-import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 export const FOOTER_HEIGHT = '265' // TODO: fix this huge hack
 

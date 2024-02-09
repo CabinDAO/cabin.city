@@ -1,5 +1,5 @@
 import { createContext, ReactNode } from 'react'
-import { mutate, useSWRConfig } from 'swr'
+import { useSWRConfig } from 'swr'
 import { usePrivy } from '@privy-io/react-auth'
 import { expandRoute, Route } from '@/utils/routes'
 import {
@@ -23,24 +23,30 @@ NOTES TO MYSELF:
  */
 
 export interface BackendState {
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useGet: <Data = any>(
     route: Route | null,
     params?: UrlParams
   ) => ReturnType<typeof useAPIGet<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useMutate: <Data = any>(
     route: Route | null
   ) => ReturnType<typeof useAPIMutate<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useDelete: <Data = any>(
     route: Route | null
   ) => ReturnType<typeof useAPIMutate<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   get: <Data = any>(
     route: Route,
     params?: UrlParams
   ) => ReturnType<typeof apiGet<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   post: <Data = any>(
     route: Route,
     params: object
   ) => ReturnType<typeof apiPost<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   revalidate: (route: Route) => Promise<any>
 }
 
@@ -52,26 +58,32 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
   const { getAccessToken } = usePrivy()
   const { mutate } = useSWRConfig()
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const useGet = <Data = any,>(route: Route | null, params: UrlParams = {}) => {
     return useAPIGet<Data>(route, params, getAccessToken)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const useMutate = <Data = any,>(route: Route | null) => {
     return useAPIMutate<Data>(route, 'POST', getAccessToken)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const useDelete = <Data = any,>(route: Route | null) => {
     return useAPIMutate<Data>(route, 'DELETE', getAccessToken)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const get = <Data = any,>(route: Route, params: UrlParams = {}) => {
     return apiGet<Data>(route, params, getAccessToken)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const post = <Data = any,>(route: Route, params: object = {}) => {
     return apiPost<Data>(route, params, getAccessToken)
   }
 
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const revalidate = (route: Route): Promise<any> => {
     return mutate(route ? expandRoute(route) : null)
   }

@@ -1,9 +1,5 @@
 import Link from 'next/link'
-import {
-  CitizenshipStatus,
-  ProfileBasicFragment,
-  ProfileFragment,
-} from '@/utils/types/profile'
+import { CitizenshipStatus, ProfileBasicFragment } from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
