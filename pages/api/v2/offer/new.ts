@@ -55,14 +55,19 @@ async function handler(
   })
 
   if (location.publishedAt) {
-    await prisma.activity.create({
-      data: {
+    const activityKey = `OfferCreated|${offer.externId}`
+    await prisma.activity.upsert({
+      where: {
+        key: activityKey,
+      },
+      create: {
         externId: randomId('activity'),
-        key: `OfferCreated|${offer.externId}`,
+        key: activityKey,
         type: ActivityType.OfferCreated,
         profileId: profile.id,
         offerId: offer.id,
       },
+      update: {},
     })
   }
 

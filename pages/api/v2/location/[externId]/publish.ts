@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
 import { LocationPublishResponse } from '@/utils/types/location'
+import { randomId } from '@/utils/random'
+import { ActivityType } from '@prisma/client'
 
 async function handler(
   req: NextApiRequest,
@@ -50,6 +52,21 @@ async function handler(
     data: {
       publishedAt: new Date(),
     },
+  })
+
+  const activityKey = `LocationPublished|${locationToPublish.type}|${locationToPublish.externId}`
+  await prisma.activity.upsert({
+    where: {
+      key: activityKey,
+    },
+    create: {
+      externId: randomId('activity'),
+      key: activityKey,
+      type: ActivityType.LocationPublished,
+      profileId: profile.id,
+      locationId: locationToPublish.id,
+    },
+    update: {},
   })
 
   res.status(200).send({

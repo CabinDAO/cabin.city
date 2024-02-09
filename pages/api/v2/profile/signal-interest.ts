@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
-import { CitizenshipStatus } from '@prisma/client'
+import { ActivityType, CitizenshipStatus } from '@prisma/client'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { randomId } from '@/utils/random'
 
 async function handler(
   req: NextApiRequest,
@@ -28,6 +29,20 @@ async function handler(
     data: {
       citizenshipStatus: CitizenshipStatus.VouchRequested,
     },
+  })
+
+  const activityKey = `VouchRequested|${profile.externId}`
+  await prisma.activity.upsert({
+    where: {
+      key: activityKey,
+    },
+    create: {
+      externId: randomId('activity'),
+      key: activityKey,
+      type: ActivityType.VouchRequested,
+      profileId: profile.id,
+    },
+    update: {},
   })
 
   res.status(200).send({})

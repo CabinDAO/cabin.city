@@ -10,12 +10,9 @@ const LocationContent = (props: PostProps) => {
 
 const LocationMedia = (props: PostProps) => {
   const location = props.activity.metadata?.location
-
-  if (location) {
-    return <LocationPostItem location={location} hideVerifiedTag />
-  } else {
-    return null
-  }
+  return location ? (
+    <LocationPostItem location={location} hideVerifiedTag />
+  ) : null
 }
 
 export const locationPublishedSlots: PostSlots = {

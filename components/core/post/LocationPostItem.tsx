@@ -5,14 +5,14 @@ import Icon from '../Icon'
 import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
-import { LocationFragment } from '@/utils/types/location'
 import { getImageUrlByIpfsHash } from '@/lib/image'
+import { ActivityListFragment } from '@/utils/types/activity'
 
 export const LocationPostItem = ({
   location,
   hideVerifiedTag,
 }: {
-  location: LocationFragment
+  location: NonNullable<ActivityListFragment['metadata']['location']>
   hideVerifiedTag: boolean
 }) => {
   const {
@@ -30,7 +30,7 @@ export const LocationPostItem = ({
   const router = useRouter()
 
   const handleOnClick = () => {
-    router.push(`/location/${externId}`)
+    router.push(`/location/${externId}`).then()
   }
 
   return (

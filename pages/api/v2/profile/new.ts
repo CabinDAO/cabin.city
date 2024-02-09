@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
-import { Profile, RoleType, RoleLevel } from '@prisma/client'
+import { Profile, RoleType, RoleLevel, ActivityType } from '@prisma/client'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { randomId } from '@/utils/random'
 import { ProfileNewResponse } from '@/utils/types/profile'
@@ -71,7 +71,19 @@ async function handler(
     },
   })
 
-  console.log('profile', profile)
+  const activityKey = `ProfileCreated|${profile.externId}`
+  await prisma.activity.upsert({
+    where: {
+      key: activityKey,
+    },
+    create: {
+      externId: randomId('activity'),
+      key: activityKey,
+      type: ActivityType.ProfileCreated,
+      profileId: profile.id,
+    },
+    update: {},
+  })
 
   await createHats(profile)
 
@@ -88,8 +100,6 @@ async function createHats(profile: Profile) {
     },
   })
 
-  console.log('wallet hats', walletHats)
-
   if (!walletHats.length) return
 
   const rolesToAdd = walletHats
@@ -104,9 +114,7 @@ async function createHats(profile: Profile) {
     })
     .filter((r) => r.type && r.level)
 
-  console.log('rolesToAdd', rolesToAdd)
-
-  const roles = await prisma.role.createMany({
+  await prisma.role.createMany({
     data: rolesToAdd.map((r) => {
       return {
         profileId: profile.id,
@@ -117,8 +125,6 @@ async function createHats(profile: Profile) {
     }),
     skipDuplicates: true,
   })
-
-  console.log('roles', roles)
 }
 
 export default withAuth(handler)

@@ -27,7 +27,7 @@ async function handler(
 
   if (params.action === 'like') {
     // await Promise.all() might be even better here because its parallel, while transaction is sequential
-    const res = await prisma.activityReaction.create({
+    await prisma.activityReaction.create({
       data: {
         activity: {
           connect: {

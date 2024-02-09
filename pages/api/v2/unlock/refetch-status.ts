@@ -109,14 +109,15 @@ const setCitizenshipStatus = async (
   })
 
   if (newStatus === CitizenshipStatus.Verified) {
+    const activityKey = `VerifiedCitizenship|${wallet.profile.externId}` // todo: this is not unique! what if you lose citizenship and then renew it? maybe include the year?
     await prisma.activity.upsert({
       where: {
-        key: `VerifiedCitizenship|${wallet.profile.externId}`, // todo: this is not unique! what if you lose citizenship and then renew it? maybe include the year?
+        key: activityKey,
       },
       create: {
         externId: randomId('activity'),
         profileId: wallet.profile.id,
-        key: `VerifiedCitizenship|${wallet.profile.externId}`,
+        key: activityKey,
         type: ActivityType.CitizenshipVerified,
         citizenshipTokenId: tokenId,
       },
