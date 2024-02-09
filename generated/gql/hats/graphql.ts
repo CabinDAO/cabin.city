@@ -32,10 +32,72 @@ export type Block_height = {
   number_gte?: InputMaybe<Scalars['Int']>;
 };
 
+export type ClaimsHatter = {
+  __typename?: 'ClaimsHatter';
+  claimableForHats: Array<Hat>;
+  claimableHats: Array<Hat>;
+  id: Scalars['ID'];
+};
+
+
+export type ClaimsHatterclaimableForHatsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Hat_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Hat_filter>;
+};
+
+
+export type ClaimsHatterclaimableHatsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Hat_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<Hat_filter>;
+};
+
+export type ClaimsHatter_filter = {
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<ClaimsHatter_filter>>>;
+  claimableForHats?: InputMaybe<Array<Scalars['String']>>;
+  claimableForHats_?: InputMaybe<Hat_filter>;
+  claimableForHats_contains?: InputMaybe<Array<Scalars['String']>>;
+  claimableForHats_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  claimableForHats_not?: InputMaybe<Array<Scalars['String']>>;
+  claimableForHats_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  claimableForHats_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats_?: InputMaybe<Hat_filter>;
+  claimableHats_contains?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats_not?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats_not_contains?: InputMaybe<Array<Scalars['String']>>;
+  claimableHats_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<ClaimsHatter_filter>>>;
+};
+
+export enum ClaimsHatter_orderBy {
+  claimableForHats = 'claimableForHats',
+  claimableHats = 'claimableHats',
+  id = 'id'
+}
+
 export type Hat = {
   __typename?: 'Hat';
   admin: Hat;
   badStandings: Array<Wearer>;
+  claimableBy: Array<ClaimsHatter>;
+  claimableForBy: Array<ClaimsHatter>;
   createdAt?: Maybe<Scalars['BigInt']>;
   currentSupply: Scalars['BigInt'];
   details: Scalars['String'];
@@ -63,6 +125,24 @@ export type HatbadStandingsArgs = {
   orderDirection?: InputMaybe<OrderDirection>;
   skip?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<Wearer_filter>;
+};
+
+
+export type HatclaimableByArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ClaimsHatter_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClaimsHatter_filter>;
+};
+
+
+export type HatclaimableForByArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ClaimsHatter_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ClaimsHatter_filter>;
 };
 
 
@@ -1592,6 +1672,8 @@ export type Hat_filter = {
   badStandings_not?: InputMaybe<Array<Scalars['String']>>;
   badStandings_not_contains?: InputMaybe<Array<Scalars['String']>>;
   badStandings_not_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
+  claimableBy_?: InputMaybe<ClaimsHatter_filter>;
+  claimableForBy_?: InputMaybe<ClaimsHatter_filter>;
   createdAt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gt?: InputMaybe<Scalars['BigInt']>;
   createdAt_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1790,6 +1872,8 @@ export enum Hat_orderBy {
   admin__status = 'admin__status',
   admin__toggle = 'admin__toggle',
   badStandings = 'badStandings',
+  claimableBy = 'claimableBy',
+  claimableForBy = 'claimableForBy',
   createdAt = 'createdAt',
   currentSupply = 'currentSupply',
   details = 'details',
@@ -1935,6 +2019,8 @@ export type Query = {
   __typename?: 'Query';
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
+  claimsHatter?: Maybe<ClaimsHatter>;
+  claimsHatters: Array<ClaimsHatter>;
   hat?: Maybe<Hat>;
   hatBurnedEvent?: Maybe<HatBurnedEvent>;
   hatBurnedEvents: Array<HatBurnedEvent>;
@@ -1974,6 +2060,24 @@ export type Query = {
 
 export type Query_metaArgs = {
   block?: InputMaybe<Block_height>;
+};
+
+
+export type QueryclaimsHatterArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryclaimsHattersArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ClaimsHatter_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<ClaimsHatter_filter>;
 };
 
 
@@ -2286,6 +2390,8 @@ export type Subscription = {
   __typename?: 'Subscription';
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
+  claimsHatter?: Maybe<ClaimsHatter>;
+  claimsHatters: Array<ClaimsHatter>;
   hat?: Maybe<Hat>;
   hatBurnedEvent?: Maybe<HatBurnedEvent>;
   hatBurnedEvents: Array<HatBurnedEvent>;
@@ -2325,6 +2431,24 @@ export type Subscription = {
 
 export type Subscription_metaArgs = {
   block?: InputMaybe<Block_height>;
+};
+
+
+export type SubscriptionclaimsHatterArgs = {
+  block?: InputMaybe<Block_height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionclaimsHattersArgs = {
+  block?: InputMaybe<Block_height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<ClaimsHatter_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<ClaimsHatter_filter>;
 };
 
 
