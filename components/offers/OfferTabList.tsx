@@ -25,6 +25,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
     publishedOnly: 'true',
     page: page,
   } as OfferListParams)
+
   useEffect(() => {
     if (data) {
       if (page === 1) {
@@ -35,7 +36,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
         setOffers([...offers, ...data.offers])
       }
     }
-  }, [data])
+  }, [data, page])
 
   const hasMore =
     data && data.count ? data.count > PAGE_SIZE * (page + 1) : false

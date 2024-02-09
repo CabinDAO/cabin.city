@@ -8,17 +8,8 @@ import { ProfilePassportsSection } from './ProfilePassportsSection'
 import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
 import { ProfileFragment } from '@/utils/types/profile'
-import { ActivityListFragment } from '@/utils/types/activity'
 
-interface ProfileContentProps {
-  profile: ProfileFragment
-  activityItems: ActivityListFragment[]
-}
-
-export const ProfileContent = ({
-  profile,
-  activityItems,
-}: ProfileContentProps) => {
+export const ProfileContent = ({ profile }: { profile: ProfileFragment }) => {
   const { user: me } = useProfile()
   if (!me) return null
 
@@ -34,7 +25,7 @@ export const ProfileContent = ({
       <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
       <ProfileRolesSection profile={profile} />
       <ProfilePassportsSection profile={profile} />
-      <ProfileActivitiesSection activityItems={activityItems} />
+      <ProfileActivitiesSection profile={profile} />
     </ProfileInnerContainer>
   )
 }

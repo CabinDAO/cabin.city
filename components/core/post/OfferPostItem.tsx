@@ -3,9 +3,10 @@ import Image from 'next/image'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY, formatRange } from '@/utils/display-utils'
 import Link from 'next/link'
-import { OfferFragment, OfferNameByType } from '@/utils/types/offer'
+import { OfferNameByType } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
+import { ActivityListFragment } from '@/utils/types/activity'
 
 export const OfferPostItem = ({
   imageIpfsHash,
@@ -15,7 +16,7 @@ export const OfferPostItem = ({
   endDate,
   location,
   externId,
-}: OfferFragment) => {
+}: NonNullable<ActivityListFragment['metadata']['offer']>) => {
   const formattedDate = formatRange(new Date(startDate), new Date(endDate))
 
   return (

@@ -112,7 +112,7 @@ class ShowMoreText extends Component {
       width,
       keepNewLines,
       truncatedEndingComponent,
-      onTruncate,
+      // onTruncate,
     } = this.props
 
     const { expanded, truncated } = this.state
