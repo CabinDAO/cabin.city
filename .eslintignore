@@ -2,3 +2,4 @@ graphql.ts
 cypress.config.ts
 contracts
 generated
+node_modules/
