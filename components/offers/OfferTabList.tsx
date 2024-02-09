@@ -36,7 +36,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
         setOffers([...offers, ...data.offers])
       }
     }
-  }, [data, page])
+  }, [data, offers, page])
 
   const hasMore =
     data && data.count ? data.count > PAGE_SIZE * (page + 1) : false

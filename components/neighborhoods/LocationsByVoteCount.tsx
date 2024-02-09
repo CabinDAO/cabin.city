@@ -35,7 +35,7 @@ export const LocationsByVoteCount = () => {
         setLocations([...locations, ...data.locations])
       }
     }
-  }, [data, page])
+  }, [data, page, locations])
 
   const hasMore =
     data && data.count ? data.count > PAGE_SIZE * (page + 1) : false

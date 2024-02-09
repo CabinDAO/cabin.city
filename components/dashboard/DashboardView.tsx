@@ -42,7 +42,7 @@ export const DashboardView = () => {
         setActivities([...activities, ...(data.activities ?? [])])
       }
     }
-  }, [data])
+  }, [data, activities, page])
 
   const { handleCreateTextActivity } = useTextActivity(refetchActivities)
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
