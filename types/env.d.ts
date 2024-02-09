@@ -4,7 +4,8 @@ type EnvDict = {
 
 export interface Env {
   NEXT_PUBLIC_ALCHEMY_APP_NAME: string
-  DATABASE_URL: string
+  POSTGRES_URL: string
+  POSTGRES_URL_NON_POOLING: string
   IRON_SESSION_PASSWORD: string
   NEXT_PUBLIC_ETH_ALCHEMY_ID: string
   NEXT_PUBLIC_OPTIMISM_ALCHEMY_ID: string
