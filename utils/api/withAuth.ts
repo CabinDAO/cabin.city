@@ -54,7 +54,7 @@ export const withAuth = (handler: WithAuthApiHandler) => {
         privyDID = response.payload.sub || null
       }
 
-      return handler(req, res, {
+      await handler(req, res, {
         ...opts,
         auth: { authToken: authToken || null, privyDID },
       })
