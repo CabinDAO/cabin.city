@@ -226,8 +226,8 @@ async function importProfile(datum: Profile) {
 
   await prisma.profile.create({
     data: {
-      createdAt: new Date(d.ts / 1000),
-      updatedAt: new Date(d.ts / 1000),
+      createdAt: d.data.createdAt,
+      updatedAt: d.data.createdAt,
       externId: d.ref,
       privyDID: d.data.externalUserId,
       name: d.data.name,

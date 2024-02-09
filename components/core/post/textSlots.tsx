@@ -7,7 +7,7 @@ const TextContent = (props: PostProps) => {
 
   return (
     <WordBreak>
-      <Body1>{activity.text}</Body1>
+      <Body1>{activity.metadata.text}</Body1>
     </WordBreak>
   )
 }

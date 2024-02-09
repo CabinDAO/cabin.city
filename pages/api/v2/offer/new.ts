@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
-import { OfferType, OfferPriceInterval } from '@prisma/client'
+import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { OfferNewParams, OfferNewResponse } from '@/utils/types/offer'
@@ -31,7 +31,7 @@ async function handler(
     return
   }
 
-  if (location.caretakerId != profile.id) {
+  if (location.caretakerId != profile.id && !profile.isAdmin) {
     res
       .status(403)
       .send({ error: 'You are not the caretaker of this location' })
@@ -53,6 +53,18 @@ async function handler(
       applicationUrl: '',
     },
   })
+
+  if (location.publishedAt) {
+    await prisma.activity.create({
+      data: {
+        externId: randomId('activity'),
+        key: `OfferCreated|${offer.externId}`,
+        type: ActivityType.OfferCreated,
+        profileId: profile.id,
+        offerId: offer.id,
+      },
+    })
+  }
 
   res.status(200).send({ offerExternId: offer.externId })
 }

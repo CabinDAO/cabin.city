@@ -19,6 +19,7 @@ type PostVariant = 'full' | 'compact'
 export interface PostProps {
   activity: ActivityListFragment
   baseDate: Date
+  onDelete: () => void
   onLike?: () => void
   onUnlike?: () => void
   hovered?: boolean
@@ -26,7 +27,7 @@ export interface PostProps {
 }
 
 export const Post = (props: PostProps) => {
-  const { activity, onLike, onUnlike, variant = 'full' } = props
+  const { activity, onLike, onUnlike, onDelete, variant = 'full' } = props
   const profile = activity.profile
 
   const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
@@ -35,7 +36,10 @@ export const Post = (props: PostProps) => {
   const [hovered, setHovered] = useState(false)
   const { user } = useProfile()
   const { showModal } = useModal()
-  const { handleDeleteTextActivity } = useTextActivity(activity.externId)
+  const { handleDeleteTextActivity } = useTextActivity(
+    onDelete,
+    activity.externId
+  )
   const [hasReactionByMe, setHasReactionByMe] = useState(
     activity.hasReactionByMe
   )
@@ -64,7 +68,11 @@ export const Post = (props: PostProps) => {
     showModal(() => (
       <DeleteConfirmationModal
         entityName="post"
-        onDelete={() => handleDeleteTextActivity}
+        onDelete={async () => {
+          console.log('delete post')
+          await handleDeleteTextActivity()
+          console.log('deleted')
+        }}
       />
     ))
   }

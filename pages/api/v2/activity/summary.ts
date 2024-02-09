@@ -1,14 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/utils/prisma'
-import { $Enums } from '@prisma/client'
+import { CitizenshipStatus } from '@prisma/client'
+import { ActivitySummaryResponse } from '@/utils/types/activity'
 
-export type ActivitySummaryResponse = {
-  profilesCount: number
-  tokenHoldersCount: number
-  citizensCount: number
-}
-
-async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ActivitySummaryResponse>
+) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
     return
@@ -24,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   })
   const citizensCount = await prisma.profile.count({
     where: {
-      citizenshipStatus: $Enums.CitizenshipStatus.Verified,
+      citizenshipStatus: CitizenshipStatus.Verified,
     },
   })
 
@@ -32,7 +30,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     profilesCount,
     tokenHoldersCount,
     citizensCount,
-  } as ActivitySummaryResponse)
+  })
 }
 
 export default handler

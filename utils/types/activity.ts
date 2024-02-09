@@ -7,6 +7,7 @@ import {
 } from '@/utils/types/profile'
 import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
 import { OfferFragment } from '@/utils/types/offer'
+import { Prisma } from '@prisma/client'
 
 // must match prisma's $Enums.ActivityType
 export enum ActivityType {
@@ -24,8 +25,8 @@ export type ActivityListFragment = {
   externId: string
   createdAt: string
   type: ActivityType
-  text: string
   metadata: {
+    text?: string
     citizenshipTokenId?: number
     badge?: BadgeFragment
     role?: RoleFragment
@@ -96,3 +97,202 @@ export type ActivityNewResponse = {
 export type ActivityDeleteResponse = {
   error?: string
 }
+
+export type ActivitySummaryResponse = {
+  profilesCount?: number
+  tokenHoldersCount?: number
+  citizensCount?: number
+  error?: string
+}
+
+// must match ActivityQueryInclude below
+export type ActivityWithRelations = Prisma.ActivityGetPayload<{
+  include: {
+    profile: {
+      select: {
+        externId: true
+        name: true
+        citizenshipStatus: true
+        citizenshipTokenId: true
+        roles: {
+          include: {
+            walletHat: true
+          }
+        }
+        avatar: {
+          select: {
+            url: true
+          }
+        }
+      }
+    }
+    badge: {
+      select: {
+        id: true
+        otterspaceBadgeId: true
+        spec: true
+      }
+    }
+    role: {
+      include: {
+        walletHat: true
+      }
+    }
+    location: {
+      select: {
+        externId: true
+        type: true
+        name: true
+        tagline: true
+        description: true
+        bannerImageIpfsHash: true
+        sleepCapacity: true
+        caretaker: {
+          select: {
+            externId: true
+            name: true
+            createdAt: true
+          }
+        }
+        publishedAt: true
+        internetSpeedMbps: true
+        address: {
+          select: {
+            locality: true
+            admininstrativeAreaLevel1Short: true
+            country: true
+          }
+        }
+      }
+    }
+    offer: {
+      select: {
+        externId: true
+        type: true
+        title: true
+        description: true
+        startDate: true
+        endDate: true
+        imageIpfsHash: true
+        price: true
+        priceInterval: true
+        location: {
+          select: {
+            externId: true
+            name: true
+            type: true
+            bannerImageIpfsHash: true
+            publishedAt: true
+            address: {
+              select: {
+                locality: true
+                admininstrativeAreaLevel1Short: true
+                country: true
+              }
+            }
+            caretaker: {
+              select: {
+                externId: true
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}>
+
+// must match ActivityWithRelations above
+export const ActivityQueryInclude = {
+  profile: {
+    select: {
+      externId: true,
+      name: true,
+      citizenshipStatus: true,
+      citizenshipTokenId: true,
+      roles: {
+        include: {
+          walletHat: true,
+        },
+      },
+      avatar: {
+        select: {
+          url: true,
+        },
+      },
+    },
+  },
+  badge: {
+    select: {
+      id: true,
+      otterspaceBadgeId: true,
+      spec: true,
+    },
+  },
+  role: {
+    include: {
+      walletHat: true,
+    },
+  },
+  location: {
+    select: {
+      externId: true,
+      name: true,
+      type: true,
+      tagline: true,
+      description: true,
+      bannerImageIpfsHash: true,
+      sleepCapacity: true,
+      caretaker: {
+        select: {
+          externId: true,
+          name: true,
+          createdAt: true,
+        },
+      },
+      publishedAt: true,
+      internetSpeedMbps: true,
+      address: {
+        select: {
+          locality: true,
+          admininstrativeAreaLevel1Short: true,
+          country: true,
+        },
+      },
+    },
+  },
+  offer: {
+    select: {
+      externId: true,
+      type: true,
+      title: true,
+      description: true,
+      startDate: true,
+      endDate: true,
+      imageIpfsHash: true,
+      price: true,
+      priceInterval: true,
+      location: {
+        select: {
+          externId: true,
+          name: true,
+          type: true,
+          bannerImageIpfsHash: true,
+          publishedAt: true,
+          address: {
+            select: {
+              locality: true,
+              admininstrativeAreaLevel1Short: true,
+              country: true,
+            },
+          },
+          caretaker: {
+            select: {
+              externId: true,
+            },
+          },
+        },
+      },
+    },
+  },
+} satisfies Prisma.ActivityInclude

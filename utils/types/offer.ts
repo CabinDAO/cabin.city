@@ -118,6 +118,11 @@ export type OfferWithRelations = Prisma.OfferGetPayload<{
     location: {
       include: {
         address: true
+        caretaker: {
+          select: {
+            externId: true
+          }
+        }
       }
     }
   }
@@ -129,6 +134,11 @@ export const OfferQueryInclude = {
   location: {
     include: {
       address: true,
+      caretaker: {
+        select: {
+          externId: true,
+        },
+      },
     },
   },
 } satisfies Prisma.OfferInclude

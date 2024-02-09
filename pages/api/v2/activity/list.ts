@@ -7,103 +7,13 @@ import {
   ActivityListFragment,
   ActivityListResponse,
   ActivityType,
+  ActivityWithRelations,
+  ActivityQueryInclude,
 } from '@/utils/types/activity'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
 import { withAuth } from '@/utils/api/withAuth'
-
-// must match the includes on query below
-type ActivityWithRelations = Prisma.ActivityGetPayload<{
-  include: {
-    profile: {
-      select: {
-        externId: true
-        name: true
-        citizenshipStatus: true
-        citizenshipTokenId: true
-        roles: {
-          include: {
-            walletHat: true
-          }
-        }
-        avatar: {
-          select: {
-            url: true
-          }
-        }
-      }
-    }
-    badge: {
-      select: {
-        id: true
-        otterspaceBadgeId: true
-        spec: true
-      }
-    }
-    role: {
-      include: {
-        walletHat: true
-      }
-    }
-    location: {
-      select: {
-        externId: true
-        type: true
-        name: true
-        tagline: true
-        description: true
-        bannerImageIpfsHash: true
-        sleepCapacity: true
-        caretaker: {
-          select: {
-            externId: true
-            name: true
-            createdAt: true
-          }
-        }
-        publishedAt: true
-        internetSpeedMbps: true
-        address: {
-          select: {
-            locality: true
-            admininstrativeAreaLevel1Short: true
-            country: true
-          }
-        }
-      }
-    }
-    offer: {
-      select: {
-        externId: true
-        type: true
-        title: true
-        description: true
-        startDate: true
-        endDate: true
-        imageIpfsHash: true
-        price: true
-        priceInterval: true
-        location: {
-          select: {
-            externId: true
-            name: true
-            type: true
-            bannerImageIpfsHash: true
-            publishedAt: true
-            address: {
-              select: {
-                locality: true
-                admininstrativeAreaLevel1Short: true
-                country: true
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}>
 
 async function handler(
   req: NextApiRequest,
@@ -132,94 +42,7 @@ async function handler(
           },
         }
       : undefined,
-    include: {
-      profile: {
-        select: {
-          externId: true,
-          name: true,
-          citizenshipStatus: true,
-          citizenshipTokenId: true,
-          roles: {
-            include: {
-              walletHat: true,
-            },
-          },
-          avatar: {
-            select: {
-              url: true,
-            },
-          },
-        },
-      },
-      badge: {
-        select: {
-          id: true,
-          otterspaceBadgeId: true,
-          spec: true,
-        },
-      },
-      role: {
-        include: {
-          walletHat: true,
-        },
-      },
-      location: {
-        select: {
-          externId: true,
-          name: true,
-          type: true,
-          tagline: true,
-          description: true,
-          bannerImageIpfsHash: true,
-          sleepCapacity: true,
-          caretaker: {
-            select: {
-              externId: true,
-              name: true,
-              createdAt: true,
-            },
-          },
-          publishedAt: true,
-          internetSpeedMbps: true,
-          address: {
-            select: {
-              locality: true,
-              admininstrativeAreaLevel1Short: true,
-              country: true,
-            },
-          },
-        },
-      },
-      offer: {
-        select: {
-          externId: true,
-          type: true,
-          title: true,
-          description: true,
-          startDate: true,
-          endDate: true,
-          imageIpfsHash: true,
-          price: true,
-          priceInterval: true,
-          location: {
-            select: {
-              externId: true,
-              name: true,
-              type: true,
-              bannerImageIpfsHash: true,
-              publishedAt: true,
-              address: {
-                select: {
-                  locality: true,
-                  admininstrativeAreaLevel1Short: true,
-                  country: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
+    include: ActivityQueryInclude,
     orderBy: {
       createdAt: 'desc',
     },
@@ -248,9 +71,9 @@ const toFragments = (
       externId: activity.externId,
       createdAt: activity.createdAt.toISOString(),
       type: activity.type as ActivityType,
-      text: activity.text,
       metadata: {
-        citizenshipTokenId: activity.profile.citizenshipTokenId ?? undefined,
+        text: activity.text || undefined,
+        citizenshipTokenId: activity.profile.citizenshipTokenId || undefined,
         badge: activity.badge
           ? {
               id: activity.badge.id,
@@ -314,6 +137,9 @@ const toFragments = (
                       country: activity.offer.location.address.country || '',
                     }
                   : null,
+                caretaker: {
+                  externId: activity.offer.location.caretaker.externId,
+                },
               },
             }
           : undefined,

@@ -82,6 +82,12 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
     imageIpfsHash: offer.imageIpfsHash,
     price: offer.price.toNumber(),
     priceInterval: offer.priceInterval as OfferPriceInterval,
+    applicationUrl: offer.applicationUrl,
+    mediaItems: offer.mediaItems.map((mediaItem) => {
+      return {
+        ipfsHash: mediaItem.ipfsHash,
+      }
+    }),
     location: {
       externId: offer.location.externId,
       name: offer.location.name,
@@ -98,6 +104,9 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
             country: offer.location.address.country,
           }
         : null,
+      caretaker: {
+        externId: offer.location.caretaker.externId,
+      },
     },
   }
 }
