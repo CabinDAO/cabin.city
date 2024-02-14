@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server'
 const isInMaintenanceMode = false
 
 export const config = {
-  matcher: '/((?!favicon.ico).*)',
+  matcher: '/((?!favicon.ico|images/).*)',
   // matcher: '/:any*',
 }
 
