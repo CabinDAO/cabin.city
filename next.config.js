@@ -44,6 +44,28 @@ const nextConfig = {
       },
     ],
   },
+  async headers() {
+    // https://nextjs.org/docs/pages/api-reference/next-config-js/headers
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          // {
+          //   key: 'Permissions-Policy',
+          //   value: 'camera=(); battery=(); microphone=()',
+          // },
+        ],
+      },
+    ]
+  },
   async redirects() {
     return [
       {
