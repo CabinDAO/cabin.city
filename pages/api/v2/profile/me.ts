@@ -63,6 +63,11 @@ async function handler(
     return
   }
 
+  if (!opts.auth.authToken || !opts.auth.privyDID) {
+    res.status(200).send({ me: null })
+    return
+  }
+
   const privyDID = requireAuth(req, res, opts)
 
   const profile = await prisma.profile.findUnique({
