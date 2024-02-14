@@ -400,7 +400,7 @@ model Activity {
   roleId             Int?
   roleTransactionId  String? // RoleAdded //TODO: should this go on Badge instead of here?
   citizenshipTokenId Int? // CitizenshipVerified
-  location           Location? @relation(fields: [locationId], references: [id]) // LocationPublished
+  location           Location? @relation(fields: [locationId], references: [id], onDelete: Cascade) // LocationPublished
   locationId         Int?
   offer              Offer?    @relation(fields: [offerId], references: [id]) // OfferCreated
   offerId            Int?
