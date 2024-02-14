@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 // import { withMaintenanceMode } from 'next-maintenance-mode'
 
-const isInMaintenanceMode = true
+const isInMaintenanceMode = false
 
 export const config = {
   matcher: '/((?!favicon.ico).*)',
