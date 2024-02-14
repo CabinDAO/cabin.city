@@ -2,14 +2,16 @@ import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { OfferView } from '@/components/offers/OfferView'
 import { useGetOffer } from './useGetOffer'
 import { ActionBar } from '../core/ActionBar'
-import { PublishModal } from '../neighborhoods/edit-location/PublishModal'
+import { PublishLocationModal } from '../neighborhoods/edit-location/PublishLocationModal'
 import { useModal } from '../hooks/useModal'
 import { useRouter } from 'next/router'
 
 export const OfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable, isPublished } = useGetOffer(offerId as string)
+  const { offer, isEditable, isPublished, refetchLocation } = useGetOffer(
+    offerId as string
+  )
   const { showModal } = useModal()
 
   if (!offer) {
@@ -17,7 +19,12 @@ export const OfferPageView = () => {
   }
 
   const handlePublish = async () => {
-    showModal(() => <PublishModal locationId={offer.location._id} />)
+    showModal(() => (
+      <PublishLocationModal
+        locationId={offer.location.externId}
+        refetchLocation={refetchLocation}
+      />
+    ))
   }
 
   return (
@@ -32,7 +39,8 @@ export const OfferPageView = () => {
             }}
             secondaryButton={{
               label: 'Back',
-              onClick: () => router.push(`/location/${offer.location._id}`),
+              onClick: () =>
+                router.push(`/location/${offer.location.externId}`),
             }}
           />
         ) : null

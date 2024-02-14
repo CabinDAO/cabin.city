@@ -12,7 +12,7 @@ export const usePriceInUsd = () => {
   }
 
   useEffect(() => {
-    setPriceInUsdc()
+    setPriceInUsdc().then()
   }, [])
 
   return { priceInUsd }

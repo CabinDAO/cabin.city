@@ -1,30 +1,32 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '../auth/useProfile'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileNewParams } from '@/pages/api/v2/profile/new'
+import { AvatarFragment, ProfileNewResponse } from '@/utils/types/profile'
+import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { useExternalUser } from '../auth/useExternalUser'
+import { useModal } from '../hooks/useModal'
 import { OnboardingLayout } from '../layouts/OnboardingLayout'
 import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
-import { useRouter } from 'next/router'
-import { CreateProfileBody } from '@/pages/api/auth/create-profile'
-import { ProfileAvatarInput } from '@/generated/graphql'
-import { useModal } from '../hooks/useModal'
 import { ErrorModal } from '../ErrorModal'
-import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { useExternalUser } from '../auth/useExternalUser'
-import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '../auth/useProfile'
-import { useEffect } from 'react'
 
 export interface RegistrationParams {
   email: string
   displayName: string
-  avatar: ProfileAvatarInput | undefined
+  avatar: AvatarFragment | undefined
 }
 
 export const RegistrationView = () => {
   const router = useRouter()
+  const { post } = useBackend()
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
-  const { getAccessToken, linkEmail } = usePrivy()
+  const { linkEmail } = usePrivy()
   const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
 
   useEffect(() => {
@@ -48,7 +50,7 @@ export const RegistrationView = () => {
     }
 
     try {
-      const createProfileBody: CreateProfileBody = {
+      const createProfileBody: ProfileNewParams = {
         address: externalUser.wallet?.address || '',
         name,
         email: externalUser.email?.address || email,
@@ -56,27 +58,22 @@ export const RegistrationView = () => {
         externalUserId: externalUser.id,
       }
 
-      const accessToken = await getAccessToken()
+      const resp = await post<ProfileNewResponse>(
+        'PROFILE_NEW',
+        createProfileBody
+      )
 
-      const resp = await fetch('/api/auth/create-profile', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createProfileBody),
-      })
-      const json = await resp.json()
+      console.log(resp)
 
-      if (!resp.ok) {
+      if (!resp.externId) {
         showModal(() => (
           <ErrorModal
             title="Profile Submission Error"
-            description={json.error}
+            description={resp.error ?? 'Error submitting profile'}
           />
         ))
-      } else if (json.profileId) {
-        refetchProfile()
+      } else {
+        await refetchProfile()
       }
     } catch (e) {
       console.error(e)

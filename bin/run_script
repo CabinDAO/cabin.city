@@ -7,9 +7,5 @@
 echo "Reading vars from .env files"
 [ -f ".env" ] && source .env
 [ -f ".env.local" ] && source .env.local
-[ -f ".env.fauna.local" ] && source .env.fauna.local
 
-FAUNA_SERVER_SECRET="$FAUNA_SERVER_SECRET" \
-FAUNA_DB_HOST="$FAUNA_DB_HOST" \
-FAUNA_DB_PORT="${FAUNA_DB_PORT:-443}" \
 npx ts-node --skip-project scripts/$1 ${@:2}

@@ -6,10 +6,15 @@ import { Button } from '@/components/core/Button'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { useError } from '@/components/hooks/useError'
 import { Body1 } from '@/components/core/Typography'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  SubscribeData,
+  SubscribeResponse,
+} from '@/pages/api/v2/newsletter/subscribe'
 
 export const SubscribeForm = () => {
   const { showError } = useError()
-
+  const { post } = useBackend()
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSubscribed, setIsSubscribed] = useState(false)
@@ -23,28 +28,16 @@ export const SubscribeForm = () => {
     setIsLoading(true)
     events.subscribeToNewsletterEvent(email)
 
-    const res: any = await fetch('/api/newsletter/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: email }),
-    })
+    const res = await post<SubscribeResponse>('NEWSLETTER_SUBSCRIBE', {
+      email: email,
+    } as SubscribeData)
 
-    if (!res.ok) {
-      showError('An unexpected error occurred.')
-      setIsLoading(false)
-      return
-    }
-
-    const resBody = await res.json()
-
-    if (resBody && resBody.success) {
+    if (res && res.success) {
       setIsSubscribed(true)
     } else {
-      setIsLoading(false)
-      showError(resBody.message)
+      showError(res.message)
     }
+    setIsLoading(false)
   }
 
   return isSubscribed ? (

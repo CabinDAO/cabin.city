@@ -1,33 +1,33 @@
-import { CheckboxChip } from '@/components/core/CheckboxChip'
-import { MeFragment, ProfileRole, ProfileRoleType } from '@/generated/graphql'
-import { roleInfoFromType } from '@/utils/roles'
 import { useState } from 'react'
+import { MeFragment, RoleFragment, RoleType } from '@/utils/types/profile'
+import { roleInfoFromType } from '@/utils/roles'
 import styled from 'styled-components'
+import { CheckboxChip } from '@/components/core/CheckboxChip'
 import { UpdateSection } from './UpdateSection'
 
 export interface RolesProps {
-  onChange: (roles: ProfileRoleType[]) => void
   user: MeFragment
+  onChange: (roles: RoleType[]) => void
 }
 
 export const Roles = ({ user, onChange }: RolesProps) => {
-  const roles = Object.keys(ProfileRoleType) as ProfileRoleType[]
+  const roles = Object.keys(RoleType) as RoleType[]
 
   const allRoles = user?.roles ?? []
-  const currentRoles = [] as ProfileRole[]
-  const onChainRoles = [] as ProfileRole[]
+  const currentRoles = [] as RoleFragment[]
+  const onChainRoles = [] as RoleFragment[]
 
   allRoles.forEach((role) =>
     role.hatId ? onChainRoles.push(role) : currentRoles.push(role)
   )
 
-  const onChainRoleTypes = onChainRoles.map((cr) => cr.role)
+  const onChainRoleTypes = onChainRoles.map((cr) => cr.type)
 
-  const [selectedRoles, setSelectedRoles] = useState<ProfileRoleType[]>(
-    currentRoles.map((cr) => cr.role)
+  const [selectedRoles, setSelectedRoles] = useState<RoleType[]>(
+    currentRoles.map((cr) => cr.type)
   )
 
-  const handleSelectRole = (role: ProfileRoleType) => {
+  const handleSelectRole = (role: RoleType) => {
     if (onChainRoleTypes.includes(role)) return
 
     const newRoles = selectedRoles.includes(role)

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { OfferType } from '@/generated/graphql'
 import { Body2, Subline1 } from '@/components/core/Typography'
+import { OfferType } from '@/utils/types/offer'
 
 interface OfferTypeSummaryProps {
   offerType: OfferType | null | undefined

@@ -3,21 +3,29 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { Post } from '@/components/core/post/Post'
 import { H3 } from '@/components/core/Typography'
 import { useActivityReactions } from '@/components/dashboard/useActivityReactions'
-import { ActivityItemFragment } from '@/generated/graphql'
 import styled from 'styled-components'
-
-interface ProfileActivitiesSectionProps {
-  activityItems: ActivityItemFragment[]
-}
+import { ActivityListResponse } from '@/utils/types/activity'
+import { ProfileFragment } from '@/utils/types/profile'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const ProfileActivitiesSection = ({
-  activityItems,
-}: ProfileActivitiesSectionProps) => {
+  profile,
+}: {
+  profile: ProfileFragment
+}) => {
   const baseDate = new Date()
 
+  const { useGet } = useBackend()
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 
-  if (activityItems.length === 0) {
+  const { data, mutate: refetchActivities } = useGet<ActivityListResponse>(
+    profile ? 'ACTIVITY_LIST' : null,
+    { profileId: profile?.externId, pageSize: 10 }
+  )
+
+  const activities = data?.activities ?? []
+
+  if (activities?.length === 0) {
     return null
   }
 
@@ -28,14 +36,15 @@ export const ProfileActivitiesSection = ({
       </SectionTitle>
       <StyledDivider />
       <InnerContainer>
-        {activityItems.map((activityItem) => (
+        {activities.map((a) => (
           <Post
             variant="compact"
-            key={activityItem.activity._id}
-            activityItem={activityItem}
+            key={a.externId}
+            activity={a}
             baseDate={baseDate}
-            onLike={() => handleLikeActivity(activityItem)}
-            onUnlike={() => handleUnlikeActivity(activityItem)}
+            onLike={() => handleLikeActivity(a)}
+            onUnlike={() => handleUnlikeActivity(a)}
+            onDelete={refetchActivities}
           />
         ))}
       </InnerContainer>

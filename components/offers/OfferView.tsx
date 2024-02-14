@@ -1,29 +1,16 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
-import {
-  OfferPrice,
-  OfferPriceUnit,
-  OfferType,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-  Scalars,
-} from '@/generated/graphql'
-import { OfferViewProps } from './useGetOffer'
 import Icon from '@/components/core/Icon'
 import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
 import { stringToSlateValue } from '../core/slate/slate-utils'
-import { RoleConstraintType } from '@/utils/offer'
-import { isNotNull } from '@/lib/data'
 import { EMPTY, formatRange } from '@/utils/display-utils'
-import { roleConstraintInfoFromType } from '@/utils/roles'
 import {
   Body1,
   body1Styles,
   Caption,
   H3,
   H4,
-  Subline1,
 } from '@/components/core/Typography'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -35,44 +22,32 @@ import { Price } from '@/components/offers/Price'
 import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { LocationLinkCard } from '@/components/neighborhoods/LinkCards'
-import Link from 'next/link'
 import { HostCard } from '@/components/neighborhoods/HostCard'
 import { isAfter, isBefore } from 'date-fns'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { CostBreakdown } from '@/components/checkout/CostBreakdown'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { OfferFragment, OfferType } from '@/utils/types/offer'
 
 export const OfferView = ({
   offer,
   isEditable,
 }: {
-  offer: OfferViewProps
+  offer: OfferFragment
   isEditable: boolean
 }) => {
   const router = useRouter()
   const { showModal } = useModal()
   const { deviceSize } = useDeviceSize()
 
-  const {
-    description,
-    offerType,
-    startDate,
-    endDate,
-    price,
-    imageUrl,
-    mediaItems,
-  } = offer
-
-  if (!offerType) return null
+  if (!offer.type) return null
 
   // TODO: let them actually select one
-  const selectedLodgingType = offer.location.lodgingTypes.data[0]
-  const isSoldOut =
-    selectedLodgingType &&
-    selectedLodgingType.spotsTaken >= selectedLodgingType.quantity
+  const selectedLodgingType = null
+  const isSoldOut = false
+  // selectedLodgingType &&
+  // selectedLodgingType.spotsTaken >= selectedLodgingType.quantity
 
-  const galleryImages = (mediaItems ?? []).map((image) => ({
+  const galleryImages = (offer.mediaItems ?? []).map((image) => ({
     ...image,
     name: `${image.ipfsHash}`,
   }))
@@ -98,8 +73,10 @@ export const OfferView = ({
 
   return (
     <>
-      {imageUrl && deviceSize !== 'mobile' && (
-        <BannerHeader imageUrl={imageUrl} />
+      {offer.imageIpfsHash && deviceSize !== 'mobile' && (
+        <BannerHeader
+          imageUrl={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+        />
       )}
 
       <TitleCard
@@ -110,7 +87,7 @@ export const OfferView = ({
             <Button
               variant={'link-slim'}
               onClick={() => {
-                router.push(`/experience/${offer._id}/edit`)
+                router.push(`/experience/${offer.externId}/edit`).then()
               }}
             >
               <Icon name="pencil" size={1.2} />
@@ -138,10 +115,10 @@ export const OfferView = ({
             )}
             <LocationLinkCard location={offer.location} />
             <H4>Description</H4>
-            <SlateRenderer value={stringToSlateValue(description)} />
+            <SlateRenderer value={stringToSlateValue(offer.description)} />
             <H4>Meet your hosts</H4>
             {_getHostIds(offer).map((hostId) => (
-              <HostCard key={hostId} profileId={hostId}></HostCard>
+              <HostCard key={hostId} externId={hostId}></HostCard>
             ))}
           </Left>
 
@@ -149,61 +126,41 @@ export const OfferView = ({
             <RightContent>
               <OfferNameAndDates
                 offer={offer}
-                withPrice={offerType === OfferType.PaidColiving}
+                withPrice={offer.type === OfferType.PaidColiving}
               />
 
-              {offerType == OfferType.CabinWeek && offer.price && (
-                <>
-                  {/* TODO: HUGE HACK TILL WE FINISH MIGRATING TO LODGING TYPES */}
-                  <Price
-                    price={
-                      {
-                        unit: offer.price.unit,
-                        amountCents: selectedLodgingType?.priceCents ?? 100000, // TODO: 1000 is a fake number. will remove later
-                      } as OfferPrice
-                    }
-                  />
-                  <CabinWeekDetails>
-                    <Subline1>Accomodations</Subline1>
-                    {offer.location.lodgingTypes.data.map((lt) => {
-                      return (
-                        <LodgingType key={lt._id}>
-                          <LodgingTypeTop>
-                            <Subline1>{lt.description}</Subline1>
-                            {/*<Caption>${lt.priceCents / 100} / night</Caption>*/}
-                          </LodgingTypeTop>
-                          <Caption>
-                            {Math.max(0, lt.quantity - lt.spotsTaken)} available
-                          </Caption>
-                        </LodgingType>
-                      )
-                    })}
-                  </CabinWeekDetails>
-                </>
+              {offer.type == OfferType.CabinWeek && offer.price && (
+                <Price
+                  price={offer.price}
+                  priceInterval={offer.priceInterval}
+                />
               )}
 
               <Actions>
-                <ApplyButton offer={offer} lodgingType={selectedLodgingType} />
+                <ApplyButton offer={offer} />
               </Actions>
-
-              {offerType == OfferType.CabinWeek &&
-                selectedLodgingType &&
-                !isSoldOut && (
-                  <CostBreakdown
-                    lodgingType={selectedLodgingType}
-                    startDate={startDate ?? null}
-                    endDate={endDate ?? null}
-                  />
-                )}
             </RightContent>
 
-            {offerType !== OfferType.CabinWeek && (
+            {offer.type !== OfferType.CabinWeek && (
               <DetailsSection>
                 <H3>AVAILABILITY</H3>
 
                 <Pricing>
-                  <Caption>{formatRange(startDate, endDate)}</Caption>
-                  {price ? <Price small price={price} /> : EMPTY}
+                  <Caption>
+                    {formatRange(
+                      new Date(offer.startDate),
+                      new Date(offer.endDate)
+                    )}
+                  </Caption>
+                  {offer.price ? (
+                    <Price
+                      small
+                      price={offer.price}
+                      priceInterval={offer.priceInterval}
+                    />
+                  ) : (
+                    EMPTY
+                  )}
                 </Pricing>
               </DetailsSection>
             )}
@@ -214,7 +171,7 @@ export const OfferView = ({
   )
 }
 
-const _getHostIds = (offer: OfferViewProps): string[] => {
+const _getHostIds = (offer: OfferFragment): string[] => {
   const charlie =
     process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
       ? '362368728841584721'
@@ -224,14 +181,14 @@ const _getHostIds = (offer: OfferViewProps): string[] => {
       : '373424375382147584'
 
   const gatherer =
-    offer.offerType !== OfferType.CabinWeek ||
+    offer.type !== OfferType.CabinWeek ||
     !offer.startDate ||
-    isAfter(offer.startDate, new Date('2024-012-01')) ||
-    isBefore(offer.startDate, new Date('2023-12-01'))
+    isAfter(new Date(offer.startDate), new Date('2024-012-01')) ||
+    isBefore(new Date(offer.startDate), new Date('2023-12-01'))
       ? ''
       : charlie
 
-  return [offer.location.caretaker._id, gatherer].filter((i) => !!i)
+  return [offer.location.caretaker.externId, gatherer].filter((i) => !!i)
 }
 
 const StyledContentCard = styled(ContentCard)`

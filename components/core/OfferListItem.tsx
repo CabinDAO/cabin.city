@@ -1,10 +1,5 @@
 import Image from 'next/image'
-import {
-  LocationType,
-  OfferPrice,
-  OfferType,
-  ProfileRoleConstraint,
-} from '@/generated/graphql'
+import { MeFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Caption, H4 } from './Typography'
 import Icon from './Icon'
@@ -14,72 +9,53 @@ import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
 import React from 'react'
-
-export interface OfferListItemProps {
-  className?: string
-  variant?: OfferListItemVariant
-  _id: string
-  offerType: OfferType | null | undefined
-  locationType: LocationType
-  title: string | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  imageUrl: string | null | undefined
-  price: OfferPrice | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
-  citizenshipRequired?: boolean | null | undefined
-  minimunCabinBalance?: number | null | undefined
-  location: {
-    _id: string
-    name: string | null | undefined
-    publishedAt: Date | null | undefined
-    shortAddress: string | null | undefined
-    caretaker?:
-      | {
-          _id: string
-        }
-      | null
-      | undefined
-  }
-  isLocked?: boolean
-  actionsEnabled?: boolean
-}
+import { OfferFragment } from '@/utils/types/offer'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 
 type OfferListItemVariant = 'default' | 'no-icon'
 
-export const OfferListItem = (props: OfferListItemProps) => {
+export const OfferListItem = (props: {
+  offer: OfferFragment
+  me: MeFragment | null | undefined
+  className?: string
+  variant?: OfferListItemVariant
+  actionsEnabled?: boolean
+}) => {
   const router = useRouter()
-  const {
-    _id,
-    title,
-    startDate,
-    endDate,
-    imageUrl,
-    location,
-    className,
-    variant,
-    isLocked,
-    actionsEnabled,
-  } = props
+  const { offer, me, className, variant, actionsEnabled } = props
+
+  const imageUrl = getImageUrlByIpfsHash(
+    offer.imageIpfsHash ?? offer.location.bannerImageIpfsHash,
+    true
+  )
+  const isLocked = !me
+
   const dateRange =
-    startDate && endDate ? formatRange(startDate, endDate) : 'Flexible dates'
-  const formattedLocation = `${location.name ?? '-'} · ${
-    location.shortAddress ?? '-'
+    offer.startDate && offer.endDate
+      ? formatRange(new Date(offer.startDate), new Date(offer.endDate))
+      : 'Flexible dates'
+  const formattedLocation = `${offer.location.name ?? '-'} · ${
+    formatShortAddress(offer.location.address) ?? '-'
   }`
   const isDisplayingIcon = variant !== 'no-icon'
-  const inactive = endDate && endDate < new Date()
+  const inactive = offer.endDate && offer.endDate < new Date().toISOString()
 
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push(`/experience/${_id}/edit`)
+    router.push(`/experience/${offer.externId}/edit`)
   }
 
   return (
     <ListItem
       authenticated
-      href={actionsEnabled ? `/experience/${_id}/edit` : `/experience/${_id}`}
-      onClick={() => events.viewExperiencesEvent(_id)}
+      href={
+        actionsEnabled
+          ? `/experience/${offer.externId}/edit`
+          : `/experience/${offer.externId}`
+      }
+      onClick={() => events.viewExperiencesEvent(offer.externId)}
     >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>
@@ -88,7 +64,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
               {imageUrl ? (
                 <StyledImage
                   src={imageUrl}
-                  alt={title ?? 'Offer'}
+                  alt={offer.title ?? 'Offer'}
                   width={64}
                   height={64}
                 />
@@ -97,7 +73,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
                   <Icon name="offer" size={3.2} color="yellow500" />
                 </EmptyImageContainer>
               )}
-              <LocationTag {...props} />
             </ImageContainer>
           )}
 
@@ -105,7 +80,7 @@ export const OfferListItem = (props: OfferListItemProps) => {
             <OfferDetails>
               <Caption emphasized>{dateRange ?? ''}</Caption>
               <TitleContainer>
-                <H4>{title}</H4>
+                <H4>{offer.title}</H4>
                 {isLocked && <Icon name="lock" size={1.2} />}
               </TitleContainer>
               <Caption>{formattedLocation}</Caption>
@@ -128,22 +103,6 @@ export const OfferListItem = (props: OfferListItemProps) => {
         </RightContent>
       </InnerContainer>
     </ListItem>
-  )
-}
-
-const LocationTag = (props: OfferListItemProps) => {
-  const { locationType } = props
-  return (
-    <TagContainer>
-      <Icon
-        name={
-          locationType === LocationType.Neighborhood
-            ? 'neighborhood'
-            : 'outpost'
-        }
-        size={1.2}
-      />
-    </TagContainer>
   )
 }
 
@@ -224,15 +183,15 @@ const OfferDetails = styled.div`
   gap: 0.4rem;
 `
 
-const TagContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  padding: 0.4rem;
-  background-color: ${({ theme }) => theme.colors.green900};
-  border-radius: 50%;
-  border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
-`
+// const TagContainer = styled.div`
+//   position: absolute;
+//   bottom: 0;
+//   right: 0;
+//   padding: 0.4rem;
+//   background-color: ${({ theme }) => theme.colors.green900};
+//   border-radius: 50%;
+//   border: solid 0.75px ${({ theme }) => theme.colors.yellow200};
+// `
 
 const TitleContainer = styled.div`
   display: flex;

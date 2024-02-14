@@ -1,22 +1,20 @@
 import { useRouter } from 'next/router'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { useGetLocationByIdQuery } from '@/generated/graphql'
-import { locationViewPropsFromFragment } from '@/lib/location'
-import { LocationPhotosView } from '@/components/neighborhoods/LocationPhotosView'
 import { useEffect } from 'react'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationGetResponse } from '@/utils/types/location'
+import { LocationPhotosView } from '@/components/neighborhoods/LocationPhotosView'
+import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 
 export const LocationPhotosPageView = () => {
   const router = useRouter()
   const { id, gallery } = router.query
-  const { data } = useGetLocationByIdQuery({
-    variables: {
-      id: `${id}`,
-    },
-    skip: !id,
-  })
-  const location = data?.findLocationByID
-    ? locationViewPropsFromFragment(data.findLocationByID)
-    : null
+
+  const { useGet } = useBackend()
+  const { data } = useGet<LocationGetResponse>(
+    id ? ['LOCATION', { externId: `${id}` }] : null
+  )
+
+  const location = data?.location
 
   useEffect(() => {
     if (data && !location) {

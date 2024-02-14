@@ -10,12 +10,14 @@ interface AccountActionProps {
   actionCTA?: string
   fieldTitle: string
   fieldValue: string
+  fieldTooltip?: string
 }
 
 export const AccountAction = ({
   actionCTA,
   fieldTitle,
   fieldValue,
+  fieldTooltip,
   onClick,
 }: AccountActionProps) => {
   const { deviceSize } = useDeviceSize()
@@ -24,9 +26,13 @@ export const AccountAction = ({
     <Container>
       <TitleValue>
         <OpaqueCaption>{fieldTitle}</OpaqueCaption>
-        <Tooltip tooltip={fieldValue} position="top">
+        {fieldTooltip ? (
+          <Tooltip tooltip={fieldTooltip} position="top">
+            <Caption emphasized>{truncate(fieldValue, 25)}</Caption>
+          </Tooltip>
+        ) : (
           <Caption emphasized>{truncate(fieldValue, 25)}</Caption>
-        </Tooltip>
+        )}
       </TitleValue>
       {actionCTA ? (
         <ActionButton variant="tertiary" onClick={onClick}>

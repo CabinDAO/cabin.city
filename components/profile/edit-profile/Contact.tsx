@@ -1,20 +1,19 @@
-import { ProfileContactField } from '@/generated/graphql'
+import { ContactFragment } from '@/utils/types/profile'
 import { useEffect, useState } from 'react'
-
 import { ContactInput } from '../ContactInput'
 import { UpdateProfileProps } from './UpdateProfileProps'
 import { UpdateSection } from './UpdateSection'
 
 export const Contact = ({
-  editProfileInput,
+  profileEditParams,
   onChange,
   user,
 }: UpdateProfileProps) => {
-  const [contactList, setContactList] = useState<ProfileContactField[]>([])
+  const [contactList, setContactList] = useState<ContactFragment[]>([])
 
   useEffect(() => {
     if (contactList.length) {
-      onChange({ ...editProfileInput, contactFields: contactList })
+      onChange({ ...profileEditParams, contactFields: contactList })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactList])

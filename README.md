@@ -29,23 +29,9 @@ Copy the `.env.example` file to `.env` and fill in the values.
 cp .env.example .env
 ```
 
-### Fauna local dev db setup
+### DB Setup
 
-Fauna is our hosted db. There are two shared databases: dev (really more like staging) and prod.
 
-To create your own db for local dev:
-
-1. Create a database following
-   the [quick start](https://docs.fauna.com/fauna/current/learn/quick_start/quick_start).
-2. From your database dashboard, go to `Security` -> `New Key` to create a new key with the `Admin`
-   role.
-3. Copy the key into the value for the `FGU_SECRET` in `.env.fauna.local`.
-4. Run `npm run fauna` to initialize resources in your database. There are no fixtures (initial
-   data) yet (I think?).
-5. Go to `Security` -> `New Key` again to create a new key with the `public` role.
-6. Copy the key into the value for the `NEXT_PUBLIC_FAUNA_CLIENT_KEY` in `.env.local`.
-7. Create a key with the `Server` role and copy it into the value for `FAUNA_SERVER_SECRET`
-   in `.env.local`
 
 ### Run the development server:
 
@@ -95,7 +81,7 @@ When working on a new feature, follow these steps:
 - Create a PR to `dev`
     - This will create a preview deployment on Vercel
 - Once the PR is approved, merge it into `dev`
-    - This will also run fauna migrations, if any, so that the database is up to date
+    - This will also run migrations, if any, so that the database is up to date
     - The changes will be live on the dev environment: https://cabin-census-dev.vercel.app/
 - Once the changes are tested and ready to be deployed to production, create a PR from `dev`
   to `main`
@@ -156,23 +142,6 @@ through some manual steps in a local or dev environment in order to set up a pro
 4. To test the Citizenship/Unlock modal locally, run ngrok and update the `NEXT_PUBLIC_VERCEL_URL`
    environment variable
    `ngrok http 3000`
-
-### Troubleshooting
-
-Sometimes the Fauna GraphQL schema doesn't update correctly, e.g. when updating types for existing
-queries. The quick fix for this is usally to run `npm run fauna -- --mode replace`.
-
-### Clear all documents in a collection
-
-```typescript
-// Change `OtterspaceBadge` to the collection you want to clear
-q.Map(
-  q.Paginate(q.Documents(q.Collection('OtterspaceBadge')), {
-    size: 9999,
-  }),
-  q.Lambda(['ref'], q.Delete(q.Var('ref')))
-)
-```
 
 ## Synchronization
 

@@ -8,35 +8,25 @@ import { Button } from './Button'
 import Icon from './Icon'
 import { useEffect, useState } from 'react'
 import { useModal } from '../hooks/useModal'
-import { isNil } from '@/lib/isNil'
 import IconButton from './IconButton'
+import { LocationVoteParams } from '@/pages/api/v2/location/vote'
+import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 
 interface LocationVoteModalProps {
   location: Location
-  votingPower: number | null | undefined
-  myVotes: LocationVote[]
-  onCastVotes: (
-    voteCountsByLocationId: VoteModifiersByLocationId
-  ) => Promise<unknown> | void
+  votingPower: number
+  myVotes: ProfileVotesResponse['votes']
+  onCastVotes: (reqBody: LocationVoteParams) => Promise<unknown> | void
   isLoading?: boolean
 }
 
 interface Location {
-  _id: string
+  externId: string
   name?: string | null | undefined
-  publishedAt?: Date | null | undefined
-}
-
-interface LocationVote {
-  location: Location
-  count: number
+  publishedAt?: string | null | undefined
 }
 
 interface VoteCountsByLocationId {
-  [key: string]: number
-}
-
-interface VoteModifiersByLocationId {
   [key: string]: number
 }
 
@@ -97,9 +87,9 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
       myVotes.reduce(
         (acc, vote) => ({
           ...acc,
-          [vote.location._id]: vote.count,
+          [vote.location.externId]: vote.count,
         }),
-        { [location._id]: 0 }
+        { [location.externId]: 0 }
       )
     )
 
@@ -107,9 +97,6 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
     (acc, count) => acc + count,
     0
   )
-  if (isNil(votingPower)) {
-    throw new Error('Voting power is required')
-  }
   const remainingVotes = votingPower - distributedVotes
   const exceededVotingPower = remainingVotes < 0
 
@@ -120,7 +107,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
   }, [exceededVotingPower])
 
   const otherLocations = myVotes
-    .filter((vote) => vote.location._id !== location._id)
+    .filter((vote) => vote.location.externId !== location.externId)
     .map((vote) => vote.location)
 
   const displayedLocations = [
@@ -138,26 +125,7 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
   const handleCastVotesButtonClick = async () => {
     setIsCastingVotes(true)
     try {
-      // We only need to send the votes for locations that have changed
-      const voteModifiersByLocationId = Object.entries(
-        voteCountsByLocationId
-      ).reduce((acc, [locationId, count]) => {
-        const priorCount =
-          myVotes.find((vote) => vote.location._id === locationId)?.count ?? 0
-
-        const modifier = count - priorCount
-
-        // We only need to include the modifier if it's non-zero
-        if (Math.abs(modifier) > 0) {
-          return {
-            ...acc,
-            [locationId]: modifier,
-          }
-        }
-        return acc
-      }, {} as VoteCountsByLocationId)
-
-      await onCastVotes(voteModifiersByLocationId)
+      await onCastVotes({ votes: voteCountsByLocationId })
       hideModal()
     } catch (err) {
       console.error(err)
@@ -199,11 +167,11 @@ const LocationVoteModalBody = (props: LocationVoteModalProps) => {
           <LocationsContainer>
             {displayedLocations.map((location) => (
               <LocationVoteSelector
-                key={location._id}
+                key={location.externId}
                 label={location.name}
-                count={voteCountsByLocationId[location._id]}
+                count={voteCountsByLocationId[location.externId]}
                 onCountChange={(count) =>
-                  handleCountChange(location._id, count)
+                  handleCountChange(location.externId, count)
                 }
                 error={exceededVotingPower}
               />

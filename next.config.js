@@ -4,7 +4,6 @@ if (isDevEnv) {
   // this is a hack but it works
   require('dotenv').config({ override: true })
   require('dotenv').config({ path: '.env.local', override: true })
-  require('dotenv').config({ path: '.env.fauna.local', override: true })
   // console.log(process.env)
 
   // the bug is that an old dotenv is somehow loading these values first, and then the new dotenv is not overriding them
@@ -44,6 +43,28 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  async headers() {
+    // https://nextjs.org/docs/pages/api-reference/next-config-js/headers
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          // {
+          //   key: 'Permissions-Policy',
+          //   value: 'camera=(); battery=(); microphone=()',
+          // },
+        ],
+      },
+    ]
   },
   async redirects() {
     return [

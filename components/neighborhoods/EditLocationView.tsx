@@ -1,7 +1,8 @@
-import { useGetLocationByIdQuery } from '@/generated/graphql'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { useBackend } from '@/components/hooks/useBackend'
+import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
+import { LocationGetResponse } from '@/utils/types/location'
 import {
   StepConfig,
   editLocationSteps,
@@ -12,14 +13,12 @@ export const EditLocationView = ({}) => {
   const { id: listingId, step } = router.query
   const stepNumber = step ? parseInt(step.toString()) : 0
 
-  const { data, loading } = useGetLocationByIdQuery({
-    variables: {
-      id: listingId as string,
-    },
-    skip: !listingId,
-  })
-  const location = data?.findLocationByID
   const { user } = useProfile({ redirectTo: '/' })
+  const { useGet } = useBackend()
+  const { data, isLoading } = useGet<LocationGetResponse>(
+    listingId ? ['LOCATION', { externId: listingId as string }] : null
+  )
+  const location = data?.location
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(
     editLocationSteps[0]
@@ -48,7 +47,7 @@ export const EditLocationView = ({}) => {
     if (targetStep) {
       setCurrentStep(targetStep)
     } else if (isLastStep) {
-      router.push('/location/[id]', `/location/${location?._id}`)
+      router.push('/location/[id]', `/location/${location?.externId}`)
     }
   }
 
@@ -62,9 +61,10 @@ export const EditLocationView = ({}) => {
     }
   }, [stepNumber])
 
-  const isEditable = user?.isAdmin || user?._id === location?.caretaker._id
+  const isEditable =
+    user?.isAdmin || user?.externId === location?.caretaker.externId
 
-  if (loading || !location || !isEditable) {
+  if (isLoading || !location || !isEditable) {
     return null
   }
 

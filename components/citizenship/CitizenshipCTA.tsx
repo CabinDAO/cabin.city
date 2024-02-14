@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'

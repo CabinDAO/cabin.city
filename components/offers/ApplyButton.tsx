@@ -1,25 +1,20 @@
 import React from 'react'
-import Icon from '@/components/core/Icon'
-import events from '@/lib/googleAnalytics/events'
-import { Button } from '@/components/core/Button'
-import { OfferViewProps } from '@/components/offers/useGetOffer'
-import { useProfile } from '@/components/auth/useProfile'
-import { CitizenshipStatus, OfferType } from '@/generated/graphql'
-import { formatUrl } from '@/utils/display-utils'
-import { useModal } from '@/components/hooks/useModal'
-import { CitizenshipRequiredModal } from '@/components/neighborhoods/CitizenshipRequiredModal'
 import Link from 'next/link'
+import { useModal } from '@/components/hooks/useModal'
+import { useProfile } from '@/components/auth/useProfile'
+import { OfferFragment, OfferType } from '@/utils/types/offer'
+import { CitizenshipStatus } from '@/utils/types/profile'
+import { formatUrl } from '@/utils/display-utils'
+import Icon from '@/components/core/Icon'
+import { Button } from '@/components/core/Button'
+import { CitizenshipRequiredModal } from '@/components/neighborhoods/CitizenshipRequiredModal'
+import events from '@/lib/googleAnalytics/events'
 
-interface ApplyButtonProps {
-  offer: OfferViewProps
-  lodgingType?: OfferViewProps['location']['lodgingTypes']['data'][0]
-}
-
-export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
+export const ApplyButton = ({ offer }: { offer: OfferFragment }) => {
   const { showModal } = useModal()
   const { user } = useProfile()
 
-  if (offer.offerType == OfferType.PaidColiving) {
+  if (offer.type == OfferType.PaidColiving) {
     if (!user || user.citizenshipStatus !== CitizenshipStatus.Verified) {
       return (
         <Link
@@ -36,7 +31,7 @@ export const ApplyButton = ({ offer, lodgingType }: ApplyButtonProps) => {
 
     return (
       <Link
-        onClick={() => events.applyToExperienceEvent(offer._id)}
+        onClick={() => events.applyToExperienceEvent(offer.externId)}
         href={formatUrl(offer.applicationUrl) ?? ''}
         target="_blank"
         rel="noreferrer"

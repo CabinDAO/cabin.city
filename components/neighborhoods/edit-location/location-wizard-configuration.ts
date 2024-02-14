@@ -1,6 +1,6 @@
+import { LocationFragment } from '@/utils/types/location'
 import { DescriptionStep } from './DescriptionStep'
 import { BasicDetailStep } from './BasicDetailStep'
-import { LocationFragment } from '@/generated/graphql'
 import { PhotoGalleryStep } from './PhotoGalleryStep'
 import { OffersStep } from './OffersStep'
 

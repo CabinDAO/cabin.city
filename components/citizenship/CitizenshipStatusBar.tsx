@@ -3,7 +3,7 @@ import { ContentCard } from '../core/ContentCard'
 import styled from 'styled-components'
 import { ProgressBar } from '../core/ProgressBar'
 import { CitizenStatusStep } from './CitizenStatusStep'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { CitizenshipCTA } from './CitizenshipCTA'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 

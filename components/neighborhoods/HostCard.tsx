@@ -1,11 +1,13 @@
 import styled from 'styled-components'
-import { useGetProfileByIdQuery } from '@/generated/graphql'
+import { ProfileGetResponse } from '@/utils/types/profile'
 import { padding } from '@/styles/theme'
 import { ProfileContact } from '@/components/core/ProfileContact'
+import { useBackend } from '@/components/hooks/useBackend'
 
-export const HostCard = ({ profileId }: { profileId: string }) => {
-  const profileRes = useGetProfileByIdQuery({ variables: { id: profileId } })
-  const profile = profileRes.data?.findProfileByID
+export const HostCard = ({ externId }: { externId: string }) => {
+  const { useGet } = useBackend()
+  const { data } = useGet<ProfileGetResponse>(['PROFILE', { externId }])
+  const profile = data?.profile
 
   if (!profile) {
     return null

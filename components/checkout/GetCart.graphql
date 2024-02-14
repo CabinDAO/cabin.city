@@ -1,5 +1,0 @@
-query GetCart($id: ID!) {
-    findCartByID(id: $id) {
-        ...Cart
-    }
-}

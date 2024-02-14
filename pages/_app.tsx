@@ -1,7 +1,6 @@
 import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
 import { AppHead } from '@/components/shared/head'
-import { apolloClient } from '@/lib/apollo/apollo-client'
 import theme from '@/styles/theme'
 import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
@@ -17,6 +16,7 @@ import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
+import { BackendProvider } from '@/components/contexts/BackendContext'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleLogin } = useAuth()
@@ -46,7 +46,8 @@ export default function App({ Component, pageProps }: AppProps) {
         >
           <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
             <ErrorProvider>
-              <ApolloProvider client={apolloClient}>
+              <BackendProvider>
+                {/*<ApolloProvider client={apolloClient}>*/}
                 <ModalProvider>
                   <CitizenshipProvider>
                     <NavigationProvider>
@@ -57,7 +58,8 @@ export default function App({ Component, pageProps }: AppProps) {
                     </NavigationProvider>
                   </CitizenshipProvider>
                 </ModalProvider>
-              </ApolloProvider>
+                {/*</ApolloProvider>*/}
+              </BackendProvider>
             </ErrorProvider>
           </PrivyWagmiConnector>
         </PrivyProvider>

@@ -1,22 +1,21 @@
-import { TitleCard } from '@/components/core/TitleCard'
-import { ImageGallery } from '@/components/core/gallery/ImageGallery'
-import { LocationMediaCategory } from '@/generated/graphql'
 import { useEffect, useRef } from 'react'
-import { LocationProps } from '@/components/neighborhoods/LocationView'
+import { LocationFragment, LocationMediaCategory } from '@/utils/types/location'
 import { TempImage } from '@/lib/image'
 import { useModal } from '../hooks/useModal'
-import { ImageBrowserModal } from '../core/gallery/ImageBrowserModal'
 import { useDeviceSize } from '../hooks/useDeviceSize'
+import { TitleCard } from '@/components/core/TitleCard'
+import { ImageGallery } from '@/components/core/gallery/ImageGallery'
+import { ImageBrowserModal } from '../core/gallery/ImageBrowserModal'
 
 export const LocationPhotosView = ({
   location,
   gallery,
 }: {
-  location: LocationProps
+  location: LocationFragment
   gallery?: string | string[] | null | undefined
 }) => {
   const { deviceSize } = useDeviceSize()
-  const { _id: locationId, mediaItems } = location
+  const { externId: locationId, mediaItems } = location
   const galleryPreviewSleepingRef = useRef<HTMLDivElement>(null)
   const galleryPreviewWorkingRef = useRef<HTMLDivElement>(null)
   const galleryPreviewFeaturesRef = useRef<HTMLDivElement>(null)

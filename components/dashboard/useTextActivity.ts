@@ -1,51 +1,29 @@
-import {
-  GetProfileByIdDocument,
-  useCreateTextActivityMutation,
-  useDeleteActivityMutation,
-} from '@/generated/graphql'
 import { useCallback } from 'react'
-import { useProfile } from '../auth/useProfile'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ActivityNewParams, ActivityNewResponse } from '@/utils/types/activity'
 
-export const useTextActivity = () => {
-  const [createTextActivity] = useCreateTextActivityMutation()
-  const [deleteTextActivity] = useDeleteActivityMutation()
-  const { user } = useProfile()
+export const useTextActivity = (afterPost: () => void, activityId?: string) => {
+  const { useMutate, useDelete } = useBackend()
+
+  const { trigger: createTextActivity } =
+    useMutate<ActivityNewResponse>('ACTIVITY_NEW')
 
   const handleCreateTextActivity = useCallback(
-    (text: string) => {
-      createTextActivity({
-        variables: {
-          text,
-        },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: user?._id },
-          },
-        ],
-      })
+    async (text: string) => {
+      await createTextActivity({ text: text } as ActivityNewParams)
+      await afterPost()
     },
-    [createTextActivity, user?._id]
+    [createTextActivity, afterPost]
   )
 
-  const handleDeleteTextActivity = useCallback(
-    (activityId: string) => {
-      deleteTextActivity({
-        variables: {
-          id: activityId,
-        },
-        refetchQueries: [
-          'GetActivities',
-          {
-            query: GetProfileByIdDocument,
-            variables: { id: user?._id },
-          },
-        ],
-      })
-    },
-    [deleteTextActivity, user?._id]
+  const { trigger: deleteTextActivity } = useDelete(
+    activityId ? ['ACTIVITY', { externId: activityId }] : null
   )
+
+  const handleDeleteTextActivity = useCallback(async () => {
+    await deleteTextActivity({})
+    await afterPost()
+  }, [deleteTextActivity, afterPost])
 
   return {
     handleCreateTextActivity,

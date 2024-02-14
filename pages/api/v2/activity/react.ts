@@ -1,0 +1,65 @@
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '@/utils/prisma'
+import {
+  ActivityReactParams,
+  ActivityReactResponse,
+} from '@/utils/types/activity'
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+
+async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<ActivityReactResponse>,
+  opts: { auth: AuthData }
+) {
+  if (req.method != 'POST') {
+    res.status(405).send({ error: 'Method not allowed' })
+    return
+  }
+
+  const params = req.body as ActivityReactParams
+
+  if (!params.action) {
+    res.status(400).send({ error: 'Action required' })
+    return
+  }
+
+  const profile = await requireProfile(req, res, opts)
+
+  if (params.action === 'like') {
+    // await Promise.all() might be even better here because its parallel, while transaction is sequential
+    await prisma.activityReaction.create({
+      data: {
+        activity: {
+          connect: {
+            externId: params.externId,
+          },
+        },
+        profile: {
+          connect: {
+            externId: profile.externId,
+          },
+        },
+      },
+    })
+  } else {
+    const activity = await prisma.activity.findUnique({
+      where: {
+        externId: params.externId,
+      },
+    })
+    if (activity) {
+      await prisma.activityReaction.delete({
+        where: {
+          profileId_activityId: {
+            profileId: profile.id,
+            activityId: activity.id,
+          },
+        },
+      })
+    }
+  }
+
+  res.status(200).send({})
+}
+
+export default withAuth(handler)

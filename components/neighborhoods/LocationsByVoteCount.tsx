@@ -1,63 +1,73 @@
-import {
-  LocationItemFragment,
-  useGetLocationsSortedByVoteCountQuery,
-} from '@/generated/graphql'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { locationCardPropsFromFragment } from '@/lib/location'
-import { useLocationVote } from '../hooks/useLocationVote'
+import { useBackend } from '@/components/hooks/useBackend'
 import { useEffect, useState } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { PAGE_SIZE } from '@/utils/api/backend'
+import {
+  LocationFragment,
+  LocationListParams,
+  LocationListResponse,
+} from '@/utils/types/location'
+import { useLocationVote } from '../hooks/useLocationVote'
 import { ListingCard } from '../core/ListingCard'
 import { LocationListContainer } from './styles'
 
 export const LocationsByVoteCount = () => {
-  const { data, fetchMore, refetch } = useGetLocationsSortedByVoteCountQuery({
-    variables: { size: 20, cursor: null },
-  })
-  const [refetchList, setRefetchList] = useState(false)
-  const { voteForLocation } = useLocationVote(() => {
-    setRefetchList(true)
-  })
+  const { useGet } = useBackend()
 
-  const locations =
-    data?.locationsSortedByVoteCount.data.filter(
-      (l): l is LocationItemFragment => !!l
-    ) ?? []
+  const [locations, setLocations] = useState<LocationFragment[]>([])
+  const [page, setPage] = useState(1)
 
-  const hasMore = !!data?.locationsSortedByVoteCount?.after
-  const dataLength = locations?.length ?? 0
+  const { data, mutate: refetchLocations } = useGet<LocationListResponse>(
+    'LOCATION_LIST',
+    {
+      sort: 'votesDesc',
+      page: page,
+    } as LocationListParams
+  )
 
   useEffect(() => {
-    if (refetchList) {
-      refetch()
+    if (data) {
+      if (page === 1) {
+        // Reset locations if first page
+        setLocations(data.locations ?? [])
+      } else if (data.locations) {
+        // Append locations if not first page
+        setLocations([...locations, ...data.locations])
+      }
     }
-  }, [refetchList, refetch])
+  }, [data, page, locations])
+
+  const hasMore =
+    data && data.count ? data.count > PAGE_SIZE * (page + 1) : false
+  const dataLength = locations?.length ?? 0
+
+  const [isRefetchNeeded, setIsRefetchNeeded] = useState(false)
+  const { voteForLocation } = useLocationVote(() => {
+    setIsRefetchNeeded(true)
+  })
+  useEffect(() => {
+    if (isRefetchNeeded) {
+      refetchLocations()
+    }
+  }, [isRefetchNeeded, refetchLocations])
 
   return (
     <LocationListContainer>
       <InfiniteScroll
-        hasMore={!!hasMore}
+        hasMore={hasMore}
         dataLength={dataLength}
         next={() => {
-          return fetchMore({
-            variables: {
-              cursor: data?.locationsSortedByVoteCount?.after,
-            },
-          })
+          setPage(page + 1)
         }}
         loader="..."
       >
         {locations.map((location, index) => {
-          const locationCardProps = locationCardPropsFromFragment(location)
           return (
             <ListingCard
               position={index + 1}
-              key={location._id}
-              {...locationCardProps}
-              onVote={() =>
-                voteForLocation({
-                  location,
-                })
-              }
+              key={location.externId}
+              location={location}
+              onVote={() => voteForLocation(location)}
             />
           )
         })}

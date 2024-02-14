@@ -1,34 +1,30 @@
-import { ProfileRoleLevelType } from '@/generated/graphql'
+import { RoleLevel } from '@/utils/types/profile'
 
 export interface LevelInfo {
   name: string
   number: number
 }
 
-const LevelInfoByType: Record<ProfileRoleLevelType, LevelInfo> = {
-  [ProfileRoleLevelType.Apprentice]: {
+const LevelInfoByType: Record<RoleLevel, LevelInfo> = {
+  [RoleLevel.Apprentice]: {
     name: 'Apprentice',
     number: 1,
   },
-  [ProfileRoleLevelType.Artisan]: {
+  [RoleLevel.Artisan]: {
     name: 'Artisan',
     number: 2,
   },
-  [ProfileRoleLevelType.Custodian]: {
+  [RoleLevel.Custodian]: {
     name: 'Custodian',
     number: 3,
   },
 }
 
-export const levelInfoFromType = (
-  levelType: ProfileRoleLevelType
-): LevelInfo => {
+export const levelInfoFromType = (levelType: RoleLevel): LevelInfo => {
   return LevelInfoByType[levelType]
 }
 
-export const allLevels = Object.values(ProfileRoleLevelType).map(
-  (levelType) => ({
-    ...levelInfoFromType(levelType),
-    levelType,
-  })
-)
+export const allLevels = Object.values(RoleLevel).map((levelType) => ({
+  ...levelInfoFromType(levelType),
+  levelType,
+}))

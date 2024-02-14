@@ -1,25 +1,21 @@
-import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
-import { padding } from '@/styles/theme'
+import { OfferFragment, OfferType } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
-import { Caption, H4 } from '@/components/core/Typography'
-import { OfferType } from '@/generated/graphql'
 import { offerInfoFromType } from '@/utils/offer'
 import { formatRange } from '@/utils/display-utils'
+import styled from 'styled-components'
+import { padding } from '@/styles/theme'
+import { Caption, H4 } from '@/components/core/Typography'
+import { formatShortAddress } from '@/lib/address'
 
-interface LocationLinkCardProps {
-  location: {
-    _id: string
-    name: string
-    shortAddress: string
-    bannerImageIpfsHash: string
-  }
-}
-
-export const LocationLinkCard = ({ location }: LocationLinkCardProps) => {
+export const LocationLinkCard = ({
+  location,
+}: {
+  location: OfferFragment['location']
+}) => {
   return (
-    <Container href={`/location/${location._id}`}>
+    <Container href={`/location/${location.externId}`}>
       <Image
         src={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
         alt={location.name}
@@ -29,7 +25,7 @@ export const LocationLinkCard = ({ location }: LocationLinkCardProps) => {
       <Info>
         <FaintCaption>Location</FaintCaption>
         <H4>{location.name}</H4>
-        <Caption>{location.shortAddress}</Caption>
+        <Caption>{formatShortAddress(location.address)}</Caption>
       </Info>
     </Container>
   )

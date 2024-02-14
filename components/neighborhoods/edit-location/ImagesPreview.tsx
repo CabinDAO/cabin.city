@@ -1,15 +1,14 @@
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { InputMaybe } from '@/generated/graphql'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
 
 interface ImagesPreviewProps {
-  ipfsHashList: (InputMaybe<string> | undefined)[]
-  onDelete?: (ipfsHash: InputMaybe<string> | undefined) => void
+  ipfsHashList: string[]
+  onDelete?: (ipfsHash: string) => void
   uploading?: boolean
 }
 

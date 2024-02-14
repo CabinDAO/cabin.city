@@ -1,29 +1,31 @@
-import { MeDocument, useDeleteLocationMutation } from '@/generated/graphql'
 import { useRouter } from 'next/router'
 import { useModal } from './useModal'
+import { useBackend } from '@/components/hooks/useBackend'
 import { DeleteConfirmationModal } from '../core/DeleteConfirmationModal'
 
-export const useLocationActions = () => {
+export const useLocationActions = (
+  locationExternId: string,
+  afterDelete: () => Promise<unknown>
+) => {
   const router = useRouter()
   const { showModal } = useModal()
-  const [deleteLocationMutation] = useDeleteLocationMutation()
+  const { useDelete } = useBackend()
+  const { trigger } = useDelete(['LOCATION', { externId: locationExternId }])
 
-  const deleteLocation = (locationId: string) => {
+  const deleteLocation = () => {
     showModal(() => (
       <DeleteConfirmationModal
-        onDelete={() =>
-          deleteLocationMutation({
-            variables: { id: locationId },
-            refetchQueries: ['Me', { query: MeDocument }],
-          })
-        }
+        onDelete={async () => {
+          await trigger({})
+          await afterDelete()
+        }}
         entityName="listing"
       />
     ))
   }
 
-  const editLocation = (locationId: string) => {
-    router.push(`/location/${locationId}/edit`)
+  const editLocation = () => {
+    router.push(`/location/${locationExternId}/edit`)
   }
 
   return {

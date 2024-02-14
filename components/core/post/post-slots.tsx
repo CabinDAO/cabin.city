@@ -1,4 +1,4 @@
-import { ActivityType } from '@/generated/graphql'
+import { ActivityType } from '@/utils/types/activity'
 import { PostProps } from './Post'
 import { profileBadgeAddedSlots } from './profileBadgeAddedSlots'
 import { profileCreatedSlots } from './profileCreatedSlots'
@@ -6,7 +6,6 @@ import { profileRoleAddedSlots } from './profileRoleAddedSlots'
 import { verifiedCitizenshipSlots } from './verifiedCitizenshipSlots'
 import { textSlots } from './textSlots'
 import { locationPublishedSlots } from './locationPublishedSlots'
-import { locationPromotedSlots } from './locationPromotedSlots'
 import { offerCreatedSlots } from './offerCreatedSlots'
 import { vouchRequestedSlots } from './vouchRequestedSlots'
 
@@ -25,22 +24,21 @@ export interface PostSlots {
 }
 
 export const getPostSlots = (props: PostProps): PostSlots => {
-  const { activityItem } = props
-  const { activity } = activityItem
+  const { activity } = props
 
   if (activity.type === ActivityType.ProfileCreated) {
     return profileCreatedSlots
   }
 
-  if (activity.type === ActivityType.ProfileRoleAdded) {
+  if (activity.type === ActivityType.RoleAdded) {
     return profileRoleAddedSlots
   }
 
-  if (activity.type === ActivityType.ProfileBadgeAdded) {
+  if (activity.type === ActivityType.BadgeAdded) {
     return profileBadgeAddedSlots
   }
 
-  if (activity.type === ActivityType.VerifiedCitizenship) {
+  if (activity.type === ActivityType.CitizenshipVerified) {
     return verifiedCitizenshipSlots
   }
 
@@ -50,10 +48,6 @@ export const getPostSlots = (props: PostProps): PostSlots => {
 
   if (activity.type === ActivityType.LocationPublished) {
     return locationPublishedSlots
-  }
-
-  if (activity.type === ActivityType.LocationPromoted) {
-    return locationPromotedSlots
   }
 
   if (activity.type === ActivityType.OfferCreated) {

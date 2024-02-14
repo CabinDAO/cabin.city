@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
 import Router from 'next/router'
 import { addressMatch } from '@/utils/address-match'
-import { MeFragment, useMeQuery } from '@/generated/graphql'
-import { useExternalUser } from './useExternalUser'
+import { ProfileMeResponse } from '@/utils/types/profile'
+import { usePrivy } from '@privy-io/react-auth'
+import { useBackend } from '@/components/hooks/useBackend'
 
 /*
   This hook is used to fetch the current user from the server.
@@ -20,35 +21,40 @@ export const useProfile = ({
   redirectTo = '',
   redirectToIfFound = '',
 } = {}) => {
-  const { data, loading, refetch } = useMeQuery()
-  const { externalUser, isUserLoading } = useExternalUser()
+  const { user: privyUser, ready } = usePrivy()
+  const { useGet } = useBackend()
+  const {
+    data: meData,
+    isLoading: isMeLoading,
+    mutate: refetchProfile,
+  } = useGet<ProfileMeResponse>('PROFILE_ME')
 
-  const me = !externalUser && !isUserLoading ? null : data?.me
+  const me = ready && !privyUser ? null : meData?.me
 
   useEffect(() => {
     if (
       me &&
-      externalUser?.wallet?.address &&
-      !addressMatch(me.account.address, externalUser?.wallet?.address ?? '0x0')
+      privyUser?.wallet?.address &&
+      !addressMatch(me.walletAddress, privyUser?.wallet?.address ?? '0x0')
     ) {
       Router.push('/logout')
     }
 
-    if (me && !loading && !me.externalUserId) {
+    if (me && !isMeLoading && !me.privyDID) {
       Router.push('/registration')
     }
 
     // If redirectTo is set, redirect if the user was not found.
-    if (redirectTo && !loading && !me) {
+    if (redirectTo && !isMeLoading && !me) {
       Router.push(redirectTo)
     } else if (redirectToIfFound && me) {
       Router.push(redirectToIfFound)
     }
-  }, [redirectTo, redirectToIfFound, externalUser, me, loading])
+  }, [redirectTo, redirectToIfFound, privyUser, me, isMeLoading])
 
   return {
-    user: me as MeFragment | null | undefined,
-    isUserLoading: loading,
-    refetchProfile: refetch,
+    user: me,
+    isUserLoading: isMeLoading,
+    refetchProfile,
   }
 }

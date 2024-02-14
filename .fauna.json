@@ -1,8 +1,0 @@
-{
-  "envPath": ".env.fauna.local",
-  "schemaPath": "fauna/schema.gql",
-  "codegen": {
-    "documents": "components/**/*.{ts,tsx,graphql}",
-    "plugins": ["typescript-react-apollo"]
-  }
-}

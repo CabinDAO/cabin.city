@@ -1,36 +1,50 @@
+import { ChangeEvent } from 'react'
+import { OfferEditParams, OfferPriceInterval } from '@/utils/types/offer'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
+import styled from 'styled-components'
+import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { Dropdown } from '@/components/core/Dropdown'
 import { InputText } from '@/components/core/InputText'
 import { H3 } from '@/components/core/Typography'
-import { SelectOption } from '@/components/hooks/useDropdownLogic'
-import {
-  OfferPrice,
-  OfferPriceUnit,
-  PartialUpdateOfferPriceInput,
-} from '@/generated/graphql'
-import { labelByOfferPriceUnit } from '@/utils/offer'
-import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
-import { ChangeEvent } from 'react'
-import styled from 'styled-components'
 import { Pair } from './EditOfferForm'
 
-const options = Object.values(OfferPriceUnit).map((unit) => ({
-  label: labelByOfferPriceUnit(unit),
-  value: unit,
+const labelByOfferPriceInterval = (unit: OfferPriceInterval): string => {
+  switch (unit) {
+    case OfferPriceInterval.Hourly:
+      return 'Per Hour'
+    case OfferPriceInterval.Daily:
+      return 'Per Day'
+    case OfferPriceInterval.Weekly:
+      return 'Per Week'
+    case OfferPriceInterval.Monthly:
+      return 'Per Month'
+    case OfferPriceInterval.FlatFee:
+    default:
+      return 'Total Cost'
+  }
+}
+
+const options = Object.values(OfferPriceInterval).map((interval) => ({
+  label: labelByOfferPriceInterval(interval),
+  value: interval,
 }))
 
 interface PricingProps {
-  price?: OfferPrice | PartialUpdateOfferPriceInput | null
-  onPriceChange?: (value: OfferPrice) => void
+  price?: OfferEditParams['price']
+  priceInterval?: OfferEditParams['priceInterval']
+  onPriceChange?: (
+    price: OfferEditParams['price'],
+    priceInterval: OfferEditParams['priceInterval']
+  ) => void
   highlightErrors?: boolean
 }
 
 export const Pricing = ({
   price,
+  priceInterval,
   onPriceChange,
   highlightErrors,
 }: PricingProps) => {
-  const amountCents = price?.amountCents ?? 0
-
   const handlePriceChange = async (e: ChangeEvent<HTMLInputElement>) => {
     let parsedValue = 0
 
@@ -42,19 +56,13 @@ export const Pricing = ({
     }
 
     if (onPriceChange) {
-      onPriceChange({
-        amountCents: (parsedValue * 100) as number,
-        unit: price?.unit as OfferPriceUnit,
-      })
+      onPriceChange(parsedValue as number, priceInterval as OfferPriceInterval)
     }
   }
 
   const handlePriceUnitSelect = (option: SelectOption) => {
     if (onPriceChange) {
-      onPriceChange({
-        amountCents: price?.amountCents as number,
-        unit: option.value as OfferPriceUnit,
-      })
+      onPriceChange(price as number, option.value as OfferPriceInterval)
     }
   }
 
@@ -67,8 +75,8 @@ export const Pricing = ({
           placeholder="$ Value"
           label="Price"
           onChange={handlePriceChange}
-          value={price && amountCents > 0 ? (amountCents / 100).toString() : ''}
-          error={highlightErrors && !price?.amountCents}
+          value={price && (price ?? 0) > 0 ? price.toString() : ''}
+          error={highlightErrors && !price}
           errorMessage={REQUIRED_FIELD_ERROR}
         />
         <Dropdown
@@ -77,7 +85,8 @@ export const Pricing = ({
           options={options}
           onSelect={handlePriceUnitSelect}
           selectedOption={
-            options.find((option) => option.value === price?.unit) ?? options[0]
+            options.find((option) => option.value === priceInterval) ??
+            options[0]
           }
         />
       </InputPair>

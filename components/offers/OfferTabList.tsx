@@ -1,53 +1,46 @@
-import {
-  GetOffersInput,
-  OfferItemFragment,
-  OfferType,
-  useGetOffersCountQuery,
-  useGetOffersQuery,
-} from '@/generated/graphql'
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { ListEmptyState } from '../core/ListEmptyState'
-import { offerListItemPropsFromFragment } from '@/utils/offer'
 import { useProfile } from '../auth/useProfile'
-import { ExperienceCard } from '../core/ExperienceCard'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  OfferFragment,
+  OfferListParams,
+  OfferListResponse,
+  OfferType,
+} from '@/utils/types/offer'
 import { ExperienceListContainer } from './styles'
+import { ListEmptyState } from '../core/ListEmptyState'
+import { ExperienceCard } from '../core/ExperienceCard'
+import { PAGE_SIZE } from '@/utils/api/backend'
 
-interface OfferTabListProps {
-  offerType?: OfferType
-}
-
-export const OfferTabList = ({ offerType }: OfferTabListProps) => {
+export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
   const { user } = useProfile()
-  const input: GetOffersInput = useMemo(() => {
-    return {
-      offerTypes: offerType ? [offerType] : [],
-      profileRoleConstraints: [],
+  const { useGet } = useBackend()
+
+  const [offers, setOffers] = useState<OfferFragment[]>([])
+  const [page, setPage] = useState(1)
+
+  const { data } = useGet<OfferListResponse>('OFFER_LIST', {
+    offerType: offerType ?? undefined,
+    publishedOnly: 'true',
+    page: page,
+  } as OfferListParams)
+
+  useEffect(() => {
+    if (data) {
+      if (page === 1) {
+        // Reset locations if first page
+        setOffers(data.offers ?? [])
+      } else if (data.offers) {
+        // Append locations if not first page
+        setOffers([...offers, ...data.offers])
+      }
     }
-  }, [offerType])
+  }, [data, offers, page])
 
-  const { data, fetchMore } = useGetOffersQuery({
-    variables: {
-      input,
-    },
-  })
-
-  const { data: offersCountData } = useGetOffersCountQuery({
-    variables: {
-      input,
-    },
-  })
-
-  // Exclude offers belonging to locations that are not published
-  const offers = useMemo(
-    () =>
-      data?.getOffers.data.filter(
-        (o): o is OfferItemFragment => !!o && o.location.publishedAt
-      ) ?? [],
-    [data]
-  )
-  const hasMore = !!data?.getOffers?.after
-  const dataLength = offers.length
+  const hasMore =
+    data && data.count ? data.count > PAGE_SIZE * (page + 1) : false
+  const dataLength = offers?.length ?? 0
 
   return (
     <ExperienceListContainer withScroll>
@@ -56,23 +49,24 @@ export const OfferTabList = ({ offerType }: OfferTabListProps) => {
         dataLength={dataLength}
         style={{ overflowX: 'hidden', overflowY: 'hidden' }}
         next={() => {
-          return fetchMore({
-            variables: {
-              cursor: data?.getOffers?.after,
-            },
-          })
+          setPage(page + 1)
         }}
         loader="..."
       >
-        {offers.length === 0 && data && offersCountData ? (
+        {offers.length === 0 && data && data.count ? (
           <ListEmptyState iconName="offer" />
         ) : (
           offers.map((offer) => {
-            if (offer.offerType == OfferType.Residency) {
+            if (offer.type == OfferType.Residency) {
               return null
             }
-            const offerProps = offerListItemPropsFromFragment(offer, user)
-            return <ExperienceCard key={offer._id} {...offerProps} />
+            return (
+              <ExperienceCard
+                key={offer.externId}
+                offer={offer}
+                isLocked={!user}
+              />
+            )
           })
         )}
       </InfiniteScroll>

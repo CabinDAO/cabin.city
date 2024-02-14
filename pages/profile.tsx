@@ -6,7 +6,7 @@ const MyProfilePage = () => {
 
   if (!user) return null
 
-  return <ProfileView profileId={user._id} />
+  return <ProfileView externId={user.externId} />
 }
 
 export default MyProfilePage

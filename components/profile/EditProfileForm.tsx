@@ -1,27 +1,23 @@
-import {
-  MeFragment,
-  ProfileRoleType,
-  UpdateProfileInput,
-} from '@/generated/graphql'
 import styled from 'styled-components'
 import { HorizontalDivider } from '../core/Divider'
 import { About } from './edit-profile/About'
 import { Contact } from './edit-profile/Contact'
 import { Identity } from './edit-profile/Identity'
 import { Roles } from './edit-profile/Roles'
+import { ProfileEditParams, RoleType, MeFragment } from '@/utils/types/profile'
 
 interface EditProfileFormProps {
-  editProfileInput: UpdateProfileInput | null
-  onChange: (input: UpdateProfileInput) => void
   user: MeFragment
-  onRolesChange: (roleTypes: ProfileRoleType[]) => void
+  profileEditParams: ProfileEditParams['data'] | null
+  onChange: (input: ProfileEditParams['data']) => void
+  onRolesChange: (roleTypes: RoleType[]) => void
 }
 
 export const EditProfileForm = ({
-  editProfileInput,
+  user,
+  profileEditParams,
   onChange,
   onRolesChange,
-  user,
 }: EditProfileFormProps) => {
   if (!user) {
     return null
@@ -31,13 +27,13 @@ export const EditProfileForm = ({
     <InnerContainer>
       <Identity
         user={user}
-        editProfileInput={editProfileInput}
+        profileEditParams={profileEditParams}
         onChange={onChange}
       />
       <HorizontalDivider />
       <About
         user={user}
-        editProfileInput={editProfileInput}
+        profileEditParams={profileEditParams}
         onChange={onChange}
       />
       <HorizontalDivider />
@@ -45,7 +41,7 @@ export const EditProfileForm = ({
       <HorizontalDivider />
       <Contact
         user={user}
-        editProfileInput={editProfileInput}
+        profileEditParams={profileEditParams}
         onChange={onChange}
       />
     </InnerContainer>

@@ -1,8 +1,9 @@
 import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { useExternalUser } from '../auth/useExternalUser'
-import { usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/router'
+import { useBackend } from '@/components/hooks/useBackend'
+import { RefetchParams, RefetchResponse } from '@/utils/types/unlock'
 
 export const CitizenshipContext = createContext<CitzenshipState | null>(null)
 
@@ -25,8 +26,8 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
   const { refetchProfile } = useProfile()
   const { externalUser } = useExternalUser()
   const checked = useRef(false)
-  const { getAccessToken } = usePrivy()
   const { pathname } = useRouter()
+  const { get } = useBackend()
 
   // Can be used to check if the user's citizenship status has changed
   // Useful for when the user interacts with the Unlock modal
@@ -35,27 +36,18 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
       return
     }
 
-    const authToken = await getAccessToken()
+    const resp = await get<RefetchResponse>('UNLOCK_REFETCH_STATUS', {
+      address: externalUser?.wallet?.address,
+    } as RefetchParams)
 
-    const resp = await fetch(
-      `/api/unlock/check-status?address=${externalUser?.wallet?.address}`,
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    if (resp.ok) {
-      const { updated } = await resp.json()
-      if (updated) {
+    if (resp.hasOwnProperty('updated')) {
+      if (resp.updated) {
         console.log('Status updated. Refetching user...')
         await refetchProfile()
       }
       checked.current = true
     }
-  }, [refetchProfile, externalUser, getAccessToken, pathname])
+  }, [refetchProfile, externalUser, get, pathname])
 
   useEffect(() => {
     if (!externalUser || checked.current) {
@@ -63,7 +55,7 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
     }
 
     // Check status on initial app load but only one time
-    checkStatus()
+    checkStatus().then()
   }, [externalUser, checkStatus])
 
   const state = {

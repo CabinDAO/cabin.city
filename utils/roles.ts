@@ -1,9 +1,5 @@
 import { IconName } from '@/components/core/Icon'
-import {
-  ProfileRoleConstraint,
-  ProfileRoleLevelType,
-  ProfileRoleType,
-} from '@/generated/graphql'
+import { RoleLevel, RoleType } from '@/utils/types/profile'
 
 export interface RoleInfo {
   name: string
@@ -17,19 +13,14 @@ export interface LevelInfo {
   name: string
 }
 
-export type RoleConstraintInfo = RoleInfo &
-  LevelInfo & {
-    constraintName: string
-  }
-
-export const LevelInfoByType: Record<ProfileRoleLevelType, LevelInfo> = {
-  [ProfileRoleLevelType.Apprentice]: { name: 'Apprentice' },
-  [ProfileRoleLevelType.Artisan]: { name: 'Artisan' },
-  [ProfileRoleLevelType.Custodian]: { name: 'Custodian' },
+export const LevelInfoByType: Record<RoleLevel, LevelInfo> = {
+  [RoleLevel.Apprentice]: { name: 'Apprentice' },
+  [RoleLevel.Artisan]: { name: 'Artisan' },
+  [RoleLevel.Custodian]: { name: 'Custodian' },
 }
 
-export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
-  [ProfileRoleType.Builder]: {
+export const RoleInfoByType: Record<RoleType, RoleInfo> = {
+  [RoleType.Builder]: {
     name: 'Builder',
     description:
       'Maker of physical things that improve the built environment of neighborhoods.',
@@ -37,7 +28,7 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
     imagePath: '/images/builder.png',
     backgroundImagePath: '/images/builder-bg.png',
   },
-  [ProfileRoleType.Naturalist]: {
+  [RoleType.Naturalist]: {
     name: 'Naturalist',
     description:
       'Grower of plants, animals, and human systems that support the natural environment.',
@@ -45,7 +36,7 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
     imagePath: '/images/naturalist.png',
     backgroundImagePath: '/images/naturalist-bg.png',
   },
-  [ProfileRoleType.Caretaker]: {
+  [RoleType.Caretaker]: {
     name: 'Caretaker',
     description:
       'Operator of a neighborhood. Jack-of-all-trades ultimately responsible for a space.',
@@ -53,7 +44,7 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
     imagePath: '/images/caretaker.png',
     backgroundImagePath: '/images/caretaker-bg.png',
   },
-  [ProfileRoleType.Gatherer]: {
+  [RoleType.Gatherer]: {
     name: 'Gatherer',
     description:
       'Space-maker in residence. The person on-site building the container and the culture.',
@@ -61,7 +52,7 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
     imagePath: '/images/gatherer.png',
     backgroundImagePath: '/images/gatherer-bg.png',
   },
-  [ProfileRoleType.Creator]: {
+  [RoleType.Creator]: {
     name: 'Creator',
     description:
       'Very-online producer of art, novelty, content, and experiments that grow new possibilities.',
@@ -69,7 +60,7 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
     imagePath: '/images/creator.png',
     backgroundImagePath: '/images/creator-bg.png',
   },
-  [ProfileRoleType.Resident]: {
+  [RoleType.Resident]: {
     name: 'Resident',
     description: 'Remote worker living across the neighborhood network.',
     iconName: 'resident',
@@ -78,30 +69,11 @@ export const RoleInfoByType: Record<ProfileRoleType, RoleInfo> = {
   },
 }
 
-export const roleInfoFromType = (roleType: ProfileRoleType): RoleInfo => {
+export const roleInfoFromType = (roleType: RoleType): RoleInfo => {
   return RoleInfoByType[roleType]
 }
 
-type RoleConstraintInfoParams = ProfileRoleConstraint & { hideLevel?: boolean }
-
-export const roleConstraintInfoFromType = ({
-  profileRole,
-  level,
-  hideLevel = false,
-}: RoleConstraintInfoParams): RoleConstraintInfo => {
-  const roleInfo = RoleInfoByType[profileRole]
-  const levelInfo = LevelInfoByType[level]
-
-  return {
-    ...roleInfo,
-    ...levelInfo,
-    constraintName: `${roleInfo.name}${
-      hideLevel ? '' : ` ${levelInfo.name.toLowerCase()}`
-    }`,
-  }
-}
-
-export const allRoles = Object.values(ProfileRoleType).map((roleType) => ({
+export const allRoles = Object.values(RoleType).map((roleType) => ({
   ...roleInfoFromType(roleType),
   roleType,
 }))

@@ -1,15 +1,14 @@
 import { LocationPageView } from '@/components/neighborhoods/LocationPageView'
 import { AppHead } from '@/components/shared/head'
-import { GetLocationById } from '@/fauna/lib/GetLocationById'
-import { faunaServerClient } from '@/lib/fauna-server/faunaServerClient'
 import { getImageUrlByIpfsHash } from '@/lib/image'
+import { prisma } from '@/utils/prisma'
 
 interface LocationPageProps {
   location: {
+    externId: string
     title: string
     description: string
     image: string
-    id: string
   }
 }
 
@@ -20,7 +19,7 @@ const LocationPage = ({ location }: LocationPageProps) => {
         title={location.title}
         description={location.description}
         imageUrl={location.image}
-        pathname={`/location/${location.id}`}
+        pathname={`/location/${location.externId}`}
       />
       <LocationPageView />
     </>
@@ -32,21 +31,27 @@ export async function getServerSideProps({
 }: {
   params: { id: string }
 }) {
-  const response = (await faunaServerClient.query(
-    GetLocationById(params.id)
-  )) as {
-    data: { name: string; tagline: string; bannerImageIpfsHash: string }
-  }
+  const location = await prisma.location.findUnique({
+    where: {
+      externId: params.id,
+    },
+    select: {
+      externId: true,
+      name: true,
+      tagline: true,
+      bannerImageIpfsHash: true,
+    },
+  })
 
   return {
     props: {
       location: {
-        title: response?.data?.name,
-        description: response?.data?.tagline,
-        image: getImageUrlByIpfsHash(response?.data?.bannerImageIpfsHash, true),
-        id: params.id,
+        externId: location?.externId,
+        title: location?.name,
+        description: location?.tagline,
+        image: getImageUrlByIpfsHash(location?.bannerImageIpfsHash, true),
       },
-    },
+    } as LocationPageProps,
   }
 }
 

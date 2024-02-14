@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 import { RoleInfo } from '@/utils/roles'
 import styled from 'styled-components'

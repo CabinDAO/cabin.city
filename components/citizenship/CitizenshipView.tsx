@@ -1,7 +1,6 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { useProfile } from '../auth/useProfile'
-import { CitizenshipStatus, useToggleSignalMutation } from '@/generated/graphql'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'
 import { loadUnlockCheckout } from './UnlockScript'
@@ -15,6 +14,8 @@ import { useEmail } from '@/components/hooks/useEmail'
 import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 import { useNavigation } from '@/components/hooks/useNavigation'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { CitizenshipStatus } from '@/utils/types/profile'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const CitizenshipView = () => {
   const { user } = useProfile()
@@ -53,7 +54,7 @@ export const CitizenshipView = () => {
   const handleMint = async () => {
     if (!user) return
 
-    events.mintEvent(user._id ?? '')
+    events.mintEvent(user.externId ?? '')
 
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
@@ -67,22 +68,23 @@ export const CitizenshipView = () => {
     performMint()
   }
 
-  const [toggleSignal] = useToggleSignalMutation()
+  const { useMutate } = useBackend()
+  const { trigger: toggleSignal } = useMutate('PROFILE_SIGNAL_INTEREST')
 
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {
-      events.signalInterestEvent(user?._id ?? '')
+      events.signalInterestEvent(user?.externId ?? '')
 
       sendEmail({
         type: EmailType.VOUCH_REQUESTED,
         data: {
           name: user?.name,
           email: user?.email,
-          profileId: user?._id,
+          profileId: user?.externId,
         } as VouchRequstedPayload,
       })
 
-      toggleSignal()
+      toggleSignal({})
     })
   }
 
@@ -99,7 +101,7 @@ export const CitizenshipView = () => {
           onMint={handleMint}
           onSignal={handleToggleSignal}
           status={user?.citizenshipStatus}
-          profileId={user?._id ?? ''}
+          profileId={user?.externId ?? ''}
           approvedDueToCabinBalance={
             (user?.cabinTokenBalanceInt ?? 0) >= MINIMUM_CABIN_BALANCE
           }

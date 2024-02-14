@@ -1,9 +1,8 @@
 import styled from 'styled-components'
-import { OfferItemFragment } from '@/generated/graphql'
+import { OfferFragment } from '@/utils/types/offer'
 import { Button } from '@/components/core/Button'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
-import { formatShortAddress } from '@/lib/address'
 import Image from 'next/image'
 import { padding } from '@/styles/theme'
 import { stringToSlateValue } from '@/components/core/slate/slate-utils'
@@ -13,7 +12,7 @@ import { body2Styles } from '@/components/core/Typography'
 import Link from 'next/link'
 
 export interface ExperienceListProps {
-  offers: OfferItemFragment[]
+  offers: OfferFragment[]
   actionButtonText: string
 }
 
@@ -24,7 +23,7 @@ export const ExperienceList = ({
   return (
     <>
       {offers.map((offer) => (
-        <Item key={offer._id}>
+        <Item key={offer.externId}>
           <StyledImage
             src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
             alt={offer.title ?? ''}
@@ -33,21 +32,7 @@ export const ExperienceList = ({
             sizes="100vw"
           />
           <Details>
-            <OfferNameAndDates
-              offer={{
-                title: offer.title ?? null,
-                startDate: offer.startDate ?? null,
-                endDate: offer.endDate ?? null,
-                offerType: offer.offerType ?? null,
-                price: offer.price ?? null,
-                location: {
-                  shortAddress: formatShortAddress(
-                    offer.location.address ?? null
-                  ),
-                },
-              }}
-              withPrice
-            />
+            <OfferNameAndDates offer={offer} withPrice />
             <Expandable
               more={
                 <span
@@ -68,7 +53,7 @@ export const ExperienceList = ({
             </Expandable>
           </Details>
           <Buttons>
-            <Link href={`/experience/${offer._id}`}>
+            <Link href={`/experience/${offer.externId}`}>
               <Button isFullWidth>{actionButtonText}</Button>
             </Link>
           </Buttons>

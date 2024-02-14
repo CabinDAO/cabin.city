@@ -1,11 +1,11 @@
-import { InputText } from '@/components/core/InputText'
-import { LocationAddressInput } from '@/generated/graphql'
-import Script from 'next/script'
 import { useEffect, useRef } from 'react'
+import Script from 'next/script'
+import { AddressFragment } from '@/utils/types/location'
+import { InputText } from '@/components/core/InputText'
 
 interface LocationAutocompleteInputProps {
-  onLocationChange: (value: LocationAddressInput) => void
-  initialValue?: LocationAddressInput | null
+  onLocationChange: (value: AddressFragment) => void
+  initialValue?: AddressFragment | null
   error: boolean
   errorMessage?: string
 }
@@ -70,29 +70,26 @@ export const LocationAutocompleteInput = ({
 
 const getLocationInputFromPlaceResult = (
   place: google.maps.places.PlaceResult
-): LocationAddressInput => {
-  const lat = place.geometry?.location?.lat()
-  const lng = place.geometry?.location?.lng()
+): AddressFragment => {
+  const lat = place.geometry?.location?.lat() || null
+  const lng = place.geometry?.location?.lng() || null
 
   return {
-    formattedAddress: place.formatted_address,
+    formattedAddress: place.formatted_address || null,
     lat,
     lng,
-    admininstrativeAreaLevel1: getValueFromPlaceResult(
-      place,
-      'administrative_area_level_1'
-    ),
-    admininstrativeAreaLevel1Short: getShortValueFromPlaceResult(
-      place,
-      'administrative_area_level_1'
-    ),
-    country: getValueFromPlaceResult(place, 'country'),
-    countryShort: getShortValueFromPlaceResult(place, 'country'),
-    streetNumber: getValueFromPlaceResult(place, 'street_number'),
-    postalCode: getValueFromPlaceResult(place, 'postal_code'),
-    route: getValueFromPlaceResult(place, 'route'),
-    routeShort: getShortValueFromPlaceResult(place, 'route'),
-    locality: getValueFromPlaceResult(place, 'locality'),
+    admininstrativeAreaLevel1:
+      getValueFromPlaceResult(place, 'administrative_area_level_1') || null,
+    admininstrativeAreaLevel1Short:
+      getShortValueFromPlaceResult(place, 'administrative_area_level_1') ||
+      null,
+    country: getValueFromPlaceResult(place, 'country') || null,
+    countryShort: getShortValueFromPlaceResult(place, 'country') || null,
+    streetNumber: getValueFromPlaceResult(place, 'street_number') || null,
+    postalCode: getValueFromPlaceResult(place, 'postal_code') || null,
+    route: getValueFromPlaceResult(place, 'route') || null,
+    routeShort: getShortValueFromPlaceResult(place, 'route') || null,
+    locality: getValueFromPlaceResult(place, 'locality') || null,
   }
 }
 

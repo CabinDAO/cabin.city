@@ -1,4 +1,4 @@
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { unlockConfig } from '@/lib/protocol-config'
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
@@ -7,6 +7,7 @@ import { useCitizenship } from '../hooks/useCitizenship'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
 import { appDomainWithProto } from '@/utils/display-utils'
+import { expandRoute } from '@/utils/routes'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loadUnlockCheckout = async (provider: any) => {
@@ -18,7 +19,7 @@ export const loadUnlockCheckout = async (provider: any) => {
       },
     },
     useDelegatedProvider: true,
-    dataBuilder: `${appDomainWithProto}/api/unlock/data-builder`,
+    dataBuilder: `${appDomainWithProto}${expandRoute('UNLOCK_DATA_BUILDER')}`,
     pessimistic: true,
     skipRecipient: true,
     title: 'Cabin Citizenship',

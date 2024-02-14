@@ -1,16 +1,11 @@
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
 import { AvatarSetup } from '../AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
-import { validName } from '../validations'
+import { isValidName } from '../validations'
 import { UpdateProfileProps } from './UpdateProfileProps'
 import { DisplayNameInputContainer } from '../styles'
-import { FieldAvailability } from '@/components/core/FieldAvailability'
-import {
-  useGetProfileByNameLazyQuery,
-  useUpdateProfileMutation,
-} from '@/generated/graphql'
-import { useEffect, useState } from 'react'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { H3 } from '@/components/core/Typography'
 import { AccountAction } from '../AccountAction'
@@ -19,27 +14,32 @@ import { shortenedAddress } from '@/utils/display-utils'
 import { usePrivy } from '@privy-io/react-auth'
 import { useModal } from '@/components/hooks/useModal'
 import { ChangeEmailConfirmationModal } from '@/components/core/ChangeEmailConfirmationModal'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileEditParams, ProfileEditResponse } from '@/utils/types/profile'
 
 export const Identity = ({
-  editProfileInput,
-  onChange,
   user,
+  profileEditParams,
+  onChange,
 }: UpdateProfileProps) => {
-  const avatar = editProfileInput?.hasOwnProperty('avatar')
-    ? editProfileInput.avatar
+  const { showModal } = useModal()
+
+  const name = profileEditParams?.name ?? user?.name
+  const avatar = profileEditParams?.hasOwnProperty('avatar')
+    ? profileEditParams.avatar
     : user?.avatar
+
   const { externalUser } = useExternalUser()
   const email = externalUser?.email?.address ?? user?.email
-  const name = editProfileInput?.name ?? user?.name
-  const [getProfileByName] = useGetProfileByNameLazyQuery()
-  const [available, setAvailable] = useState(true)
-  const [displayAvailability, setDisplayAvailability] = useState(false)
-  const { ens } = useEns(externalUser?.wallet?.address)
-  const walletDisplay = ens ?? shortenedAddress(externalUser?.wallet?.address)
+  const { ens } = useEns(user.walletAddress)
+  const walletDisplay = ens ?? shortenedAddress(user.walletAddress)
   const isEmbeddedWallet = externalUser?.wallet?.walletClient === 'privy'
   const { linkEmail, unlinkEmail, exportWallet } = usePrivy()
-  const [updateProfile] = useUpdateProfileMutation()
-  const { showModal } = useModal()
+
+  const { useMutate } = useBackend()
+  const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
+    user ? ['PROFILE', { externId: user.externId }] : null
+  )
 
   const handleEmailRelink = async () => {
     showModal(() => (
@@ -62,64 +62,35 @@ export const Identity = ({
       externalUser.email.address !== user.email
     ) {
       updateProfile({
-        variables: {
-          id: user._id,
-          data: {
-            email: externalUser.email.address,
-          },
+        profileExternId: user.externId,
+        data: {
+          email: externalUser.email.address,
         },
-      })
+      } as ProfileEditParams)
     }
   }, [externalUser?.email?.address, updateProfile, user])
 
   const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayAvailability(false)
-    onChange({ ...editProfileInput, name: e.target.value })
-  }
-
-  const handleDisplayNameValidation = async () => {
-    setDisplayAvailability(false)
-    const displayName = editProfileInput?.name ?? ''
-
-    if (!validName(displayName) || displayName === user.name) {
-      setAvailable(true)
-      return
-    }
-
-    const response = await getProfileByName({
-      variables: { name: displayName.trim() },
-    })
-
-    const existingName = response.data?.profileByName?.name
-
-    if (existingName !== user?.name) {
-      setDisplayAvailability(true)
-      setAvailable(!response.data?.profileByName?._id)
-    } else {
-      setDisplayAvailability(false)
-      setAvailable(true)
-    }
+    onChange({ ...profileEditParams, name: e.target.value })
   }
 
   return (
     <AboutContainer>
       <AvatarSetup
         avatar={avatar}
-        onNftSelected={(avatar) => onChange({ ...editProfileInput, avatar })}
+        onNftSelected={(avatar) => onChange({ ...profileEditParams, avatar })}
       />
       <InputGroup>
         <DisplayNameInputContainer>
           <InputText
             id="displayName"
-            error={!validName(name, !available)}
+            error={!isValidName(name)}
             required
             label="Display Name"
-            onBlur={handleDisplayNameValidation}
             value={name}
             onChange={onDisplayNameChange}
             helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
           />
-          {displayAvailability && <FieldAvailability available={available} />}
         </DisplayNameInputContainer>
       </InputGroup>
       <InputGroup>
@@ -135,6 +106,7 @@ export const Identity = ({
             <AccountAction
               fieldTitle="Wallet"
               fieldValue={walletDisplay ?? ''}
+              fieldTooltip={externalUser?.wallet?.address}
               onClick={exportWallet}
               actionCTA={isEmbeddedWallet ? 'Export wallet' : undefined}
             />

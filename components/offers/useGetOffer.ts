@@ -1,78 +1,22 @@
-import { offerViewPropsFromFragment } from '@/utils/offer'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
-import {
-  LocationAddress,
-  LocationType,
-  OfferDataFragment,
-  OfferMediaItem,
-  OfferPriceUnit,
-  OfferType,
-  ProfileRoleConstraint,
-  useGetOfferByIdQuery,
-} from '@/generated/graphql'
-import { useEffect } from 'react'
-
-interface OfferPrice {
-  unit: OfferPriceUnit
-  amountCents: number
-}
-
-export interface OfferViewProps {
-  _id: string
-  offerType: OfferType | null | undefined
-  locationType: LocationType
-  title: string | null | undefined
-  description: string | null | undefined
-  citizenshipRequired: boolean | null | undefined
-  minimunCabinBalance: number | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  imageUrl: string | null | undefined
-  applicationUrl: string | null | undefined
-  price: OfferPrice | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
-  mediaItems: OfferMediaItem[] | null | undefined
-  location: {
-    _id: string
-    name: string
-    address: LocationAddress | null | undefined
-    shortAddress: string
-    bannerImageIpfsHash: string
-    publishedAt: Date | null | undefined
-    caretaker: {
-      _id: string
-    }
-    lodgingTypes: {
-      data: {
-        _id: string
-        description: string
-        quantity: number
-        priceCents: number
-        spotsTaken: number
-      }[]
-    }
-  }
-  rawFragment: OfferDataFragment
-}
+import { useBackend } from '@/components/hooks/useBackend'
+import { OfferGetResponse } from '@/utils/types/offer'
 
 export const useGetOffer = (offerId: string) => {
   const router = useRouter()
   const { user } = useProfile()
-  const { data } = useGetOfferByIdQuery({
-    variables: {
-      id: offerId,
-    },
-    skip: !offerId,
-  })
+  const { useGet, revalidate } = useBackend()
+  const { data } = useGet<OfferGetResponse>(
+    offerId ? ['OFFER', { externId: offerId }] : null
+  )
 
-  const offer = data?.findOfferByID
-    ? offerViewPropsFromFragment(data.findOfferByID)
-    : null
+  const offer = data?.offer || null
 
   const isPublished = !!offer?.location.publishedAt
 
-  const isUserCaretaker = user?._id === offer?.location.caretaker._id
+  const isUserCaretaker = user?.externId === offer?.location.caretaker.externId
 
   const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
 
@@ -82,9 +26,9 @@ export const useGetOffer = (offerId: string) => {
     if (!data) {
       return
     } else if (!offer) {
-      router.push('/404')
+      router.push('/404').then()
     } else if (!isVisible) {
-      router.push('/city-directory')
+      router.push('/city-directory').then()
     }
   }, [data, offer, router, isVisible])
 
@@ -94,5 +38,10 @@ export const useGetOffer = (offerId: string) => {
     isUserCaretaker: isUserCaretaker,
     isEditable: isEditable,
     isVisible: isVisible,
+    refetchLocation: async () => {
+      if (offer) {
+        await revalidate(['LOCATION', { externId: offer.location.externId }])
+      }
+    },
   }
 }

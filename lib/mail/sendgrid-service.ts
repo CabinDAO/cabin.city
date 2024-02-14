@@ -26,6 +26,7 @@ export class SendgridService {
       },
     }
 
+    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
     let d: any
 
     switch (type) {

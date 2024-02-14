@@ -1,6 +1,6 @@
 import { EMPTY } from '@/utils/display-utils'
 
-interface FormatShortAddressParams {
+export interface FormatShortAddressParams {
   locality?: string | null | undefined
   admininstrativeAreaLevel1Short?: string | null | undefined
   country?: string | null | undefined

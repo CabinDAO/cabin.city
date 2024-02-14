@@ -1,19 +1,14 @@
-import {
-  LocationType,
-  OfferPrice,
-  OfferType,
-  ProfileRoleConstraint,
-} from '@/generated/graphql'
-import styled from 'styled-components'
-import { Caption, H2, Subline1 } from './Typography'
+import Link from 'next/link'
+import { OfferFragment } from '@/utils/types/offer'
+import { getImageUrlByIpfsHash } from '@/lib/image'
 import { offerInfoFromType } from '@/utils/offer'
 import { formatRange } from '@/utils/display-utils'
 import events from '@/lib/googleAnalytics/events'
-import { ImageFlex } from './gallery/ImageFlex'
-import { OfferListItemProps } from './OfferListItem'
-import { HorizontalDivider } from './Divider'
-import Link from 'next/link'
+import styled from 'styled-components'
+import { Caption, H2, Subline1 } from './Typography'
 import { Price } from '@/components/offers/Price'
+import { ImageFlex } from './gallery/ImageFlex'
+import { HorizontalDivider } from './Divider'
 
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
@@ -21,29 +16,7 @@ const BANNER_IMAGE_HEIGHT = 258
 export interface ExperienceCardProps {
   className?: string
   variant?: ExperienceCardVariant
-  _id: string
-  offerType: OfferType | null | undefined
-  locationType: LocationType
-  title: string | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  imageUrl: string | null | undefined
-  price: OfferPrice | null | undefined
-  profileRoleConstraints?: ProfileRoleConstraint[] | null | undefined
-  citizenshipRequired?: boolean | null | undefined
-  minimunCabinBalance?: number | null | undefined
-  location: {
-    _id: string
-    name: string | null | undefined
-    publishedAt: Date | null | undefined
-    shortAddress: string | null | undefined
-    caretaker?:
-      | {
-          _id: string
-        }
-      | null
-      | undefined
-  }
+  offer: OfferFragment
   isLocked?: boolean
   actionsEnabled?: boolean
 }
@@ -51,39 +24,41 @@ export interface ExperienceCardProps {
 type ExperienceCardVariant = 'default' | 'no-icon'
 
 export const ExperienceCard = (props: ExperienceCardProps) => {
-  const { _id, offerType, title, imageUrl, location, price, endDate } = props
-  const formattedLocation = `${location.name ?? '-'} · ${
-    location.shortAddress ?? '-'
+  const offer = props.offer
+  const formattedLocation = `${offer.location.name ?? '-'} · ${
+    offer.location.address ?? '-'
   }`
 
-  const offerInfo = offerType ? offerInfoFromType(offerType) : null
-  const inactive = endDate && endDate < new Date()
+  const offerInfo = offer.type ? offerInfoFromType(offer.type) : null
+  const inactive = offer.endDate && new Date(offer.endDate) < new Date()
 
   return (
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
-        href={`/experience/${_id}`}
-        onClick={() => events.viewExperiencesEvent(_id)}
+        href={`/experience/${offer.externId}`}
+        onClick={() => events.viewExperiencesEvent(offer.externId)}
       >
         <ImageContainer>
-          {imageUrl ? (
+          {offer.imageIpfsHash ? (
             <ImageFlex
               sizes={`${BANNER_IMAGE_WIDTH}px`}
               quality={40}
               aspectRatio={BANNER_IMAGE_WIDTH / BANNER_IMAGE_HEIGHT}
-              src={imageUrl}
-              alt={title ?? ''}
+              src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+              alt={offer.title ?? ''}
             />
           ) : null}
-          <DateRangeTag {...props} />
+          <DateRangeTag startDate={offer.startDate} endDate={offer.endDate} />
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
             <Caption emphasized>{offerInfo?.name}</Caption>
-            <NameH2>{title}</NameH2>
+            <NameH2>{offer.title}</NameH2>
             <Caption>{formattedLocation}</Caption>
           </SummaryContainer>
-          {price && price.amountCents > 0 && <Price price={price} />}
+          {offer.price && offer.price > 0 && (
+            <Price price={offer.price} priceInterval={offer.priceInterval} />
+          )}
         </ContentContainer>
         <HorizontalDivider />
       </ContainerLink>
@@ -91,12 +66,16 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
   )
 }
 
-const DateRangeTag = (props: OfferListItemProps) => {
-  const { startDate, endDate } = props
-
+const DateRangeTag = ({
+  startDate,
+  endDate,
+}: {
+  startDate: string
+  endDate: string
+}) => {
   return (
     <TagContainer>
-      <Subline1>{formatRange(startDate, endDate)}</Subline1>
+      <Subline1>{formatRange(new Date(startDate), new Date(endDate))}</Subline1>
     </TagContainer>
   )
 }

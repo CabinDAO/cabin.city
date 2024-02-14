@@ -3,21 +3,21 @@ import { UpdateProfileProps } from './UpdateProfileProps'
 import { UpdateSection } from './UpdateSection'
 
 export const About = ({
-  editProfileInput,
-  onChange,
   user,
+  profileEditParams,
+  onChange,
 }: UpdateProfileProps) => {
-  const bio = editProfileInput?.bio ?? user?.bio ?? ''
-  const location = editProfileInput?.location ?? user?.location ?? ''
+  const bio = profileEditParams?.bio ?? user?.bio ?? ''
+  const location = profileEditParams?.location ?? user?.location ?? ''
 
   return (
     <UpdateSection title="About">
       <AboutInput
         bio={bio}
         location={location}
-        onBioChange={(bio) => onChange({ ...editProfileInput, bio })}
+        onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
         onLocationChange={(location) =>
-          onChange({ ...editProfileInput, location })
+          onChange({ ...profileEditParams, location })
         }
       />
     </UpdateSection>

@@ -4,7 +4,6 @@ import { Body2 } from '@/components/core/Typography'
 import { StepProps } from './location-wizard-configuration'
 import styled from 'styled-components'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { PartialUpdateLocationInput } from '@/generated/graphql'
 import { Descendant } from 'slate'
 import { useUpdateLocation } from '../useUpdateLocation'
 import { emptyEditorValue } from '@/components/core/slate/slate-utils'
@@ -13,6 +12,7 @@ import {
   REQUIRED_FIELD_ERROR,
 } from '@/utils/validate'
 import { useError } from '@/components/hooks/useError'
+import { LocationEditParams } from '@/utils/types/location'
 
 export const DescriptionStep = ({
   name,
@@ -21,11 +21,10 @@ export const DescriptionStep = ({
   location,
   steps,
 }: StepProps) => {
-  const { updateLocation } = useUpdateLocation(location._id)
-  const [locationInput, setLocationInput] =
-    useState<PartialUpdateLocationInput>({
-      description: location.description,
-    })
+  const { updateLocation } = useUpdateLocation(location.externId)
+  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+    description: location.description,
+  })
 
   const [highlightErrors, setHighlightErrors] = useState(false)
   const { showError } = useError()

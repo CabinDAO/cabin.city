@@ -1,17 +1,17 @@
-import { useLogTrackingEventMutation } from '@/generated/graphql'
-import { TrackingEvent } from '@/lib/tracking-events'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { StepConfig, steps } from './setup-profile/step-configuration'
+import { ProfileSetupStateParams } from '@/utils/types/profile'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const SetupProfileView = ({}) => {
   const router = useRouter()
-  const [logTrackingEvent] = useLogTrackingEventMutation()
   const { id: profileId } = router.query
   const { user } = useProfile({ redirectTo: '/' })
+  const { post } = useBackend()
 
   const [currentStep, setCurrentStep] = useState<StepConfig>(steps[0])
 
@@ -29,17 +29,15 @@ export const SetupProfileView = ({}) => {
     if (targetStep) {
       setCurrentStep(targetStep)
     } else if (isLastStep) {
-      logTrackingEvent({
-        variables: {
-          key: TrackingEvent.profile_setup_finished,
-        },
+      post('PROFILE_SETUP_STATE', {
+        state: 'finished',
+      } as ProfileSetupStateParams).then(() => {
+        router.push('/profile/[id]', `/profile/${profileId}`)
       })
-
-      router.push('/profile/[id]', `/profile/${profileId}`)
     }
   }
 
-  const ownProfile = user?._id === profileId
+  const ownProfile = user?.externId === profileId
 
   if (!user || !ownProfile || !currentStep) {
     return null

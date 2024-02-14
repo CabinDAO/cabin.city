@@ -1,7 +1,7 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { TitleCard } from '../core/TitleCard'
 import { useProfile } from '../auth/useProfile'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import { NewListingButton } from './NewListingButton'
 import { MyLocations } from './MyLocations'
 

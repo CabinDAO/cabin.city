@@ -1,50 +1,30 @@
-import styled, { css } from 'styled-components'
 import Image from 'next/image'
-import { isDate, parseISO } from 'date-fns'
+import { OfferFragment, OfferType } from '@/utils/types/offer'
+import { parseISO } from 'date-fns'
+import { formatShortAddress } from '@/lib/address'
+import { daysBetween, formatRange } from '@/utils/display-utils'
 import { getImageUrlByIpfsHash } from '@/lib/image'
-import { OfferPrice, OfferType } from '@/generated/graphql'
-import { daysBetween, EMPTY, formatRange } from '@/utils/display-utils'
+import styled, { css } from 'styled-components'
 import { Caption, H1, H4, H5 } from '@/components/core/Typography'
 import { Price } from '@/components/offers/Price'
-
-interface OfferNameAndDatesProps {
-  title: string | null | undefined
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  offerType: OfferType | null | undefined
-  price: OfferPrice | null | undefined
-  imageIpfsHash?: string | null
-  location: {
-    shortAddress: string
-  }
-}
 
 export const OfferNameAndDates = ({
   offer,
   small = false,
   withPrice = false,
 }: {
-  offer: OfferNameAndDatesProps
+  offer: OfferFragment
   small?: boolean
   withPrice?: boolean
 }) => {
   // TODO: once dates are optional, always show them (if set)
-  const showDates = offer.offerType !== OfferType.PaidColiving
+  const showDates = offer.type !== OfferType.PaidColiving
 
-  const startDate = isDate(offer.startDate)
-    ? offer.startDate
-    : typeof offer.startDate === 'string'
-    ? parseISO(offer.startDate)
-    : null
-
-  const endDate = isDate(offer.endDate)
-    ? offer.endDate
-    : typeof offer.endDate === 'string'
-    ? parseISO(offer.endDate)
-    : null
+  const startDate = parseISO(offer.startDate)
+  const endDate = parseISO(offer.endDate)
 
   const duration =
-    offer.offerType == OfferType.CabinWeek
+    offer.type == OfferType.CabinWeek
       ? small
         ? ''
         : `${daysBetween(startDate, endDate)} nights in`
@@ -55,7 +35,7 @@ export const OfferNameAndDates = ({
       {offer.imageIpfsHash && (
         <Image
           src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
-          alt={offer.offerType ?? ''}
+          alt={offer.type}
           width={72}
           height={72}
           style={{
@@ -69,18 +49,14 @@ export const OfferNameAndDates = ({
           <Date small={small}>{formatRange(startDate, endDate)}</Date>
         )}
 
-        {small ? (
-          <H4>{offer.title ?? EMPTY}</H4>
-        ) : (
-          <H1>{offer.title ?? EMPTY}</H1>
-        )}
+        {small ? <H4>{offer.title}</H4> : <H1>{offer.title}</H1>}
 
         <Location small={small}>
-          {duration} {offer.location.shortAddress}
+          {duration} {formatShortAddress(offer.location.address)}
         </Location>
 
         {withPrice && offer.price && (
-          <Price price={offer.price as OfferPrice} />
+          <Price price={offer.price} priceInterval={offer.priceInterval} />
         )}
       </Details>
     </Container>

@@ -1,4 +1,3 @@
-import { GetProfileByIdFragment } from '@/generated/graphql'
 import { levelInfoFromType } from '@/utils/levels'
 import { roleInfoFromType } from '@/utils/roles'
 import styled from 'styled-components'
@@ -8,9 +7,10 @@ import { EmptyState } from '../../core/EmptyState'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { pxToRem } from '@/utils/display-utils'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileRolesProps {
-  profile: GetProfileByIdFragment
+  profile: ProfileFragment
 }
 
 const ROLE_CARD_GAP = 24
@@ -26,8 +26,8 @@ export const ProfileRolesSection = ({ profile }: ProfileRolesProps) => {
           {profile.roles.map((role) => (
             <RoleCard
               variant={deviceSize === 'desktop' ? 'default' : 'horizontal'}
-              key={role.role}
-              roleInfo={roleInfoFromType(role.role)}
+              key={role.type}
+              roleInfo={roleInfoFromType(role.type)}
               levelInfo={levelInfoFromType(role.level)}
             />
           ))}

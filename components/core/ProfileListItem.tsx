@@ -1,28 +1,26 @@
-import { ProfileFragment } from '@/generated/graphql'
 import { truncate } from '@/utils/display-utils'
 import { roleInfoFromType } from '@/utils/roles'
-import { format, parseISO } from 'date-fns'
+import { format } from 'date-fns'
 import styled from 'styled-components'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { Avatar } from './Avatar'
 import { ProfileIcons } from './ProfileIcons'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
+import { ProfileListFragment } from '@/utils/types/profile'
 
 interface ProfileListItemProps {
-  profile: ProfileFragment
+  profile: ProfileListFragment
 }
 
 export const ProfileListItem = (props: ProfileListItemProps) => {
   const { profile } = props
-  const roleInfos = profile.roles.map((profileRole) =>
-    roleInfoFromType(profileRole.role)
-  )
+  const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
   const { deviceSize } = useDeviceSize()
   const avatarSize = deviceSize === 'mobile' ? 4 : 6.4
 
   return (
-    <StyledListItem href={`/profile/${profile._id}`}>
+    <StyledListItem href={`/profile/${profile.externId}`}>
       <AvatarContainer>
         <Avatar src={profile.avatar?.url} size={avatarSize} />
         <InfoContainer>
@@ -42,7 +40,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
       </AvatarContainer>
       <CaptionContainer>
         <Caption>
-          Joined {format(parseISO(profile.createdAt), 'MMM yyyy')}
+          Joined {format(new Date(profile.createdAt), 'MMM yyyy')}
         </Caption>
       </CaptionContainer>
     </StyledListItem>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ProfileFragment } from '@/generated/graphql'
+import { CitizenshipStatus, ProfileBasicFragment } from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
@@ -15,7 +15,7 @@ import { CaretakerContactModal } from '@/components/core/CaretakerContactModal'
 import { useModal } from '@/components/hooks/useModal'
 
 interface ProfileContactProps {
-  profile: ProfileFragment
+  profile: ProfileBasicFragment
   caretakerEmail?: string | null | undefined
   onContact?: () => void
 }
@@ -28,10 +28,11 @@ export const ProfileContact = ({
   const { showModal } = useModal()
   const { user } = useProfile()
 
-  const isCitizen = user && user.citizenshipStatus === 'Verified'
+  const isCitizen =
+    user && user.citizenshipStatus === CitizenshipStatus.Verified
 
   const roleInfos = profile.roles.map((profileRole) =>
-    roleInfoFromType(profileRole.role)
+    roleInfoFromType(profileRole.type)
   )
 
   const wrapToNextLine = profile.name.length > 15 && roleInfos.length > 4
@@ -40,7 +41,7 @@ export const ProfileContact = ({
     <Container>
       <Top flexDir={'row'}>
         {isCitizen ? (
-          <Link href={`/profile/${profile._id}`}>
+          <Link href={`/profile/${profile.externId}`}>
             <Avatar src={profile.avatar?.url} size={7.2} />
           </Link>
         ) : (
@@ -65,7 +66,7 @@ export const ProfileContact = ({
           <Name wrapToNextLine={wrapToNextLine}>
             {isCitizen ? (
               <>
-                <Link href={`/profile/${profile._id}`}>
+                <Link href={`/profile/${profile.externId}`}>
                   <NoWrap>
                     <H4>{profile.name}</H4>
                   </NoWrap>

@@ -8,13 +8,13 @@ import { Caption, Subline1 } from '../Typography'
 
 export const MobileMenuProfileItem = () => {
   const { user: profile } = useProfile()
-  const { ens } = useEns(profile?.account.address)
-  const displayCaption = ens ?? shortenedAddress(profile?.account.address)
+  const { ens } = useEns(profile?.walletAddress)
+  const displayCaption = ens ?? shortenedAddress(profile?.walletAddress)
 
   if (!profile) return null
 
   return (
-    <StyledLink href={`/profile/${profile?._id}`}>
+    <StyledLink href={`/profile/${profile?.externId}`}>
       <Avatar size={2.4} src={profile?.avatar?.url} />
       <ProfileNameContainer>
         <Subline1 $color="yellow100">{profile?.name}</Subline1>

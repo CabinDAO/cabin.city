@@ -1,5 +1,4 @@
 import Icon from '@/components/core/Icon'
-import { GetProfileByIdFragment } from '@/generated/graphql'
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { Avatar } from '../../core/Avatar'
@@ -12,9 +11,10 @@ import { ProfileHeaderButton } from './ProfileHeaderButton'
 import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Tooltip } from '@/components/core/Tooltip'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileHeaderProps {
-  profile: GetProfileByIdFragment | undefined | null
+  profile: ProfileFragment | undefined | null
   isOwnProfile?: boolean
 }
 
@@ -22,7 +22,7 @@ export const ProfileHeaderSection = ({
   profile,
   isOwnProfile = false,
 }: ProfileHeaderProps) => {
-  const { ens } = useEns(profile?.account?.address)
+  const { ens } = useEns(profile?.wallet.address)
   const { deviceSize } = useDeviceSize()
 
   const citizenship = citizenshipInfoFromStatus(profile?.citizenshipStatus)
@@ -49,9 +49,9 @@ export const ProfileHeaderSection = ({
                 profile?.cabinTokenBalanceInt ?? 0
               } ₡ABIN`}</Subline2>
               <Subline2>·</Subline2>
-              <CopyToClipboard text={ens ?? profile?.account?.address ?? ''}>
+              <CopyToClipboard text={ens ?? profile?.wallet.address ?? ''}>
                 <Subline2>
-                  {ens ?? shortenedAddress(profile?.account?.address)}
+                  {ens ?? shortenedAddress(profile?.wallet.address)}
                 </Subline2>
               </CopyToClipboard>
             </BalanceAddressContainer>

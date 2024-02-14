@@ -1,21 +1,17 @@
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { useGetOffer } from './useGetOffer'
-import { EditOfferView } from './EditOfferView'
-import { ActionBar } from '../core/ActionBar'
-import {
-  OfferPriceUnit,
-  OfferType,
-  UpdateOfferInput,
-  useUpdateOfferMutation,
-} from '@/generated/graphql'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { useNavigation } from '../hooks/useNavigation'
-import { validateOfferInput } from '../neighborhoods/validations'
 import { useError } from '../hooks/useError'
-import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
 import { useModal } from '../hooks/useModal'
+import { useNavigation } from '../hooks/useNavigation'
+import { useGetOffer } from './useGetOffer'
+import { useBackend } from '@/components/hooks/useBackend'
+import { OfferEditParams, OfferType } from '@/utils/types/offer'
+import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { EditOfferView } from './EditOfferView'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
+import { ActionBar } from '../core/ActionBar'
+import { validateOfferInput } from '../neighborhoods/validations'
+import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
@@ -28,61 +24,45 @@ export const EditOfferPageView = () => {
   )
     ? `/experience/${router.query.offerId}`
     : history[history.length - 2]
-  console.log(backRoute)
 
   const { offerId } = router.query
   const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
-  const offerFragment = offer?.rawFragment
-  const [updateOffer] = useUpdateOfferMutation()
+  const { useMutate } = useBackend()
+  const { trigger: updateOffer } = useMutate(
+    offer ? ['OFFER', { externId: `${offer.externId}` }] : null
+  )
 
   const [highlightErrors, setHighlightErrors] = useState(false)
   const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const [updateOfferInput, setUpdateOfferInput] = useState<UpdateOfferInput>({})
+  const [newValues, setNewValues] = useState<OfferEditParams>({})
 
   useEffect(() => {
-    if (offerFragment) {
-      setUpdateOfferInput({
-        title: offerFragment.title ?? '',
-        imageIpfsHash: offerFragment.imageIpfsHash ?? '',
-        description: offerFragment.description,
-        startDate: offerFragment.startDate ?? new Date(),
-        endDate: offerFragment.endDate ?? new Date(),
-        price: {
-          amountCents: offerFragment.price?.amountCents ?? 0,
-          unit: offerFragment.price?.unit ?? OfferPriceUnit.FlatFee,
-        },
-        applicationUrl: offerFragment.applicationUrl,
-        mediaItems: (offerFragment?.mediaItems ?? []).map((i) => {
-          return {
-            ipfsHash: i.ipfsHash,
-          }
-        }),
+    if (offer) {
+      setNewValues({
+        title: offer?.title ?? undefined,
+        description: offer?.description ?? undefined,
+        imageIpfsHash: offer?.imageIpfsHash ?? undefined,
+        startDate: offer?.startDate ?? undefined,
+        endDate: offer?.endDate ?? undefined,
+        price: offer?.price ?? undefined,
+        priceInterval: offer?.priceInterval ?? undefined,
+        applicationUrl: offer?.applicationUrl ?? undefined,
+        mediaItems: offer?.mediaItems ?? undefined,
       })
     }
-  }, [offerFragment])
+  }, [offer])
 
   if (!offer || !isEditable) {
     return null
   }
 
   const handleNext = async () => {
-    if (
-      offer?.offerType &&
-      validateOfferInput(
-        { ...offerFragment, ...updateOfferInput },
-        offer.offerType
-      )
-    ) {
-      await updateOffer({
-        variables: {
-          offerId: offer._id,
-          data: updateOfferInput,
-        },
-      })
-      if (offer.offerType === OfferType.CabinWeek && !isUserCaretaker) {
-        router.push(`/experience/${offer._id}`)
+    if (offer?.type && validateOfferInput(offer.type, newValues)) {
+      await updateOffer(newValues)
+      if (offer.type === OfferType.CabinWeek && !isUserCaretaker) {
+        router.push(`/experience/${offer.externId}`).then()
       } else {
-        router.push(`/location/${offer.location._id}/edit?step=3`)
+        router.push(`/location/${offer.location.externId}/edit?step=3`).then()
       }
     } else {
       setHighlightErrors(true)
@@ -94,14 +74,14 @@ export const EditOfferPageView = () => {
     if (unsavedChanges) {
       showModal(() => <DiscardChangesModal leaveUrl={backRoute} />)
     } else {
-      router.push(backRoute)
+      router.push(backRoute).then()
     }
   }
 
-  const handleOnEdit = (updateOfferInput: UpdateOfferInput) => {
+  const handleOnEdit = (updateOfferInput: OfferEditParams) => {
     setUnsavedChanges(true)
 
-    setUpdateOfferInput((prev) => ({
+    setNewValues((prev) => ({
       ...prev,
       ...updateOfferInput,
     }))
@@ -124,8 +104,8 @@ export const EditOfferPageView = () => {
     >
       <EditOfferView
         highlightErrors={highlightErrors}
-        updateOfferInput={updateOfferInput}
-        offer={offer.rawFragment}
+        updateOfferInput={newValues}
+        offer={offer}
         onEdit={handleOnEdit}
       />
     </SingleColumnLayout>

@@ -1,21 +1,17 @@
+import Link from 'next/link'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationMineResponse } from '@/utils/types/location'
 import styled from 'styled-components'
-import { LocationItemFragment } from '@/generated/graphql'
-import { useLocationVote } from '../hooks/useLocationVote'
 import { LocationCard } from '../core/LocationCard'
-import { locationCardPropsFromFragment } from '@/lib/location'
 import { EmptyState } from '../core/EmptyState'
 import { Button } from '../core/Button'
-import Link from 'next/link'
-import { useProfile } from '../auth/useProfile'
-import { useLocationActions } from '../hooks/useLocationActions'
 
 export const MyLocations = () => {
-  const { user } = useProfile()
-  const { voteForLocation } = useLocationVote()
-  const { editLocation, deleteLocation } = useLocationActions()
+  const { useGet } = useBackend()
+  const { data: locationData, mutate } =
+    useGet<LocationMineResponse>('LOCATION_MINE')
 
-  const locations =
-    user?.locations?.data?.filter((l): l is LocationItemFragment => !!l) ?? []
+  const locations = locationData?.locations ?? []
 
   if (!locations.length) {
     return (
@@ -33,19 +29,12 @@ export const MyLocations = () => {
   return (
     <LocationListContainer>
       {locations.map((location) => {
-        const locationCardProps = locationCardPropsFromFragment(location)
         return (
           <LocationCard
-            key={location._id}
-            {...locationCardProps}
-            onVote={() =>
-              voteForLocation({
-                location,
-              })
-            }
+            key={location.externId}
+            location={location}
+            revalidateLocationsFn={mutate}
             editMode
-            onDelete={() => deleteLocation(location._id)}
-            onEdit={() => editLocation(location._id)}
           />
         )
       })}

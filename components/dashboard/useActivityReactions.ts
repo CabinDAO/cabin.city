@@ -1,40 +1,30 @@
-import {
-  ActivityItemFragment,
-  useLikeActivityMutation,
-  useUnlikeActivityMutation,
-} from '@/generated/graphql'
 import events from '@/lib/googleAnalytics/events'
-import { useCallback } from 'react'
+import {
+  ActivityReactResponse,
+  ActivityListFragment,
+} from '@/utils/types/activity'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const useActivityReactions = () => {
-  const [likeActivity] = useLikeActivityMutation()
-  const [unlikeActivity] = useUnlikeActivityMutation()
+  const { post } = useBackend()
 
-  const handleLikeActivity = useCallback(
-    (activityItem: ActivityItemFragment) => {
-      events.reactToPostEvent(activityItem.activity._id, 'like')
+  const handleLikeActivity = async (activity: ActivityListFragment) => {
+    events.reactToPostEvent(`${activity.externId}`, 'like')
 
-      likeActivity({
-        variables: {
-          id: activityItem.activity._id,
-        },
-      })
-    },
-    [likeActivity]
-  )
+    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+      externId: activity.externId,
+      action: 'like',
+    })
+  }
 
-  const handleUnlikeActivity = useCallback(
-    (activityItem: ActivityItemFragment) => {
-      events.reactToPostEvent(activityItem.activity._id, 'unlike')
+  const handleUnlikeActivity = async (activity: ActivityListFragment) => {
+    events.reactToPostEvent(`${activity.externId}`, 'like')
 
-      unlikeActivity({
-        variables: {
-          id: activityItem.activity._id,
-        },
-      })
-    },
-    [unlikeActivity]
-  )
+    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+      externId: activity.externId,
+      action: 'unlike',
+    })
+  }
 
   return {
     handleLikeActivity,

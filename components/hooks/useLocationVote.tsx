@@ -1,53 +1,31 @@
-import {
-  LocationVoteFragment,
-  useGetLocationsByIdsLazyQuery,
-  useMyLocationVotesQuery,
-} from '@/generated/graphql'
 import { LocationVoteModal } from '../core/LocationVoteModal'
 import { useModal } from './useModal'
 import { useCallback } from 'react'
-import { CastLocationVotesBody } from '@/pages/api/cast-location-votes'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { usePrivy } from '@privy-io/react-auth'
 import events from '@/lib/googleAnalytics/events'
+import { LocationVoteParams } from '@/pages/api/v2/location/vote'
+import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export const useLocationVote = (afterVote?: () => void) => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
-  const { getAccessToken } = usePrivy()
-
-  const [getLocationVoteCountsByIds] = useGetLocationsByIdsLazyQuery({
-    fetchPolicy: 'network-only',
-  })
+  const { post } = useBackend()
 
   const voteForLocation = useCallback(
-    (props: Pick<LocationVoteModalWithDataProps, 'location'>) => {
-      events.voteModalEvent(props.location._id)
+    (location: LocationVoteModalWithDataProps['location']) => {
+      events.voteModalEvent(location.externId)
       confirmLoggedIn(() => {
         showModal(() => (
           <LocationVodalModalWithData
-            {...props}
-            onCastVotes={async (
-              voteModifiersByLocationId: CastLocationVotesBody
-            ) => {
-              const token = await getAccessToken()
-              return fetch('/api/cast-location-votes', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify(voteModifiersByLocationId),
-              }).then((res) => {
-                if (res.ok) {
-                  afterVote?.()
-                  return getLocationVoteCountsByIds({
-                    variables: {
-                      ids: Object.keys(voteModifiersByLocationId),
-                    },
-                  })
-                } else {
+            location={location}
+            onCastVotes={async (reqBody: LocationVoteParams) => {
+              return post('LOCATION_VOTE', reqBody).then((res) => {
+                if (!res || res.error) {
                   throw new Error('Error casting votes')
+                } else {
+                  afterVote?.()
+                  // TODO: we used to refetch vote count here? now we need to refetch the whole location? where does vote count come from?
                 }
               })
             }}
@@ -55,40 +33,27 @@ export const useLocationVote = (afterVote?: () => void) => {
         ))
       })
     },
-    [
-      showModal,
-      getLocationVoteCountsByIds,
-      confirmLoggedIn,
-      afterVote,
-      getAccessToken,
-    ]
+    [showModal, confirmLoggedIn, afterVote, post]
   )
 
-  return {
-    voteForLocation,
-  }
+  return { voteForLocation }
 }
 
 interface LocationVoteModalWithDataProps {
   location: {
-    _id: string
+    externId: string
     name?: string | null | undefined
-    publishedAt?: Date | null | undefined
+    publishedAt?: string | null | undefined
   }
-  onCastVotes: (
-    voteCountsByLocationId: CastLocationVotesBody
-  ) => Promise<unknown> | void
+  onCastVotes: (reqBody: LocationVoteParams) => Promise<unknown> | void
 }
 
 const LocationVodalModalWithData = (props: LocationVoteModalWithDataProps) => {
-  const { data, loading } = useMyLocationVotesQuery({
-    fetchPolicy: 'network-only',
-  })
+  const { useGet } = useBackend()
+  const { data, isLoading } = useGet<ProfileVotesResponse>(`PROFILE_VOTES`)
 
-  const myVotes =
-    data?.me.locationVotes.data.filter((v): v is LocationVoteFragment => !!v) ??
-    []
-  const votingPower = data?.me.cabinTokenBalanceInt
+  const myVotes = data?.votes ?? []
+  const votingPower = data?.votingPower ?? 0
 
   return (
     <LocationVoteModal
@@ -96,7 +61,7 @@ const LocationVodalModalWithData = (props: LocationVoteModalWithDataProps) => {
       myVotes={myVotes}
       votingPower={votingPower}
       onCastVotes={props.onCastVotes}
-      isLoading={loading}
+      isLoading={isLoading}
     />
   )
 }

@@ -1,28 +1,36 @@
 import styled from 'styled-components'
-import { LocationCardProps } from '../LocationCard'
 import { Caption, H4, Subline1, truncateStyles } from '../Typography'
 import { EMPTY } from '@/utils/display-utils'
 import Icon from '../Icon'
 import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { ActivityListFragment } from '@/utils/types/activity'
 
 export const LocationPostItem = ({
-  name,
-  bannerImageUrl,
-  address,
-  sleepCapacity,
-  offerCount,
-  tagline,
-  voteCount,
-  _id,
+  location,
   hideVerifiedTag,
-}: LocationCardProps) => {
+}: {
+  location: NonNullable<ActivityListFragment['metadata']['location']>
+  hideVerifiedTag: boolean
+}) => {
+  const {
+    name,
+    bannerImageIpfsHash,
+    address,
+    sleepCapacity,
+    offerCount,
+    tagline,
+    voteCount,
+    externId,
+  } = location
+
   const offerCountString = offerCount === 1 ? 'Offer' : 'Offers'
   const router = useRouter()
 
   const handleOnClick = () => {
-    router.push(`/location/${_id}`)
+    router.push(`/location/${externId}`).then()
   }
 
   return (
@@ -35,10 +43,10 @@ export const LocationPostItem = ({
       ) : null}
       <Container onClick={handleOnClick}>
         <ImageContainer>
-          {bannerImageUrl ? (
+          {bannerImageIpfsHash ? (
             <ImageFlex
               alt={name ?? 'Location'}
-              src={bannerImageUrl}
+              src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
               width={9.6}
               sizes={`96px`}
             />

@@ -1,8 +1,8 @@
 import {
+  ContactFieldType,
+  ContactFragment,
   MeFragment,
-  ProfileContactField,
-  ProfileContactFieldType,
-} from '@/generated/graphql'
+} from '@/utils/types/profile'
 import { SetStateAction, useEffect } from 'react'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
@@ -13,7 +13,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { SelectOption } from '../hooks/useDropdownLogic'
 import { contactFieldDisplayNameMapping } from './setup-profile/step-configuration'
 
-const contactOptions = Object.values(ProfileContactFieldType).map(
+const contactOptions = Object.values(ContactFieldType).map(
   (type) =>
     ({
       label: type,
@@ -23,8 +23,8 @@ const contactOptions = Object.values(ProfileContactFieldType).map(
 
 interface ContactInputProps {
   profile: MeFragment
-  contactList: ProfileContactField[]
-  setContactList: (contactList: SetStateAction<ProfileContactField[]>) => void
+  contactList: ContactFragment[]
+  setContactList: (contactList: SetStateAction<ContactFragment[]>) => void
 }
 
 export const ContactInput = ({
@@ -45,7 +45,7 @@ export const ContactInput = ({
     } else {
       setContactList([
         {
-          type: contactOptions[0].label as ProfileContactFieldType,
+          type: contactOptions[0].label as ContactFieldType,
           value: '',
         },
       ])
@@ -56,7 +56,7 @@ export const ContactInput = ({
   const handleOnSelect = (value: SelectOption, position: number) => {
     setContactList((prev) => {
       const newContactList = [...prev]
-      newContactList[position].type = value.label as ProfileContactFieldType
+      newContactList[position].type = value.label as ContactFieldType
       return newContactList
     })
   }
@@ -65,7 +65,7 @@ export const ContactInput = ({
     setContactList((prev) => {
       const newContactList = [...prev]
       newContactList.push({
-        type: contactOptions[0].label as ProfileContactFieldType,
+        type: contactOptions[0].label as ContactFieldType,
         value: '',
       })
       return newContactList
@@ -108,11 +108,7 @@ export const ContactInput = ({
                   options={contactOptions}
                 />
                 <InputText
-                  label={
-                    contactFieldDisplayNameMapping[
-                      contact.type as ProfileContactFieldType
-                    ]
-                  }
+                  label={contactFieldDisplayNameMapping[contact.type]}
                   value={contact.value}
                   onChange={(e) => handleInputTextChange(e.target.value, index)}
                 />

@@ -25,21 +25,19 @@ export const useGetUnlockNFT = () => {
     const getNFT = async () => {
       if (
         !publicLockContract ||
-        !profile?.account?.address ||
-        !profile.citizenshipMetadata
+        !profile?.walletAddress ||
+        !profile.citizenshipMintedAt
       ) {
         setLoading(false)
         return
       }
 
       setLoading(true)
-      const nft = await publicLockContract.getHasValidKey(
-        profile.account.address
-      )
+      const nft = await publicLockContract.getHasValidKey(profile.walletAddress)
 
       if (nft) {
         const tokenId = await publicLockContract.tokenOfOwnerByIndex(
-          profile.account.address,
+          profile.walletAddress,
           0
         )
 
@@ -48,7 +46,7 @@ export const useGetUnlockNFT = () => {
 
         setActiveNFT({
           tokenId: tokenId.toString(),
-          mintedDate: new Date(profile.citizenshipMetadata.mintedAt),
+          mintedDate: new Date(profile.citizenshipMintedAt),
           expirationDate: getDateFromBigNumber(expirationTimestamp),
           image: DEFAULT_NFT_IMAGE,
         })

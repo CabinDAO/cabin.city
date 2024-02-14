@@ -1,15 +1,16 @@
 {
+  "buildCommand": "npm run build && ([ -n \"${NEXT_PUBLIC_VERCEL}\"] && [ -n \"${POSTGRES_URL}\" ] && npx prisma migrate deploy || true)",
   "crons": [
     {
-      "path": "/api/sync/cabin-token",
+      "path": "/api/v2/sync/token",
       "schedule": "1/10 * * * *"
     },
     {
-      "path": "/api/sync/hats",
+      "path": "/api/v2/sync/hats",
       "schedule": "2/10 * * * *"
     },
     {
-      "path": "/api/sync/otterspace-badges",
+      "path": "/api/v2/sync/badges",
       "schedule": "3/10 * * * *"
     }
   ]

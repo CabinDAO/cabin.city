@@ -1,5 +1,5 @@
 import { IconName } from '@/components/core/Icon'
-import { CitizenshipStatus } from '@/generated/graphql'
+import { CitizenshipStatus } from '@/utils/types/profile'
 
 export const DEFAULT_CTA_TEXT = 'Get started'
 export const MONTHLY_PRICE_IN_USD = 20

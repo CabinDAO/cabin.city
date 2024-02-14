@@ -1,8 +1,4 @@
 import {
-  GetProfileByIdFragment,
-  ProfileContactField,
-} from '@/generated/graphql'
-import {
   formatContactField,
   getUrlFromContactField,
 } from '@/utils/display-utils'
@@ -10,9 +6,10 @@ import styled from 'styled-components'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { Caption } from '../../core/Typography'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileContactListProps {
-  contactFields: GetProfileByIdFragment['contactFields']
+  contactFields: ProfileFragment['contactFields']
 }
 export const ProfileContactList = ({
   contactFields,
@@ -34,7 +31,7 @@ export const ProfileContactList = ({
 }
 
 interface ContactFieldProps {
-  field: ProfileContactField
+  field: ProfileFragment['contactFields'][0]
 }
 
 const ContactField = ({ field }: ContactFieldProps) => {

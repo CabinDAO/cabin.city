@@ -1,42 +1,39 @@
-import { useRouter } from 'next/router'
-import { useGetLocationByIdQuery } from '@/generated/graphql'
-import { locationViewPropsFromFragment } from '@/lib/location'
-import { LocationView } from '@/components/neighborhoods/LocationView'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { useBackend } from '@/components/hooks/useBackend'
+import { LocationGetResponse } from '@/utils/types/location'
 import { useProfile } from '@/components/auth/useProfile'
 import { useLocationVote } from '../hooks/useLocationVote'
+import { LocationView } from '@/components/neighborhoods/LocationView'
+import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ActionBar } from '../core/ActionBar'
 import { useModal } from '../hooks/useModal'
-import { PublishModal } from './edit-location/PublishModal'
+import { PublishLocationModal } from './edit-location/PublishLocationModal'
 
 export const LocationPageView = () => {
   const router = useRouter()
   const { id } = router.query
   const { user } = useProfile()
-  const { voteForLocation } = useLocationVote()
   const { showModal } = useModal()
-  const { data } = useGetLocationByIdQuery({
-    variables: {
-      id: `${id}`,
-    },
-    skip: !id,
-  })
-  const location = data?.findLocationByID
-    ? locationViewPropsFromFragment(data?.findLocationByID)
-    : null
+  const { useGet } = useBackend()
+  const { data, mutate: refetchLocation } = useGet<LocationGetResponse>(
+    id ? ['LOCATION', { externId: `${id}` }] : null
+  )
+  const { voteForLocation } = useLocationVote(refetchLocation)
+
+  const location = data?.location
 
   const hideFromOthersIfPreview =
     location &&
     !location.publishedAt &&
-    user?._id !== location?.caretaker._id &&
+    user?.externId !== location?.caretaker.externId &&
     !user?.isAdmin
 
   useEffect(() => {
     if (data && !location) {
-      router.push('/404')
+      router.push('/404').then()
     } else if (user && hideFromOthersIfPreview) {
-      router.push('/city-directory')
+      router.push('/city-directory').then()
     }
   }, [data, location, router, hideFromOthersIfPreview, user])
 
@@ -46,18 +43,21 @@ export const LocationPageView = () => {
 
   const previewMode =
     !location.publishedAt &&
-    (user?._id === location.caretaker._id || user?.isAdmin)
+    (user?.externId === location.caretaker.externId || user?.isAdmin)
 
-  const backRoute = `/location/${location._id}/edit`
+  const backRoute = `/location/${location.externId}/edit`
 
   const handleVote = () => {
-    voteForLocation({
-      location,
-    })
+    voteForLocation(location)
   }
 
   const handlePublish = async () => {
-    showModal(() => <PublishModal locationId={location._id} />)
+    showModal(() => (
+      <PublishLocationModal
+        locationId={location.externId}
+        refetchLocation={refetchLocation}
+      />
+    ))
   }
 
   return (

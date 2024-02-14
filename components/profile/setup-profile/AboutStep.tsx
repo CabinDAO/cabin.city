@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import { SetupStepForm } from './SetupStepForm'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileEditParams, ProfileEditResponse } from '@/utils/types/profile'
 import { useProfile } from '@/components/auth/useProfile'
-import { useUpdateProfile } from '@/components/profile/useUpdateProfile'
+import { StepProps } from './step-configuration'
+import { SetupStepForm } from './SetupStepForm'
 import { AboutInput } from '../AboutInput'
 import { validBio, validLocation } from '../validations'
-import { StepProps } from './step-configuration'
 
 export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const [bio, setBio] = useState(user?.bio ?? '')
   const [location, setLocation] = useState(user?.location ?? '')
-  const { updateProfile } = useUpdateProfile(user?._id)
+
+  const { useMutate } = useBackend()
+  const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
+    user ? ['PROFILE', { externId: user.externId }] : null
+  )
 
   const handleNext = async () => {
     if (!validBio(bio) || !validLocation(location)) {
@@ -22,7 +27,7 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
         bio,
         location,
       },
-    })
+    } as ProfileEditParams)
 
     onNext()
   }

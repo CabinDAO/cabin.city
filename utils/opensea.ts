@@ -8,7 +8,7 @@ export const getOtterSpaceOpenseaUrl = (badgeId: string) => {
   }/${tokenId}`
 }
 
-export const getUnlockOpenseaUrl = (tokenId: string) => {
+export const getUnlockOpenseaUrl = (tokenId: number) => {
   return `${getOpenSeaNetworkUrl(unlockConfig.networkName)}/${
     unlockConfig.contractAddress
   }/${tokenId}`
