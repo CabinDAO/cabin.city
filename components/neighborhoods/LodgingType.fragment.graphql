@@ -1,7 +1,0 @@
-fragment LodgingType on LodgingType {
-    _id
-    description
-    quantity
-    priceCents
-    spotsTaken
-}

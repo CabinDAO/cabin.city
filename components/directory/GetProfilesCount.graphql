@@ -1,3 +1,0 @@
-query GetProfilesCount($input: GetProfilesInput!) {
-  profilesCount(input: $input)
-}

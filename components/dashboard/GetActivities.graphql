@@ -1,8 +1,0 @@
-query GetActivities($size: Int, $cursor: String) {
-  allActivities(_size: $size, _cursor: $cursor) {
-    data {
-      ...ActivityItem
-    }
-    after
-  }
-}

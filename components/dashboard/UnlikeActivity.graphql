@@ -1,5 +1,0 @@
-mutation UnlikeActivity($id: ID!) {
-  unlikeActivity(id: $id) {
-    _id
-  }
-}

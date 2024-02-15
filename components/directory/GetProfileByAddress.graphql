@@ -1,8 +1,0 @@
-query GetProfileByAddress($address: String!) {
-  accountByAddress(address: $address) {
-    _id
-    profile {
-      ...Profile
-    }
-  }
-}

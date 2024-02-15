@@ -1,5 +1,0 @@
-mutation DeleteOffer($id: ID!) {
-  deleteOffer(id: $id) {
-    ...OfferData
-  }
-}

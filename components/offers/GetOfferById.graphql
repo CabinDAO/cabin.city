@@ -1,5 +1,0 @@
-query GetOfferById($id: ID!) {
-  findOfferByID(id: $id) {
-    ...OfferData
-  }
-}

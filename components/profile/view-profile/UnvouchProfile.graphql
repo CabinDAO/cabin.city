@@ -1,5 +1,0 @@
-mutation UnvouchProfile($id: ID!) {
-  unvouchProfile(id: $id) {
-    ...GetProfileById
-  }
-}

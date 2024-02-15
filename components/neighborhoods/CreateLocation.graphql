@@ -1,5 +1,0 @@
-mutation CreateLocation {
-  createLocation {
-    ...Location
-  }
-}

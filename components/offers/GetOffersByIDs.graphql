@@ -1,5 +1,0 @@
-query GetOffersByIds($ids: [ID!]!) {
-    getOffersByIds(ids: $ids) {
-        ...OfferItem
-    }
-}
