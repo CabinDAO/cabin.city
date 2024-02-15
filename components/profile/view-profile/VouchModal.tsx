@@ -15,9 +15,10 @@ import { Button } from '@/components/core/Button'
 
 interface VouchModalProps {
   profile: ProfileFragment
+  refetchProfile: () => void
 }
 
-export const VouchModal = ({ profile }: VouchModalProps) => {
+export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {
   const [vouched, setVouched] = useState(false)
   const { post } = useBackend()
 
@@ -28,6 +29,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
     } as ProfileVouchParams)
     if (result.newStatus === CitizenshipStatus.Vouched) {
       setVouched(true)
+      refetchProfile()
     }
   }
 
@@ -38,6 +40,7 @@ export const VouchModal = ({ profile }: VouchModalProps) => {
     } as ProfileVouchParams)
     if (result.newStatus === CitizenshipStatus.VouchRequested) {
       setVouched(false)
+      refetchProfile()
     }
   }
 

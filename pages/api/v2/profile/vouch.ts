@@ -32,6 +32,8 @@ async function handler(
   const vouchedProfile = await prisma.profile.update({
     data: {
       voucherId: params.action === 'vouch' ? profile.id : null,
+      citizenshipStatus:
+        params.action === 'vouch' ? 'Vouched' : 'VouchRequested',
     },
     where: {
       externId: params.externId,

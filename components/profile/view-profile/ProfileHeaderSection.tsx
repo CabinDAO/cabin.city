@@ -14,13 +14,13 @@ import { Tooltip } from '@/components/core/Tooltip'
 import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileHeaderProps {
-  profile: ProfileFragment | undefined | null
-  isOwnProfile?: boolean
+  profile: ProfileFragment
+  refetchProfile: () => void
 }
 
 export const ProfileHeaderSection = ({
   profile,
-  isOwnProfile = false,
+  refetchProfile,
 }: ProfileHeaderProps) => {
   const { ens } = useEns(profile?.wallet.address)
   const { deviceSize } = useDeviceSize()
@@ -57,7 +57,10 @@ export const ProfileHeaderSection = ({
             </BalanceAddressContainer>
           </ProfileInfoContainer>
         </ProfileSummary>
-        <ProfileHeaderButton profile={profile} isOwnProfile={isOwnProfile} />
+        <ProfileHeaderButton
+          profile={profile}
+          refetchProfile={refetchProfile}
+        />
       </Container>
     </ContentCard>
   )
@@ -69,8 +72,7 @@ const Container = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  padding: 1.6rem 2.4rem;
-  padding-bottom: 2.2rem;
+  padding: 1.6rem 2.4rem 2.2rem;
   gap: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {

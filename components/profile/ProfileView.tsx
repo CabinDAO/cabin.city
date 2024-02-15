@@ -6,9 +6,11 @@ import { ProfileGetResponse } from '@/utils/types/profile'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
-  const { data: profileData, isLoading } = useGet<ProfileGetResponse>(
-    externId ? ['PROFILE', { externId }] : null
-  )
+  const {
+    data: profileData,
+    isLoading,
+    mutate: refetchProfile,
+  } = useGet<ProfileGetResponse>(externId ? ['PROFILE', { externId }] : null)
 
   const profile = profileData?.profile
 
@@ -21,7 +23,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
 
   return (
     <SingleColumnLayout withFooter>
-      <ProfileContent profile={profile} />
+      <ProfileContent profile={profile} refetchProfile={refetchProfile} />
     </SingleColumnLayout>
   )
 }

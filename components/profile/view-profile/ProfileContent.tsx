@@ -9,7 +9,13 @@ import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
 import { ProfileFragment } from '@/utils/types/profile'
 
-export const ProfileContent = ({ profile }: { profile: ProfileFragment }) => {
+export const ProfileContent = ({
+  profile,
+  refetchProfile,
+}: {
+  profile: ProfileFragment
+  refetchProfile: () => void
+}) => {
   const { user: me } = useProfile()
   if (!me) return null
 
@@ -17,7 +23,7 @@ export const ProfileContent = ({ profile }: { profile: ProfileFragment }) => {
 
   return (
     <ProfileInnerContainer>
-      <ProfileHeaderSection profile={profile} isOwnProfile={isOwnProfile} />
+      <ProfileHeaderSection profile={profile} refetchProfile={refetchProfile} />
       {isOwnProfile && (
         <ProfileSetupSection profileId={profile.externId} me={me} />
       )}
