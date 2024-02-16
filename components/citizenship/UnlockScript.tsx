@@ -24,6 +24,7 @@ export const loadUnlockCheckout = async (provider: any) => {
     skipRecipient: true,
     title: 'Cabin Citizenship',
     icon: `${appDomainWithProto}/images/cabin-nft.png`,
+    referrer: '0x522C6b0Aa5A14E1771Aab5646247349fFa9E5111',
   }
 
   const paywall = new Paywall(networks)
