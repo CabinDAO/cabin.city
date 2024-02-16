@@ -42,24 +42,38 @@ async function handler(
 
   // TODO: data validation
 
+  const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
+  const take = PAGE_SIZE
+
+  const idsInOrder = await sortByVoteCountPrequery(
+    params.sort || LocationSort.nameAsc,
+    params.offerType,
+    params.locationType,
+    skip,
+    take
+  )
+
   const query: Prisma.LocationFindManyArgs = {
     where: {
-      type: params.locationType,
-      publishedAt: {
-        not: null,
+      id: {
+        in: idsInOrder,
       },
-      offers: params.offerType
-        ? {
-            some: {
-              type: params.offerType,
-            },
-          }
-        : undefined,
+      // type: params.locationType,
+      // publishedAt: {
+      //   not: null,
+      // },
+      // offers: params.offerType
+      //   ? {
+      //       some: {
+      //         type: params.offerType,
+      //       },
+      //     }
+      //   : undefined,
     },
     include: LocationQueryInclude,
-    orderBy: sortOrder(params.sort),
-    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
-    take: PAGE_SIZE,
+    // orderBy: sortOrder(params.sort),
+    // skip: skip,
+    // take: take,
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
@@ -68,8 +82,12 @@ async function handler(
     prisma.location.count({ where: query.where }),
   ])
 
+  const sortedLocations = locations.sort((a, b) => {
+    return idsInOrder.indexOf(a.id) - idsInOrder.indexOf(b.id)
+  })
+
   res.status(200).send({
-    locations: locations.map((location) =>
+    locations: sortedLocations.map((location) =>
       locationToFragment(location as LocationWithRelations)
     ),
     count: locations.length,
@@ -79,16 +97,16 @@ async function handler(
 
 const sortOrder = (
   sortParam: LocationSort | undefined
-):
-  | Prisma.LocationOrderByWithRelationInput
-  | Prisma.LocationOrderByWithRelationInput[] => {
+): Prisma.LocationOrderByWithRelationInput[] => {
   switch (sortParam) {
     case LocationSort.votesDesc:
-      return {
-        votes: {
-          _count: 'desc',
+      return [
+        {
+          votes: {
+            _count: 'desc',
+          },
         },
-      }
+      ]
     case LocationSort.nameAsc:
     default:
       return [
@@ -100,6 +118,39 @@ const sortOrder = (
         },
       ]
   }
+}
+
+// get ids for locations sorted in proper order
+const sortByVoteCountPrequery = async (
+  sort: LocationSort,
+  offerType: OfferType | undefined,
+  locationType: LocationType | undefined,
+  offset: number,
+  limit: number
+) => {
+  const ids = await prisma.$queryRaw<{ id: number }[]>`
+    SELECT l.id
+    FROM "Location" l
+    ${
+      offerType
+        ? Prisma.sql`INNER JOIN "Offer" o ON l.id = o."locationId" AND o.type = ${offerType}`
+        : Prisma.empty
+    }
+    LEFT JOIN "LocationVote" lv ON l.id = lv."locationId"
+    WHERE l."publishedAt" IS NOT NULL AND ${
+      locationType ? Prisma.sql`l.type = ${locationType}` : Prisma.sql`1=1`
+    }
+    GROUP BY l.id
+    ORDER BY ${
+      sort === LocationSort.votesDesc
+        ? Prisma.sql`COALESCE(SUM(lv.count), 0) DESC,`
+        : Prisma.empty
+    } l.name ASC, l."createdAt" ASC
+    LIMIT ${limit}
+    OFFSET ${offset}
+  `
+
+  return ids.reduce((acc: number[], val) => [...acc, val.id], [])
 }
 
 export const locationToFragment = (
@@ -160,7 +211,6 @@ export const locationToFragment = (
         ipfsHash: mi.ipfsHash,
       }
     }),
-    // offers: loc.offers,
     offerCount: loc._count.offers,
     recentVoters: loc.votes.slice(0, 3).map((vote) => {
       return {
@@ -169,12 +219,12 @@ export const locationToFragment = (
           url: vote.profile.avatar ? vote.profile.avatar.url : '',
         },
       }
-    }), // TODO: return 3 most recent voters or move this to separate api
+    }),
     voteCount: loc.votes
       .map((vote) => {
         return vote.count
       })
-      .reduce((a, b) => a + b, 0), // TODO: return actual total votes or move to separate api
+      .reduce((a, b) => a + b, 0),
   }
 }
 
