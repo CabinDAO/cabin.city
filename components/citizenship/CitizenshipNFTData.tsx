@@ -1,4 +1,4 @@
-import { UnlockNFT, YEARLY_PRICE_IN_ETH } from '@/utils/citizenship'
+import { UnlockNFT, YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { EMPTY, formatDate } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { useProfile } from '../auth/useProfile'
@@ -35,7 +35,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
         ? formatDate(nft.expirationDate, 'MMM dd, yyyy')
         : EMPTY,
     },
-    'Renewal Price': { value: `${YEARLY_PRICE_IN_ETH} ETH / year` },
+    'Renewal Price': { value: `$${YEARLY_PRICE_IN_USD} / year` },
     'Citizen perks': {
       value: 'View my perks',
       url: EXTERNAL_LINKS.CITIZENSHIP_PERKS,

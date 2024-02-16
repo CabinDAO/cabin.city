@@ -2,9 +2,7 @@ import { IconName } from '@/components/core/Icon'
 import { CitizenshipStatus } from '@/utils/types/profile'
 
 export const DEFAULT_CTA_TEXT = 'Get started'
-export const MONTHLY_PRICE_IN_USD = 20
-export const YEARLY_PRICE_IN_ETH = 0.2
-export const YEARLY_PRICE_IN_USD = 400
+export const YEARLY_PRICE_IN_USD = 420
 export const MINIMUM_CABIN_BALANCE = 1000
 
 export const DEFAULT_NFT_IMAGE = '/images/citizenship-thumbnail.png'
