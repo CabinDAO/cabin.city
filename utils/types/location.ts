@@ -3,6 +3,7 @@
 import { Prisma } from '@prisma/client'
 import { AvatarFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
+import { APIError, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.LocationType
 export enum LocationType {
@@ -79,11 +80,11 @@ export type LocationListParams = {
   page?: number
 }
 
-export type LocationListResponse = {
-  locations?: LocationFragment[]
-  count?: number
-  error?: string
-}
+export type LocationListResponse =
+  | ({
+      locations: LocationFragment[]
+    } & Paginated)
+  | APIError
 
 export type LocationMineResponse = {
   locations?: LocationFragment[]

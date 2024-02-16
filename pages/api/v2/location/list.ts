@@ -48,11 +48,13 @@ async function handler(
       publishedAt: {
         not: null,
       },
-      offers: {
-        some: {
-          type: params.offerType,
-        },
-      },
+      offers: params.offerType
+        ? {
+            some: {
+              type: params.offerType,
+            },
+          }
+        : undefined,
     },
     include: LocationQueryInclude,
     orderBy: sortOrder(params.sort),
@@ -61,7 +63,7 @@ async function handler(
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [locations, count] = await prisma.$transaction([
+  const [locations, totalCount] = await prisma.$transaction([
     prisma.location.findMany(query),
     prisma.location.count({ where: query.where }),
   ])
@@ -70,7 +72,8 @@ async function handler(
     locations: locations.map((location) =>
       locationToFragment(location as LocationWithRelations)
     ),
-    count,
+    count: locations.length,
+    totalCount,
   })
 }
 

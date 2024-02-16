@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
-import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   ActivityListFragment,
   ActivityListResponse,
@@ -18,31 +16,28 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { Post } from '@/components/core/post/Post'
 
 export const DashboardView = () => {
-  const { useGet } = useBackend()
+  const { useGet, useGetPaginated } = useBackend()
 
   const { user } = useProfile({ redirectTo: '/logout' })
 
   const { data: summaryData } =
     useGet<ActivitySummaryResponse>('ACTIVITY_SUMMARY')
 
-  const [activities, setActivities] = useState<ActivityListFragment[]>([])
-  const [page, setPage] = useState(1)
+  const {
+    data,
+    page,
+    setPage,
+    isLastPage,
+    mutate: refetchActivities,
+  } = useGetPaginated<ActivityListResponse>('ACTIVITY_LIST')
 
-  const { data, mutate: refetchActivities } = useGet<ActivityListResponse>(
-    'ACTIVITY_LIST',
-    { page }
-  )
-  const hasMore = data ? (data.count ?? 0) > PAGE_SIZE * (page + 1) : false
-
-  useEffect(() => {
-    if (data) {
-      if (page === 1) {
-        setActivities(data.activities ?? [])
-      } else {
-        setActivities([...activities, ...(data.activities ?? [])])
-      }
-    }
-  }, [data, activities, page])
+  const activities = data
+    ? data.reduce(
+        (acc: ActivityListFragment[], val) =>
+          'error' in val ? acc : [...acc, ...val.activities],
+        []
+      )
+    : []
 
   const { handleCreateTextActivity } = useTextActivity(refetchActivities)
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
@@ -52,15 +47,20 @@ export const DashboardView = () => {
   const dashboardItems = [
     {
       name: 'Members',
-      value: summaryData?.profilesCount ?? 0,
+      value:
+        !summaryData || 'error' in summaryData ? 0 : summaryData?.profilesCount,
     },
     {
       name: 'Token Holders',
-      value: summaryData?.tokenHoldersCount ?? 0,
+      value:
+        !summaryData || 'error' in summaryData
+          ? 0
+          : summaryData?.tokenHoldersCount,
     },
     {
       name: 'Citizens',
-      value: summaryData?.citizensCount ?? 0,
+      value:
+        !summaryData || 'error' in summaryData ? 0 : summaryData?.citizensCount,
     },
   ]
 
@@ -77,11 +77,11 @@ export const DashboardView = () => {
         <ContentCard shape="notch">
           <InnerContainer>
             <InfiniteScroll
-              hasMore={!!hasMore}
+              hasMore={!isLastPage}
               style={{ overflowX: 'hidden' }}
               dataLength={activities.length}
-              next={() => {
-                setPage(page + 1)
+              next={async () => {
+                await setPage(page + 1)
               }}
               loader="..."
             >

@@ -19,8 +19,13 @@ export const NeighborhoodsTop6List = () => {
       locationType: LocationType.Neighborhood,
     } as LocationListParams
   )
-  const locations = data?.locations ? data.locations.slice(0, 6) : []
   const { voteForLocation } = useLocationVote(refetchLocations)
+
+  if (!data || 'error' in data) {
+    return null
+  }
+
+  const locations = data.locations.slice(0, 6)
 
   return (
     <OuterContainer>

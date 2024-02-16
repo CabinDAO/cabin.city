@@ -35,7 +35,7 @@ async function handler(
 
   await prisma.activity.delete({ where: { id: activityToDelete.id } })
 
-  res.status(200).send({})
+  res.status(200).send({ deleted: true })
 }
 
 export default withAuth(handler)

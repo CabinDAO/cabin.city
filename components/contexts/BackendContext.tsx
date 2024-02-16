@@ -8,7 +8,9 @@ import {
   apiPost,
   useAPIGet,
   useAPIMutate,
+  useAPIGetPaginated,
 } from '@/utils/api/backend'
+import { APIError, Paginated } from '@/utils/types/shared'
 
 export const BackendContext = createContext<BackendState | null>(null)
 
@@ -28,6 +30,11 @@ export interface BackendState {
     route: Route | null,
     params?: UrlParams
   ) => ReturnType<typeof useAPIGet<Data>>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  useGetPaginated: <Data extends Paginated | APIError = any>(
+    route: Route,
+    params?: UrlParams
+  ) => ReturnType<typeof useAPIGetPaginated<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useMutate: <Data = any>(
     route: Route | null
@@ -64,6 +71,14 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const useGetPaginated = <Data extends Paginated | APIError = any>(
+    route: Route,
+    params: UrlParams = {}
+  ) => {
+    return useAPIGetPaginated<Data>(route, params, getAccessToken)
+  }
+
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const useMutate = <Data = any,>(route: Route | null) => {
     return useAPIMutate<Data>(route, 'POST', getAccessToken)
   }
@@ -90,6 +105,7 @@ export const BackendProvider = ({ children }: BackendProviderProps) => {
 
   const state = {
     useGet,
+    useGetPaginated,
     useMutate,
     useDelete,
     get,

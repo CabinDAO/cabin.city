@@ -45,7 +45,7 @@ export const LocationView = ({
   const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
     locationId: externId,
   })
-  const offers = offerData?.offers ?? []
+  const offers = !offerData || 'error' in offerData ? [] : offerData.offers
 
   const galleryPreviewSleeping = mediaItems.find(
     ({ category }) => category === LocationMediaCategory.Sleeping

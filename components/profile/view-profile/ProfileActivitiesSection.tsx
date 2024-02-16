@@ -23,9 +23,9 @@ export const ProfileActivitiesSection = ({
     { profileId: profile?.externId, pageSize: 10 }
   )
 
-  const activities = data?.activities ?? []
+  const activities = data && 'activities' in data ? data.activities : []
 
-  if (activities?.length === 0) {
+  if (activities.length === 0) {
     return null
   }
 

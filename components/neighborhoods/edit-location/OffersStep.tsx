@@ -38,7 +38,8 @@ export const OffersStep = ({
       locationId: location.externId,
     } as OfferListParams
   )
-  const offerList = offersData?.offers || []
+  const offerList =
+    !offersData || 'error' in offersData ? [] : offersData.offers
 
   const { trigger: createOffer } = useMutate<OfferNewResponse>('OFFER_NEW')
 
@@ -49,7 +50,7 @@ export const OffersStep = ({
         offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
       } as OfferNewParams)
 
-      if (data?.offerExternId) {
+      if ('offerExternId' in data) {
         router.push(`/experience/${data.offerExternId}/edit`).then(null)
       }
     }

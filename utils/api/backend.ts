@@ -1,12 +1,11 @@
 import { expandRoute, Route } from '@/utils/routes'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
+import useSWRInfinite from 'swr/infinite'
+import { APIError, Paginated } from '@/utils/types/shared'
 // import {URL} from 'url'
 
 export const PAGE_SIZE = 20
-
-// TODO: consider using useSWRInfinite for pagination
-// https://swr.vercel.app/docs/pagination
 
 type PostMethod = 'POST' | 'DELETE'
 
@@ -46,6 +45,59 @@ export const useAPIGet = <Data = any>(
   return useSWR<Data>(route ? [expandRoute(route), params] : null, fetcher)
 }
 
+export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
+  route: Route,
+  params: UrlParams = {},
+  tokenFn: () => Promise<string | null>
+) => {
+  const getKey = (pageIndex: number, previousPageData: Data | null) => {
+    if (
+      previousPageData &&
+      (!('count' in previousPageData) || previousPageData.count < PAGE_SIZE)
+    ) {
+      return null
+    }
+
+    const url = expandRoute(route)
+    const searchParams = new URLSearchParams(cleanParams(params))
+    const queryString =
+      `?page=${pageIndex + 1}` +
+      (searchParams ? '&' + searchParams : '').replace(/[\?\&]$/, '')
+
+    return url + queryString
+  }
+
+  const fetcher = async <Data>(url: string) => {
+    return _apiGet(url, {}, await tokenFn())
+  }
+
+  const { data, error, mutate, size, setSize } = useSWRInfinite<Data>(
+    getKey,
+    fetcher
+  )
+
+  const isLoadingInitialData = !data && !error
+  const isLoadingMore =
+    isLoadingInitialData ||
+    (size > 0 && data && typeof data[size - 1] === 'undefined')
+  const isEmpty =
+    data?.[0] && 'count' in data?.[0] ? data?.[0]?.count === 0 : true
+  const lastItem = data?.[data.length - 1]
+  const isLastPage =
+    isEmpty || (lastItem && 'count' in lastItem && lastItem.count < PAGE_SIZE)
+
+  return {
+    data,
+    error,
+    isEmpty,
+    isLoadingMore,
+    page: size,
+    setPage: setSize,
+    isLastPage,
+    mutate,
+  }
+}
+
 export const useAPIMutate = <Data = any>(
   route: Route | null,
   method: PostMethod = 'POST',
@@ -72,9 +124,10 @@ const _apiGet = async (
     headers['Authorization'] = `Bearer ${token}`
   }
 
+  const searchParams = new URLSearchParams(cleanParams(params))
   const queryString = (
-    params ? '?' + new URLSearchParams(cleanParams(params)) : ''
-  ).replace(/\?$/, '')
+    searchParams ? (url.indexOf('?') === -1 ? '?' : '&') + searchParams : ''
+  ).replace(/[\?\&]$/, '')
 
   const res = await fetch(url + queryString, {
     method: 'GET',
@@ -117,14 +170,16 @@ const cleanParams = (params: UrlParams) => {
     const cleaned: Record<string, string> = {}
 
     Object.keys(params).forEach((key) => {
-      if (params[key]) {
+      const val = params[key]
+      if (val) {
         // if params[key] is an array, join it with commas
-        if (Array.isArray(params[key])) {
-          cleaned[key] = (params[key] as string[]).join(',')
+        if (Array.isArray(val)) {
+          if ((val.length || 0) > 0) {
+            cleaned[key] = (val as string[]).join(',')
+          }
         } else {
-          cleaned[key] = params[key] as string
+          cleaned[key] = val as string
         }
-        // cleaned[key] = params[key] as string
       }
     })
 

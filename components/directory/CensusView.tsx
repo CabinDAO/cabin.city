@@ -1,7 +1,7 @@
 import { allCitizenshipStatuses } from '@/utils/citizenship'
 import { allLevels } from '@/utils/levels'
 import { allRoles } from '@/utils/roles'
-import { ChangeEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, useMemo, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import styled from 'styled-components'
 import { Button } from '../core/Button'
@@ -22,7 +22,6 @@ import { ListEmptyState } from '../core/ListEmptyState'
 import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
 import { useBackend } from '@/components/hooks/useBackend'
-import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   ProfileListParams,
   ProfileListResponse,
@@ -45,13 +44,9 @@ export const CensusView = () => {
     ProfileSort.CreatedAtDesc
   )
 
-  const [profiles, setProfiles] = useState<ProfileListFragment[]>([])
-  const [totalProfiles, setTotalProfiles] = useState(0)
-  const [page, setPage] = useState(1)
-
   const { deviceSize } = useDeviceSize()
   const { user } = useProfile({ redirectTo: '/' })
-  const { useGet } = useBackend()
+  const { useGetPaginated } = useBackend()
 
   const input = useMemo<ProfileListParams>(() => {
     // Only search if there are at least 2 characters
@@ -63,33 +58,21 @@ export const CensusView = () => {
       levelTypes,
       citizenshipStatuses,
       sort: profileSortType,
-      page,
     }
-  }, [
-    searchValue,
-    roleTypes,
-    levelTypes,
-    citizenshipStatuses,
-    profileSortType,
-    page,
-  ])
+  }, [searchValue, roleTypes, levelTypes, citizenshipStatuses, profileSortType])
 
-  const { data } = useGet<ProfileListResponse>('PROFILE_LIST', input)
+  const { data, page, setPage, isEmpty, isLastPage } =
+    useGetPaginated<ProfileListResponse>('PROFILE_LIST', input)
 
-  useEffect(() => {
-    if (data) {
-      if (page === 1) {
-        // Reset profiles if first page
-        setProfiles(data.profiles ?? [])
-      } else {
-        // Append profiles if not first page
-        setProfiles([...profiles, ...(data.profiles ?? [])])
-      }
-      setTotalProfiles(data.count ?? 0)
-    }
-  }, [data, page, profiles])
-
-  const hasMore = data ? (data.count ?? 0) > PAGE_SIZE * (page + 1) : false
+  const profiles = data
+    ? data.reduce(
+        (acc: ProfileListFragment[], val) =>
+          'error' in val ? acc : [...acc, ...val.profiles],
+        []
+      )
+    : []
+  const totalProfiles =
+    data && data[0] && 'totalCount' in data[0] ? data[0].totalCount : 0
 
   const roleOptions = allRoles.map((role) => ({
     label: role.name,
@@ -108,37 +91,37 @@ export const CensusView = () => {
 
   const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
-    setPage(1)
+    await setPage(1)
   }
 
-  const handleSelectedRoles = (selectedRoles: RoleType[]) => {
+  const handleSelectedRoles = async (selectedRoles: RoleType[]) => {
     setRoleTypes(selectedRoles)
-    setPage(1)
+    await setPage(1)
   }
 
-  const handleSelectedLevels = (selectedLevels: RoleLevel[]) => {
+  const handleSelectedLevels = async (selectedLevels: RoleLevel[]) => {
     setLevelTypes(selectedLevels)
-    setPage(1)
+    await setPage(1)
   }
 
-  const handleSelectedCitizenshipStatuses = (
+  const handleSelectedCitizenshipStatuses = async (
     selectedCitizenshipStatuses: CitizenshipStatus[]
   ) => {
     setCitizenshipStatuses(selectedCitizenshipStatuses)
-    setPage(1)
+    await setPage(1)
   }
 
-  const handleClearFilters = () => {
+  const handleClearFilters = async () => {
     setSearchInput('')
     setRoleTypes([])
     setLevelTypes([])
     setCitizenshipStatuses([])
-    setPage(1)
+    await setPage(1)
   }
 
-  const handleSort = (option: SortOption<ProfileSort>) => {
+  const handleSort = async (option: SortOption<ProfileSort>) => {
     setProfileSortType(option.key)
-    setPage(1)
+    await setPage(1)
   }
 
   const [open, setOpen] = useState(false)
@@ -221,15 +204,15 @@ export const CensusView = () => {
         }
       >
         <InfiniteScroll
-          hasMore={hasMore}
+          hasMore={!isLastPage}
           dataLength={profiles.length}
           style={{ overflowX: 'hidden' }}
-          next={() => {
-            setPage(page + 1)
+          next={async () => {
+            await setPage(page + 1)
           }}
           loader="..."
         >
-          {profiles.length === 0 ? (
+          {isEmpty ? (
             <ListEmptyState iconName="profile2" />
           ) : (
             profiles.map((profile) => (

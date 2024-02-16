@@ -1,6 +1,8 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 // must match prisma's $Enums.RoleType
+import { APIError, Paginated } from '@/utils/types/shared'
+
 export enum RoleType {
   Caretaker = 'Caretaker',
   Builder = 'Builder',
@@ -74,11 +76,11 @@ export type ProfileListParams = {
   page?: number
 }
 
-export type ProfileListResponse = {
-  profiles?: ProfileListFragment[]
-  count?: number
-  error?: string
-}
+export type ProfileListResponse =
+  | ({
+      profiles: ProfileListFragment[]
+    } & Paginated)
+  | APIError
 
 export type ProfileNewResponse = {
   externId?: string

@@ -1,13 +1,8 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-import {
-  AddressFragment,
-  LocationFragment,
-  LocationMediaCategory,
-  LocationType,
-  ShortAddressFragment,
-} from '@/utils/types/location'
+import { LocationType, ShortAddressFragment } from '@/utils/types/location'
 import { Prisma } from '@prisma/client'
+import { APIError, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.OfferType
 export enum OfferType {
@@ -67,26 +62,28 @@ export type OfferListParams = {
   page?: number
 }
 
-export type OfferListResponse = {
-  offers?: OfferFragment[]
-  count?: number
-  error?: string
-}
+export type OfferListResponse =
+  | ({
+      offers: OfferFragment[]
+    } & Paginated)
+  | APIError
 
 export type OfferNewParams = {
   locationExternId?: string
   offerType?: OfferType
 }
 
-export type OfferNewResponse = {
-  offerExternId?: string
-  error?: string
-}
+export type OfferNewResponse =
+  | {
+      offerExternId: string
+    }
+  | APIError
 
-export type OfferGetResponse = {
-  offer?: OfferFragment
-  error?: string
-}
+export type OfferGetResponse =
+  | {
+      offer: OfferFragment
+    }
+  | APIError
 
 export type OfferEditParams = {
   title?: string
@@ -102,10 +99,11 @@ export type OfferEditParams = {
   }[]
 }
 
-export type OfferEditResponse = {
-  offer?: OfferFragment | null
-  error?: string
-}
+export type OfferEditResponse =
+  | {
+      offer: OfferFragment | null
+    }
+  | APIError
 
 export type OfferDeleteResponse = {
   error?: string

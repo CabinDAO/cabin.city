@@ -12,7 +12,7 @@ export const useGetOffer = (offerId: string) => {
     offerId ? ['OFFER', { externId: offerId }] : null
   )
 
-  const offer = data?.offer || null
+  const offer = data && 'offer' in data ? data.offer : null
 
   const isPublished = !!offer?.location.publishedAt
 

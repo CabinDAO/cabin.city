@@ -59,7 +59,9 @@ async function handler(
     }
   }
 
-  res.status(200).send({})
+  res.status(200).send({
+    reacted: true,
+  })
 }
 
 export default withAuth(handler)

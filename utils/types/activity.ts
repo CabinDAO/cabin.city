@@ -8,6 +8,7 @@ import {
 import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
 import { OfferFragment } from '@/utils/types/offer'
 import { Prisma } from '@prisma/client'
+import { APIError, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.ActivityType
 export enum ActivityType {
@@ -70,40 +71,46 @@ export type ActivityListParams = {
   pageSize?: number
 }
 
-export type ActivityListResponse = {
-  activities?: ActivityListFragment[]
-  count?: number
-  error?: string
-}
+export type ActivityListResponse =
+  | ({
+      activities: ActivityListFragment[]
+    } & Paginated)
+  | APIError
 
 export type ActivityReactParams = {
   externId: string
   action: 'like' | 'unlike'
 }
 
-export type ActivityReactResponse = {
-  error?: string
-}
+export type ActivityReactResponse =
+  | {
+      reacted: boolean
+    }
+  | APIError
 
 export type ActivityNewParams = {
   text: string
 }
 
-export type ActivityNewResponse = {
-  externId: string
-  error?: string
-}
+export type ActivityNewResponse =
+  | {
+      externId: string
+    }
+  | APIError
 
-export type ActivityDeleteResponse = {
-  error?: string
-}
+export type ActivityDeleteResponse =
+  | {
+      deleted: boolean
+    }
+  | APIError
 
-export type ActivitySummaryResponse = {
-  profilesCount?: number
-  tokenHoldersCount?: number
-  citizensCount?: number
-  error?: string
-}
+export type ActivitySummaryResponse =
+  | {
+      profilesCount: number
+      tokenHoldersCount: number
+      citizensCount: number
+    }
+  | APIError
 
 // must match ActivityQueryInclude below
 export type ActivityWithRelations = Prisma.ActivityGetPayload<{

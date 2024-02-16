@@ -17,7 +17,7 @@ export const NeighborhoodShowcase = () => {
     sort: 'votesDesc',
   } as LocationListParams)
 
-  const locations = data?.locations?.slice(0, 4) ?? []
+  const locations = !data || 'error' in data ? [] : data.locations.slice(0, 4)
 
   return (
     <Container>

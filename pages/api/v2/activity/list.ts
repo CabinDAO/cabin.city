@@ -51,15 +51,15 @@ async function handler(
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [activities, count] = await prisma.$transaction([
+  const [activities, totalCount] = await prisma.$transaction([
     prisma.activity.findMany(activityQuery),
     prisma.activity.count({ where: activityQuery.where }),
   ])
 
-  // console.log(count, profiles)
   res.status(200).send({
     activities: toFragments(activities as ActivityWithRelations[]),
-    count,
+    count: activities.length,
+    totalCount,
   })
 }
 
