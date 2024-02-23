@@ -1,31 +1,36 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/utils/prisma'
-import { Profile, RoleType, RoleLevel, ActivityType } from '@prisma/client'
+import {
+  Profile,
+  RoleType,
+  RoleLevel,
+  ActivityType,
+  Prisma,
+  CitizenshipStatus,
+} from '@prisma/client'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
-import { randomId } from '@/utils/random'
+import { randomId, randomInviteCode } from '@/utils/random'
 import { ProfileNewResponse } from '@/utils/types/profile'
 
-export interface ProfileNewParams {
+export type ProfileNewParams = {
   address: string
   name: string
   email: string
-  avatar:
-    | {
-        url: string
-        contractAddress?: string | null
-        title?: string | null
-        tokenId?: string | null
-        tokenUri?: string | null
-        network?: string | null
-      }
-    | undefined
-  externalUserId: string
+  avatar?: {
+    url: string
+    contractAddress?: string | null
+    title?: string | null
+    tokenId?: string | null
+    tokenUri?: string | null
+    network?: string | null
+  }
+  claimedInviteExternId?: string
 }
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -37,6 +42,18 @@ async function handler(
   const privyDID = requireAuth(req, res, opts)
   const body = req.body as ProfileNewParams
 
+  let claimedInvite: Prisma.PartialInviteClaimGetPayload<null> | null = null
+  if (body.claimedInviteExternId) {
+    claimedInvite = await prisma.partialInviteClaim.findUnique({
+      where: { externId: body.claimedInviteExternId },
+    })
+
+    if (!claimedInvite) {
+      res.status(400).send({ error: 'Invite claim not found' })
+      return
+    }
+  }
+
   const profile = await prisma.profile.create({
     data: {
       externId: randomId('profile'),
@@ -45,6 +62,7 @@ async function handler(
       email: body.email,
       bio: '',
       location: '',
+      inviteCode: randomInviteCode(),
       wallet: {
         connectOrCreate: {
           where: {
@@ -68,6 +86,14 @@ async function handler(
             },
           }
         : undefined,
+
+      citizenshipStatus: claimedInvite ? CitizenshipStatus.Vouched : undefined, // should this be verified? the only way to get to this flow is through instant citizenship
+      voucher: claimedInvite
+        ? { connect: { id: claimedInvite.inviterId } }
+        : undefined,
+      claimedInvite: claimedInvite
+        ? { connect: { id: claimedInvite.id } }
+        : undefined,
     },
   })
 
@@ -87,7 +113,13 @@ async function handler(
 
   await createHats(profile)
 
-  res.status(200).send({ externId: profile.externId } as ProfileNewResponse)
+  if (claimedInvite) {
+    // TODO: check if they have a paid cart. if they do, airdrop them citizenship (or maybe it should be a separate api call???)
+    // TODO: prolly also need to make sure that when UNLOCK_REFETCH_STATUS is hit,
+    // it returns the correct status (might be a race condition with Alchemy)
+  }
+
+  res.status(200).send({ externId: profile.externId })
 }
 
 async function createHats(profile: Profile) {

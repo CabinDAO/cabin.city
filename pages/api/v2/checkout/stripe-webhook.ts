@@ -6,7 +6,7 @@ import { PaymentStatus } from '@prisma/client'
 import { prisma } from '@/utils/prisma'
 import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
-import { EmailType } from '@/lib/mail/types'
+import { EmailType, NewPurchasePayload } from '@/lib/mail/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -103,7 +103,7 @@ const handlePaymentIntentNewStatus = async (
 
   const cart = await prisma.cart.findUnique({
     where: { stripePaymentIntentClientSecret: clientSecret },
-    include: { profile: true },
+    include: { partialInviteClaim: true },
   })
 
   if (!cart) {
@@ -129,9 +129,11 @@ const handlePaymentIntentNewStatus = async (
     const sendgrid = new SendgridService()
     try {
       await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {
-        cartId: cart.id,
-      })
+        cartExternId: cart.externId,
+        partialInviteClaimExternId: cart.partialInviteClaim?.externId,
+      } satisfies NewPurchasePayload)
       console.log(`Sent us a new purchase email`)
+      // TODO: if they're minting a citizenship, send them an email with the activation link
     } catch (e: unknown) {
       console.log(`Failed to send new purchase email: ${e}`)
     }

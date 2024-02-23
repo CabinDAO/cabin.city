@@ -1,8 +1,37 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { AuthData, withAuth } from '@/utils/api/withAuth'
+import { prisma } from '@/utils/prisma'
+import { randomId } from '@/utils/random'
+import { CartNewResponse } from '@/utils/types/cart'
+import { PaymentStatus } from '@prisma/client'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  res.status(404).send({ error: 'Not implemetend' })
-  // <ApplyButton> used to create the cart. see commit 0f92ab8fa96c963700344edb7acaa2737b947582
+type CartNewParams = {
+  amount: number
 }
 
-export default handler
+const handler = async (
+  req: NextApiRequest,
+  res: NextApiResponse<CartNewResponse>,
+  opts: { auth: AuthData }
+) => {
+  if (req.method != 'POST') {
+    res.setHeader('Allow', ['POST'])
+    res.status(405).send({ error: 'Method not allowed' })
+    return
+  }
+
+  const body = req.body as CartNewParams
+
+  const cart = await prisma.cart.create({
+    data: {
+      externId: randomId('cart'),
+      amount: body.amount,
+      paymentStatus: PaymentStatus.Pending,
+      notes: '',
+    },
+  })
+
+  res.status(200).send({ externId: cart.externId })
+}
+
+export default withAuth(handler)

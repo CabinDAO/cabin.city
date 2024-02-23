@@ -34,8 +34,13 @@ enum Routes {
   UNLOCK_DATA_BUILDER = '/unlock/data-builder',
   UNLOCK_REFETCH_STATUS = '/unlock/refetch-status',
 
+  INVITE = `/invite/[externId]`,
+  INVITE_CLAIM = `/invite/claim`,
+
+  CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
+  CART = `/cart/[externId]`,
+
   // not implemented yet
-  // CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
   // CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook',
   // CART_NEW: `/cart/new`,
   // CART_GET: `/cart/[externId]`,

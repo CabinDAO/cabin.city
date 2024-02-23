@@ -55,7 +55,6 @@ export const RegistrationView = () => {
         name,
         email: externalUser.email?.address || email,
         avatar,
-        externalUserId: externalUser.id,
       }
 
       const resp = await post<ProfileNewResponse>(
@@ -63,15 +62,14 @@ export const RegistrationView = () => {
         createProfileBody
       )
 
-      console.log(resp)
-
-      if (!resp.externId) {
+      if ('error' in resp) {
         showModal(() => (
           <ErrorModal
             title="Profile Submission Error"
             description={resp.error ?? 'Error submitting profile'}
           />
         ))
+        return
       } else {
         await refetchProfile()
       }

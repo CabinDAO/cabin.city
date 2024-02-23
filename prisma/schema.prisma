@@ -120,20 +120,25 @@ model Profile {
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
 
-  voucherId Int?
-  voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
-  vouchees  Profile[] @relation("Vouches")
-
   avatar Avatar?
 
   citizenshipStatus   CitizenshipStatus?
   citizenshipTokenId  Int?
   citizenshipMintedAt DateTime?
 
+  voucherId Int?
+  voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
+  vouchees  Profile[] @relation("Vouches")
+
+  inviteCode String?              @unique
+  invitees   PartialInviteClaim[] @relation("Invitees")
+
+  claimedInvite   PartialInviteClaim? @relation("ClaimedInvite", fields: [claimedInviteId], references: [id])
+  claimedInviteId Int?                @unique
+
   roles      Role[]
   locations  Location[] // TODO: rename to managedLocations??
   votes      LocationVote[] // used to be called locationVotes
-  carts      Cart[]
   activities Activity[]
   reactions  ActivityReaction[]
 }
@@ -324,7 +329,6 @@ model Offer {
   imageIpfsHash  String
   mediaItems     OfferMediaItem[]
 
-  carts      Cart[]
   activities Activity[]
 }
 
@@ -361,15 +365,11 @@ model Cart {
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
 
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-  offer     Offer   @relation(fields: [offerId], references: [id])
-  offerId   Int
+  partialInviteClaim   PartialInviteClaim @relation(fields: [partialInviteClaimId], references: [id])
+  partialInviteClaimId Int                @unique
 
   amount        Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
   paymentStatus PaymentStatus
-  agreedToCOC   Boolean       @default(false)
-  agreedToTerms Boolean       @default(false)
   notes         String
 
   stripePaymentIntentClientSecret String? @unique
@@ -379,6 +379,32 @@ enum PaymentStatus {
   Pending
   Paid
   Error
+}
+
+enum PaymentMethod {
+  Crypto
+  CreditCard
+}
+
+model PartialInviteClaim {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique
+
+  inviter   Profile @relation("Invitees", fields: [inviterId], references: [id])
+  inviterId Int
+
+  claimer Profile? @relation("ClaimedInvite")
+
+  cart   Cart?
+  cartId Int?  @unique
+
+  name          String
+  email         String
+  code          String
+  hasWallet     Boolean
+  paymentMethod PaymentMethod
 }
 
 model Activity {

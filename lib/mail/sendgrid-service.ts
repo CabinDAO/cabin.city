@@ -53,15 +53,21 @@ export class SendgridService {
       case EmailType.NEW_PURCHASE:
         d = data as NewPurchasePayload
 
-        if (!d.cartId) {
-          throw new Error('required fields: cartId')
+        if (!d.cartExternId) {
+          throw new Error('required fields: cartExternId')
         }
         Object.assign(md, {
           to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
           subject: 'New cabin.city Purchase',
-          html: `<div>
-            <a href="${appDomainWithProto}/checkout/${d.cartId}">new purchase</a>.
-          </div>`,
+          html:
+            `<div><a href="${appDomainWithProto}/checkout/${d.cartExternId}">new purchase</a>.</div>` +
+            (d.partialInviteClaimExternId
+              ? `<div>It's a citizenship. Here's their activation link just in case.</div>
+                 <div>
+                   <a href="${appDomainWithProto}/invite/activate/${d.partialInviteClaimExternId}">${appDomainWithProto}/invite/activate/${d.partialInviteClaimExternId}</a>
+                 </div>`
+              : ''),
+
           trackingSettings: {
             clickTracking: { enable: false },
             openTracking: { enable: false },

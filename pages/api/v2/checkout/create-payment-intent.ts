@@ -1,17 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { withAuth } from '@/utils/api/withAuth'
 import Stripe from 'stripe'
 import { $Enums } from '@prisma/client'
 import { prisma } from '@/utils/prisma'
+import { APIError } from '@/utils/types/shared'
 
 export type CreatePaymentIntentParams = {
   cartId: string
-  agreedToTerms: boolean
 }
 
-export type CreatePaymentIntentResponse = {
-  clientSecret: string
-}
+export type CreatePaymentIntentResponse =
+  | {
+      clientSecret: string
+    }
+  | APIError
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -21,8 +23,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
 
 const handler = async (
   req: NextApiRequest,
-  res: NextApiResponse<CreatePaymentIntentResponse>,
-  opts: { auth: AuthData }
+  res: NextApiResponse<CreatePaymentIntentResponse>
 ) => {
   const { method } = req
   if (method !== 'POST') {
@@ -31,13 +32,13 @@ const handler = async (
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  // const profile = await requireProfile(req, res, opts)
 
   const body = req.body as CreatePaymentIntentParams
 
   const cart = await prisma.cart.findUnique({
     where: { externId: body.cartId },
-    include: { profile: true },
+    // include: { profile: true },
   })
 
   if (!cart) {
@@ -45,13 +46,8 @@ const handler = async (
     return
   }
 
-  if (cart.profileId !== profile.id) {
-    res.status(403).end({ error: 'Not your cart' })
-    return
-  }
-
-  // if (lodgingType.data.spotsTaken >= lodgingType.data.quantity) {
-  //   res.status(500).end({ error: 'This experience is sold out' })
+  // if (cart.profileId !== profile.id) {
+  //   res.status(403).end({ error: 'Not your cart' })
   //   return
   // }
 
@@ -74,7 +70,6 @@ const handler = async (
     data: {
       paymentStatus: $Enums.PaymentStatus.Pending, // always reset to pending in case it errored in the past
       stripePaymentIntentClientSecret: paymentIntent.client_secret,
-      agreedToTerms: body.agreedToTerms,
     },
   })
 

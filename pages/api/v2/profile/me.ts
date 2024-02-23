@@ -128,6 +128,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     email: profile.email,
     bio: profile.bio,
     location: profile.location,
+    inviteCode: profile.inviteCode ?? '',
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
     citizenshipMintedAt: profile.citizenshipMintedAt
