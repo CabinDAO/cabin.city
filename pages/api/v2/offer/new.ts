@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'

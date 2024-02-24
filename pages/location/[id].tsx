@@ -1,7 +1,7 @@
 import { LocationPageView } from '@/components/neighborhoods/LocationPageView'
 import { AppHead } from '@/components/shared/head'
 import { getImageUrlByIpfsHash } from '@/lib/image'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 
 interface LocationPageProps {
   location: {

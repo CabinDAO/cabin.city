@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { usePrivy } from '@privy-io/react-auth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { PaymentStatus } from '@/utils/types/cart'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import styled from 'styled-components'

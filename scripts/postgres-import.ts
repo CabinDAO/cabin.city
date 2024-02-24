@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { prisma } from '../utils/prisma'
+import { prisma } from '../lib/prisma'
 import { $Enums } from '@prisma/client'
 import {
   Decimal,

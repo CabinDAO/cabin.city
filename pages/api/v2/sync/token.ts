@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
-import { prisma, onchainAmountToDecimal } from '@/utils/prisma'
+import { prisma, onchainAmountToDecimal } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getAlchemyProvider } from '@/lib/alchemy'

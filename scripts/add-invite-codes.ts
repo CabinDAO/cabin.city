@@ -1,4 +1,4 @@
-import { prisma } from '../utils/prisma'
+import { prisma } from '../lib/prisma'
 import { randomInviteCode } from '../utils/random'
 
 async function addInviteCodes() {

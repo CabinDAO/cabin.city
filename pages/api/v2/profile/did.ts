@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { ProfileDIDResponse } from '@/utils/types/profile'
 
 async function handler(

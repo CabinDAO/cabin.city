@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { randomId } from '@/utils/random'
 import { CartNewResponse } from '@/utils/types/cart'
 import { PaymentStatus } from '@prisma/client'

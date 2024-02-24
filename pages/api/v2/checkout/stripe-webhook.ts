@@ -2,8 +2,8 @@
 
 import { NextApiRequest, NextApiResponse } from 'next'
 import type { Readable } from 'node:stream'
-import { PaymentStatus } from '@prisma/client'
-import { prisma } from '@/utils/prisma'
+import { PaymentStatus, Prisma } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailType, NewPurchasePayload } from '@/lib/mail/types'

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { subscribe } from '@/utils/convertkit'
+import { subscribe } from '@/lib/convertkit'
 import { AxiosError } from 'axios'
 
 export type SubscribeResponse = {

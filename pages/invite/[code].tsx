@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { prisma } from '@/utils/prisma'
-import { RefObject, useRef, useState } from 'react'
+import { prisma } from '@/lib/prisma'
+import React, { RefObject, useRef, useState } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Body1, H1 } from '@/components/core/Typography'

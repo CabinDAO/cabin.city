@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
 import Stripe from 'stripe'
 import { $Enums } from '@prisma/client'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { APIError } from '@/utils/types/shared'
 
 export type CreatePaymentIntentParams = {

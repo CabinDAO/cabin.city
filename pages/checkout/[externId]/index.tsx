@@ -1,5 +1,5 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { CartFragment, PaymentStatus } from '@/utils/types/cart'
 import CheckoutPageView from '@/components/checkout/CheckoutPageView'
 import Error from 'next/error'
