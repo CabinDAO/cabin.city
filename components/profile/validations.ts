@@ -5,6 +5,7 @@ import {
   MAX_LOCATION_LENGTH,
 } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
+import { isAddress } from 'viem'
 
 export const validateProfileInput = (
   editProfileInput: ProfileEditParams['data'],
@@ -46,4 +47,8 @@ export const validLocation = (
 
 export const isValidEmail = (email: ConditionalString) => {
   return email !== '' && !!email?.match(EMAIL_VALID_REGEX)
+}
+
+export const isValidAddressOrENSFormat = (address: ConditionalString) => {
+  return address && (isAddress(address) || address.endsWith('.eth'))
 }

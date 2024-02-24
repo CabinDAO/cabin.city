@@ -18,10 +18,11 @@ import { useError } from '@/components/hooks/useError'
 import { InputText } from '@/components/core/InputText'
 import {
   INVALID_NAME_MESSAGE,
+  isValidAddressOrENSFormat,
   isValidEmail,
   isValidName,
 } from '@/components/profile/validations'
-import { isLocalDev } from '@/utils/dev'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 type PayMethod = PaymentMethod | null
 
@@ -74,14 +75,16 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
   const router = useRouter()
 
   const { useMutate } = useBackend()
-  const { trigger: createClaim } =
+  const { trigger: createClaim, isMutating } =
     useMutate<InviteClaimResponse>('INVITE_CLAIM')
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [walletAddress, setWalletAddress] = useState('')
   const [hasWallet, setHasWallet] = useState<null | true | false>(null)
   const [payMethod, setPayMethod] = useState<PayMethod>(null)
   const [step, setStep] = useState(0)
+  const [isAboutToRedirect, setIsAboutToRedirect] = useState(false)
 
   const refs: { [key: number]: RefObject<HTMLDivElement> } = {
     1: useRef<HTMLDivElement>(null),
@@ -100,7 +103,13 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
   }
 
   const goToPayment = async () => {
-    if (payMethod === null || hasWallet === null || !name || !email) {
+    if (
+      payMethod === null ||
+      hasWallet === null ||
+      !name ||
+      !email ||
+      (hasWallet && !walletAddress)
+    ) {
       showError('Please fill out all fields')
       return
     }
@@ -115,11 +124,16 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       return
     }
 
+    if (hasWallet && !isValidAddressOrENSFormat(walletAddress)) {
+      showError('Wallet address is not valid')
+      return
+    }
+
     const claimRes = await createClaim({
       inviteCode: inviter.code,
-      name: name,
-      email: email,
-      hasWallet: hasWallet,
+      name,
+      email,
+      walletAddressOrENS: hasWallet ? walletAddress : '',
       paymentMethod: payMethod,
     } as InviteClaimParams)
 
@@ -128,11 +142,9 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       return
     }
 
-    // set cookie so we can create a new account later
-    document.cookie = `cabinClaimExternId=${claimRes.externId}; Expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=Strict; Path=/`
-
     // if there's a cart, go to it
     if (claimRes.cartId) {
+      setIsAboutToRedirect(true)
       router.push(`/checkout/${claimRes.cartId}`).then()
       return
     }
@@ -182,6 +194,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
               startAdornment={hasWallet === false ? '✓ ' : ''}
               onClick={() => {
                 setHasWallet(false)
+                setWalletAddress('')
                 setPayMethod(PaymentMethod.CreditCard)
                 goToStep(3)
               }}
@@ -216,7 +229,6 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
             >
               Credit Card
             </Button>
-            {/*<Button variant={'secondary'}>Apple Pay</Button>*/}
           </ButtonRow>
         </>
       )}
@@ -237,9 +249,28 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
                 setEmail(e.target.value)
               }}
             ></InputText>
+            {hasWallet && (
+              <InputText
+                placeholder={'Wallet Address or ENS'}
+                onChange={(e) => {
+                  setWalletAddress(e.target.value)
+                }}
+              ></InputText>
+            )}
           </Inputs>
           <ButtonRow>
-            <Button onClick={goToPayment}>Proceed to Payment</Button>
+            <Button
+              onClick={goToPayment}
+              disabled={isMutating || isAboutToRedirect}
+            >
+              {(isMutating || isAboutToRedirect) && (
+                <>
+                  <LoadingSpinner />
+                  &nbsp; {/* this keeps the button height from collapsing */}
+                </>
+              )}
+              Proceed to Payment
+            </Button>
           </ButtonRow>
         </>
       )}

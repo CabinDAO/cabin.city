@@ -51,7 +51,7 @@ export const RegistrationView = () => {
 
     try {
       const createProfileBody: ProfileNewParams = {
-        address: externalUser.wallet?.address || '',
+        walletAddress: externalUser.wallet?.address || '',
         name,
         email: externalUser.email?.address || email,
         avatar,

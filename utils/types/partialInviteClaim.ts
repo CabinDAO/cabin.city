@@ -9,7 +9,7 @@ export type InviteClaimParams = {
   inviteCode: string
   name: string
   email: string
-  hasWallet: boolean
+  walletAddressOrENS: string
   paymentMethod: PaymentMethod
 }
 

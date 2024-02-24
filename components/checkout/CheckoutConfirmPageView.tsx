@@ -12,6 +12,7 @@ import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { Button } from '@/components/core/Button'
+import PostInviteFlow from '@/components/checkout/PostInviteFlow'
 
 const CheckoutConfirmPageView = () => {
   const router = useRouter()
@@ -111,11 +112,7 @@ const Paid = ({
     <Content>
       <StyledIcon name={'citizen'} size={9.6} color={'green800'} />
       <StyledH2>Paid</StyledH2>
-      <StyledBody>Thanks for buying a Cabin citizenship.</StyledBody>
-      <StyledBody>Finish setting up your account to activate it.</StyledBody>
-      <Link href={`/invite/activate/${cart.partialInviteClaimExternId}`}>
-        <Button>Activate Citizenship</Button>
-      </Link>
+      <PostInviteFlow cart={cart} />
     </Content>
   )
 }

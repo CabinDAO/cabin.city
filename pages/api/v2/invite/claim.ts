@@ -9,6 +9,8 @@ import {
 } from '@/utils/types/partialInviteClaim'
 import { PaymentStatus } from '@prisma/client'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
+import { resolveAddressOrName } from '@/lib/ens'
+import { privy } from '@/lib/privy'
 
 async function handler(
   req: NextApiRequest,
@@ -37,6 +39,29 @@ async function handler(
     return
   }
 
+  if (await privy.getUserByEmail(body.email)) {
+    res.status(400).send({ error: 'User with this email already exists' })
+    return
+  }
+
+  let walletAddress: string | undefined
+  if (body.walletAddressOrENS) {
+    walletAddress = await resolveAddressOrName(body.walletAddressOrENS)
+    if (!walletAddress) {
+      res
+        .status(400)
+        .send({ error: 'Invalid wallet walletAddress or ENS name' })
+      return
+    }
+
+    if (await privy.getUserByWalletAddress(walletAddress)) {
+      res
+        .status(400)
+        .send({ error: 'User with this wallet address already exists' })
+      return
+    }
+  }
+
   const partialClaim = await prisma.partialInviteClaim.create({
     data: {
       externId: randomId('partialInviteClaim'),
@@ -44,15 +69,16 @@ async function handler(
       email: body.email,
       code: body.inviteCode,
       inviterId: inviter.id,
-      hasWallet: body.hasWallet,
+      walletAddress: walletAddress || '',
       paymentMethod: body.paymentMethod,
     },
   })
 
   const resData: InviteClaimResponse = { externId: partialClaim.externId }
 
-  const checkoutThroughUnlock =
-    body.hasWallet && body.paymentMethod === PaymentMethod.Crypto
+  const checkoutThroughUnlock = !!(
+    walletAddress && body.paymentMethod === PaymentMethod.Crypto
+  )
 
   if (!checkoutThroughUnlock) {
     const cart = await prisma.cart.create({

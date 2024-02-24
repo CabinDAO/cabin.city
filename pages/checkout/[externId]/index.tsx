@@ -1,8 +1,8 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
+import Error from 'next/error'
 import { prisma } from '@/lib/prisma'
 import { CartFragment, PaymentStatus } from '@/utils/types/cart'
 import CheckoutPageView from '@/components/checkout/CheckoutPageView'
-import Error from 'next/error'
 
 export default function CheckoutPage({
   cart,
@@ -22,13 +22,22 @@ export const getServerSideProps = (async (context) => {
     include: { partialInviteClaim: true },
   })
 
+  if (cart && cart.paymentStatus == PaymentStatus.Paid) {
+    return {
+      redirect: {
+        destination: `/checkout/${cart.externId}/confirmation`,
+        permanent: false,
+      },
+    }
+  }
+
   const data: CartFragment | null = !cart
     ? null
     : {
         externId: cart.externId,
         amount: cart.amount.toNumber(),
         paymentStatus: cart.paymentStatus as PaymentStatus,
-        partialInviteClaimExternId: cart.partialInviteClaim.externId,
+        partialInviteClaimExternId: cart.partialInviteClaim?.externId || '',
       }
 
   return { props: { cart: data } }

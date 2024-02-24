@@ -8,9 +8,7 @@ async function main() {
   // )
   // console.log(res)
 
-  const privyUser = await privy.getUserByWalletAddress(
-    '0x3DedB545E9B89f63FA71Ab75497735d802C9d26F'
-  )
+  const privyUser = await privy.getUser('did:privy:clt02txv709f1jbrinkilu5a8')
   console.log(privyUser)
 }
 

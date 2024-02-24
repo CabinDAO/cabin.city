@@ -25,6 +25,7 @@
     "@pinata/sdk": "^2.1.0",
     "@prisma/client": "^5.7.0",
     "@privy-io/react-auth": "^1.29.0",
+    "@privy-io/server-auth": "^1.7.1",
     "@privy-io/wagmi-connector": "^0.0.10",
     "@sendgrid/mail": "^7.7.0",
     "@stripe/react-stripe-js": "^2.3.0",

@@ -7,6 +7,8 @@ import { prisma } from '@/lib/prisma'
 import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailType, NewPurchasePayload } from '@/lib/mail/types'
+import { createProfile } from '@/utils/profile'
+import { createPrivyAccount } from '@/lib/privy'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -14,21 +16,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   telemetry: false,
 })
 
+// Disable NextJS body parsing, we want to read the raw body
 export const config = {
   api: {
     bodyParser: false,
   },
 }
 
-async function getRawBody(readable: Readable): Promise<Buffer> {
-  const chunks = []
-  for await (const chunk of readable) {
-    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
-  }
-  return Buffer.concat(chunks)
-}
-
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
   if (method !== 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -63,9 +58,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return
   }
 
+  let cartNeedingPostProcessing: CartWithRelations | undefined
+
   switch (event.type) {
     case 'payment_intent.succeeded':
-      await handlePaymentIntentNewStatus(
+      cartNeedingPostProcessing = await handlePaymentIntentNewStatus(
         res,
         event.data.object,
         PaymentStatus.Paid
@@ -73,11 +70,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       break
     case 'payment_intent.payment_failed':
       console.log(event)
-      await handlePaymentIntentNewStatus(
+      cartNeedingPostProcessing = await handlePaymentIntentNewStatus(
         res,
         event.data.object,
         PaymentStatus.Error
       )
+      break
+    case 'charge.succeeded':
+    case 'payment_intent.created':
+      // nothing to do
       break
     default:
       console.log(`Got unhandled stripe event of type ${event.type}`)
@@ -88,13 +89,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!res.writableEnded) {
     res.end('')
   }
+
+  if (cartNeedingPostProcessing) {
+    await postProcessCart(cartNeedingPostProcessing)
+  }
 }
 
-const handlePaymentIntentNewStatus = async (
+async function handlePaymentIntentNewStatus(
   res: NextApiResponse,
   paymentIntent: Stripe.PaymentIntent,
   status: PaymentStatus
-) => {
+): Promise<CartWithRelations | undefined> {
   const clientSecret = paymentIntent.client_secret
   if (!clientSecret) {
     res.status(400).end(`No client secret in payment intent`)
@@ -103,7 +108,7 @@ const handlePaymentIntentNewStatus = async (
 
   const cart = await prisma.cart.findUnique({
     where: { stripePaymentIntentClientSecret: clientSecret },
-    include: { partialInviteClaim: true },
+    include: CartQueryInclude,
   })
 
   if (!cart) {
@@ -112,10 +117,12 @@ const handlePaymentIntentNewStatus = async (
     return
   }
 
+  let updatedCart: CartWithRelations
   try {
-    await prisma.cart.update({
+    updatedCart = await prisma.cart.update({
       where: { id: cart.id },
       data: { paymentStatus: status },
+      include: CartQueryInclude,
     })
   } catch (e: unknown) {
     console.log(
@@ -130,7 +137,7 @@ const handlePaymentIntentNewStatus = async (
     try {
       await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {
         cartExternId: cart.externId,
-        partialInviteClaimExternId: cart.partialInviteClaim?.externId,
+        partialInviteClaimExternId: cart.partialInviteClaim?.externId ?? '',
       } satisfies NewPurchasePayload)
       console.log(`Sent us a new purchase email`)
       // TODO: if they're minting a citizenship, send them an email with the activation link
@@ -138,6 +145,65 @@ const handlePaymentIntentNewStatus = async (
       console.log(`Failed to send new purchase email: ${e}`)
     }
   }
+
+  return updatedCart.partialInviteClaim ? updatedCart : undefined
 }
 
-export default handler
+async function postProcessCart(cart: CartWithRelations) {
+  if (!cart.partialInviteClaim) {
+    return
+  }
+
+  // create prisma account
+  const privyAccount = await createPrivyAccount(
+    cart.partialInviteClaim.email,
+    cart.partialInviteClaim.walletAddress
+  )
+
+  // just to track account creation status
+  await prisma.partialInviteClaim.update({
+    where: { id: cart.partialInviteClaim.id },
+    data: { privyDID: privyAccount.id },
+  })
+
+  const walletAddress =
+    cart.partialInviteClaim.walletAddress ||
+    privyAccount.linked_accounts.find((w) => w.type === 'wallet')?.address
+
+  if (!walletAddress) {
+    await prisma.partialInviteClaim.update({
+      where: { id: cart.partialInviteClaim.id },
+      data: { error: `Privy failed to create a wallet` },
+    })
+    return
+  }
+
+  // this also handles airdropping citizenship
+  await createProfile({
+    privyDID: privyAccount.id,
+    name: cart.partialInviteClaim.name,
+    email: cart.partialInviteClaim.email,
+    walletAddress: walletAddress,
+    claimedInvite: cart.partialInviteClaim,
+  })
+}
+
+// must match CartQueryInclude below
+type CartWithRelations = Prisma.CartGetPayload<{
+  include: {
+    partialInviteClaim: true
+  }
+}>
+
+// must match CartWithRelations type above
+const CartQueryInclude = {
+  partialInviteClaim: true,
+} satisfies Prisma.CartInclude
+
+async function getRawBody(readable: Readable): Promise<Buffer> {
+  const chunks = []
+  for await (const chunk of readable) {
+    chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk)
+  }
+  return Buffer.concat(chunks)
+}

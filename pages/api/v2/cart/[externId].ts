@@ -33,7 +33,7 @@ async function handler(
     externId: cart.externId,
     amount: cart.amount.toNumber(),
     paymentStatus: cart.paymentStatus as PaymentStatus,
-    partialInviteClaimExternId: cart.partialInviteClaim.externId,
+    partialInviteClaimExternId: cart.partialInviteClaim?.externId ?? '',
   })
 }
 
