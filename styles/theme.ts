@@ -163,6 +163,7 @@ const theme = {
     red100: '#FBEDE6',
     white: '#FFFFFF',
     black: '#000000',
+    gray: '#888888',
   },
   border: {
     light: '1px solid rgba(29, 42, 42, 0.12)',

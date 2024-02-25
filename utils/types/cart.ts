@@ -17,7 +17,13 @@ export type CartFragment = {
   externId: string
   amount: number
   paymentStatus: PaymentStatus
-  partialInviteClaimExternId: string
+  claimStatus: {
+    privyAccountCreated: boolean
+    localProfileCreated: boolean
+    grantTxSent: boolean
+    grantTxConfirmed: boolean
+    error: string
+  }
 }
 
 export type CartResponse = CartFragment | APIError

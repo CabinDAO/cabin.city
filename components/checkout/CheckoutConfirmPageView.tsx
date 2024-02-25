@@ -1,33 +1,48 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { CartFragment, CartResponse, PaymentStatus } from '@/utils/types/cart'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { padding } from '@/styles/theme'
-import { Body1, Body2, H2 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
-import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { Button } from '@/components/core/Button'
-import PostInviteFlow from '@/components/checkout/PostInviteFlow'
+import { usePrivy } from '@privy-io/react-auth'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 const CheckoutConfirmPageView = () => {
   const router = useRouter()
   const { useGet } = useBackend()
 
+  const [firstTime, setFirstTime] = useState(false)
   const cartId = router.query.externId
   const { data, mutate: refetchCart } = useGet<CartResponse>(
     cartId ? ['CART', { externId: cartId as string }] : null
   )
 
   const cart = !data || 'error' in data ? null : data
+  const processingStep = !cart
+    ? 0
+    : cart.paymentStatus != PaymentStatus.Paid
+    ? 1
+    : !cart.claimStatus.privyAccountCreated
+    ? 2
+    : !cart.claimStatus.localProfileCreated
+    ? 3
+    : !cart.claimStatus.grantTxSent
+    ? 4
+    : !cart.claimStatus.grantTxConfirmed
+    ? 5
+    : 6
+  const finishedProcessingPayment = processingStep == 6
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | null = null
-    const shouldPoll = !cart || cart.paymentStatus != PaymentStatus.Paid
+    const shouldPoll = !finishedProcessingPayment
     if (!timer && shouldPoll) {
       timer = setInterval(() => {
         refetchCart()
@@ -42,9 +57,7 @@ const CheckoutConfirmPageView = () => {
         clearInterval(timer)
       }
     }
-  }, [cart])
-
-  const [firstTime, setFirstTime] = useState(false)
+  }, [finishedProcessingPayment, refetchCart])
 
   // remove stripe query params from url so it looks nicer
   useEffect(() => {
@@ -76,9 +89,6 @@ const CheckoutConfirmPageView = () => {
     }
   }, [router])
 
-  const isPaid = cart?.paymentStatus == PaymentStatus.Paid
-  const isError = cart?.paymentStatus == PaymentStatus.Error
-
   if (!cart) {
     return null
   }
@@ -87,13 +97,11 @@ const CheckoutConfirmPageView = () => {
     <SingleColumnLayout withFooter>
       <TitleCard icon="citizen" title="Checkout" />
       <Outline shape="notch" notchSize={1.6}>
-        {isPaid ? (
-          <Paid showFirstTimeSection={firstTime} cart={cart} />
-        ) : isError ? (
-          <Error cart={cart} />
-        ) : (
-          <Waiting />
-        )}
+        <Progress
+          cart={cart}
+          processingStep={processingStep}
+          firstTime={firstTime}
+        />
       </Outline>
     </SingleColumnLayout>
   )
@@ -101,44 +109,196 @@ const CheckoutConfirmPageView = () => {
 
 export default CheckoutConfirmPageView
 
-const Paid = ({
-  showFirstTimeSection,
+const Progress = ({
   cart,
+  processingStep,
+  firstTime,
 }: {
-  showFirstTimeSection: boolean
   cart: CartFragment
+  processingStep: number
+  firstTime: boolean
 }) => {
+  const { login, authenticated } = usePrivy()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (authenticated && firstTime) {
+      // todo: maybe send them to their profile? prompt them to add a photo?
+      router.push('/dashboard').then()
+    }
+  }, [authenticated, firstTime])
+
+  const error =
+    cart.claimStatus.error ||
+    (cart.paymentStatus == PaymentStatus.Error
+      ? 'Error processing payment. Please check your card details and try again.'
+      : null)
+
   return (
     <Content>
-      <StyledIcon name={'citizen'} size={9.6} color={'green800'} />
-      <StyledH2>Paid</StyledH2>
-      <PostInviteFlow cart={cart} />
+      {error ? (
+        <ErrorIcon name={'exclamation-mark'} size={9.6} color={'red600'} />
+      ) : processingStep == 6 ? (
+        <StyledIcon name={'citizen'} size={9.6} color={'green800'} />
+      ) : (
+        <StyledIcon name={'lock'} size={9.6} color={'yellow600'} />
+      )}
+      <Steps>
+        <H2>Activating citizenship</H2>
+        <Step
+          cart={cart}
+          step={1}
+          processingStep={processingStep}
+          error={error}
+        >
+          Processing payment
+        </Step>
+        <Step
+          cart={cart}
+          step={2}
+          processingStep={processingStep}
+          error={error}
+        >
+          Creating account
+        </Step>
+        <Step
+          cart={cart}
+          step={3}
+          processingStep={processingStep}
+          error={error}
+        >
+          Linking account
+        </Step>
+        <Step
+          cart={cart}
+          step={4}
+          processingStep={processingStep}
+          error={error}
+        >
+          Granting citizenship onchain
+        </Step>
+        <Step
+          cart={cart}
+          step={5}
+          processingStep={processingStep}
+          error={error}
+        >
+          Waiting for onchain confirmation
+        </Step>
+        {processingStep == 6 && (
+          <>
+            <Step cart={cart} step={0} processingStep={1}>
+              Done!
+            </Step>
+            {firstTime && (
+              <Button onClick={login}>Login to your new account</Button>
+            )}
+          </>
+        )}
+      </Steps>
     </Content>
   )
 }
 
-const Waiting = () => {
+const Step = ({
+  cart,
+  step,
+  processingStep,
+  error,
+  children,
+}: {
+  cart: CartFragment
+  step: number
+  processingStep: number
+  error?: string | null
+  children: ReactNode
+}) => {
+  if (error && step > processingStep) {
+    return null
+  }
+  const loading = !error && step == processingStep
   return (
-    <Content>
-      <StyledIcon name={'lock'} size={9.6} color={'yellow600'} />
-      <H2>Processing your payment...</H2>
-      <Body2>This should only take a moment.</Body2>
-      <LoadingSpinner></LoadingSpinner>
-    </Content>
+    <>
+      <StyledStep>
+        {step < processingStep ? (
+          <Icon name={'check'} size={1.4} color={'green600'} />
+        ) : error && step == processingStep ? (
+          <Icon name={'alert'} size={1.4} color={'red600'} />
+        ) : (
+          <Icon
+            name={'right-arrow'}
+            size={1.4}
+            color={step > processingStep ? 'gray' : 'green800'}
+          />
+        )}
+
+        <StyledBody variant={getVariant(step, processingStep)}>
+          {children}
+          {loading && <Ellipsis />}
+        </StyledBody>
+      </StyledStep>
+      {error && step == processingStep && (
+        <>
+          <Error>
+            <Body1>Error: {error}</Body1>
+          </Error>
+          {step == 1 ? (
+            <Link href={`/checkout/${cart.externId}`}>
+              <Button>Back to payment selection</Button>
+            </Link>
+          ) : (
+            <StyledBody>
+              We&apos;re sorry about that!{' '}
+              <ContactUsLink
+                subject={'Error during invite process'}
+                body={`%0D%0A%0D%0A%0D%0A--------%0D%0ATo help us fix the problem, include this string: ${cart.externId}`}
+              >
+                Shoot us an email
+              </ContactUsLink>{' '}
+              and we will take care of this for you.
+            </StyledBody>
+          )}
+        </>
+      )}
+    </>
   )
 }
 
-const Error = ({ cart }: { cart: CartFragment }) => {
-  return (
-    <Content>
-      <ErrorIcon name={'exclamation-mark'} size={9.6} color={'red600'} />
-      <H2>Error processing payment</H2>
-      <Body2>Please check your card details and try again.</Body2>
-      <Link href={`/checkout/${cart.externId}`}>
-        <Button className={'error-button'}>Back to payment selection</Button>
-      </Link>
-    </Content>
-  )
+const Steps = styled.div`
+  display: flex;
+  max-width: 27rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2.4rem;
+`
+const StyledStep = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 1rem;
+`
+
+const Error = styled.div`
+  width: 100%;
+  // background-color: ${({ theme }) => theme.colors.red100};
+  //padding: 1rem 0.6rem;
+
+  ${Body1} {
+    color: ${({ theme }) => theme.colors.red600};
+  }
+`
+
+function getVariant(thisStep: number, processingStep: number) {
+  if (thisStep < processingStep) {
+    return 'completed'
+  }
+  if (thisStep == processingStep) {
+    return 'current'
+  }
+  return 'upcoming'
 }
 
 const Outline = styled(ContentCard)`
@@ -155,14 +315,6 @@ const Content = styled.div`
   align-items: center;
   gap: 0;
   width: 100%;
-
-  .error-button {
-    margin-top: 2.4rem;
-  }
-
-  ${LoadingSpinner} {
-    margin-top: 3.2rem;
-  }
 `
 
 const StyledIcon = styled(Icon)`
@@ -176,12 +328,46 @@ const ErrorIcon = styled(StyledIcon)`
   background-color: ${({ theme }) => theme.colors.red300};
 `
 
-const StyledH2 = styled(H2)`
-  text-align: center;
-  margin-bottom: 3.2rem;
+const StyledBody = styled(Body1)<{
+  variant?: 'upcoming' | 'current' | 'completed'
+}>`
+  ${({ variant }) => {
+    switch (variant) {
+      case 'upcoming':
+        return css`
+          color: ${({ theme }) => theme.colors.gray};
+        `
+      case 'completed':
+        return css`
+          color: ${({ theme }) => theme.colors.green600};
+          // background-color: ${({ theme }) => theme.colors.yellow200};
+        `
+      case 'current':
+      default:
+        return css`
+          // background-color: ${({ theme }) => theme.colors.yellow100};
+          color: ${({ theme }) => theme.colors.green900};
+        `
+    }
+  }};
 `
 
-const StyledBody = styled(Body1)`
-  text-align: center;
-  margin-bottom: 3.2rem;
+const Ellipsis = styled.span`
+  @keyframes ellipsis {
+    0%,
+    33% {
+      content: ' .';
+    }
+    66% {
+      content: ' ..';
+    }
+    100% {
+      content: ' ...';
+    }
+  }
+
+  &::after {
+    content: ' .';
+    animation: ellipsis 2.5s infinite step-start;
+  }
 `
