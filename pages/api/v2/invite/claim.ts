@@ -6,7 +6,7 @@ import {
   InviteClaimParams,
   InviteClaimResponse,
   PaymentMethod,
-} from '@/utils/types/partialInviteClaim'
+} from '@/utils/types/invite'
 import { PaymentStatus } from '@prisma/client'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { resolveAddressOrName } from '@/lib/ens'
@@ -62,9 +62,9 @@ async function handler(
     }
   }
 
-  const partialClaim = await prisma.partialInviteClaim.create({
+  const invite = await prisma.invite.create({
     data: {
-      externId: randomId('partialInviteClaim'),
+      externId: randomId('invite'),
       name: body.name,
       email: body.email,
       code: body.inviteCode,
@@ -74,7 +74,7 @@ async function handler(
     },
   })
 
-  const resData: InviteClaimResponse = { externId: partialClaim.externId }
+  const resData: InviteClaimResponse = { externId: invite.externId }
 
   const checkoutThroughUnlock = !!(
     walletAddress && body.paymentMethod === PaymentMethod.Crypto
@@ -85,14 +85,14 @@ async function handler(
       data: {
         externId: randomId('cart'),
         amount: YEARLY_PRICE_IN_USD,
-        partialInviteClaimId: partialClaim.id,
+        inviteId: invite.id,
         paymentStatus: PaymentStatus.Pending,
         notes: '',
       },
     })
 
-    await prisma.partialInviteClaim.update({
-      where: { id: partialClaim.id },
+    await prisma.invite.update({
+      where: { id: invite.id },
       data: { cartId: cart.id },
     })
 

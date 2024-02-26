@@ -25,19 +25,20 @@ const CheckoutConfirmPageView = () => {
   )
 
   const cart = !data || 'error' in data ? null : data
-  const processingStep = !cart
-    ? 0
-    : cart.paymentStatus != PaymentStatus.Paid
-    ? 1
-    : !cart.claimStatus.privyAccountCreated
-    ? 2
-    : !cart.claimStatus.localProfileCreated
-    ? 3
-    : !cart.claimStatus.grantTxSent
-    ? 4
-    : !cart.claimStatus.grantTxConfirmed
-    ? 5
-    : 6
+  const processingStep =
+    !cart || !cart.accountSetupStatus
+      ? 0
+      : cart.paymentStatus != PaymentStatus.Paid
+      ? 1
+      : !cart.accountSetupStatus.privyAccountCreated
+      ? 2
+      : !cart.accountSetupStatus.localProfileCreated
+      ? 3
+      : !cart.accountSetupStatus.grantTxSent
+      ? 4
+      : !cart.accountSetupStatus.grantTxConfirmed
+      ? 5
+      : 6
   const finishedProcessingPayment = processingStep == 6
 
   useEffect(() => {
@@ -126,10 +127,10 @@ const Progress = ({
       // todo: maybe send them to their profile? prompt them to add a photo?
       router.push('/dashboard').then()
     }
-  }, [authenticated, firstTime])
+  }, [router, authenticated, firstTime])
 
   const error =
-    cart.claimStatus.error ||
+    cart.accountSetupStatus?.error ||
     (cart.paymentStatus == PaymentStatus.Error
       ? 'Error processing payment. Please check your card details and try again.'
       : null)

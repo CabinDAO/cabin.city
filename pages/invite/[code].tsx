@@ -11,7 +11,7 @@ import {
   InviteClaimParams,
   InviteClaimResponse,
   PaymentMethod,
-} from '@/utils/types/partialInviteClaim'
+} from '@/utils/types/invite'
 import { useBackend } from '@/components/hooks/useBackend'
 import { useRouter } from 'next/router'
 import { useError } from '@/components/hooks/useError'
@@ -129,7 +129,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       return
     }
 
-    const claimRes = await createClaim({
+    const inviteClaimRes = await createClaim({
       inviteCode: inviter.code,
       name,
       email,
@@ -137,21 +137,21 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       paymentMethod: payMethod,
     } as InviteClaimParams)
 
-    if ('error' in claimRes) {
-      showError(claimRes.error)
+    if ('error' in inviteClaimRes) {
+      showError(inviteClaimRes.error)
       return
     }
 
     // if there's a cart, go to it
-    if (claimRes.cartId) {
+    if (inviteClaimRes.cartId) {
       setIsAboutToRedirect(true)
-      router.push(`/checkout/${claimRes.cartId}`).then()
+      router.push(`/checkout/${inviteClaimRes.cartId}`).then()
       return
     }
 
     showError('unlock checkout should happen now but its not implemented')
 
-    // redirect to partial claim page to do unlock checkout???
+    // redirect to invite page to do unlock checkout???
   }
 
   return (

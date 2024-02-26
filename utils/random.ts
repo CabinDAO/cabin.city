@@ -5,8 +5,8 @@ enum Prefixes {
   location = 'lc',
   activity = 'ac',
   experience = 'ex',
+  invite = 'iv',
   inviteCode = 'ic',
-  partialInviteClaim = 'pc',
   cart = 'ct',
 }
 

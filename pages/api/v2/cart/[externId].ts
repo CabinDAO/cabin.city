@@ -20,9 +20,9 @@ async function handler(
       externId: externId,
     },
     include: {
-      partialInviteClaim: {
+      invite: {
         include: {
-          claimer: true,
+          invitee: true,
         },
       },
     },
@@ -33,18 +33,18 @@ async function handler(
     return
   }
 
-  const claim = cart.partialInviteClaim
+  const invite = cart.invite
 
   res.status(200).send({
     externId: cart.externId,
     amount: cart.amount.toNumber(),
     paymentStatus: cart.paymentStatus as PaymentStatus,
-    claimStatus: {
-      privyAccountCreated: !!claim?.privyDID,
-      localProfileCreated: !!claim?.claimer,
-      grantTxSent: !!claim?.citizenshipGrantTx,
-      grantTxConfirmed: !!claim?.citizenshipTxConfirmed,
-      error: claim?.error ?? '',
+    accountSetupStatus: {
+      privyAccountCreated: !!invite?.privyDID,
+      localProfileCreated: !!invite?.invitee,
+      grantTxSent: !!invite?.citizenshipGrantTx,
+      grantTxConfirmed: !!invite?.citizenshipTxConfirmed,
+      error: invite?.error ?? '',
     },
   })
 }

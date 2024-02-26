@@ -17,7 +17,7 @@ export type ProfileNewParams = {
     tokenUri?: string | null
     network?: string | null
   }
-  claimedInviteExternId?: string
+  inviteExternId?: string
 }
 
 async function handler(
@@ -34,14 +34,14 @@ async function handler(
   const privyDID = requireAuth(req, res, opts)
   const body = req.body as ProfileNewParams
 
-  let claimedInvite: Prisma.PartialInviteClaimGetPayload<null> | null = null
-  if (body.claimedInviteExternId) {
-    claimedInvite = await prisma.partialInviteClaim.findUnique({
-      where: { externId: body.claimedInviteExternId },
+  let invite: Prisma.InviteGetPayload<null> | null = null
+  if (body.inviteExternId) {
+    invite = await prisma.invite.findUnique({
+      where: { externId: body.inviteExternId },
     })
 
-    if (!claimedInvite) {
-      res.status(400).send({ error: 'Invite claim not found' })
+    if (!invite) {
+      res.status(400).send({ error: 'Invite not found' })
       return
     }
   }
@@ -52,7 +52,7 @@ async function handler(
     name: body.name,
     email: body.email,
     avatar: body.avatar,
-    claimedInvite,
+    invite,
   })
 
   res.status(200).send({ externId: profile.externId })

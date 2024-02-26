@@ -23,7 +23,10 @@ export const config = {
   },
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method } = req
   if (method !== 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -137,7 +140,7 @@ async function handlePaymentIntentNewStatus(
     try {
       await sendgrid.sendEmail(EmailType.NEW_PURCHASE, {
         cartExternId: cart.externId,
-        partialInviteClaimExternId: cart.partialInviteClaim?.externId ?? '',
+        inviteExternId: cart.invite?.externId ?? '',
       } satisfies NewPurchasePayload)
       console.log(`Sent us a new purchase email`)
       // TODO: if they're minting a citizenship, send them an email with the activation link
@@ -146,33 +149,33 @@ async function handlePaymentIntentNewStatus(
     }
   }
 
-  return updatedCart.partialInviteClaim ? updatedCart : undefined
+  return updatedCart.invite ? updatedCart : undefined
 }
 
 async function postProcessCart(cart: CartWithRelations) {
-  if (!cart.partialInviteClaim) {
+  if (!cart.invite) {
     return
   }
 
   // create prisma account
   const privyAccount = await createPrivyAccount(
-    cart.partialInviteClaim.email,
-    cart.partialInviteClaim.walletAddress
+    cart.invite.email,
+    cart.invite.walletAddress
   )
 
   // just to track account creation status
-  await prisma.partialInviteClaim.update({
-    where: { id: cart.partialInviteClaim.id },
+  await prisma.invite.update({
+    where: { id: cart.invite.id },
     data: { privyDID: privyAccount.id },
   })
 
   const walletAddress =
-    cart.partialInviteClaim.walletAddress ||
+    cart.invite.walletAddress ||
     privyAccount.linked_accounts.find((w) => w.type === 'wallet')?.address
 
   if (!walletAddress) {
-    await prisma.partialInviteClaim.update({
-      where: { id: cart.partialInviteClaim.id },
+    await prisma.invite.update({
+      where: { id: cart.invite.id },
       data: { error: `Privy failed to create a wallet` },
     })
     return
@@ -181,23 +184,23 @@ async function postProcessCart(cart: CartWithRelations) {
   // this also handles airdropping citizenship
   await createProfile({
     privyDID: privyAccount.id,
-    name: cart.partialInviteClaim.name,
-    email: cart.partialInviteClaim.email,
+    name: cart.invite.name,
+    email: cart.invite.email,
     walletAddress: walletAddress,
-    claimedInvite: cart.partialInviteClaim,
+    invite: cart.invite,
   })
 }
 
 // must match CartQueryInclude below
 type CartWithRelations = Prisma.CartGetPayload<{
   include: {
-    partialInviteClaim: true
+    invite: true
   }
 }>
 
 // must match CartWithRelations type above
 const CartQueryInclude = {
-  partialInviteClaim: true,
+  invite: true,
 } satisfies Prisma.CartInclude
 
 async function getRawBody(readable: Readable): Promise<Buffer> {

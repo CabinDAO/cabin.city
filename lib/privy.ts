@@ -1,6 +1,5 @@
 import fetch from 'node-fetch'
 import { PrivyClient, LinkedAccountWithMetadata } from '@privy-io/server-auth'
-import axios, { AxiosError } from 'axios'
 
 export const privy = new PrivyClient(
   process.env.NEXT_PUBLIC_PRIVY_APP_ID || '',
@@ -115,7 +114,7 @@ type CreateAccountResponse = {
   id: string // did:privy:abc123
   created_at: number // timestamp
   linked_accounts: LinkedAccount[]
-  mfa_methods: any[]
+  mfa_methods: unknown[]
   has_accepted_terms: boolean
 }
 

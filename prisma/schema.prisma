@@ -130,11 +130,14 @@ model Profile {
   voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
   vouchees  Profile[] @relation("Vouches")
 
-  inviteCode String?              @unique // the code that others use to be invited/vouched by this profile
-  invitees   PartialInviteClaim[] @relation("Invitees")
+  // the invite that this profile used to join
+  invite   Invite? @relation("Invite", fields: [inviteId], references: [id])
+  inviteId Int?    @unique
 
-  claimedInvite   PartialInviteClaim? @relation("ClaimedInvite", fields: [claimedInviteId], references: [id])
-  claimedInviteId Int?                @unique
+  // the code that others use to be invited/vouched by this profile
+  inviteCode String?  @unique // the code that others use to be invited/vouched by this profile
+  // the invites that this profile has spawned
+  invitees   Invite[] @relation("Invitees")
 
   roles      Role[]
   locations  Location[] // TODO: rename to managedLocations??
@@ -365,8 +368,8 @@ model Cart {
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
 
-  partialInviteClaim   PartialInviteClaim? @relation(fields: [partialInviteClaimId], references: [id])
-  partialInviteClaimId Int?                @unique
+  invite   Invite? @relation(fields: [inviteId], references: [id])
+  inviteId Int?    @unique
 
   amount        Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
   paymentStatus PaymentStatus
@@ -386,7 +389,7 @@ enum PaymentMethod {
   CreditCard
 }
 
-model PartialInviteClaim {
+model Invite {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -395,7 +398,7 @@ model PartialInviteClaim {
   inviter   Profile @relation("Invitees", fields: [inviterId], references: [id])
   inviterId Int
 
-  claimer Profile? @relation("ClaimedInvite")
+  invitee Profile? @relation("Invite")
 
   cart   Cart?
   cartId Int?  @unique

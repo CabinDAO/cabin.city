@@ -54,26 +54,8 @@ async function handler(
   )
 
   const query: Prisma.LocationFindManyArgs = {
-    where: {
-      id: {
-        in: idsInOrder,
-      },
-      // type: params.locationType,
-      // publishedAt: {
-      //   not: null,
-      // },
-      // offers: params.offerType
-      //   ? {
-      //       some: {
-      //         type: params.offerType,
-      //       },
-      //     }
-      //   : undefined,
-    },
+    where: { id: { in: idsInOrder } },
     include: LocationQueryInclude,
-    // orderBy: sortOrder(params.sort),
-    // skip: skip,
-    // take: take,
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
@@ -93,31 +75,6 @@ async function handler(
     count: locations.length,
     totalCount,
   })
-}
-
-const sortOrder = (
-  sortParam: LocationSort | undefined
-): Prisma.LocationOrderByWithRelationInput[] => {
-  switch (sortParam) {
-    case LocationSort.votesDesc:
-      return [
-        {
-          votes: {
-            _count: 'desc',
-          },
-        },
-      ]
-    case LocationSort.nameAsc:
-    default:
-      return [
-        {
-          name: 'asc',
-        },
-        {
-          createdAt: 'asc',
-        },
-      ]
-  }
 }
 
 // get ids for locations sorted in proper order

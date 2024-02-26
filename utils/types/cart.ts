@@ -17,7 +17,7 @@ export type CartFragment = {
   externId: string
   amount: number
   paymentStatus: PaymentStatus
-  claimStatus: {
+  accountSetupStatus?: {
     privyAccountCreated: boolean
     localProfileCreated: boolean
     grantTxSent: boolean

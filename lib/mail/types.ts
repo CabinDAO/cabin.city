@@ -13,7 +13,7 @@ export class VouchRequstedPayload {
 
 export class NewPurchasePayload {
   cartExternId = ''
-  partialInviteClaimExternId = ''
+  inviteExternId = ''
 }
 
 export class NewLocationPayload {

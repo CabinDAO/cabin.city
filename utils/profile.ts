@@ -6,7 +6,7 @@ import {
   ActivityType,
   Prisma,
   CitizenshipStatus,
-  PartialInviteClaim,
+  Invite,
 } from '@prisma/client'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
@@ -29,14 +29,14 @@ type ProfileCreateParams = {
     tokenUri?: string | null
     network?: string | null
   }
-  claimedInvite: Prisma.PartialInviteClaimGetPayload<null> | null
+  invite: Prisma.InviteGetPayload<null> | null
 }
 
 // must match ProfileWithRelations below
 type ProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     wallet: true
-    claimedInvite: {
+    invite: {
       include: {
         cart: true
       }
@@ -47,7 +47,7 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
 // must match ProfileWithRelations type above
 export const ProfileQueryInclude = {
   wallet: true,
-  claimedInvite: {
+  invite: {
     include: {
       cart: true,
     },
@@ -90,15 +90,11 @@ export async function createProfile(
           }
         : undefined,
 
-      citizenshipStatus: params.claimedInvite
-        ? CitizenshipStatus.Vouched
-        : undefined, // should this be verified? the only way to get to this flow is through instant citizenship
-      voucher: params.claimedInvite
-        ? { connect: { id: params.claimedInvite.inviterId } }
+      citizenshipStatus: params.invite ? CitizenshipStatus.Vouched : undefined, // should this be verified? the only way to get to this flow is through instant citizenship
+      voucher: params.invite
+        ? { connect: { id: params.invite.inviterId } }
         : undefined,
-      claimedInvite: params.claimedInvite
-        ? { connect: { id: params.claimedInvite.id } }
-        : undefined,
+      invite: params.invite ? { connect: { id: params.invite.id } } : undefined,
     },
     // include must match ProfileWithIncludes type below
     include: ProfileQueryInclude,
@@ -120,7 +116,7 @@ export async function createProfile(
 
   await createHats(profile)
 
-  if (params.claimedInvite) {
+  if (params.invite) {
     await grantOrExtendCitizenship(profile)
   }
 
@@ -165,19 +161,19 @@ async function createHats(profile: Profile) {
 }
 
 async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
-  const claim = profile.claimedInvite
+  const invite = profile.invite
 
-  if (!claim) {
+  if (!invite) {
     return null
   }
 
-  if (claim.citizenshipGrantTx) {
+  if (invite.citizenshipGrantTx) {
     // todo: maybe this is not an error? there may be race conditions
     // res.status(400).send({
     //   error: `Citizenship was already granted in tx ${claim.citizenshipGrantTx}`,
     // })
     console.error(
-      `Citizenship was already granted in tx ${claim.citizenshipGrantTx}`
+      `Citizenship was already granted in tx ${invite.citizenshipGrantTx}`
     )
     return null
   }
@@ -212,13 +208,13 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
     hasValidKey = await lockContract.getHasValidKey(address)
   } catch (e: unknown) {
     console.error(e)
-    await claimSetError(claim, `Couldnt fetch data about lock contract: ${e}`)
+    await inviteSetError(invite, `Couldnt fetch data about lock contract: ${e}`)
   }
 
   if (hasValidKey) {
     // tx will fail and revert if we try to grant a citizenship when they already have one
     // TODO: if they did pay, maybe we should just extend their citizenship?
-    await claimSetError(claim, `User already has a valid key`)
+    await inviteSetError(invite, `User already has a valid key`)
     return null
   }
 
@@ -261,15 +257,15 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
     console.log(`tx granting key or extension: ${tx.hash}`)
   } catch (e: unknown) {
     console.error(e)
-    await claimSetError(claim, `Failed to send citizenship tx: ${e}`)
+    await inviteSetError(invite, `Failed to send citizenship tx: ${e}`)
   }
 
   if (!tx) {
     return null
   }
 
-  await prisma.partialInviteClaim.update({
-    where: { id: claim.id },
+  await prisma.invite.update({
+    where: { id: invite.id },
     data: { citizenshipGrantTx: tx.hash },
   })
 
@@ -279,15 +275,15 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
     console.log(`tx ${tx.hash} included in block: ${receipt.blockNumber}`)
   } catch (e: unknown) {
     console.error(e)
-    await claimSetError(claim, `Failed waiting to include tx: ${e}`)
+    await inviteSetError(invite, `Failed waiting to include tx: ${e}`)
   }
 
   if (!receipt) {
     return null
   }
 
-  await prisma.partialInviteClaim.update({
-    where: { id: claim.id },
+  await prisma.invite.update({
+    where: { id: invite.id },
     data: { citizenshipTxConfirmed: true },
   })
 
@@ -305,9 +301,9 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
   return receipt
 }
 
-async function claimSetError(claim: PartialInviteClaim, error: string) {
-  await prisma.partialInviteClaim.update({
-    where: { id: claim.id },
+async function inviteSetError(invite: Invite, error: string) {
+  await prisma.invite.update({
+    where: { id: invite.id },
     data: { error: error },
   })
 }

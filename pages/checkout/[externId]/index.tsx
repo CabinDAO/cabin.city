@@ -19,7 +19,7 @@ export const getServerSideProps = (async (context) => {
   const externId = context.query.externId as string
   const cart = await prisma.cart.findUnique({
     where: { externId },
-    include: { partialInviteClaim: true },
+    include: { invite: true },
   })
 
   if (cart && cart.paymentStatus == PaymentStatus.Paid) {
@@ -37,7 +37,7 @@ export const getServerSideProps = (async (context) => {
         externId: cart.externId,
         amount: cart.amount.toNumber(),
         paymentStatus: cart.paymentStatus as PaymentStatus,
-        partialInviteClaimExternId: cart.partialInviteClaim?.externId || '',
+        // inviteExternId: cart.invite?.externId || '',
       }
 
   return { props: { cart: data } }
