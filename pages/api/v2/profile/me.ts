@@ -10,6 +10,7 @@ import {
   ProfileMeResponse,
   MeFragment,
 } from '@/utils/types/profile'
+import { randomInviteCode } from '@/utils/random'
 
 // must match the includes on query below
 type MyProfileWithRelations = Prisma.ProfileGetPayload<{
@@ -113,6 +114,14 @@ async function handler(
       },
     },
   })
+
+  if (profile && !profile.inviteCode) {
+    const updatedProfile = await prisma.profile.update({
+      where: { id: profile.id },
+      data: { inviteCode: randomInviteCode() },
+    })
+    profile.inviteCode = updatedProfile.inviteCode
+  }
 
   res.status(profile ? 200 : 404).send({
     me: profile ? profileToFragment(profile as MyProfileWithRelations) : null,
