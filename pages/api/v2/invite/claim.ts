@@ -5,19 +5,17 @@ import {
   requireProfile,
   withAuth,
 } from '@/utils/api/withAuth'
-import { prisma } from '@/lib/prisma'
 import { randomId } from '@/utils/random'
+import { prisma } from '@/lib/prisma'
+import { Invite, PaymentStatus, CitizenshipStatus } from '@prisma/client'
 import {
   InviteClaimParams,
   InviteClaimResponse,
   PaymentMethod,
 } from '@/utils/types/invite'
-import { Invite, PaymentStatus } from '@prisma/client'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { resolveAddressOrName } from '@/lib/ens'
 import { privy } from '@/lib/privy'
-import { $Enums } from '@/prisma/generated/client'
-import CitizenshipStatus = $Enums.CitizenshipStatus
 
 export default withAuth(handler)
 
