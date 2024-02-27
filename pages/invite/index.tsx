@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { QRCodeSVG } from 'qrcode.react'
 import { CitizenshipStatus, MeFragment } from '@/utils/types/profile'
 import { useProfile } from '@/components/auth/useProfile'
@@ -9,6 +10,7 @@ import theme from '@/styles/theme'
 import { ContentCard } from '@/components/core/ContentCard'
 import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
+import Icon from '@/components/core/Icon'
 
 const InvitePage = () => {
   const { user, isUserLoading } = useProfile()
@@ -16,7 +18,7 @@ const InvitePage = () => {
   return (
     <>
       <SingleColumnLayout withFooter>
-        <TitleCard title="Invite" icon="citizen" />
+        <TitleCard title="Invite Your Friends" icon="citizen" />
         <Content>
           {isUserLoading ? (
             <LoadingSpinner />
@@ -35,25 +37,30 @@ const InvitePage = () => {
 
 const InviteContent = ({ user }: { user: MeFragment }) => {
   const inviteUrl = `${appDomainWithProto}/invite/${user.inviteCode}`
+  const [isFlashing, setIsFlashing] = useState(false)
+  const flashBg = () => {
+    setIsFlashing(true)
+    setTimeout(() => setIsFlashing(false), 500) // Adjust timeout to match CSS transition
+  }
   return (
     <>
-      <H1>Invite your friends</H1>
+      <H1>Vouch for New Citizens</H1>
       <Text>
         <Body1>
-          Invite your friends to join Cabin and become citizens. You can invite
-          as many people as you like.
+          Invite your friends to become Cabin Citizens by having them scan the
+          QR code below.
         </Body1>
       </Text>
       <Text>
         <Body1>
-          Only invite people who would make great citizens. An invite
-          automatically confers a vouch from you to the recipient. We track who
-          invites whom.
+          By sharing this code with someone, you are vouching for them to become
+          a Cabin Citizen. Only invite people who you trust and think will make
+          the Cabin community better. We track who invites whom; their
+          reputation will be tied to yours.
         </Body1>
       </Text>
 
       <H3>Scan code to join</H3>
-      <Body1>{inviteUrl}</Body1>
       <QRCodeSVG
         value={inviteUrl}
         size={350}
@@ -62,6 +69,22 @@ const InviteContent = ({ user }: { user: MeFragment }) => {
         includeMargin={true}
         level={'Q'}
       />
+      <Body1
+        style={{
+          display: 'flex',
+          gap: '1rem',
+          cursor: 'pointer',
+          background: isFlashing ? theme.colors.yellow400 : 'initial',
+          transition: 'background 0.5s ease-in-out',
+          padding: '0.5rem',
+        }}
+        onClick={() => {
+          flashBg()
+          navigator.clipboard.writeText(inviteUrl).then()
+        }}
+      >
+        {inviteUrl} <Icon name={'copy'} size={2}></Icon>
+      </Body1>
     </>
   )
 }
@@ -82,7 +105,7 @@ const Content = styled(ContentCard)`
 `
 
 const Text = styled.div`
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 
   ${({ theme }) => theme.bp.md} {
     max-width: 45rem;
