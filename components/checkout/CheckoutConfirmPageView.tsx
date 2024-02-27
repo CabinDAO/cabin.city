@@ -13,6 +13,8 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { Button } from '@/components/core/Button'
 import { usePrivy } from '@privy-io/react-auth'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
+import Image from 'next/image'
+import { useProfile } from '@/components/auth/useProfile'
 
 const CheckoutConfirmPageView = () => {
   const router = useRouter()
@@ -119,15 +121,19 @@ const Progress = ({
   processingStep: number
   firstTime: boolean
 }) => {
-  const { login, authenticated } = usePrivy()
+  const { login } = usePrivy()
+  const { user } = useProfile()
   const router = useRouter()
 
   useEffect(() => {
-    if (authenticated && firstTime) {
-      // todo: maybe send them to their profile? prompt them to add a photo?
-      router.push('/dashboard').then()
+    if (
+      firstTime &&
+      user &&
+      user.externId == cart.accountSetupStatus?.profileExternId
+    ) {
+      router.push(`/profile/${user.externId}`).then()
     }
-  }, [router, authenticated, firstTime])
+  }, [router, user, firstTime])
 
   const error =
     cart.accountSetupStatus?.error ||
@@ -192,7 +198,25 @@ const Progress = ({
               Done!
             </Step>
             {firstTime && (
-              <Button onClick={login}>Login to your new account</Button>
+              <>
+                {!cart.accountSetupStatus?.hasWallet && (
+                  <>
+                    <Body1>
+                      Log in by clicking the button below and selecting Email as
+                      shown in the image.
+                    </Body1>
+                    <Image
+                      src={'/images/email-login-demo.png'}
+                      alt={'email login demo'}
+                      width={0}
+                      height={0}
+                      sizes="100vw"
+                      style={{ width: '100%', height: 'auto' }}
+                    />
+                  </>
+                )}
+                <Button onClick={login}>Login to your new account</Button>
+              </>
             )}
           </>
         )}

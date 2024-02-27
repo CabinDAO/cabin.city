@@ -18,8 +18,10 @@ export type CartFragment = {
   amount: number
   paymentStatus: PaymentStatus
   accountSetupStatus?: {
+    hasWallet: boolean
     privyAccountCreated: boolean
     localProfileCreated: boolean
+    profileExternId: string
     grantTxSent: boolean
     grantTxConfirmed: boolean
     error: string

@@ -40,8 +40,10 @@ async function handler(
     amount: cart.amount.toNumber(),
     paymentStatus: cart.paymentStatus as PaymentStatus,
     accountSetupStatus: {
+      hasWallet: !!invite?.walletAddress,
       privyAccountCreated: !!invite?.privyDID,
       localProfileCreated: !!invite?.invitee,
+      profileExternId: invite?.invitee?.externId ?? '',
       grantTxSent: !!invite?.citizenshipGrantTx,
       grantTxConfirmed: !!invite?.citizenshipTxConfirmed,
       error: invite?.error ?? '',

@@ -58,9 +58,9 @@ export class SendgridService {
         }
         Object.assign(md, {
           to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
-          subject: 'New cabin.city Purchase',
+          subject: 'Someone bought a cabin.city citizenship',
           html: `<div>
-            <a href="${appDomainWithProto}/checkout/${d.cartExternId}/confirmation">new purchase</a>.
+            <a href="${appDomainWithProto}/checkout/${d.cartExternId}/confirmation">This is their cart</a>.
           </div>`,
           trackingSettings: {
             clickTracking: { enable: false },
