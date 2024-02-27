@@ -245,6 +245,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
             ></InputText>
             <InputText
               placeholder={'Email'}
+              type={'email'}
               onChange={(e) => {
                 setEmail(e.target.value)
               }}
