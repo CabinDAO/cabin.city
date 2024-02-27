@@ -3,8 +3,14 @@ import { prisma } from '@/lib/prisma'
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
-import { Body1, Caption, H1 } from '@/components/core/Typography'
-import styled from 'styled-components'
+import {
+  Body1,
+  Caption,
+  captionStyles,
+  H1,
+  h1Styles,
+} from '@/components/core/Typography'
+import styled, { css } from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { ContentCard } from '@/components/core/ContentCard'
 import {
@@ -24,6 +30,9 @@ import {
 } from '@/components/profile/validations'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { usePrivy } from '@privy-io/react-auth'
+import { padding } from '@/styles/theme'
+import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
+import Image from 'next/image'
 
 type PayMethod = PaymentMethod | null
 
@@ -46,8 +55,8 @@ export default function Page({
   return (
     <>
       <SingleColumnLayout withFooter>
-        <TitleCard title="Join Cabin" icon="citizen" />
-        <StyledContentCard>
+        <TitleCard title="Citizenship" icon="citizen" />
+        <StyledContentCard shape={'notch'} notchSize={1.6}>
           {inviter ? (
             <InviteClaim inviter={inviter} />
           ) : (
@@ -196,150 +205,167 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
 
   return (
     <>
-      <H1>{inviter.name} invited you to become a Citizen</H1>
-      <Body1>
-        Citizenship is a X Y Z thing that you must be invited to so its very
-        special. It costs $money and you can pay with crypto or credit card.
-      </Body1>
-      <Button
-        disabled={step > Step.NotStarted}
-        onClick={() => {
-          goToStep(Step.PromptLogin)
-        }}
-      >
-        Claim your invite
-      </Button>
-      {step >= Step.PromptLogin && !alreadyHasAccount && (
-        <>
-          <StepText ref={refs[Step.PromptLogin]}>
-            Do you have a Cabin.city account?
-          </StepText>
-          <ButtonRow>
-            <Button variant={'secondary'} onClick={login}>
-              Yes, log in
-            </Button>
-            <Button
-              variant={'secondary'}
-              startAdornment={confirmedNoAccount ? '✓ ' : ''}
-              onClick={() => {
-                setConfirmedNoAccount(true)
-                goToStep(Step.Wallet)
-              }}
-            >
-              I do not
-            </Button>
-          </ButtonRow>
-        </>
-      )}
-      {step >= Step.Wallet && !alreadyHasAccount && (
-        <>
-          <StepText ref={refs[Step.Wallet]}>
-            Do you already have a crypto wallet?
-          </StepText>
-          <ButtonRow>
-            <Button
-              variant={'secondary'}
-              startAdornment={hasWallet === true ? '✓ ' : ''}
-              onClick={() => {
-                setHasWallet(true)
-                setPayMethod(null)
-                goToStep(Step.PaymentMethod)
-              }}
-            >
-              Yes
-            </Button>
-            <Button
-              variant={'secondary'}
-              startAdornment={hasWallet === false ? '✓ ' : ''}
-              onClick={() => {
-                setHasWallet(false)
-                setWalletAddress('')
-                setPayMethod(PaymentMethod.CreditCard)
-                goToStep(Step.LastStep)
-              }}
-            >
-              No / I&apos;m Not Sure
-            </Button>
-          </ButtonRow>
-        </>
-      )}
-      {step >= Step.PaymentMethod &&
-        (alreadyHasAccount || hasWallet !== false) && (
+      <Image
+        src={'/images/citizenship-campfire.jpg'}
+        alt={'around a campfire'}
+        width={0}
+        height={0}
+        sizes="100vw"
+        style={{ width: '100%', height: 'auto' }}
+      />
+
+      <Content>
+        <Top>
+          <H1>Feel at home anywhere in the world</H1>
+          <StyledPrice>
+            <Amount>${YEARLY_PRICE_IN_USD}</Amount>
+            <Unit>per year</Unit>
+          </StyledPrice>
+          <Body1>
+            Connect with Citizens around the world, participate in our
+            community, and get Citizen benefits.
+          </Body1>
+        </Top>
+        <Button
+          disabled={step > Step.NotStarted}
+          onClick={() => {
+            goToStep(Step.PromptLogin)
+          }}
+        >
+          Claim your invite
+        </Button>
+        {step >= Step.PromptLogin && !alreadyHasAccount && (
           <>
-            <StepText ref={refs[Step.PaymentMethod]}>
-              How do you want to pay?
+            <StepText ref={refs[Step.PromptLogin]}>
+              Do you have a Cabin.city account?
             </StepText>
             <ButtonRow>
-              <Button
-                variant={'secondary'}
-                startAdornment={payMethod == PaymentMethod.Crypto ? '✓ ' : ''}
-                onClick={() => {
-                  setPayMethod(PaymentMethod.Crypto)
-                  goToStep(Step.LastStep)
-                }}
-              >
-                Crypto
+              <Button variant={'secondary'} onClick={login}>
+                Yes, log in
               </Button>
               <Button
                 variant={'secondary'}
-                startAdornment={
-                  payMethod == PaymentMethod.CreditCard ? '✓ ' : ''
-                }
+                startAdornment={confirmedNoAccount ? '✓ ' : ''}
                 onClick={() => {
-                  setPayMethod(PaymentMethod.CreditCard)
-                  goToStep(Step.LastStep)
+                  setConfirmedNoAccount(true)
+                  goToStep(Step.Wallet)
                 }}
               >
-                Credit Card
+                I do not
               </Button>
             </ButtonRow>
           </>
         )}
-      {step >= Step.LastStep && (
-        <>
-          {!alreadyHasAccount && (
+        {step >= Step.Wallet && !alreadyHasAccount && (
+          <>
+            <StepText ref={refs[Step.Wallet]}>
+              Do you already have a crypto wallet?
+            </StepText>
+            <ButtonRow>
+              <Button
+                variant={'secondary'}
+                startAdornment={hasWallet === true ? '✓ ' : ''}
+                onClick={() => {
+                  setHasWallet(true)
+                  setPayMethod(null)
+                  goToStep(Step.PaymentMethod)
+                }}
+              >
+                Yes
+              </Button>
+              <Button
+                variant={'secondary'}
+                startAdornment={hasWallet === false ? '✓ ' : ''}
+                onClick={() => {
+                  setHasWallet(false)
+                  setWalletAddress('')
+                  setPayMethod(PaymentMethod.CreditCard)
+                  goToStep(Step.LastStep)
+                }}
+              >
+                No / I&apos;m Not Sure
+              </Button>
+            </ButtonRow>
+          </>
+        )}
+        {step >= Step.PaymentMethod &&
+          (alreadyHasAccount || hasWallet !== false) && (
             <>
-              <StepText ref={refs[Step.LastStep]}>
-                Tell us a little about yourself
+              <StepText ref={refs[Step.PaymentMethod]}>
+                How do you want to pay?
               </StepText>
-              <Inputs>
-                <InputText
-                  placeholder={'Name'}
-                  onChange={(e) => {
-                    setName(e.target.value)
+              <ButtonRow>
+                <Button
+                  variant={'secondary'}
+                  startAdornment={payMethod == PaymentMethod.Crypto ? '✓ ' : ''}
+                  onClick={() => {
+                    setPayMethod(PaymentMethod.Crypto)
+                    goToStep(Step.LastStep)
                   }}
-                ></InputText>
-                <InputText
-                  placeholder={'Email'}
-                  type={'email'}
-                  onChange={(e) => {
-                    setEmail(e.target.value)
+                >
+                  Crypto
+                </Button>
+                <Button
+                  variant={'secondary'}
+                  startAdornment={
+                    payMethod == PaymentMethod.CreditCard ? '✓ ' : ''
+                  }
+                  onClick={() => {
+                    setPayMethod(PaymentMethod.CreditCard)
+                    goToStep(Step.LastStep)
                   }}
-                ></InputText>
-                {hasWallet && (
-                  <InputText
-                    placeholder={'Wallet Address or ENS'}
-                    onChange={(e) => {
-                      setWalletAddress(e.target.value)
-                    }}
-                  ></InputText>
-                )}
-              </Inputs>
+                >
+                  Credit Card
+                </Button>
+              </ButtonRow>
             </>
           )}
-          <ButtonRow>
-            <Button onClick={goToPayment} disabled={!proceedButtonReady}>
-              {!proceedButtonReady && (
-                <>
-                  <LoadingSpinner />
-                  &nbsp; {/* this keeps the button height from collapsing */}
-                </>
-              )}
-              Proceed to Payment
-            </Button>
-          </ButtonRow>
-        </>
-      )}
+        {step >= Step.LastStep && (
+          <>
+            {!alreadyHasAccount && (
+              <>
+                <StepText ref={refs[Step.LastStep]}>
+                  Tell us a little about yourself
+                </StepText>
+                <Inputs>
+                  <InputText
+                    placeholder={'Name'}
+                    onChange={(e) => {
+                      setName(e.target.value)
+                    }}
+                  ></InputText>
+                  <InputText
+                    placeholder={'Email'}
+                    type={'email'}
+                    onChange={(e) => {
+                      setEmail(e.target.value)
+                    }}
+                  ></InputText>
+                  {hasWallet && (
+                    <InputText
+                      placeholder={'Wallet Address or ENS'}
+                      onChange={(e) => {
+                        setWalletAddress(e.target.value)
+                      }}
+                    ></InputText>
+                  )}
+                </Inputs>
+              </>
+            )}
+            <ButtonRow>
+              <Button onClick={goToPayment} disabled={!proceedButtonReady}>
+                {!proceedButtonReady && (
+                  <>
+                    <LoadingSpinner />
+                    &nbsp; {/* this keeps the button height from collapsing */}
+                  </>
+                )}
+                Proceed to Payment
+              </Button>
+            </ButtonRow>
+          </>
+        )}
+      </Content>
     </>
   )
 }
@@ -350,11 +376,7 @@ const StyledContentCard = styled(ContentCard)`
   align-items: center;
   justify-content: center;
   gap: 2.4rem;
-  padding: 2.4rem 1.6rem;
-
-  ${({ theme }) => theme.bp.md} {
-    padding: 2.4rem;
-  }
+  width: 100%;
 `
 
 const StepText = styled(Body1)`
@@ -393,4 +415,40 @@ const ErrorMessage = styled.div`
   ${Body1} {
     color: ${({ theme }) => theme.colors.red600};
   }
+`
+
+const Top = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 2.4rem;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 45rem;
+  }
+`
+
+const Amount = styled.span`
+  ${h1Styles}
+`
+const Unit = styled.span`
+  ${captionStyles}
+`
+const StyledPrice = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 0.8rem;
+`
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  align-items: center;
+  width: 100%;
+  ${padding('md', 'sm')};
 `
