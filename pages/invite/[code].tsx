@@ -1,9 +1,9 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { prisma } from '@/lib/prisma'
-import React, { RefObject, useRef, useState } from 'react'
+import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
-import { Body1, H1 } from '@/components/core/Typography'
+import { Body1, Caption, H1 } from '@/components/core/Typography'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -30,6 +30,14 @@ type PayMethod = PaymentMethod | null
 type Inviter = {
   name: string
   code: string
+}
+
+enum Step {
+  NotStarted = 0,
+  PromptLogin = 1,
+  Wallet = 2,
+  PaymentMethod = 3,
+  LastStep = 4,
 }
 
 export default function Page({
@@ -74,7 +82,7 @@ export const getServerSideProps = (async (context) => {
 const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
   const { showError } = useError()
   const router = useRouter()
-  const { ready: privyReady, user } = usePrivy()
+  const { ready: privyReady, user, login } = usePrivy()
 
   const { useMutate } = useBackend()
   const { trigger: createClaim, isMutating } =
@@ -85,20 +93,28 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
   const [walletAddress, setWalletAddress] = useState('')
   const [hasWallet, setHasWallet] = useState<null | true | false>(null)
   const [payMethod, setPayMethod] = useState<PayMethod>(null)
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(Step.NotStarted)
   const [isAboutToRedirect, setIsAboutToRedirect] = useState(false)
+  const [confirmedNoAccount, setConfirmedNoAccount] = useState(false)
 
-  const refs: { [key: number]: RefObject<HTMLDivElement> } = {
-    1: useRef<HTMLDivElement>(null),
-    2: useRef<HTMLDivElement>(null),
-    3: useRef<HTMLDivElement>(null),
+  const alreadyHasAccount = privyReady && !!user
+
+  const refs: Partial<{ [key in Step]: RefObject<HTMLDivElement> }> = {
+    [Step.PromptLogin]: useRef<HTMLDivElement>(null),
+    [Step.Wallet]: useRef<HTMLDivElement>(null),
+    [Step.PaymentMethod]: useRef<HTMLDivElement>(null),
+    [Step.LastStep]: useRef<HTMLDivElement>(null),
   }
 
-  const goToStep = (step: number) => {
-    setStep(step)
-    const ref = refs[step]
+  const goToStep = (step: Step) => {
+    const actualStep: Step =
+      user && [Step.PromptLogin, Step.Wallet].includes(step)
+        ? Step.PaymentMethod
+        : step
+    setStep(actualStep)
+    const ref = refs[actualStep]
     setTimeout(() => {
-      if (ref.current) {
+      if (ref?.current) {
         ref.current.scrollIntoView({ behavior: 'smooth' })
       }
     }, 50)
@@ -111,39 +127,48 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       return
     }
 
-    if (
-      payMethod === null ||
-      hasWallet === null ||
-      !name ||
-      !email ||
-      (hasWallet && !walletAddress)
-    ) {
-      showError('Please fill out all fields')
+    if (payMethod === null) {
+      showError('Select a payment method')
       return
     }
 
-    if (!isValidName(name)) {
-      showError(INVALID_NAME_MESSAGE)
-      return
-    }
+    if (!user) {
+      if (
+        !name ||
+        !email ||
+        hasWallet === null ||
+        (hasWallet && !walletAddress)
+      ) {
+        showError('Fill out all fields')
+        return
+      }
 
-    if (!isValidEmail(email)) {
-      showError('Email address is not valid')
-      return
-    }
+      if (!isValidName(name)) {
+        showError(INVALID_NAME_MESSAGE)
+        return
+      }
 
-    if (hasWallet && !isValidAddressOrENSFormat(walletAddress)) {
-      showError('Wallet address is not valid')
-      return
+      if (!isValidEmail(email)) {
+        showError('Email address is not valid')
+        return
+      }
+
+      if (hasWallet && !isValidAddressOrENSFormat(walletAddress)) {
+        showError('Wallet address is not valid')
+        return
+      }
     }
 
     const inviteClaimRes = await createClaim({
       inviteCode: inviter.code,
-      name,
-      email,
-      walletAddressOrENS: hasWallet ? walletAddress : '',
       paymentMethod: payMethod,
-      privyDID: user?.id,
+      newAccountParams: user
+        ? null
+        : {
+            name,
+            email,
+            walletAddressOrENS: hasWallet ? walletAddress : '',
+          },
     } as InviteClaimParams)
 
     if ('error' in inviteClaimRes) {
@@ -158,9 +183,15 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       return
     }
 
-    showError('unlock checkout should happen now but its not implemented')
+    if (user) {
+      setIsAboutToRedirect(true)
+      router.push(`/citizenship`).then()
+      return
+    }
 
-    // redirect to invite page to do unlock checkout???
+    // make them log in, then take them to the mint page
+
+    showError('login, then go to /citizenship')
   }
 
   return (
@@ -171,19 +202,38 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
         special. It costs $money and you can pay with crypto or credit card.
       </Body1>
       <Button
-        disabled={step >= 1}
+        disabled={step > Step.NotStarted}
         onClick={() => {
-          setPayMethod(null)
-          setHasWallet(null)
-          goToStep(1)
+          goToStep(Step.PromptLogin)
         }}
       >
         Claim your invite
       </Button>
-
-      {step >= 1 && (
+      {step >= Step.PromptLogin && !alreadyHasAccount && (
         <>
-          <StepText ref={refs[1]}>
+          <StepText ref={refs[Step.PromptLogin]}>
+            Do you have a Cabin.city account?
+          </StepText>
+          <ButtonRow>
+            <Button variant={'secondary'} onClick={login}>
+              Yes, log in
+            </Button>
+            <Button
+              variant={'secondary'}
+              startAdornment={confirmedNoAccount ? '✓ ' : ''}
+              onClick={() => {
+                setConfirmedNoAccount(true)
+                goToStep(Step.Wallet)
+              }}
+            >
+              I do not
+            </Button>
+          </ButtonRow>
+        </>
+      )}
+      {step >= Step.Wallet && !alreadyHasAccount && (
+        <>
+          <StepText ref={refs[Step.Wallet]}>
             Do you already have a crypto wallet?
           </StepText>
           <ButtonRow>
@@ -193,7 +243,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
               onClick={() => {
                 setHasWallet(true)
                 setPayMethod(null)
-                goToStep(2)
+                goToStep(Step.PaymentMethod)
               }}
             >
               Yes
@@ -205,7 +255,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
                 setHasWallet(false)
                 setWalletAddress('')
                 setPayMethod(PaymentMethod.CreditCard)
-                goToStep(3)
+                goToStep(Step.LastStep)
               }}
             >
               No / I&apos;m Not Sure
@@ -213,61 +263,70 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
           </ButtonRow>
         </>
       )}
-
-      {step >= 2 && hasWallet !== false && (
-        <>
-          <StepText ref={refs[2]}>How do you want to pay?</StepText>
-          <ButtonRow>
-            <Button
-              variant={'secondary'}
-              startAdornment={payMethod == PaymentMethod.Crypto ? '✓ ' : ''}
-              onClick={() => {
-                setPayMethod(PaymentMethod.Crypto)
-                goToStep(3)
-              }}
-            >
-              Crypto
-            </Button>
-            <Button
-              variant={'secondary'}
-              startAdornment={payMethod == PaymentMethod.CreditCard ? '✓ ' : ''}
-              onClick={() => {
-                setPayMethod(PaymentMethod.CreditCard)
-                goToStep(3)
-              }}
-            >
-              Credit Card
-            </Button>
-          </ButtonRow>
-        </>
-      )}
-
-      {step >= 3 && (
-        <>
-          <StepText ref={refs[3]}>Tell us a little about yourself</StepText>
-          <Inputs>
-            <InputText
-              placeholder={'Name'}
-              onChange={(e) => {
-                setName(e.target.value)
-              }}
-            ></InputText>
-            <InputText
-              placeholder={'Email'}
-              type={'email'}
-              onChange={(e) => {
-                setEmail(e.target.value)
-              }}
-            ></InputText>
-            {hasWallet && (
-              <InputText
-                placeholder={'Wallet Address or ENS'}
-                onChange={(e) => {
-                  setWalletAddress(e.target.value)
+      {step >= Step.PaymentMethod &&
+        (alreadyHasAccount || hasWallet !== false) && (
+          <>
+            <StepText ref={refs[Step.PaymentMethod]}>
+              How do you want to pay?
+            </StepText>
+            <ButtonRow>
+              <Button
+                variant={'secondary'}
+                startAdornment={payMethod == PaymentMethod.Crypto ? '✓ ' : ''}
+                onClick={() => {
+                  setPayMethod(PaymentMethod.Crypto)
+                  goToStep(Step.LastStep)
                 }}
-              ></InputText>
-            )}
-          </Inputs>
+              >
+                Crypto
+              </Button>
+              <Button
+                variant={'secondary'}
+                startAdornment={
+                  payMethod == PaymentMethod.CreditCard ? '✓ ' : ''
+                }
+                onClick={() => {
+                  setPayMethod(PaymentMethod.CreditCard)
+                  goToStep(Step.LastStep)
+                }}
+              >
+                Credit Card
+              </Button>
+            </ButtonRow>
+          </>
+        )}
+      {step >= Step.LastStep && (
+        <>
+          {!alreadyHasAccount && (
+            <>
+              <StepText ref={refs[Step.LastStep]}>
+                Tell us a little about yourself
+              </StepText>
+              <Inputs>
+                <InputText
+                  placeholder={'Name'}
+                  onChange={(e) => {
+                    setName(e.target.value)
+                  }}
+                ></InputText>
+                <InputText
+                  placeholder={'Email'}
+                  type={'email'}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                  }}
+                ></InputText>
+                {hasWallet && (
+                  <InputText
+                    placeholder={'Wallet Address or ENS'}
+                    onChange={(e) => {
+                      setWalletAddress(e.target.value)
+                    }}
+                  ></InputText>
+                )}
+              </Inputs>
+            </>
+          )}
           <ButtonRow>
             <Button onClick={goToPayment} disabled={!proceedButtonReady}>
               {!proceedButtonReady && (

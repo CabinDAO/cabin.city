@@ -192,6 +192,7 @@ export async function grantOrExtendCitizenship(
 
   const keyIndex = 0 // we only support one key per user for now, but Unlock supports more
   let hasKey = false
+  let existingTokenId = 0
   // let hasValidKey = false
 
   try {
@@ -199,6 +200,12 @@ export async function grantOrExtendCitizenship(
     // if they do, need to extend them instead of granting a new one
     const totalKeys = await lockContract.totalKeys(address)
     hasKey = totalKeys.toNumber() > 0
+
+    if (hasKey) {
+      existingTokenId = (
+        await lockContract.tokenOfOwnerByIndex(address, keyIndex)
+      ).toNumber()
+    }
 
     // hasValidKey = await lockContract.getHasValidKey(address)
     // if (hasValidKey) {
@@ -238,7 +245,7 @@ export async function grantOrExtendCitizenship(
 
     tx = hasKey
       ? await lockContract.grantKeyExtension(
-          keyIndex,
+          existingTokenId,
           oneYearInSeconds,
           overrides
         )
@@ -296,7 +303,7 @@ export async function grantOrExtendCitizenship(
   return receipt
 }
 
-async function inviteSetError(invite: Invite, error: string) {
+export async function inviteSetError(invite: Invite, error: string) {
   await prisma.invite.update({
     where: { id: invite.id },
     data: { error: error },

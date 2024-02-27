@@ -403,12 +403,15 @@ model Invite {
   cart   Cart?
   cartId Int?  @unique
 
-  name          String
-  email         String
   code          String
-  walletAddress String
   paymentMethod PaymentMethod
 
+  // info for creating a new account
+  name          String?
+  email         String?
+  walletAddress String?
+
+  // fields for tracking account creation process
   privyDID               String?
   citizenshipGrantTx     String?
   citizenshipTxConfirmed Boolean @default(false)

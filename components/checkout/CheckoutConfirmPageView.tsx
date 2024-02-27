@@ -32,9 +32,9 @@ const CheckoutConfirmPageView = () => {
       ? 0
       : cart.paymentStatus != PaymentStatus.Paid
       ? 1
-      : !cart.accountSetupStatus.privyAccountCreated
+      : !cart.accountSetupStatus.privyAccountExists
       ? 2
-      : !cart.accountSetupStatus.localProfileCreated
+      : !cart.accountSetupStatus.localProfileExists
       ? 3
       : !cart.accountSetupStatus.grantTxSent
       ? 4
@@ -45,7 +45,8 @@ const CheckoutConfirmPageView = () => {
 
   useEffect(() => {
     let timer: ReturnType<typeof setInterval> | null = null
-    const shouldPoll = !finishedProcessingPayment
+    const shouldPoll =
+      !finishedProcessingPayment && !cart?.accountSetupStatus?.error
     if (!timer && shouldPoll) {
       timer = setInterval(() => {
         refetchCart()
@@ -152,7 +153,8 @@ const Progress = ({
         <StyledIcon name={'lock'} size={9.6} color={'yellow600'} />
       )}
       <Steps>
-        <H2>Activating citizenship</H2>
+        <H2>Activating Citizenship</H2>
+        <Body1>This could take up to 60 seconds...</Body1>
         <Step
           cart={cart}
           step={1}
@@ -161,22 +163,26 @@ const Progress = ({
         >
           Processing payment
         </Step>
-        <Step
-          cart={cart}
-          step={2}
-          processingStep={processingStep}
-          error={error}
-        >
-          Creating account
-        </Step>
-        <Step
-          cart={cart}
-          step={3}
-          processingStep={processingStep}
-          error={error}
-        >
-          Linking account
-        </Step>
+        {!cart.accountSetupStatus?.existingAccount && (
+          <>
+            <Step
+              cart={cart}
+              step={2}
+              processingStep={processingStep}
+              error={error}
+            >
+              Creating account
+            </Step>
+            <Step
+              cart={cart}
+              step={3}
+              processingStep={processingStep}
+              error={error}
+            >
+              Linking account
+            </Step>
+          </>
+        )}
         <Step
           cart={cart}
           step={4}
@@ -198,13 +204,22 @@ const Progress = ({
             <Step cart={cart} step={0} processingStep={1}>
               Done!
             </Step>
-            {firstTime && (
+            {user ? (
+              <Link href={'/citizenship'}>
+                <Button>Go to your citizenship page</Button>
+              </Link>
+            ) : (
               <>
                 {!cart.accountSetupStatus?.hasWallet && (
                   <>
                     <Body1>
-                      Log in by clicking the button below and selecting Email as
-                      shown in the image.
+                      Log in with the
+                      {cart.accountSetupStatus?.providedEmailDomain &&
+                        ' @' +
+                          cart.accountSetupStatus.providedEmailDomain +
+                          ' '}
+                      email you provided by clicking the button below and
+                      selecting Email as shown in the image.
                     </Body1>
                     <Image
                       src={'/images/email-login-demo.png'}

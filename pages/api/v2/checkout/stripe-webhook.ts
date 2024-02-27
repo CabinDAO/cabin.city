@@ -11,6 +11,7 @@ import { createPrivyAccount } from '@/lib/privy'
 import {
   createProfile,
   grantOrExtendCitizenship,
+  inviteSetError,
   ProfileWithInviteQueryInclude,
   ProfileWithInviteRelations,
 } from '@/utils/profile'
@@ -163,16 +164,23 @@ async function postProcessCart(cart: CartWithRelations) {
   }
 
   let profile: ProfileWithInviteRelations | null = null
-  if (cart.invite.privyDID) {
+  if (cart.invite.invitee) {
     profile = await prisma.profile.findUnique({
-      where: { privyDID: cart.invite.privyDID },
+      where: { id: cart.invite.invitee.id },
       include: ProfileWithInviteQueryInclude,
     })
   } else {
+    const name = cart.invite.name
+    const email = cart.invite.email
+    if (!name || !email) {
+      await inviteSetError(cart.invite, 'No profile and no name/email')
+      return
+    }
+
     // create prisma account
     const privyAccount = await createPrivyAccount(
-      cart.invite.email,
-      cart.invite.walletAddress
+      email,
+      cart.invite.walletAddress || undefined
     )
 
     // just to track account creation status
@@ -186,17 +194,14 @@ async function postProcessCart(cart: CartWithRelations) {
       privyAccount.linked_accounts.find((w) => w.type === 'wallet')?.address
 
     if (!walletAddress) {
-      await prisma.invite.update({
-        where: { id: cart.invite.id },
-        data: { error: `Privy failed to create a wallet` },
-      })
+      await inviteSetError(cart.invite, `Privy failed to create a wallet`)
       return
     }
 
     profile = await createProfile({
       privyDID: privyAccount.id,
-      name: cart.invite.name,
-      email: cart.invite.email,
+      name: name,
+      email: email,
       walletAddress: walletAddress,
       invite: cart.invite,
     })
@@ -204,6 +209,7 @@ async function postProcessCart(cart: CartWithRelations) {
 
   if (!profile) {
     console.error(`Failed to find or create profile for cart ${cart.externId}`)
+    await inviteSetError(cart.invite, 'Failed to create profile')
     return
   }
 
@@ -213,13 +219,21 @@ async function postProcessCart(cart: CartWithRelations) {
 // must match CartQueryInclude below
 type CartWithRelations = Prisma.CartGetPayload<{
   include: {
-    invite: true
+    invite: {
+      include: {
+        invitee: true
+      }
+    }
   }
 }>
 
 // must match CartWithRelations type above
 const CartQueryInclude = {
-  invite: true,
+  invite: {
+    include: {
+      invitee: true,
+    },
+  },
 } satisfies Prisma.CartInclude
 
 async function getRawBody(readable: Readable): Promise<Buffer> {

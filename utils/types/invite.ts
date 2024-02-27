@@ -7,11 +7,12 @@ export enum PaymentMethod {
 
 export type InviteClaimParams = {
   inviteCode: string
-  name: string
-  email: string
-  walletAddressOrENS: string
   paymentMethod: PaymentMethod
-  privyDID: string | null
+  newAccountParams: {
+    name: string
+    email: string
+    walletAddressOrENS: string
+  } | null
 }
 
 export type InviteClaimResponse =

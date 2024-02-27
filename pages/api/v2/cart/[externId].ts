@@ -35,14 +35,18 @@ async function handler(
 
   const invite = cart.invite
 
+  const existingAccount = !!(invite?.invitee && !invite?.privyDID)
+
   res.status(200).send({
     externId: cart.externId,
     amount: cart.amount.toNumber(),
     paymentStatus: cart.paymentStatus as PaymentStatus,
     accountSetupStatus: {
-      hasWallet: !!invite?.walletAddress,
-      privyAccountCreated: !!invite?.privyDID,
-      localProfileCreated: !!invite?.invitee,
+      existingAccount: existingAccount,
+      hasWallet: existingAccount || !!invite?.walletAddress,
+      providedEmailDomain: invite?.email?.split('@')[1],
+      privyAccountExists: existingAccount || !!invite?.privyDID,
+      localProfileExists: existingAccount || !!invite?.invitee,
       profileExternId: invite?.invitee?.externId ?? '',
       grantTxSent: !!invite?.citizenshipGrantTx,
       grantTxConfirmed: !!invite?.citizenshipTxConfirmed,

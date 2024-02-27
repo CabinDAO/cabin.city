@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, withAuth } from '@/utils/api/withAuth'
+import {
+  AuthData,
+  ProfileWithWallet,
+  requireProfile,
+  withAuth,
+} from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { randomId } from '@/utils/random'
 import {
@@ -7,10 +12,14 @@ import {
   InviteClaimResponse,
   PaymentMethod,
 } from '@/utils/types/invite'
-import { PaymentStatus } from '@prisma/client'
+import { Invite, PaymentStatus } from '@prisma/client'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { resolveAddressOrName } from '@/lib/ens'
 import { privy } from '@/lib/privy'
+import { $Enums } from '@/prisma/generated/client'
+import CitizenshipStatus = $Enums.CitizenshipStatus
+
+export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
@@ -23,63 +32,23 @@ async function handler(
     return
   }
 
-  if (opts.auth.privyDID) {
-    res.status(400).send({ error: 'Implement this case' }) // todo: make sure it works when they have an account already
-    return
+  let profile: ProfileWithWallet | null = null
+  if (opts.auth.authToken) {
+    profile = await requireProfile(req, res, opts)
   }
 
   const body = req.body as InviteClaimParams
 
-  const inviter = await prisma.profile.findUnique({
-    where: { inviteCode: body.inviteCode },
-  })
-
-  if (!inviter) {
-    res.status(400).send({ error: 'Invalid invite code' })
+  const invite = await createInvite(res, body, profile)
+  if (!invite) {
     return
   }
-
-  if (await privy.getUserByEmail(body.email)) {
-    res.status(400).send({ error: 'User with this email already exists' })
-    return
-  }
-
-  let walletAddress: string | undefined
-  if (body.walletAddressOrENS) {
-    walletAddress = await resolveAddressOrName(body.walletAddressOrENS)
-    if (!walletAddress) {
-      res
-        .status(400)
-        .send({ error: 'Invalid wallet walletAddress or ENS name' })
-      return
-    }
-
-    if (await privy.getUserByWalletAddress(walletAddress)) {
-      res
-        .status(400)
-        .send({ error: 'User with this wallet address already exists' })
-      return
-    }
-  }
-
-  const invite = await prisma.invite.create({
-    data: {
-      externId: randomId('invite'),
-      name: body.name,
-      email: body.email,
-      code: body.inviteCode,
-      inviterId: inviter.id,
-      walletAddress: walletAddress || '',
-      paymentMethod: body.paymentMethod,
-      privyDID: body.privyDID,
-    },
-  })
 
   const resData: InviteClaimResponse = { externId: invite.externId }
 
-  const checkoutThroughUnlock = !!(
-    walletAddress && body.paymentMethod === PaymentMethod.Crypto
-  )
+  const hasCryptoWallet = !!(profile || invite.walletAddress)
+  const checkoutThroughUnlock =
+    hasCryptoWallet && body.paymentMethod === PaymentMethod.Crypto
 
   if (!checkoutThroughUnlock) {
     const cart = await prisma.cart.create({
@@ -103,4 +72,88 @@ async function handler(
   res.status(200).send(resData)
 }
 
-export default withAuth(handler)
+async function createInvite(
+  res: NextApiResponse<InviteClaimResponse>,
+  body: InviteClaimParams,
+  profile: ProfileWithWallet | null
+): Promise<Invite | null> {
+  const inviter = await prisma.profile.findUnique({
+    where: { inviteCode: body.inviteCode },
+  })
+
+  if (!inviter) {
+    res.status(400).send({ error: 'Invalid invite code' })
+    return null
+  }
+
+  if (profile) {
+    const invite = await prisma.invite.create({
+      data: {
+        externId: randomId('invite'),
+        code: body.inviteCode,
+        inviterId: inviter.id,
+        paymentMethod: body.paymentMethod,
+        invitee: {
+          connect: { id: profile.id },
+        },
+      },
+    })
+    if (
+      profile.citizenshipStatus === null ||
+      profile.citizenshipStatus === CitizenshipStatus.VouchRequested
+    ) {
+      await prisma.profile.update({
+        where: { id: profile.id },
+        data: {
+          citizenshipStatus: CitizenshipStatus.Vouched,
+          voucher: { connect: { id: inviter.id } },
+        },
+      })
+    }
+    return invite
+  }
+
+  if (!body.newAccountParams) {
+    res
+      .status(400)
+      .send({ error: 'Must provide newAccountParams if not logged in' })
+    return null
+  }
+
+  if (await privy.getUserByEmail(body.newAccountParams.email)) {
+    res.status(400).send({ error: 'User with this email already exists' })
+    return null
+  }
+
+  let walletAddress: string | undefined
+  if (body.newAccountParams.walletAddressOrENS) {
+    walletAddress = await resolveAddressOrName(
+      body.newAccountParams.walletAddressOrENS
+    )
+    if (!walletAddress) {
+      res
+        .status(400)
+        .send({ error: 'Invalid wallet walletAddress or ENS name' })
+      return null
+    }
+
+    if (await privy.getUserByWalletAddress(walletAddress)) {
+      res
+        .status(400)
+        .send({ error: 'User with this wallet address already exists' })
+      return null
+    }
+  }
+
+  return prisma.invite.create({
+    data: {
+      externId: randomId('invite'),
+      name: body.newAccountParams.name,
+      email: body.newAccountParams.email,
+      code: body.inviteCode,
+      inviterId: inviter.id,
+      walletAddress: walletAddress || '',
+      paymentMethod: body.paymentMethod,
+    },
+  })
+}

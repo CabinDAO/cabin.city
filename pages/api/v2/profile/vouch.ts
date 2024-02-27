@@ -33,7 +33,9 @@ async function handler(
     data: {
       voucherId: params.action === 'vouch' ? profile.id : null,
       citizenshipStatus:
-        params.action === 'vouch' ? 'Vouched' : 'VouchRequested',
+        params.action === 'vouch'
+          ? CitizenshipStatus.Vouched
+          : CitizenshipStatus.VouchRequested,
     },
     where: {
       externId: params.externId,
@@ -44,8 +46,6 @@ async function handler(
       _count: true,
     },
   })
-
-  console.log(vouchedProfile)
 
   res.status(200).send({
     newStatus: vouchedProfile.citizenshipStatus as CitizenshipStatus,
