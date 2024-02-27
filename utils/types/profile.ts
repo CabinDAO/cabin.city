@@ -1,8 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
-
-// must match prisma's $Enums.RoleType
 import { APIError, Paginated } from '@/utils/types/shared'
 
+// must match prisma's $Enums.RoleType
 export enum RoleType {
   Caretaker = 'Caretaker',
   Builder = 'Builder',

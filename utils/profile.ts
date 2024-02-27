@@ -32,8 +32,8 @@ type ProfileCreateParams = {
   invite: Prisma.InviteGetPayload<null> | null
 }
 
-// must match ProfileWithRelations below
-type ProfileWithRelations = Prisma.ProfileGetPayload<{
+// must match ProfileWithInviteQueryInclude below
+export type ProfileWithInviteRelations = Prisma.ProfileGetPayload<{
   include: {
     wallet: true
     invite: {
@@ -44,8 +44,8 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
   }
 }>
 
-// must match ProfileWithRelations type above
-export const ProfileQueryInclude = {
+// must match ProfileWithInviteRelations type above
+export const ProfileWithInviteQueryInclude = {
   wallet: true,
   invite: {
     include: {
@@ -56,7 +56,7 @@ export const ProfileQueryInclude = {
 
 export async function createProfile(
   params: ProfileCreateParams
-): Promise<ProfileWithRelations> {
+): Promise<ProfileWithInviteRelations> {
   const profile = await prisma.profile.create({
     data: {
       externId: randomId('profile'),
@@ -96,8 +96,7 @@ export async function createProfile(
         : undefined,
       invite: params.invite ? { connect: { id: params.invite.id } } : undefined,
     },
-    // include must match ProfileWithIncludes type below
-    include: ProfileQueryInclude,
+    include: ProfileWithInviteQueryInclude,
   })
 
   const activityKey = `ProfileCreated|${profile.externId}`
@@ -115,10 +114,6 @@ export async function createProfile(
   })
 
   await createHats(profile)
-
-  if (params.invite) {
-    await grantOrExtendCitizenship(profile)
-  }
 
   return profile
 }
@@ -160,7 +155,9 @@ async function createHats(profile: Profile) {
   })
 }
 
-async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
+export async function grantOrExtendCitizenship(
+  profile: ProfileWithInviteRelations
+) {
   const invite = profile.invite
 
   if (!invite) {
@@ -187,8 +184,6 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
   }
 
   const wallet = new Wallet(privateKey, provider)
-  // console.log(wallet.address)
-  // console.log(await wallet.getBalance())
 
   const lockContract = PublicLock__factory.connect(
     unlockConfig.contractAddress,
@@ -197,7 +192,7 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
 
   const keyIndex = 0 // we only support one key per user for now, but Unlock supports more
   let hasKey = false
-  let hasValidKey = false
+  // let hasValidKey = false
 
   try {
     // need to check this to ensure they don't already have an expired key.
@@ -205,20 +200,20 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
     const totalKeys = await lockContract.totalKeys(address)
     hasKey = totalKeys.toNumber() > 0
 
-    hasValidKey = await lockContract.getHasValidKey(address)
+    // hasValidKey = await lockContract.getHasValidKey(address)
+    // if (hasValidKey) {
+    //   // tx will fail and revert if we try to grant a citizenship when they already have one
+    //   // TODO: if they did pay, maybe we should just extend their citizenship?
+    //   await inviteSetError(invite, `User already has a valid key`)
+    //   return null
+    // }
   } catch (e: unknown) {
     console.error(e)
     await inviteSetError(invite, `Couldnt fetch data about lock contract: ${e}`)
   }
 
-  if (hasValidKey) {
-    // tx will fail and revert if we try to grant a citizenship when they already have one
-    // TODO: if they did pay, maybe we should just extend their citizenship?
-    await inviteSetError(invite, `User already has a valid key`)
-    return null
-  }
+  // const hasExpiredKey = hasKey && !hasValidKey
 
-  const hasExpiredKey = hasKey && !hasValidKey
   const oneYearInSeconds = 60 * 60 * 24 * 365 * 1
   const expiration = Math.floor(new Date().getTime() / 1000) + oneYearInSeconds
   const keyManager = '0x3DedB545E9B89f63FA71Ab75497735d802C9d26F' // grin
@@ -241,7 +236,7 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
   try {
     const overrides = { gasLimit: 500000 }
 
-    tx = hasExpiredKey
+    tx = hasKey
       ? await lockContract.grantKeyExtension(
           keyIndex,
           oneYearInSeconds,
@@ -269,8 +264,8 @@ async function grantOrExtendCitizenship(profile: ProfileWithRelations) {
     data: { citizenshipGrantTx: tx.hash },
   })
 
-  // wait till tx is included in a block
   try {
+    // wait till tx is included in a block
     receipt = await tx.wait()
     console.log(`tx ${tx.hash} included in block: ${receipt.blockNumber}`)
   } catch (e: unknown) {

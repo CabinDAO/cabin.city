@@ -11,19 +11,12 @@ export type InviteClaimParams = {
   email: string
   walletAddressOrENS: string
   paymentMethod: PaymentMethod
+  privyDID: string | null
 }
 
 export type InviteClaimResponse =
   | {
       externId: string
       cartId?: string
-    }
-  | APIError
-
-export type InviteResponse =
-  | {
-      externId: string
-      name: string
-      email: string
     }
   | APIError

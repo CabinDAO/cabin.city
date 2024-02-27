@@ -127,6 +127,7 @@ const Progress = ({
 
   useEffect(() => {
     if (
+      processingStep == 6 &&
       firstTime &&
       user &&
       user.externId == cart.accountSetupStatus?.profileExternId

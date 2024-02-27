@@ -7,8 +7,13 @@ import { prisma } from '@/lib/prisma'
 import Stripe from 'stripe'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { EmailType, NewPurchasePayload } from '@/lib/mail/types'
-import { createProfile } from '@/utils/profile'
 import { createPrivyAccount } from '@/lib/privy'
+import {
+  createProfile,
+  grantOrExtendCitizenship,
+  ProfileWithInviteQueryInclude,
+  ProfileWithInviteRelations,
+} from '@/utils/profile'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -157,38 +162,52 @@ async function postProcessCart(cart: CartWithRelations) {
     return
   }
 
-  // create prisma account
-  const privyAccount = await createPrivyAccount(
-    cart.invite.email,
-    cart.invite.walletAddress
-  )
+  let profile: ProfileWithInviteRelations | null = null
+  if (cart.invite.privyDID) {
+    profile = await prisma.profile.findUnique({
+      where: { privyDID: cart.invite.privyDID },
+      include: ProfileWithInviteQueryInclude,
+    })
+  } else {
+    // create prisma account
+    const privyAccount = await createPrivyAccount(
+      cart.invite.email,
+      cart.invite.walletAddress
+    )
 
-  // just to track account creation status
-  await prisma.invite.update({
-    where: { id: cart.invite.id },
-    data: { privyDID: privyAccount.id },
-  })
-
-  const walletAddress =
-    cart.invite.walletAddress ||
-    privyAccount.linked_accounts.find((w) => w.type === 'wallet')?.address
-
-  if (!walletAddress) {
+    // just to track account creation status
     await prisma.invite.update({
       where: { id: cart.invite.id },
-      data: { error: `Privy failed to create a wallet` },
+      data: { privyDID: privyAccount.id },
     })
+
+    const walletAddress =
+      cart.invite.walletAddress ||
+      privyAccount.linked_accounts.find((w) => w.type === 'wallet')?.address
+
+    if (!walletAddress) {
+      await prisma.invite.update({
+        where: { id: cart.invite.id },
+        data: { error: `Privy failed to create a wallet` },
+      })
+      return
+    }
+
+    profile = await createProfile({
+      privyDID: privyAccount.id,
+      name: cart.invite.name,
+      email: cart.invite.email,
+      walletAddress: walletAddress,
+      invite: cart.invite,
+    })
+  }
+
+  if (!profile) {
+    console.error(`Failed to find or create profile for cart ${cart.externId}`)
     return
   }
 
-  // this also handles airdropping citizenship
-  await createProfile({
-    privyDID: privyAccount.id,
-    name: cart.invite.name,
-    email: cart.invite.email,
-    walletAddress: walletAddress,
-    invite: cart.invite,
-  })
+  await grantOrExtendCitizenship(profile)
 }
 
 // must match CartQueryInclude below

@@ -23,6 +23,7 @@ import {
   isValidName,
 } from '@/components/profile/validations'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { usePrivy } from '@privy-io/react-auth'
 
 type PayMethod = PaymentMethod | null
 
@@ -73,6 +74,7 @@ export const getServerSideProps = (async (context) => {
 const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
   const { showError } = useError()
   const router = useRouter()
+  const { ready: privyReady, user } = usePrivy()
 
   const { useMutate } = useBackend()
   const { trigger: createClaim, isMutating } =
@@ -102,7 +104,13 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
     }, 50)
   }
 
+  const proceedButtonReady = privyReady && !isMutating && !isAboutToRedirect
+
   const goToPayment = async () => {
+    if (!proceedButtonReady) {
+      return
+    }
+
     if (
       payMethod === null ||
       hasWallet === null ||
@@ -135,6 +143,7 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
       email,
       walletAddressOrENS: hasWallet ? walletAddress : '',
       paymentMethod: payMethod,
+      privyDID: user?.id,
     } as InviteClaimParams)
 
     if ('error' in inviteClaimRes) {
@@ -260,11 +269,8 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
             )}
           </Inputs>
           <ButtonRow>
-            <Button
-              onClick={goToPayment}
-              disabled={isMutating || isAboutToRedirect}
-            >
-              {(isMutating || isAboutToRedirect) && (
+            <Button onClick={goToPayment} disabled={!proceedButtonReady}>
+              {!proceedButtonReady && (
                 <>
                   <LoadingSpinner />
                   &nbsp; {/* this keeps the button height from collapsing */}

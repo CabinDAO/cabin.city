@@ -71,6 +71,7 @@ async function handler(
       inviterId: inviter.id,
       walletAddress: walletAddress || '',
       paymentMethod: body.paymentMethod,
+      privyDID: body.privyDID,
     },
   })
 
