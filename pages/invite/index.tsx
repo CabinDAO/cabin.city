@@ -11,6 +11,8 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import Icon from '@/components/core/Icon'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { useWindowSize } from 'react-use'
 
 const InvitePage = () => {
   const { user, isUserLoading } = useProfile()
@@ -37,11 +39,14 @@ const InvitePage = () => {
 
 const InviteContent = ({ user }: { user: MeFragment }) => {
   const inviteUrl = `${appDomainWithProto}/invite/${user.inviteCode}`
+  const { width } = useWindowSize()
+  const qrCodeSize = Math.min(350, width - 60)
   const [isFlashing, setIsFlashing] = useState(false)
   const flashBg = () => {
     setIsFlashing(true)
     setTimeout(() => setIsFlashing(false), 500) // Adjust timeout to match CSS transition
   }
+
   return (
     <>
       <H1>Vouch for New Citizens</H1>
@@ -63,7 +68,7 @@ const InviteContent = ({ user }: { user: MeFragment }) => {
       <H3>Scan code to join</H3>
       <QRCodeSVG
         value={inviteUrl}
-        size={350}
+        size={qrCodeSize}
         bgColor={theme.colors.green800}
         fgColor={theme.colors.yellow300}
         includeMargin={true}
@@ -77,6 +82,7 @@ const InviteContent = ({ user }: { user: MeFragment }) => {
           background: isFlashing ? theme.colors.yellow400 : 'initial',
           transition: 'background 0.5s ease-in-out',
           padding: '0.5rem',
+          wordBreak: 'break-all',
         }}
         onClick={() => {
           flashBg()
