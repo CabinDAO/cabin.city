@@ -41,6 +41,13 @@ export default function App({ Component, pageProps }: AppProps) {
               accentColor: theme.colors.green800 as `#${string}`,
               logo: `${appDomainWithProto}/images/cabin-auth.png`,
               showWalletLoginFirst: true,
+              walletList: [
+                'detected_wallets',
+                'metamask',
+                'coinbase_wallet',
+                'rainbow',
+                'wallet_connect',
+              ],
             },
           }}
         >
