@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useWindowSize } from 'react-use'
 import { QRCodeSVG } from 'qrcode.react'
 import { CitizenshipStatus, MeFragment } from '@/utils/types/profile'
 import { useProfile } from '@/components/auth/useProfile'
@@ -11,8 +12,6 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import Icon from '@/components/core/Icon'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { useWindowSize } from 'react-use'
 
 const InvitePage = () => {
   const { user, isUserLoading } = useProfile()

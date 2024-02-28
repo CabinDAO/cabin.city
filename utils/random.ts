@@ -5,18 +5,22 @@ enum Prefixes {
   location = 'lc',
   activity = 'ac',
   experience = 'ex',
-  invite = 'iv',
-  inviteCode = 'ic',
+  invite = 'in',
   cart = 'ct',
 }
 
 type PrefixType = keyof typeof Prefixes
 
-export function randomId(type: PrefixType, length = 20, lcOnly = false) {
-  const prefix = Prefixes[type]
-  const characters = lcOnly
-    ? 'abcdefghijkmnopqrstuvwxyz123456789'
-    : 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'
+export function randomId(type: PrefixType) {
+  return `${Prefixes[type]}_${randomString(20, 'mixedCase')}`
+}
+
+export function randomInviteCode() {
+  return randomString(8, 'lcOnly')
+}
+
+function randomString(length: number, alphabet: Alphabet) {
+  const characters = alphabets[alphabet]
   const charactersLength = characters.length
 
   let result = ''
@@ -24,9 +28,13 @@ export function randomId(type: PrefixType, length = 20, lcOnly = false) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength))
   }
 
-  return `${prefix}_${result}`
+  return result
 }
 
-export function randomInviteCode() {
-  return randomId('inviteCode', 8, true)
+// some chars are removed to aid legibility
+const alphabets = {
+  lcOnly: 'abcdefghijkmnopqrstuvwxyz123456789',
+  mixedCase: 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789',
 }
+
+type Alphabet = keyof typeof alphabets
