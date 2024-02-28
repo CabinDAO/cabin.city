@@ -61,7 +61,7 @@ const handler = async (
     description: cart.invite
       ? `citizenship for ${cart.invite.invitee?.name || cart.invite.name}`
       : 'cabin.city purchase',
-    amount: cart.amount.toNumber(),
+    amount: cart.amount.toNumber() * 100,
     currency: 'usd',
     statement_descriptor: 'cabin.city',
     metadata: {
