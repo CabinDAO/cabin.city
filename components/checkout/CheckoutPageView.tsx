@@ -1,17 +1,22 @@
 import { CartFragment } from '@/utils/types/cart'
 import styled from 'styled-components'
-import { H2 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
 import { PaymentForm } from '@/components/checkout/PaymentForm'
 import { TitleCard } from '@/components/core/TitleCard'
+import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 
 const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
   return (
     <SingleColumnLayout withFooter>
       <TitleCard icon="citizen" title="Checkout" />
       <Content shape="notch" notchSize={1.6}>
+        <H2>Cart</H2>
+        <Body1>
+          1 Year of Cabin citizenship: <Price>${YEARLY_PRICE_IN_USD}</Price>
+        </Body1>
         <H2>Payment</H2>
         <FormContainer>
           <PaymentForm cart={cart} />
@@ -40,4 +45,9 @@ const Content = styled(ContentCard)`
 const FormContainer = styled.div`
   display: flex;
   width: 100%;
+`
+
+const Price = styled.span`
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.green700};
 `
