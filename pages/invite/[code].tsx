@@ -129,6 +129,14 @@ const InviteClaim = ({ inviter }: { inviter: Inviter }) => {
     }, 50)
   }
 
+  useEffect(() => {
+    // fix the case where you're on a step that's invisible to logged-in users
+    // and then you log yourself in
+    if (alreadyHasAccount) {
+      goToStep(step)
+    }
+  }, [alreadyHasAccount, step])
+
   const proceedButtonReady = privyReady && !isMutating && !isAboutToRedirect
 
   const goToPayment = async () => {
