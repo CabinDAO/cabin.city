@@ -19,5 +19,6 @@ export type InviteClaimResponse =
   | {
       externId: string
       cartId?: string
+      profileId?: string
     }
   | APIError

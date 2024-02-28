@@ -15,7 +15,8 @@ import {
 } from '@/utils/types/invite'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { resolveAddressOrName } from '@/lib/ens'
-import { privy } from '@/lib/privy'
+import { createPrivyAccount, privy } from '@/lib/privy'
+import { createProfile } from '@/utils/profile'
 
 export default withAuth(handler)
 
@@ -48,7 +49,36 @@ async function handler(
   const checkoutThroughUnlock =
     hasCryptoWallet && body.paymentMethod === PaymentMethod.Crypto
 
-  if (!checkoutThroughUnlock) {
+  if (checkoutThroughUnlock) {
+    const name = invite.name
+    const email = invite.email
+    const walletAddress = invite.walletAddress
+
+    if (!email || !name || !walletAddress) {
+      res.status(400).send({
+        error: 'Must provide name, email, and wallet if not logged in',
+      })
+      return null
+    }
+
+    const privyAccount = await createPrivyAccount(email, walletAddress)
+
+    // just to track account creation status
+    await prisma.invite.update({
+      where: { id: invite.id },
+      data: { privyDID: privyAccount.id },
+    })
+
+    const profile = await createProfile({
+      privyDID: privyAccount.id,
+      invite: invite,
+      name: name,
+      email: email,
+      walletAddress: walletAddress,
+    })
+
+    resData.profileId = profile.externId
+  } else {
     const cart = await prisma.cart.create({
       data: {
         externId: randomId('cart'),

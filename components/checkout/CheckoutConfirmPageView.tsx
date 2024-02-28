@@ -61,7 +61,7 @@ const CheckoutConfirmPageView = () => {
         clearInterval(timer)
       }
     }
-  }, [finishedProcessingPayment, refetchCart])
+  }, [finishedProcessingPayment, refetchCart, cart?.accountSetupStatus?.error])
 
   // remove stripe query params from url so it looks nicer
   useEffect(() => {
@@ -135,7 +135,14 @@ const Progress = ({
     ) {
       router.push(`/profile/${user.externId}`).then()
     }
-  }, [router, user, firstTime])
+  }, [
+    router,
+    user,
+    firstTime,
+    ,
+    processingStep,
+    cart.accountSetupStatus?.profileExternId,
+  ])
 
   const error =
     cart.accountSetupStatus?.error ||
