@@ -120,20 +120,28 @@ model Profile {
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
 
-  voucherId Int?
-  voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
-  vouchees  Profile[] @relation("Vouches")
-
   avatar Avatar?
 
   citizenshipStatus   CitizenshipStatus?
   citizenshipTokenId  Int?
   citizenshipMintedAt DateTime?
 
+  voucherId Int?
+  voucher   Profile?  @relation("Vouches", fields: [voucherId], references: [id])
+  vouchees  Profile[] @relation("Vouches")
+
+  // the invite that this profile used to join
+  invite   Invite? @relation("Invite", fields: [inviteId], references: [id])
+  inviteId Int?    @unique
+
+  // the code that others use to be invited/vouched by this profile
+  inviteCode String?  @unique // the code that others use to be invited/vouched by this profile
+  // the invites that this profile has spawned
+  invitees   Invite[] @relation("Invitees")
+
   roles      Role[]
   locations  Location[] // TODO: rename to managedLocations??
   votes      LocationVote[] // used to be called locationVotes
-  carts      Cart[]
   activities Activity[]
   reactions  ActivityReaction[]
 }
@@ -324,7 +332,6 @@ model Offer {
   imageIpfsHash  String
   mediaItems     OfferMediaItem[]
 
-  carts      Cart[]
   activities Activity[]
 }
 
@@ -361,15 +368,11 @@ model Cart {
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
 
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-  offer     Offer   @relation(fields: [offerId], references: [id])
-  offerId   Int
+  invite   Invite? @relation(fields: [inviteId], references: [id])
+  inviteId Int?    @unique
 
   amount        Decimal       @db.Decimal(12, 2) // TODO: max amount is 9 billion dollars
   paymentStatus PaymentStatus
-  agreedToCOC   Boolean       @default(false)
-  agreedToTerms Boolean       @default(false)
   notes         String
 
   stripePaymentIntentClientSecret String? @unique
@@ -379,6 +382,41 @@ enum PaymentStatus {
   Pending
   Paid
   Error
+}
+
+enum PaymentMethod {
+  Crypto
+  CreditCard
+}
+
+model Invite {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique
+
+  inviter   Profile @relation("Invitees", fields: [inviterId], references: [id])
+  inviterId Int
+
+  invitee Profile? @relation("Invite")
+
+  cart   Cart?
+  cartId Int?  @unique
+
+  code          String
+  paymentMethod PaymentMethod
+
+  // info for creating a new account
+  name          String?
+  email         String?
+  walletAddress String?
+
+  // fields for tracking account creation process
+  privyDID               String?
+  citizenshipGrantTx     String?
+  citizenshipTxConfirmed Boolean @default(false)
+
+  error String?
 }
 
 model Activity {

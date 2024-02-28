@@ -1,5 +1,0 @@
-mutation UpdateLocation($id: ID!, $data: PartialUpdateLocationInput!) {
-  partialUpdateLocation(id: $id, data: $data) {
-    ...Location
-  }
-}

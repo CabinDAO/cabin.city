@@ -1,5 +1,0 @@
-mutation PublishLocation($id: ID!) {
-  publishLocation(id: $id) {
-    ...Location
-  }
-}

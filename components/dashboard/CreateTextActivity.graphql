@@ -1,5 +1,0 @@
-mutation CreateTextActivity($text: String!) {
-  createTextActivity(text: $text) {
-    ...Activity
-  }
-}

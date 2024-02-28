@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { resolveAddressOrName } from '@/lib/ens'
 import { PAGE_SIZE } from '@/utils/api/backend'
@@ -14,8 +14,8 @@ import {
   ProfileListFragment,
 } from '@/utils/types/profile'
 
-// must match the includes on profileQuery below
-type ProfileWithRelations = Prisma.ProfileGetPayload<{
+// must match ListedProfileQueryInclude below
+type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     avatar: true
     wallet: {
@@ -34,6 +34,25 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
     }
   }
 }>
+
+// must match ListedProfileWithRelations  above
+const ListedProfileQueryInclude = {
+  avatar: true,
+  wallet: {
+    include: {
+      _count: {
+        select: {
+          badges: true,
+        },
+      },
+    },
+  },
+  roles: {
+    include: {
+      walletHat: true,
+    },
+  },
+} satisfies Prisma.ProfileInclude
 
 async function handler(
   req: NextApiRequest,
@@ -106,24 +125,7 @@ async function handler(
           }
         : undefined,
     },
-    include: {
-      // includes must match ProfileWithRelations type above
-      avatar: true,
-      wallet: {
-        include: {
-          _count: {
-            select: {
-              badges: true,
-            },
-          },
-        },
-      },
-      roles: {
-        include: {
-          walletHat: true,
-        },
-      },
-    },
+    include: ListedProfileQueryInclude,
     orderBy: sortOrder(params.sort),
     skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
     take: PAGE_SIZE,
@@ -137,7 +139,7 @@ async function handler(
 
   // console.log(count, profiles)
   res.status(200).send({
-    profiles: profilesToFragments(profiles as ProfileWithRelations[]),
+    profiles: profilesToFragments(profiles as ListedProfileWithRelations[]),
     count: profiles.length,
     totalCount,
   })
@@ -188,7 +190,7 @@ const sortOrder = (
 }
 
 const profilesToFragments = (
-  profiles: ProfileWithRelations[]
+  profiles: ListedProfileWithRelations[]
 ): ProfileListFragment[] => {
   return profiles.map((profile) => {
     return {

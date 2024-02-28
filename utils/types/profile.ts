@@ -1,8 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
-
-// must match prisma's $Enums.RoleType
 import { APIError, Paginated } from '@/utils/types/shared'
 
+// must match prisma's $Enums.RoleType
 export enum RoleType {
   Caretaker = 'Caretaker',
   Builder = 'Builder',
@@ -82,10 +81,11 @@ export type ProfileListResponse =
     } & Paginated)
   | APIError
 
-export type ProfileNewResponse = {
-  externId?: string
-  error?: string
-}
+export type ProfileNewResponse =
+  | {
+      externId: string
+    }
+  | APIError
 
 export type ProfileVouchParams = {
   externId: string
@@ -209,6 +209,7 @@ export type MeFragment = {
   email: string
   bio: string
   location: string
+  inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
@@ -245,3 +246,9 @@ export type ProfileEditResponse = {
   success: boolean
   error?: string
 }
+
+export type ProfileDIDResponse =
+  | {
+      externId: string | null
+    }
+  | APIError

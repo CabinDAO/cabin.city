@@ -41,12 +41,6 @@ export const OfferView = ({
 
   if (!offer.type) return null
 
-  // TODO: let them actually select one
-  const selectedLodgingType = null
-  const isSoldOut = false
-  // selectedLodgingType &&
-  // selectedLodgingType.spotsTaken >= selectedLodgingType.quantity
-
   const galleryImages = (offer.mediaItems ?? []).map((image) => ({
     ...image,
     name: `${image.ipfsHash}`,
@@ -287,21 +281,6 @@ const DetailsSection = styled.div`
   gap: 1.6rem;
 `
 
-const CabinWeekDetails = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 1.6rem;
-
-  h1 {
-    font-size: 3.2rem;
-    small {
-      font-size: 1.3rem;
-      font-weight: 400;
-      //color: ${({ theme }) => theme.colors.green900};
-    }
-  }
-`
-
 const Pricing = styled.div`
   display: flex;
   flex-flow: row;
@@ -316,22 +295,4 @@ const Pricing = styled.div`
   ${({ theme }) => theme.bp.md_max} {
     width: 100%;
   }
-`
-
-const LodgingType = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.3rem;
-  justify-content: space-between;
-  width: 100%;
-  padding: 1.2rem 1.6rem;
-  border: 1px solid ${({ theme }) => theme.colors.green900}12; // green900 at 12% opacity
-`
-
-const LodgingTypeTop = styled.div`
-  display: flex;
-  flex-flow: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
 `

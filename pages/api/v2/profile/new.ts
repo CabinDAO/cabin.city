@@ -1,31 +1,28 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
-import { Profile, RoleType, RoleLevel, ActivityType } from '@prisma/client'
-import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
-import { randomId } from '@/utils/random'
+import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { ProfileNewResponse } from '@/utils/types/profile'
+import { createProfile } from '@/utils/profile'
 
-export interface ProfileNewParams {
-  address: string
+export type ProfileNewParams = {
+  walletAddress: string
   name: string
   email: string
-  avatar:
-    | {
-        url: string
-        contractAddress?: string | null
-        title?: string | null
-        tokenId?: string | null
-        tokenUri?: string | null
-        network?: string | null
-      }
-    | undefined
-  externalUserId: string
+  avatar?: {
+    url: string
+    contractAddress?: string | null
+    title?: string | null
+    tokenId?: string | null
+    tokenUri?: string | null
+    network?: string | null
+  }
+  inviteExternId?: string
 }
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -37,94 +34,28 @@ async function handler(
   const privyDID = requireAuth(req, res, opts)
   const body = req.body as ProfileNewParams
 
-  const profile = await prisma.profile.create({
-    data: {
-      externId: randomId('profile'),
-      privyDID: privyDID,
-      name: body.name,
-      email: body.email,
-      bio: '',
-      location: '',
-      wallet: {
-        connectOrCreate: {
-          where: {
-            address: body.address,
-          },
-          create: {
-            address: body.address,
-            cabinTokenBalance: '0',
-          },
-        },
-      },
-      avatar: body.avatar
-        ? {
-            create: {
-              url: body.avatar.url,
-              contractAddress: body.avatar.contractAddress,
-              title: body.avatar.title,
-              tokenId: body.avatar.tokenId,
-              tokenUri: body.avatar.tokenUri,
-              network: body.avatar.network,
-            },
-          }
-        : undefined,
-    },
-  })
-
-  const activityKey = `ProfileCreated|${profile.externId}`
-  await prisma.activity.upsert({
-    where: {
-      key: activityKey,
-    },
-    create: {
-      externId: randomId('activity'),
-      key: activityKey,
-      type: ActivityType.ProfileCreated,
-      profileId: profile.id,
-    },
-    update: {},
-  })
-
-  await createHats(profile)
-
-  res.status(200).send({ externId: profile.externId } as ProfileNewResponse)
-}
-
-async function createHats(profile: Profile) {
-  const walletHats = await prisma.walletHat.findMany({
-    where: {
-      walletId: profile.walletId,
-    },
-    include: {
-      hat: true,
-    },
-  })
-
-  if (!walletHats.length) return
-
-  const rolesToAdd = walletHats
-    .map((wh) => {
-      const r = getRoleInfoFromHat(wh.hat.hatsProtocolId)
-
-      return {
-        walletHatId: wh.id,
-        type: r?.type,
-        level: r?.level,
-      }
+  let invite: Prisma.InviteGetPayload<null> | null = null
+  if (body.inviteExternId) {
+    invite = await prisma.invite.findUnique({
+      where: { externId: body.inviteExternId },
     })
-    .filter((r) => r.type && r.level)
 
-  await prisma.role.createMany({
-    data: rolesToAdd.map((r) => {
-      return {
-        profileId: profile.id,
-        walletHatId: r.walletHatId,
-        type: r.type as RoleType,
-        level: r.level as RoleLevel,
-      }
-    }),
-    skipDuplicates: true,
+    if (!invite) {
+      res.status(400).send({ error: 'Invite not found' })
+      return
+    }
+  }
+
+  const profile = await createProfile({
+    privyDID,
+    walletAddress: body.walletAddress,
+    name: body.name,
+    email: body.email,
+    avatar: body.avatar,
+    invite,
   })
+
+  res.status(200).send({ externId: profile.externId })
 }
 
 export default withAuth(handler)

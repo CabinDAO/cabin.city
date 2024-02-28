@@ -4,7 +4,7 @@ import { RefetchResponse } from '@/utils/types/unlock'
 import { PublicLock__factory } from '@/generated/contract'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getAlchemyProvider } from '@/lib/alchemy'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
 import { randomId } from '@/utils/random'
 

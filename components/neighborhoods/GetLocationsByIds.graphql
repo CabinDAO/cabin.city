@@ -1,5 +1,0 @@
-query GetLocationsByIds($ids: [ID!]!) {
-  getLocationsByIds(ids: $ids) {
-    ...LocationItem
-  }
-}

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import {
   ActivityType,
   BlockSyncType,

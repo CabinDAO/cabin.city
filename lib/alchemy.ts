@@ -1,7 +1,7 @@
 import { Alchemy, Network } from 'alchemy-sdk'
 import { ethers } from 'ethers'
 
-// TODO: switch to viem
+// TODO: switch from ethers to viem
 
 export const getAlchemyProvider = (network: ethers.providers.Networkish) => {
   switch (network) {

@@ -1,6 +1,6 @@
 import { providers } from 'ethers'
 import { NextApiResponse } from 'next'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { $Enums, BlockSyncAttempt } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 

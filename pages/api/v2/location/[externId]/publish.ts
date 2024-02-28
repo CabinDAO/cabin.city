@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { LocationPublishResponse } from '@/utils/types/location'
 import { randomId } from '@/utils/random'
 import { ActivityType } from '@prisma/client'

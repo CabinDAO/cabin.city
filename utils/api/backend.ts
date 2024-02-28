@@ -7,6 +7,8 @@ import { APIError, Paginated } from '@/utils/types/shared'
 
 export const PAGE_SIZE = 20
 
+export const NO_TOKEN = async () => null
+
 type PostMethod = 'POST' | 'DELETE'
 
 export type UrlParams =

@@ -1,5 +1,5 @@
 import { getImageUrl } from '@/lib/image'
-import { getOtterSpaceOpenseaUrl } from '@/utils/opensea'
+import { getOtterSpaceOpenseaUrl } from '@/lib/opensea'
 import styled from 'styled-components'
 import Icon from './Icon'
 import { NoWrap } from './NoWrap'

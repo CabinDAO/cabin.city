@@ -1,6 +1,0 @@
-query GetProfileByName($name: String!) {
-  profileByName(name: $name) {
-    _id
-    name
-  }
-}

@@ -1,8 +1,0 @@
-query GetLocationsSortedByVoteCount($size: Int, $cursor: String) {
-  locationsSortedByVoteCount(_size: $size, _cursor: $cursor) {
-    data {
-      ...LocationItem
-    }
-    after
-  }
-}

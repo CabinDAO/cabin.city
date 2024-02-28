@@ -40,7 +40,7 @@ export default function App({ Component, pageProps }: AppProps) {
               theme: theme.colors.yellow100 as `#${string}`,
               accentColor: theme.colors.green800 as `#${string}`,
               logo: `${appDomainWithProto}/images/cabin-auth.png`,
-              showWalletLoginFirst: false,
+              showWalletLoginFirst: true,
             },
           }}
         >

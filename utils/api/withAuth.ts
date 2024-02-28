@@ -2,9 +2,10 @@ import * as jose from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { ironOptions } from '@/lib/next-server/iron-options'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { Profile, Wallet } from '@prisma/client'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
+import { IncomingHttpHeaders } from 'http'
 
 export type ProfileWithWallet = Profile & {
   wallet: Wallet
@@ -34,29 +35,10 @@ export type WithAuthApiHandler<T = any> = (
 export const withAuth = (handler: WithAuthApiHandler) => {
   const h = async (req: NextApiRequest, res: NextApiResponse, opts = {}) => {
     try {
-      const authToken =
-        (await req.headers.authorization?.replace('Bearer ', '')) || null
-      let privyDID: string | null = null
-
-      if (authToken) {
-        const spkiPublicKey = `-----BEGIN PUBLIC KEY-----
-          ${process.env.NEXT_PUBLIC_PRIVY_PUBLIC_KEY}
-          -----END PUBLIC KEY-----
-          `
-
-        const verificationKey = await jose.importSPKI(spkiPublicKey, 'ES256')
-
-        const response = await jose.jwtVerify(authToken, verificationKey, {
-          issuer: 'privy.io',
-          audience: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
-        })
-
-        privyDID = response.payload.sub || null
-      }
-
+      const { authToken, privyDID } = await privyDIDFromHeaders(req.headers)
       await handler(req, res, {
         ...opts,
-        auth: { authToken: authToken || null, privyDID },
+        auth: { authToken: authToken, privyDID },
       })
     } catch (error) {
       if (error instanceof AuthenticationError) {
@@ -109,4 +91,26 @@ export const requireProfile = async (
   }
 
   return profile
+}
+
+export const privyDIDFromAuthToken = async (authToken: string) => {
+  const spkiPublicKey = `-----BEGIN PUBLIC KEY-----
+          ${process.env.NEXT_PUBLIC_PRIVY_PUBLIC_KEY}
+          -----END PUBLIC KEY-----
+          `
+
+  const verificationKey = await jose.importSPKI(spkiPublicKey, 'ES256')
+
+  const response = await jose.jwtVerify(authToken, verificationKey, {
+    issuer: 'privy.io',
+    audience: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
+  })
+
+  return response.payload.sub || null
+}
+
+export const privyDIDFromHeaders = async (headers: IncomingHttpHeaders) => {
+  const authToken = headers.authorization?.replace('Bearer ', '') || null
+  const privyDID = authToken ? await privyDIDFromAuthToken(authToken) : null
+  return { authToken, privyDID }
 }

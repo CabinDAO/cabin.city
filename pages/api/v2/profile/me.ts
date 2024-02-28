@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
-import { prisma } from '@/utils/prisma'
+import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
   RoleLevel,
@@ -10,6 +10,7 @@ import {
   ProfileMeResponse,
   MeFragment,
 } from '@/utils/types/profile'
+import { randomInviteCode } from '@/utils/random'
 
 // must match the includes on query below
 type MyProfileWithRelations = Prisma.ProfileGetPayload<{
@@ -114,6 +115,14 @@ async function handler(
     },
   })
 
+  if (profile && !profile.inviteCode) {
+    const updatedProfile = await prisma.profile.update({
+      where: { id: profile.id },
+      data: { inviteCode: randomInviteCode() },
+    })
+    profile.inviteCode = updatedProfile.inviteCode
+  }
+
   res.status(profile ? 200 : 404).send({
     me: profile ? profileToFragment(profile as MyProfileWithRelations) : null,
   })
@@ -128,6 +137,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     email: profile.email,
     bio: profile.bio,
     location: profile.location,
+    inviteCode: profile.inviteCode ?? '',
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
     citizenshipMintedAt: profile.citizenshipMintedAt

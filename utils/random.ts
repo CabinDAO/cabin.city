@@ -5,15 +5,18 @@ enum Prefixes {
   location = 'lc',
   activity = 'ac',
   experience = 'ex',
+  invite = 'iv',
+  inviteCode = 'ic',
+  cart = 'ct',
 }
 
 type PrefixType = keyof typeof Prefixes
 
-export function randomId(type: PrefixType) {
-  const length = 20
+export function randomId(type: PrefixType, length = 20, lcOnly = false) {
   const prefix = Prefixes[type]
-  const characters =
-    'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'
+  const characters = lcOnly
+    ? 'abcdefghijkmnopqrstuvwxyz123456789'
+    : 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789'
   const charactersLength = characters.length
 
   let result = ''
@@ -22,4 +25,8 @@ export function randomId(type: PrefixType) {
   }
 
   return `${prefix}_${result}`
+}
+
+export function randomInviteCode() {
+  return randomId('inviteCode', 8, true)
 }

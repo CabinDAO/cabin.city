@@ -1,4 +1,4 @@
-import { getAppConfig } from '@/utils/app-config'
+import { getAppConfig } from '../utils/app-config'
 import { BigNumber } from 'ethers'
 
 interface HatsConfig {
