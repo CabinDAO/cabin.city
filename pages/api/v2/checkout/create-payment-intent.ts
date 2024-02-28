@@ -38,7 +38,13 @@ const handler = async (
 
   const cart = await prisma.cart.findUnique({
     where: { externId: body.cartId },
-    include: { invite: true },
+    include: {
+      invite: {
+        include: {
+          invitee: true,
+        },
+      },
+    },
   })
 
   if (!cart) {
@@ -53,7 +59,7 @@ const handler = async (
 
   const paymentIntent = await stripe.paymentIntents.create({
     description: cart.invite
-      ? `citizenship for ${cart.invite.name}`
+      ? `citizenship for ${cart.invite.invitee?.name || cart.invite.name}`
       : 'cabin.city purchase',
     amount: cart.amount.toNumber(),
     currency: 'usd',
