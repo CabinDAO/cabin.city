@@ -189,7 +189,7 @@ export default function InviteClaimFlow({
 
   if (user?.citizenshipStatus == CitizenshipStatus.Verified) {
     return (
-      <CitizenMessage emphasized>
+      <CitizenMessage>
         You are already a citizen.{' '}
         <UnderlinedLink href={'/citizenship'}>
           View or extend your citizenship here
