@@ -20,6 +20,7 @@ import {
   isValidEmail,
   isValidName,
 } from '@/components/profile/validations'
+import Script from 'next/script'
 
 export type Inviter = {
   name: string
@@ -58,6 +59,22 @@ export default function InviteClaimFlow({
   const [isAboutToRedirect, setIsAboutToRedirect] = useState(false)
   const [confirmedNoAccount, setConfirmedNoAccount] = useState(false)
   const [sendToCitizenship, setSendToCitizenship] = useState(false)
+
+  const [applePaySupported, setApplePaySupported] = useState(false)
+  useEffect(() => {
+    const checkApplePaySupport = () => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (window && window.ApplePaySession) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const canMakePayments = window.ApplePaySession.canMakePayments()
+        setApplePaySupported(canMakePayments)
+      }
+    }
+
+    checkApplePaySupport()
+  }, [])
 
   const alreadyHasAccount = privyReady && !!user
 
@@ -180,6 +197,10 @@ export default function InviteClaimFlow({
 
   return (
     <>
+      <Script
+        src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
+        strategy="afterInteractive"
+      />
       <Button
         disabled={step > Step.NotStarted}
         onClick={() => {
@@ -270,7 +291,7 @@ export default function InviteClaimFlow({
                   goToStep(Step.LastStep)
                 }}
               >
-                Credit Card
+                Credit Card {applePaySupported && ' / Apple Pay'}
               </Button>
             </ButtonRow>
           </>
