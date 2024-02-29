@@ -60,7 +60,7 @@ export default function InviteClaimFlow({
   const [confirmedNoAccount, setConfirmedNoAccount] = useState(false)
   const [sendToCitizenship, setSendToCitizenship] = useState(false)
 
-  const [applePaySupported, setApplePaySupported] = useState(false)
+  const [isApplePaySupported, setIsApplePaySupported] = useState(false)
   useEffect(() => {
     const checkApplePaySupport = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -69,11 +69,62 @@ export default function InviteClaimFlow({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         const canMakePayments = window.ApplePaySession.canMakePayments()
-        setApplePaySupported(canMakePayments)
+        setIsApplePaySupported(canMakePayments)
       }
     }
 
     checkApplePaySupport()
+  }, [])
+
+  const [isGooglePaySupported, setIsGooglePaySupported] = useState(false)
+  useEffect(() => {
+    if (!window.PaymentRequest) {
+      return
+    }
+    const paymentRequest = new PaymentRequest(
+      [
+        {
+          supportedMethods: 'https://google.com/pay',
+          data: {
+            // Google Pay-specific data here
+            environment: 'TEST', // or 'PRODUCTION'
+            apiVersion: 2,
+            apiVersionMinor: 0,
+            allowedPaymentMethods: [
+              {
+                type: 'CARD',
+                parameters: {
+                  allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                  allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                },
+                tokenizationSpecification: {
+                  type: 'PAYMENT_GATEWAY',
+                  // Gateway and other tokenization parameters here
+                },
+              },
+            ],
+            // Merchant Info here
+          },
+        },
+      ],
+      {
+        total: {
+          label: 'Total',
+          amount: { currency: 'USD', value: '0.00' },
+        },
+      }
+    )
+
+    console.log('checking for google pay')
+    paymentRequest
+      .canMakePayment()
+      .then((result) => {
+        setIsGooglePaySupported(result)
+      })
+      .catch((error) => {
+        console.error('Payment Request Error:', error)
+        setIsGooglePaySupported(false)
+      })
   }, [])
 
   const alreadyHasAccount = privyReady && !!user
@@ -201,6 +252,10 @@ export default function InviteClaimFlow({
         src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"
         strategy="afterInteractive"
       />
+      <Script
+        src="https://pay.google.com/gp/p/js/pay.js"
+        strategy="afterInteractive"
+      />
       <Button
         disabled={step > Step.NotStarted}
         onClick={() => {
@@ -291,7 +346,8 @@ export default function InviteClaimFlow({
                   goToStep(Step.LastStep)
                 }}
               >
-                Credit Card {applePaySupported && ' / Apple Pay'}
+                Credit Card {isApplePaySupported && ' / Apple Pay'}
+                {isGooglePaySupported && ' / Google Pay'}
               </Button>
             </ButtonRow>
           </>
