@@ -13,7 +13,7 @@ import { appDomainWithProto } from '@/utils/display-utils'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import Icon from '@/components/core/Icon'
 
-const InvitePage = () => {
+export default function InvitePage() {
   const { user, isUserLoading } = useProfile()
 
   return (
@@ -93,8 +93,6 @@ const InviteContent = ({ user }: { user: MeFragment }) => {
     </>
   )
 }
-
-export default InvitePage
 
 const Content = styled(ContentCard)`
   display: flex;

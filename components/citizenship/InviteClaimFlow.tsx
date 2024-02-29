@@ -2,6 +2,9 @@ import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/router'
 import { usePrivy } from '@privy-io/react-auth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
+import { useProfile } from '@/components/auth/useProfile'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import {
   InviteClaimParams,
   InviteClaimResponse,
@@ -20,7 +23,6 @@ import {
   isValidEmail,
   isValidName,
 } from '@/components/profile/validations'
-import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
 
 export type Inviter = {
   name: string
@@ -44,7 +46,8 @@ export default function InviteClaimFlow({
 }) {
   const { showError } = useError()
   const router = useRouter()
-  const { ready: privyReady, user, login } = usePrivy()
+  const { login } = usePrivy()
+  const { user, isUserLoading } = useProfile()
 
   const { useMutate } = useBackend()
   const { trigger: createClaim, isMutating } =
@@ -64,7 +67,7 @@ export default function InviteClaimFlow({
   const { googlePayScriptElement, isGooglePaySupported } =
     useCheckForGooglePay()
 
-  const alreadyHasAccount = privyReady && !!user
+  const alreadyHasAccount = !isUserLoading && !!user
 
   const refs: Partial<{ [key in Step]: RefObject<HTMLDivElement> }> = {
     [Step.PromptLogin]: useRef<HTMLDivElement>(null),
@@ -100,7 +103,7 @@ export default function InviteClaimFlow({
     }
   }, [alreadyHasAccount, step, sendToCitizenship, router])
 
-  const proceedButtonReady = privyReady && !isMutating && !isAboutToRedirect
+  const proceedButtonReady = !isUserLoading && !isMutating && !isAboutToRedirect
 
   const newUserPayingThroughUnlock =
     !alreadyHasAccount && payMethod == PaymentMethod.Crypto
@@ -187,6 +190,9 @@ export default function InviteClaimFlow({
     <>
       {applePayScriptElement}
       {googlePayScriptElement}
+      {/*{user && user.citizenshipStatus == CitizenshipStatus.Verified && (*/}
+      {/*  <Body1>Your citizenship expires on</Body1>*/}
+      {/*)}*/}
       <Button
         disabled={step > Step.NotStarted}
         onClick={() => {
@@ -194,7 +200,9 @@ export default function InviteClaimFlow({
           goToStep(Step.PromptLogin)
         }}
       >
-        Claim your invite
+        {user && user.citizenshipStatus == CitizenshipStatus.Verified
+          ? 'Extend your citizenship'
+          : 'Claim your invite'}
       </Button>
       {step >= Step.PromptLogin && !alreadyHasAccount && (
         <>
