@@ -10,10 +10,12 @@ import alertSvg from './svg/alert.svg'
 import backpackSvg from './svg/backpack.svg'
 import backpackGreenSvg from './svg/backpack-green.svg'
 import backArrowSvg from './svg/back-arrow.svg'
+import businessHandshakeSvg from './svg/business-handshake.svg'
 import builderSvg from './svg/builder.svg'
 import calendarStarFourPointsSvg from './svg/calendar-star-four-points.svg'
 import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
+import chatBubbleSvg from './svg/chat-bubble.svg'
 import checkSvg from './svg/check.svg'
 import checkCircleSvg from './svg/check-circle.svg'
 import checkCircleGreenSvg from './svg/check-circle-green.svg'
@@ -25,14 +27,17 @@ import chevronRightSvg from './svg/chevron-right.svg'
 import chevronUpSvg from './svg/chevron-up.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
+import coinSvg from './svg/coin.svg'
 import copySvg from './svg/copy.svg'
 import creatorSvg from './svg/creator.svg'
 import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
+import discountSvg from './svg/discount.svg'
 import draftProposalSvg from './svg/draft-proposal.svg'
 import exclamationMarkSvg from './svg/exclamation-mark.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
+import flagSvg from './svg/flag.svg'
 import flowerSvg from './svg/flower.svg'
 import formatBold from './svg/format-bold.svg'
 import formatHeader1 from './svg/format-header1.svg'
@@ -59,15 +64,18 @@ import mapGreenSvg from './svg/map-green.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import minusSvg from './svg/minus.svg'
+import moonStarsSvg from './svg/moon-stars.svg'
 import mountainSvg from './svg/mountain.svg'
 import mountainsSvg from './svg/mountains.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
 import neighborhoodsSvg from './svg/neighborhoods.svg'
+import networkGlobeSvg from './svg/network-globe.svg'
 import nftSvg from './svg/nft.svg'
 import offerSvg from './svg/offer.svg'
 import outpostSvg from './svg/outpost.svg'
+import passportSvg from './svg/passport.svg'
 import peaceSignSvg from './svg/peace-sign.svg'
 import pencilSvg from './svg/pencil.svg'
 import personSvg from './svg/person.svg'
@@ -80,13 +88,16 @@ import residentSvg from './svg/resident.svg'
 import scheduleGreenSvg from './svg/schedule-green.svg'
 import searchSvg from './svg/search.svg'
 import shieldSvg from './svg/shield.svg'
+import shirtSvg from './svg/shirt.svg'
 import silhouette from './svg/silhouette.svg'
 import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
 import staySvg from './svg/stay.svg'
+import takeoutSvg from './svg/takeout.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
+import ticketSvg from './svg/ticket.svg'
 import trashSvg from './svg/trash.svg'
 import twitterSvg from './svg/twitter.svg'
 import upArrowSvg from './svg/up-arrow.svg'
@@ -105,9 +116,11 @@ export const IconSvgs = {
   'backpack-green': backpackGreenSvg,
   'back-arrow': backArrowSvg,
   builder: builderSvg,
+  'business-handshake': businessHandshakeSvg,
   'calendar-star-four-points': calendarStarFourPointsSvg,
   caretaker: caretakerSvg,
   'card-heart': cardHeartSvg,
+  'chat-bubble': chatBubbleSvg,
   check: checkSvg,
   'check-circle': checkCircleSvg,
   'check-circle-green': checkCircleGreenSvg,
@@ -119,14 +132,17 @@ export const IconSvgs = {
   'chevron-up': chevronUpSvg,
   citizen: citizenSvg,
   close: closeSvg,
+  coin: coinSvg,
   copy: copySvg,
   creator: creatorSvg,
   dashboard: dashboardSvg,
   date: dateSvg,
+  discount: discountSvg,
   'draft-proposal': draftProposalSvg,
   'exclamation-mark': exclamationMarkSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,
+  flag: flagSvg,
   flower: flowerSvg,
   'format-bold': formatBold,
   'format-header1': formatHeader1,
@@ -153,15 +169,18 @@ export const IconSvgs = {
   members: membersSvg,
   menu: menuSvg,
   minus: minusSvg,
+  'moon-stars': moonStarsSvg,
   mountain: mountainSvg,
   mountains: mountainsSvg,
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
   neighborhoods: neighborhoodsSvg,
+  'network-globe': networkGlobeSvg,
   nft: nftSvg,
   offer: offerSvg,
   outpost: outpostSvg,
+  passport: passportSvg,
   'peace-sign': peaceSignSvg,
   pencil: pencilSvg,
   person: personSvg,
@@ -174,13 +193,16 @@ export const IconSvgs = {
   'schedule-green': scheduleGreenSvg,
   search: searchSvg,
   shield: shieldSvg,
+  shirt: shirtSvg,
   silhouette: silhouette,
   'sign-out': signOutSvg,
   sleep: sleepSvg,
   stamp: stampSvg,
   stay: staySvg,
+  takeout: takeoutSvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
+  ticket: ticketSvg,
   trash: trashSvg,
   twitter: twitterSvg,
   'up-arrow': upArrowSvg,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import theme, { padding } from '@/styles/theme'
 import Icon, { IconName } from '@/components/core/Icon'
@@ -10,26 +10,33 @@ export default function CitizenshipBenefits({
 }: {
   suggestHide: boolean
 }) {
-  const [isHidden, setIsHidden] = useState<true | false | null>(null)
+  const [isHidden, setIsHidden] = useState(false)
+
+  useEffect(() => {
+    setIsHidden(suggestHide)
+  }, [suggestHide, setIsHidden])
+
   return (
     <Container>
       <HeaderWrap>
         <Header onClick={() => setIsHidden(!isHidden)}>Citizen Benefits</Header>
       </HeaderWrap>
-      <Rows hidden={isHidden !== null ? isHidden : suggestHide}>
+      <Rows hidden={isHidden}>
         <Row>
           <RowHeader>
             <Icon name={'check'} size={1.6} />
             Connect with Citizens around the world
           </RowHeader>
           <Items>
-            <Item icon={'peace-sign'}>
+            <Item icon={'network-globe'}>
               20+ properties and 300+ people in dozens of countries
             </Item>
-            <Item icon={'peace-sign'}>
+            <Item icon={'moon-stars'}>
               7 free nights at the Citizen&apos;s Clubhouse at Neighborhood Zero
             </Item>
-            <Item icon={'peace-sign'}>Join us for our seasonal gatherings</Item>
+            <Item icon={'business-handshake'}>
+              Join us for our seasonal gatherings
+            </Item>
           </Items>
         </Row>
         <HorizontalDivider />
@@ -39,12 +46,14 @@ export default function CitizenshipBenefits({
             Participate in our community
           </RowHeader>
           <Items>
-            <Item icon={'peace-sign'}>25 CABIN + 10 C per referral</Item>
-            <Item icon={'peace-sign'}>Vouch for others to become Citizens</Item>
-            <Item icon={'peace-sign'}>
+            <Item icon={'coin'}>25 CABIN + 10 C per referral</Item>
+            <Item icon={'chat-bubble'}>
+              Vouch for others to become Citizens
+            </Item>
+            <Item icon={'takeout'}>
               $450 reimbursement for hosting Supper Clubs
             </Item>
-            <Item icon={'peace-sign'}>
+            <Item icon={'flag'}>
               Become the founder of a Cabin neighborhood
             </Item>
           </Items>
@@ -56,12 +65,12 @@ export default function CitizenshipBenefits({
             Get Citizen benefits
           </RowHeader>
           <Items>
-            <Item icon={'peace-sign'}>
+            <Item icon={'passport'}>
               Physical passport and numbered Citizen NFT
             </Item>
-            <Item icon={'peace-sign'}>Welcome package and merch drops</Item>
-            <Item icon={'peace-sign'}>Tickets to conferences and events</Item>
-            <Item icon={'peace-sign'}>Partnership discounts and perks</Item>
+            <Item icon={'shirt'}>Welcome package and merch drops</Item>
+            <Item icon={'ticket'}>Tickets to conferences and events</Item>
+            <Item icon={'discount'}>Partnership discounts and perks</Item>
           </Items>
         </Row>
       </Rows>
@@ -85,7 +94,7 @@ function Item({
         style={{
           backgroundColor: theme.colors.green800,
           borderRadius: '50%',
-          padding: '0.5rem',
+          padding: '0.6rem',
         }}
       />
       <Body1>{children}</Body1>

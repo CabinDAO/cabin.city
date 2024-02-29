@@ -53,7 +53,7 @@ export default function Page({
                     setHideBenefits(true)
                   }}
                 />
-                {/*<CitizenshipBenefits suggestHide={hideBenefits} />*/}
+                <CitizenshipBenefits suggestHide={hideBenefits} />
               </Content>
             </>
           ) : (
