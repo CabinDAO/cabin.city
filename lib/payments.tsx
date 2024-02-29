@@ -59,10 +59,10 @@ export function useCheckForGooglePay() {
       }
     )
 
-    console.log('checking for google pay')
     paymentRequest
       .canMakePayment()
       .then((result) => {
+        console.log('google pay support', result)
         setIsGooglePaySupported(result)
       })
       .catch((error) => {
