@@ -4,14 +4,13 @@ import { usePrivy } from '@privy-io/react-auth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
 import { useProfile } from '@/components/auth/useProfile'
-import { CitizenshipStatus } from '@/utils/types/profile'
 import {
   InviteClaimParams,
   InviteClaimResponse,
   PaymentMethod,
 } from '@/utils/types/invite'
 import styled from 'styled-components'
-import { Body1 } from '@/components/core/Typography'
+import { Body1, Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { useBackend } from '@/components/hooks/useBackend'
 import { useError } from '@/components/hooks/useError'
@@ -23,6 +22,8 @@ import {
   isValidEmail,
   isValidName,
 } from '@/components/profile/validations'
+import { CitizenshipStatus } from '@/utils/types/profile'
+import Link from 'next/link'
 
 export type Inviter = {
   name: string
@@ -186,13 +187,22 @@ export default function InviteClaimFlow({
     )
   }
 
+  if (user?.citizenshipStatus == CitizenshipStatus.Verified) {
+    return (
+      <CitizenMessage emphasized>
+        You are already a citizen.{' '}
+        <UnderlinedLink href={'/citizenship'}>
+          View or extend your citizenship here
+        </UnderlinedLink>
+        .
+      </CitizenMessage>
+    )
+  }
+
   return (
     <>
       {applePayScriptElement}
       {googlePayScriptElement}
-      {/*{user && user.citizenshipStatus == CitizenshipStatus.Verified && (*/}
-      {/*  <Body1>Your citizenship expires on</Body1>*/}
-      {/*)}*/}
       <Button
         disabled={step > Step.NotStarted}
         onClick={() => {
@@ -200,9 +210,7 @@ export default function InviteClaimFlow({
           goToStep(Step.PromptLogin)
         }}
       >
-        {user && user.citizenshipStatus == CitizenshipStatus.Verified
-          ? 'Extend your citizenship'
-          : 'Claim your invite'}
+        Claim your invite
       </Button>
       {step >= Step.PromptLogin && !alreadyHasAccount && (
         <>
@@ -368,4 +376,13 @@ const Inputs = styled.div`
   ${({ theme }) => theme.bp.md} {
     width: 45rem;
   }
+`
+
+const UnderlinedLink = styled(Link)`
+  text-decoration: underline;
+`
+
+const CitizenMessage = styled(Body1)`
+  color: ${({ theme }) => theme.colors.green600};
+  margin-top: 0.4rem;
 `

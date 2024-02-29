@@ -34,6 +34,10 @@ async function handler(
   let profile: ProfileWithWallet | null = null
   if (opts.auth.authToken) {
     profile = await requireProfile(req, res, opts)
+    if (profile.citizenshipStatus == CitizenshipStatus.Verified) {
+      res.status(400).send({ error: 'Already a citizen' })
+      return
+    }
   }
 
   const body = req.body as InviteClaimParams
