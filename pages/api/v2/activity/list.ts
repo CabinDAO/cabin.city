@@ -13,11 +13,12 @@ import {
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
-import { withAuth } from '@/utils/api/withAuth'
+import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ActivityListResponse>
+  res: NextApiResponse<ActivityListResponse>,
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
@@ -56,15 +57,39 @@ async function handler(
     prisma.activity.count({ where: activityQuery.where }),
   ])
 
+  let activtiesWithMyReactions: { [key: number]: boolean } = {}
+  if (opts.auth.authToken) {
+    const profile = await requireProfile(req, res, opts)
+    const myReactions = await prisma.activityReaction.findMany({
+      select: { activityId: true },
+      where: {
+        profile: { id: profile.id },
+        activity: {
+          id: {
+            in: activities.map((a) => a.id),
+          },
+        },
+      },
+    })
+    activtiesWithMyReactions = myReactions.reduce((obj, r, i) => {
+      obj[i] = true
+      return obj
+    }, activtiesWithMyReactions)
+  }
+
   res.status(200).send({
-    activities: toFragments(activities as ActivityWithRelations[]),
+    activities: toFragments(
+      activities as ActivityWithRelations[],
+      activtiesWithMyReactions
+    ),
     count: activities.length,
     totalCount,
   })
 }
 
 const toFragments = (
-  activities: ActivityWithRelations[]
+  activities: ActivityWithRelations[],
+  activtiesWithMyReactions: { [key: number]: boolean }
 ): ActivityListFragment[] => {
   return activities.map((activity) => {
     return {
@@ -156,8 +181,8 @@ const toFragments = (
         })),
         avatarUrl: activity.profile.avatar ? activity.profile.avatar.url : '',
       },
-      reactionCount: 0, // TODO: implement
-      hasReactionByMe: false, // TODO: implement
+      reactionCount: activity._count.reactions,
+      hasReactionByMe: activtiesWithMyReactions[activity.id] || false,
     }
   })
 }

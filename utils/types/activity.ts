@@ -115,6 +115,9 @@ export type ActivitySummaryResponse =
 // must match ActivityQueryInclude below
 export type ActivityWithRelations = Prisma.ActivityGetPayload<{
   include: {
+    _count: {
+      select: { reactions: true }
+    }
     profile: {
       select: {
         externId: true
@@ -211,6 +214,9 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
 
 // must match ActivityWithRelations above
 export const ActivityQueryInclude = {
+  _count: {
+    select: { reactions: true },
+  },
   profile: {
     select: {
       externId: true,

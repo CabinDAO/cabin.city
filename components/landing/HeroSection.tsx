@@ -57,12 +57,6 @@ const ExtraPadding = styled.div`
   }
 `
 
-const Description = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-`
-
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;
