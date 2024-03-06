@@ -1,13 +1,8 @@
 import styled from 'styled-components'
-import { Body1, H4, HHero } from '@/components/core/Typography'
-import { padding } from '@/styles/theme'
+import { H4, HHero } from '@/components/core/Typography'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
 
-interface HeroSectionProps {
-  buttons: JSX.Element[]
-}
-
-export const HeroSection = (props: HeroSectionProps) => {
+export const HeroSection = () => {
   return (
     <ExtraPadding>
       <Wrapper>

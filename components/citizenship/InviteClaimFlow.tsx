@@ -10,7 +10,7 @@ import {
   PaymentMethod,
 } from '@/utils/types/invite'
 import styled from 'styled-components'
-import { Body1, Caption } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { useBackend } from '@/components/hooks/useBackend'
 import { useError } from '@/components/hooks/useError'
@@ -102,7 +102,7 @@ export default function InviteClaimFlow({
         goToStep(step)
       }
     }
-  }, [alreadyHasAccount, step, sendToCitizenship, router])
+  }, [alreadyHasAccount, step, sendToCitizenship, router, goToStep])
 
   const proceedButtonReady = !isUserLoading && !isMutating && !isAboutToRedirect
 

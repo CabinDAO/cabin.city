@@ -17,7 +17,9 @@ export const ProfileContent = ({
   refetchProfile: () => void
 }) => {
   const { user: me } = useProfile()
-  if (!me) return null
+  if (!me) {
+    return null // TODO: return a message that you must have an account to view profiles?
+  }
 
   const isOwnProfile = me?.externId === profile.externId
 

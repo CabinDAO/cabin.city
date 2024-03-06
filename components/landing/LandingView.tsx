@@ -21,7 +21,7 @@ export const LandingView = () => {
       <TopLogoSection />
 
       <LandingSection>
-        <HeroSection buttons={[]} />
+        <HeroSection />
       </LandingSection>
 
       <LandingSection fullWidth noVertPadding>
