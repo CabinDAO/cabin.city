@@ -7,99 +7,113 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import events from '@/lib/googleAnalytics/events'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
+import { useProfile } from '@/components/auth/useProfile'
+import { CitizenshipStatus } from '@/utils/types/profile'
 
 export const FOOTER_HEIGHT = '265' // TODO: fix this huge hack
 
-export const Footer = () => (
-  <Container>
-    <LandingContent>
-      <FooterContainer>
-        <TextSections>
-          <Section>
-            <Header>Product</Header>
-            <AppLink
-              onClick={() => events.viewCityDirectoryEvent()}
-              location="/city-directory"
-              iconSize={0}
-            >
-              <Name>City Directory</Name>
-            </AppLink>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
-              iconSize={0}
-            >
-              <Name>List Your Property</Name>
-            </AppLink>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.CITIZENSHIP}
-              iconSize={0}
-            >
-              <Name>Citizenship</Name>
-            </AppLink>
-            <AppLink
-              external
-              location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
-              iconSize={0}
-            >
-              <Name>Privacy & Terms</Name>
-            </AppLink>
-            <AppLink location="/security" iconSize={0}>
-              <Name>Security</Name>
-            </AppLink>
-          </Section>
+export const Footer = () => {
+  const { user } = useProfile()
+  return (
+    <Container>
+      <LandingContent>
+        <FooterContainer>
+          <TextSections>
+            <Section>
+              <Header>Product</Header>
+              <AppLink
+                onClick={() => events.viewCityDirectoryEvent()}
+                location="/city-directory"
+                iconSize={0}
+              >
+                <Name>City Directory</Name>
+              </AppLink>
+              <AppLink
+                external
+                location={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
+                iconSize={0}
+              >
+                <Name>List Your Property</Name>
+              </AppLink>
+              <AppLink
+                external
+                location={EXTERNAL_LINKS.CITIZENSHIP}
+                iconSize={0}
+              >
+                <Name>Citizenship</Name>
+              </AppLink>
+              {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
+                <AppLink external location="/invite" iconSize={0}>
+                  <Name>Invite Friends</Name>
+                </AppLink>
+              )}
+              <AppLink
+                external
+                location={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
+                iconSize={0}
+              >
+                <Name>Privacy & Terms</Name>
+              </AppLink>
+              <AppLink location="/security" iconSize={0}>
+                <Name>Security</Name>
+              </AppLink>
+            </Section>
+
+            <Section>
+              <Header>Resources</Header>
+              <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
+                <Name>Vision</Name>
+              </AppLink>
+              <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
+                <Name>Blog</Name>
+              </AppLink>
+              <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
+                <Name>Podcast</Name>
+              </AppLink>
+              <AppLink external location={EXTERNAL_LINKS.STORE} iconSize={0}>
+                <Name>Store</Name>
+              </AppLink>
+              <AppLink
+                external
+                location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+                iconSize={0}
+              >
+                <Name>Contact Us</Name>
+              </AppLink>
+            </Section>
+
+            <Section>
+              <Header>Social</Header>
+              <AppLink external location={EXTERNAL_LINKS.DISCORD} iconSize={0}>
+                <Name>Discord</Name>
+              </AppLink>
+              <AppLink external location={EXTERNAL_LINKS.FORUM} iconSize={0}>
+                <Name>Forum</Name>
+              </AppLink>
+              <AppLink external location={EXTERNAL_LINKS.TWITTER} iconSize={0}>
+                <Name>Twitter</Name>
+              </AppLink>
+              <AppLink
+                external
+                location={EXTERNAL_LINKS.INSTAGRAM}
+                iconSize={0}
+              >
+                <Name>Instagram</Name>
+              </AppLink>
+            </Section>
+          </TextSections>
 
           <Section>
-            <Header>Resources</Header>
-            <AppLink external location={EXTERNAL_LINKS.VISION} iconSize={0}>
-              <Name>Vision</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.BLOG} iconSize={0}>
-              <Name>Blog</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.PODCAST} iconSize={0}>
-              <Name>Podcast</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.STORE} iconSize={0}>
-              <Name>Store</Name>
-            </AppLink>
-            <AppLink
-              external
-              location={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-              iconSize={0}
-            >
-              <Name>Contact Us</Name>
-            </AppLink>
+            <FooterLogo>
+              <Icon name="logo-cabin" size={3.8} color="green400" />
+              <IconText>Cabin</IconText>
+            </FooterLogo>
           </Section>
-
-          <Section>
-            <Header>Social</Header>
-            <AppLink external location={EXTERNAL_LINKS.DISCORD} iconSize={0}>
-              <Name>Discord</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.FORUM} iconSize={0}>
-              <Name>Forum</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.TWITTER} iconSize={0}>
-              <Name>Twitter</Name>
-            </AppLink>
-            <AppLink external location={EXTERNAL_LINKS.INSTAGRAM} iconSize={0}>
-              <Name>Instagram</Name>
-            </AppLink>
-          </Section>
-        </TextSections>
-
-        <Section>
-          <FooterLogo>
-            <Icon name="logo-cabin" size={3.8} color="green400" />
-            <IconText>Cabin</IconText>
-          </FooterLogo>
-        </Section>
-      </FooterContainer>
-    </LandingContent>
-  </Container>
-)
+        </FooterContainer>
+      </LandingContent>
+    </Container>
+  )
+}
 
 const Container = styled.div`
   display: flex;

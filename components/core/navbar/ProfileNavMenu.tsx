@@ -10,6 +10,7 @@ import Icon from '../Icon'
 import { Caption, Subline1 } from '../Typography'
 import events from '@/lib/googleAnalytics/events'
 import { MenuItemOption } from '@/utils/nav/types'
+import { CitizenshipStatus } from '@/utils/types/profile'
 
 interface ProfileNavMenuProps {
   visible: boolean
@@ -76,6 +77,12 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
             <Caption $color="yellow100">({user.locationCount})</Caption>
           </MenuItemWithNote>
         </ProfileMenuItem>
+        {user.citizenshipStatus == CitizenshipStatus.Verified && (
+          <ProfileMenuItem onClick={() => handleClick('invite')} href="/invite">
+            <Icon name="plus" size={2} color="green400" />
+            <Subline1 $color="yellow100">Invite</Subline1>
+          </ProfileMenuItem>
+        )}
         {user.isAdmin && (
           <ProfileMenuItem onClick={() => handleClick('admin')} href="/admin">
             <Icon name="person" size={2} color="green400" />
