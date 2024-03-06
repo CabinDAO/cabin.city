@@ -1,23 +1,28 @@
-import { ContentCard } from '../core/ContentCard'
+import { useRef, useState } from 'react'
+import Link from 'next/link'
+import { unlockConfig } from '@/lib/protocol-config'
+import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
+import { useProfile } from '@/components/auth/useProfile'
+import { CitizenshipStatus } from '@/utils/types/profile'
 import styled from 'styled-components'
+import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
+import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { Body2, H3, Overline } from '../core/Typography'
+import { Button } from '@/components/core/Button'
+import { AppLink } from '../core/AppLink'
 import { HorizontalDivider } from '../core/Divider'
+import { ContentCard } from '../core/ContentCard'
 import { CitizenshipNFTPreviewData } from './CitizenshipNFTPreviewData'
 import { CitizenshipNFTData } from './CitizenshipNFTData'
-import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
-import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
-import { unlockConfig } from '@/lib/protocol-config'
-import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { NFTDataList } from './NFTDataList'
-import { AppLink } from '../core/AppLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { useRef, useState } from 'react'
 
 const INNER_PADDING_PX = 24
 const IMAGE_SIZE_PX = 336
 const TABLET_IMAGE_SIZE_PX = 222
 
 export const CitizenNFTContainer = () => {
+  const { user } = useProfile()
   const { activeNFT } = useGetUnlockNFT()
   const [displayVideo, setDisplayVideo] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -58,6 +63,13 @@ export const CitizenNFTContainer = () => {
           <CitizenshipNFTPreviewData />
         )}
       </Section>
+      {user?.citizenshipStatus == CitizenshipStatus.Verified && (
+        <Link href={'/invite'}>
+          <Button variant={'secondary'}>
+            Invite your friends to become Citizens
+          </Button>
+        </Link>
+      )}
       <HorizontalDivider />
       <Section>
         <DescriptionContainer>
