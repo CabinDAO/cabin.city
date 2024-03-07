@@ -149,7 +149,7 @@ async function importBlockSyncAttempt(datum: BlockSyncAttempt) {
       startBlock: d.data.startBlock,
       endBlock: d.data.endBlock,
       status: d.data.status,
-      failedAttemptCount: d.data.failedAttemptCount ?? 0,
+      // failedAttemptCount: d.data.failedAttemptCount ?? 0, // dropped this column later
     },
   })
 }

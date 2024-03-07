@@ -481,11 +481,9 @@ model BlockSyncAttempt {
   updatedAt DateTime @updatedAt
 
   type       BlockSyncType
+  status     BlockSyncStatus
   startBlock Decimal         @db.Decimal(9, 0)
   endBlock   Decimal         @db.Decimal(9, 0)
-  status     BlockSyncStatus
-
-  failedAttemptCount Int // TODO: do we need this at all?
 
   @@index([type, status])
 }

@@ -1,14 +1,18 @@
 import { providers } from 'ethers'
 import { NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { $Enums, BlockSyncAttempt } from '@prisma/client'
+import {
+  BlockSyncType,
+  BlockSyncAttempt,
+  BlockSyncStatus,
+} from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 
 const SAFE_BLOCK_THRESHOLD = 30
 
 export interface SyncAttemptInput {
   provider: providers.Provider
-  type: $Enums.BlockSyncType
+  type: BlockSyncType
   initialBlock: Decimal
   blockCount: Decimal
   res: NextApiResponse
@@ -36,17 +40,17 @@ export async function attemptSync(input: SyncAttemptInput) {
 
   // Short circuit if there are any pending sync attempts
   if (latestPendingAttempt) {
-    console.log('Pending sync attempt found, skipping')
+    console.log(`${type} sync already in progress`)
     res
       .status(200)
-      .send(JSON.stringify({ message: 'Pending sync attempt found, skipping' }))
+      .send(JSON.stringify({ message: `${type} sync already in progress` }))
     return
   }
 
   const latestBlockNumber = await provider.getBlockNumber()
   const syncAttempt =
     latestFailedAttempt ??
-    (await _tryCreateNewSyncAttempt(
+    (await createNewSyncAttempt(
       input,
       latestBlockNumber,
       latestSuccessfulAttempt
@@ -71,16 +75,16 @@ export async function attemptSync(input: SyncAttemptInput) {
       endBlock: syncAttempt.endBlock,
     })
 
-    await completeSync(syncAttempt.id)
+    await completeSync(syncAttempt)
 
     res.status(200).send(
       JSON.stringify(
         {
           type,
           id: syncAttempt.id,
-          startBlock: syncAttempt.startBlock.toString(),
-          endBlock: syncAttempt.endBlock.toString(),
-          blocksTillLatest: blocksTillLatest.toString(),
+          startBlock: syncAttempt.startBlock.toNumber(),
+          endBlock: syncAttempt.endBlock.toNumber(),
+          blocksTillLatest: blocksTillLatest.toNumber(),
           result,
         },
         null,
@@ -90,15 +94,7 @@ export async function attemptSync(input: SyncAttemptInput) {
   } catch (error) {
     console.error(error)
     try {
-      await prisma.blockSyncAttempt.update({
-        where: {
-          id: syncAttempt.id,
-          status: 'Pending',
-        },
-        data: {
-          status: 'Failed',
-        },
-      })
+      await failSync(syncAttempt)
 
       res
         .status(400)
@@ -112,13 +108,13 @@ export async function attemptSync(input: SyncAttemptInput) {
     } catch (error) {
       console.error(error)
       res
-        .status(422)
+        .status(400)
         .send(JSON.stringify({ error: 'Sync attempt failed.' }, null, 2))
     }
   }
 }
 
-async function _tryCreateNewSyncAttempt(
+async function createNewSyncAttempt(
   input: SyncAttemptInput,
   latestBlockNumber: number,
   latestSuccessfulAttempt: BlockSyncAttempt | undefined
@@ -148,22 +144,43 @@ async function _tryCreateNewSyncAttempt(
   return prisma.blockSyncAttempt.create({
     data: {
       type,
-      status: 'Pending',
+      status: BlockSyncStatus.Pending,
       startBlock: startBlock,
       endBlock: endBlock,
-      failedAttemptCount: 0,
     },
   })
 }
 
-export async function completeSync(syncAttemptId: number) {
+async function completeSync(syncAttempt: BlockSyncAttempt) {
+  if (syncAttempt.status == BlockSyncStatus.Successful) {
+    console.error(`sync attempt ${syncAttempt.id} already completed`)
+    return
+  }
+
   return prisma.blockSyncAttempt.update({
     where: {
-      id: syncAttemptId,
-      status: 'Pending',
+      id: syncAttempt.id,
+      status: syncAttempt.status,
     },
     data: {
-      status: 'Successful',
+      status: BlockSyncStatus.Successful,
+    },
+  })
+}
+
+async function failSync(syncAttempt: BlockSyncAttempt) {
+  if (syncAttempt.status == BlockSyncStatus.Failed) {
+    console.error(`sync attempt ${syncAttempt.id} already failed`)
+    return
+  }
+
+  return prisma.blockSyncAttempt.update({
+    where: {
+      id: syncAttempt.id,
+      status: syncAttempt.status,
+    },
+    data: {
+      status: BlockSyncStatus.Failed,
     },
   })
 }
