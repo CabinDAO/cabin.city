@@ -1,7 +1,8 @@
+import { isDevEnv } from '@/utils/dev'
 import { CartFragment } from '@/utils/types/cart'
 import styled from 'styled-components'
 import { Body1, H2 } from '@/components/core/Typography'
-import { padding } from '@/styles/theme'
+import theme, { padding } from '@/styles/theme'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ContentCard } from '@/components/core/ContentCard'
 import { PaymentForm } from '@/components/checkout/PaymentForm'
@@ -18,6 +19,29 @@ const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
           1 Year of Cabin citizenship: <Price>${YEARLY_PRICE_IN_USD}</Price>
         </Body1>
         <H2>Payment</H2>
+
+        {isDevEnv && (
+          <Body1
+            style={{
+              backgroundColor: theme.colors.yellow400,
+              padding: '1rem',
+              borderRadius: '10px',
+            }}
+          >
+            This is a test environment. Use card number{' '}
+            <code
+              style={{
+                backgroundColor: theme.colors.yellow300,
+                padding: '2px 4px',
+                borderRadius: '6px',
+              }}
+            >
+              4242424242424242
+            </code>
+            , any future expiration date, and any CVC and zip code.
+          </Body1>
+        )}
+
         <FormContainer>
           <PaymentForm cart={cart} />
         </FormContainer>
