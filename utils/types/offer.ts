@@ -58,7 +58,7 @@ export type OfferFragment = {
 export type OfferListParams = {
   locationId?: string
   offerType?: OfferType
-  publishedOnly?: 'true' | 'false'
+  publiclyVisibleOnly?: 'true' | 'false'
   page?: number
 }
 

@@ -32,6 +32,8 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
   const offerInfo = offer.type ? offerInfoFromType(offer.type) : null
   const inactive = offer.endDate && new Date(offer.endDate) < new Date()
 
+  const imageHash = offer.imageIpfsHash || offer.location.bannerImageIpfsHash
+
   return (
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
@@ -39,12 +41,12 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
         onClick={() => events.viewExperiencesEvent(offer.externId)}
       >
         <ImageContainer>
-          {offer.imageIpfsHash ? (
+          {imageHash ? (
             <ImageFlex
               sizes={`${BANNER_IMAGE_WIDTH}px`}
               quality={40}
               aspectRatio={BANNER_IMAGE_WIDTH / BANNER_IMAGE_HEIGHT}
-              src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+              src={getImageUrlByIpfsHash(imageHash) ?? ''}
               alt={offer.title ?? ''}
             />
           ) : null}

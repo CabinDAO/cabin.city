@@ -36,18 +36,24 @@ async function handler(
       : undefined,
     // sort: req.query.sort ? (req.query.sort as LocationSort) : undefined,
     page: req.query.page ? parseInt(req.query.page as string) : undefined,
+    publiclyVisibleOnly:
+      req.query.publiclyVisibleOnly && req.query.publiclyVisibleOnly === 'true'
+        ? 'true'
+        : 'false',
   }
 
   // TODO: data validation
 
+  const publiclyVisibleOnly = params.publiclyVisibleOnly === 'true'
+
   const query: Prisma.OfferFindManyArgs = {
     where: {
       type: params.offerType,
-      location: params.locationId
-        ? {
-            externId: params.locationId,
-          }
-        : undefined,
+      endDate: publiclyVisibleOnly ? { gte: new Date() } : undefined,
+      location: {
+        externId: params.locationId,
+        publishedAt: publiclyVisibleOnly ? { not: null } : undefined,
+      },
     },
     include: OfferQueryInclude,
     orderBy: {
