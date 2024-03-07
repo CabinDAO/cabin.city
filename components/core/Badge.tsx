@@ -17,7 +17,7 @@ const MOBILE_IMAGE_SIZE = 148
 const TABLET_IMAGE_SIZE = 133
 
 export const Badge = ({ name, src, badgeId }: BadgeProps) => {
-  const imageUrl = getImageUrl(src)
+  const imageUrl = getImageUrl(src) + `?cb=1` // the ?cb=1 is to bust the cache. its totally optional
 
   return (
     <BadgeContainer>
