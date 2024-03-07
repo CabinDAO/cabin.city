@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Icon from '../Icon'
 
 interface Props {
-  onClick: () => void
+  onClick: VoidFunction
   open: boolean
 }
 

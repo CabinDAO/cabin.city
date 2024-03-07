@@ -8,10 +8,10 @@ interface AvatarProps {
   src?: string
   size: number
   hoverShadow?: boolean
-  onClick?: () => void
+  onClick?: VoidFunction
   color?: ColorName
   isLoading?: boolean
-  onRendered?: () => void
+  onRendered?: VoidFunction
 }
 
 export const Avatar = ({
@@ -49,7 +49,7 @@ export const Avatar = ({
 }
 
 const StyledCircle = styled(Circle)<{
-  onClick?: () => void
+  onClick?: VoidFunction
 }>`
   cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
   position: relative; // need this because the image inside has 'fill' attribute

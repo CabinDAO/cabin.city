@@ -15,7 +15,7 @@ import { Button } from '@/components/core/Button'
 
 interface VouchModalProps {
   profile: ProfileFragment
-  refetchProfile: () => void
+  refetchProfile: VoidFunction
 }
 
 export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {

@@ -2,7 +2,10 @@ import { useCallback } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ActivityNewParams, ActivityNewResponse } from '@/utils/types/activity'
 
-export const useTextActivity = (afterPost: () => void, activityId?: string) => {
+export const useTextActivity = (
+  afterPost: VoidFunction,
+  activityId?: string
+) => {
   const { useMutate, useDelete } = useBackend()
 
   const { trigger: createTextActivity } =

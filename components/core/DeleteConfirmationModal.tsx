@@ -6,7 +6,7 @@ import { Button } from './Button'
 import { useModal } from '@/components/hooks/useModal'
 
 interface DeleteConfirmationModalProps {
-  onDelete: () => void
+  onDelete: VoidFunction
   entityName: string
 }
 

@@ -45,7 +45,7 @@ interface IconButtonProps extends HTMLAttributes<HTMLButtonElement> {
   size?: number
   color?: ColorName
   disabled?: boolean
-  onClick?: () => void
+  onClick?: VoidFunction
   animated?: boolean
   addHoverState?: boolean
 }

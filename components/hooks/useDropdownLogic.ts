@@ -15,7 +15,7 @@ const useDropdownLogic = (
   defaultOptions: SelectOption[],
   onSelect: (_opt: SelectOption) => void,
   onSearch?: (value: string) => void,
-  onDelete?: () => void
+  onDelete?: VoidFunction
 ) => {
   const [options, _setOptions] = useState<SelectOption[]>(defaultOptions)
   const [active, _setActive] = useState(false)

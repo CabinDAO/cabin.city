@@ -6,7 +6,7 @@ import { Button } from './Button'
 import { useModal } from '@/components/hooks/useModal'
 
 interface ChangeEmailConfirmationModalProps {
-  onConfirm: () => void
+  onConfirm: VoidFunction
 }
 
 export const ChangeEmailConfirmationModal = ({

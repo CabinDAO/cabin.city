@@ -7,7 +7,7 @@ export const useConfirmLoggedIn = (logAnalyticsEvent?: boolean) => {
   const { login } = usePrivy()
 
   const confirmLoggedIn = useCallback(
-    (onConfirmed?: () => void) => {
+    (onConfirmed?: VoidFunction) => {
       if (ready && !authenticated) {
         if (logAnalyticsEvent) {
           events.signInEvent()

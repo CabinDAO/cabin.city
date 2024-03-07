@@ -9,7 +9,7 @@ interface TitleCardProps {
   title: string
   icon: IconName
   iconHref?: string
-  onIconClick?: () => void
+  onIconClick?: VoidFunction
   end?: ReactNode | null
   marginTop?: number
 }
@@ -51,7 +51,7 @@ export const TitleCard = ({
 }
 
 const Container = styled.div<{
-  onClick?: () => void
+  onClick?: VoidFunction
   marginTop?: number
 }>`
   display: flex;

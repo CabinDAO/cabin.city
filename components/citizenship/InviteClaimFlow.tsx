@@ -43,7 +43,7 @@ export default function InviteClaimFlow({
   onStart,
 }: {
   inviter: Inviter
-  onStart: () => void
+  onStart: VoidFunction
 }) {
   const { showError } = useError()
   const router = useRouter()

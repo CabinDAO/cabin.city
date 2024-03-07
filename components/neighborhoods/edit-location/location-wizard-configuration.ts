@@ -11,8 +11,8 @@ export type StepConfig = {
 
 export type StepProps = {
   name: string
-  onNext: () => void
-  onBack: () => void
+  onNext: VoidFunction
+  onBack: VoidFunction
   location: LocationFragment
   steps: StepConfig[]
 }

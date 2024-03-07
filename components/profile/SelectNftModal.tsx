@@ -10,7 +10,7 @@ import { ExtendedOwnedNft } from './AvatarSetup'
 
 interface SelectNftModalProps {
   onSelect: (nft: ExtendedOwnedNft) => void
-  onClose: () => void
+  onClose: VoidFunction
 }
 
 interface NetworkNftMap {

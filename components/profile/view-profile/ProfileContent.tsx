@@ -14,7 +14,7 @@ export const ProfileContent = ({
   refetchProfile,
 }: {
   profile: ProfileFragment
-  refetchProfile: () => void
+  refetchProfile: VoidFunction
 }) => {
   const { user: me } = useProfile()
   if (!me) {

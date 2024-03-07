@@ -7,7 +7,7 @@ interface FileUploadButtonProps {
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
   removeEnabled?: boolean
   multiple?: boolean
-  onStartUploading?: () => void
+  onStartUploading?: VoidFunction
 }
 
 export const FileUploadButton = (props: FileUploadButtonProps) => {

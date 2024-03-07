@@ -37,7 +37,7 @@ const Content = styled.div`
 
 interface ModalProps {
   children: React.ReactNode
-  onClose: () => void
+  onClose: VoidFunction
   hideOnClickAway?: boolean
   active: boolean
 }

@@ -7,7 +7,7 @@ import { pxToRem } from '@/utils/display-utils'
 
 type MenuOption = {
   label: string
-  onClick: () => void
+  onClick: VoidFunction
   icon?: IconName
 }
 

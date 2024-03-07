@@ -15,7 +15,7 @@ import { ProfileFragment } from '@/utils/types/profile'
 
 interface ProfileHeaderProps {
   profile: ProfileFragment
-  refetchProfile: () => void
+  refetchProfile: VoidFunction
 }
 
 export const ProfileHeaderSection = ({

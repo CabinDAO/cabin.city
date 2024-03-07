@@ -11,7 +11,7 @@ import axios from 'axios'
 interface UseFilesUploadProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
-  onStartUploading?: () => void
+  onStartUploading?: VoidFunction
 }
 
 export const useFilesUpload = ({

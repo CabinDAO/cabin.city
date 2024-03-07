@@ -11,7 +11,7 @@ export const TabBar = (props: TabBarProps) => {
 
 interface TabProps {
   isSelected: boolean
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 export const Tab = styled(H3)<TabProps>`

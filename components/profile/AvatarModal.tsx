@@ -11,7 +11,7 @@ import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 interface AvatarModalProps {
   onNftSelect: (nft: ExtendedOwnedNft) => void
   onPhotoUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  onStartUpload: () => void
+  onStartUpload: VoidFunction
 }
 
 export type AvatarMode = 'nft' | 'upload'

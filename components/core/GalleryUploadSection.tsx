@@ -13,7 +13,7 @@ interface GalleryUploadSectionProps {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   ipfsHashList?: string[]
   onDelete?: (ipfsHash: string) => void
-  onStartUploading?: () => void
+  onStartUploading?: VoidFunction
   uploading?: boolean
   errorMessage?: string
 }

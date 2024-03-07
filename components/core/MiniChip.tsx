@@ -4,7 +4,7 @@ import { Subline1 } from './Typography'
 interface MiniChipProps {
   selected: boolean
   label: string
-  onClick?: () => void
+  onClick?: VoidFunction
   className?: string
 }
 

@@ -8,7 +8,7 @@ import { RefetchParams, RefetchResponse } from '@/utils/types/unlock'
 export const CitizenshipContext = createContext<CitzenshipState | null>(null)
 
 export interface CitzenshipState {
-  checkStatus: () => void
+  checkStatus: VoidFunction
 }
 
 interface CitzenshipProviderProps {

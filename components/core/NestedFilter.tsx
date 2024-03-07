@@ -197,7 +197,7 @@ interface NestedOptionsListProps<T1 extends string | number, T2> {
   options: NestableFilterOption<T1, T2>[]
   selections: SelectedOptionValues<T1, T2>
   onSelect: (option: NestableFilterOption<T1, T2>) => void
-  onApply: () => void
+  onApply: VoidFunction
 }
 const NestedOptionsList = <T1 extends string | number, T2>(
   props: NestedOptionsListProps<T1, T2>
@@ -236,8 +236,8 @@ interface OptionsListProps<T1 extends string | number, T2> {
     option: NestableFilterOption<T1, T2>,
     selection: FilterOption<T2>
   ) => void
-  onBack: () => void
-  onApply?: () => void
+  onBack: VoidFunction
+  onApply?: VoidFunction
 }
 const OptionsList = <T1 extends string | number, T2>(
   props: OptionsListProps<T1, T2>
@@ -288,7 +288,7 @@ const OptionsListHeader = styled.div`
 
 interface ListOptionProps {
   children: React.ReactNode
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 const ListOption = (props: ListOptionProps) => {

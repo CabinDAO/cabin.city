@@ -4,7 +4,7 @@ import Icon from './Icon'
 interface CheckboxProps {
   selected: boolean
   disabled?: boolean
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 export const Checkbox = (props: CheckboxProps) => {

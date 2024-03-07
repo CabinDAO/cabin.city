@@ -6,8 +6,8 @@ import { Button } from './Button'
 import { appChain } from '@/lib/wagmi/wagmi-client'
 
 interface SwitchNetworkModalProps {
-  onSwitch?: () => void
-  onLeave?: () => void
+  onSwitch?: VoidFunction
+  onLeave?: VoidFunction
 }
 
 export const SwitchNetworkModal = ({

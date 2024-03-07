@@ -10,7 +10,7 @@ const defaultButtonConfig = {
 
 export type ButtonConfig = {
   label: string
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 interface ActionBarProps {

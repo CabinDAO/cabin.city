@@ -7,7 +7,7 @@ import { LocationVoteParams } from '@/pages/api/v2/location/vote'
 import { ProfileVotesResponse } from '@/pages/api/v2/profile/votes'
 import { useBackend } from '@/components/hooks/useBackend'
 
-export const useLocationVote = (afterVote?: () => void) => {
+export const useLocationVote = (afterVote?: VoidFunction) => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { post } = useBackend()

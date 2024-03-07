@@ -5,7 +5,7 @@ interface ImageProps {
   src: string
   alt: string
   className?: string
-  onLoadingComplete?: () => void
+  onLoadingComplete?: VoidFunction
 }
 
 const StyledNextImage = styled(Image)`

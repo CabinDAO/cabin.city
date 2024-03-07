@@ -14,7 +14,7 @@ interface LayoutProps {
   title: string
   icon?: IconName
   iconHref?: string
-  onIconClick?: () => void
+  onIconClick?: VoidFunction
   subheader?: string
   withFooter?: boolean
 }

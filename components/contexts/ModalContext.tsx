@@ -6,7 +6,7 @@ export const ModalContext = createContext<ModalState | null>(null)
 export interface ModalState {
   showModal: (render: () => ReactNode) => void
   showLoadingModal: (render: () => ReactNode) => void
-  hideModal: () => void
+  hideModal: VoidFunction
   active: boolean
 }
 

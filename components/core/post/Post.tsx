@@ -19,9 +19,9 @@ type PostVariant = 'full' | 'compact'
 export interface PostProps {
   activity: ActivityListFragment
   baseDate: Date
-  onDelete: () => void
-  onLike?: () => void
-  onUnlike?: () => void
+  onDelete: VoidFunction
+  onLike?: VoidFunction
+  onUnlike?: VoidFunction
   hovered?: boolean
   variant?: PostVariant
 }

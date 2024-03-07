@@ -3,8 +3,8 @@ import Icon from './Icon'
 import { Overline } from './Typography'
 
 interface CardActionsProps {
-  onDelete: () => void
-  onEdit: () => void
+  onDelete: VoidFunction
+  onEdit: VoidFunction
 }
 
 export const CardActions = ({ onDelete, onEdit }: CardActionsProps) => {

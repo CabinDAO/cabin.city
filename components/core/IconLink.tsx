@@ -12,7 +12,7 @@ interface IconLinkProps extends HTMLAttributes<HTMLButtonElement> {
   color?: ColorName
   disabled?: boolean
   authenticated?: boolean
-  onIconClick?: () => void
+  onIconClick?: VoidFunction
 }
 
 const IconLink = ({

@@ -26,7 +26,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   disabled?: boolean
   className?: string
   children: ReactNode
-  onClick?: () => void
+  onClick?: VoidFunction
   helperTextPosition?: HelperTextPosition
 }
 export const InputBase = ({

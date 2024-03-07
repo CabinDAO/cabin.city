@@ -40,7 +40,7 @@ declare global {
     unlockProtocol: {
       loadCheckoutModal: (config?: unknown) => void
     }
-    initMap: () => void
+    initMap: VoidFunction
   }
 }
 

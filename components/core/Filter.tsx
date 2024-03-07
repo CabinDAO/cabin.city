@@ -156,7 +156,7 @@ const FilterMenuSection = styled(MenuSection)`
 
 interface ListOptionProps {
   children: React.ReactNode
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 const ListOption = (props: ListOptionProps) => {

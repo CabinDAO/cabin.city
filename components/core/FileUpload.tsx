@@ -10,7 +10,7 @@ interface FileUploadProps {
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
   removeEnabled?: boolean
   multiple?: boolean
-  onStartUploading?: () => void
+  onStartUploading?: VoidFunction
   children: React.ReactNode
   className?: string
 }

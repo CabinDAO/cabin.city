@@ -11,7 +11,7 @@ interface AuthenticatedLinkProps {
   children: React.ReactNode
   className?: string
   logSignInEvent?: boolean
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 export const AuthenticatedLink = ({

@@ -9,7 +9,7 @@ import { ProfileFragment, CitizenshipStatus } from '@/utils/types/profile'
 
 interface ProfileHeaderButtonProps {
   profile: ProfileFragment
-  refetchProfile: () => void
+  refetchProfile: VoidFunction
 }
 
 export const ProfileHeaderButton = ({

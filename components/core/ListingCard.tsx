@@ -26,9 +26,9 @@ interface ListingCardProps {
     sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
   }
-  onVote?: () => void
-  onDelete?: () => void
-  onEdit?: () => void
+  onVote?: VoidFunction
+  onDelete?: VoidFunction
+  onEdit?: VoidFunction
   editMode?: boolean
   hideNeighborTag?: boolean
   position?: number

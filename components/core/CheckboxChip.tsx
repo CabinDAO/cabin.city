@@ -6,7 +6,7 @@ import { H5 } from './Typography'
 interface CheckboxChipProps {
   selected: boolean
   label: string
-  onSelect?: () => void
+  onSelect?: VoidFunction
   disabled?: boolean
   icon: IconName
 }

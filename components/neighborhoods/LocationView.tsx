@@ -36,7 +36,7 @@ export const LocationView = ({
   onVote,
 }: {
   location: LocationFragment
-  onVote?: () => void
+  onVote?: VoidFunction
 }) => {
   const { externId, offerCount, mediaItems, caretaker, caretakerEmail } =
     location

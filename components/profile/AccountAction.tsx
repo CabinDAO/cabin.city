@@ -6,7 +6,7 @@ import { Tooltip } from '../core/Tooltip'
 import { truncate } from '@/utils/display-utils'
 
 interface AccountActionProps {
-  onClick?: () => void
+  onClick?: VoidFunction
   actionCTA?: string
   fieldTitle: string
   fieldValue: string

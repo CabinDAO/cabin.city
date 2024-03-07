@@ -7,7 +7,7 @@ import { MAX_POST_LENGTH } from './constants'
 
 interface TextPostInputProps {
   onPost: (text: string) => void
-  onCancel: () => void
+  onCancel: VoidFunction
 }
 
 export const TextPostInput = ({ onPost, onCancel }: TextPostInputProps) => {

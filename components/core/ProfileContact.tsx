@@ -17,7 +17,7 @@ import { useModal } from '@/components/hooks/useModal'
 interface ProfileContactProps {
   profile: ProfileBasicFragment
   caretakerEmail?: string | null | undefined
-  onContact?: () => void
+  onContact?: VoidFunction
 }
 
 export const ProfileContact = ({

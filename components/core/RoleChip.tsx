@@ -16,7 +16,7 @@ interface RoleChipProps {
   roleType: RoleType
   selected?: boolean
   disabled?: boolean
-  onSelect?: () => void
+  onSelect?: VoidFunction
 }
 
 const INNER_CONTAINER_PADDING_PX = 8

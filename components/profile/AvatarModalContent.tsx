@@ -13,7 +13,7 @@ interface AvatarModalContentProps {
   onNftSelect: (nft: ExtendedOwnedNft) => void
   onAvatarModeSelected: (avatarMode: AvatarMode) => void
   onPhotoUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  onStartUpload: () => void
+  onStartUpload: VoidFunction
 }
 
 const AboutExplainer = styled.div`

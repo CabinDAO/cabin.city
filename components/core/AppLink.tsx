@@ -11,7 +11,7 @@ interface AppLinkProps {
   iconName?: IconName
   iconSize?: number
   className?: string
-  onClick?: () => void
+  onClick?: VoidFunction
 }
 
 export const AppLink = ({

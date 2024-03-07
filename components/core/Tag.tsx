@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 
 interface TagProps {
   label: string
-  onClick?: () => void
+  onClick?: VoidFunction
   className?: string
   color?: ColorName | undefined
   startAdornment?: ReactNode

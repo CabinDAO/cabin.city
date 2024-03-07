@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Button } from '../Button'
 
 interface ModalActionBarProps {
-  onActionClick?: () => void
+  onActionClick?: VoidFunction
   locationHref?: string
   text: string
 }
