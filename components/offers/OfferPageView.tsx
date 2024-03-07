@@ -29,7 +29,6 @@ export const OfferPageView = () => {
 
   return (
     <SingleColumnLayout
-      withFooter
       actionBar={
         isEditable && !isPublished ? (
           <ActionBar

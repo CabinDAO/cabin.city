@@ -25,7 +25,7 @@ export default function Page({
   const [hideBenefits, setHideBenefits] = useState(false)
   return (
     <>
-      <SingleColumnLayout withFooter>
+      <SingleColumnLayout>
         <TitleCard title="Citizenship" icon="citizen" />
         <StyledContentCard shape={'notch'} notchSize={1.6}>
           {inviter ? (

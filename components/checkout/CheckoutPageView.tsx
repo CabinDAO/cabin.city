@@ -11,7 +11,7 @@ import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 
 const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <TitleCard icon="citizen" title="Checkout" />
       <Content shape="notch" notchSize={1.6}>
         <H2>Cart</H2>

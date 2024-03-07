@@ -11,7 +11,7 @@ export const CityDirectoryView = () => {
     user?.citizenshipStatus === CitizenshipStatus.Verified
 
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <TitleCard
         title="City Directory"
         icon="neighborhoods"

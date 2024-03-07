@@ -18,7 +18,7 @@ export default function InvitePage() {
 
   return (
     <>
-      <SingleColumnLayout withFooter>
+      <SingleColumnLayout>
         <TitleCard title="Invite Your Friends" icon="citizen" />
         <Content>
           {isUserLoading ? (

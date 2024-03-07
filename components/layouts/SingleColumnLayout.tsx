@@ -16,7 +16,6 @@ interface LayoutProps {
   actionBar?: React.ReactNode
   className?: string
   variant?: LayoutVariant
-  withFooter?: boolean
 }
 
 export const SingleColumnLayout = ({
@@ -26,10 +25,10 @@ export const SingleColumnLayout = ({
   hideNavbar,
   className,
   variant,
-  withFooter,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
+  const withFooter = !actionBar
 
   return (
     <>

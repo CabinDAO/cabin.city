@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useModal } from '../hooks/useModal'
 import { useProfile } from '../auth/useProfile'
@@ -18,6 +17,9 @@ import { ErrorModal } from '../ErrorModal'
 import { ContentCard } from '../core/ContentCard'
 import { HorizontalDivider } from '../core/Divider'
 import { AppLink } from '../core/AppLink'
+import { Button } from '@/components/core/Button'
+import Link from 'next/link'
+import { EmptyState } from '@/components/core/EmptyState'
 
 export const NewLocationView = () => {
   const router = useRouter()
@@ -67,14 +69,28 @@ export const NewLocationView = () => {
     goBack()
   }
 
-  useEffect(() => {
-    if (!canCreateListings) {
-      router.push('/city-directory')
-    }
-  }, [router, canCreateListings])
-
-  if (!canCreateListings || !user) {
+  if (!user) {
     return null
+  }
+
+  if (!canCreateListings) {
+    return (
+      <SingleColumnLayout>
+        <TitleCard title="New listing" icon="close" iconHref="/" />
+        <div style={{ width: '100%' }}>
+          <EmptyState
+            icon="alert"
+            title="Citizens only"
+            description="Only citizens can create new listings."
+            customCta={() => (
+              <Link href={'/citizenship'}>
+                <Button variant={'secondary'}>Become a citizen</Button>
+              </Link>
+            )}
+          />
+        </div>
+      </SingleColumnLayout>
+    )
   }
 
   return (

@@ -39,7 +39,7 @@ const DebugPage = () => {
   // })
 
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <TitleCard icon="info" title="How do I report a security issue?" />
       <DebugContent>
         <Body1 style={{ marginBottom: '2rem' }}>

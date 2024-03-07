@@ -98,7 +98,7 @@ const CheckoutConfirmPageView = () => {
   }
 
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <TitleCard icon="citizen" title="Checkout" />
       <Outline shape="notch" notchSize={1.6}>
         <Progress

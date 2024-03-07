@@ -22,7 +22,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
   }
 
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <ProfileContent profile={profile} refetchProfile={refetchProfile} />
     </SingleColumnLayout>
   )

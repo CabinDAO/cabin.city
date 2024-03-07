@@ -138,7 +138,7 @@ export const CensusView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout withFooter>
+    <SingleColumnLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
       <FilterContainer>
         <SearchContainer>

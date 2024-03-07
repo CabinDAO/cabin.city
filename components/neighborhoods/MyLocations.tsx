@@ -50,7 +50,6 @@ const GetStartedButton = () => (
 
 export const LocationListContainer = styled.div`
   width: 100%;
-
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
