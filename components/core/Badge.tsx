@@ -17,12 +17,18 @@ const MOBILE_IMAGE_SIZE = 148
 const TABLET_IMAGE_SIZE = 133
 
 export const Badge = ({ name, src, badgeId }: BadgeProps) => {
-  const imageUrl = getImageUrl(src) + `?cb=1` // the ?cb=1 is to bust the cache. its totally optional
+  const imageUrl = getImageUrl(src)
 
   return (
     <BadgeContainer>
       <ImageContainer>
-        <ImageFlex src={imageUrl} alt={name} fill sizes={`${IMAGE_SIZE}px`} />
+        <ImageFlex
+          src={imageUrl}
+          alt={name}
+          fill
+          sizes={`${IMAGE_SIZE}px`}
+          unoptimized
+        />
       </ImageContainer>
       <NameContainer>
         <NoWrap>
