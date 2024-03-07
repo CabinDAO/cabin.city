@@ -46,7 +46,7 @@ export default function CitizenshipBenefits({
             Participate in our community
           </RowHeader>
           <Items>
-            <Item icon={'coin'}>25 CABIN + 10 C per referral</Item>
+            <Item icon={'coin'}>25 ₡ABIN + 10 ₡ per referral</Item>
             <Item icon={'chat-bubble'}>
               Vouch for others to become Citizens
             </Item>
