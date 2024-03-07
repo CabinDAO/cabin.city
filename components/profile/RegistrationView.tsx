@@ -30,10 +30,10 @@ export const RegistrationView = () => {
   const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
 
   useEffect(() => {
-    if (!externalUser?.email?.address) {
+    if (externalUser && !externalUser?.email?.address) {
       linkEmail()
     }
-  }, [externalUser?.email?.address, linkEmail])
+  }, [externalUser]) // don't add linkEmail() to deps. it causes a bug where useEffect is called many times and the popup never shows the screen to enter the code Privy emails you
 
   const handleSubmit = async (params: RegistrationParams) => {
     const { email, displayName: name, avatar } = params
@@ -49,14 +49,14 @@ export const RegistrationView = () => {
       return
     }
 
-    try {
-      const createProfileBody: ProfileNewParams = {
-        walletAddress: externalUser.wallet?.address || '',
-        name,
-        email: externalUser.email?.address || email,
-        avatar,
-      }
+    const createProfileBody: ProfileNewParams = {
+      walletAddress: externalUser.wallet?.address || '',
+      name,
+      email: externalUser.email?.address || email,
+      avatar,
+    }
 
+    try {
       const resp = await post<ProfileNewResponse>(
         'PROFILE_NEW',
         createProfileBody
