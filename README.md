@@ -163,19 +163,7 @@ another and to facilitate retries in the case of failures.
 
 Synchronized data is expected to work at the `Account` level, meaning a registered `Profile` does
 not need to exist in order for data to be imported. This allows synchronized data to be available to
-end users immediatelty after their `Profile` is created.
-
-### Account -> Profile synchronization
-
-Some `Account` data is denormalized to the `Profile` collection to better support sorting and
-filtering via Fauna indexes.
-
-This synchronization occurs in 2 primary areas:
-
-1. When a new `Profile` is created, some `Account` data is denormalized to the new `Profile`.
-   See `SyncProfileBadgeCount.ts` for an example.
-2. When a synchronization job runs and results in data updates for an `Account` the
-   associated `Profile` data is also updated if it exists.
+end users immediately after their `Profile` is created.
 
 ### Synchronization test scenarios
 
@@ -234,8 +222,14 @@ Secrets. See how this works in the [Github Actions Workflow](.github/workflows/f
 
 ## Code Generation
 
-To generate Fauna GQL code for Hats and Otterspace synced data, run:
+To generate GQL code for Hats and Otterspace synced data, run:
 
 ```bash
 npm run codegen
 ```
+
+To generate the smart contract types:
+
+- get ABI file for the contract you want from Etherscan and put it in the `lib/abi` dir
+    - eg go to https://etherscan.io/address/0x1934e252f840aa98dfce2b6205b3e45c41aef830#code, scroll down to Contract ABI and export in JSON format
+- run `npm run contract:gen`, which puts generated files into `generated/contract` dir
