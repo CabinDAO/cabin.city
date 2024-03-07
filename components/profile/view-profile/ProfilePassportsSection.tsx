@@ -8,14 +8,15 @@ import { PASSPORT_PAGE_SIZE } from '../constants'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { ProfileFragment } from '@/utils/types/profile'
 
-interface ProfilePassportsProps {
+export const ProfilePassportsSection = ({
+  profile,
+}: {
   profile: ProfileFragment
-}
+}) => {
+  const [currentPage, setCurrentPage] = useState(0)
 
-export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
   const list = profile.wallet.badges
   const count = list.length
-  const [currentPage, setCurrentPage] = useState(0)
   const start = PASSPORT_PAGE_SIZE * currentPage
   const end = (currentPage + 1) * PASSPORT_PAGE_SIZE
   const currentBadges = list.slice(start, end)
@@ -32,43 +33,40 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
     }
   }
 
-  if (list.length) {
-    return (
-      <Container>
-        <H3>Passport stamps</H3>
-        <PassportsPage>
-          {currentBadges.map((badge) => (
-            <Badge
-              key={badge?.otterspaceBadgeId}
-              badgeId={badge?.otterspaceBadgeId ?? ''}
-              name={badge?.spec.name ?? ''}
-              src={badge?.spec.image ?? ''}
-            />
-          ))}
-        </PassportsPage>
-        <Pagination>
-          <Overline>
-            {start + 1} - {end > count ? count : end} of {count}
-          </Overline>
-          <PageTurner>
-            <IconButton
-              icon="chevron-left"
-              size={1}
-              onClick={handleClickPrev}
-            />
-            <IconButton
-              icon="chevron-right"
-              size={1}
-              onClick={handleClickNext}
-            />
-          </PageTurner>
-        </Pagination>
-      </Container>
-    )
-  } else {
-    return (
-      <Container>
-        <H3>Passport stamps</H3>
+  return (
+    <Container>
+      <H3>Passport Stamps</H3>
+      {count ? (
+        <>
+          <PassportsPage>
+            {currentBadges.map((badge) => (
+              <Badge
+                key={badge?.otterspaceBadgeId}
+                badgeId={badge?.otterspaceBadgeId ?? ''}
+                name={badge?.spec.name ?? ''}
+                src={badge?.spec.image ?? ''}
+              />
+            ))}
+          </PassportsPage>
+          <Pagination>
+            <Overline>
+              {start + 1} - {end > count ? count : end} of {count}
+            </Overline>
+            <PageTurner>
+              <IconButton
+                icon="chevron-left"
+                size={1}
+                onClick={handleClickPrev}
+              />
+              <IconButton
+                icon="chevron-right"
+                size={1}
+                onClick={handleClickNext}
+              />
+            </PageTurner>
+          </Pagination>
+        </>
+      ) : (
         <EmptyState
           backgroundVariant="gradient"
           icon="stamp"
@@ -76,9 +74,9 @@ export const ProfilePassportsSection = ({ profile }: ProfilePassportsProps) => {
           description="Build your Cabin creds"
           href={EXTERNAL_LINKS.PASSPORTS}
         />
-      </Container>
-    )
-  }
+      )}
+    </Container>
+  )
 }
 
 const Container = styled.div`
