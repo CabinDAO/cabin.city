@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
-import { Footer } from '@/components/navigation/Footer'
 import { HeroVideo } from '../core/HeroVideo'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { TestimonialSection } from './TestimonialSection'
@@ -68,10 +67,6 @@ export const LandingView = () => {
           height={32}
           width={84}
         />
-      </LandingSection>
-
-      <LandingSection variant="dark">
-        <Footer />
       </LandingSection>
     </StyledLayout>
   )
