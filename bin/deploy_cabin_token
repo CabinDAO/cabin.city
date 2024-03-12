@@ -5,7 +5,12 @@ source .env.forge
 
 
 forge create --rpc-url $RPC_URL \
-  --private-key $SCRIPT_PRIVATE_KEY contracts/src/cabin-token/MockCabinToken.sol:MockCabinToken \
+  --private-key $SCRIPT_PRIVATE_KEY \
   --etherscan-api-key $ETHERSCAN_API_KEY \
   --constructor-args $CONTRACT_OWNER_ADDRESS \
-  --verify
+  --verify \
+  contracts/src/cabin-token/MockCabinToken.sol:MockCabinToken
+
+
+# manual verification
+# forge verify-contract --etherscan-api-key $ETHERSCAN_API_KEY --watch $CONTRACT_ADDRESS --chain sepolia --constructor-args $(cast abi-encode "constructor(address)" "$CONTRACT_OWNER_ADDRESS") contracts/src/cabin-token/MockCabinToken.sol:MockCabinToken
