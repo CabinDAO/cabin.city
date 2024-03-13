@@ -30,7 +30,7 @@ export const hatsConfig: HatsConfig = getAppConfig({
   dev: {
     // https://app.hatsprotocol.xyz/trees/11155111/145
     networkName: 'sepolia',
-    contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
+    contractAddress: '0x3bc1a0ad72417f2d411118085256fc53cbddd137',
     subgraphUrl:
       'https://api.studio.thegraph.com/query/55784/hats-v1-sepolia/version/latest',
     treeId: '0x00000091', // hat ids are hex and layered by byte groups - https://docs.hatsprotocol.xyz/for-developers/hats-protocol-overview/hat-ids
@@ -39,7 +39,7 @@ export const hatsConfig: HatsConfig = getAppConfig({
   prod: {
     // https://app.hatsprotocol.xyz/trees/10/2
     networkName: 'optimism',
-    contractAddress: '0x3bc1A0Ad72417f2d411118085256fC53CBdDd137',
+    contractAddress: '0x3bc1a0ad72417f2d411118085256fc53cbddd137',
     subgraphUrl:
       'https://api.thegraph.com/subgraphs/name/hats-protocol/hats-v1-optimism',
     treeId: '0x00000002',
@@ -58,7 +58,7 @@ type OtterspaceConfig = {
 export const otterspaceConfig: OtterspaceConfig = getAppConfig({
   dev: {
     networkName: 'goerli',
-    contractAddress: '0xa6773847d3D2c8012C9cF62818b320eE278Ff722',
+    contractAddress: '0xa6773847d3d2c8012c9cf62818b320ee278ff722',
     subgraphUrl:
       'https://api.thegraph.com/subgraphs/name/otterspace-xyz/badges-goerli',
     initialBlock: BigInt('7799232'),
@@ -66,7 +66,7 @@ export const otterspaceConfig: OtterspaceConfig = getAppConfig({
   },
   prod: {
     networkName: 'optimism',
-    contractAddress: '0x7F9279B24D1c36Fa3E517041fdb4E8788dc63D25',
+    contractAddress: '0x7f9279b24d1c36fa3e517041fdb4e8788dc63d25',
     subgraphUrl:
       'https://api.thegraph.com/subgraphs/name/otterspace-xyz/badges-optimism',
     initialBlock: BigInt('20256100'),
@@ -83,7 +83,7 @@ type CabinTokenConfig = {
 export const cabinTokenConfig: CabinTokenConfig = getAppConfig({
   dev: {
     networkName: 'sepolia',
-    contractAddress: '0x331E823689314B702396b97FF299D9D2968EFf47',
+    contractAddress: '0x331e823689314b702396b97ff299d9d2968eff47',
     initialBlock: BigInt('5471896'),
   },
   prod: {
@@ -110,7 +110,7 @@ export const unlockConfig: UnlockConfig = getAppConfig({
   prod: {
     networkName: 'optimism',
     chainId: 10,
-    contractAddress: '0x45aCCac0E5C953009cDa713a3b722F87F2907F86',
+    contractAddress: '0x45accac0e5c953009cda713a3b722f87f2907f86',
     etherscanUrl: 'https://optimistic.etherscan.io',
   },
 })

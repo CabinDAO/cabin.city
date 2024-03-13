@@ -31,7 +31,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
     }
 
     const results = nfts.filter((nft) =>
-      nft.title.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+      nft.name?.toLocaleLowerCase().includes(value.toLocaleLowerCase())
     )
     setSearchResults(results)
   }
@@ -58,10 +58,13 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
               onClick={() => handleSearchResultClick(nft)}
             >
               <NftImage>
-                <AutofitImage src={getImageUrlFromNft(nft)} alt={nft.title} />
+                <AutofitImage
+                  src={getImageUrlFromNft(nft)}
+                  alt={nft.name || ''}
+                />
               </NftImage>
               <CaptionContainer>
-                <Caption emphasized>{nft.title}</Caption>
+                <Caption emphasized>{nft.name}</Caption>
               </CaptionContainer>
             </SearchResult>
           )
