@@ -16,6 +16,7 @@ import {
   ProfileWithInviteRelations,
 } from '@/utils/profile'
 import { sendToDiscord } from '@/lib/discord'
+import { appDomainWithProto } from '@/utils/display-utils'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? '', {
   apiVersion: '2023-08-16', // latest version at the time I wrote this
@@ -217,7 +218,7 @@ async function postProcessCart(cart: CartWithRelations) {
   await grantOrExtendCitizenship(profile)
 
   await sendToDiscord(
-    `New citizen minted via checkout: ${profile.name} https://cabin.city/profile/${profile.externId}`
+    `New citizen minted via checkout: ${profile.name} https://${appDomainWithProto}/profile/${profile.externId}`
   )
 }
 
