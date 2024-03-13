@@ -1,4 +1,4 @@
-import { Inter, IBM_Plex_Mono, Poppins } from 'next/font/google'
+import { Inter, IBM_Plex_Mono, Poppins } from '@next/font/google'
 import styled, { css } from 'styled-components'
 import theme, { ColorName } from '../../styles/theme'
 
