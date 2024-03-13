@@ -9,7 +9,7 @@ async function handler(
   res: NextApiResponse,
   opts: { auth: AuthData }
 ) {
-  if (req.method === 'POST') {
+  if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])
     res.status(405).send({ error: 'Method not allowed' })
     return
