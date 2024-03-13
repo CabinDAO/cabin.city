@@ -18,6 +18,7 @@ import {
   ContractTransactionReceipt,
   ContractTransactionResponse,
 } from 'ethers'
+import { NonPayableOverrides } from '@/generated/ethers/common'
 
 type ProfileCreateParams = {
   privyDID: string
@@ -244,7 +245,8 @@ export async function grantOrExtendCitizenship(
 
   // sign and send the tx all in one shot
   try {
-    const overrides = { gasLimit: 500000 }
+    // const feeData = await provider.getFeeData()
+    const overrides: NonPayableOverrides = { gasLimit: 500000 }
 
     tx = hasKey
       ? await lockContract.grantKeyExtension(
