@@ -61,7 +61,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-use": "^17.4.0",
     "sharp": "^0.32.5",
-    "siwe": "^1.1.6",
+    "siwe": "^2.1.4",
     "slate": "^0.93.0",
     "slate-react": "^0.93.0",
     "stripe": "^13.6.0",
