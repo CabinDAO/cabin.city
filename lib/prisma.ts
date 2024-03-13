@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+import { isLocalDev } from '../utils/dev'
 
 // const getExtendedClient = () => {
 //   return new PrismaClient({
@@ -36,8 +37,10 @@ import { Decimal } from '@prisma/client/runtime/library'
 //
 // if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
+const enableQueryLogging = false
+
 const options =
-  process.env.NODE_ENV === 'development' && !process.env.NEXT_PUBLIC_VERCEL_ENV
+  enableQueryLogging && isLocalDev
     ? { log: ['query' as Prisma.LogLevel] }
     : undefined
 

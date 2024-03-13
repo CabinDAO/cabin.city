@@ -21,7 +21,7 @@ contract CabinUnlockHooksTest is Test {
     MockPublicLock _lock;
 
     function setUp() public {
-        vm.chainId(5); // Goerli
+        vm.chainId(11155111); // Sepolia
         SIGNER_ADDRESS = vm.addr(SIGNER_PRIVATE_KEY);
         _signer = new Signer(vm, SIGNER_ADDRESS, SIGNER_PRIVATE_KEY);
 

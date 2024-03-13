@@ -10,13 +10,14 @@ import {
   SUPPORTED_FILE_TYPES,
   fileTypesListString,
 } from '@/lib/file-storage/configuration'
-import { bytesToMegabytes } from '@/lib/file'
 
 interface FileUploadDropzoneProps {
   iconName: IconName
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
 }
+
+const bytesToMegabytes = (bytes: number) => bytes / 1024 / 1024
 
 export const FileUploadDropzone = ({
   iconName,

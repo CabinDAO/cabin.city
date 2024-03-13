@@ -8,7 +8,7 @@ import {
   RoleType,
 } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { randomId } from '@/utils/random'
 import { hatsClient } from '@/lib/hats/hatsClient'
 import { hatsConfig } from '@/lib/protocol-config'
@@ -23,7 +23,7 @@ export default async function handler(
 ) {
   await attemptSync({
     type: BlockSyncType.Hats,
-    provider: getAlchemyProvider(hatsConfig.networkName),
+    provider: getEthersAlchemyProvider(hatsConfig.networkName),
     initialBlock: new Decimal(hatsConfig.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
     res,

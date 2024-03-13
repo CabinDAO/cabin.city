@@ -27,6 +27,7 @@ import { isAfter, isBefore } from 'date-fns'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
 import { OfferFragment, OfferType } from '@/utils/types/offer'
+import { isProd, isVercelDev } from '@/utils/dev'
 
 export const OfferView = ({
   offer,
@@ -166,13 +167,11 @@ export const OfferView = ({
 }
 
 const _getHostIds = (offer: OfferFragment): string[] => {
-  const charlie =
-    process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-      ? '362368728841584721'
-      : process.env.NEXT_PUBLIC_VERCEL_ENV === 'preview' ||
-        process.env.NEXT_PUBLIC_VERCEL_ENV === 'development'
-      ? '359768139021418582'
-      : '373424375382147584'
+  const charlie = isProd
+    ? '362368728841584721'
+    : isVercelDev
+    ? '359768139021418582'
+    : '373424375382147584'
 
   const gatherer =
     offer.type !== OfferType.CabinWeek ||

@@ -20,7 +20,7 @@ export const getImageUrl = (imageUrl: string, useGateway = false) => {
 }
 
 export const getImageUrlFromNft = (nft: OwnedNft) => {
-  return getImageUrl(nft.media[0]?.thumbnail || nft.media[0]?.gateway)
+  return getImageUrl(nft.image.originalUrl || nft.image.cachedUrl || '')
 }
 
 export const getImageUrlByIpfsHash = (

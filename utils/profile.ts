@@ -10,11 +10,15 @@ import {
 } from '@prisma/client'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
-import { PublicLock__factory } from '@/generated/contract'
+import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfig } from '@/lib/protocol-config'
-import { getAlchemyProvider } from '@/lib/alchemy'
-import { Wallet } from 'alchemy-sdk'
-import { ContractReceipt, ContractTransaction } from 'ethers'
+import { getEthersAlchemyProvider } from '@/lib/chains'
+import {
+  Wallet,
+  ContractTransactionReceipt,
+  ContractTransactionResponse,
+} from 'ethers'
+import { NonPayableOverrides } from '@/generated/ethers/common'
 
 type ProfileCreateParams = {
   privyDID: string
@@ -176,7 +180,7 @@ export async function grantOrExtendCitizenship(
   }
 
   const address = profile.wallet.address
-  const provider = getAlchemyProvider(unlockConfig.networkName)
+  const provider = getEthersAlchemyProvider(unlockConfig.networkName)
 
   const privateKey = process.env.SIGNER_PRIVATE_KEY
   if (!privateKey) {
@@ -199,12 +203,12 @@ export async function grantOrExtendCitizenship(
     // need to check this to ensure they don't already have an expired key.
     // if they do, need to extend them instead of granting a new one
     const totalKeys = await lockContract.totalKeys(address)
-    hasKey = totalKeys.toNumber() > 0
+    hasKey = Number(totalKeys) > 0
 
     if (hasKey) {
-      existingTokenId = (
+      existingTokenId = Number(
         await lockContract.tokenOfOwnerByIndex(address, keyIndex)
-      ).toNumber()
+      )
     }
 
     // hasValidKey = await lockContract.getHasValidKey(address)
@@ -236,12 +240,13 @@ export async function grantOrExtendCitizenship(
   // const signed = await wallet.signTransaction(tx)
   // console.log(signed)
 
-  let tx: ContractTransaction | null = null
-  let receipt: ContractReceipt | null = null
+  let tx: ContractTransactionResponse | null = null
+  let receipt: ContractTransactionReceipt | null = null
 
   // sign and send the tx all in one shot
   try {
-    const overrides = { gasLimit: 500000 }
+    // const feeData = await provider.getFeeData()
+    const overrides: NonPayableOverrides = { gasLimit: 500000 }
 
     tx = hasKey
       ? await lockContract.grantKeyExtension(
@@ -274,6 +279,11 @@ export async function grantOrExtendCitizenship(
   try {
     // wait till tx is included in a block
     receipt = await tx.wait()
+    if (!receipt) {
+      throw new Error(
+        `tx ${tx.hash} was not included in a block, which should not happen because wait() should wait for 1 confirmation`
+      )
+    }
     console.log(`tx ${tx.hash} included in block: ${receipt.blockNumber}`)
   } catch (e: unknown) {
     console.error(e)
@@ -295,7 +305,7 @@ export async function grantOrExtendCitizenship(
     where: { id: profile.id },
     data: {
       citizenshipStatus: CitizenshipStatus.Verified,
-      citizenshipTokenId: tokenId.toNumber(),
+      citizenshipTokenId: Number(tokenId),
       citizenshipMintedAt: new Date(),
     },
   })

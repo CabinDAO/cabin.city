@@ -1,12 +1,12 @@
 import { useEffect, useCallback, useState } from 'react'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 
 const useEns = (address: string | undefined) => {
   const [ens, setEns] = useState<string | null>(null)
 
   const fetchEns = useCallback(async () => {
     try {
-      const provider = getAlchemyProvider('mainnet')
+      const provider = getEthersAlchemyProvider('mainnet')
       if (!address) return
 
       const _ens = await provider.lookupAddress(address)

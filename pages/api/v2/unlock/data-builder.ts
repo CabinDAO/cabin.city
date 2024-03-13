@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { BigNumber, ethers } from 'ethers'
-import { defaultAbiCoder } from 'ethers/lib/utils'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { ethers } from 'ethers'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
-import { CabinToken__factory } from '@/generated/contract'
+import { CabinToken__factory } from '@/generated/ethers'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { cabinTokenConfig, unlockConfig } from '@/lib/protocol-config'
 import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
@@ -34,35 +33,33 @@ export default async function handler(
     `DataBuilder: recipient: ${recipient}, canMint: ${canMint}, cabinBalance: ${cabinBalance.toString()}`
   )
 
-  const payload = defaultAbiCoder.encode(
-    ['bool', 'uint256'],
-    [canMint, cabinBalance]
-  )
+  const coder = ethers.AbiCoder.defaultAbiCoder()
 
-  const chainId = BigNumber.from(unlockConfig.chainId)
+  const payload = coder.encode(['bool', 'uint256'], [canMint, cabinBalance])
 
-  const digest = defaultAbiCoder.encode(
+  const chainId = BigInt(unlockConfig.chainId)
+
+  const digest = coder.encode(
     ['string', 'address', 'uint256'],
     ['CabinUnlockData', query.recipient, chainId]
   )
 
   // Without this signature, anyone could pass any data to the checkout flow and the user would be able to purchase a key without a voucher
   // or they could get a discount without having the correct cabin token balance
-  const hashed = ethers.utils.solidityKeccak256(['bytes'], [digest])
+  const hashed = ethers.solidityPackedKeccak256(['bytes'], [digest])
   const signer = new ethers.Wallet(process.env.SIGNER_PRIVATE_KEY)
-  const bytes = ethers.utils.arrayify(hashed)
+  const bytes = ethers.getBytes(hashed)
   const signature = await signer.signMessage(bytes)
 
-  const data = defaultAbiCoder.encode(['bytes', 'bytes'], [payload, signature])
+  const data = coder.encode(['bytes', 'bytes'], [payload, signature])
 
   res.status(200).json({ data })
 }
 
-async function _getCabinTokenBalance(address: string): Promise<BigNumber> {
-  const provider = getAlchemyProvider(cabinTokenConfig.networkName)
+async function _getCabinTokenBalance(address: string): Promise<bigint> {
   const cabinTokenContract = CabinToken__factory.connect(
     cabinTokenConfig.contractAddress,
-    provider
+    getEthersAlchemyProvider(cabinTokenConfig.networkName)
   )
   return cabinTokenContract.balanceOf(address)
 }

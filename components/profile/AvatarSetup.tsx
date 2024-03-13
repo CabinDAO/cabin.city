@@ -66,9 +66,9 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
       url,
       network: nft.network,
       contractAddress: nft.contract.address,
-      title: nft.title,
+      title: nft.name,
       tokenId: nft.tokenId,
-      tokenUri: nft.tokenUri?.raw,
+      tokenUri: nft.raw.tokenUri,
     })
     hideModal()
   }

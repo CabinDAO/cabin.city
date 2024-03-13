@@ -3,7 +3,7 @@ import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { prisma } from '@/lib/prisma'
 import { BlockSyncType, ActivityType } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { randomId } from '@/utils/random'
 import { otterspaceClient } from '@/lib/otterspace/otterspaceClient'
 import { otterspaceConfig } from '@/lib/protocol-config'
@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   await attemptSync({
     type: BlockSyncType.Otterspace,
-    provider: getAlchemyProvider(otterspaceConfig.networkName),
+    provider: getEthersAlchemyProvider(otterspaceConfig.networkName),
     initialBlock: new Decimal(otterspaceConfig.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
     res,

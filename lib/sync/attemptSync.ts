@@ -1,4 +1,4 @@
-import { providers } from 'ethers'
+import { Provider } from 'ethers'
 import { NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import {
@@ -11,7 +11,7 @@ import { Decimal } from '@prisma/client/runtime/library'
 const SAFE_BLOCK_THRESHOLD = 30
 
 export interface SyncAttemptInput {
-  provider: providers.Provider
+  provider: Provider
   type: BlockSyncType
   initialBlock: Decimal
   blockCount: Decimal
@@ -20,7 +20,7 @@ export interface SyncAttemptInput {
 }
 
 export interface SyncAttemptState {
-  provider: providers.Provider
+  provider: Provider
   startBlock: Decimal
   endBlock: Decimal
 }
