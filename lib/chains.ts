@@ -5,7 +5,7 @@ import { Alchemy, Network } from 'alchemy-sdk'
 import { AlchemyProvider, ethers } from 'ethers'
 import { isProd } from '../utils/dev'
 
-export const chainConfig = createConfig({
+export const wagmiChainConfig = createConfig({
   chains: [mainnet, sepolia, optimism, goerli],
   transports: {
     [mainnet.id]: http(
@@ -28,23 +28,25 @@ export const defaultChain = isProd ? optimism : sepolia
 export type NetworkName = 'mainnet' | 'sepolia' | 'optimism' | 'goerli'
 
 // the new viem client
-export function getAlchemyClient(network: NetworkName) {
+export function getWagmiAlchemyClient(network: NetworkName) {
   switch (network) {
     case 'mainnet':
-      return chainConfig.getClient({ chainId: mainnet.id })
+      return wagmiChainConfig.getClient({ chainId: mainnet.id })
     case 'sepolia':
-      return chainConfig.getClient({ chainId: sepolia.id })
+      return wagmiChainConfig.getClient({ chainId: sepolia.id })
     case 'optimism':
-      return chainConfig.getClient({ chainId: optimism.id })
+      return wagmiChainConfig.getClient({ chainId: optimism.id })
     case 'goerli':
-      return chainConfig.getClient({ chainId: goerli.id })
+      return wagmiChainConfig.getClient({ chainId: goerli.id })
     default:
       throw new Error(`Unsupported network: ${network}`)
   }
 }
 
 // the old ethers provider
-export const getAlchemyProvider = (network: NetworkName): AlchemyProvider => {
+export const getEthersAlchemyProvider = (
+  network: NetworkName
+): AlchemyProvider => {
   switch (network) {
     case 'mainnet':
     case 'sepolia':
@@ -63,20 +65,20 @@ export const getAlchemyProvider = (network: NetworkName): AlchemyProvider => {
   }
 }
 
-export function getAlchemy(network: NetworkName): Alchemy {
+export function getAlchemySdk(network: NetworkName): Alchemy {
   switch (network) {
     case 'mainnet':
-      new Alchemy({
+      return new Alchemy({
         apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
         network: Network.ETH_MAINNET,
       })
     case 'sepolia':
-      new Alchemy({
+      return new Alchemy({
         apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
         network: Network.ETH_SEPOLIA,
       })
     case 'optimism':
-      new Alchemy({
+      return new Alchemy({
         apiKey: process.env.NEXT_PUBLIC_ETH_ALCHEMY_ID,
         network: Network.OPT_MAINNET,
       })
@@ -85,8 +87,8 @@ export function getAlchemy(network: NetworkName): Alchemy {
   }
 }
 
-export function getAlchemySdks(): Alchemy[] {
+export function getCurrentAlchemySdks(): Alchemy[] {
   return isProd
-    ? [getAlchemy('mainnet'), getAlchemy('optimism')]
-    : [getAlchemy('sepolia')]
+    ? [getAlchemySdk('mainnet'), getAlchemySdk('optimism')]
+    : [getAlchemySdk('sepolia')]
 }

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { ethers } from 'ethers'
-import { getAlchemyProvider } from '@/lib/chains'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { CabinToken__factory } from '@/generated/ethers'
 import { CitizenshipStatus } from '@/utils/types/profile'
@@ -59,7 +59,7 @@ export default async function handler(
 async function _getCabinTokenBalance(address: string): Promise<bigint> {
   const cabinTokenContract = CabinToken__factory.connect(
     cabinTokenConfig.contractAddress,
-    getAlchemyProvider(cabinTokenConfig.networkName)
+    getEthersAlchemyProvider(cabinTokenConfig.networkName)
   )
   return cabinTokenContract.balanceOf(address)
 }

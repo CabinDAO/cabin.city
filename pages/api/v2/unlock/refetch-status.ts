@@ -3,7 +3,7 @@ import { withAuth } from '@/utils/api/withAuth'
 import { RefetchResponse } from '@/utils/types/unlock'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfig } from '@/lib/protocol-config'
-import { getAlchemyProvider } from '@/lib/chains'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
 import { randomId } from '@/utils/random'
@@ -29,7 +29,7 @@ async function handler(
 
   const lockContract = PublicLock__factory.connect(
     unlockConfig.contractAddress,
-    getAlchemyProvider(unlockConfig.networkName)
+    getEthersAlchemyProvider(unlockConfig.networkName)
   )
 
   const hasValidKey = await lockContract.getHasValidKey(address)

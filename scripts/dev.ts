@@ -1,10 +1,10 @@
 import { prisma } from '../lib/prisma'
-import { getAlchemyProvider } from '../lib/chains'
+import { getEthersAlchemyProvider } from '../lib/chains'
 import { CabinToken__factory } from '../generated/ethers'
 import { cabinTokenConfig } from '../lib/protocol-config'
 
 async function main() {
-  const provider = getAlchemyProvider(cabinTokenConfig.networkName)
+  const provider = getEthersAlchemyProvider(cabinTokenConfig.networkName)
 
   const cabinTokenContract = CabinToken__factory.connect(
     cabinTokenConfig.contractAddress,

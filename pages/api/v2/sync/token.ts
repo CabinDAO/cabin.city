@@ -3,7 +3,7 @@ import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { prisma, onchainAmountToDecimal } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { getAlchemyProvider } from '@/lib/chains'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { CabinToken__factory } from 'generated/ethers'
 import { cabinTokenConfig } from '@/lib/protocol-config'
 
@@ -16,7 +16,7 @@ export default async function handler(
 ) {
   await attemptSync({
     type: $Enums.BlockSyncType.CabinToken,
-    provider: getAlchemyProvider(cabinTokenConfig.networkName),
+    provider: getEthersAlchemyProvider(cabinTokenConfig.networkName),
     initialBlock: new Decimal(cabinTokenConfig.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
     res,

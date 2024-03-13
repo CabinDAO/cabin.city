@@ -1,4 +1,4 @@
-import { getAlchemySdks } from '@/lib/chains'
+import { getCurrentAlchemySdks } from '@/lib/chains'
 import { Alchemy } from 'alchemy-sdk'
 import { useCallback, useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
@@ -53,7 +53,7 @@ export const SelectNftModal = ({ onSelect, onClose }: SelectNftModalProps) => {
   const fetchNfts = useCallback(async () => {
     if (!chain || !address) return
 
-    const alchemyInstances = getAlchemySdks()
+    const alchemyInstances = getCurrentAlchemySdks()
 
     await Promise.all(
       alchemyInstances.map((alchemyInstance) =>

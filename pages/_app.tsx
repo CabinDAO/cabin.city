@@ -10,7 +10,7 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
 import { PrivyProvider } from '@privy-io/react-auth'
 import { appDomainWithProto } from '@/utils/display-utils'
-import { chainConfig } from '@/lib/chains'
+import { wagmiChainConfig } from '@/lib/chains'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
@@ -53,7 +53,7 @@ export default function App({ Component, pageProps }: AppProps) {
           }}
         >
           <QueryClientProvider client={queryClient}>
-            <WagmiProvider config={chainConfig}>
+            <WagmiProvider config={wagmiChainConfig}>
               <ErrorProvider>
                 <BackendProvider>
                   <ModalProvider>

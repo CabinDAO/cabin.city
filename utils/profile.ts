@@ -12,7 +12,7 @@ import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfig } from '@/lib/protocol-config'
-import { getAlchemyProvider } from '@/lib/chains'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import {
   Wallet,
   ContractTransactionReceipt,
@@ -179,7 +179,7 @@ export async function grantOrExtendCitizenship(
   }
 
   const address = profile.wallet.address
-  const provider = getAlchemyProvider(unlockConfig.networkName)
+  const provider = getEthersAlchemyProvider(unlockConfig.networkName)
 
   const privateKey = process.env.SIGNER_PRIVATE_KEY
   if (!privateKey) {
