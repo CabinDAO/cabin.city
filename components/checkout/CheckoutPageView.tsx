@@ -1,4 +1,4 @@
-import { isDevEnv } from '@/utils/dev'
+import { isProd } from '@/utils/dev'
 import { CartFragment } from '@/utils/types/cart'
 import styled from 'styled-components'
 import { Body1, H2 } from '@/components/core/Typography'
@@ -20,7 +20,7 @@ const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
         </Body1>
         <H2>Payment</H2>
 
-        {isDevEnv && (
+        {!isProd && (
           <Body1
             style={{
               backgroundColor: theme.colors.yellow400,

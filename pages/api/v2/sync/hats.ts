@@ -8,7 +8,7 @@ import {
   RoleType,
 } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getAlchemyProvider } from '@/lib/chains'
 import { randomId } from '@/utils/random'
 import { hatsClient } from '@/lib/hats/hatsClient'
 import { hatsConfig } from '@/lib/protocol-config'

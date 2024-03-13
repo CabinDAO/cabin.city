@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import { Contract, Signer, utils } from "ethers";
-import type { Provider } from "@ethersproject/providers";
+import { Contract, Interface, type ContractRunner } from "ethers";
 import type { CabinToken, CabinTokenInterface } from "../CabinToken";
 
 const _abi = [
@@ -443,12 +442,9 @@ const _abi = [
 export class CabinToken__factory {
   static readonly abi = _abi;
   static createInterface(): CabinTokenInterface {
-    return new utils.Interface(_abi) as CabinTokenInterface;
+    return new Interface(_abi) as CabinTokenInterface;
   }
-  static connect(
-    address: string,
-    signerOrProvider: Signer | Provider
-  ): CabinToken {
-    return new Contract(address, _abi, signerOrProvider) as CabinToken;
+  static connect(address: string, runner?: ContractRunner | null): CabinToken {
+    return new Contract(address, _abi, runner) as unknown as CabinToken;
   }
 }

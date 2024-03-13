@@ -3,8 +3,8 @@ import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
 import { prisma, onchainAmountToDecimal } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { getAlchemyProvider } from '@/lib/alchemy'
-import { CabinToken__factory } from 'generated/contract'
+import { getAlchemyProvider } from '@/lib/chains'
+import { CabinToken__factory } from 'generated/ethers'
 import { cabinTokenConfig } from '@/lib/protocol-config'
 
 const BLOCK_COUNT = new Decimal(2000)

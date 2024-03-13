@@ -49,7 +49,7 @@ export const CitizenshipView = () => {
     loadUnlockCheckout(provider)
   }
 
-  const { handleSwitch, rightChain } = useChainSwitch(performMint)
+  const { handleSwitch, isOnRightChain } = useChainSwitch(performMint)
 
   const handleMint = async () => {
     if (!user) return
@@ -60,7 +60,7 @@ export const CitizenshipView = () => {
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
     )
 
-    if (!currentUserWallet || !rightChain) {
+    if (!currentUserWallet || !isOnRightChain) {
       handleSwitch()
       return
     }

@@ -86,8 +86,8 @@ When working on a new feature, follow these steps:
 - Once the changes are tested and ready to be deployed to production, create a PR from `dev`
   to `main`
     - Make sure you double check all the changes previously merged to `dev`
-- Once the PR is approved, merge it into `main`
-    - Fauna migrations will be run against the production database
+- Once the PR is approved, merge it into `main` and push it
+    - Migrations will be run against the production database
 
 ## Google Analytics
 

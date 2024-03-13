@@ -1,15 +1,26 @@
 import { prisma } from '../lib/prisma'
-import { createPrivyAccount, privy } from '../lib/privy'
+import { getAlchemyProvider } from '../lib/chains'
+import { CabinToken__factory } from '../generated/ethers'
+import { cabinTokenConfig } from '../lib/protocol-config'
 
 async function main() {
-  // const res = await createPrivyAccount(
-  //   'grin+realaddress@cabin.city',
-  //   '0x3DedB545E9B89f63FA71Ab75497735d802C9d26F'
-  // )
-  // console.log(res)
+  const provider = getAlchemyProvider(cabinTokenConfig.networkName)
 
-  const privyUser = await privy.getUser('did:privy:clt02txv709f1jbrinkilu5a8')
-  console.log(privyUser)
+  const cabinTokenContract = CabinToken__factory.connect(
+    cabinTokenConfig.contractAddress,
+    provider
+  )
+
+  // await cabinTokenContract.
+
+  const transferFilter = cabinTokenContract.filters.Transfer()
+  const transfers = await cabinTokenContract.queryFilter(
+    transferFilter,
+    0,
+    await provider.getBlockNumber()
+  )
+
+  console.log(transfers)
 }
 
 main()

@@ -1,13 +1,13 @@
 import { format, getYear, getMonth } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { ContactFieldType, ProfileFragment } from '@/utils/types/profile'
+import { isProd } from '@/utils/dev'
 
-export const appDomain =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? 'cabin.city'
-    : process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'dev'
-    ? 'dev.cabin.city'
-    : process.env.NEXT_PUBLIC_VERCEL_URL
+export const appDomain = isProd
+  ? 'cabin.city'
+  : process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF === 'dev'
+  ? 'dev.cabin.city'
+  : process.env.NEXT_PUBLIC_VERCEL_URL
 
 export const appDomainWithProto =
   (appDomain.startsWith('localhost:') ? 'http' : 'https') + `://${appDomain}`

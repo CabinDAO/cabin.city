@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SiweMessage } from 'siwe'
-import { useNetwork, useSignMessage } from 'wagmi'
+import { useAccount, useSignMessage } from 'wagmi'
 
 interface UseSignAuthMessageProps {
   prefetchNonce?: boolean
@@ -11,7 +11,7 @@ export function useSignAuthMessage(props: UseSignAuthMessageProps = {}) {
 
   const [nonce, setNonce] = useState<string | null>(null)
   const fetchingNonce = useRef<boolean>(false)
-  const { chain: activeChain } = useNetwork()
+  const { chain: activeChain } = useAccount()
   const { signMessageAsync } = useSignMessage()
 
   const fetchNonce = useCallback(async () => {

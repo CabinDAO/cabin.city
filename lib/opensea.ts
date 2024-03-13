@@ -16,9 +16,7 @@ export const getUnlockOpenseaUrl = (tokenId: number) => {
 
 export const getOpenSeaNetworkUrl = (network: string) => {
   return {
-    goerli: 'https://testnets.opensea.io/assets/goerli',
-    mumbai: 'https://testnets.opensea.io/assets/mumbai',
-    matic: 'https://testnets.opensea.io/assets/goerli',
+    sepolia: 'https://testnets.opensea.io/',
     optimism: 'https://opensea.io/assets/optimism',
     mainnet: 'https://opensea.io/assets/ethereum',
   }[network]

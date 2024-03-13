@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useState } from 'react'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getAlchemyProvider } from '@/lib/chains'
 
 const useEns = (address: string | undefined) => {
   const [ens, setEns] = useState<string | null>(null)

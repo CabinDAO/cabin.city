@@ -3,7 +3,7 @@ import { ModalContainer } from './modals/ModalContainer'
 import { ModalTitle } from './modals/ModalTitle'
 import { Body2, H4 } from './Typography'
 import { Button } from './Button'
-import { appChain } from '@/lib/wagmi/wagmi-client'
+import { defaultChain } from '@/lib/chains'
 
 interface SwitchNetworkModalProps {
   onSwitch?: VoidFunction
@@ -24,7 +24,7 @@ export const SwitchNetworkModal = ({
           </Question>
           <Body2>
             Minting your Citizenship NFT requires you to switch to the{' '}
-            {appChain.name} network.
+            {defaultChain.name} network.
           </Body2>
         </QuestionContainer>
         <Actions>

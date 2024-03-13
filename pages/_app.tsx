@@ -2,7 +2,6 @@ import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
 import { AppHead } from '@/components/shared/head'
 import theme from '@/styles/theme'
-import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'
 import GlobalStyles from '../styles/global'
@@ -11,15 +10,17 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
 import { PrivyProvider } from '@privy-io/react-auth'
 import { appDomainWithProto } from '@/utils/display-utils'
-import { PrivyWagmiConnector } from '@privy-io/wagmi-connector'
-import { configureChainsConfig } from '@/lib/wagmi/wagmi-client'
+import { chainConfig } from '@/lib/chains'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
 import { BackendProvider } from '@/components/contexts/BackendContext'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { WagmiProvider } from '@privy-io/wagmi'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleLogin } = useAuth()
+  const queryClient = new QueryClient()
 
   return (
     <>
@@ -51,24 +52,24 @@ export default function App({ Component, pageProps }: AppProps) {
             },
           }}
         >
-          <PrivyWagmiConnector wagmiChainsConfig={configureChainsConfig}>
-            <ErrorProvider>
-              <BackendProvider>
-                {/*<ApolloProvider client={apolloClient}>*/}
-                <ModalProvider>
-                  <CitizenshipProvider>
-                    <NavigationProvider>
-                      <GoogleAnalytics />
-                      <Reload />
-                      <Component {...pageProps} />
-                      <Analytics />
-                    </NavigationProvider>
-                  </CitizenshipProvider>
-                </ModalProvider>
-                {/*</ApolloProvider>*/}
-              </BackendProvider>
-            </ErrorProvider>
-          </PrivyWagmiConnector>
+          <QueryClientProvider client={queryClient}>
+            <WagmiProvider config={chainConfig}>
+              <ErrorProvider>
+                <BackendProvider>
+                  <ModalProvider>
+                    <CitizenshipProvider>
+                      <NavigationProvider>
+                        <GoogleAnalytics />
+                        <Reload />
+                        <Component {...pageProps} />
+                        <Analytics />
+                      </NavigationProvider>
+                    </CitizenshipProvider>
+                  </ModalProvider>
+                </BackendProvider>
+              </ErrorProvider>
+            </WagmiProvider>
+          </QueryClientProvider>
         </PrivyProvider>
       </ThemeProvider>
     </>

@@ -1,7 +1,7 @@
-import { getAlchemySdks } from '@/lib/alchemy'
+import { getAlchemySdks } from '@/lib/chains'
 import { Alchemy } from 'alchemy-sdk'
 import { useCallback, useEffect, useState } from 'react'
-import { useAccount, useNetwork } from 'wagmi'
+import { useAccount } from 'wagmi'
 import IconButton from '../core/IconButton'
 import { ModalContainer } from '../core/modals/ModalContainer'
 import { ModalTitle } from '../core/modals/ModalTitle'
@@ -19,8 +19,7 @@ interface NetworkNftMap {
 
 export const SelectNftModal = ({ onSelect, onClose }: SelectNftModalProps) => {
   const [aboutOpen, setAboutOpen] = useState(false)
-  const { chain } = useNetwork()
-  const { address } = useAccount()
+  const { chain, address } = useAccount()
 
   const [nftsbyNetwork, setNftsbyNetwork] = useState<NetworkNftMap>({})
 
@@ -35,7 +34,7 @@ export const SelectNftModal = ({ onSelect, onClose }: SelectNftModalProps) => {
       const myNfts = await alchemyInstance.nft.getNftsForOwner(address)
 
       const filteredNfts = myNfts.ownedNfts.filter(
-        (nft) => nft.media.length > 0
+        (nft) => nft.image.originalUrl
       )
 
       if (filteredNfts.length > 0) {

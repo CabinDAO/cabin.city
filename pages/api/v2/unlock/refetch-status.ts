@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
 import { RefetchResponse } from '@/utils/types/unlock'
-import { PublicLock__factory } from '@/generated/contract'
+import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfig } from '@/lib/protocol-config'
-import { getAlchemyProvider } from '@/lib/alchemy'
+import { getAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
 import { randomId } from '@/utils/random'
@@ -39,7 +39,7 @@ async function handler(
     const profile = await setCitizenshipStatus(
       address,
       CitizenshipStatus.Verified,
-      tokenId.toNumber()
+      Number(tokenId)
     )
     if (profile) {
       res.json({ updated: true })
