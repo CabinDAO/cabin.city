@@ -1,7 +1,6 @@
-import theme, { ColorName } from '../../styles/theme'
+import { Inter, IBM_Plex_Mono, Poppins } from 'next/font/google'
 import styled, { css } from 'styled-components'
-
-import { Inter, IBM_Plex_Mono, Poppins } from '@next/font/google'
+import theme, { ColorName } from '../../styles/theme'
 
 const inter = Inter({
   display: 'swap',

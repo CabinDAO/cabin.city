@@ -37,7 +37,12 @@ import { isLocalDev } from '../utils/dev'
 //
 // if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-const options = isLocalDev ? { log: ['query' as Prisma.LogLevel] } : undefined
+const enableQueryLogging = false
+
+const options =
+  enableQueryLogging && isLocalDev
+    ? { log: ['query' as Prisma.LogLevel] }
+    : undefined
 
 let prisma: PrismaClient
 
