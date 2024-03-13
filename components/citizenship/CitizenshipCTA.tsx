@@ -56,7 +56,7 @@ export const CitizenshipCTA = ({
         'Introduce yourself in our Discord community and get involved in our various community calls to earn the endorsement of active Citizens.',
       button: () => (
         <a
-          href={EXTERNAL_LINKS.VOUCH_REQUEST_DISCORD_CHANNEL}
+          href={EXTERNAL_LINKS.GENERAL_CHAT_DISCORD_CHANNEL}
           onClick={() => events.citizenshipShareDiscordEvent(profileId)}
           target="_blank"
           rel="noreferrer"
