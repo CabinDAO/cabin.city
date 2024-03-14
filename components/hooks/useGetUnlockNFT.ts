@@ -11,16 +11,6 @@ export const useGetUnlockNFT = () => {
   const { user: profile } = useProfile()
   const config = useConfig()
 
-  const getDateFromBigint = (bi: bigint) => {
-    try {
-      return new Date(Number(bi) * 1000)
-    } catch (error) {
-      // Example invalid date: '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-      console.error('Invalid date', error)
-      return null
-    }
-  }
-
   useEffect(() => {
     const getNFT = async () => {
       if (!profile?.walletAddress || !profile.citizenshipMintedAt) {
@@ -51,7 +41,10 @@ export const useGetUnlockNFT = () => {
         setActiveNFT({
           tokenId: tokenId.toString(),
           mintedDate: new Date(profile.citizenshipMintedAt),
-          expirationDate: getDateFromBigint(expirationTimestamp),
+          expirationDate:
+            expirationTimestamp > BigInt(4102462800)
+              ? null
+              : new Date(Number(expirationTimestamp) * 1000),
           image: DEFAULT_NFT_IMAGE,
         })
       }

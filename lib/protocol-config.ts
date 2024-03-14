@@ -1,4 +1,5 @@
 import { NetworkName } from '@/lib/chains'
+import { isProd } from '@/utils/dev'
 
 interface GetConfigArgs<T> extends Record<string, T> {
   dev: T
@@ -6,11 +7,7 @@ interface GetConfigArgs<T> extends Record<string, T> {
 }
 
 const getAppConfig = <T>(args: GetConfigArgs<T>): T => {
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV
-  if (!appEnv) {
-    throw new Error('NEXT_PUBLIC_APP_ENV is not set')
-  }
-
+  const appEnv = isProd ? 'prod' : 'dev'
   const config = args[appEnv]
   if (!config) {
     throw new Error(`No config for app env: ${appEnv}`)

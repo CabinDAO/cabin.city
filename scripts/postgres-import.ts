@@ -5,6 +5,7 @@ import {
   Decimal,
   PrismaClientKnownRequestError,
 } from '@prisma/client/runtime/library'
+import { isLocalDev } from '@/utils/dev'
 
 // TODO: check that every field in the existing data is imported
 
@@ -115,7 +116,7 @@ async function postgresImport() {
     console.log(`finished parsing ${fullPath}`)
   }
 
-  if (process.env.NEXT_PUBLIC_APP_ENV === 'dev') {
+  if (isLocalDev) {
     console.log('updating profile privyDID and externId FOR DEV ENV')
     await prisma.profile.update({
       data: {
