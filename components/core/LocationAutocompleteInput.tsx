@@ -8,6 +8,9 @@ interface LocationAutocompleteInputProps {
   initialValue?: AddressFragment | null
   error: boolean
   errorMessage?: string
+  bottomHelpText?: string
+  disabled?: boolean
+  placeholder?: string
 }
 
 export const LocationAutocompleteInput = ({
@@ -15,6 +18,9 @@ export const LocationAutocompleteInput = ({
   initialValue,
   error,
   errorMessage,
+  bottomHelpText,
+  disabled,
+  placeholder,
 }: LocationAutocompleteInputProps) => {
   const autoCompleteRef = useRef<google.maps.places.Autocomplete>()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -28,6 +34,13 @@ export const LocationAutocompleteInput = ({
       window.initMap = () => {
         const options = {
           fields: ['address_components', 'geometry', 'formatted_address'],
+          // https://developers.google.com/maps/documentation/javascript/supported_types
+          types: [
+            // 'address',
+            'geocode',
+            // '(regions)',
+            // '(cities)',
+          ],
         }
 
         if (inputRef.current) {
@@ -58,9 +71,13 @@ export const LocationAutocompleteInput = ({
       />
       <InputText
         required
+        disabled={disabled}
+        placeholder={placeholder}
         ref={inputRef}
         label="Location"
-        bottomHelpText="Your precise location will not be shown publicly"
+        bottomHelpText={
+          bottomHelpText || 'Your precise location will not be shown publicly'
+        }
         error={error}
         errorMessage={errorMessage}
       />
