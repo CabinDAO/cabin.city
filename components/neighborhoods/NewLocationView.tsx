@@ -138,11 +138,7 @@ export const NewLocationView = () => {
             </JoiningTextContainer>
           </Content>
           <HorizontalDivider />
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CITY_DIRECTORY}
-            iconSize={0.9}
-          >
+          <AppLink external href={EXTERNAL_LINKS.CITY_DIRECTORY} iconSize={0.9}>
             <Overline>Learn More</Overline>
           </AppLink>
         </StyledContentCard>

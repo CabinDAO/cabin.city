@@ -5,7 +5,7 @@ import Icon, { IconName } from './Icon'
 import events from '@/lib/googleAnalytics/events'
 
 interface AppLinkProps {
-  location: string
+  href: string
   external?: boolean
   children: ReactNode
   iconName?: IconName
@@ -15,7 +15,7 @@ interface AppLinkProps {
 }
 
 export const AppLink = ({
-  location,
+  href,
   children,
   external,
   className,
@@ -28,7 +28,7 @@ export const AppLink = ({
   const handleClick = () => {
     onClick?.()
     if (external) {
-      events.externalLinkEvent(location)
+      events.externalLinkEvent(href)
     }
   }
 
@@ -36,7 +36,7 @@ export const AppLink = ({
     return (
       <StyledAnchor
         className={className}
-        href={location}
+        href={href}
         target="_blank"
         rel="noreferrer"
         onClick={handleClick}
@@ -47,7 +47,7 @@ export const AppLink = ({
     )
   } else {
     return (
-      <StyledLink onClick={handleClick} className={className} href={location}>
+      <StyledLink onClick={handleClick} className={className} href={href}>
         {children}
         {!!iconSize && <Icon name={iconName} size={iconSize} />}
       </StyledLink>

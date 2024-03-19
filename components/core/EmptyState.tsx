@@ -39,7 +39,7 @@ export const EmptyState = ({
         {customCta ? (
           customCta()
         ) : href ? (
-          <AppLink external location={href} iconSize={0.9}>
+          <AppLink external href={href} iconSize={0.9}>
             <Overline>Learn More</Overline>
           </AppLink>
         ) : null}

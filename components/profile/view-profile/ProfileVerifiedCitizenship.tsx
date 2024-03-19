@@ -57,7 +57,7 @@ export const ProfileVerifiedCitizenship = ({
           <ManageCTA
             iconSize={0.8}
             iconName="chevron-right"
-            location="/citizenship"
+            href="/citizenship"
           >
             <Overline>Manage</Overline>
           </ManageCTA>

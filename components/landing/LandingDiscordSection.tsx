@@ -21,7 +21,7 @@ export const LandingDiscordSection = () => {
         <StyledAppLink
           iconSize={2}
           external
-          location={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=homepage`}
+          href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=homepage`}
         >
           <p style={{ color: theme.colors.yellow700 }}>Book a call</p>
         </StyledAppLink>

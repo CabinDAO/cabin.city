@@ -37,7 +37,7 @@ export const NFTDataList = ({ data }: NFTDataListProps) => {
             return (
               <AppLink
                 external={value.external}
-                location={value.url}
+                href={value.url}
                 key={value.value}
                 iconSize={0.9}
                 iconName={value.external ? 'up-right-arrow' : 'chevron-right'}

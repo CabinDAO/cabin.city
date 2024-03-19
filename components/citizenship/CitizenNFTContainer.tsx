@@ -85,11 +85,7 @@ export const CitizenNFTContainer = () => {
             access to our annual gathering, citizens-only discord channels,
             merch, and partnership perks.
           </Body2>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CITIZENSHIP}
-            iconSize={0.9}
-          >
+          <AppLink external href={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0.9}>
             <Overline>Learn More</Overline>
           </AppLink>
         </DescriptionContainer>

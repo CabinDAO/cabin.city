@@ -41,11 +41,7 @@ export const ProfileUnverifiedCitizenship = ({
             A digital and physical passport to explore the Cabin network. Join
             the growing community today and unlock some epic benefits.
           </Body2>
-          <AppLink
-            external
-            location={EXTERNAL_LINKS.CITIZENSHIP}
-            iconSize={0.9}
-          >
+          <AppLink external href={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0.9}>
             <Overline>Learn More</Overline>
           </AppLink>
         </DescriptionContainer>
