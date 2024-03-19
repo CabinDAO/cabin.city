@@ -40,7 +40,7 @@ export type AddressFragment = {
 
 export type ShortAddressFragment = Pick<
   AddressFragment,
-  'locality' | 'admininstrativeAreaLevel1Short' | 'country'
+  'locality' | 'admininstrativeAreaLevel1Short' | 'country' | 'countryShort'
 >
 
 export type RecentVoterFragment = {

@@ -107,6 +107,7 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
             admininstrativeAreaLevel1Short:
               offer.location.address.admininstrativeAreaLevel1Short,
             country: offer.location.address.country,
+            countryShort: offer.location.address.countryShort,
           }
         : null,
       caretaker: {

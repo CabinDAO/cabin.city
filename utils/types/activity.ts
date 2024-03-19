@@ -171,6 +171,7 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             locality: true
             admininstrativeAreaLevel1Short: true
             country: true
+            countryShort: true
           }
         }
       }
@@ -198,6 +199,7 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
                 locality: true
                 admininstrativeAreaLevel1Short: true
                 country: true
+                countryShort: true
               }
             }
             caretaker: {
@@ -270,6 +272,7 @@ export const ActivityQueryInclude = {
           locality: true,
           admininstrativeAreaLevel1Short: true,
           country: true,
+          countryShort: true,
         },
       },
     },
@@ -297,6 +300,7 @@ export const ActivityQueryInclude = {
               locality: true,
               admininstrativeAreaLevel1Short: true,
               country: true,
+              countryShort: true,
             },
           },
           caretaker: {

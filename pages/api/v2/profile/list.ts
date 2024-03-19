@@ -220,6 +220,7 @@ const profilesToFragments = (
             admininstrativeAreaLevel1Short:
               profile.address.admininstrativeAreaLevel1Short,
             country: profile.address.country,
+            countryShort: profile.address.countryShort,
           }
         : null,
       avatar: profile.avatar

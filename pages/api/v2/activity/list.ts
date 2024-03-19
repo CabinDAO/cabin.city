@@ -131,6 +131,7 @@ const toFragments = (
                   activity.location.address?.admininstrativeAreaLevel1Short ||
                   '',
                 country: activity.location.address?.country || '',
+                countryShort: activity.location.address?.countryShort || '',
               },
               voteCount: 0, // TODO: implement
               offerCount: 0, // TODO: implement
@@ -160,6 +161,8 @@ const toFragments = (
                         activity.offer.location.address
                           .admininstrativeAreaLevel1Short || '',
                       country: activity.offer.location.address.country || '',
+                      countryShort:
+                        activity.offer.location.address.countryShort || '',
                     }
                   : null,
                 caretaker: {
