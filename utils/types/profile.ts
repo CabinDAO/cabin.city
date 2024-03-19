@@ -1,5 +1,6 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 import { APIError, Paginated } from '@/utils/types/shared'
+import { AddressFragment, ShortAddressFragment } from '@/utils/types/location'
 
 // must match prisma's $Enums.RoleType
 export enum RoleType {
@@ -54,6 +55,7 @@ export type ProfileListFragment = {
   email: string
   bio: string
   location: string
+  address: ShortAddressFragment | null
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
@@ -71,6 +73,7 @@ export type ProfileListParams = {
   roleTypes?: RoleType[]
   levelTypes?: RoleLevel[]
   citizenshipStatuses?: CitizenshipStatus[]
+  withLocation?: 'true' | 'false'
   sort?: ProfileSort
   page?: number
 }
@@ -125,7 +128,7 @@ export type ProfileBasicFragment = {
 
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
-  location: string
+  address: ShortAddressFragment | undefined
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {
@@ -208,7 +211,7 @@ export type MeFragment = {
   name: string
   email: string
   bio: string
-  location: string
+  address: AddressFragment | undefined
   inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
@@ -235,7 +238,7 @@ export type ProfileEditParams = {
     name?: string
     email?: string
     bio?: string
-    location?: string
+    address?: AddressFragment
     contactFields?: ContactFragment[]
     avatar?: AvatarFragment
   }

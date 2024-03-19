@@ -1,35 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
-import { InputText } from '../core/InputText'
 import { InputTextArea } from '../core/InputTextArea'
-import { MAX_BIO_LENGTH, MAX_LOCATION_LENGTH } from './constants'
-import { validBio, validLocation } from './validations'
+import { MAX_BIO_LENGTH } from './constants'
+import { isValidAddress, isValidBio } from './validations'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
 import { AvatarFragment } from '@/utils/types/profile'
+import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
+import { AddressFragment } from '@/utils/types/location'
 
 interface AboutInputProps {
   bio: string
-  location: string
   onBioChange: (bio: string) => void
-  onLocationChange: (location: string) => void
+  address?: AddressFragment
+  onAddressChange: (location: AddressFragment) => void
   avatar?: AvatarFragment
   onAvatarChange?: (avatar: AvatarFragment | undefined) => void
 }
 
 export const AboutInput = ({
   bio,
-  location,
+  address,
   onBioChange,
-  onLocationChange,
+  onAddressChange,
   avatar,
   onAvatarChange,
 }: AboutInputProps) => {
   const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onBioChange(e.target.value)
-  }
-
-  const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onLocationChange(e.target.value)
   }
 
   return (
@@ -42,14 +40,16 @@ export const AboutInput = ({
         helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
         value={bio}
         onChange={handleBioChange}
-        error={!validBio(bio)}
+        error={!isValidBio(bio)}
       />
-      <InputText
-        label="Location"
-        helperText={`${location.length}/${MAX_LOCATION_LENGTH}`}
-        value={location}
-        onChange={handleLocationChange}
-        error={!validLocation(location)}
+      <LocationAutocompleteInput
+        initialValue={address}
+        onLocationChange={onAddressChange}
+        bottomHelpText={
+          'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
+        }
+        error={!isValidAddress(address)}
+        errorMessage={REQUIRED_FIELD_ERROR}
       />
     </SetupStepContainer>
   )

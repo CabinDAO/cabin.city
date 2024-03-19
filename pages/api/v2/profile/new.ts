@@ -3,12 +3,14 @@ import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewResponse } from '@/utils/types/profile'
+import { AddressFragment } from '@/utils/types/location'
 import { createProfile } from '@/utils/profile'
 
 export type ProfileNewParams = {
   walletAddress: string
   name: string
   email: string
+  address: AddressFragment
   avatar?: {
     url: string
     contractAddress?: string | null
@@ -63,6 +65,7 @@ async function handler(
     walletAddress: body.walletAddress,
     name: body.name,
     email: body.email,
+    address: body.address,
     avatar: body.avatar,
     invite,
   })

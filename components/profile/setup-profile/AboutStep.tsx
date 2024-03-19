@@ -5,14 +5,14 @@ import { useProfile } from '@/components/auth/useProfile'
 import { StepProps } from './step-configuration'
 import { SetupStepForm } from './SetupStepForm'
 import { AboutInput } from '../AboutInput'
-import { validBio, validLocation } from '../validations'
+import { isValidAddress, isValidBio } from '../validations'
 import { useError } from '@/components/hooks/useError'
 
 export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const { showError } = useError()
   const [bio, setBio] = useState(user?.bio ?? '')
-  const [location, setLocation] = useState(user?.location ?? '')
+  const [address, setAddress] = useState(user?.address)
   const [avatar, setAvatar] = useState(user?.avatar)
 
   const { useMutate } = useBackend()
@@ -26,20 +26,20 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
       return
     }
 
-    if (!validBio(bio)) {
+    if (!isValidBio(bio)) {
       showError('Bio is too long')
       return
     }
 
-    if (!validLocation(location)) {
-      showError('Location is too long')
+    if (!isValidAddress(address)) {
+      showError('Address required')
       return
     }
 
     await updateProfile({
       data: {
         bio,
-        location,
+        address,
         avatar,
       },
     } as ProfileEditParams)
@@ -51,9 +51,9 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
     <SetupStepForm name={name} onNext={handleNext} onBack={onBack}>
       <AboutInput
         bio={bio}
-        location={location}
+        address={address}
         onBioChange={setBio}
-        onLocationChange={setLocation}
+        onAddressChange={setAddress}
         avatar={avatar}
         onAvatarChange={setAvatar}
       />

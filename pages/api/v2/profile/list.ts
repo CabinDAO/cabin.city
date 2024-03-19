@@ -17,6 +17,7 @@ import {
 // must match ListedProfileQueryInclude below
 type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
+    address: true
     avatar: true
     wallet: {
       include: {
@@ -37,6 +38,7 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
 
 // must match ListedProfileWithRelations  above
 const ListedProfileQueryInclude = {
+  address: true,
   avatar: true,
   wallet: {
     include: {
@@ -75,6 +77,7 @@ async function handler(
     citizenshipStatuses: toArray<CitizenshipStatus>(
       req.query.citizenshipStatuses
     ),
+    withLocation: req.query.withLocation === 'true' ? 'true' : undefined,
     sort: req.query.sort ? (req.query.sort as ProfileSort) : undefined,
     page: req.query.page ? parseInt(req.query.page as string) : undefined,
   }
@@ -94,6 +97,8 @@ async function handler(
               mode: 'insensitive',
             }
           : undefined,
+      location: params.withLocation == 'true' ? { not: '' } : undefined,
+      address: params.withLocation == 'true' ? { is: null } : undefined,
       roles:
         params.roleTypes?.length || params.levelTypes?.length
           ? {
@@ -208,6 +213,14 @@ const profilesToFragments = (
       citizenshipTokenId: profile.citizenshipTokenId,
       citizenshipMintedAt: profile.citizenshipMintedAt
         ? profile.citizenshipMintedAt?.toISOString()
+        : null,
+      address: profile.address
+        ? {
+            locality: profile.address.locality,
+            admininstrativeAreaLevel1Short:
+              profile.address.admininstrativeAreaLevel1Short,
+            country: profile.address.country,
+          }
         : null,
       avatar: profile.avatar
         ? {

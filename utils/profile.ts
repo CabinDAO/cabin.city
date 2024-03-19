@@ -1,16 +1,16 @@
 import { prisma } from '@/lib/prisma'
 import {
+  Prisma,
   Profile,
+  Invite,
   RoleType,
   RoleLevel,
   ActivityType,
-  Prisma,
   CitizenshipStatus,
-  Invite,
 } from '@prisma/client'
+import { AddressFragment } from '@/utils/types/location'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
-import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfig } from '@/lib/protocol-config'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import {
@@ -18,6 +18,7 @@ import {
   ContractTransactionReceipt,
   ContractTransactionResponse,
 } from 'ethers'
+import { PublicLock__factory } from '@/generated/ethers'
 import { NonPayableOverrides } from '@/generated/ethers/common'
 
 type ProfileCreateParams = {
@@ -25,6 +26,7 @@ type ProfileCreateParams = {
   walletAddress: string
   name: string
   email: string
+  address?: AddressFragment
   avatar?: {
     url: string
     contractAddress?: string | null
@@ -81,16 +83,14 @@ export async function createProfile(
           },
         },
       },
+      address: params.address
+        ? {
+            create: params.address,
+          }
+        : undefined,
       avatar: params.avatar
         ? {
-            create: {
-              url: params.avatar.url,
-              contractAddress: params.avatar.contractAddress,
-              title: params.avatar.title,
-              tokenId: params.avatar.tokenId,
-              tokenUri: params.avatar.tokenUri,
-              network: params.avatar.network,
-            },
+            create: params.avatar,
           }
         : undefined,
 

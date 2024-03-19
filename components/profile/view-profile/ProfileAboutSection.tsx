@@ -6,6 +6,7 @@ import { Body2, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
 import { ProfileFragment } from '@/utils/types/profile'
 import { monthYearFormat } from '@/utils/display-utils'
+import { formatShortAddress } from '@/lib/address'
 
 interface ProfileAboutSectionProps {
   profile: ProfileFragment
@@ -23,7 +24,9 @@ export const ProfileAboutSection = ({ profile }: ProfileAboutSectionProps) => (
           />
           <ProfileDataText
             iconName="location"
-            captionText={profile.location ?? ''}
+            captionText={
+              profile.address ? formatShortAddress(profile.address) : ''
+            }
           />
         </ProfileDataGroup>
         {profile.bio && <Body2>{profile.bio}</Body2>}

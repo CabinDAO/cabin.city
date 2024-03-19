@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
-import Script from 'next/script'
+import { useState } from 'react'
+import { usePlacesWidget } from 'react-google-autocomplete'
 import { AddressFragment } from '@/utils/types/location'
 import { InputText } from '@/components/core/InputText'
 
@@ -22,59 +22,37 @@ export const LocationAutocompleteInput = ({
   disabled,
   placeholder,
 }: LocationAutocompleteInputProps) => {
-  const autoCompleteRef = useRef<google.maps.places.Autocomplete>()
-  const inputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.value = initialValue?.formattedAddress ?? ''
-    }
-
-    if (!window.initMap) {
-      window.initMap = () => {
-        const options = {
-          fields: ['address_components', 'geometry', 'formatted_address'],
-          // https://developers.google.com/maps/documentation/javascript/supported_types
-          types: [
-            // 'address',
-            'geocode',
-            // '(regions)',
-            // '(cities)',
-          ],
-        }
-
-        if (inputRef.current) {
-          autoCompleteRef.current = new window.google.maps.places.Autocomplete(
-            inputRef.current,
-            options
-          )
-
-          autoCompleteRef.current.addListener(
-            'place_changed',
-            async function () {
-              if (!autoCompleteRef.current) return
-              const place = autoCompleteRef.current.getPlace()
-
-              onLocationChange(getLocationInputFromPlaceResult(place))
-            }
-          )
-        }
-      }
-    }
-  }, [initialValue?.formattedAddress, onLocationChange])
+  const [value, setValue] = useState(initialValue?.formattedAddress || '')
+  const { ref: inputRef } = usePlacesWidget<HTMLInputElement>({
+    apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    options: {
+      fields: ['address_components', 'geometry.location', 'formatted_address'],
+      // https://developers.google.com/maps/documentation/javascript/supported_types
+      types: [
+        'geocode',
+        // 'address',
+        // '(regions)',
+        // '(cities)',
+      ],
+    },
+    onPlaceSelected: (place) => {
+      console.log(place)
+      const addr = getFragment(place)
+      setValue(addr.formattedAddress || '')
+      onLocationChange(addr)
+    },
+  })
 
   return (
     <>
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&callback=initMap`}
-        async
-      />
       <InputText
-        required
-        disabled={disabled}
-        placeholder={placeholder}
         ref={inputRef}
         label="Location"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={placeholder}
+        required
+        disabled={disabled}
         bottomHelpText={
           bottomHelpText || 'Your precise location will not be shown publicly'
         }
@@ -85,16 +63,13 @@ export const LocationAutocompleteInput = ({
   )
 }
 
-const getLocationInputFromPlaceResult = (
+const getFragment = (
   place: google.maps.places.PlaceResult
 ): AddressFragment => {
-  const lat = place.geometry?.location?.lat() || null
-  const lng = place.geometry?.location?.lng() || null
-
   return {
     formattedAddress: place.formatted_address || null,
-    lat,
-    lng,
+    lat: place.geometry?.location?.lat() || null,
+    lng: place.geometry?.location?.lng() || null,
     admininstrativeAreaLevel1:
       getValueFromPlaceResult(place, 'administrative_area_level_1') || null,
     admininstrativeAreaLevel1Short:

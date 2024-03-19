@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react'
-import styled from 'styled-components'
-import { InputText } from '@/components/core/InputText'
-import { AvatarSetup } from '../AvatarSetup'
-import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
-import { isValidName } from '../validations'
-import { UpdateProfileProps } from './UpdateProfileProps'
-import { DisplayNameInputContainer } from '../styles'
-import { useExternalUser } from '@/components/auth/useExternalUser'
-import { H3 } from '@/components/core/Typography'
-import { AccountAction } from '../AccountAction'
-import useEns from '@/components/hooks/useEns'
-import { shortenedAddress } from '@/utils/display-utils'
 import { usePrivy } from '@privy-io/react-auth'
+import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
-import { ChangeEmailConfirmationModal } from '@/components/core/ChangeEmailConfirmationModal'
+import useEns from '@/components/hooks/useEns'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileEditParams, ProfileEditResponse } from '@/utils/types/profile'
+import { shortenedAddress } from '@/utils/display-utils'
+import styled from 'styled-components'
+import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
+import { H3 } from '@/components/core/Typography'
+import { InputText } from '@/components/core/InputText'
+import { ChangeEmailConfirmationModal } from '@/components/core/ChangeEmailConfirmationModal'
+import { AvatarSetup } from '../AvatarSetup'
+import { isValidName } from '../validations'
+import { UpdateProfileProps } from '../EditProfileForm'
+import { InputContainer } from '../RegistrationForm'
+import { AccountAction } from '../AccountAction'
 
 export const Identity = ({
   user,
@@ -70,7 +70,7 @@ export const Identity = ({
     }
   }, [externalUser?.email?.address, updateProfile, user])
 
-  const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange({ ...profileEditParams, name: e.target.value })
   }
 
@@ -81,17 +81,16 @@ export const Identity = ({
         onNftSelected={(avatar) => onChange({ ...profileEditParams, avatar })}
       />
       <InputGroup>
-        <DisplayNameInputContainer>
+        <InputContainer>
           <InputText
-            id="displayName"
             error={!isValidName(name)}
             required
-            label="Display Name"
+            label="Name"
             value={name}
-            onChange={onDisplayNameChange}
+            onChange={onNameChange}
             helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
           />
-        </DisplayNameInputContainer>
+        </InputContainer>
       </InputGroup>
       <InputGroup>
         <AccountContainer>

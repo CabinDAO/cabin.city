@@ -1,23 +1,18 @@
 import { ProfileEditParams } from '@/utils/types/profile'
-import {
-  MAX_DISPLAY_NAME_LENGTH,
-  MAX_BIO_LENGTH,
-  MAX_LOCATION_LENGTH,
-} from './constants'
+import { MAX_DISPLAY_NAME_LENGTH, MAX_BIO_LENGTH } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
+import { AddressFragment } from '@/utils/types/location'
 
 export const validateProfileInput = (
-  editProfileInput: ProfileEditParams['data'],
-  locationRequired = false
+  editProfileInput: ProfileEditParams['data']
 ) => {
-  const { name, email, bio, location } = editProfileInput
+  const { name, email, bio, address } = editProfileInput
 
   const invalid =
     (editProfileInput.hasOwnProperty('name') && !isValidName(name)) ||
-    (editProfileInput.hasOwnProperty('bio') && !validBio(bio)) ||
-    (editProfileInput.hasOwnProperty('location') &&
-      !validLocation(location, locationRequired)) ||
+    (editProfileInput.hasOwnProperty('bio') && !isValidBio(bio)) ||
+    (editProfileInput.hasOwnProperty('address') && !isValidAddress(address)) ||
     (editProfileInput.hasOwnProperty('email') && !isValidEmail(email))
 
   return !invalid
@@ -29,20 +24,16 @@ export const isValidName = (name: ConditionalString) => {
   return name !== '' && (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH
 }
 
-export const INVALID_NAME_MESSAGE = `Name must be at most ${MAX_DISPLAY_NAME_LENGTH} characters`
-
-export const validBio = (bio: ConditionalString) => {
-  return (bio?.length ?? 0) <= MAX_BIO_LENGTH
+export const isValidAddress = (
+  address: AddressFragment | null | undefined
+): boolean => {
+  return !!(address && address.admininstrativeAreaLevel1)
 }
 
-export const validLocation = (
-  location: ConditionalString,
-  locationRequired = false
-) => {
-  return (
-    (location?.length ?? 0) <= MAX_LOCATION_LENGTH &&
-    (!locationRequired || (location?.length ?? 0) > 0)
-  )
+export const INVALID_NAME_MESSAGE = `Name required and must be at most ${MAX_DISPLAY_NAME_LENGTH} characters`
+
+export const isValidBio = (bio: ConditionalString) => {
+  return (bio?.length ?? 0) <= MAX_BIO_LENGTH
 }
 
 export const isValidEmail = (email: ConditionalString) => {

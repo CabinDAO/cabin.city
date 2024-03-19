@@ -6,6 +6,8 @@ import { prisma } from '@/lib/prisma'
 import { Profile, Wallet } from '@prisma/client'
 import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { IncomingHttpHeaders } from 'http'
+import { privy } from '@/lib/privy'
+import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 
 export type ProfileWithWallet = Profile & {
   wallet: Wallet
@@ -113,4 +115,33 @@ export const privyDIDFromHeaders = async (headers: IncomingHttpHeaders) => {
   const authToken = headers.authorization?.replace('Bearer ', '') || null
   const privyDID = authToken ? await privyDIDFromAuthToken(authToken) : null
   return { authToken, privyDID }
+}
+
+export const profileFromApiCookies = async (
+  cookies: NextApiRequestCookies
+): Promise<ProfileWithWallet | null> => {
+  const privyToken = cookies['privy-token']
+  if (!privyToken) {
+    return null
+  }
+
+  let privyDID: string | null = null
+
+  try {
+    const verifiedClaims = await privy.verifyAuthToken(privyToken)
+    privyDID = verifiedClaims.userId
+  } catch (error) {
+    return null
+  }
+
+  if (!privyDID) {
+    return null
+  }
+
+  return prisma.profile.findUnique({
+    where: { privyDID },
+    include: {
+      wallet: true,
+    },
+  })
 }

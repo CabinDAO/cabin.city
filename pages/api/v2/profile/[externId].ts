@@ -27,6 +27,7 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
         name: true
       }
     }
+    address: true
     avatar: {
       select: {
         url: true
@@ -92,6 +93,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
           name: true,
         },
       },
+      address: true,
       avatar: {
         select: {
           url: true,
@@ -164,7 +166,14 @@ async function handlePost(
         name: params.data.name,
         email: params.data.email,
         bio: params.data.bio,
-        location: params.data.location,
+        address: params.data.address
+          ? {
+              upsert: {
+                create: params.data.address,
+                update: params.data.address,
+              },
+            }
+          : undefined,
       },
       where: {
         id: profileToEdit.id,
@@ -268,7 +277,14 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    location: profile.location,
+    address: profile.address
+      ? {
+          locality: profile.address.locality,
+          admininstrativeAreaLevel1Short:
+            profile.address.admininstrativeAreaLevel1Short,
+          country: profile.address.country,
+        }
+      : undefined,
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
     citizenshipMintedAt: profile.citizenshipMintedAt

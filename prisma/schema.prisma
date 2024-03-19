@@ -2,21 +2,15 @@ generator client {
   provider = "prisma-client-js"
   // output   = "./generated/client" // if you do this, replace imports of '@prisma/client' with './prisma/generated/client'
   // previewFeatures = ["relationJoins"]
+  // previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  // extensions = [cube(), earthdistance()]
 }
-
-// TODO: make the schema multisite-enabled
-
-// we're dropping profile role constraints
-// dropping lodging types
-// dropping feature flags
-// dropping referred locations
-// dropping LocationPromoted activity type
 
 // ---------------------------
 // ON-CHAIN STUFF
@@ -120,7 +114,8 @@ model Profile {
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
 
-  avatar Avatar?
+  address ProfileAddress?
+  avatar  Avatar?
 
   citizenshipStatus   CitizenshipStatus?
   citizenshipTokenId  Int?
@@ -192,6 +187,26 @@ enum ProfileContactFieldType {
   Telegram
   Lens
   LinkedIn
+}
+
+model ProfileAddress {
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int     @unique
+
+  lat                            Float?
+  lng                            Float?
+  formattedAddress               String?
+  streetNumber                   String?
+  route                          String? // Street, e.g. Cascade Street
+  routeShort                     String? // e.g. Cascade St
+  locality                       String? // City
+  admininstrativeAreaLevel1      String? // State, e.g. Colorado
+  admininstrativeAreaLevel1Short String? // e.g. CO
+  country                        String? // e.g. Costa Rica
+  countryShort                   String? // e.g. CR
+  postalCode                     String?
+
+  @@id([profileId])
 }
 
 model Role {

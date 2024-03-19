@@ -3,40 +3,54 @@ import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '../auth/useProfile'
 import { useExternalUser } from '../auth/useExternalUser'
 import styled from 'styled-components'
-import { DisplayNameInputContainer } from './styles'
 import { AvatarFragment } from '@/utils/types/profile'
 import { Button } from '../core/Button'
 import { InputText } from '../core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
-import { isValidName } from './validations'
+import {
+  INVALID_NAME_MESSAGE,
+  isValidAddress,
+  isValidName,
+} from './validations'
+import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
+import { AddressFragment } from '@/utils/types/location'
 
 interface RegistrationFormProps {
   onSubmit: (params: RegistrationParams) => void
 }
 
 export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
-  const [displayName, setDisplayName] = useState('')
-  const [email, setEmail] = useState('')
-  const [avatar, setAvatar] = useState<AvatarFragment | undefined>()
-  const [displayUsernameError, setDisplayUsernameError] = useState(false)
-  const { externalUser } = useExternalUser()
   const { linkEmail } = usePrivy()
-  const [submitted, setSubmitted] = useState(false)
+  const { externalUser } = useExternalUser()
   const { user } = useProfile()
+  const [email, setEmail] = useState('')
+
+  const [avatar, setAvatar] = useState<AvatarFragment | undefined>()
+  const [name, setName] = useState('')
+  const [address, setAddress] = useState<AddressFragment>()
+
+  const [canShowNameError, setCanShowNameError] = useState(false)
+  const [canShowAddressError, setCanShowAddressError] = useState(false)
+
+  const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
     if (
       externalUser?.email?.address &&
       externalUser.email.address !== email &&
       !submitted &&
-      isValidName(displayName) &&
+      isValidName(name) &&
+      address &&
+      isValidAddress(address) &&
       !user
     ) {
       onSubmit({
+        name: name.trim(),
         email: email.trim(),
-        displayName: displayName.trim(),
+        address,
         avatar,
       })
       setSubmitted(true)
@@ -46,21 +60,28 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     if (externalUser?.email?.address) {
       setEmail(externalUser.email?.address)
     }
-  }, [externalUser, avatar, displayName, email, onSubmit, user, submitted])
+  }, [externalUser, avatar, address, name, email, onSubmit, user, submitted])
 
-  const onDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayUsernameError(false)
-    setDisplayName(e.target.value)
+  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCanShowNameError(false)
+    setName(e.target.value)
+  }
+
+  const onAddressChange = (address: AddressFragment) => {
+    setCanShowAddressError(false)
+    setAddress(address)
   }
 
   const handleSubmit = async () => {
-    setDisplayUsernameError(true)
+    setCanShowNameError(true)
+    setCanShowAddressError(true)
 
-    if (isValidName(displayName)) {
+    if (isValidName(name) && address && isValidAddress(address)) {
       if (externalUser?.email?.address) {
         onSubmit({
           email: email.trim(),
-          displayName: displayName.trim(),
+          name: name.trim(),
+          address,
           avatar,
         })
       } else {
@@ -73,19 +94,36 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
     <Container>
       <AvatarSetup onNftSelected={setAvatar} avatar={avatar} />
       <InputGroup>
-        <DisplayNameInputContainer>
+        <InputContainer>
           <InputText
-            id="displayName"
-            error={displayUsernameError && !isValidName(displayName)}
             required
             disabled={!!user || submitted}
-            label="Display Name"
-            value={displayName}
-            onChange={onDisplayNameChange}
-            helperText={`${displayName.length}/${MAX_DISPLAY_NAME_LENGTH}`}
+            label="Name"
+            value={name}
+            onChange={onNameChange}
+            helperText={`${name.length}/${MAX_DISPLAY_NAME_LENGTH}`}
+            error={canShowNameError && !isValidName(name)}
+            errorMessage={INVALID_NAME_MESSAGE}
           />
-        </DisplayNameInputContainer>
+        </InputContainer>
       </InputGroup>
+
+      <InputGroup>
+        <InputContainer>
+          <LocationAutocompleteInput
+            disabled={!!user || submitted}
+            initialValue={address}
+            onLocationChange={onAddressChange}
+            // placeholder={'Start typing a address'}
+            bottomHelpText={
+              'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
+            }
+            error={canShowAddressError && !isValidAddress(address)}
+            errorMessage={REQUIRED_FIELD_ERROR}
+          />
+        </InputContainer>
+      </InputGroup>
+
       <Submission>
         <SubmitButton
           disabled={!!user || submitted}
@@ -147,4 +185,13 @@ const SubmitButton = styled(Button)`
     right: 0;
     top: 0;
   }
+`
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 0.6rem;
 `

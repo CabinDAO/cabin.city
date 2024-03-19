@@ -12,47 +12,6 @@ import {
 } from '@/utils/types/profile'
 import { randomInviteCode } from '@/utils/random'
 
-// must match the includes on query below
-type MyProfileWithRelations = Prisma.ProfileGetPayload<{
-  include: {
-    _count: {
-      select: {
-        locations: true
-      }
-    }
-    voucher: {
-      select: {
-        externId: true
-        name: true
-      }
-    }
-    avatar: {
-      select: {
-        url: true
-      }
-    }
-    wallet: {
-      select: {
-        address: true
-        cabinTokenBalance: true
-        badges: {
-          select: {
-            id: true
-            otterspaceBadgeId: true
-            spec: true
-          }
-        }
-      }
-    }
-    contactFields: true
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
-  }
-}>
-
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProfileMeResponse>,
@@ -72,47 +31,8 @@ async function handler(
   const privyDID = requireAuth(req, res, opts)
 
   const profile = await prisma.profile.findUnique({
-    where: {
-      privyDID: privyDID,
-    },
-    include: {
-      // must match MyProfileWithRelations above
-      _count: {
-        select: {
-          locations: true,
-        },
-      },
-      voucher: {
-        select: {
-          externId: true,
-          name: true,
-        },
-      },
-      avatar: {
-        select: {
-          url: true,
-        },
-      },
-      wallet: {
-        select: {
-          address: true,
-          cabinTokenBalance: true,
-          badges: {
-            select: {
-              id: true,
-              otterspaceBadgeId: true,
-              spec: true,
-            },
-          },
-        },
-      },
-      contactFields: true,
-      roles: {
-        include: {
-          walletHat: true,
-        },
-      },
-    },
+    where: { privyDID: privyDID },
+    include: MyProfileQueryInclude,
   })
 
   if (profile && !profile.inviteCode) {
@@ -136,7 +56,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    location: profile.location,
+    address: profile.address || undefined,
     inviteCode: profile.inviteCode ?? '',
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
@@ -175,3 +95,85 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
 }
 
 export default withAuth(handler)
+
+// must match MyProfileQueryInclude below
+type MyProfileWithRelations = Prisma.ProfileGetPayload<{
+  include: {
+    _count: {
+      select: {
+        locations: true
+      }
+    }
+    voucher: {
+      select: {
+        externId: true
+        name: true
+      }
+    }
+    address: true
+    avatar: {
+      select: {
+        url: true
+      }
+    }
+    wallet: {
+      select: {
+        address: true
+        cabinTokenBalance: true
+        badges: {
+          select: {
+            id: true
+            otterspaceBadgeId: true
+            spec: true
+          }
+        }
+      }
+    }
+    contactFields: true
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
+  }
+}>
+
+const MyProfileQueryInclude = {
+  // must match MyProfileWithRelations above
+  _count: {
+    select: {
+      locations: true,
+    },
+  },
+  voucher: {
+    select: {
+      externId: true,
+      name: true,
+    },
+  },
+  address: true,
+  avatar: {
+    select: {
+      url: true,
+    },
+  },
+  wallet: {
+    select: {
+      address: true,
+      cabinTokenBalance: true,
+      badges: {
+        select: {
+          id: true,
+          otterspaceBadgeId: true,
+          spec: true,
+        },
+      },
+    },
+  },
+  contactFields: true,
+  roles: {
+    include: {
+      walletHat: true,
+    },
+  },
+}

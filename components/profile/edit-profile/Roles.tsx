@@ -3,14 +3,15 @@ import { MeFragment, RoleFragment, RoleType } from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import styled from 'styled-components'
 import { CheckboxChip } from '@/components/core/CheckboxChip'
-import { UpdateSection } from './UpdateSection'
+import { UpdateSection } from '../EditProfileForm'
 
-export interface RolesProps {
+export const Roles = ({
+  user,
+  onChange,
+}: {
   user: MeFragment
   onChange: (roles: RoleType[]) => void
-}
-
-export const Roles = ({ user, onChange }: RolesProps) => {
+}) => {
   const roles = Object.keys(RoleType) as RoleType[]
 
   const allRoles = user?.roles ?? []
@@ -58,15 +59,6 @@ export const Roles = ({ user, onChange }: RolesProps) => {
     </UpdateSection>
   )
 }
-
-export const SetupStepContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  gap: 1.6rem;
-`
 
 const RoleGroup = styled.div`
   display: flex;

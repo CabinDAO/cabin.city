@@ -13,10 +13,12 @@ import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
 import { ErrorModal } from '../ErrorModal'
+import { AddressFragment } from '@/utils/types/location'
 
 export interface RegistrationParams {
   email: string
-  displayName: string
+  name: string
+  address: AddressFragment
   avatar: AvatarFragment | undefined
 }
 
@@ -36,7 +38,7 @@ export const RegistrationView = () => {
   }, [externalUser]) // don't add linkEmail() to deps. it causes a bug where useEffect is called many times and the popup never shows the screen to enter the code Privy emails you
 
   const handleSubmit = async (params: RegistrationParams) => {
-    const { email, displayName: name, avatar } = params
+    const { email, name, address, avatar } = params
 
     if (!isUserLoading && !externalUser) {
       confirmLoggedIn(() => {
@@ -53,6 +55,7 @@ export const RegistrationView = () => {
       walletAddress: externalUser.wallet?.address || '',
       name,
       email: externalUser.email?.address || email,
+      address,
       avatar,
     }
 
