@@ -16,6 +16,11 @@ export type ResolvableImage = {
 export const getImageUrl = (imageUrl: string, useGateway = false) => {
   return imageUrl.startsWith('ipfs://')
     ? imageUrl.replace('ipfs://', useGateway ? OWNED_GATEWAY : DEFAULT_GATEWAY)
+    : imageUrl.startsWith('https://ipfs.io/ipfs/')
+    ? imageUrl.replace(
+        'https://ipfs.io/ipfs/',
+        useGateway ? OWNED_GATEWAY : DEFAULT_GATEWAY
+      )
     : imageUrl
 }
 
