@@ -6,7 +6,7 @@ import { isValidAddress, isValidBio } from './validations'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
 import { AvatarFragment } from '@/utils/types/profile'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
+import { ADDRESS_ERROR } from '@/utils/validate'
 import { AddressFragment } from '@/utils/types/location'
 
 interface AboutInputProps {
@@ -49,7 +49,7 @@ export const AboutInput = ({
           'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
         }
         error={!isValidAddress(address)}
-        errorMessage={REQUIRED_FIELD_ERROR}
+        errorMessage={ADDRESS_ERROR}
       />
     </SetupStepContainer>
   )

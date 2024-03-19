@@ -15,7 +15,7 @@ import {
   isValidName,
 } from './validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
+import { ADDRESS_ERROR } from '@/utils/validate'
 import { AddressFragment } from '@/utils/types/location'
 
 interface RegistrationFormProps {
@@ -119,7 +119,7 @@ export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
               'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
             }
             error={canShowAddressError && !isValidAddress(address)}
-            errorMessage={REQUIRED_FIELD_ERROR}
+            errorMessage={ADDRESS_ERROR}
           />
         </InputContainer>
       </InputGroup>
