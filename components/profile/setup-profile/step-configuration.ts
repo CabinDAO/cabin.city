@@ -1,7 +1,6 @@
 import { ContactFieldType } from '@/utils/types/profile'
 import { AboutStep } from './AboutStep'
 import { ContactStep } from './ContactStep'
-import { RoleStep } from './RoleStep'
 
 export type StepConfig = {
   name: string
@@ -18,10 +17,6 @@ export const steps: StepConfig[] = [
   {
     name: 'About',
     component: AboutStep,
-  },
-  {
-    name: 'Roles',
-    component: RoleStep,
   },
   {
     name: 'Contact',

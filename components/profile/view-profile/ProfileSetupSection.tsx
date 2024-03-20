@@ -9,6 +9,7 @@ import { Button } from '@/components/core/Button'
 import events from '@/lib/googleAnalytics/events'
 import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
 import { useBackend } from '@/components/hooks/useBackend'
+import { useState } from 'react'
 
 interface ProfileSetupSectionProps {
   profileId: string
@@ -24,13 +25,16 @@ export const ProfileSetupSection = ({
   const { post } = useBackend()
   const progress = complete ? 100 : 25
 
-  if (!me || me.isProfileSetupDismissed) return null
+  const [hideLinkContainer, setHideLinkContainer] = useState(false)
+
+  if (!me || me.isProfileSetupDismissed || hideLinkContainer) return null
 
   const handleSetupClick = () => {
     router.push(`/profile/${profileId}/setup`)
   }
 
   const handleDismissClick = () => {
+    setHideLinkContainer(true)
     post('PROFILE_SETUP_STATE', {
       state: 'dismissed',
     } as ProfileSetupStateParams)

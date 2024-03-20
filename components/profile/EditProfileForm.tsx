@@ -11,7 +11,6 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { AboutInput } from '@/components/profile/AboutInput'
 import { ContactInput } from '@/components/profile/ContactInput'
 import { Identity } from './edit-profile/Identity'
-import { Roles } from './edit-profile/Roles'
 
 export interface UpdateProfileProps {
   user: MeFragment
@@ -23,7 +22,6 @@ export const EditProfileForm = ({
   user,
   profileEditParams,
   onChange,
-  onRolesChange,
 }: {
   user: MeFragment
   profileEditParams: ProfileEditParams['data'] | null
@@ -47,8 +45,6 @@ export const EditProfileForm = ({
         profileEditParams={profileEditParams}
         onChange={onChange}
       />
-      <HorizontalDivider />
-      <Roles user={user} onChange={onRolesChange} />
       <HorizontalDivider />
       <Contact
         user={user}
