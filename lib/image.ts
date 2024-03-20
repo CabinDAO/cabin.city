@@ -1,7 +1,8 @@
 import { OwnedNft } from 'alchemy-sdk'
 
 const DEFAULT_GATEWAY = 'https://ipfs.io/ipfs/'
-const OWNED_GATEWAY = process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? DEFAULT_GATEWAY
+const MAYBE_OWNED_GATEWAY =
+  process.env.NEXT_PUBLIC_IPFS_GATEWAY ?? DEFAULT_GATEWAY
 
 export type TempImage = ResolvableImage & {
   name: string
@@ -13,14 +14,9 @@ export type ResolvableImage = {
   url?: string | null | undefined
 }
 
-export const getImageUrl = (imageUrl: string, useGateway = false) => {
+export const getImageUrl = (imageUrl: string) => {
   return imageUrl.startsWith('ipfs://')
-    ? imageUrl.replace('ipfs://', useGateway ? OWNED_GATEWAY : DEFAULT_GATEWAY)
-    : imageUrl.startsWith('https://ipfs.io/ipfs/')
-    ? imageUrl.replace(
-        'https://ipfs.io/ipfs/',
-        useGateway ? OWNED_GATEWAY : DEFAULT_GATEWAY
-      )
+    ? imageUrl.replace('ipfs://', MAYBE_OWNED_GATEWAY)
     : imageUrl
 }
 
@@ -33,7 +29,7 @@ export const getImageUrlByIpfsHash = (
   useGateway = false
 ) => {
   return ipfsHash
-    ? `${useGateway ? OWNED_GATEWAY : DEFAULT_GATEWAY}${ipfsHash}`
+    ? `${useGateway ? MAYBE_OWNED_GATEWAY : DEFAULT_GATEWAY}${ipfsHash}`
     : null
 }
 
@@ -44,7 +40,7 @@ export const resolveImageUrl = (image: ResolvableImage, useGateway = false) => {
       useGateway
     )
   } else if (image.url) {
-    return getImageUrl(image.url, useGateway)
+    return getImageUrl(image.url)
   } else {
     return ''
   }
