@@ -1,7 +1,8 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 import { Prisma } from '@prisma/client'
-import { APIError, Paginated } from '@/utils/types/shared'
+import { z } from 'zod'
+import { APIError } from '@/utils/types/shared'
 
 export type NeighborhoodFragment = {
   createdAt: string
@@ -11,11 +12,14 @@ export type NeighborhoodFragment = {
   lng: number
 }
 
-export type NeighborhoodListParams = {
-  lat: number
-  lng: number
-  page?: number
-}
+export const NeighborhoodListParamsSchema = z.object({
+  lat: z.string().transform((x) => parseFloat(x)),
+  lng: z.string().transform((x) => parseFloat(x)),
+})
+
+export type NeighborhoodListParams = z.infer<
+  typeof NeighborhoodListParamsSchema
+>
 
 export type NeighborhoodListResponse =
   | {

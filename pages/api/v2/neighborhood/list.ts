@@ -5,10 +5,12 @@ import { Prisma } from '@prisma/client'
 import {
   NeighborhoodFragment,
   NeighborhoodListParams,
+  NeighborhoodListParamsSchema,
   NeighborhoodListResponse,
   NeighborhoodQueryInclude,
   NeighborhoodWithRelations,
 } from '@/utils/types/neighborhood'
+import { toErrorString } from '@/utils/api/error'
 
 export default withAuth(handler)
 
@@ -22,17 +24,13 @@ async function handler(
     return
   }
 
-  if (!req.query.lat || !req.query.lng) {
-    res.status(400).send({ error: 'lat and lng are required' })
+  let params: NeighborhoodListParams
+  try {
+    params = NeighborhoodListParamsSchema.parse(req.query)
+  } catch (e) {
+    res.status(400).send({ error: toErrorString(e) })
     return
   }
-
-  const params: NeighborhoodListParams = {
-    lat: parseFloat(req.query.lat as string),
-    lng: parseFloat(req.query.lng as string),
-  }
-
-  // TODO: data validation
 
   const idsInOrder = await sortByDistancePrequery(params.lat, params.lng, 5)
 

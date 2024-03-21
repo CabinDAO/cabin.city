@@ -5,6 +5,14 @@ generator client {
   // previewFeatures = ["postgresqlExtensions"]
 }
 
+// npm i prisma-zod-generator
+// generator zod {
+//   provider = "prisma-zod-generator"
+//   output   = "../generated/zod"
+//   // isGenerateSelect  = true
+//   // isGenerateInclude = true
+// }
+
 datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_URL")
