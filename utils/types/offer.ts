@@ -1,6 +1,6 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-import { LocationType, ShortAddressFragment } from '@/utils/types/location'
+import { LocationType, ShortAddressFragmentType } from '@/utils/types/location'
 import { Prisma } from '@prisma/client'
 import { APIError, Paginated } from '@/utils/types/shared'
 
@@ -48,7 +48,7 @@ export type OfferFragment = {
     type: LocationType
     bannerImageIpfsHash: string
     publishedAt: string | null
-    address: ShortAddressFragment | null
+    address: ShortAddressFragmentType | null
     caretaker: {
       externId: string
     }

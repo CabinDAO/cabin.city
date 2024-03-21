@@ -8,7 +8,7 @@ import {
   ActivityType,
   CitizenshipStatus,
 } from '@prisma/client'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { unlockConfig } from '@/lib/protocol-config'
@@ -26,7 +26,8 @@ type ProfileCreateParams = {
   walletAddress: string
   name: string
   email: string
-  address?: AddressFragment
+  neighborhoodExternId?: string
+  address?: AddressFragmentType
   avatar?: {
     url: string
     contractAddress?: string | null
@@ -83,6 +84,9 @@ export async function createProfile(
           },
         },
       },
+      neighborhood: params.neighborhoodExternId
+        ? { connect: { externId: params.neighborhoodExternId } }
+        : undefined,
       address: params.address
         ? {
             create: params.address,

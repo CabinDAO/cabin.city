@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useUpdateLocation } from '../useUpdateLocation'
-import { AddressFragment, LocationEditParams } from '@/utils/types/location'
+import { AddressFragmentType, LocationEditParams } from '@/utils/types/location'
 import { useError } from '@/components/hooks/useError'
 import {
   MAX_LOCATION_BIO_LENGTH,
@@ -35,7 +35,7 @@ export const BasicDetailStep = ({
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location.externId)
 
-  const [address, setAddress] = useState<AddressFragment | null>(
+  const [address, setAddress] = useState<AddressFragmentType | null>(
     location?.address
   )
 
@@ -93,7 +93,7 @@ export const BasicDetailStep = ({
     }))
   }
 
-  const handleLocationChange = (value: AddressFragment) => {
+  const handleLocationChange = (value: AddressFragmentType) => {
     setAddress(value)
   }
 

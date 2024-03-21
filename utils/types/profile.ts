@@ -1,6 +1,11 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 import { APIError, Paginated } from '@/utils/types/shared'
-import { AddressFragment, ShortAddressFragment } from '@/utils/types/location'
+import { z } from 'zod'
+import {
+  AddressFragment,
+  AddressFragmentType,
+  ShortAddressFragmentType,
+} from '@/utils/types/location'
 
 // must match prisma's $Enums.RoleType
 export enum RoleType {
@@ -55,14 +60,14 @@ export type ProfileListFragment = {
   email: string
   bio: string
   location: string
-  address: ShortAddressFragment | null
+  address: ShortAddressFragmentType | null
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
   citizenshipStatus: CitizenshipStatus | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  avatar?: AvatarFragment
+  avatar?: AvatarFragmentType
   roles: RoleFragment[]
   badgeCount: number
   cabinTokenBalanceInt: number
@@ -122,13 +127,13 @@ export type ProfileBasicFragment = {
   bio: string
   citizenshipStatus: CitizenshipStatus | null
   cabinTokenBalanceInt: number
-  avatar?: AvatarFragment
+  avatar?: AvatarFragmentType
   roles: RoleFragment[]
 }
 
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
-  address: ShortAddressFragment | undefined
+  address: ShortAddressFragmentType | undefined
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {
@@ -163,39 +168,16 @@ export type BadgeFragment = {
   }
 }
 
-export type AvatarFragment = {
-  url: string
-  contractAddress?: string | null
-  network?: string | null
-  title?: string | null
-  tokenId?: string | null
-  tokenUri?: string | null
-}
+export const AvatarFragment = z.object({
+  url: z.string(),
+  contractAddress: z.string().nullish(),
+  title: z.string().nullish(),
+  tokenId: z.string().nullish(),
+  tokenUri: z.string().nullish(),
+  network: z.string().nullish(),
+})
 
-export type CaretakerFragment = ProfileBasicFragment
-/*
-fragment Caretaker on Profile {
-  _id
-  email
-  name
-  avatar {
-    url
-  }
-  citizenshipStatus
-  cabinTokenBalanceInt
-  account {
-    address
-  }
-  createdAt
-  roles {
-    role
-    level
-  }
-  bio
-  badgeCount
-}
-
-   */
+export type AvatarFragmentType = z.infer<typeof AvatarFragment>
 
 export type ProfileMeResponse = {
   me?: MeFragment | null
@@ -211,7 +193,7 @@ export type MeFragment = {
   name: string
   email: string
   bio: string
-  address: AddressFragment | undefined
+  address: AddressFragmentType | undefined
   inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
@@ -221,7 +203,7 @@ export type MeFragment = {
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
-  avatar: AvatarFragment
+  avatar: AvatarFragmentType
   walletAddress: string
   voucher: {
     externId: string
@@ -233,14 +215,26 @@ export type MeFragment = {
   locationCount: number
 }
 
+export const ProfileNewParams = z.object({
+  walletAddress: z.string(),
+  name: z.string(),
+  email: z.string(),
+  address: AddressFragment,
+  avatar: AvatarFragment.optional(),
+  inviteExternId: z.string().optional(),
+  neighborhoodExternId: z.string().optional(),
+})
+
+export type ProfileNewParamsType = z.infer<typeof ProfileNewParams>
+
 export type ProfileEditParams = {
   data: {
     name?: string
     email?: string
     bio?: string
-    address?: AddressFragment
+    address?: AddressFragmentType
     contactFields?: ContactFragment[]
-    avatar?: AvatarFragment
+    avatar?: AvatarFragmentType
   }
   roleTypes?: RoleType[]
 }

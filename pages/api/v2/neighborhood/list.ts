@@ -4,8 +4,8 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
   NeighborhoodFragment,
+  NeighborhoodListParamsType,
   NeighborhoodListParams,
-  NeighborhoodListParamsSchema,
   NeighborhoodListResponse,
   NeighborhoodQueryInclude,
   NeighborhoodWithRelations,
@@ -24,15 +24,19 @@ async function handler(
     return
   }
 
-  let params: NeighborhoodListParams
+  let params: NeighborhoodListParamsType
   try {
-    params = NeighborhoodListParamsSchema.parse(req.query)
+    params = NeighborhoodListParams.parse(req.query)
   } catch (e) {
     res.status(400).send({ error: toErrorString(e) })
     return
   }
 
-  const idsInOrder = await sortByDistancePrequery(params.lat, params.lng, 5)
+  const idsInOrder = await sortByDistancePrequery(
+    params.lat,
+    params.lng,
+    params.maxDistance
+  )
 
   const query: Prisma.NeighborhoodFindManyArgs = {
     where: { id: { in: idsInOrder } },
@@ -52,8 +56,12 @@ async function handler(
   })
 }
 
-async function sortByDistancePrequery(lat: number, lng: number, limit: number) {
-  const ids = await prisma.$queryRaw<{ id: number; distance_in_km: number }[]>`
+async function sortByDistancePrequery(
+  lat: number,
+  lng: number,
+  maxDistance?: number
+) {
+  const rows = await prisma.$queryRaw<{ id: number; distance_in_km: number }[]>`
     SELECT n.id, (6371 * 2 * ASIN(SQRT(
       POWER(SIN((radians(n.lat) - radians(${lat})) / 2), 2) +
       COS(radians(${lat})) * COS(radians(n.lat)) *
@@ -61,10 +69,12 @@ async function sortByDistancePrequery(lat: number, lng: number, limit: number) {
     ))) AS distance_in_km
     FROM "Neighborhood" n
     ORDER BY distance_in_km ASC, n.name ASC, n."createdAt" ASC
-    LIMIT ${limit}
+    LIMIT 5
   `
 
-  return ids.reduce((acc: number[], val) => [...acc, val.id], [])
+  return rows
+    .filter((row) => !maxDistance || row.distance_in_km <= maxDistance)
+    .reduce((ids: number[], row) => [...ids, row.id], [])
 }
 
 function neighborhoodToFragment(

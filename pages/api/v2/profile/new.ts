@@ -2,25 +2,15 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { ProfileNewResponse } from '@/utils/types/profile'
-import { AddressFragment } from '@/utils/types/location'
+import {
+  ProfileNewParams,
+  ProfileNewParamsType,
+  ProfileNewResponse,
+} from '@/utils/types/profile'
 import { createProfile } from '@/utils/profile'
+import { toErrorString } from '@/utils/api/error'
 
-export type ProfileNewParams = {
-  walletAddress: string
-  name: string
-  email: string
-  address: AddressFragment
-  avatar?: {
-    url: string
-    contractAddress?: string | null
-    title?: string | null
-    tokenId?: string | null
-    tokenUri?: string | null
-    network?: string | null
-  }
-  inviteExternId?: string
-}
+export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
@@ -34,7 +24,14 @@ async function handler(
   }
 
   const privyDID = requireAuth(req, res, opts)
-  const body = req.body as ProfileNewParams
+
+  let body: ProfileNewParamsType
+  try {
+    body = ProfileNewParams.parse(req.body)
+  } catch (e) {
+    res.status(400).send({ error: toErrorString(e) })
+    return
+  }
 
   let invite: Prisma.InviteGetPayload<null> | null = null
   if (body.inviteExternId) {
@@ -65,6 +62,7 @@ async function handler(
     walletAddress: body.walletAddress,
     name: body.name,
     email: body.email,
+    neighborhoodExternId: body.neighborhoodExternId,
     address: body.address,
     avatar: body.avatar,
     invite,
@@ -72,5 +70,3 @@ async function handler(
 
   res.status(200).send({ externId: profile.externId })
 }
-
-export default withAuth(handler)

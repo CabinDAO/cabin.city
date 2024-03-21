@@ -5,7 +5,10 @@ import {
   CitizenshipStatus,
   RoleFragment,
 } from '@/utils/types/profile'
-import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
+import {
+  LocationFragment,
+  ShortAddressFragmentType,
+} from '@/utils/types/location'
 import { OfferFragment } from '@/utils/types/offer'
 import { Prisma } from '@prisma/client'
 import { APIError, Paginated } from '@/utils/types/shared'
@@ -40,7 +43,7 @@ export type ActivityListFragment = {
       | 'sleepCapacity'
       | 'offerCount'
       | 'voteCount'
-    > & { address: ShortAddressFragment }
+    > & { address: ShortAddressFragmentType }
     offer?: Pick<
       OfferFragment,
       | 'externId'

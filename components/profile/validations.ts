@@ -2,7 +2,7 @@ import { ProfileEditParams } from '@/utils/types/profile'
 import { MAX_DISPLAY_NAME_LENGTH, MAX_BIO_LENGTH } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 
 export const validateProfileInput = (
   editProfileInput: ProfileEditParams['data']
@@ -25,7 +25,7 @@ export const isValidName = (name: ConditionalString) => {
 }
 
 export const isValidAddress = (
-  address: AddressFragment | null | undefined
+  address: AddressFragmentType | null | undefined
 ): boolean => {
   return !!(address && address.admininstrativeAreaLevel1)
 }

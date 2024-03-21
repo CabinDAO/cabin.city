@@ -142,7 +142,7 @@ model Profile {
   // the invites that this profile has spawned
   invitees   Invite[] @relation("Invitees")
 
-  Neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
+  neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
   neighborhoodId Int?
 
   roles      Role[]

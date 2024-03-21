@@ -1,9 +1,14 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 import { Prisma } from '@prisma/client'
-import { AvatarFragment, ProfileBasicFragment } from '@/utils/types/profile'
+import {
+  AvatarFragmentType,
+  ProfileBasicFragment,
+  ProfileNewParams,
+} from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { APIError, Paginated } from '@/utils/types/shared'
+import { z } from 'zod'
 
 // must match prisma's $Enums.LocationType
 export enum LocationType {
@@ -23,29 +28,31 @@ export enum LocationSort {
   votesDesc = 'votesDesc',
 }
 
-export type AddressFragment = {
-  lat: number | null
-  lng?: number | null
-  formattedAddress: string | null
-  streetNumber: string | null
-  route: string | null
-  routeShort: string | null
-  locality: string | null
-  admininstrativeAreaLevel1: string | null
-  admininstrativeAreaLevel1Short: string | null
-  country: string | null
-  countryShort: string | null
-  postalCode: string | null
-}
+export const AddressFragment = z.object({
+  lat: z.number().nullable(),
+  lng: z.number().nullable(),
+  formattedAddress: z.string().nullable(),
+  streetNumber: z.string().nullable(),
+  route: z.string().nullable(),
+  routeShort: z.string().nullable(),
+  locality: z.string().nullable(),
+  admininstrativeAreaLevel1: z.string().nullable(),
+  admininstrativeAreaLevel1Short: z.string().nullable(),
+  country: z.string().nullable(),
+  countryShort: z.string().nullable(),
+  postalCode: z.string().nullable(),
+})
 
-export type ShortAddressFragment = Pick<
-  AddressFragment,
+export type AddressFragmentType = z.infer<typeof AddressFragment>
+
+export type ShortAddressFragmentType = Pick<
+  AddressFragmentType,
   'locality' | 'admininstrativeAreaLevel1Short' | 'country' | 'countryShort'
 >
 
 export type RecentVoterFragment = {
   externId: string
-  avatar: AvatarFragment
+  avatar: AvatarFragmentType
 }
 
 export type LocationFragment = {
@@ -55,7 +62,7 @@ export type LocationFragment = {
   name: string
   tagline: string
   description: string
-  address: AddressFragment | null
+  address: AddressFragmentType | null
   bannerImageIpfsHash: string
   sleepCapacity: number
   internetSpeedMbps: number
@@ -106,7 +113,7 @@ export type LocationEditParams = {
   name?: string
   tagline?: string
   description?: string
-  address?: AddressFragment | null
+  address?: AddressFragmentType | null
   sleepCapacity?: number
   internetSpeedMbps?: number
   caretakerEmail?: string | null

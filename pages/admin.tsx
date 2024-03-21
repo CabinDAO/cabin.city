@@ -19,7 +19,7 @@ import {
 import { ErrorModal } from '@/components/ErrorModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import { useModal } from '@/components/hooks/useModal'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { Button } from '@/components/core/Button'
 import { List } from '@/components/core/List'
@@ -106,7 +106,7 @@ const Row = ({ profile }: { profile: ProfileListFragment }) => {
   const { post } = useBackend()
   const { showModal } = useModal()
 
-  const [address, setAddress] = useState<AddressFragment>({
+  const [address, setAddress] = useState<AddressFragmentType>({
     lat: null,
     lng: null,
     formattedAddress: formatShortAddress(profile.address),
@@ -125,7 +125,7 @@ const Row = ({ profile }: { profile: ProfileListFragment }) => {
   const [submitting, setSubmitting] = useState(false)
   const [canShowAddressError, setCanShowAddressError] = useState(false)
 
-  const onAddressChange = (a: AddressFragment) => {
+  const onAddressChange = (a: AddressFragmentType) => {
     setCanShowAddressError(false)
     setAddress(a)
   }

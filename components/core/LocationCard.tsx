@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
-import { CaretakerFragment } from '@/utils/types/profile'
+import {
+  LocationFragment,
+  ShortAddressFragmentType,
+} from '@/utils/types/location'
+import { ProfileBasicFragment } from '@/utils/types/profile'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { formatShortAddress } from '@/lib/address'
 import { EMPTY, truncate } from '@/utils/display-utils'
@@ -26,10 +29,10 @@ interface LocationCardProps {
     bannerImageIpfsHash: string | null | undefined
     voteCount: number | null | undefined
     recentVoters: LocationFragment['recentVoters'] | null | undefined
-    address: ShortAddressFragment | null | undefined
+    address: ShortAddressFragmentType | null | undefined
     sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
-    caretaker: CaretakerFragment
+    caretaker: ProfileBasicFragment
   }
   editMode?: boolean
   hideVerifiedTag?: boolean

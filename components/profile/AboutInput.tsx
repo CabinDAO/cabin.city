@@ -4,18 +4,18 @@ import { InputTextArea } from '../core/InputTextArea'
 import { MAX_BIO_LENGTH } from './constants'
 import { isValidAddress, isValidBio } from './validations'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
-import { AvatarFragment } from '@/utils/types/profile'
+import { AvatarFragmentType } from '@/utils/types/profile'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { ADDRESS_ERROR } from '@/utils/validate'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 
 interface AboutInputProps {
   bio: string
   onBioChange: (bio: string) => void
-  address?: AddressFragment
-  onAddressChange: (location: AddressFragment) => void
-  avatar?: AvatarFragment
-  onAvatarChange?: (avatar: AvatarFragment | undefined) => void
+  address?: AddressFragmentType
+  onAddressChange: (location: AddressFragmentType) => void
+  avatar?: AvatarFragmentType
+  onAvatarChange?: (avatar: AvatarFragmentType | undefined) => void
 }
 
 export const AboutInput = ({
