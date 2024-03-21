@@ -18,11 +18,11 @@ import { LocationAutocompleteInput } from '@/components/core/LocationAutocomplet
 import { ADDRESS_ERROR } from '@/utils/validate'
 import { AddressFragment } from '@/utils/types/location'
 
-interface RegistrationFormProps {
+export const RegistrationForm = ({
+  onSubmit,
+}: {
   onSubmit: (params: RegistrationParams) => void
-}
-
-export const RegistrationForm = ({ onSubmit }: RegistrationFormProps) => {
+}) => {
   const { linkEmail } = usePrivy()
   const { externalUser } = useExternalUser()
   const { user } = useProfile()

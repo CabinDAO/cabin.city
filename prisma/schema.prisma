@@ -134,6 +134,9 @@ model Profile {
   // the invites that this profile has spawned
   invitees   Invite[] @relation("Invitees")
 
+  Neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
+  neighborhoodId Int?
+
   roles      Role[]
   locations  Location[] // TODO: rename to managedLocations??
   votes      LocationVote[] // used to be called locationVotes
@@ -242,6 +245,19 @@ enum RoleLevel {
   Apprentice
   Artisan
   Custodian
+}
+
+model Neighborhood {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  externId  String   @unique // for external-facing use, e.g. urls
+
+  name String
+  lat  Float
+  lng  Float
+
+  members Profile[]
 }
 
 model Location {
