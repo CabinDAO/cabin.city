@@ -17,6 +17,7 @@ import { Analytics } from '@vercel/analytics/react'
 import { BackendProvider } from '@/components/contexts/BackendContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider } from '@privy-io/wagmi'
+import { isProd } from '@/utils/dev'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { handleLogin } = useAuth()
@@ -40,7 +41,9 @@ export default function App({ Component, pageProps }: AppProps) {
             appearance: {
               theme: theme.colors.yellow100 as `#${string}`,
               accentColor: theme.colors.green800 as `#${string}`,
-              logo: `${appDomainWithProto}/images/cabin-auth.png`,
+              logo: isProd
+                ? `${appDomainWithProto}/images/cabin-auth.png`
+                : `${appDomainWithProto}/images/cabin-auth-dev.png`,
               showWalletLoginFirst: true,
               walletList: [
                 'detected_wallets',

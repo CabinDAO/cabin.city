@@ -1,5 +1,6 @@
-import styled from 'styled-components'
+import React, { useEffect, useState } from 'react'
 import useDropdownLogic, { SelectOption } from '../hooks/useDropdownLogic'
+import styled from 'styled-components'
 import { ChevronButton } from './ChevronButton'
 import ClickAway from './ClickAway'
 import Icon from './Icon'
@@ -9,7 +10,6 @@ import { Menu, MenuPopup, MenuSection } from './Menu'
 import { Subline2 } from './Typography'
 import { InputText } from './InputText'
 import { Avatar } from './Avatar'
-import { useEffect, useState } from 'react'
 
 const Container = styled.div`
   position: relative;

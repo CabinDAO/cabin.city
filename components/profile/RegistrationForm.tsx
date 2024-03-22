@@ -30,11 +30,11 @@ import { InputLabel } from '@/components/core/InputLabel'
 import { Caption } from '@/components/core/Typography'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
 
-export const RegistrationForm = ({
+export function RegistrationForm({
   onSubmit,
 }: {
   onSubmit: (params: RegistrationParams) => void
-}) => {
+}) {
   const { linkEmail } = usePrivy()
   const { externalUser } = useExternalUser()
   const { user } = useProfile()
@@ -44,7 +44,7 @@ export const RegistrationForm = ({
   const [name, setName] = useState('')
   const [address, setAddress] = useState<AddressFragmentType>()
   const [neighborhood, setNeighborhood] = useState<
-    NeighborhoodFragment | undefined
+    NeighborhoodFragment | null | undefined
   >()
 
   const [canShowNameError, setCanShowNameError] = useState(false)
@@ -53,39 +53,40 @@ export const RegistrationForm = ({
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
-    if (
-      externalUser?.email?.address &&
-      externalUser.email.address !== email &&
-      !submitted &&
-      isValidName(name) &&
-      address &&
-      isValidAddress(address) &&
-      !user
-    ) {
-      onSubmit({
-        name: name.trim(),
-        email: email.trim(),
-        address,
-        avatar,
-        neighborhoodExternId: neighborhood?.externId,
-      })
-      setSubmitted(true)
-      return
-    }
+    // if (
+    //   externalUser?.email?.address &&
+    //   externalUser.email.address !== email &&
+    //   !submitted &&
+    //   isValidName(name) &&
+    //   address &&
+    //   isValidAddress(address) &&
+    //   !user
+    // ) {
+    //   onSubmit({
+    //     name: name.trim(),
+    //     email: email.trim(),
+    //     address,
+    //     avatar,
+    //     neighborhoodExternId: neighborhood?.externId,
+    //   })
+    //   setSubmitted(true)
+    //   return
+    // }
 
     if (externalUser?.email?.address) {
-      setEmail(externalUser.email?.address)
+      setEmail(externalUser.email.address)
     }
   }, [
     externalUser,
-    avatar,
-    address,
-    name,
-    email,
-    onSubmit,
-    user,
-    submitted,
-    neighborhood?.externId,
+    setEmail,
+    // avatar,
+    // address,
+    // name,
+    // email,
+    // onSubmit,
+    // user,
+    // submitted,
+    // neighborhood?.externId,
   ])
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,6 +105,7 @@ export const RegistrationForm = ({
 
     if (isValidName(name) && address && isValidAddress(address)) {
       if (externalUser?.email?.address) {
+        setSubmitted(true)
         onSubmit({
           email: email.trim(),
           name: name.trim(),
@@ -141,7 +143,6 @@ export const RegistrationForm = ({
             disabled={!!user || submitted}
             initialValue={address}
             onLocationChange={onAddressChange}
-            // placeholder={'Start typing a address'}
             bottomHelpText={
               'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
             }
@@ -170,15 +171,15 @@ export const RegistrationForm = ({
   )
 }
 
-const NeighborhoodSelect = ({
+function NeighborhoodSelect({
   address,
   selected,
   onNeighborhoodChange,
 }: {
   address: AddressFragmentType | undefined
-  selected: NeighborhoodFragment | undefined
-  onNeighborhoodChange: (n: NeighborhoodFragment | undefined) => void
-}) => {
+  selected: NeighborhoodFragment | null | undefined
+  onNeighborhoodChange: (n: NeighborhoodFragment | null | undefined) => void
+}) {
   const label = 'Cabin Neighborhood'
   const { useGet } = useBackend()
   const { data, isLoading } = useGet<NeighborhoodListResponse>(
@@ -189,7 +190,6 @@ const NeighborhoodSelect = ({
       maxDistance: 200,
     } as NeighborhoodListParamsType
   )
-
   const neighborhoods = !data || 'error' in data ? [] : data.neighborhoods
 
   const neighborhoodSelectOptions = neighborhoods.map((n) => {
@@ -199,36 +199,55 @@ const NeighborhoodSelect = ({
     }
   })
 
+  if (neighborhoodSelectOptions.length > 0) {
+    neighborhoodSelectOptions.push({
+      label: 'none',
+      value: '',
+    })
+  }
+
   const [selectedOption, setSelectedOption] = useState<
     SelectOption | undefined
   >()
 
   const selectNeighborhood = (o: SelectOption | undefined) => {
     setSelectedOption(o)
+
+    if (!o) {
+      onNeighborhoodChange(undefined)
+      return
+    }
+
+    if (o?.value == '') {
+      onNeighborhoodChange(null)
+      return
+    }
+
     const n = o && neighborhoods.find((ne) => ne.externId === o.value)
     onNeighborhoodChange(n)
   }
 
   useEffect(() => {
-    if (neighborhoodSelectOptions.length > 0) {
-      if (!selected) {
-        selectNeighborhood(neighborhoodSelectOptions[0])
-        return
-      }
-
-      const selectedInOptions = neighborhoodSelectOptions.find(
-        (n) => n.value === selected.externId
-      )
-
-      if (!selectedInOptions) {
-        selectNeighborhood(neighborhoodSelectOptions[0])
-      }
-    } else {
+    if (!neighborhoodSelectOptions.length) {
       selectNeighborhood(undefined)
+      return
+    }
+
+    if (selected === undefined) {
+      selectNeighborhood(neighborhoodSelectOptions[0])
+      return
+    }
+
+    const selectedInOptions = neighborhoodSelectOptions.find(
+      (n) => n.value === (selected === null ? '' : selected.externId)
+    )
+
+    if (!selectedInOptions) {
+      selectNeighborhood(neighborhoodSelectOptions[0])
     }
   }, [neighborhoodSelectOptions, selected])
 
-  if (!address || neighborhoods.length == 0) {
+  if (!address || !neighborhoods.length) {
     return (
       <InputGroup>
         <InputContainer>
@@ -264,7 +283,6 @@ const NeighborhoodSelect = ({
         ) : (
           <Dropdown
             label={label}
-            error={data && 'error' in data}
             options={neighborhoodSelectOptions}
             selectedOption={selectedOption}
             onSelect={(n) => selectNeighborhood(n)}
