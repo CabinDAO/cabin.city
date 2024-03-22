@@ -7,6 +7,7 @@ enum Prefixes {
   experience = 'ex',
   invite = 'in',
   cart = 'ct',
+  neighborhood = 'nh',
 }
 
 type PrefixType = keyof typeof Prefixes

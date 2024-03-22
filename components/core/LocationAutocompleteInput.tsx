@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { usePlacesWidget } from 'react-google-autocomplete'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 import { InputText } from '@/components/core/InputText'
 
 interface LocationAutocompleteInputProps {
-  onLocationChange: (value: AddressFragment) => void
-  initialValue?: AddressFragment | null
+  onLocationChange: (value: AddressFragmentType) => void
+  initialValue?: AddressFragmentType | null
   error: boolean
   errorMessage?: string
   bottomHelpText?: string
@@ -36,7 +36,6 @@ export const LocationAutocompleteInput = ({
       ],
     },
     onPlaceSelected: (place) => {
-      console.log(place)
       const addr = getFragment(place)
       setValue(addr.formattedAddress || '')
       onLocationChange(addr)
@@ -65,7 +64,7 @@ export const LocationAutocompleteInput = ({
 
 const getFragment = (
   place: google.maps.places.PlaceResult
-): AddressFragment => {
+): AddressFragmentType => {
   return {
     formattedAddress: place.formatted_address || null,
     lat: place.geometry?.location?.lat() || null,

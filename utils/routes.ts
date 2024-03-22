@@ -11,6 +11,8 @@ enum Routes {
   PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
   PROFILE_SIGNAL_INTEREST = `/profile/signal-interest`,
 
+  NEIGHBORHOOD_LIST = `/neighborhood/list`,
+
   LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,
   LOCATION_LIST = `/location/list`,

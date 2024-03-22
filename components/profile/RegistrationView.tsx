@@ -3,23 +3,28 @@ import { useRouter } from 'next/router'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileNewParams } from '@/pages/api/v2/profile/new'
-import { AvatarFragment, ProfileNewResponse } from '@/utils/types/profile'
+import {
+  ProfileNewParamsType,
+  AvatarFragmentType,
+  ProfileNewResponse,
+} from '@/utils/types/profile'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { useExternalUser } from '../auth/useExternalUser'
 import { useModal } from '../hooks/useModal'
-import { OnboardingLayout } from '../layouts/OnboardingLayout'
+import styled from 'styled-components'
+import { MainContent } from '@/components/layouts/common.styles'
 import { TitleCard } from '../core/TitleCard'
 import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
 import { ErrorModal } from '../ErrorModal'
-import { AddressFragment } from '@/utils/types/location'
+import { AddressFragmentType } from '@/utils/types/location'
 
 export interface RegistrationParams {
   email: string
   name: string
-  address: AddressFragment
-  avatar: AvatarFragment | undefined
+  address: AddressFragmentType
+  avatar: AvatarFragmentType | undefined
+  neighborhoodExternId?: string
 }
 
 export const RegistrationView = () => {
@@ -51,12 +56,13 @@ export const RegistrationView = () => {
       return
     }
 
-    const createProfileBody: ProfileNewParams = {
+    const createProfileBody: ProfileNewParamsType = {
       walletAddress: externalUser.wallet?.address || '',
       name,
       email: externalUser.email?.address || email,
       address,
       avatar,
+      neighborhoodExternId: params.neighborhoodExternId,
     }
 
     try {
@@ -86,11 +92,35 @@ export const RegistrationView = () => {
   }
 
   return (
-    <OnboardingLayout>
-      <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
-      <ContentCard shape="notch">
-        <RegistrationForm onSubmit={handleSubmit} />
-      </ContentCard>
-    </OnboardingLayout>
+    <Container>
+      <MainContent>
+        <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
+        <ContentCard shape="notch">
+          <RegistrationForm onSubmit={handleSubmit} />
+        </ContentCard>
+      </MainContent>
+    </Container>
   )
 }
+
+// TODO: instead of <Container> and <MainContent>, we should be using SingleColumnLayout and hiding the footer and nav sidebar
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 100vw;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4.8rem;
+  padding: 2.5rem 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    padding: 2.5rem 8rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    padding: 0 1.6rem;
+    justify-content: center;
+  }
+`

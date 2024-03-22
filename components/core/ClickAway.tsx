@@ -26,7 +26,11 @@ const ClickAway = ({ children, onClickAway, className }: ClickAwayProps) => {
   }, [onClickAway, wrapperRef])
 
   return (
-    <div className={className} ref={wrapperRef}>
+    <div
+      className={className}
+      ref={wrapperRef}
+      style={{ width: 'fit-content' }}
+    >
       {children}
     </div>
   )

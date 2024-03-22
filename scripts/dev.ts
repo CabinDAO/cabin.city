@@ -2,8 +2,12 @@ import { prisma } from '../lib/prisma'
 import { getEthersAlchemyProvider } from '../lib/chains'
 import { CabinToken__factory } from '../generated/ethers'
 import { cabinTokenConfig } from '../lib/protocol-config'
+import { randomId } from '@/utils/random'
 
 async function main() {
+  console.log(randomId('neighborhood'))
+  return
+
   const provider = getEthersAlchemyProvider(cabinTokenConfig.networkName)
 
   const cabinTokenContract = CabinToken__factory.connect(

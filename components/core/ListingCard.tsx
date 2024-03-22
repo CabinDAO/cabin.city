@@ -10,7 +10,10 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
-import { LocationFragment, ShortAddressFragment } from '@/utils/types/location'
+import {
+  LocationFragment,
+  ShortAddressFragmentType,
+} from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
@@ -22,7 +25,7 @@ interface ListingCardProps {
     bannerImageIpfsHash: string | null | undefined
     voteCount: number | null | undefined
     recentVoters: LocationFragment['recentVoters'] | null | undefined
-    address: ShortAddressFragment | null | undefined
+    address: ShortAddressFragmentType | null | undefined
     sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
   }
