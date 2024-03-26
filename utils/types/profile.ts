@@ -81,7 +81,7 @@ export const ProfileListParams = z
     citizenshipStatuses: z.array(z.nativeEnum(CitizenshipStatus)).optional(),
     withLocation: z.union([z.literal('true'), z.literal('false')]).optional(),
     sort: z.nativeEnum(ProfileSort).optional(),
-    page: z.number().optional(),
+    page: z.coerce.number().optional(),
   })
   .strict()
 export type ProfileListParamsType = z.infer<typeof ProfileListParams>

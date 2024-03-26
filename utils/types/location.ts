@@ -86,7 +86,7 @@ export const LocationListParams = z
     offerType: z.nativeEnum(OfferType).optional(),
     locationType: z.nativeEnum(LocationType).optional(),
     sort: z.nativeEnum(LocationSort).optional(),
-    page: z.number().optional(),
+    page: z.coerce.number().optional(),
   })
   .strict()
 export type LocationListParamsType = z.infer<typeof LocationListParams>

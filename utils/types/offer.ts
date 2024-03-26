@@ -63,7 +63,7 @@ export const OfferListParams = z
     publiclyVisibleOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),
-    page: z.number().optional(),
+    page: z.coerce.number().optional(),
   })
   .strict()
 export type OfferListParamsType = z.infer<typeof OfferListParams>
