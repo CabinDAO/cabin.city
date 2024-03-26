@@ -1,6 +1,6 @@
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  LocationEditParams,
+  LocationEditParamsType,
   LocationEditResponse,
 } from '@/utils/types/location'
 
@@ -10,7 +10,7 @@ export function useUpdateLocation(locationId: string | undefined) {
     locationId ? ['LOCATION', { externId: locationId }] : null
   )
 
-  const updateLocation = async (inputData: LocationEditParams = {}) => {
+  const updateLocation = async (inputData: LocationEditParamsType = {}) => {
     if (locationId) {
       const data = await mutateLocation(inputData)
 

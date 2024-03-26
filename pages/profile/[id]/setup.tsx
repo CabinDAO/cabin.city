@@ -1,7 +1,7 @@
 import { SetupProfileView } from '@/components/profile/SetupProfileView'
 
 const SetupPage = () => {
-  return <SetupProfileView></SetupProfileView>
+  return <SetupProfileView />
 }
 
 export default SetupPage

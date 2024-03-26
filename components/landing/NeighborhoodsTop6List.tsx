@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  LocationListParams,
+  LocationListParamsType,
   LocationListResponse,
   LocationType,
 } from '@/utils/types/location'
@@ -17,7 +17,7 @@ export const NeighborhoodsTop6List = () => {
     'LOCATION_LIST',
     {
       locationType: LocationType.Neighborhood,
-    } as LocationListParams
+    } as LocationListParamsType
   )
   const { voteForLocation } = useLocationVote(refetchLocations)
 

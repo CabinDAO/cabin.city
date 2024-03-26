@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   OfferType,
-  OfferListParams,
+  OfferListParamsType,
   OfferListResponse,
   OfferNewParams,
   OfferNewResponse,
@@ -36,7 +36,7 @@ export const OffersStep = ({
     location ? 'OFFER_LIST' : null,
     {
       locationId: location.externId,
-    } as OfferListParams
+    } as OfferListParamsType
   )
   const offerList =
     !offersData || 'error' in offersData ? [] : offersData.offers

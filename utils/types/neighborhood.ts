@@ -12,14 +12,16 @@ export type NeighborhoodFragment = {
   lng: number
 }
 
-export const NeighborhoodListParams = z.object({
-  lat: z.string().transform((x) => parseFloat(x)),
-  lng: z.string().transform((x) => parseFloat(x)),
-  maxDistance: z
-    .string({ description: 'max distance in km' })
-    .optional()
-    .transform((x) => (x ? parseInt(x) : undefined)),
-})
+export const NeighborhoodListParams = z
+  .object({
+    lat: z.string().transform((x) => parseFloat(x)),
+    lng: z.string().transform((x) => parseFloat(x)),
+    maxDistance: z
+      .string({ description: 'max distance in km' })
+      .optional()
+      .transform((x) => (x ? parseInt(x) : undefined)),
+  })
+  .strict()
 
 export type NeighborhoodListParamsType = z.infer<typeof NeighborhoodListParams>
 

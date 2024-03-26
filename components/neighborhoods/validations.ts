@@ -7,8 +7,8 @@ import {
   truthyString,
 } from '@/utils/validate'
 import { emptyEditorValue } from '../core/slate/slate-utils'
-import { OfferEditParams, OfferType } from '@/utils/types/offer'
-import { LocationEditParams } from '@/utils/types/location'
+import { OfferEditParamsType, OfferType } from '@/utils/types/offer'
+import { LocationEditParamsType } from '@/utils/types/location'
 
 export type ValidationType = 'missing' | 'invalid' | 'valid'
 
@@ -17,7 +17,7 @@ type ValidationResult = {
   valid: boolean
 }
 
-export const validateLocationInput = (values: LocationEditParams) => {
+export const validateLocationInput = (values: LocationEditParamsType) => {
   const {
     name,
     tagline,
@@ -45,7 +45,7 @@ export const validateLocationInput = (values: LocationEditParams) => {
 
 export const validateOfferInput = (
   type: OfferType,
-  newValues: OfferEditParams
+  newValues: OfferEditParamsType
 ) => {
   const invalid =
     !validateTitle(newValues.title).valid ||

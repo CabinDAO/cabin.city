@@ -4,7 +4,6 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
   NeighborhoodFragment,
-  NeighborhoodListParamsType,
   NeighborhoodListParams,
   NeighborhoodListResponse,
   NeighborhoodQueryInclude,
@@ -24,13 +23,12 @@ async function handler(
     return
   }
 
-  let params: NeighborhoodListParamsType
-  try {
-    params = NeighborhoodListParams.parse(req.query)
-  } catch (e) {
-    res.status(400).send({ error: toErrorString(e) })
+  const parsed = NeighborhoodListParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
     return
   }
+  const params = parsed.data
 
   const idsInOrder = await sortByDistancePrequery(
     params.lat,

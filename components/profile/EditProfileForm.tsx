@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import {
-  ProfileEditParams,
-  RoleType,
+  ProfileEditParamsType,
   MeFragment,
-  ContactFragment,
+  ContactFragmentType,
 } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { H3 } from '@/components/core/Typography'
@@ -14,8 +13,8 @@ import { Identity } from './edit-profile/Identity'
 
 export interface UpdateProfileProps {
   user: MeFragment
-  profileEditParams: ProfileEditParams['data'] | null
-  onChange: (input: ProfileEditParams['data']) => void
+  profileEditParams: ProfileEditParamsType['data'] | null
+  onChange: (input: ProfileEditParamsType['data']) => void
 }
 
 export const EditProfileForm = ({
@@ -24,9 +23,8 @@ export const EditProfileForm = ({
   onChange,
 }: {
   user: MeFragment
-  profileEditParams: ProfileEditParams['data'] | null
-  onChange: (input: ProfileEditParams['data']) => void
-  onRolesChange: (roleTypes: RoleType[]) => void
+  profileEditParams: ProfileEditParamsType['data'] | null
+  onChange: (input: ProfileEditParamsType['data']) => void
 }) => {
   if (!user) {
     return null
@@ -58,6 +56,8 @@ export const EditProfileForm = ({
 const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   const bio = profileEditParams?.bio ?? user?.bio ?? ''
   const address = profileEditParams?.address ?? user?.address ?? undefined
+  const neighborhoodExternId =
+    profileEditParams?.neighborhoodExternId ?? user?.neighborhoodExternId
 
   return (
     <UpdateSection title="About">
@@ -68,13 +68,17 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
         onAddressChange={(address) =>
           onChange({ ...profileEditParams, address })
         }
+        neighborhoodExternId={neighborhoodExternId}
+        onNeighborhoodChange={(n) =>
+          onChange({ ...profileEditParams, neighborhoodExternId: n || null })
+        }
       />
     </UpdateSection>
   )
 }
 
 const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
-  const [contactList, setContactList] = useState<ContactFragment[]>([])
+  const [contactList, setContactList] = useState<ContactFragmentType[]>([])
 
   useEffect(() => {
     if (contactList.length) {

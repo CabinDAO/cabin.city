@@ -3,7 +3,7 @@ import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   OfferFragment,
-  OfferListParams,
+  OfferListParamsType,
   OfferListResponse,
   OfferType,
 } from '@/utils/types/offer'
@@ -19,7 +19,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
     useGetPaginated<OfferListResponse>('OFFER_LIST', {
       offerType: offerType ?? undefined,
       publiclyVisibleOnly: 'true',
-    } as OfferListParams)
+    } as OfferListParamsType)
 
   const offers = data
     ? data.reduce(

@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
-import { OfferEditParams, OfferFragment, OfferType } from '@/utils/types/offer'
+import {
+  OfferEditParamsType,
+  OfferFragment,
+  OfferType,
+} from '@/utils/types/offer'
 import {
   MAX_OFFER_TITLE_LENGTH,
   PHOTO_UPLOAD_INSTRUCTIONS,
@@ -32,8 +36,8 @@ import { useBackend } from '@/components/hooks/useBackend'
 
 interface EditOfferFormProps {
   offer: OfferFragment
-  updateOfferInput: OfferEditParams
-  onEdit: (updateOfferInput: OfferEditParams) => void
+  updateOfferInput: OfferEditParamsType
+  onEdit: (updateOfferInput: OfferEditParamsType) => void
   highlightErrors?: boolean
 }
 

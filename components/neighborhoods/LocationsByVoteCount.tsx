@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   LocationFragment,
-  LocationListParams,
+  LocationListParamsType,
   LocationListResponse,
 } from '@/utils/types/location'
 import { useLocationVote } from '../hooks/useLocationVote'
@@ -21,7 +21,7 @@ export const LocationsByVoteCount = () => {
     mutate: refetchLocations,
   } = useGetPaginated<LocationListResponse>('LOCATION_LIST', {
     sort: 'votesDesc',
-  } as LocationListParams)
+  } as LocationListParamsType)
 
   const locations = data
     ? data.reduce(

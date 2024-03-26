@@ -2,11 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import {
-  ProfileNewParams,
-  ProfileNewParamsType,
-  ProfileNewResponse,
-} from '@/utils/types/profile'
+import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
 import { createProfile } from '@/utils/profile'
 import { toErrorString } from '@/utils/api/error'
 
@@ -25,18 +21,17 @@ async function handler(
 
   const privyDID = requireAuth(req, res, opts)
 
-  let body: ProfileNewParamsType
-  try {
-    body = ProfileNewParams.parse(req.body)
-  } catch (e) {
-    res.status(400).send({ error: toErrorString(e) })
+  const parsed = ProfileNewParams.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
     return
   }
+  const params = parsed.data
 
   let invite: Prisma.InviteGetPayload<null> | null = null
-  if (body.inviteExternId) {
+  if (params.inviteExternId) {
     invite = await prisma.invite.findUnique({
-      where: { externId: body.inviteExternId },
+      where: { externId: params.inviteExternId },
     })
 
     if (!invite) {
@@ -46,7 +41,7 @@ async function handler(
   }
 
   const existingWallet = await prisma.wallet.findUnique({
-    where: { address: body.walletAddress },
+    where: { address: params.walletAddress },
     include: { profile: true },
   })
 
@@ -59,12 +54,12 @@ async function handler(
 
   const profile = await createProfile({
     privyDID,
-    walletAddress: body.walletAddress,
-    name: body.name,
-    email: body.email,
-    neighborhoodExternId: body.neighborhoodExternId,
-    address: body.address,
-    avatar: body.avatar,
+    walletAddress: params.walletAddress,
+    name: params.name,
+    email: params.email,
+    neighborhoodExternId: params.neighborhoodExternId,
+    address: params.address,
+    avatar: params.avatar,
     invite,
   })
 

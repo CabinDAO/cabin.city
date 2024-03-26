@@ -1,6 +1,6 @@
 import {
   ContactFieldType,
-  ContactFragment,
+  ContactFragmentType,
   MeFragment,
 } from '@/utils/types/profile'
 import { SetStateAction, useEffect } from 'react'
@@ -23,8 +23,8 @@ const contactOptions = Object.values(ContactFieldType).map(
 
 interface ContactInputProps {
   profile: MeFragment
-  contactList: ContactFragment[]
-  setContactList: (contactList: SetStateAction<ContactFragment[]>) => void
+  contactList: ContactFragmentType[]
+  setContactList: (contactList: SetStateAction<ContactFragmentType[]>) => void
 }
 
 export const ContactInput = ({

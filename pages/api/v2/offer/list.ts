@@ -13,6 +13,7 @@ import {
   OfferPriceInterval,
 } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
+import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
@@ -24,25 +25,12 @@ async function handler(
     return
   }
 
-  const params: OfferListParams = {
-    // searchQuery: req.query.searchQuery
-    //   ? (req.query.searchQuery as string)
-    //   : undefined,
-    offerType: req.query.offerType
-      ? (req.query.offerType as OfferType)
-      : undefined,
-    locationId: req.query.locationId
-      ? (req.query.locationId as string)
-      : undefined,
-    // sort: req.query.sort ? (req.query.sort as LocationSort) : undefined,
-    page: req.query.page ? parseInt(req.query.page as string) : undefined,
-    publiclyVisibleOnly:
-      req.query.publiclyVisibleOnly && req.query.publiclyVisibleOnly === 'true'
-        ? 'true'
-        : 'false',
+  const parsed = OfferListParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
   }
-
-  // TODO: data validation
+  const params = parsed.data
 
   const publiclyVisibleOnly = params.publiclyVisibleOnly === 'true'
 

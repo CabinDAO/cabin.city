@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
+import { toErrorString } from '@/utils/api/error'
 import {
   AuthData,
   requireProfile,
@@ -28,6 +29,11 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
+    neighborhood: {
+      select: {
+        externId: true
+      }
+    }
     avatar: {
       select: {
         url: true
@@ -94,6 +100,11 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       address: true,
+      neighborhood: {
+        select: {
+          externId: true,
+        },
+      },
       avatar: {
         select: {
           url: true,
@@ -138,7 +149,13 @@ async function handlePost(
   res: NextApiResponse,
   profile: ProfileWithWallet
 ) {
-  const params: ProfileEditParams = req.body
+  const parsed = ProfileEditParams.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
+
   const externId = req.query.externId as string
 
   if (externId != profile.externId && !profile.isAdmin) {
@@ -173,6 +190,11 @@ async function handlePost(
                 update: params.data.address,
               },
             }
+          : undefined,
+        neighborhood: params.data.neighborhoodExternId
+          ? { connect: { externId: params.data.neighborhoodExternId } }
+          : params.data.neighborhoodExternId === null
+          ? { disconnect: true }
           : undefined,
       },
       where: {
@@ -277,6 +299,9 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
+    neighborhoodExternId: profile.neighborhood
+      ? profile.neighborhood.externId
+      : null,
     address: profile.address
       ? {
           locality: profile.address.locality,

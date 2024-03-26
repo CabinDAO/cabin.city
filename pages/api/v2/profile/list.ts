@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { toErrorString } from '@/utils/api/error'
+import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { resolveAddressOrName } from '@/lib/ens'
 import { PAGE_SIZE } from '@/utils/api/backend'
 import {
@@ -14,47 +15,7 @@ import {
   ProfileListFragment,
 } from '@/utils/types/profile'
 
-// must match ListedProfileQueryInclude below
-type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
-  include: {
-    address: true
-    avatar: true
-    wallet: {
-      include: {
-        _count: {
-          select: {
-            badges: true
-          }
-        }
-      }
-    }
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
-  }
-}>
-
-// must match ListedProfileWithRelations  above
-const ListedProfileQueryInclude = {
-  address: true,
-  avatar: true,
-  wallet: {
-    include: {
-      _count: {
-        select: {
-          badges: true,
-        },
-      },
-    },
-  },
-  roles: {
-    include: {
-      walletHat: true,
-    },
-  },
-} satisfies Prisma.ProfileInclude
+export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
@@ -68,25 +29,16 @@ async function handler(
 
   requireAuth(req, res, opts)
 
-  const params: ProfileListParams = {
-    searchQuery: req.query.searchQuery
-      ? (req.query.searchQuery as string)
-      : undefined,
-    roleTypes: toArray<RoleType>(req.query.roleTypes),
-    levelTypes: toArray<RoleLevel>(req.query.levelTypes),
-    citizenshipStatuses: toArray<CitizenshipStatus>(
-      req.query.citizenshipStatuses
-    ),
-    withLocation: req.query.withLocation === 'true' ? 'true' : undefined,
-    sort: req.query.sort ? (req.query.sort as ProfileSort) : undefined,
-    page: req.query.page ? parseInt(req.query.page as string) : undefined,
+  const parsed = ProfileListParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
   }
+  const params = parsed.data
 
   const resolvedAddress = params.searchQuery
     ? await resolveAddressOrName(params.searchQuery)
     : undefined
-
-  // TODO: data validation
 
   const profileQuery: Prisma.ProfileFindManyArgs = {
     where: {
@@ -205,7 +157,9 @@ const profilesToFragments = (
       name: profile.name,
       email: profile.email,
       bio: profile.bio,
-      location: profile.location,
+      neighborhoodExternId: profile.neighborhood
+        ? profile.neighborhood.externId
+        : null,
       isAdmin: profile.isAdmin,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
@@ -246,14 +200,54 @@ const profilesToFragments = (
   })
 }
 
-const toArray = <T = RoleType | RoleLevel | CitizenshipStatus>(
-  param: string | string[] | undefined
-): T[] => {
-  if (!param) return []
-  if (typeof param === 'string' || param instanceof String) {
-    return param.split(',') as T[]
+// must match ListedProfileQueryInclude below
+type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
+  include: {
+    address: true
+    neighborhood: {
+      select: {
+        externId: true
+      }
+    }
+    avatar: true
+    wallet: {
+      include: {
+        _count: {
+          select: {
+            badges: true
+          }
+        }
+      }
+    }
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
   }
-  return param as T[]
-}
+}>
 
-export default withAuth(handler)
+// must match ListedProfileWithRelations  above
+const ListedProfileQueryInclude = {
+  address: true,
+  neighborhood: {
+    select: {
+      externId: true,
+    },
+  },
+  avatar: true,
+  wallet: {
+    include: {
+      _count: {
+        select: {
+          badges: true,
+        },
+      },
+    },
+  },
+  roles: {
+    include: {
+      walletHat: true,
+    },
+  },
+} satisfies Prisma.ProfileInclude

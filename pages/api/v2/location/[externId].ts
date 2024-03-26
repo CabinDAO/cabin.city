@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
+import { toErrorString } from '@/utils/api/error'
 import {
   AuthData,
   ProfileWithWallet,
   requireProfile,
   withAuth,
 } from '@/utils/api/withAuth'
-import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import {
   LocationDeleteResponse,
   LocationEditParams,
@@ -87,7 +88,12 @@ async function handlePost(
     return
   }
 
-  const params: LocationEditParams = req.body
+  const parsed = LocationEditParams.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
 
   const mediaItemsToDelete: number[] = []
   if (params.mediaItems) {

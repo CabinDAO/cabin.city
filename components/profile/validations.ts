@@ -1,11 +1,11 @@
-import { ProfileEditParams } from '@/utils/types/profile'
+import { ProfileEditParamsType } from '@/utils/types/profile'
 import { MAX_DISPLAY_NAME_LENGTH, MAX_BIO_LENGTH } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
 import { AddressFragmentType } from '@/utils/types/location'
 
 export const validateProfileInput = (
-  editProfileInput: ProfileEditParams['data']
+  editProfileInput: ProfileEditParamsType['data']
 ) => {
   const { name, email, bio, address } = editProfileInput
 

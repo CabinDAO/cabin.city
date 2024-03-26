@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
+import { toErrorString } from '@/utils/api/error'
 import {
   AuthData,
   ProfileWithWallet,
   requireProfile,
   withAuth,
 } from '@/utils/api/withAuth'
-import { prisma } from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import {
   OfferDeleteResponse,
   OfferEditParams,
@@ -65,6 +66,13 @@ async function handlePost(
   res: NextApiResponse<OfferEditResponse>,
   profile: ProfileWithWallet
 ) {
+  const parsed = OfferEditParams.safeParse(req.body)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
+
   const externId = req.query.externId as string
 
   const offerToEdit = await prisma.offer.findUnique({
@@ -83,8 +91,6 @@ async function handlePost(
     res.status(403).send({ error: 'Only caretakers can edit their offers' })
     return
   }
-
-  const params: OfferEditParams = req.body
 
   const mediaItemsToDelete: number[] = []
   if (params.mediaItems) {

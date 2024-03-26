@@ -1,7 +1,8 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-import { LocationType, ShortAddressFragmentType } from '@/utils/types/location'
 import { Prisma } from '@prisma/client'
+import { z } from 'zod'
+import { LocationType, ShortAddressFragmentType } from '@/utils/types/location'
 import { APIError, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.OfferType
@@ -55,12 +56,17 @@ export type OfferFragment = {
   }
 }
 
-export type OfferListParams = {
-  locationId?: string
-  offerType?: OfferType
-  publiclyVisibleOnly?: 'true' | 'false'
-  page?: number
-}
+export const OfferListParams = z
+  .object({
+    locationId: z.string().optional(),
+    offerType: z.nativeEnum(OfferType).optional(),
+    publiclyVisibleOnly: z
+      .union([z.literal('true'), z.literal('false')])
+      .optional(),
+    page: z.number().optional(),
+  })
+  .strict()
+export type OfferListParamsType = z.infer<typeof OfferListParams>
 
 export type OfferListResponse =
   | ({
@@ -85,19 +91,26 @@ export type OfferGetResponse =
     }
   | APIError
 
-export type OfferEditParams = {
-  title?: string
-  description?: string
-  startDate?: string
-  endDate?: string
-  price?: number
-  priceInterval?: OfferPriceInterval
-  applicationUrl?: string
-  imageIpfsHash?: string
-  mediaItems?: {
-    ipfsHash: string
-  }[]
-}
+export const OfferEditParams = z
+  .object({
+    title: z.string().optional(),
+    description: z.string().optional(),
+    startDate: z.string().optional(),
+    endDate: z.string().optional(),
+    price: z.number().optional(),
+    priceInterval: z.nativeEnum(OfferPriceInterval).optional(),
+    applicationUrl: z.string().optional(),
+    imageIpfsHash: z.string().optional(),
+    mediaItems: z
+      .array(
+        z.object({
+          ipfsHash: z.string(),
+        })
+      )
+      .optional(),
+  })
+  .strict()
+export type OfferEditParamsType = z.infer<typeof OfferEditParams>
 
 export type OfferEditResponse =
   | {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Network, OwnedNft } from 'alchemy-sdk'
-import { ProfileEditParams } from '@/utils/types/profile'
+import { ProfileEditParamsType } from '@/utils/types/profile'
 import { getImageUrlFromNft } from '@/lib/image'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { getImageUrlByIpfsHash } from '@/lib/image'
@@ -16,8 +16,10 @@ export type ExtendedOwnedNft = OwnedNft & {
 }
 
 interface AvatarSetupProps {
-  onNftSelected: (nft: ProfileEditParams['data']['avatar'] | undefined) => void
-  avatar?: ProfileEditParams['data']['avatar'] | undefined | null
+  onNftSelected: (
+    nft: ProfileEditParamsType['data']['avatar'] | undefined
+  ) => void
+  avatar?: ProfileEditParamsType['data']['avatar'] | undefined | null
 }
 
 export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {

@@ -13,7 +13,7 @@ import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import {
   ProfileEditResponse,
   ProfileListFragment,
-  ProfileListParams,
+  ProfileListParamsType,
   ProfileListResponse,
 } from '@/utils/types/profile'
 import { ErrorModal } from '@/components/ErrorModal'
@@ -35,7 +35,7 @@ export default function Page({
   const { data, page, setPage, isEmpty, isLastPage, mutate } =
     useGetPaginated<ProfileListResponse>('PROFILE_LIST', {
       withLocation: 'true',
-    } as ProfileListParams)
+    } as ProfileListParamsType)
 
   const profiles = data
     ? data.reduce(

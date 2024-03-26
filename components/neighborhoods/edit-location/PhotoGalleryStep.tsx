@@ -3,7 +3,7 @@ import { useError } from '@/components/hooks/useError'
 import { useUpdateLocation } from '../useUpdateLocation'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import {
-  LocationEditParams,
+  LocationEditParamsType,
   LocationMediaCategory,
 } from '@/utils/types/location'
 import {
@@ -35,7 +35,7 @@ export const PhotoGalleryStep = ({
     [LocationMediaCategory.Features]: false,
   })
 
-  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+  const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     bannerImageIpfsHash: location.bannerImageIpfsHash,
     mediaItems: location.mediaItems?.map((mediaItem) => ({
       ipfsHash: mediaItem?.ipfsHash,

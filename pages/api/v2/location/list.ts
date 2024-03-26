@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { toErrorString } from '@/utils/api/error'
 import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   LocationFragment,
@@ -26,21 +27,12 @@ async function handler(
     return
   }
 
-  const params: LocationListParams = {
-    // searchQuery: req.query.searchQuery
-    //   ? (req.query.searchQuery as string)
-    //   : undefined,
-    offerType: req.query.offerType
-      ? (req.query.offerType as OfferType)
-      : undefined,
-    locationType: req.query.locationType
-      ? (req.query.locationType as LocationType)
-      : undefined,
-    sort: req.query.sort ? (req.query.sort as LocationSort) : undefined,
-    page: req.query.page ? parseInt(req.query.page as string) : undefined,
+  const parsed = LocationListParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
   }
-
-  // TODO: data validation
+  const params = parsed.data
 
   const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
   const take = PAGE_SIZE

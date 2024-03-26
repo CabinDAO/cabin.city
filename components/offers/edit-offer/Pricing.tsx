@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react'
-import { OfferEditParams, OfferPriceInterval } from '@/utils/types/offer'
+import { OfferEditParamsType, OfferPriceInterval } from '@/utils/types/offer'
 import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import styled from 'styled-components'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
@@ -30,11 +30,11 @@ const options = Object.values(OfferPriceInterval).map((interval) => ({
 }))
 
 interface PricingProps {
-  price?: OfferEditParams['price']
-  priceInterval?: OfferEditParams['priceInterval']
+  price?: OfferEditParamsType['price']
+  priceInterval?: OfferEditParamsType['priceInterval']
   onPriceChange?: (
-    price: OfferEditParams['price'],
-    priceInterval: OfferEditParams['priceInterval']
+    price: OfferEditParamsType['price'],
+    priceInterval: OfferEditParamsType['priceInterval']
   ) => void
   highlightErrors?: boolean
 }

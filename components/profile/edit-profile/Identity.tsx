@@ -4,7 +4,10 @@ import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import useEns from '@/components/hooks/useEns'
 import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileEditParams, ProfileEditResponse } from '@/utils/types/profile'
+import {
+  ProfileEditParamsType,
+  ProfileEditResponse,
+} from '@/utils/types/profile'
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { MAX_DISPLAY_NAME_LENGTH } from '../constants'
@@ -66,7 +69,7 @@ export const Identity = ({
         data: {
           email: externalUser.email.address,
         },
-      } as ProfileEditParams)
+      } as ProfileEditParamsType)
     }
   }, [externalUser?.email?.address, updateProfile, user])
 

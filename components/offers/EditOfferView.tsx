@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useModal } from '../hooks/useModal'
-import { OfferEditParams, OfferFragment } from '@/utils/types/offer'
+import { OfferEditParamsType, OfferFragment } from '@/utils/types/offer'
 import styled from 'styled-components'
 import { ContentCard } from '../core/ContentCard'
 import { TitleCard } from '../core/TitleCard'
@@ -10,8 +10,8 @@ import { DiscardChangesModal } from '../core/DiscardChangesModal'
 
 interface EditOfferViewProps {
   offer: OfferFragment
-  updateOfferInput: OfferEditParams
-  onEdit: (updateOfferInput: OfferEditParams) => void
+  updateOfferInput: OfferEditParamsType
+  onEdit: (updateOfferInput: OfferEditParamsType) => void
   highlightErrors?: boolean
 }
 
@@ -25,7 +25,7 @@ export const EditOfferView = ({
   const { showModal } = useModal()
   const router = useRouter()
 
-  const handleEdit = (updateOfferInput: OfferEditParams) => {
+  const handleEdit = (updateOfferInput: OfferEditParamsType) => {
     setUnsavedChanges(true)
     onEdit(updateOfferInput)
   }

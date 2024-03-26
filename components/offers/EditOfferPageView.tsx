@@ -5,7 +5,7 @@ import { useModal } from '../hooks/useModal'
 import { useNavigation } from '../hooks/useNavigation'
 import { useGetOffer } from './useGetOffer'
 import { useBackend } from '@/components/hooks/useBackend'
-import { OfferEditParams, OfferType } from '@/utils/types/offer'
+import { OfferEditParamsType, OfferType } from '@/utils/types/offer'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { EditOfferView } from './EditOfferView'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
@@ -34,7 +34,7 @@ export const EditOfferPageView = () => {
 
   const [highlightErrors, setHighlightErrors] = useState(false)
   const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const [newValues, setNewValues] = useState<OfferEditParams>({})
+  const [newValues, setNewValues] = useState<OfferEditParamsType>({})
 
   useEffect(() => {
     if (offer) {
@@ -78,7 +78,7 @@ export const EditOfferPageView = () => {
     }
   }
 
-  const handleOnEdit = (updateOfferInput: OfferEditParams) => {
+  const handleOnEdit = (updateOfferInput: OfferEditParamsType) => {
     setUnsavedChanges(true)
 
     setNewValues((prev) => ({

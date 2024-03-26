@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { useUpdateLocation } from '../useUpdateLocation'
-import { AddressFragmentType, LocationEditParams } from '@/utils/types/location'
+import {
+  AddressFragmentType,
+  LocationEditParamsType,
+} from '@/utils/types/location'
 import { useError } from '@/components/hooks/useError'
 import {
   MAX_LOCATION_BIO_LENGTH,
@@ -43,7 +46,7 @@ export const BasicDetailStep = ({
 
   const { showError } = useError()
 
-  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+  const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     name: location.name,
     caretakerEmail: location.caretakerEmail,
     tagline: location.tagline,
@@ -57,7 +60,7 @@ export const BasicDetailStep = ({
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof LocationEditParams
+    field: keyof LocationEditParamsType
   ) => {
     const intFields = ['sleepCapacity', 'internetSpeedMbps']
 

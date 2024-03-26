@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  LocationListParams,
+  LocationListParamsType,
   LocationListResponse,
 } from '@/utils/types/location'
 import { getImageUrlByIpfsHash } from '@/lib/image'
@@ -15,7 +15,7 @@ export const NeighborhoodShowcase = () => {
   const { useGet } = useBackend()
   const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
     sort: 'votesDesc',
-  } as LocationListParams)
+  } as LocationListParamsType)
 
   const locations = !data || 'error' in data ? [] : data.locations.slice(0, 4)
 

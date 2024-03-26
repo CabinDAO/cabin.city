@@ -5,9 +5,8 @@ import { useProfile } from '../auth/useProfile'
 import { useModal } from '../hooks/useModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  ProfileEditParams,
+  ProfileEditParamsType,
   ProfileEditResponse,
-  RoleType,
 } from '@/utils/types/profile'
 import { validateProfileInput } from './validations'
 import { EditProfileForm } from './EditProfileForm'
@@ -26,8 +25,7 @@ export const EditProfileView = () => {
     user ? ['PROFILE', { externId: user.externId }] : null
   )
 
-  const [newValues, setNewValues] = useState<ProfileEditParams['data']>({})
-  const [roleTypes, setRoleTypes] = useState<RoleType[] | null>(null)
+  const [newValues, setNewValues] = useState<ProfileEditParamsType['data']>({})
   const { showModal } = useModal()
 
   const handleSubmit = async () => {
@@ -42,8 +40,7 @@ export const EditProfileView = () => {
     if (user && validateProfileInput(newValues)) {
       const res = await updateUser({
         data: newValues,
-        roleTypes,
-      } as ProfileEditParams)
+      } as ProfileEditParamsType)
 
       if (!res.error) {
         await router.push(`/profile/${user.externId}`)
@@ -59,12 +56,7 @@ export const EditProfileView = () => {
     }
   }
 
-  const handleRolesChange = (roleTypes: RoleType[]) => {
-    if (!roleTypes) return
-    setRoleTypes(roleTypes)
-  }
-
-  const handleChange = (input: ProfileEditParams['data']) => {
+  const handleChange = (input: ProfileEditParamsType['data']) => {
     setNewValues((prev) => ({
       ...prev,
       ...input,
@@ -96,7 +88,6 @@ export const EditProfileView = () => {
           user={user}
           profileEditParams={newValues}
           onChange={handleChange}
-          onRolesChange={handleRolesChange}
         />
       </ContentCard>
     </StyledLayout>

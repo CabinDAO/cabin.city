@@ -28,20 +28,22 @@ export enum LocationSort {
   votesDesc = 'votesDesc',
 }
 
-export const AddressFragment = z.object({
-  lat: z.number().nullable(),
-  lng: z.number().nullable(),
-  formattedAddress: z.string().nullable(),
-  streetNumber: z.string().nullable(),
-  route: z.string().nullable(),
-  routeShort: z.string().nullable(),
-  locality: z.string().nullable(),
-  admininstrativeAreaLevel1: z.string().nullable(),
-  admininstrativeAreaLevel1Short: z.string().nullable(),
-  country: z.string().nullable(),
-  countryShort: z.string().nullable(),
-  postalCode: z.string().nullable(),
-})
+export const AddressFragment = z
+  .object({
+    lat: z.number().nullable(),
+    lng: z.number().nullable(),
+    formattedAddress: z.string().nullable(),
+    streetNumber: z.string().nullable(),
+    route: z.string().nullable(),
+    routeShort: z.string().nullable(),
+    locality: z.string().nullable(),
+    admininstrativeAreaLevel1: z.string().nullable(),
+    admininstrativeAreaLevel1Short: z.string().nullable(),
+    country: z.string().nullable(),
+    countryShort: z.string().nullable(),
+    postalCode: z.string().nullable(),
+  })
+  .strict()
 
 export type AddressFragmentType = z.infer<typeof AddressFragment>
 
@@ -79,13 +81,15 @@ export type LocationFragment = {
   voteCount: number
 }
 
-export type LocationListParams = {
-  // searchQuery?: string
-  offerType?: OfferType
-  locationType?: LocationType
-  sort?: LocationSort
-  page?: number
-}
+export const LocationListParams = z
+  .object({
+    offerType: z.nativeEnum(OfferType).optional(),
+    locationType: z.nativeEnum(LocationType).optional(),
+    sort: z.nativeEnum(LocationSort).optional(),
+    page: z.number().optional(),
+  })
+  .strict()
+export type LocationListParamsType = z.infer<typeof LocationListParams>
 
 export type LocationListResponse =
   | ({
@@ -109,20 +113,25 @@ export type LocationNewResponse = {
   error?: string
 }
 
-export type LocationEditParams = {
-  name?: string
-  tagline?: string
-  description?: string
-  address?: AddressFragmentType | null
-  sleepCapacity?: number
-  internetSpeedMbps?: number
-  caretakerEmail?: string | null
-  bannerImageIpfsHash?: string
-  mediaItems?: {
-    category: LocationMediaCategory
-    ipfsHash: string
-  }[]
-}
+export const LocationEditParams = z.object({
+  name: z.string().optional(),
+  tagline: z.string().optional(),
+  description: z.string().optional(),
+  address: AddressFragment.nullable().optional(),
+  sleepCapacity: z.number().optional(),
+  internetSpeedMbps: z.number().optional(),
+  caretakerEmail: z.string().nullable().optional(),
+  bannerImageIpfsHash: z.string().optional(),
+  mediaItems: z
+    .array(
+      z.object({
+        category: z.nativeEnum(LocationMediaCategory),
+        ipfsHash: z.string(),
+      })
+    )
+    .optional(),
+})
+export type LocationEditParamsType = z.infer<typeof LocationEditParams>
 
 export type LocationEditResponse = {
   location?: LocationFragment | null

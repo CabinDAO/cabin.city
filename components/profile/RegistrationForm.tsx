@@ -4,7 +4,6 @@ import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  NeighborhoodFragment,
   NeighborhoodListParamsType,
   NeighborhoodListResponse,
 } from '@/utils/types/neighborhood'
@@ -43,8 +42,8 @@ export function RegistrationForm({
   const [avatar, setAvatar] = useState<AvatarFragmentType | undefined>()
   const [name, setName] = useState('')
   const [address, setAddress] = useState<AddressFragmentType>()
-  const [neighborhood, setNeighborhood] = useState<
-    NeighborhoodFragment | null | undefined
+  const [neighborhoodExternId, setNeighborhoodExternId] = useState<
+    string | null | undefined
   >()
 
   const [canShowNameError, setCanShowNameError] = useState(false)
@@ -111,7 +110,7 @@ export function RegistrationForm({
           name: name.trim(),
           address,
           avatar,
-          neighborhoodExternId: neighborhood?.externId,
+          neighborhoodExternId: neighborhoodExternId || undefined,
         })
       } else {
         linkEmail()
@@ -154,8 +153,8 @@ export function RegistrationForm({
 
       <NeighborhoodSelect
         address={address}
-        selected={neighborhood}
-        onNeighborhoodChange={setNeighborhood}
+        neighborhoodExternId={neighborhoodExternId}
+        onNeighborhoodChange={setNeighborhoodExternId}
       />
 
       <Submission>
@@ -171,14 +170,14 @@ export function RegistrationForm({
   )
 }
 
-function NeighborhoodSelect({
+export function NeighborhoodSelect({
   address,
-  selected,
+  neighborhoodExternId,
   onNeighborhoodChange,
 }: {
   address: AddressFragmentType | undefined
-  selected: NeighborhoodFragment | null | undefined
-  onNeighborhoodChange: (n: NeighborhoodFragment | null | undefined) => void
+  neighborhoodExternId: string | null | undefined
+  onNeighborhoodChange: (n: string | null | undefined) => void
 }) {
   const label = 'Cabin Neighborhood'
   const { useGet } = useBackend()
@@ -224,28 +223,40 @@ function NeighborhoodSelect({
     }
 
     const n = o && neighborhoods.find((ne) => ne.externId === o.value)
-    onNeighborhoodChange(n)
+    onNeighborhoodChange(n?.externId)
   }
 
   useEffect(() => {
+    if (isLoading) {
+      return
+    }
+
     if (!neighborhoodSelectOptions.length) {
       selectNeighborhood(undefined)
       return
     }
 
-    if (selected === undefined) {
+    if (neighborhoodExternId === undefined) {
       selectNeighborhood(neighborhoodSelectOptions[0])
       return
     }
 
     const selectedInOptions = neighborhoodSelectOptions.find(
-      (n) => n.value === (selected === null ? '' : selected.externId)
+      (n) =>
+        n.value === (neighborhoodExternId === null ? '' : neighborhoodExternId)
     )
 
     if (!selectedInOptions) {
       selectNeighborhood(neighborhoodSelectOptions[0])
+    } else if (!selectedOption) {
+      setSelectedOption(selectedInOptions)
     }
-  }, [neighborhoodSelectOptions, selected])
+  }, [
+    neighborhoodSelectOptions,
+    neighborhoodExternId,
+    selectedOption,
+    isLoading,
+  ])
 
   if (!address || !neighborhoods.length) {
     return (

@@ -23,7 +23,7 @@ import { useProfile } from '../auth/useProfile'
 import { List } from '../core/List'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  ProfileListParams,
+  ProfileListParamsType,
   ProfileListResponse,
   ProfileSort,
   ProfileListFragment,
@@ -48,7 +48,7 @@ export const CensusView = () => {
   const { user } = useProfile({ redirectTo: '/' })
   const { useGetPaginated } = useBackend()
 
-  const input = useMemo<ProfileListParams>(() => {
+  const input = useMemo<ProfileListParamsType>(() => {
     // Only search if there are at least 2 characters
     const searchQuery = searchValue.length >= 2 ? searchValue : ''
 

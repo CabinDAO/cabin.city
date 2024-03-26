@@ -12,7 +12,7 @@ import {
   REQUIRED_FIELD_ERROR,
 } from '@/utils/validate'
 import { useError } from '@/components/hooks/useError'
-import { LocationEditParams } from '@/utils/types/location'
+import { LocationEditParamsType } from '@/utils/types/location'
 
 export const DescriptionStep = ({
   name,
@@ -22,7 +22,7 @@ export const DescriptionStep = ({
   steps,
 }: StepProps) => {
   const { updateLocation } = useUpdateLocation(location.externId)
-  const [locationInput, setLocationInput] = useState<LocationEditParams>({
+  const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     description: location.description,
   })
 
