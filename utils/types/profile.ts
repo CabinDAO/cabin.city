@@ -1,6 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 import { APIError, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'
+import { isAddress } from 'viem'
 import {
   AddressFragment,
   AddressFragmentType,
@@ -226,9 +227,9 @@ export type MeFragment = {
 
 export const ProfileNewParams = z
   .object({
-    walletAddress: z.string(),
+    walletAddress: z.string().refine(isAddress, { message: 'invalid address' }),
     name: z.string(),
-    email: z.string(),
+    email: z.string().email(),
     address: AddressFragment,
     avatar: AvatarFragment.optional(),
     inviteExternId: z.string().optional(),
@@ -241,7 +242,7 @@ export const ProfileEditParams = z
   .object({
     data: z.object({
       name: z.string().optional(),
-      email: z.string().optional(),
+      email: z.string().email().optional(),
       bio: z.string().optional(),
       address: AddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
