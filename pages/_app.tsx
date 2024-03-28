@@ -13,7 +13,7 @@ import { wagmiChainConfig } from '@/lib/chains'
 import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
-import { BackendProvider } from '@/components/contexts/BackendContext'
+import { BackendProvider } from '@/components/hooks/useBackend'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { WagmiProvider } from '@privy-io/wagmi'
 import {
