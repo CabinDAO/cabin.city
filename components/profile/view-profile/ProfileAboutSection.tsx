@@ -1,18 +1,20 @@
-import styled from 'styled-components'
-import { ContentCard } from '../../core/ContentCard'
-import { ResponsiveDivider } from '../../core/Divider'
-import Icon, { IconName } from '../../core/Icon'
-import { Body2, Caption, H3 } from '../../core/Typography'
-import { ProfileContactList } from './ProfileContactList'
+import { ReactNode } from 'react'
+import Link from 'next/link'
+import { formatShortAddress } from '@/lib/address'
 import { ProfileFragment } from '@/utils/types/profile'
 import { monthYearFormat } from '@/utils/display-utils'
-import { formatShortAddress } from '@/lib/address'
+import styled from 'styled-components'
+import Icon, { IconName } from '../../core/Icon'
+import { ContentCard } from '../../core/ContentCard'
+import { ResponsiveDivider } from '../../core/Divider'
+import { Body2, Caption, H3 } from '../../core/Typography'
+import { ProfileContactList } from './ProfileContactList'
 
-interface ProfileAboutSectionProps {
+export const ProfileAboutSection = ({
+  profile,
+}: {
   profile: ProfileFragment
-}
-
-export const ProfileAboutSection = ({ profile }: ProfileAboutSectionProps) => (
+}) => (
   <ContentCard shape="notch">
     <Container>
       <AboutSubsection>
@@ -20,14 +22,30 @@ export const ProfileAboutSection = ({ profile }: ProfileAboutSectionProps) => (
         <ProfileDataGroup>
           <ProfileDataText
             iconName="date"
-            captionText={`Joined ${monthYearFormat(profile.createdAt)}`}
+            captionContent={`Joined ${monthYearFormat(profile.createdAt)}`}
           />
-          <ProfileDataText
-            iconName="location"
-            captionText={
-              profile.address ? formatShortAddress(profile.address) : ''
-            }
-          />
+          {profile.address && (
+            <ProfileDataText
+              iconName="location"
+              captionContent={formatShortAddress(profile.address)}
+            />
+          )}
+          {profile.voucher && (
+            <ProfileDataText
+              iconName="citizen"
+              captionContent={
+                <>
+                  Vouched for by{' '}
+                  <Link
+                    href={`/profile/${profile.voucher.externId}`}
+                    style={{ textDecoration: 'underline' }}
+                  >
+                    {profile.voucher.name}
+                  </Link>
+                </>
+              }
+            />
+          )}
         </ProfileDataGroup>
         {profile.bio && <Body2>{profile.bio}</Body2>}
       </AboutSubsection>
@@ -44,19 +62,20 @@ export const ProfileAboutSection = ({ profile }: ProfileAboutSectionProps) => (
   </ContentCard>
 )
 
-interface ProfileDataTextProps {
+const ProfileDataText = ({
+  iconName,
+  captionContent,
+}: {
   iconName: IconName
-  captionText: string
-}
-
-const ProfileDataText = ({ iconName, captionText }: ProfileDataTextProps) => {
-  if (!captionText.length) {
+  captionContent: ReactNode
+}) => {
+  if (!captionContent) {
     return null
   }
   return (
     <ProfileData>
       <Icon name={iconName} size={1.4} />
-      <Caption>{captionText}</Caption>
+      <Caption>{captionContent}</Caption>
     </ProfileData>
   )
 }
@@ -85,6 +104,7 @@ const Container = styled.div`
 const ProfileDataGroup = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
