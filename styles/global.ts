@@ -49,9 +49,7 @@ export default createGlobalStyle`
     ;
     background-position: 100px 0, 0 0;
     background-size: 2.886rem 2.886rem, 2.886rem 2.886rem;
-  }
 
-  body {
     position: relative;
     min-height: 100vh;
 

@@ -18,6 +18,8 @@ import { ContentCard } from '../core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
 import { ErrorModal } from '../ErrorModal'
 import { AddressFragmentType } from '@/utils/types/location'
+import { Address } from 'viem'
+import { useError } from '@/components/hooks/useError'
 
 export interface RegistrationParams {
   email: string
@@ -31,6 +33,7 @@ export const RegistrationView = () => {
   const router = useRouter()
   const { post } = useBackend()
   const { showModal } = useModal()
+  const { showError } = useError()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
   const { linkEmail } = usePrivy()
@@ -56,8 +59,14 @@ export const RegistrationView = () => {
       return
     }
 
+    const walletAddress = externalUser.wallet?.address
+    if (!walletAddress) {
+      showError('No connected wallet found')
+      return
+    }
+
     const createProfileBody: ProfileNewParamsType = {
-      walletAddress: externalUser.wallet?.address || '',
+      walletAddress: walletAddress as Address,
       name,
       email: externalUser.email?.address || email,
       address,

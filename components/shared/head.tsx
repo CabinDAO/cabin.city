@@ -65,6 +65,7 @@ export const AppHead = ({
 
         <link rel="manifest" href="/manifest.json" />
 
+        {/* todo: why is noindex here */}
         <meta name="robots" content="noindex, nosnippet, noimageindex" />
       </Head>
       <NextSeo
