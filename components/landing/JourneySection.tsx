@@ -40,8 +40,8 @@ export const JourneySection = () => {
         <Icon name={'backpack-green'} size={8} />
         <Title>Join us on our journey</Title>
         <BodyText>
-          Cabin is pioneering a new way of living rooted in meaningful
-          connection between people and places.
+          We are a global network of local community builders. Together, we are
+          creating the future of places we want to live.
         </BodyText>
       </Header>
 
@@ -52,19 +52,35 @@ export const JourneySection = () => {
           <Value style={{ gridArea: 'a' }}>
             <ValueTitle>Meet at the trailhead</ValueTitle>
             <BodyText>
-              Learn more about Cabin and cross paths with community members to
-              connect and exchange ideas.
+              Learn more about Cabin and how you can get involved in growing a
+              network city.
               <ul>
                 <li>
-                  <Link href={EXTERNAL_LINKS.BLOG}>Read our blog</Link>
+                  <Link
+                    href={EXTERNAL_LINKS.VISION}
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Read our vision
+                  </Link>
                 </li>
                 <li>
-                  <Link href={EXTERNAL_LINKS.PODCAST}>
+                  <Link
+                    href={EXTERNAL_LINKS.PODCAST}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
                     Listen to our podcast
                   </Link>
                 </li>
                 <li>
-                  <Link href={EXTERNAL_LINKS.DISCORD}>Join the Discord</Link>
+                  <Link
+                    href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpagetimeline`}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Book an intro call
+                  </Link>
                 </li>
               </ul>
             </BodyText>
@@ -90,19 +106,27 @@ export const JourneySection = () => {
               local area and participating online.
               <ul>
                 <li>
-                  <Link href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}>
-                    Attend a Supper Club
-                  </Link>
-                </li>
-                <li>
-                  <Link href={EXTERNAL_LINKS.FORUM}>
-                    Participate on the forum
-                  </Link>
-                </li>
-                <li>
-                  <AuthenticatedLink href={'/dashboard'}>
-                    Sign in and create your profile
+                  <AuthenticatedLink href={'/experiences'}>
+                    Sign in & create your profile
                   </AuthenticatedLink>
+                </li>
+                <li>
+                  <Link
+                    href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Attend a local event
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href={EXTERNAL_LINKS.DISCORD}
+                    target="_blank"
+                    rel="noopener nofollow noreferrer"
+                  >
+                    Join our Discord
+                  </Link>
                 </li>
               </ul>
             </BodyText>
@@ -124,9 +148,8 @@ export const JourneySection = () => {
           <Value style={{ gridArea: 'e' }}>
             <ValueTitle>Reach the summit</ValueTitle>
             <BodyText>
-              Become a Citizen to explore our City Directory, a network of
-              connected properties, and be a part of building a modern village
-              for families.
+              Grow your local neighborhood into a modern village that’s part of
+              a global network city..
               <ul>
                 <li>
                   <AuthenticatedLink href={'/citizenship'}>

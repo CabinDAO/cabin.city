@@ -73,6 +73,8 @@ const themeColor = (
       return fgBg == 'fg' ? theme.colors.green900 : theme.colors.yellow100
     case 'dark':
       return fgBg == 'fg' ? theme.colors.yellow100 : theme.colors.green800
+    case 'clear':
+      return fgBg == 'fg' ? theme.colors.yellow100 : 'transparent'
     default:
       return fgBg == 'fg' ? theme.colors.green800 : theme.colors.yellow200
   }

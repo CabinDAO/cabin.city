@@ -34,7 +34,7 @@ export const ApplyButton = ({ offer }: { offer: OfferFragment }) => {
         onClick={() => events.applyToExperienceEvent(offer.externId)}
         href={formatUrl(offer.applicationUrl) ?? ''}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener nofollow noreferrer"
         style={{
           width: '100%',
         }}

@@ -113,7 +113,11 @@ export const RoleCard = ({
                   size={isSmall ? 1.3 * sf : 1.3}
                 />
                 {externalUrl && (
-                  <a href={externalUrl} target="_blank" rel="noreferrer">
+                  <a
+                    href={externalUrl}
+                    target="_blank"
+                    rel="noopener nofollow noreferrer"
+                  >
                     <IconButton
                       icon="external-link"
                       size={isSmall ? 1.3 * sf : 1.3}

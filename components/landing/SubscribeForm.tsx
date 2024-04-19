@@ -51,7 +51,7 @@ export const SubscribeForm = () => {
           placeholder={'Email'}
           onChange={handleEmailChange}
         />
-        <StyledButton disabled={isLoading}>
+        <StyledButton disabled={isLoading} variant="secondary">
           {isLoading ? (
             <>
               <LoadingSpinner />

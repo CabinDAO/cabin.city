@@ -38,7 +38,7 @@ export const AppLink = ({
         className={className}
         href={href}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener nofollow noreferrer"
         onClick={handleClick}
       >
         {children}

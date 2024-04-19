@@ -1,6 +1,5 @@
 import styled from 'styled-components'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
-import { HeroVideo } from '../core/HeroVideo'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { TestimonialSection } from './TestimonialSection'
 import { HeroSection } from './HeroSection'
@@ -13,19 +12,30 @@ import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { ValuesSection } from '@/components/landing/ValuesSection'
 import { SupperClubSection } from '@/components/landing/SupperClubSection'
 import { JourneySection } from '@/components/landing/JourneySection'
+import headerBg from './header.jpg'
 
 export const LandingView = () => {
   return (
     <StyledLayout variant="full">
-      <TopLogoSection />
-
-      <LandingSection>
-        <HeroSection />
+      <LandingSection
+        fullWidth
+        noVertPadding
+        variant={'clear'}
+        style={{
+          backgroundImage: `url(${headerBg.src})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <OpaqueDiv>
+          <TopLogoSection />
+          <HeroSection />
+        </OpaqueDiv>
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding>
-        <HeroVideo />
-      </LandingSection>
+      {/*<LandingSection fullWidth noVertPadding>*/}
+      {/*  <HeroVideo />*/}
+      {/*</LandingSection>*/}
 
       <LandingSection precedesNoVertPadding>
         <JourneySection />
@@ -74,4 +84,13 @@ export const LandingView = () => {
 
 const StyledLayout = styled(SingleColumnLayout)`
   margin-bottom: 0rem;
+`
+
+const OpaqueDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
 `

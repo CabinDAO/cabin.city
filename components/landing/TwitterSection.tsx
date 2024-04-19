@@ -132,7 +132,11 @@ const Item = (props: Tweet) => {
           <DisplayName>{props.name}</DisplayName>
           <Handle>{props.handle}</Handle>
         </Name>
-        <Link href={props.srcUrl} target={'_blank'} rel={'noreferer'}>
+        <Link
+          href={props.srcUrl}
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+        >
           <XLogo name={'x-logo'} size={3.2} />
         </Link>
       </Top>

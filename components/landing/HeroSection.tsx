@@ -1,59 +1,67 @@
 import styled from 'styled-components'
 import { H4, HHero } from '@/components/core/Typography'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
+import { Button } from '@/components/core/Button'
+import Link from 'next/link'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const HeroSection = () => {
   return (
-    <ExtraPadding>
-      <Wrapper>
-        <Text>
-          <StyledHHero>
-            Internet friends building a network of modern villages
-          </StyledHHero>
-        </Text>
-        {/*<ButtonWrapper>*/}
-        {/*  <Buttons>*/}
-        {/*    {props.buttons.map((button) => {*/}
-        {/*      return button*/}
-        {/*    })}*/}
-        {/*  </Buttons>*/}
-        {/*</ButtonWrapper>*/}
-      </Wrapper>
+    <Content>
+      <TopWrapper>
+        <HeaderText>
+          A network of neighborhoods where you’d want to grow up
+        </HeaderText>
+        <ButtonWrapper>
+          <Buttons>
+            <Button>Find one near you</Button>
+            <Link
+              href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
+              target="_blank"
+              rel="noopener nofollow noreferrer"
+            >
+              <Button variant={'secondary'}>Book a welcome call</Button>
+            </Link>
+          </Buttons>
+        </ButtonWrapper>
+      </TopWrapper>
       <Newsletter>
         <H4>Subscribe to our newsletter</H4>
         <SubscribeForm />
       </Newsletter>
-    </ExtraPadding>
+    </Content>
   )
 }
 
-export const StyledHHero = styled(HHero)`
-  width: 28.8rem;
-  text-align: center;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 100%;
-    font-size: 3.2rem;
-    line-height: 1.25;
-  }
-`
-
-const ExtraPadding = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-self: center;
   justify-content: center;
   align-items: center;
-  gap: 4rem;
+  gap: 8rem;
+  margin-top: 4rem;
   margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
-    gap: 4.8rem;
+    gap: 16rem;
+    margin-bottom: 6rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 57rem;
+    width: 67rem;
+  }
+`
+
+const TopWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 10rem;
   }
 `
 
@@ -64,6 +72,7 @@ const Buttons = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
+    gap: 4rem;
   }
 
   ${({ theme }) => theme.bp.md_max} {
@@ -89,17 +98,6 @@ const ButtonWrapper = styled.div`
   }
 `
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2.4rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    gap: 4rem;
-  }
-`
-
 const Newsletter = styled.div`
   display: flex;
   flex-direction: column;
@@ -107,14 +105,23 @@ const Newsletter = styled.div`
   align-items: center;
   gap: 2.4rem;
   width: 100%;
+  h4 {
+    color: ${({ theme }) => theme.colors.yellow100};
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
+      3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
+  }
 `
 
-export const Text = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+const HeaderText = styled(HHero)`
+  width: 28.8rem;
   text-align: center;
+  color: ${({ theme }) => theme.colors.white};
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
+    3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
+
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
+    font-size: 4rem;
+    line-height: 1.25;
+  }
 `

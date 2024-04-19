@@ -59,7 +59,7 @@ export const CitizenshipCTA = ({
           href={EXTERNAL_LINKS.GENERAL_CHAT_DISCORD_CHANNEL}
           onClick={() => events.citizenshipShareDiscordEvent(profileId)}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener nofollow noreferrer"
         >
           <Button>Share on Discord</Button>
         </a>

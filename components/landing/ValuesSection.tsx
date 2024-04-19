@@ -12,14 +12,17 @@ export const ValuesSection = () => {
   return (
     <>
       <Title>What we believe</Title>
+      <Subtitle>
+        Our community shares three obvious truths. Most people agree with these
+        beliefs—but we don’t just talk about our ideals, we live them.
+      </Subtitle>
       <Content>
         <Value style={{ gridArea: 'a' }}>
-          <ValueTitle>
-            We are our best selves when we live with people we admire
-          </ValueTitle>
+          <ValueTitle>Live Near Friends </ValueTitle>
           <ValueBody>
-            Thanks to the power of the internet, we can connect with like-minded
-            individuals online and come together in person.
+            We are our best selves when we live with people we admire. Thanks to
+            the internet, we can connect with like-minded individuals online and
+            come together in-person to deepen relationships.
           </ValueBody>
         </Value>
 
@@ -36,10 +39,11 @@ export const ValuesSection = () => {
         />
 
         <Value style={{ gridArea: 'c' }}>
-          <ValueTitle>Touching grass is good for our wellbeing</ValueTitle>
+          <ValueTitle>Create Together</ValueTitle>
           <ValueBody>
-            Regenerative local communities are the most resilient and
-            sustainable way to grow an abundant future.
+            Co-creation builds trust among collaborators through transparency
+            and empowerment. We practice a culture of cooperation, reciprocity,
+            and do-ocracy.
           </ValueBody>
         </Value>
 
@@ -57,11 +61,12 @@ export const ValuesSection = () => {
         />
 
         <Value style={{ gridArea: 'e' }}>
-          <ValueTitle>Co-creation grows culture</ValueTitle>
+          <ValueTitle>Touch Grass</ValueTitle>
           <ValueBody>
-            Co-creation builds trust among collaborators through transparency
-            and empowerment. We practice a culture of co-creation, cooperation,
-            and reciprocity.
+            We spend time online, but we believe that unplugging from technology
+            and being present with people and nature is good for our well being.
+            Together, we grow regenerative local communities towards a
+            resilient, sustainable, abundant future.
           </ValueBody>
         </Value>
 
@@ -89,6 +94,12 @@ export const ValuesSection = () => {
 const Title = styled(H2)`
   font-family: ${fonts.inter};
   font-size: 3.2rem;
+`
+
+const Subtitle = styled(Body1)`
+  text-align: center;
+  font-size: 2.2rem;
+  max-width: 75rem;
   margin-bottom: 2rem;
 `
 

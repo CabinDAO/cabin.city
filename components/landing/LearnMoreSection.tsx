@@ -11,7 +11,7 @@ export const LearnMoreSection = () => {
       <Link
         href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=cabinweekpage`}
         target="_blank"
-        rel="noreferrer"
+        rel="noopener nofollow noreferrer"
       >
         <Button
           variant={'tertiary'}
@@ -24,10 +24,10 @@ export const LearnMoreSection = () => {
       <HorizontalList
         items={[
           {
-            title: "Check out Cabin's Vision",
+            title: 'Check out the Forum',
             body: 'Learn about how we’re co-creating a Network City with our community.',
             icon: 'account-group',
-            link: EXTERNAL_LINKS.VISION,
+            link: EXTERNAL_LINKS.FORUM,
           },
           {
             title: 'Join our online community',
