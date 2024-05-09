@@ -13,6 +13,7 @@ import { ValuesSection } from '@/components/landing/ValuesSection'
 import { SupperClubSection } from '@/components/landing/SupperClubSection'
 import { JourneySection } from '@/components/landing/JourneySection'
 import headerBg from './header.jpg'
+import { MapSection } from '@/components/landing/MapSection'
 
 export const LandingView = () => {
   return (
@@ -37,6 +38,10 @@ export const LandingView = () => {
       {/*  <HeroVideo />*/}
       {/*</LandingSection>*/}
 
+      <LandingSection fullWidth noVertPadding>
+        <MapSection />
+      </LandingSection>
+
       <LandingSection precedesNoVertPadding>
         <JourneySection />
       </LandingSection>
@@ -47,10 +52,6 @@ export const LandingView = () => {
 
       <LandingSection>
         <ValuesSection />
-      </LandingSection>
-
-      <LandingSection fullWidth variant={'dark'}>
-        <NeighborhoodShowcase />
       </LandingSection>
 
       <LandingSection title={'What people are saying'} variant={'light'}>
