@@ -37,7 +37,7 @@ export const JourneySection = () => {
   return (
     <>
       <Header>
-        <Icon name={'backpack-green'} size={8} />
+        {/*<Icon name={'backpack-green'} size={8} />*/}
         <Title>Join us on our journey</Title>
         <BodyText>
           We are a global network of local community builders. Together, we are
@@ -149,7 +149,7 @@ export const JourneySection = () => {
             <ValueTitle>Reach the summit</ValueTitle>
             <BodyText>
               Grow your local neighborhood into a modern village that’s part of
-              a global network city..
+              a global network city.
               <ul>
                 <li>
                   <AuthenticatedLink href={'/citizenship'}>

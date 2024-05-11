@@ -99,6 +99,13 @@ export type ProfileNewResponse =
     }
   | APIError
 
+export type ProfileStatsResponse =
+  | {
+      profiles: number
+      citizens: number
+    }
+  | APIError
+
 export type ProfileVouchParams = {
   externId: string
   action: 'vouch' | 'unvouch'

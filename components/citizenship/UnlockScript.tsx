@@ -3,7 +3,7 @@ import { useEvent } from 'react-use'
 import { useProfile } from '../auth/useProfile'
 import { useCitizenship } from '../hooks/useCitizenship'
 import { CitizenshipStatus } from '@/utils/types/profile'
-import { unlockConfig } from '@/lib/protocol-config'
+import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
 import { appDomainWithProto } from '@/utils/display-utils'
@@ -13,8 +13,8 @@ import { expandRoute } from '@/utils/routes'
 export const loadUnlockCheckout = async (provider: any) => {
   const paywallConfig = {
     locks: {
-      [unlockConfig.contractAddress]: {
-        network: unlockConfig.chainId,
+      [unlockConfigForEnv.contractAddress]: {
+        network: unlockConfigForEnv.chainId,
         recurringPayments: 10,
       },
     },
@@ -70,7 +70,7 @@ export const UnlockScript = () => {
   // Check status to see if the user minted
   useEvent('unlockProtocol.closeModal', checkStatus)
 
-  if (!unlockConfig.contractAddress || !unlockConfig.chainId) {
+  if (!unlockConfigForEnv.contractAddress || !unlockConfigForEnv.chainId) {
     console.error('Missing config for UnlockScript')
     return null
   }

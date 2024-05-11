@@ -4,6 +4,7 @@ import { SubscribeForm } from '@/components/landing/SubscribeForm'
 import { Button } from '@/components/core/Button'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const HeroSection = () => {
   return (
@@ -14,7 +15,9 @@ export const HeroSection = () => {
         </HeaderText>
         <ButtonWrapper>
           <Buttons>
-            <Button>Find one near you</Button>
+            <AuthenticatedLink href="/experiences">
+              <Button>Find one near you</Button>
+            </AuthenticatedLink>
             <Link
               href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
               target="_blank"
@@ -25,10 +28,10 @@ export const HeroSection = () => {
           </Buttons>
         </ButtonWrapper>
       </TopWrapper>
-      <Newsletter>
-        <H4>Subscribe to our newsletter</H4>
-        <SubscribeForm />
-      </Newsletter>
+      {/*<Newsletter>*/}
+      {/*  <H4>Subscribe to our newsletter</H4>*/}
+      {/*  <SubscribeForm />*/}
+      {/*</Newsletter>*/}
     </Content>
   )
 }
@@ -46,11 +49,12 @@ const Content = styled.div`
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
     gap: 16rem;
-    margin-bottom: 6rem;
+    margin-bottom: 12rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     width: 67rem;
+    margin-bottom: 16rem;
   }
 `
 

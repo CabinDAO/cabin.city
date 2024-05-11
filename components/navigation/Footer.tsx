@@ -28,13 +28,6 @@ export const Footer = () => {
               >
                 <Name>City Directory</Name>
               </AppLink>
-              <AppLink
-                external
-                href={EXTERNAL_LINKS.CARETAKER_TYPEFORM}
-                iconSize={0}
-              >
-                <Name>List Your Property</Name>
-              </AppLink>
               <AppLink external href={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
                 <Name>Citizenship</Name>
               </AppLink>

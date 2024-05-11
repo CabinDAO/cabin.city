@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import headerBg from './header.jpg'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { TestimonialSection } from './TestimonialSection'
@@ -8,12 +9,11 @@ import { LandingSection } from './LandingSection'
 import { TwitterSection } from './TwitterSection'
 import { FeaturedInSection } from './FeaturedInSection'
 import { LearnMoreSection } from './LearnMoreSection'
-import { NeighborhoodShowcase } from '@/components/landing/NeighborhoodShowcase'
 import { ValuesSection } from '@/components/landing/ValuesSection'
 import { SupperClubSection } from '@/components/landing/SupperClubSection'
 import { JourneySection } from '@/components/landing/JourneySection'
-import headerBg from './header.jpg'
 import { MapSection } from '@/components/landing/MapSection'
+import { SubscribeSection } from '@/components/landing/SubscribeSection'
 
 export const LandingView = () => {
   return (
@@ -42,8 +42,12 @@ export const LandingView = () => {
         <MapSection />
       </LandingSection>
 
-      <LandingSection precedesNoVertPadding>
+      <LandingSection>
         <JourneySection />
+      </LandingSection>
+
+      <LandingSection precedesNoVertPadding>
+        <SubscribeSection />
       </LandingSection>
 
       <LandingSection fullWidth noVertPadding variant={'light'}>
@@ -65,7 +69,7 @@ export const LandingView = () => {
 
       <LandingSection
         title={'Want to learn more?'}
-        icon={'hand-wave-green'}
+        // icon={'hand-wave-green'}
         precedesNoVertPadding
       >
         <LearnMoreSection />

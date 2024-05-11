@@ -11,7 +11,7 @@ import { shortenedAddress } from '@/utils/display-utils'
 import { format } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
-import { unlockConfig } from '@/lib/protocol-config'
+import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { getUnlockOpenseaUrl } from '@/lib/opensea'
 import Icon from '@/components/core/Icon'
 import { useProfile } from '@/components/auth/useProfile'
@@ -98,7 +98,7 @@ export const ProfileVerifiedCitizenship = ({
             })}
           </Subline2>
           <Subline2 $color="yellow100">
-            Address {shortenedAddress(unlockConfig.contractAddress)}
+            Address {shortenedAddress(unlockConfigForEnv.contractAddress)}
           </Subline2>
           {!!vouchedBy && (
             <VouchedByContainer>

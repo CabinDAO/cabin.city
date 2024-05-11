@@ -49,7 +49,7 @@ const Container = styled.div<ContainerProps>`
       precedesNoVertPadding ? 'xl' : noVertPadding ? 'none' : 'xl_half'
     )};
 
-  &.noVertPadding + & {
+  &.noVertPadding + &:not(.noVertPadding) {
     ${padding.top('xl')};
   }
 

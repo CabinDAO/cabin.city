@@ -21,18 +21,17 @@ export const SupperClubSection = () => {
         />
 
         <Text>
-          <Subline1>Get started</Subline1>
-          <Title>Make meaningful connections in the Cabin community</Title>
+          <Title>Upgrade your neighborhood</Title>
           <Body>
-            Supper Club is the kindling to our fire. Get together with friends
-            to grow community, discuss your favorite topics, and start fanning
-            the flame of new ways of living.
+            Make friends with your neighbors and make neighbors out of your
+            friends. Cabin&apos;s neighborhood steward cohort program can guide
+            you every step of the way.
           </Body>
           <Buttons>
-            <Link href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}>
-              <Button variant={'primary'}>Attend a Supper Club</Button>
+            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_TYPEFORM}>
+              <Button variant={'primary'}>Get started</Button>
             </Link>
-            <Link href={EXTERNAL_LINKS.SUPPER_CLUB_INFO}>
+            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}>
               <Button variant={'secondary'}>Learn more</Button>
             </Link>
           </Buttons>
@@ -93,7 +92,7 @@ const Title = styled(H4)`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    max-width: 42rem;
+    max-width: 44rem;
   }
 `
 
@@ -105,7 +104,7 @@ const Body = styled(Body1)`
   }
 
   ${({ theme }) => theme.bp.lg} {
-    max-width: 42rem;
+    max-width: 44rem;
   }
 `
 

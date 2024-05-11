@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import Link from 'next/link'
-import { unlockConfig } from '@/lib/protocol-config'
+import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
 import { useProfile } from '@/components/auth/useProfile'
 import { CitizenshipStatus } from '@/utils/types/profile'
@@ -39,11 +39,11 @@ export const CitizenNFTContainer = () => {
 
   const contractData = {
     'Contract Address': {
-      value: shortenedAddress(unlockConfig.contractAddress) ?? '',
-      url: `${unlockConfig.etherscanUrl}/address/${unlockConfig.contractAddress}`,
+      value: shortenedAddress(unlockConfigForEnv.contractAddress) ?? '',
+      url: `${unlockConfigForEnv.etherscanUrl}/address/${unlockConfigForEnv.contractAddress}`,
       external: true,
     },
-    Blockchain: { value: capitalize(unlockConfig.networkName) ?? '' },
+    Blockchain: { value: capitalize(unlockConfigForEnv.networkName) ?? '' },
   }
 
   return (
