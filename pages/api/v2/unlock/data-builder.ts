@@ -4,7 +4,7 @@ import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { CabinToken__factory } from '@/generated/ethers'
 import { CitizenshipStatus } from '@/utils/types/profile'
-import { cabinTokenConfig, unlockConfig } from '@/lib/protocol-config'
+import { cabinTokenConfig, unlockConfigForEnv } from '@/lib/protocol-config'
 import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
 
 type ResponseJson = {
@@ -37,7 +37,7 @@ export default async function handler(
 
   const payload = coder.encode(['bool', 'uint256'], [canMint, cabinBalance])
 
-  const chainId = BigInt(unlockConfig.chainId)
+  const chainId = BigInt(unlockConfigForEnv.chainId)
 
   const digest = coder.encode(
     ['string', 'address', 'uint256'],

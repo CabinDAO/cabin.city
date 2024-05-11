@@ -37,7 +37,7 @@ export const Badge = ({ name, src, badgeId }: BadgeProps) => {
         <a
           href={getOtterSpaceOpenseaUrl(badgeId)}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener nofollow noreferrer"
         >
           <Icon name="up-right-arrow" color="green900" size={1.1} />
         </a>

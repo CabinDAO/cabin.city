@@ -4,6 +4,7 @@ enum Routes {
   PROFILE = `/profile/[externId]`,
   PROFILE_NEW = `/profile/new`,
   PROFILE_LIST = `/profile/list`,
+  PROFILE_STATS = '/profile/stats',
   PROFILE_VOUCH = `/profile/vouch`,
   PROFILE_VOTES = `/profile/votes`,
   PROFILE_ME = `/profile/me`,

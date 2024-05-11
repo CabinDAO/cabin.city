@@ -97,7 +97,7 @@ type UnlockConfig = {
   etherscanUrl: string
 }
 
-export const unlockConfig: UnlockConfig = getAppConfig({
+export const unlockConfigs: { [key in 'dev' | 'prod']: UnlockConfig } = {
   dev: {
     networkName: 'sepolia',
     chainId: 11155111,
@@ -110,4 +110,6 @@ export const unlockConfig: UnlockConfig = getAppConfig({
     contractAddress: '0x45accac0e5c953009cda713a3b722f87f2907f86',
     etherscanUrl: 'https://optimistic.etherscan.io',
   },
-})
+}
+
+export const unlockConfigForEnv: UnlockConfig = getAppConfig(unlockConfigs)

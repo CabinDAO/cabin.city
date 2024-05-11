@@ -24,7 +24,7 @@ export const ModalActionBar = (props: ModalActionBarProps) => {
           href={locationHref}
           onClick={handleActionClick}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener nofollow noreferrer"
         >
           <Button isFullWidth onClick={handleActionClick}>
             {text}

@@ -39,7 +39,12 @@ export const HorizontalList = ({
             </Item>
           )
           return i.link ? (
-            <Link key={index} href={i.link} target="_blank" rel="noreferrer">
+            <Link
+              key={index}
+              href={i.link}
+              target="_blank"
+              rel="noopener nofollow"
+            >
               {item}
             </Link>
           ) : (

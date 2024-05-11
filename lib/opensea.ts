@@ -1,5 +1,5 @@
 import { tokenIdFromBadgeId } from '@/lib/otterspace/otterspace-utils'
-import { otterspaceConfig, unlockConfig } from 'lib/protocol-config'
+import { otterspaceConfig, unlockConfigForEnv } from 'lib/protocol-config'
 
 export const getOtterSpaceOpenseaUrl = (badgeId: string) => {
   const tokenId = tokenIdFromBadgeId(badgeId)
@@ -9,8 +9,8 @@ export const getOtterSpaceOpenseaUrl = (badgeId: string) => {
 }
 
 export const getUnlockOpenseaUrl = (tokenId: number) => {
-  return `${getOpenSeaNetworkUrl(unlockConfig.networkName)}/${
-    unlockConfig.contractAddress
+  return `${getOpenSeaNetworkUrl(unlockConfigForEnv.networkName)}/${
+    unlockConfigForEnv.contractAddress
   }/${tokenId}`
 }
 

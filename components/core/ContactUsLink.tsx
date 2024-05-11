@@ -20,8 +20,8 @@ export const ContactUsLink = ({
     <StyledLink
       href={base + (params ? `?${params}` : '')}
       style={{ textDecoration: 'underline' }}
-      target={'_blank'}
-      rel={'noreferer'}
+      target="_blank"
+      rel="noopener nofollow noreferrer"
     >
       {children}
     </StyledLink>

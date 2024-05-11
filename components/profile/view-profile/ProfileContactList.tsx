@@ -40,7 +40,7 @@ const ContactField = ({ field }: ContactFieldProps) => {
 
   if (url) {
     return (
-      <a href={url} target="_blank" rel="noreferrer">
+      <a href={url} target="_blank" rel="noopener nofollow noreferrer">
         <Caption emphasized>{formatContactField(field)}</Caption>
       </a>
     )

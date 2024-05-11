@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { HTMLAttributes } from 'react'
 
-export type LandingSectionVariant = 'default' | 'light' | 'dark'
+export type LandingSectionVariant = 'default' | 'light' | 'dark' | 'clear'
 
 export const SectionContent = styled.div`
   display: flex;

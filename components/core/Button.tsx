@@ -4,7 +4,13 @@ import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
 import React, { MouseEventHandler } from 'react'
 
-type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link' | 'link-slim'
+type ButtonVariant =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'link'
+  | 'link-slim'
+  | 'link-inverted'
 
 interface StyledButtonProps {
   variant: ButtonVariant
@@ -84,8 +90,13 @@ const StyledButton = styled(motion.button)<StyledButtonProps>`
           `}
         `
       case 'link':
+      case 'link-slim':
+      case 'link-inverted':
         return css`
-          color: ${({ theme }) => theme.colors.green900};
+          color: ${({ theme }) =>
+            variant === 'link-inverted'
+              ? theme.colors.white
+              : theme.colors.green900};
           box-shadow: none;
           transition: all 0.2s ease-in-out;
 
@@ -177,6 +188,17 @@ export const Button = ({
       }
       tapAnimation = {
         backgroundColor: theme.colors.yellow100,
+      }
+      initial = {
+        backgroundColor: 'transparent',
+      }
+      break
+    case 'link-inverted':
+      hoverAnimation = {
+        // color: theme.colors.green400,
+      }
+      tapAnimation = {
+        // color: theme.colors.green400,
       }
       initial = {
         backgroundColor: 'transparent',

@@ -17,7 +17,7 @@ export const EMPTY = '—'
 // Utility functions for displaying numbers compactly. e.g. 1000 -> 1k
 const SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E']
 
-export const formatValue = (value: number): string => {
+export const formatValue = (value: number, precision = 2): string => {
   const tier = (Math.log10(Math.abs(value)) / 3) | 0
 
   if (tier == 0) return value.toString()
@@ -27,7 +27,7 @@ export const formatValue = (value: number): string => {
 
   const scaled = value / scale
 
-  return parseFloat(scaled.toFixed(2)) + suffix
+  return parseFloat(scaled.toFixed(precision)) + suffix
 }
 
 export const pxToRem = (px: number) => `${px / 10}`

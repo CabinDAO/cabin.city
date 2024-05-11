@@ -11,7 +11,7 @@ import {
 import { AddressFragmentType } from '@/utils/types/location'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
-import { unlockConfig } from '@/lib/protocol-config'
+import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import {
   Wallet,
@@ -184,7 +184,7 @@ export async function grantOrExtendCitizenship(
   }
 
   const address = profile.wallet.address
-  const provider = getEthersAlchemyProvider(unlockConfig.networkName)
+  const provider = getEthersAlchemyProvider(unlockConfigForEnv.networkName)
 
   const privateKey = process.env.SIGNER_PRIVATE_KEY
   if (!privateKey) {
@@ -194,7 +194,7 @@ export async function grantOrExtendCitizenship(
   const wallet = new Wallet(privateKey, provider)
 
   const lockContract = PublicLock__factory.connect(
-    unlockConfig.contractAddress,
+    unlockConfigForEnv.contractAddress,
     wallet
   )
 

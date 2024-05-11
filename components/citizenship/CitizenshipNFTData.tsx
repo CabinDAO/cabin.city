@@ -54,7 +54,7 @@ export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
         <a
           href={EXTERNAL_LINKS.UNLOCK_KEY_MANAGE}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener nofollow noreferrer"
         >
           <Button isFullWidth variant="secondary">
             Manage
