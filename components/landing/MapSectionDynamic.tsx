@@ -25,6 +25,7 @@ export const MapSectionDynamic = ({ data }: { data: MapData }) => {
   // const mapRef = useRef(null)
   const { width } = useWindowSize()
   const { deviceSize } = useDeviceSize()
+
   L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling)
 
   return (
