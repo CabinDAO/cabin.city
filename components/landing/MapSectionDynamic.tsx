@@ -1,13 +1,6 @@
 import React, { useRef } from 'react'
 import { useWindowSize } from 'react-use'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileStatsResponse } from '@/utils/types/profile'
-import {
-  LocationSort,
-  LocationListParamsType,
-  LocationListResponse,
-} from '@/utils/types/location'
 import * as L from 'leaflet'
 import { MapContainer, TileLayer, Popup, CircleMarker } from 'react-leaflet'
 import { GestureHandling } from 'leaflet-gesture-handling'
@@ -18,55 +11,31 @@ import theme from '@/styles/theme'
 import { h1Styles } from '@/components/core/Typography'
 import { formatValue } from '@/utils/display-utils'
 
-export const MapSectionDynamic = () => {
+export type MapData = {
+  members: number
+  citizens: number
+  locations: {
+    label: string
+    lat: number
+    lng: number
+  }[]
+}
+
+export const MapSectionDynamic = ({ data }: { data: MapData }) => {
   // const mapRef = useRef(null)
   const { width } = useWindowSize()
   const { deviceSize } = useDeviceSize()
-  const { useGet } = useBackend()
-
-  const { data: stats } = useGet<ProfileStatsResponse>('PROFILE_STATS')
-  const { data: locationData } = useGet<LocationListResponse>('LOCATION_LIST', {
-    sort: LocationSort.votesDesc,
-  } as LocationListParamsType)
-
-  const neighborhoods: {
-    [key: string]: {
-      lat: number
-      lng: number
-    }
-  } = {
-    'Spy Pond': { lat: 42.4153, lng: -71.1564729 },
-    'Larkspur, CA': { lat: 37.9340915, lng: -122.5352539 },
-    'North Boulder Park': { lat: 40.0149856, lng: -105.2705456 },
-    'Oakland, CA': { lat: 37.8043514, lng: -122.2711639 },
-    'Eden Forest Collective': { lat: 34.4480495, lng: -119.242889 },
-    'Curiosity Courtyard': { lat: 33.9850469, lng: -118.4694832 },
-  }
-
-  if (!(!locationData || 'error' in locationData)) {
-    for (const location of locationData.locations) {
-      if (location.address && location.address.lat && location.address.lng) {
-        neighborhoods[location.name] = {
-          lat: location.address.lat,
-          lng: location.address.lng,
-        }
-      }
-    }
-  }
-
   L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling)
 
   return (
     <>
-      {!(!stats || 'error' in stats) && (
-        <Stats>
-          <span>{formatValue(stats.profiles, 1)} Members</span>
-          {deviceSize !== 'mobile' && <span>|</span>}
-          <span>{stats.citizens} Citizens</span>
-          {deviceSize !== 'mobile' && <span>|</span>}
-          <span>{Object.keys(neighborhoods).length} Neighborhoods</span>
-        </Stats>
-      )}
+      <Stats>
+        <span>{formatValue(data.members, 1)} Members</span>
+        {deviceSize !== 'mobile' && <span>|</span>}
+        <span>{data.citizens} Citizens</span>
+        {deviceSize !== 'mobile' && <span>|</span>}
+        <span>{data.locations.length} Neighborhoods</span>
+      </Stats>
       <Map>
         <MapContainer
           // ref={mapRef}
@@ -87,15 +56,15 @@ export const MapSectionDynamic = () => {
             url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {Object.keys(neighborhoods).map((key) => (
+          {data.locations.map((l, i) => (
             <CircleMarker
-              key={key}
-              center={[neighborhoods[key].lat, neighborhoods[key].lng]}
+              key={i}
+              center={[l.lat, l.lng]}
               radius={12}
               color={theme.colors.green800}
               fillColor={theme.colors.green400}
             >
-              <Pin>{key}</Pin>
+              <Pin>{l.label}</Pin>
             </CircleMarker>
           ))}
         </MapContainer>

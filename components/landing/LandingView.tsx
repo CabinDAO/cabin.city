@@ -1,3 +1,4 @@
+import { MapData } from '@/components/landing/MapSectionDynamic'
 import styled from 'styled-components'
 import headerBg from './header.jpg'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
@@ -15,7 +16,7 @@ import { JourneySection } from '@/components/landing/JourneySection'
 import { MapSection } from '@/components/landing/MapSection'
 import { SubscribeSection } from '@/components/landing/SubscribeSection'
 
-export const LandingView = () => {
+export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
     <StyledLayout variant="full">
       <LandingSection
@@ -39,7 +40,7 @@ export const LandingView = () => {
       {/*</LandingSection>*/}
 
       <LandingSection fullWidth noVertPadding>
-        <MapSection />
+        <MapSection data={mapData} />
       </LandingSection>
 
       <LandingSection>
