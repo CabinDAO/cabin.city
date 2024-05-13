@@ -2,9 +2,8 @@ import Head from 'next/head'
 import { NextSeo } from 'next-seo'
 import { appDomainWithProto } from '@/utils/display-utils'
 
-// TODO: Update title/description
 const DEFAULT_TITLE = 'Cabin'
-const DESCRIPTION = 'Colive with friends in nature'
+const DESCRIPTION = `Neighborhoods that you’d want to grow up in`
 
 export interface AppHeadProps {
   description?: string
