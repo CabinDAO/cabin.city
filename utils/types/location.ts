@@ -1,11 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 import { Prisma } from '@prisma/client'
-import {
-  AvatarFragmentType,
-  ProfileBasicFragment,
-  ProfileNewParams,
-} from '@/utils/types/profile'
+import { AvatarFragmentType, ProfileBasicFragment } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { APIError, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'
@@ -25,7 +21,8 @@ export enum LocationMediaCategory {
 
 export enum LocationSort {
   nameAsc = 'nameAsc',
-  votesDesc = 'votesDesc',
+  membersDesc = 'membersDesc',
+  distAsc = 'distAsc',
 }
 
 export const AddressFragment = z
@@ -52,7 +49,7 @@ export type ShortAddressFragmentType = Pick<
   'locality' | 'admininstrativeAreaLevel1Short' | 'country' | 'countryShort'
 >
 
-export type RecentVoterFragment = {
+export type RecentMemberFragment = {
   externId: string
   avatar: AvatarFragmentType
 }
@@ -66,19 +63,15 @@ export type LocationFragment = {
   description: string
   address: AddressFragmentType | null
   bannerImageIpfsHash: string
-  sleepCapacity: number
-  internetSpeedMbps: number
-  caretaker: ProfileBasicFragment
-  caretakerEmail: string | null
-  publishedAt: string | null
+  steward: ProfileBasicFragment
   mediaItems: {
     category: LocationMediaCategory
     ipfsHash: string
   }[]
   // offers: OfferItemFragment[]
   offerCount: number
-  recentVoters: RecentVoterFragment[]
-  voteCount: number
+  memberCount: number
+  recentMembers: RecentMemberFragment[]
 }
 
 export const LocationListParams = z
@@ -86,6 +79,9 @@ export const LocationListParams = z
     offerType: z.nativeEnum(OfferType).optional(),
     locationType: z.nativeEnum(LocationType).optional(),
     sort: z.nativeEnum(LocationSort).optional(),
+    lat: z.number().optional(),
+    lng: z.number().optional(),
+    maxDist: z.number().optional(),
     page: z.coerce.number().optional(),
   })
   .strict()
@@ -97,16 +93,18 @@ export type LocationListResponse =
     } & Paginated)
   | APIError
 
-export type LocationMineResponse = {
-  locations?: LocationFragment[]
-  count?: number
-  error?: string
-}
+export type LocationMineResponse =
+  | {
+      locations: LocationFragment[]
+      count: number
+    }
+  | APIError
 
-export type LocationGetResponse = {
-  location?: LocationFragment | null
-  error?: string
-}
+export type LocationGetResponse =
+  | {
+      location: LocationFragment
+    }
+  | APIError
 
 export type LocationNewResponse = {
   locationExternId?: string
@@ -118,9 +116,6 @@ export const LocationEditParams = z.object({
   tagline: z.string().optional(),
   description: z.string().optional(),
   address: AddressFragment.nullable().optional(),
-  sleepCapacity: z.number().optional(),
-  internetSpeedMbps: z.number().optional(),
-  caretakerEmail: z.string().nullable().optional(),
   bannerImageIpfsHash: z.string().optional(),
   mediaItems: z
     .array(
@@ -142,16 +137,11 @@ export type LocationDeleteResponse = {
   error?: string
 }
 
-export type LocationPublishResponse = {
-  publishedAt?: string
-  error?: string
-}
-
 // must match LocationQueryInclude below
 export type LocationWithRelations = Prisma.LocationGetPayload<{
   include: {
     address: true
-    caretaker: {
+    steward: {
       include: {
         avatar: {
           select: {
@@ -171,24 +161,24 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
       }
     }
     mediaItems: true
-    votes: {
+    members: {
       select: {
-        count: true
-        profile: {
+        externId: true
+        avatar: {
           select: {
-            externId: true
-            avatar: {
-              select: {
-                url: true
-              }
-            }
+            url: true
           }
         }
       }
+      orderBy: {
+        updatedAt: 'desc'
+      }
+      take: 3
     }
     _count: {
       select: {
         offers: true
+        members: true
       }
     }
   }
@@ -197,7 +187,7 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
 // must match LocationWithRelations type above
 export const LocationQueryInclude = {
   address: true,
-  caretaker: {
+  steward: {
     include: {
       avatar: {
         select: {
@@ -217,24 +207,24 @@ export const LocationQueryInclude = {
     },
   },
   mediaItems: true,
-  votes: {
+  members: {
     select: {
-      count: true,
-      profile: {
+      externId: true,
+      avatar: {
         select: {
-          externId: true,
-          avatar: {
-            select: {
-              url: true,
-            },
-          },
+          url: true,
         },
       },
     },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+    take: 3,
   },
   _count: {
     select: {
       offers: true,
+      members: true,
     },
   },
 } satisfies Prisma.LocationInclude

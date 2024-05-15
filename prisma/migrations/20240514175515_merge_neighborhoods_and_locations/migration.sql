@@ -1,0 +1,40 @@
+/*
+  Warnings:
+
+  - You are about to drop the column `caretakerEmail` on the `Location` table. All the data in the column will be lost.
+  - You are about to drop the column `caretakerId` on the `Location` table. All the data in the column will be lost.
+  - You are about to drop the column `internetSpeedMbps` on the `Location` table. All the data in the column will be lost.
+  - You are about to drop the column `publishedAt` on the `Location` table. All the data in the column will be lost.
+  - You are about to drop the column `sleepCapacity` on the `Location` table. All the data in the column will be lost.
+  - You are about to drop the `Neighborhood` table. If the table is not empty, all the data it contains will be lost.
+
+*/
+
+DELETE FROM "Location" where "publishedAt" is null;
+UPDATE "Location" set type = 'Outpost';
+
+-- DropForeignKey
+ALTER TABLE "Profile" DROP CONSTRAINT "Profile_neighborhoodId_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Location" DROP CONSTRAINT "Location_caretakerId_fkey";
+
+ALTER TABLE "Location" RENAME COLUMN "caretakerId" to "stewardId";
+
+-- AlterTable
+ALTER TABLE "Location" DROP COLUMN "caretakerEmail",
+DROP COLUMN "internetSpeedMbps",
+DROP COLUMN "publishedAt",
+DROP COLUMN "sleepCapacity",
+ADD COLUMN  "groupchatUrl" TEXT;
+
+-- DropTable
+DROP TABLE "Neighborhood";
+
+UPDATE "Profile" set "neighborhoodId" = null;
+
+-- AddForeignKey
+ALTER TABLE "Profile" ADD CONSTRAINT "Profile_neighborhoodId_fkey" FOREIGN KEY ("neighborhoodId") REFERENCES "Location" ("id")  ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Location" ADD CONSTRAINT "Location_stewardId_fkey" FOREIGN KEY ("stewardId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -7,15 +7,17 @@ import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   LocationFragment,
   LocationListParams,
+  LocationListParamsType,
   LocationListResponse,
-  LocationSort,
-  LocationType,
   LocationMediaCategory,
   LocationQueryInclude,
+  LocationSort,
+  LocationType,
   LocationWithRelations,
 } from '@/utils/types/location'
-import { OfferType } from '@/utils/types/offer'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+
+export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
@@ -37,13 +39,15 @@ async function handler(
   const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
   const take = PAGE_SIZE
 
-  const idsInOrder = await sortByVoteCountPrequery(
-    params.sort || LocationSort.nameAsc,
-    params.offerType,
-    params.locationType,
-    skip,
-    take
-  )
+  if (
+    params.sort == LocationSort.distAsc &&
+    (params.lat === undefined || params.lng === undefined)
+  ) {
+    res.status(400).send({ error: 'Missing lat/lng for distance sort' })
+    return
+  }
+
+  const idsInOrder = await sortPrequery(params, skip, take)
 
   const query: Prisma.LocationFindManyArgs = {
     where: { id: { in: idsInOrder } },
@@ -70,36 +74,57 @@ async function handler(
 }
 
 // get ids for locations sorted in proper order
-const sortByVoteCountPrequery = async (
-  sort: LocationSort,
-  offerType: OfferType | undefined,
-  locationType: LocationType | undefined,
+const sortPrequery = async (
+  params: LocationListParamsType,
   offset: number,
   limit: number
 ) => {
-  const ids = await prisma.$queryRaw<{ id: number }[]>`
-    SELECT l.id
+  const sort = params.sort || LocationSort.nameAsc
+
+  const sortByDist = sort === LocationSort.distAsc && params.lat && params.lng
+  const maxDistance = sortByDist ? params.maxDist || 100 : null
+  const distQuery = sortByDist
+    ? Prisma.sql`(6371 * 2 * ASIN(SQRT(
+      POWER(SIN((radians(a.lat) - radians(${params.lat})) / 2), 2) +
+      COS(radians(${params.lat})) * COS(radians(a.lat)) *
+      POWER(SIN((radians(a.lng) - radians(${params.lng})) / 2), 2)
+    )))`
+    : Prisma.sql`0`
+
+  const ids = await prisma.$queryRaw<{ id: number; distance_in_km: number }[]>`
+    SELECT l.id, ${distQuery} AS distance_in_km
     FROM "Location" l
     ${
-      offerType
-        ? Prisma.sql`INNER JOIN "Offer" o ON l.id = o."locationId" AND o.type = ${offerType}`
+      sortByDist
+        ? Prisma.sql`INNER JOIN "Address" a ON l.id = a."locationId"`
         : Prisma.empty
     }
-    LEFT JOIN "LocationVote" lv ON l.id = lv."locationId"
-    WHERE l."publishedAt" IS NOT NULL AND ${
-      locationType ? Prisma.sql`l.type = ${locationType}` : Prisma.sql`1=1`
+    ${
+      params.offerType
+        ? Prisma.sql`INNER JOIN "Offer" o ON l.id = o."locationId" AND o.type = ${params.offerType}`
+        : Prisma.empty
+    }
+    LEFT JOIN "Profile" mem ON l.id = mem."neighborhoodId"
+    WHERE ${
+      params.locationType
+        ? Prisma.sql`l.type = ${params.locationType}`
+        : Prisma.sql`1=1`
     }
     GROUP BY l.id
     ORDER BY ${
-      sort === LocationSort.votesDesc
-        ? Prisma.sql`COALESCE(SUM(lv.count), 0) DESC,`
+      sortByDist
+        ? Prisma.sql`distance_in_km ASC,`
+        : sort === LocationSort.membersDesc
+        ? Prisma.sql`COALESCE(COUNT(mem.id), 0) DESC,`
         : Prisma.empty
     } l.name ASC, l."createdAt" ASC
     LIMIT ${limit}
     OFFSET ${offset}
   `
 
-  return ids.reduce((acc: number[], val) => [...acc, val.id], [])
+  return ids
+    .filter((row) => !maxDistance || row.distance_in_km <= maxDistance)
+    .reduce((ids: number[], row) => [...ids, row.id], [])
 }
 
 export const locationToFragment = (
@@ -130,30 +155,26 @@ export const locationToFragment = (
         }
       : null,
     bannerImageIpfsHash: loc.bannerImageIpfsHash,
-    sleepCapacity: loc.sleepCapacity,
-    internetSpeedMbps: loc.internetSpeedMbps,
-    caretaker: {
-      createdAt: loc.caretaker.createdAt.toISOString(),
-      externId: loc.caretaker.externId,
-      name: loc.caretaker.name,
-      email: loc.caretaker.email,
-      bio: loc.caretaker.bio,
-      citizenshipStatus: loc.caretaker
+    steward: {
+      createdAt: loc.steward.createdAt.toISOString(),
+      externId: loc.steward.externId,
+      name: loc.steward.name,
+      email: loc.steward.email,
+      bio: loc.steward.bio,
+      citizenshipStatus: loc.steward
         .citizenshipStatus as CitizenshipStatus | null,
-      cabinTokenBalanceInt: loc.caretaker.wallet.cabinTokenBalance.toNumber(),
-      avatar: loc.caretaker.avatar
+      cabinTokenBalanceInt: loc.steward.wallet.cabinTokenBalance.toNumber(),
+      avatar: loc.steward.avatar
         ? {
-            url: loc.caretaker.avatar.url,
+            url: loc.steward.avatar.url,
           }
         : undefined,
-      roles: loc.caretaker.roles.map((role) => ({
+      roles: loc.steward.roles.map((role) => ({
         hatId: role.walletHat?.hatId || null,
         type: role.type as RoleType,
         level: role.level as RoleLevel,
       })),
     },
-    caretakerEmail: loc.caretakerEmail,
-    publishedAt: loc.publishedAt ? loc.publishedAt.toISOString() : null,
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,
@@ -161,20 +182,14 @@ export const locationToFragment = (
       }
     }),
     offerCount: loc._count.offers,
-    recentVoters: loc.votes.slice(0, 3).map((vote) => {
+    memberCount: loc._count.members,
+    recentMembers: loc.members.map((m) => {
       return {
-        externId: vote.profile.externId,
+        externId: m.externId,
         avatar: {
-          url: vote.profile.avatar ? vote.profile.avatar.url : '',
+          url: m.avatar ? m.avatar.url : '',
         },
       }
     }),
-    voteCount: loc.votes
-      .map((vote) => {
-        return vote.count
-      })
-      .reduce((a, b) => a + b, 0),
   }
 }
-
-export default withAuth(handler)

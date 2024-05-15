@@ -24,16 +24,11 @@ export const PhotoGalleryStep = ({
   location,
   steps,
 }: StepProps) => {
+  const { showError } = useError()
   const { updateLocation } = useUpdateLocation(location.externId)
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [highlightErrors, setHighlightErrors] = useState(false)
-  const [uploadingByCategory, setUploadingByCategory] = useState<{
-    [key in LocationMediaCategory]: boolean
-  }>({
-    [LocationMediaCategory.Sleeping]: false,
-    [LocationMediaCategory.Working]: false,
-    [LocationMediaCategory.Features]: false,
-  })
+  const [uploading, setUploading] = useState(false)
 
   const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     bannerImageIpfsHash: location.bannerImageIpfsHash,
@@ -43,30 +38,10 @@ export const PhotoGalleryStep = ({
     })),
   })
 
-  const getImagesForCategory = (category: LocationMediaCategory) => {
-    const imagesForCategory = locationInput.mediaItems?.filter(
-      (mediaItem) => mediaItem?.category === category
-    )
-
-    if (!imagesForCategory) return []
-
-    const ipfsHashList = imagesForCategory.map(
-      (mediaItem) => mediaItem?.ipfsHash ?? ''
-    ) as string[]
-
-    return unique<string>(ipfsHashList)
-  }
-
-  const resolvedbannerImageIpfsHash = locationInput?.bannerImageIpfsHash
-
-  const { showError } = useError()
-
   const handleNext = async () => {
     if (
       !locationInput.bannerImageIpfsHash ||
-      !getImagesForCategory(LocationMediaCategory.Sleeping).length ||
-      !getImagesForCategory(LocationMediaCategory.Working).length ||
-      !getImagesForCategory(LocationMediaCategory.Features).length
+      !locationInput.mediaItems?.length
     ) {
       setHighlightErrors(true)
       showError(REQUIRED_SECTIONS_TOAST_ERROR)
@@ -77,17 +52,13 @@ export const PhotoGalleryStep = ({
   }
 
   const handleFilesUploaded = async (
-    fileNameIpfsHashMap: FileNameIpfsHashMap,
-    category: LocationMediaCategory
+    fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
-    setUploadingByCategory((prev) => ({
-      ...prev,
-      [category]: false,
-    }))
+    setUploading(false)
 
     const newImages = Object.values(fileNameIpfsHashMap).map((ipfsHash) => ({
       ipfsHash,
-      category,
+      category: LocationMediaCategory.Features,
     }))
 
     const currentImages = locationInput.mediaItems ?? []
@@ -136,91 +107,36 @@ export const PhotoGalleryStep = ({
         onFilesUploaded={handleBannerFileUploaded}
         uploading={uploadingBanner}
         title="Neighborhood banner image"
-        instructions="This picture will be your banner on the listing page. It will be trimmed to a 7:3 ratio for desktop and 1:1 for mobile. Thus, it's best to put the main focus in the center to avoid unwanted trimming. Choose a JPG or PNG no larger than 5 MB."
+        instructions="This picture will be your banner on the neighborhood page. It will be trimmed to a 7:3 ratio for desktop and 1:1 for mobile. Thus, it's best to put the main focus in the center to avoid unwanted trimming. Choose a JPG or PNG no larger than 5 MB."
         isBanner
         ipfsHashList={
-          resolvedbannerImageIpfsHash ? [resolvedbannerImageIpfsHash] : []
+          locationInput?.bannerImageIpfsHash
+            ? [locationInput.bannerImageIpfsHash]
+            : []
         }
         errorMessage={
-          highlightErrors && !resolvedbannerImageIpfsHash
+          highlightErrors && !locationInput?.bannerImageIpfsHash
             ? REQUIRED_SECTION_ERROR
             : undefined
         }
       />
+
       <HorizontalDivider />
+
       <GalleryUploadSection
-        onStartUploading={() =>
-          setUploadingByCategory((prev) => ({
-            ...prev,
-            [LocationMediaCategory.Sleeping]: true,
-          }))
-        }
-        uploading={uploadingByCategory[LocationMediaCategory.Sleeping]}
+        onStartUploading={() => setUploading(true)}
+        uploading={uploading}
         onFilesUploaded={(fileNameIpfsHashMap) =>
-          handleFilesUploaded(
-            fileNameIpfsHashMap,
-            LocationMediaCategory.Sleeping
-          )
+          handleFilesUploaded(fileNameIpfsHashMap)
         }
         onDelete={deleteByIpfsHash}
-        title="sleeping arrangements"
-        instructions="Share images of the available sleeping arrangements at your place to provide potential guests with an idea of where they can rest. Choose JPG or PNG file formats no larger than 5 MB."
-        ipfsHashList={getImagesForCategory(LocationMediaCategory.Sleeping)}
+        title="Photos"
+        instructions="Add at least 3 images for the photo gallery. Choose JPG or PNG file formats no larger than 5 MB."
+        ipfsHashList={unique<string>(
+          (locationInput.mediaItems || []).map((mi) => mi.ipfsHash)
+        )}
         errorMessage={
-          highlightErrors &&
-          !getImagesForCategory(LocationMediaCategory.Sleeping).length
-            ? PHOTO_REQUIRED_ERROR
-            : undefined
-        }
-      />
-      <HorizontalDivider />
-      <GalleryUploadSection
-        onStartUploading={() =>
-          setUploadingByCategory((prev) => ({
-            ...prev,
-            [LocationMediaCategory.Working]: true,
-          }))
-        }
-        uploading={uploadingByCategory[LocationMediaCategory.Working]}
-        onDelete={deleteByIpfsHash}
-        onFilesUploaded={(fileNameIpfsHashMap) =>
-          handleFilesUploaded(
-            fileNameIpfsHashMap,
-            LocationMediaCategory.Working
-          )
-        }
-        title="Work stations"
-        instructions="This is a designated area where computer work, writing or other job duties are done. It should be equipped with the necessary tools and furniture. Choose a JPG or PNG no larger than 5 MB."
-        ipfsHashList={getImagesForCategory(LocationMediaCategory.Working)}
-        errorMessage={
-          highlightErrors &&
-          !getImagesForCategory(LocationMediaCategory.Working).length
-            ? PHOTO_REQUIRED_ERROR
-            : undefined
-        }
-      />
-      <HorizontalDivider />
-      <GalleryUploadSection
-        onStartUploading={() =>
-          setUploadingByCategory((prev) => ({
-            ...prev,
-            [LocationMediaCategory.Features]: true,
-          }))
-        }
-        uploading={uploadingByCategory[LocationMediaCategory.Features]}
-        onDelete={deleteByIpfsHash}
-        onFilesUploaded={(fileNameIpfsHashMap) =>
-          handleFilesUploaded(
-            fileNameIpfsHashMap,
-            LocationMediaCategory.Features
-          )
-        }
-        title="Amenities"
-        instructions="This entails any indoor or outdoor features like nearby nature or additional amenities your place offers. Choose a JPG or PNG no larger than 5 MB."
-        ipfsHashList={getImagesForCategory(LocationMediaCategory.Features)}
-        errorMessage={
-          highlightErrors &&
-          !getImagesForCategory(LocationMediaCategory.Features).length
+          highlightErrors && !locationInput.mediaItems?.length
             ? PHOTO_REQUIRED_ERROR
             : undefined
         }

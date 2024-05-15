@@ -64,13 +64,6 @@ export const MobileBanner = styled.div`
   }
 `
 
-export const VoteButton = styled(Button)`
-  padding: 0;
-  padding-bottom: 0.2rem;
-  width: 4.8rem;
-  height: 4.8rem;
-`
-
 export const LocationListContainer = styled.div`
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.green900};

@@ -62,7 +62,7 @@ export const EditLocationView = ({}) => {
   }, [stepNumber])
 
   const isEditable =
-    user?.isAdmin || user?.externId === location?.caretaker.externId
+    user?.isAdmin || user?.externId === location?.steward.externId
 
   if (isLoading || !location || !isEditable) {
     return null

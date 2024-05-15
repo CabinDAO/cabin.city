@@ -27,8 +27,6 @@ export const OffersStep = ({
   steps,
 }: StepProps) => {
   const router = useRouter()
-  const { created } = router.query
-  const stepTitle = created ? 'Draft listing' : 'Edit listing'
   const stepNumber = steps.map((step) => step.name).indexOf(name) + 1
 
   const { useGet, useMutate } = useBackend()
@@ -71,7 +69,11 @@ export const OffersStep = ({
         />
       }
     >
-      <TitleCard title={stepTitle} icon="close" iconHref="/my-locations" />
+      <TitleCard
+        title={'Edit neighborhood'}
+        icon="close"
+        iconHref="/my-locations"
+      />
       <Container>
         <StepIndicator>
           <H3>{name}</H3>

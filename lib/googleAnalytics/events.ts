@@ -30,24 +30,11 @@ export const signInEvent = (): void => {
   })
 }
 
-/**
- * @param listingId - The id of the listing being voted on.
- **/
-export const voteModalEvent = (listingId: string): void => {
+export const contactStewardEvent = (stewardId: string): void => {
   event({
-    action: 'vote_modal_click',
-    params: { listing_id: listingId },
-  })
-}
-
-/**
- * @param caretakerId - The id of the caretaker being contacted.
- **/
-export const contactCaretakerEvent = (caretakerId: string): void => {
-  event({
-    action: 'contact_caretaker_click',
+    action: 'contact_steward_click',
     params: {
-      caretaker_id: caretakerId,
+      steward_id: stewardId,
     },
   })
 }
@@ -220,8 +207,7 @@ const events = {
   event,
   signInEvent,
   shareEvent,
-  contactCaretakerEvent,
-  voteModalEvent,
+  contactStewardEvent: contactStewardEvent,
   applyToExperienceEvent,
   externalLinkEvent,
   navBarEvent,

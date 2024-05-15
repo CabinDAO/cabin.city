@@ -18,7 +18,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
   const { data, page, setPage, isEmpty, isLastPage } =
     useGetPaginated<OfferListResponse>('OFFER_LIST', {
       offerType: offerType ?? undefined,
-      publiclyVisibleOnly: 'true',
+      futureOnly: 'true',
     } as OfferListParamsType)
 
   const offers = data

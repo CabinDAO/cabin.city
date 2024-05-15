@@ -11,7 +11,7 @@ import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<LocationMineResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
@@ -23,7 +23,7 @@ async function handler(
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
-      caretaker: {
+      steward: {
         privyDID: profile.privyDID,
       },
     },
@@ -44,7 +44,7 @@ async function handler(
       locationToFragment(location as LocationWithRelations)
     ),
     count,
-  } as LocationMineResponse)
+  })
 }
 
 export default withAuth(handler)

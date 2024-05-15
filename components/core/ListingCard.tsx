@@ -23,13 +23,11 @@ interface ListingCardProps {
     externId: string
     name: string | null | undefined
     bannerImageIpfsHash: string | null | undefined
-    voteCount: number | null | undefined
-    recentVoters: LocationFragment['recentVoters'] | null | undefined
+    memberCount: number | null | undefined
+    recentMembers: LocationFragment['recentMembers'] | null | undefined
     address: ShortAddressFragmentType | null | undefined
-    sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
   }
-  onVote?: VoidFunction
   onDelete?: VoidFunction
   onEdit?: VoidFunction
   editMode?: boolean
@@ -51,16 +49,10 @@ export const ListingCard = (props: ListingCardProps) => {
     editMode = false,
   } = props
 
-  const {
-    externId,
-    bannerImageIpfsHash,
-    voteCount,
-    recentVoters,
-    address,
-    sleepCapacity,
-  } = location
+  const { externId, bannerImageIpfsHash, memberCount, recentMembers, address } =
+    location
 
-  const name = props.location.name ?? 'New Listing'
+  const name = props.location.name ?? 'New Neighborhood'
 
   const { deviceSize } = useDeviceSize()
 
@@ -95,18 +87,15 @@ export const ListingCard = (props: ListingCardProps) => {
         <ContentContainer>
           <SummaryContainer>
             <NameH2>{truncatedName}</NameH2>
-            <Caption>
-              {formatShortAddress(address) ?? EMPTY} · Sleeps {sleepCapacity}
-            </Caption>
+            <Caption>{formatShortAddress(address) ?? EMPTY}</Caption>
           </SummaryContainer>
           <AggregatedDataContainer>
-            <ListingTypeTag {...props} />
-            <VotersContainer>
-              {<ProfilesCount profiles={recentVoters ?? []} />}
+            <MembersContainer>
+              {<ProfilesCount profiles={recentMembers ?? []} />}
               <Caption emphasized>{`(${
-                voteCount?.toLocaleString() ?? 0
-              } Votes)`}</Caption>
-            </VotersContainer>
+                memberCount?.toLocaleString() ?? 0
+              } Members)`}</Caption>
+            </MembersContainer>
           </AggregatedDataContainer>
         </ContentContainer>
         <HorizontalDivider />
@@ -179,6 +168,7 @@ const ContainerLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 1.6rem;
 `
 
@@ -246,7 +236,7 @@ const LocationTagContainer = styled.div`
   gap: 0.5rem;
 `
 
-const VotersContainer = styled.div`
+const MembersContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.4rem;

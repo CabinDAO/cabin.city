@@ -4,13 +4,13 @@ import { ModalContainer } from '../core/modals/ModalContainer'
 import { Body1, Body2, H2 } from '../core/Typography'
 import Icon from '@/components/core/Icon'
 
-export const CaretakerContactModal = () => {
+export const StewardContactModal = () => {
   return (
     <CitizenshipModalContainer>
       <ModalTitle text="Citizenship" />
       <CitizenshipModalContent>
         <StyledIcon name={'check-decagram'} size={9.6} />
-        <H2>Unlock Citizenship to connect with Caretakers</H2>
+        <H2>Unlock Citizenship to connect with Stewards</H2>
         <Body2>
           Cabin’s annual membership that gives you access to our community’s
           global adventures.

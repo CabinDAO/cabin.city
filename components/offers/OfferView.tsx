@@ -181,7 +181,7 @@ const _getHostIds = (offer: OfferFragment): string[] => {
       ? ''
       : charlie
 
-  return [offer.location.caretaker.externId, gatherer].filter((i) => !!i)
+  return [offer.location.steward.externId, gatherer].filter((i) => !!i)
 }
 
 const StyledContentCard = styled(ContentCard)`

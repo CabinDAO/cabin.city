@@ -4,9 +4,10 @@ import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  NeighborhoodListParamsType,
-  NeighborhoodListResponse,
-} from '@/utils/types/neighborhood'
+  AddressFragmentType,
+  LocationListParamsType,
+  LocationListResponse,
+} from '@/utils/types/location'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import styled from 'styled-components'
 import { AvatarFragmentType } from '@/utils/types/profile'
@@ -23,7 +24,6 @@ import {
 } from './validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { ADDRESS_ERROR } from '@/utils/validate'
-import { AddressFragmentType } from '@/utils/types/location'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { InputLabel } from '@/components/core/InputLabel'
 import { Caption } from '@/components/core/Typography'
@@ -181,15 +181,15 @@ export function NeighborhoodSelect({
 }) {
   const label = 'Cabin Neighborhood'
   const { useGet } = useBackend()
-  const { data, isLoading } = useGet<NeighborhoodListResponse>(
-    address ? 'NEIGHBORHOOD_LIST' : null,
+  const { data, isLoading } = useGet<LocationListResponse>(
+    address ? 'LOCATION_LIST' : null,
     {
       lat: address?.lat,
       lng: address?.lng,
       maxDistance: 200,
-    } as NeighborhoodListParamsType
+    } as LocationListParamsType
   )
-  const neighborhoods = !data || 'error' in data ? [] : data.neighborhoods
+  const neighborhoods = !data || 'error' in data ? [] : data.locations
 
   const neighborhoodSelectOptions = neighborhoods.map((n) => {
     return {

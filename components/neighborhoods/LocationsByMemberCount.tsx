@@ -1,27 +1,20 @@
 import { useBackend } from '@/components/hooks/useBackend'
-import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   LocationFragment,
   LocationListParamsType,
   LocationListResponse,
 } from '@/utils/types/location'
-import { useLocationVote } from '../hooks/useLocationVote'
 import { ListingCard } from '../core/ListingCard'
 import { LocationListContainer } from './styles'
 
-export const LocationsByVoteCount = () => {
+export const LocationsByMemberCount = () => {
   const { useGetPaginated } = useBackend()
 
-  const {
-    data,
-    page,
-    setPage,
-    isLastPage,
-    mutate: refetchLocations,
-  } = useGetPaginated<LocationListResponse>('LOCATION_LIST', {
-    sort: 'votesDesc',
-  } as LocationListParamsType)
+  const { data, page, setPage, isLastPage } =
+    useGetPaginated<LocationListResponse>('LOCATION_LIST', {
+      sort: 'membersDesc',
+    } as LocationListParamsType)
 
   const locations = data
     ? data.reduce(
@@ -30,16 +23,6 @@ export const LocationsByVoteCount = () => {
         []
       )
     : []
-
-  const [isRefetchNeeded, setIsRefetchNeeded] = useState(false)
-  const { voteForLocation } = useLocationVote(() => {
-    setIsRefetchNeeded(true)
-  })
-  useEffect(() => {
-    if (isRefetchNeeded) {
-      refetchLocations()
-    }
-  }, [isRefetchNeeded, refetchLocations])
 
   return (
     <LocationListContainer>
@@ -57,7 +40,6 @@ export const LocationsByVoteCount = () => {
               position={index + 1}
               key={location.externId}
               location={location}
-              onVote={() => voteForLocation(location)}
             />
           )
         })}

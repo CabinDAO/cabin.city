@@ -1,11 +1,12 @@
+import React from 'react'
+import { useRouter } from 'next/router'
+import { StepConfig } from './location-wizard-configuration'
 import styled from 'styled-components'
 import { ContentCard } from '../../core/ContentCard'
 import { H3 } from '../../core/Typography'
-import { StepConfig } from './location-wizard-configuration'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ActionBar } from '@/components/core/ActionBar'
-import { useRouter } from 'next/router'
 
 interface LocationStepWrapperProps {
   onNext?: VoidFunction
@@ -28,13 +29,9 @@ export const LocationStepWrapper = ({
 }: LocationStepWrapperProps) => {
   const router = useRouter()
   const { created } = router.query
-  const stepTitle = created ? 'New listing' : 'Edit listing'
-
-  const stepIndicatorText = () => {
-    const names = steps.map((step) => step.name)
-    const currentStepIndex = names.indexOf(name)
-    return `Step ${currentStepIndex + 1} of ${names.length}`
-  }
+  const stepTitle = created ? 'New neighborhood' : 'Edit neighborhood'
+  const names = steps.map((step) => step.name)
+  const currentStepIndex = names.indexOf(name)
 
   return (
     <StyledLayout
@@ -46,7 +43,7 @@ export const LocationStepWrapper = ({
           }}
           secondaryButton={{
             onClick: onBack,
-            label: 'Cancel',
+            label: currentStepIndex == 0 ? 'Cancel' : 'Back',
           }}
         />
       }
@@ -55,7 +52,9 @@ export const LocationStepWrapper = ({
       <Container className={className}>
         <StepIndicator>
           <H3>{name}</H3>
-          {displayStepIndicator && <H3>{stepIndicatorText()}</H3>}
+          {displayStepIndicator && (
+            <H3>{`Step ${currentStepIndex + 1} of ${names.length}`}</H3>
+          )}
         </StepIndicator>
         <ContentCard shape="notch">
           <FormContainer>{children}</FormContainer>

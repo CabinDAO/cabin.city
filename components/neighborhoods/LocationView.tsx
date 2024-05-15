@@ -25,49 +25,29 @@ import { ProfilesCount } from '@/components/core/ProfilesCount'
 import { Button } from '@/components/core/Button'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
-import { VoteButton } from './styles'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { ExperienceList } from '@/components/offers/ExperienceList'
-import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
 
-export const LocationView = ({
-  location,
-  onVote,
-}: {
-  location: LocationFragment
-  onVote?: VoidFunction
-}) => {
-  const { externId, offerCount, mediaItems, caretaker, caretakerEmail } =
-    location
+export const LocationView = ({ location }: { location: LocationFragment }) => {
+  const { externId, mediaItems } = location
 
   const { useGet } = useBackend()
   const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
-    locationId: externId,
+    locationId: location.externId,
   })
   const offers = !offerData || 'error' in offerData ? [] : offerData.offers
 
-  const galleryPreviewSleeping = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Sleeping
-  )
-  const galleryPreviewSleepingUrl =
-    !!galleryPreviewSleeping && resolveImageUrl(galleryPreviewSleeping, true)
-  const galleryPreviewWorking = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Working
-  )
-  const galleryPreviewWorkingUrl =
-    !!galleryPreviewWorking && resolveImageUrl(galleryPreviewWorking, true)
-  const galleryPreviewFeatures = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Features
-  )
-  const galleryPreviewFeaturesUrl =
-    !!galleryPreviewFeatures && resolveImageUrl(galleryPreviewFeatures, true)
-  const { deviceSize } = useDeviceSize()
-  const hasPhotos =
-    !!galleryPreviewSleepingUrl &&
-    !!galleryPreviewWorkingUrl &&
-    !!galleryPreviewFeaturesUrl
+  const galleryPreviewUrls =
+    mediaItems.length > 0
+      ? mediaItems
+          .slice(0, 3)
+          .map((mi) => resolveImageUrl(mi, true))
+          .filter((value): value is string => value !== null)
+      : []
 
+  const { deviceSize } = useDeviceSize()
+  const hasPhotos = galleryPreviewUrls.length > 0
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
@@ -79,7 +59,7 @@ export const LocationView = ({
 
   const { user } = useProfile()
   const isEditable =
-    user?.isAdmin || user?.externId === location.caretaker.externId
+    user?.isAdmin || user?.externId === location.steward.externId
 
   return (
     <LocationContent>
@@ -91,7 +71,7 @@ export const LocationView = ({
       )}
 
       <LocationDetailsContainer>
-        {(location.voteCount ?? 0) >= VERIFIED_VOTE_COUNT && (
+        {location.steward.externId && (
           <LocationTypeTag
             label={'Verified'}
             color={'green400'}
@@ -107,35 +87,32 @@ export const LocationView = ({
               <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
-                <span>Sleeps {location.sleepCapacity ?? EMPTY}</span>
                 <span>
-                  {offerCount} {offerCount === 1 ? 'Experience' : 'Experiences'}
+                  {location.offerCount}{' '}
+                  {location.offerCount === 1 ? 'Experience' : 'Experiences'}
                 </span>
               </LocationHeaderInformation>
             </LocationHeaderTitle>
 
             <LocationHeaderHorizontalBar />
 
-            <VotesContainer>
-              <VotesAvatarContainer>
+            <MembersContainer>
+              <Members>
                 <Caption>
-                  {location.voteCount}{' '}
-                  {location.voteCount === 1 ? 'Vote' : 'Votes'}
+                  {location.memberCount}{' '}
+                  {location.memberCount === 1 ? 'Member' : 'Members'}
                 </Caption>
-                <ProfilesCount profiles={location.recentVoters ?? []} />
-              </VotesAvatarContainer>
-
-              <VoteButton variant="secondary" onClick={onVote}>
-                <Icon name="chevron-up" size={1.6} />
-              </VoteButton>
-            </VotesContainer>
+                <ProfilesCount profiles={location.recentMembers ?? []} />
+              </Members>
+            </MembersContainer>
           </LocationHeader>
+
           {isEditable && (
             <EditBar>
               <Link href={`/location/${externId}/edit`}>
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
-                  <Overline>Edit Listing</Overline>
+                  <Overline>Edit Neighborhood</Overline>
                 </Button>
               </Link>
             </EditBar>
@@ -147,48 +124,20 @@ export const LocationView = ({
         {hasPhotos && (
           <GalleryPreviewList>
             <GalleryPreviewListImages>
-              {galleryPreviewFeaturesUrl && (
+              {galleryPreviewUrls.map((url) => (
                 <StyledLink
                   key={LocationMediaCategory.Features}
-                  href={`/location/${externId}/photos?gallery=features`}
+                  href={`/location/${externId}/photos`}
                 >
                   <ImageFlex
                     sizes={imageSizesString}
                     alt={LocationMediaCategory.Features}
-                    src={galleryPreviewFeaturesUrl}
+                    src={url}
                     width={galleryImageWidth}
                     aspectRatio={1}
                   />
                 </StyledLink>
-              )}
-              {galleryPreviewSleepingUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Sleeping}
-                  href={`/location/${externId}/photos?gallery=sleeping`}
-                >
-                  <ImageFlex
-                    sizes={imageSizesString}
-                    alt={LocationMediaCategory.Sleeping}
-                    src={galleryPreviewSleepingUrl}
-                    width={galleryImageWidth}
-                    aspectRatio={1}
-                  />
-                </StyledLink>
-              )}
-              {galleryPreviewWorkingUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Working}
-                  href={`/location/${externId}/photos?gallery=working`}
-                >
-                  <ImageFlex
-                    sizes={imageSizesString}
-                    alt={LocationMediaCategory.Working}
-                    src={galleryPreviewWorkingUrl}
-                    width={galleryImageWidth}
-                    aspectRatio={1}
-                  />
-                </StyledLink>
-              )}
+              ))}
             </GalleryPreviewListImages>
 
             <Link href={`/location/${externId}/photos`}>
@@ -220,30 +169,18 @@ export const LocationView = ({
           <DescriptionTwoColumn>
             <DescriptionDetails>
               <SlateRenderer value={stringToSlateValue(location.description)} />
-
-              <HorizontalBar />
-
-              <InternetSpeed>
-                <H4>Internet speed</H4>
-                <Body1>
-                  {location.internetSpeedMbps
-                    ? `${location.internetSpeedMbps} Mbps`
-                    : EMPTY}
-                </Body1>
-              </InternetSpeed>
             </DescriptionDetails>
 
-            <CaretakerDetailsContainer>
-              <CaretakerDetails>
+            <StewardDetailsContainer>
+              <StewardDetails>
                 <ProfileContact
-                  profile={caretaker}
-                  caretakerEmail={caretakerEmail}
+                  profile={location.steward}
                   onContact={() =>
-                    events.contactCaretakerEvent(caretaker.externId)
+                    events.contactStewardEvent(location.steward.externId)
                   }
                 />
-              </CaretakerDetails>
-            </CaretakerDetailsContainer>
+              </StewardDetails>
+            </StewardDetailsContainer>
           </DescriptionTwoColumn>
         </SectionContent>
       </Section>
@@ -276,7 +213,7 @@ const LocationTypeTag = styled(Tag)`
   border-radius: 0.8rem 0 0 0;
 `
 
-const CaretakerDetailsContainer = styled.div`
+const StewardDetailsContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
@@ -288,7 +225,7 @@ const CaretakerDetailsContainer = styled.div`
   }
 `
 
-const CaretakerDetails = styled.div`
+const StewardDetails = styled.div`
   display: flex;
   flex-flow: row;
   padding-left: 2.4rem;
@@ -463,14 +400,14 @@ const StyledLink = styled(Link)`
   cursor: pointer;
 `
 
-const VotesContainer = styled.div`
+const MembersContainer = styled.div`
   display: flex;
   flex-flow: row;
   gap: 1.6rem;
   justify-content: end;
 `
 
-const VotesAvatarContainer = styled.div`
+const Members = styled.div`
   display: flex;
   flex-flow: column;
   gap: 0.8rem;

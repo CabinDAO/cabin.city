@@ -26,7 +26,7 @@ export const EditOfferPageView = () => {
     : history[history.length - 2]
 
   const { offerId } = router.query
-  const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
+  const { offer, isEditable, isUserSteward } = useGetOffer(offerId as string)
   const { useMutate } = useBackend()
   const { trigger: updateOffer } = useMutate(
     offer ? ['OFFER', { externId: `${offer.externId}` }] : null
@@ -59,7 +59,7 @@ export const EditOfferPageView = () => {
   const handleNext = async () => {
     if (offer?.type && validateOfferInput(offer.type, newValues)) {
       await updateOffer(newValues)
-      if (offer.type === OfferType.CabinWeek && !isUserCaretaker) {
+      if (offer.type === OfferType.CabinWeek && !isUserSteward) {
         router.push(`/experience/${offer.externId}`).then()
       } else {
         router.push(`/location/${offer.location.externId}/edit?step=3`).then()

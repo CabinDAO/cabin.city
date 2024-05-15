@@ -76,12 +76,12 @@ export const NewLocationView = () => {
   if (!canCreateListings) {
     return (
       <SingleColumnLayout>
-        <TitleCard title="New listing" icon="close" iconHref="/" />
+        <TitleCard title="New neighborhood" icon="close" iconHref="/" />
         <div style={{ width: '100%' }}>
           <EmptyState
             icon="alert"
             title="Citizens only"
-            description="Only citizens can create new listings."
+            description="Only citizens can create new neighborhoods."
             customCta={() => (
               <Link href={'/citizenship'}>
                 <Button variant={'secondary'}>Become a citizen</Button>
@@ -108,7 +108,7 @@ export const NewLocationView = () => {
         />
       }
     >
-      <TitleCard title="New listing" icon="close" iconHref="/" />
+      <TitleCard title="New neighborhood" icon="close" iconHref="/" />
       <Container>
         <H3>Getting Started</H3>
         <StyledContentCard shape="notch">
@@ -126,10 +126,6 @@ export const NewLocationView = () => {
                 leaderboard. Improving your rank starts with creating an
                 attractive listing and providing a quality experience at your
                 location.
-              </Body2>
-              <Body2>
-                Properties receive the verified tag when they earn 1,000 votes
-                from the community.
               </Body2>
               <Body2>
                 Only Cabin Citizens will be able to contact you through your

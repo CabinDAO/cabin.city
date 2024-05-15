@@ -11,15 +11,16 @@ export const MyLocations = () => {
   const { data: locationData, mutate } =
     useGet<LocationMineResponse>('LOCATION_MINE')
 
-  const locations = locationData?.locations ?? []
+  const locations =
+    !locationData || 'error' in locationData ? [] : locationData.locations
 
   if (!locations.length) {
     return (
       <LocationListContainer>
         <EmptyState
           icon="file-document"
-          title="No listings yet"
-          description="Once created, your locations can be managed from here"
+          title="No neighborhoods yet"
+          description="Once created, your neighborhood can be managed from here"
           customCta={GetStartedButton}
         />
       </LocationListContainer>

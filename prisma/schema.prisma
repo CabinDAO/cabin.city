@@ -142,14 +142,14 @@ model Profile {
   // the invites that this profile has spawned
   invitees   Invite[] @relation("Invitees")
 
-  neighborhood   Neighborhood? @relation(fields: [neighborhoodId], references: [id])
+  neighborhood   Location? @relation("Members", fields: [neighborhoodId], references: [id])
   neighborhoodId Int?
 
-  roles      Role[]
-  locations  Location[] // TODO: rename to managedLocations??
-  votes      LocationVote[] // used to be called locationVotes
-  activities Activity[]
-  reactions  ActivityReaction[]
+  roles              Role[]
+  stewardedLocations Location[]         @relation("Steward")
+  votes              LocationVote[]
+  activities         Activity[]
+  reactions          ActivityReaction[]
 }
 
 enum CitizenshipStatus {
@@ -255,19 +255,6 @@ enum RoleLevel {
   Custodian
 }
 
-model Neighborhood {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  externId  String   @unique // for external-facing use, e.g. urls
-
-  name String
-  lat  Float
-  lng  Float
-
-  members Profile[]
-}
-
 model Location {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -281,18 +268,15 @@ model Location {
   address             Address?
   bannerImageIpfsHash String
   mediaItems          LocationMediaItem[]
+  groupchatUrl        String?
 
-  caretaker      Profile @relation(fields: [caretakerId], references: [id])
-  caretakerId    Int
-  caretakerEmail String?
-
-  sleepCapacity     Int
-  internetSpeedMbps Int
-  publishedAt       DateTime?
+  steward   Profile @relation("Steward", fields: [stewardId], references: [id])
+  stewardId Int
 
   offers     Offer[]
   votes      LocationVote[]
   activities Activity[]
+  members    Profile[]      @relation("Members")
 }
 
 enum LocationType {

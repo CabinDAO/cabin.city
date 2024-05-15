@@ -18,27 +18,14 @@ type ValidationResult = {
 }
 
 export const validateLocationInput = (values: LocationEditParamsType) => {
-  const {
-    name,
-    tagline,
-    description,
-    caretakerEmail,
-    address,
-    sleepCapacity,
-    internetSpeedMbps,
-  } = values
+  const { name, tagline, description, address } = values
 
   const invalid =
     (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
     (values.hasOwnProperty('tagline') && !validateBio(tagline).valid) ||
     (values.hasOwnProperty('description') && !validateBio(description).valid) ||
-    (values.hasOwnProperty('caretakerEmail') &&
-      !validateEmail(caretakerEmail).valid) ||
     (values.hasOwnProperty('address') &&
-      !truthyString(address?.formattedAddress)) ||
-    (values.hasOwnProperty('internetSpeedMbps') &&
-      !isNumber(internetSpeedMbps)) ||
-    (values.hasOwnProperty('sleepCapacity') && !isNumber(sleepCapacity))
+      !truthyString(address?.formattedAddress))
 
   return !invalid
 }

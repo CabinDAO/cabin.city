@@ -1,10 +1,10 @@
-import { RecentVoterFragment } from '@/utils/types/location'
+import { RecentMemberFragment } from '@/utils/types/location'
 import styled from 'styled-components'
 import { Avatar } from './Avatar'
 import { Caption } from '@/components/core/Typography'
 
 interface ProfilesCountProps {
-  profiles: RecentVoterFragment[]
+  profiles: RecentMemberFragment[]
 }
 
 export const ProfilesCount = ({ profiles }: ProfilesCountProps) => {

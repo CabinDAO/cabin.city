@@ -12,22 +12,23 @@ import {
 import {
   REQUIRED_FIELDS_TOAST_ERROR,
   REQUIRED_FIELD_ERROR,
-  isNumber,
   truthyString,
 } from '@/utils/validate'
 import {
   validateBio,
-  validateEmail,
   validateLocationInput,
   validateTitle,
 } from '../validations'
 import { StepProps } from './location-wizard-configuration'
 import styled from 'styled-components'
-import { Subline2 } from '@/components/core/Typography'
 import { InputText } from '@/components/core/InputText'
 import { LocationStepWrapper } from './LocationStepWrapper'
-import { HorizontalDivider } from '@/components/core/Divider'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
+import { emptyEditorValue } from '@/components/core/slate/slate-utils'
+import { Descendant } from 'slate'
+import { SlateEditor } from '@/components/core/slate/SlateEditor'
+import { Body2 } from '@/components/core/Typography'
+import { InputLabel } from '@/components/core/InputLabel'
 
 export const BasicDetailStep = ({
   name,
@@ -36,64 +37,53 @@ export const BasicDetailStep = ({
   location,
   steps,
 }: StepProps) => {
+  const { showError } = useError()
   const { updateLocation } = useUpdateLocation(location.externId)
+
+  const [highlightErrors, setHighlightErrors] = useState(false)
 
   const [address, setAddress] = useState<AddressFragmentType | null>(
     location?.address
   )
 
-  const [highlightErrors, setHighlightErrors] = useState(false)
-
-  const { showError } = useError()
-
   const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     name: location.name,
-    caretakerEmail: location.caretakerEmail,
     tagline: location.tagline,
-    sleepCapacity: location.sleepCapacity,
-    internetSpeedMbps: location.internetSpeedMbps,
+    description: location.description,
   })
 
+  const emptyDescription = emptyEditorValue(locationInput?.description)
+  const slateProps = locationInput?.description
+    ? { value: JSON.parse(locationInput.description) }
+    : {}
+
   const nameValidation = validateTitle(locationInput.name)
-  const contactEmailValidation = validateEmail(locationInput.caretakerEmail)
   const shortBioValidation = validateBio(locationInput.tagline)
 
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof LocationEditParamsType
   ) => {
-    const intFields = ['sleepCapacity', 'internetSpeedMbps']
-
-    let parsedValue = 0
-
-    if (intFields.includes(field) && e.target.value !== '') {
-      parsedValue = parseInt(e.target.value)
-      if (isNaN(parsedValue)) {
-        return
-      }
-    }
-
     if (field === 'name') {
       setLocationInput((prev) => ({
         ...prev,
         [field]: e.target.value.slice(0, MAX_LOCATION_TITLE_LENGTH),
       }))
-      return
     } else if (field === 'tagline') {
       setLocationInput((prev) => ({
         ...prev,
         [field]: e.target.value.slice(0, MAX_LOCATION_BIO_LENGTH),
       }))
-      return
+    } else {
+      setLocationInput((prev) => ({
+        ...prev,
+        [field]: e.target.value,
+      }))
     }
+  }
 
-    setLocationInput((prev) => ({
-      ...prev,
-      [field]:
-        intFields.includes(field) && e.target.value !== ''
-          ? parsedValue
-          : e.target.value,
-    }))
+  const handleEditorChange = (val: Descendant[]) => {
+    setLocationInput({ ...locationInput, description: JSON.stringify(val) })
   }
 
   const handleLocationChange = (value: AddressFragmentType) => {
@@ -101,7 +91,7 @@ export const BasicDetailStep = ({
   }
 
   const handleNext = async () => {
-    if (validateLocationInput(locationInput)) {
+    if (validateLocationInput(locationInput) && !emptyDescription) {
       await updateLocation({ ...locationInput, address })
       onNext()
     } else {
@@ -125,28 +115,12 @@ export const BasicDetailStep = ({
           helperText={`${
             locationInput.name?.length ?? 0
           }/${MAX_LOCATION_TITLE_LENGTH}`}
-          label="Listing title"
-          placeholder="Title"
+          label="Neighborhood name"
+          placeholder="Name"
           error={highlightErrors && !nameValidation.valid}
           errorMessage={nameValidation.error}
         />
       </FullWidthInputContainer>
-      <InputCoupleContainer>
-        <InputText
-          placeholder={location.caretaker.name ?? ''}
-          label="Caretaker"
-          disabled
-        />
-        <InputText
-          required
-          value={locationInput.caretakerEmail ?? ''}
-          onChange={(event) => handleOnChange(event, 'caretakerEmail')}
-          label="Contact email"
-          placeholder="Email"
-          error={highlightErrors && !contactEmailValidation.valid}
-          errorMessage={contactEmailValidation.error}
-        />
-      </InputCoupleContainer>
       <FullWidthInputContainer>
         <InputText
           required
@@ -155,8 +129,8 @@ export const BasicDetailStep = ({
           helperText={`${
             locationInput.tagline?.length ?? 0
           }/${MAX_LOCATION_BIO_LENGTH}`}
-          label="Short bio"
-          placeholder="1 sentence description of your property"
+          label="Short description"
+          placeholder="1 sentence description of your neighborhood"
           error={highlightErrors && !shortBioValidation.valid}
           errorMessage={shortBioValidation.error}
         />
@@ -171,26 +145,27 @@ export const BasicDetailStep = ({
       </FullWidthInputContainer>
       <InputCoupleContainer>
         <InputText
-          required
-          value={locationInput.sleepCapacity ?? ''}
-          onChange={(event) => handleOnChange(event, 'sleepCapacity')}
-          label="Number of beds"
-          placeholder="Value"
-          error={highlightErrors && !isNumber(locationInput.sleepCapacity)}
-          errorMessage={REQUIRED_FIELD_ERROR}
-        />
-        <InputText
-          required
-          value={locationInput.internetSpeedMbps ?? ''}
-          onChange={(event) => handleOnChange(event, 'internetSpeedMbps')}
-          label="Average internet speed"
-          placeholder="Value"
-          endAdornment={<Subline2 style={{ opacity: '0.5' }}>Mbps</Subline2>}
-          error={highlightErrors && !isNumber(locationInput.internetSpeedMbps)}
-          errorMessage={REQUIRED_FIELD_ERROR}
+          placeholder={location.steward.name ?? ''}
+          label="Steward"
+          disabled
         />
       </InputCoupleContainer>
-      <HorizontalDivider />
+      <FullWidthInputContainer>
+        <InputLabel label={'Description'} required />
+        <div style={{ margin: '1rem 0' }}>
+          <SlateEditor
+            {...slateProps}
+            placeholder="Share a description of your neighborhood here"
+            onChange={handleEditorChange}
+            error={highlightErrors && emptyDescription}
+            errorMessage={REQUIRED_FIELD_ERROR}
+          />
+        </div>
+        <Body2>
+          Get specific, but be clear and brief. Describe what your neighborhood
+          is about, what happens there, and what makes it special.
+        </Body2>
+      </FullWidthInputContainer>
     </StyledLocationStepWrapper>
   )
 }

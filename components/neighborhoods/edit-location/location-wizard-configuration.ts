@@ -1,5 +1,4 @@
 import { LocationFragment } from '@/utils/types/location'
-import { DescriptionStep } from './DescriptionStep'
 import { BasicDetailStep } from './BasicDetailStep'
 import { PhotoGalleryStep } from './PhotoGalleryStep'
 import { OffersStep } from './OffersStep'
@@ -19,12 +18,8 @@ export type StepProps = {
 
 export const editLocationSteps: StepConfig[] = [
   {
-    name: 'Basic Detail',
+    name: 'Details',
     component: BasicDetailStep,
-  },
-  {
-    name: 'Description',
-    component: DescriptionStep,
   },
   {
     name: 'Photo Gallery',

@@ -14,13 +14,11 @@ export const useGetOffer = (offerId: string) => {
 
   const offer = data && 'offer' in data ? data.offer : null
 
-  const isPublished = !!offer?.location.publishedAt
+  const isUserSteward = user?.externId === offer?.location.steward.externId
 
-  const isUserCaretaker = user?.externId === offer?.location.caretaker.externId
+  const isEditable = !!(offer && (user?.isAdmin || isUserSteward))
 
-  const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
-
-  const isVisible = !!offer && (isEditable || isPublished)
+  const isVisible = !!offer && isEditable
 
   useEffect(() => {
     if (!data) {
@@ -33,11 +31,10 @@ export const useGetOffer = (offerId: string) => {
   }, [data, offer, router, isVisible])
 
   return {
-    offer: offer,
-    isPublished: isPublished,
-    isUserCaretaker: isUserCaretaker,
-    isEditable: isEditable,
-    isVisible: isVisible,
+    offer,
+    isUserSteward,
+    isEditable,
+    isVisible,
     refetchLocation: async () => {
       if (offer) {
         await revalidate(['LOCATION', { externId: offer.location.externId }])

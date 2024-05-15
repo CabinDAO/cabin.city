@@ -16,7 +16,7 @@ export const LocationOffersList = ({ offers, location }: OffersListProps) => {
     <StyledContentCard>
       <OffersList
         offers={offers}
-        actionsEnabled={user?.externId === location.caretaker.externId}
+        actionsEnabled={user?.externId === location.steward.externId}
       />
     </StyledContentCard>
   )

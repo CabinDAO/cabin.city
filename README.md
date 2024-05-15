@@ -96,7 +96,7 @@ The following custom events are being tracked:
 - **share:** it tracks when a user shares a profile
 - **sign_in_click:** when a user clicks the sign in button
 - **vote_modal_click:** triggered when a user clicks the vote button
-- **contact_caretaker_click:** tracked when a user clicks the contact caretaker button
+- **contact_steward_click:** tracked when a user clicks the contact caretaker button
 - **apply_to_experience_click:** tracked when a user clicks on the apply now button
 - **external_link_click:** generic event to track external URLs such as discord, twitter, notion
   docs, etc.

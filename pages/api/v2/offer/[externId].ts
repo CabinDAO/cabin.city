@@ -87,8 +87,8 @@ async function handlePost(
     return
   }
 
-  if (offerToEdit.location.caretakerId !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can edit their offers' })
+  if (offerToEdit.location.stewardId !== profile.id && !profile.isAdmin) {
+    res.status(403).send({ error: 'Only stewards can edit their offers' })
     return
   }
 
@@ -158,7 +158,7 @@ async function handleDelete(
     include: {
       location: {
         include: {
-          caretaker: true,
+          steward: true,
         },
       },
     },
@@ -169,8 +169,8 @@ async function handleDelete(
     return
   }
 
-  if (offerToDelete.location.caretaker.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can delete their offers' })
+  if (offerToDelete.location.steward.id !== profile.id && !profile.isAdmin) {
+    res.status(403).send({ error: 'Only stewards can delete their offers' })
     return
   }
 

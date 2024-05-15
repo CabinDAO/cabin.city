@@ -11,20 +11,15 @@ import { NoWrap } from './NoWrap'
 import { useProfile } from '@/components/auth/useProfile'
 import Icon from '@/components/core/Icon'
 import theme from '@/styles/theme'
-import { CaretakerContactModal } from '@/components/core/CaretakerContactModal'
+import { StewardContactModal } from '@/components/core/StewardContactModal'
 import { useModal } from '@/components/hooks/useModal'
 
 interface ProfileContactProps {
   profile: ProfileBasicFragment
-  caretakerEmail?: string | null | undefined
   onContact?: VoidFunction
 }
 
-export const ProfileContact = ({
-  profile,
-  caretakerEmail,
-  onContact,
-}: ProfileContactProps) => {
+export const ProfileContact = ({ profile, onContact }: ProfileContactProps) => {
   const { showModal } = useModal()
   const { user } = useProfile()
 
@@ -80,7 +75,7 @@ export const ProfileContact = ({
             ) : (
               <>
                 <NoWrap>
-                  <H4>Caretaker</H4>
+                  <H4>Steward</H4>
                 </NoWrap>
                 <Icon name={'check-star'} size={1.6} />
               </>
@@ -94,9 +89,7 @@ export const ProfileContact = ({
                 {format(parseISO(profile.createdAt), 'yyyy')}
               </>
             ) : (
-              <>
-                Become a Citizen to connect with the property&apos;s caretaker.
-              </>
+              <>Become a Citizen to connect with the property&apos;s steward.</>
             )}
           </Caption>
         </Info>
@@ -106,7 +99,7 @@ export const ProfileContact = ({
 
       <ContactContainer>
         {isCitizen ? (
-          <Link href={`mailto:${caretakerEmail ?? profile.email}`}>
+          <Link href={`mailto:${profile.email}`}>
             <ContactButton onClick={onContact} variant="tertiary">
               Contact
             </ContactButton>
@@ -114,7 +107,7 @@ export const ProfileContact = ({
         ) : (
           <ContactButton
             onClick={() => {
-              showModal(() => <CaretakerContactModal />)
+              showModal(() => <StewardContactModal />)
             }}
             variant="tertiary"
           >

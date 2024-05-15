@@ -58,7 +58,7 @@ async function handleGet(
 
   res.status(200).send({
     location: locationToFragment(location as LocationWithRelations),
-  } as LocationGetResponse)
+  })
 }
 
 async function handlePost(
@@ -73,7 +73,7 @@ async function handlePost(
       externId: externId,
     },
     include: {
-      caretaker: true,
+      steward: true,
       mediaItems: true,
     },
   })
@@ -83,8 +83,8 @@ async function handlePost(
     return
   }
 
-  if (locationToEdit.caretaker.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can edit their locations' })
+  if (locationToEdit.steward.id !== profile.id && !profile.isAdmin) {
+    res.status(403).send({ error: 'Only stewards can edit their locations' })
     return
   }
 
@@ -123,9 +123,6 @@ async function handlePost(
         name: params.name,
         tagline: params.tagline,
         description: params.description,
-        sleepCapacity: params.sleepCapacity,
-        internetSpeedMbps: params.internetSpeedMbps,
-        caretakerEmail: params.caretakerEmail,
         bannerImageIpfsHash: params.bannerImageIpfsHash,
         mediaItems: params.mediaItems
           ? {
@@ -174,7 +171,7 @@ async function handleDelete(
 
   const locationToDelete = await prisma.location.findUnique({
     where: { externId },
-    include: { caretaker: true },
+    include: { steward: true },
   })
 
   if (!locationToDelete) {
@@ -182,10 +179,8 @@ async function handleDelete(
     return
   }
 
-  if (locationToDelete.caretaker.id !== profile.id && !profile.isAdmin) {
-    res
-      .status(403)
-      .send({ error: 'Only caretakers can delete their locations' })
+  if (locationToDelete.steward.id !== profile.id && !profile.isAdmin) {
+    res.status(403).send({ error: 'Only stewards can delete their locations' })
     return
   }
 

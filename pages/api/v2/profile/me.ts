@@ -77,7 +77,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
     mailingListOptIn: profile.mailingListOptIn,
     walletAddress: profile.wallet.address,
-    locationCount: profile._count.locations,
+    locationCount: profile._count.stewardedLocations,
     contactFields: profile.contactFields.map((cf) => ({
       type: cf.type as ContactFieldType,
       value: cf.value,
@@ -104,7 +104,7 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     _count: {
       select: {
-        locations: true
+        stewardedLocations: true
       }
     }
     voucher: {
@@ -150,7 +150,7 @@ const MyProfileQueryInclude = {
   // must match MyProfileWithRelations above
   _count: {
     select: {
-      locations: true,
+      stewardedLocations: true,
     },
   },
   voucher: {

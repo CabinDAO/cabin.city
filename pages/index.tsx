@@ -18,12 +18,11 @@ export const getStaticProps = (async (context) => {
     getEthersAlchemyProvider(unlockConfigForEnv.networkName)
   )
 
-  const [locations, neighborhoods, numProfiles, citizens] = await Promise.all([
+  const [locations, numProfiles, citizens] = await Promise.all([
     prisma.location.findMany({
       select: { name: true, address: true },
-      where: { publishedAt: { not: null }, address: { lat: { not: null } } },
+      where: { address: { lat: { not: null } } },
     }),
-    prisma.neighborhood.findMany({}),
     prisma.profile.count(),
     lockContract.totalSupply(),
   ])
@@ -33,19 +32,11 @@ export const getStaticProps = (async (context) => {
       mapData: {
         members: numProfiles,
         citizens: Number(citizens),
-        locations: locations
-          .map((l) => ({
-            label: l.name,
-            lat: l.address?.lat || 0,
-            lng: l.address?.lng || 0,
-          }))
-          .concat(
-            neighborhoods.map((n) => ({
-              label: n.name,
-              lat: n.lat,
-              lng: n.lng,
-            }))
-          ),
+        locations: locations.map((l) => ({
+          label: l.name,
+          lat: l.address?.lat || 0,
+          lng: l.address?.lng || 0,
+        })),
       },
     },
     revalidate: 60 * 60 * 24, // refetch the stats once every 24 hours

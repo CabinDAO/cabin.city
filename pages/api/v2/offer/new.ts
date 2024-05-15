@@ -31,10 +31,8 @@ async function handler(
     return
   }
 
-  if (location.caretakerId != profile.id && !profile.isAdmin) {
-    res
-      .status(403)
-      .send({ error: 'You are not the caretaker of this location' })
+  if (location.stewardId != profile.id && !profile.isAdmin) {
+    res.status(403).send({ error: 'You are not the steward of this location' })
     return
   }
 
@@ -54,22 +52,20 @@ async function handler(
     },
   })
 
-  if (location.publishedAt) {
-    const activityKey = `OfferCreated|${offer.externId}`
-    await prisma.activity.upsert({
-      where: {
-        key: activityKey,
-      },
-      create: {
-        externId: randomId('activity'),
-        key: activityKey,
-        type: ActivityType.OfferCreated,
-        profileId: profile.id,
-        offerId: offer.id,
-      },
-      update: {},
-    })
-  }
+  const activityKey = `OfferCreated|${offer.externId}`
+  await prisma.activity.upsert({
+    where: {
+      key: activityKey,
+    },
+    create: {
+      externId: randomId('activity'),
+      key: activityKey,
+      type: ActivityType.OfferCreated,
+      profileId: profile.id,
+      offerId: offer.id,
+    },
+    update: {},
+  })
 
   res.status(200).send({ offerExternId: offer.externId })
 }

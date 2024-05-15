@@ -3,6 +3,7 @@
 import {
   BadgeFragment,
   CitizenshipStatus,
+  ProfileFragment,
   RoleFragment,
 } from '@/utils/types/profile'
 import {
@@ -37,12 +38,12 @@ export type ActivityListFragment = {
     location?: Pick<
       LocationFragment,
       | 'externId'
+      | 'steward'
       | 'name'
       | 'tagline'
       | 'bannerImageIpfsHash'
-      | 'sleepCapacity'
       | 'offerCount'
-      | 'voteCount'
+      | 'memberCount'
     > & { address: ShortAddressFragmentType }
     offer?: Pick<
       OfferFragment,
@@ -159,16 +160,13 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         tagline: true
         description: true
         bannerImageIpfsHash: true
-        sleepCapacity: true
-        caretaker: {
+        steward: {
           select: {
             externId: true
             name: true
             createdAt: true
           }
         }
-        publishedAt: true
-        internetSpeedMbps: true
         address: {
           select: {
             locality: true
@@ -196,7 +194,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             name: true
             type: true
             bannerImageIpfsHash: true
-            publishedAt: true
             address: {
               select: {
                 locality: true
@@ -205,7 +202,7 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
                 countryShort: true
               }
             }
-            caretaker: {
+            steward: {
               select: {
                 externId: true
               }
@@ -260,16 +257,13 @@ export const ActivityQueryInclude = {
       tagline: true,
       description: true,
       bannerImageIpfsHash: true,
-      sleepCapacity: true,
-      caretaker: {
+      steward: {
         select: {
           externId: true,
           name: true,
           createdAt: true,
         },
       },
-      publishedAt: true,
-      internetSpeedMbps: true,
       address: {
         select: {
           locality: true,
@@ -297,7 +291,6 @@ export const ActivityQueryInclude = {
           name: true,
           type: true,
           bannerImageIpfsHash: true,
-          publishedAt: true,
           address: {
             select: {
               locality: true,
@@ -306,7 +299,7 @@ export const ActivityQueryInclude = {
               countryShort: true,
             },
           },
-          caretaker: {
+          steward: {
             select: {
               externId: true,
             },

@@ -15,9 +15,7 @@ import { Body2, Caption, H2, Subline1, truncateStyles } from './Typography'
 import Icon, { IconName } from './Icon'
 import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
-import { VoteButton } from '../neighborhoods/styles'
 import { useLocationActions } from '@/components/hooks/useLocationActions'
-import { useLocationVote } from '@/components/hooks/useLocationVote'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
 interface LocationCardProps {
@@ -25,14 +23,12 @@ interface LocationCardProps {
     externId: string
     name: string | null | undefined
     tagline: string | null | undefined
-    publishedAt: string | null | undefined
     bannerImageIpfsHash: string | null | undefined
-    voteCount: number | null | undefined
-    recentVoters: LocationFragment['recentVoters'] | null | undefined
+    memberCount: number | null | undefined
+    recentMembers: LocationFragment['recentMembers'] | null | undefined
     address: ShortAddressFragmentType | null | undefined
-    sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
-    caretaker: ProfileBasicFragment
+    steward: ProfileBasicFragment
   }
   editMode?: boolean
   hideVerifiedTag?: boolean
@@ -49,11 +45,8 @@ export const LocationCard = (props: LocationCardProps) => {
     location.externId,
     props.revalidateLocationsFn
   )
-  const { voteForLocation: onVote } = useLocationVote(
-    props.revalidateLocationsFn
-  )
 
-  const name = location.name ?? 'New Listing'
+  const name = location.name ?? 'New Neighborhood'
 
   const { deviceSize } = useDeviceSize()
 
@@ -89,11 +82,6 @@ export const LocationCard = (props: LocationCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          {!location.publishedAt && (
-            <TagContainer>
-              <Subline1 $color="yellow100">Draft</Subline1>
-            </TagContainer>
-          )}
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
@@ -106,14 +94,6 @@ export const LocationCard = (props: LocationCardProps) => {
               label={formatShortAddress(location.address) ?? EMPTY}
             />
             <LocationInfo
-              iconName="sleep"
-              label={
-                location.sleepCapacity
-                  ? `Sleeps ${location.sleepCapacity}`
-                  : EMPTY
-              }
-            />
-            <LocationInfo
               iconName="offer"
               label={
                 location.offerCount
@@ -123,39 +103,24 @@ export const LocationCard = (props: LocationCardProps) => {
             />
           </LocationInfoGroupContainer>
           <LocationInfoGroupContainer>
-            <LocationInfo
-              iconName="caretaker"
-              label={location.caretaker.name}
-            />
+            <LocationInfo iconName="steward" label={location.steward.name} />
             <LocationInfo
               iconName="date"
               label={`Joined ${format(
-                new Date(location.caretaker.createdAt),
+                new Date(location.steward.createdAt),
                 'MMM yyyy'
               )}`}
             />
           </LocationInfoGroupContainer>
         </ContentContainer>
-        <VotesContainer>
-          <VotersContainer>
+        <MembersContainer>
+          <Members>
             <Caption emphasized>{`${
-              location.voteCount?.toLocaleString() ?? 0
-            } Votes`}</Caption>
-            {<ProfilesCount profiles={location.recentVoters ?? []} />}
-          </VotersContainer>
-
-          <VoteButton
-            variant="secondary"
-            onClick={(e) => {
-              e.preventDefault()
-              if (onVote) {
-                onVote(location)
-              }
-            }}
-          >
-            <Icon name="chevron-up" size={1.6} />
-          </VoteButton>
-        </VotesContainer>
+              location.memberCount?.toLocaleString() ?? 0
+            } Members`}</Caption>
+            {<ProfilesCount profiles={location.recentMembers ?? []} />}
+          </Members>
+        </MembersContainer>
       </ContainerLink>
       {editMode && <CardActions onDelete={onDelete} onEdit={onEdit} />}
     </OuterContainer>
@@ -256,7 +221,7 @@ const TagContainer = styled.div`
   width: max-content;
 `
 
-const VotesContainer = styled.div`
+const MembersContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1.6rem;
@@ -271,7 +236,7 @@ const VotesContainer = styled.div`
   }
 `
 
-const VotersContainer = styled.div`
+const Members = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
