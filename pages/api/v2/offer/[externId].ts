@@ -174,7 +174,7 @@ async function handleDelete(
     return
   }
 
-  await prisma.location.delete({ where: { id: offerToDelete.id } })
+  await prisma.offer.delete({ where: { id: offerToDelete.id } })
 
   res.status(200).send({})
 }

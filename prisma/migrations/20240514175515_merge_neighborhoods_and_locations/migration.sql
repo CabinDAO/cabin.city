@@ -25,8 +25,7 @@ ALTER TABLE "Location" RENAME COLUMN "caretakerId" to "stewardId";
 ALTER TABLE "Location" DROP COLUMN "caretakerEmail",
 DROP COLUMN "internetSpeedMbps",
 DROP COLUMN "publishedAt",
-DROP COLUMN "sleepCapacity",
-ADD COLUMN  "groupchatUrl" TEXT;
+DROP COLUMN "sleepCapacity";
 
 -- DropTable
 DROP TABLE "Neighborhood";

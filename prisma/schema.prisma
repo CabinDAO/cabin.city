@@ -268,7 +268,6 @@ model Location {
   address             Address?
   bannerImageIpfsHash String
   mediaItems          LocationMediaItem[]
-  groupchatUrl        String?
 
   steward   Profile @relation("Steward", fields: [stewardId], references: [id])
   stewardId Int
