@@ -10,53 +10,72 @@ import { SlateRenderer } from '@/components/core/slate/SlateRenderer'
 import ShowMoreText from '@/components/showmore/ShowMoreText'
 import { body2Styles } from '@/components/core/Typography'
 import Link from 'next/link'
-
-export interface ExperienceListProps {
-  offers: OfferFragment[]
-  actionButtonText: string
-}
+import Icon from '@/components/core/Icon'
+import React from 'react'
 
 export const ExperienceList = ({
   offers,
   actionButtonText,
-}: ExperienceListProps) => {
+  isEditable,
+}: {
+  offers: OfferFragment[]
+  actionButtonText: string
+  isEditable?: boolean
+}) => {
   return (
     <>
       {offers.map((offer) => (
-        <Item key={offer.externId}>
-          <StyledImage
-            src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
-            alt={offer.title ?? ''}
-            width={0}
-            height={0}
-            sizes="100vw"
-          />
-          <Details>
-            <OfferNameAndDates offer={offer} withPrice />
-            <Expandable
-              more={
-                <span
-                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                >
-                  show more
-                </span>
-              }
-              less={
-                <span
-                  style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                >
-                  show less
-                </span>
-              }
-            >
-              <SlateRenderer value={stringToSlateValue(offer.description)} />
-            </Expandable>
-          </Details>
-          <Buttons>
-            <Link href={`/experience/${offer.externId}`}>
-              <Button isFullWidth>{actionButtonText}</Button>
-            </Link>
-          </Buttons>
+        <Item
+          key={offer.externId}
+          active={offer.endDate >= new Date().toISOString().slice(0, 10)}
+        >
+          <Contents>
+            {offer.imageIpfsHash && (
+              <StyledImage
+                src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
+                alt={offer.title ?? ''}
+                width={0}
+                height={0}
+                sizes="100vw"
+              />
+            )}
+            <Details>
+              <OfferNameAndDates offer={offer} withPrice noImage />
+              <Expandable
+                more={
+                  <span
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    show more
+                  </span>
+                }
+                less={
+                  <span
+                    style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                  >
+                    show less
+                  </span>
+                }
+              >
+                <SlateRenderer value={stringToSlateValue(offer.description)} />
+              </Expandable>
+            </Details>
+            <Buttons>
+              <Link href={`/experience/${offer.externId}`}>
+                <Button isFullWidth>{actionButtonText}</Button>
+              </Link>
+            </Buttons>
+          </Contents>
+          {isEditable && (
+            <AdminActions>
+              <Link href={`/experience/${offer.externId}/edit`}>
+                <Button variant="link">
+                  <Icon name="pencil" size={1.6} />
+                  Edit
+                </Button>
+              </Link>
+            </AdminActions>
+          )}
         </Item>
       ))}
     </>
@@ -67,8 +86,20 @@ const Expandable = styled(ShowMoreText)`
   ${body2Styles}
 `
 
-const Item = styled.div`
+const Item = styled.div<{ active: boolean }>`
   border: none;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+
+  opacity: ${({ active }) => (active ? 1 : 0.65)};
+
+  &:not(:last-child) {
+    border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
+  }
+`
+
+const Contents = styled.div`
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -79,8 +110,15 @@ const Item = styled.div`
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;
   }
+`
 
-  &:not(:last-child) {
+const AdminActions = styled.div`
+  display: flex;
+  justify-content: center;
+
+  ${({ theme }) => theme.bp.md} {
+    justify-content: flex-end;
+    border-top: solid 1px ${({ theme }) => theme.colors.green900};
     border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
   }
 `

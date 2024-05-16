@@ -13,7 +13,6 @@ enum Routes {
   LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,
   LOCATION_LIST = `/location/list`,
-  LOCATION_MINE = `/location/mine`,
 
   OFFER = `/offer/[externId]`,
   OFFER_NEW = `/offer/new`,

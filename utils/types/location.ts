@@ -82,6 +82,7 @@ export const LocationListParams = z
     lat: z.number().optional(),
     lng: z.number().optional(),
     maxDist: z.number().optional(),
+    mineOnly: z.union([z.literal('true'), z.literal('false')]).optional(),
     activeEventsOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),
@@ -94,13 +95,6 @@ export type LocationListResponse =
   | ({
       locations: LocationFragment[]
     } & Paginated)
-  | APIError
-
-export type LocationMineResponse =
-  | {
-      locations: LocationFragment[]
-      count: number
-    }
   | APIError
 
 export type LocationGetResponse =
@@ -188,7 +182,11 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
 }>
 
 // must match LocationWithRelations type above
-export const LocationQueryInclude = (activeEventsOnly = false) => {
+export const LocationQueryInclude = (
+  params: {
+    activeEventsOnly?: boolean
+  } = {}
+) => {
   return {
     address: true,
     steward: {
@@ -227,7 +225,7 @@ export const LocationQueryInclude = (activeEventsOnly = false) => {
     },
     _count: {
       select: {
-        offers: activeEventsOnly
+        offers: params.activeEventsOnly
           ? { where: { endDate: { gte: new Date().toISOString() } } }
           : true,
         members: true,

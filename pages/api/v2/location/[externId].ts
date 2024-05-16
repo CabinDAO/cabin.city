@@ -46,7 +46,9 @@ async function handleGet(
 ) {
   const query: Prisma.LocationFindUniqueArgs = {
     where: { externId: req.query.externId as string },
-    include: LocationQueryInclude(),
+    include: LocationQueryInclude({
+      activeEventsOnly: req.query.activeEventsOnly === 'true',
+    }),
   }
 
   const location = await prisma.location.findUnique(query)

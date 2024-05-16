@@ -12,7 +12,8 @@ export const LocationPageView = () => {
   const { user } = useProfile()
   const { useGet } = useBackend()
   const { data } = useGet<LocationGetResponse>(
-    id ? ['LOCATION', { externId: `${id}` }] : null
+    id ? ['LOCATION', { externId: `${id}` }] : null,
+    { activeEventsOnly: 'true' }
   )
 
   const location = !data || 'error' in data ? null : data?.location

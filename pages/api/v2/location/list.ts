@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { AuthData, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
@@ -21,7 +21,8 @@ export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<LocationListResponse>
+  res: NextApiResponse<LocationListResponse>,
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -35,6 +36,8 @@ async function handler(
     return
   }
   const params = parsed.data
+
+  const maybeCurrentPrivyDID = opts.auth.privyDID || '0'
 
   const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
   const take = PAGE_SIZE
@@ -50,8 +53,13 @@ async function handler(
   const idsInOrder = await sortPrequery(params, skip, take)
 
   const query: Prisma.LocationFindManyArgs = {
-    where: { id: { in: idsInOrder } },
-    include: LocationQueryInclude(params.activeEventsOnly === 'true'),
+    where: {
+      id: { in: idsInOrder },
+      steward: params.mineOnly ? { privyDID: maybeCurrentPrivyDID } : undefined,
+    },
+    include: LocationQueryInclude({
+      activeEventsOnly: params.activeEventsOnly === 'true',
+    }),
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential

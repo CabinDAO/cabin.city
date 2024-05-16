@@ -1,21 +1,21 @@
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { EMPTY } from '@/utils/display-utils'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
-import { OfferListResponse, OfferType } from '@/utils/types/offer'
+import {
+  OfferListResponse,
+  OfferNewParams,
+  OfferNewResponse,
+  OfferType,
+} from '@/utils/types/offer'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import {
-  Body1,
-  Caption,
-  H1,
-  H3,
-  H4,
-  Overline,
-} from '@/components/core/Typography'
+import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { Tag } from '@/components/core/Tag'
@@ -32,11 +32,24 @@ import { ExperienceList } from '@/components/offers/ExperienceList'
 export const LocationView = ({ location }: { location: LocationFragment }) => {
   const { externId, mediaItems } = location
 
-  const { useGet } = useBackend()
+  const router = useRouter()
+  const { useGet, useMutate } = useBackend()
   const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
     locationId: location.externId,
   })
   const offers = !offerData || 'error' in offerData ? [] : offerData.offers
+
+  const { trigger: createOffer } = useMutate<OfferNewResponse>('OFFER_NEW')
+  const handleNewEventClick = async () => {
+    const data = await createOffer({
+      locationExternId: location.externId,
+      offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
+    } as OfferNewParams)
+
+    if ('offerExternId' in data) {
+      router.push(`/experience/${data.offerExternId}/edit`).then(null)
+    }
+  }
 
   const galleryPreviewUrls =
     mediaItems.length > 0
@@ -51,11 +64,14 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const bookableOffers = offers.filter(
-    (offer) =>
-      (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-      offer.type !== OfferType.Residency
-  )
+  const [bookableOffersOnly, setBookableOffersOnly] = useState(true)
+  const bookableOffers = bookableOffersOnly
+    ? offers.filter(
+        (offer) =>
+          (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+          offer.type !== OfferType.Residency
+      )
+    : offers
 
   const { user } = useProfile()
   const isEditable =
@@ -87,10 +103,12 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
-                <span>
-                  {location.offerCount}{' '}
-                  {location.offerCount === 1 ? 'Event' : 'Events'}
-                </span>
+                {location.offerCount > 0 && (
+                  <span>
+                    {location.offerCount}{' '}
+                    {location.offerCount === 1 ? 'Event' : 'Events'}
+                  </span>
+                )}
               </LocationHeaderInformation>
             </LocationHeaderTitle>
 
@@ -112,9 +130,13 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               <Link href={`/location/${externId}/edit`}>
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
-                  <Overline>Edit Neighborhood</Overline>
+                  <Overline>Edit</Overline>
                 </Button>
               </Link>
+              <Button variant={'link'} onClick={handleNewEventClick}>
+                <Icon name="plus" size={1.2} />
+                <Overline>New Event</Overline>
+              </Button>
             </EditBar>
           )}
         </StyledContentCard>
@@ -173,14 +195,23 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         </SectionContent>
       </Section>
 
-      {!!bookableOffers.length && (
+      {(bookableOffers.length > 0 || (isEditable && offers.length > 0)) && (
         <Section>
           <SectionHeader>
             <H3>Events</H3>
+            {isEditable && (
+              <Button
+                variant={'link-slim'}
+                onClick={() => setBookableOffersOnly(!bookableOffersOnly)}
+              >
+                {bookableOffersOnly ? 'Show Past Events' : 'Active Events Only'}
+              </Button>
+            )}
           </SectionHeader>
           <ExperienceList
             offers={bookableOffers}
             actionButtonText={'Reserve'}
+            isEditable={isEditable}
           />
         </Section>
       )}
@@ -207,6 +238,7 @@ const SectionHeader = styled.div`
   display: flex;
   padding: 1.6rem 2.4rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
+  justify-content: space-between;
 `
 
 const LocationTypeTag = styled(Tag)`

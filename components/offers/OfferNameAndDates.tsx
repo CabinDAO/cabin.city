@@ -12,10 +12,12 @@ export const OfferNameAndDates = ({
   offer,
   small = false,
   withPrice = false,
+  noImage = false,
 }: {
   offer: OfferFragment
   small?: boolean
   withPrice?: boolean
+  noImage?: boolean
 }) => {
   // TODO: once dates are optional, always show them (if set)
   const showDates = offer.type !== OfferType.PaidColiving
@@ -32,7 +34,7 @@ export const OfferNameAndDates = ({
 
   return (
     <Container>
-      {offer.imageIpfsHash && (
+      {!noImage && offer.imageIpfsHash && (
         <Image
           src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
           alt={offer.type}
@@ -55,7 +57,7 @@ export const OfferNameAndDates = ({
           {duration} {formatShortAddress(offer.location.address)}
         </Location>
 
-        {withPrice && offer.price && (
+        {withPrice && offer.price > 0 && (
           <Price price={offer.price} priceInterval={offer.priceInterval} />
         )}
       </Details>
