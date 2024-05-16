@@ -8,12 +8,11 @@ import {
 import { ListingCard } from '../core/ListingCard'
 import { LocationListContainer } from './styles'
 
-export const LocationsByMemberCount = () => {
+export const Locations = () => {
   const { useGetPaginated } = useBackend()
 
   const { data, page, setPage, isLastPage } =
     useGetPaginated<LocationListResponse>('LOCATION_LIST', {
-      sort: 'membersDesc',
       activeEventsOnly: 'true',
     } as LocationListParamsType)
 

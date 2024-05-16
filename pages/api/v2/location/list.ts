@@ -87,7 +87,7 @@ const sortPrequery = async (
   offset: number,
   limit: number
 ) => {
-  const sort = params.sort || LocationSort.nameAsc
+  const sort = params.sort || LocationSort.default
 
   const sortByDist = sort === LocationSort.distAsc && params.lat && params.lng
   const maxDistance = sortByDist ? params.maxDist || 100 : null
@@ -107,11 +107,7 @@ const sortPrequery = async (
         ? Prisma.sql`INNER JOIN "Address" a ON l.id = a."locationId"`
         : Prisma.empty
     }
-    ${
-      params.offerType
-        ? Prisma.sql`INNER JOIN "Offer" o ON l.id = o."locationId" AND o.type = ${params.offerType}`
-        : Prisma.empty
-    }
+    LEFT JOIN "Offer" o ON l.id = o."locationId"
     LEFT JOIN "Profile" mem ON l.id = mem."neighborhoodId"
     WHERE ${
       params.locationType
@@ -120,7 +116,9 @@ const sortPrequery = async (
     }
     GROUP BY l.id
     ORDER BY ${
-      sortByDist
+      sort === LocationSort.default
+        ? Prisma.sql`COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
+        : sortByDist
         ? Prisma.sql`distance_in_km ASC,`
         : sort === LocationSort.membersDesc
         ? Prisma.sql`COALESCE(COUNT(mem.id), 0) DESC,`

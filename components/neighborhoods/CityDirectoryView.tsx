@@ -3,7 +3,7 @@ import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { useProfile } from '../auth/useProfile'
 import { NewListingButton } from './NewListingButton'
-import { LocationsByMemberCount } from '@/components/neighborhoods/LocationsByMemberCount'
+import { Locations } from '@/components/neighborhoods/Locations'
 
 export const CityDirectoryView = () => {
   const { user } = useProfile()
@@ -17,7 +17,7 @@ export const CityDirectoryView = () => {
         icon="neighborhoods"
         end={canCreateListings ? <NewListingButton /> : null}
       ></TitleCard>
-      <LocationsByMemberCount />
+      <Locations />
     </SingleColumnLayout>
   )
 }

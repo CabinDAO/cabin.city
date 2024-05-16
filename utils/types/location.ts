@@ -20,6 +20,7 @@ export enum LocationMediaCategory {
 }
 
 export enum LocationSort {
+  default = 'default',
   nameAsc = 'nameAsc',
   membersDesc = 'membersDesc',
   distAsc = 'distAsc',
@@ -76,7 +77,6 @@ export type LocationFragment = {
 
 export const LocationListParams = z
   .object({
-    offerType: z.nativeEnum(OfferType).optional(),
     locationType: z.nativeEnum(LocationType).optional(),
     sort: z.nativeEnum(LocationSort).optional(),
     lat: z.number().optional(),
