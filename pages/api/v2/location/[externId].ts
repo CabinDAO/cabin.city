@@ -46,7 +46,7 @@ async function handleGet(
 ) {
   const query: Prisma.LocationFindUniqueArgs = {
     where: { externId: req.query.externId as string },
-    include: LocationQueryInclude,
+    include: LocationQueryInclude(),
   }
 
   const location = await prisma.location.findUnique(query)
@@ -118,7 +118,7 @@ async function handlePost(
       where: {
         id: locationToEdit.id,
       },
-      include: LocationQueryInclude,
+      include: LocationQueryInclude(),
       data: {
         name: params.name,
         tagline: params.tagline,

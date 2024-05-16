@@ -51,7 +51,7 @@ async function handler(
 
   const query: Prisma.LocationFindManyArgs = {
     where: { id: { in: idsInOrder } },
-    include: LocationQueryInclude,
+    include: LocationQueryInclude(params.activeEventsOnly === 'true'),
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential

@@ -82,6 +82,9 @@ export const LocationListParams = z
     lat: z.number().optional(),
     lng: z.number().optional(),
     maxDist: z.number().optional(),
+    activeEventsOnly: z
+      .union([z.literal('true'), z.literal('false')])
+      .optional(),
     page: z.coerce.number().optional(),
   })
   .strict()
@@ -185,46 +188,50 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
 }>
 
 // must match LocationWithRelations type above
-export const LocationQueryInclude = {
-  address: true,
-  steward: {
-    include: {
-      avatar: {
-        select: {
-          url: true,
+export const LocationQueryInclude = (activeEventsOnly = false) => {
+  return {
+    address: true,
+    steward: {
+      include: {
+        avatar: {
+          select: {
+            url: true,
+          },
         },
-      },
-      wallet: {
-        select: {
-          cabinTokenBalance: true,
+        wallet: {
+          select: {
+            cabinTokenBalance: true,
+          },
         },
-      },
-      roles: {
-        include: {
-          walletHat: true,
-        },
-      },
-    },
-  },
-  mediaItems: true,
-  members: {
-    select: {
-      externId: true,
-      avatar: {
-        select: {
-          url: true,
+        roles: {
+          include: {
+            walletHat: true,
+          },
         },
       },
     },
-    orderBy: {
-      updatedAt: 'desc',
+    mediaItems: true,
+    members: {
+      select: {
+        externId: true,
+        avatar: {
+          select: {
+            url: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      take: 3,
     },
-    take: 3,
-  },
-  _count: {
-    select: {
-      offers: true,
-      members: true,
+    _count: {
+      select: {
+        offers: activeEventsOnly
+          ? { where: { endDate: { gte: new Date().toISOString() } } }
+          : true,
+        members: true,
+      },
     },
-  },
-} satisfies Prisma.LocationInclude
+  } satisfies Prisma.LocationInclude
+}

@@ -27,7 +27,7 @@ async function handler(
         privyDID: profile.privyDID,
       },
     },
-    include: LocationQueryInclude,
+    include: LocationQueryInclude(),
     orderBy: {
       name: 'asc',
     },

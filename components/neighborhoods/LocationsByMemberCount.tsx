@@ -14,6 +14,7 @@ export const LocationsByMemberCount = () => {
   const { data, page, setPage, isLastPage } =
     useGetPaginated<LocationListResponse>('LOCATION_LIST', {
       sort: 'membersDesc',
+      activeEventsOnly: 'true',
     } as LocationListParamsType)
 
   const locations = data
