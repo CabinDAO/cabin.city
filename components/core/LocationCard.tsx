@@ -96,9 +96,7 @@ export const LocationCard = (props: LocationCardProps) => {
             <LocationInfo
               iconName="offer"
               label={
-                location.offerCount
-                  ? `${location.offerCount} Experiences`
-                  : EMPTY
+                location.offerCount ? `${location.offerCount} Events` : EMPTY
               }
             />
           </LocationInfoGroupContainer>

@@ -94,20 +94,7 @@ export const NewLocationView = () => {
   }
 
   return (
-    <SingleColumnLayout
-      actionBar={
-        <ActionBar
-          primaryButton={{
-            label: 'Let’s go!',
-            onClick: handlePrimaryButtonClick,
-          }}
-          secondaryButton={{
-            label: 'Cancel',
-            onClick: handleSecondaryButtonClick,
-          }}
-        />
-      }
-    >
+    <SingleColumnLayout>
       <TitleCard title="New neighborhood" icon="close" iconHref="/" />
       <Container>
         <H3>Getting Started</H3>
@@ -132,11 +119,25 @@ export const NewLocationView = () => {
                 property listing page.
               </Body2>
             </JoiningTextContainer>
+            <HorizontalDivider />
+            <AppLink
+              external
+              href={EXTERNAL_LINKS.CITY_DIRECTORY}
+              iconSize={0.9}
+            >
+              <Overline>Learn More</Overline>
+            </AppLink>
           </Content>
-          <HorizontalDivider />
-          <AppLink external href={EXTERNAL_LINKS.CITY_DIRECTORY} iconSize={0.9}>
-            <Overline>Learn More</Overline>
-          </AppLink>
+          <ActionBar
+            primaryButton={{
+              label: 'Let’s go!',
+              onClick: handlePrimaryButtonClick,
+            }}
+            secondaryButton={{
+              label: 'Cancel',
+              onClick: handleSecondaryButtonClick,
+            }}
+          />
         </StyledContentCard>
       </Container>
     </SingleColumnLayout>
@@ -154,7 +155,6 @@ const Container = styled.div`
 `
 
 const StyledContentCard = styled(ContentCard)`
-  padding: 3.2rem 2.4rem;
   flex-direction: column;
   gap: 2.4rem;
 `
@@ -162,6 +162,7 @@ const Content = styled.div`
   flex-direction: column;
   display: flex;
   gap: 2.4rem;
+  padding: 3.2rem 2.4rem;
 
   @media ${({ theme }) => theme.bp.md} {
     width: 55%;

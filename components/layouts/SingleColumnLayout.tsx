@@ -1,10 +1,10 @@
+import React, { HTMLAttributes } from 'react'
+import { useDeviceSize } from '../hooks/useDeviceSize'
 import styled from 'styled-components'
 import { LaunchBanner } from '../citizenship/LaunchBanner'
-import { useDeviceSize } from '../hooks/useDeviceSize'
 import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
 import { Navbar } from '../core/Navbar'
 import { MainContent, NavbarContainer } from './common.styles'
-import React, { HTMLAttributes } from 'react'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 export type LayoutVariant = 'default' | 'full'
@@ -13,7 +13,6 @@ interface LayoutProps {
   children: React.ReactNode
   displayLaunchBanner?: boolean
   hideNavbar?: boolean
-  actionBar?: React.ReactNode
   className?: string
   variant?: LayoutVariant
 }
@@ -21,18 +20,16 @@ interface LayoutProps {
 export const SingleColumnLayout = ({
   children,
   displayLaunchBanner,
-  actionBar,
   hideNavbar,
   className,
   variant,
 }: LayoutProps) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
-  const withFooter = !actionBar
 
   return (
     <>
-      <OuterContainer className={className} withFooter={withFooter}>
+      <OuterContainer className={className}>
         {displayLaunchBanner && <LaunchBanner />}
         <Container variant={variant}>
           <MainContent variant={variant}>{children}</MainContent>
@@ -48,31 +45,20 @@ export const SingleColumnLayout = ({
             </>
           )}
         </Container>
-        <ActionBarContainer>{actionBar}</ActionBarContainer>
       </OuterContainer>
-      {withFooter && <Footer />}
+      <Footer />
     </>
   )
 }
 
-const OuterContainer = styled.div<{
-  withFooter?: boolean
-}>`
+const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: ${({ withFooter }) =>
-    withFooter ? `calc(100vh - ${FOOTER_HEIGHT}px)` : '100vh'};
+  min-height: ${`calc(100vh - ${FOOTER_HEIGHT}px)`};
   min-width: 100%;
   justify-content: flex-start;
   align-items: center;
   position: relative;
-`
-
-export const ActionBarContainer = styled.div`
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
 `
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {

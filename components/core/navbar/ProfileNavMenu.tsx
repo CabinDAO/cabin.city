@@ -67,16 +67,6 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
           <Icon name="citizen" size={2} color="green400" />
           <Subline1 $color="yellow100">Citizenship</Subline1>
         </ProfileMenuItem>
-        <ProfileMenuItem
-          onClick={() => handleClick('myLocations')}
-          href="/my-locations"
-        >
-          <Icon name="draft-proposal" size={2} color="green400" />
-          <MenuItemWithNote>
-            <Subline1 $color="yellow100">My Locations</Subline1>
-            <Caption $color="yellow100">({user.locationCount})</Caption>
-          </MenuItemWithNote>
-        </ProfileMenuItem>
         {user.citizenshipStatus == CitizenshipStatus.Verified && (
           <ProfileMenuItem onClick={() => handleClick('invite')} href="/invite">
             <Icon name="plus" size={2} color="green400" />

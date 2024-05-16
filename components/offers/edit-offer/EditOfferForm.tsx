@@ -52,26 +52,6 @@ export const EditOfferForm = ({
   }
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState(false)
-  const { showModal } = useModal()
-  const { useDelete } = useBackend()
-  const { trigger: deleteOffer } = useDelete([
-    'OFFER',
-    { externId: `${offer.externId}` },
-  ])
-
-  const router = useRouter()
-
-  const handleDelete = () => {
-    showModal(() => (
-      <DeleteConfirmationModal
-        entityName="experience"
-        onDelete={async () => {
-          await deleteOffer({})
-          router.push(`/location/${offer.location.externId}/edit?step=3`).then()
-        }}
-      />
-    ))
-  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit({ title: e.target.value.slice(0, MAX_OFFER_TITLE_LENGTH) })
@@ -208,7 +188,6 @@ export const EditOfferForm = ({
           onEdit({ price, priceInterval })
         }}
       />
-      )
       <HorizontalDivider />
       <ApplicationLink
         onEdit={(url) => {
@@ -221,13 +200,6 @@ export const EditOfferForm = ({
         errorMessage={REQUIRED_FIELD_ERROR}
       />
       <HorizontalDivider />
-      <DeleteButton
-        startAdornment={<Icon name="trash" size={1.2} />}
-        variant="tertiary"
-        onClick={handleDelete}
-      >
-        Delete Experience
-      </DeleteButton>
     </Container>
   )
 }

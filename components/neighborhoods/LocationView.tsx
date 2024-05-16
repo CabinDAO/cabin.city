@@ -73,7 +73,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
       <LocationDetailsContainer>
         {location.steward.externId && (
           <LocationTypeTag
-            label={'Verified'}
+            label={'Active'}
             color={'green400'}
             startAdornment={
               <Icon name={'logo-cabin'} size={1.8} color={'green400'} />
@@ -89,7 +89,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
                 <span>
                   {location.offerCount}{' '}
-                  {location.offerCount === 1 ? 'Experience' : 'Experiences'}
+                  {location.offerCount === 1 ? 'Event' : 'Events'}
                 </span>
               </LocationHeaderInformation>
             </LocationHeaderTitle>
@@ -149,18 +149,6 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         )}
       </GalleryPreviewContainer>
 
-      {!!bookableOffers.length && (
-        <Section>
-          <SectionHeader>
-            <H3>Experiences</H3>
-          </SectionHeader>
-          <ExperienceList
-            offers={bookableOffers}
-            actionButtonText={'Reserve'}
-          />
-        </Section>
-      )}
-
       <Section>
         <SectionHeader>
           <H3>Description</H3>
@@ -184,6 +172,18 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
           </DescriptionTwoColumn>
         </SectionContent>
       </Section>
+
+      {!!bookableOffers.length && (
+        <Section>
+          <SectionHeader>
+            <H3>Events</H3>
+          </SectionHeader>
+          <ExperienceList
+            offers={bookableOffers}
+            actionButtonText={'Reserve'}
+          />
+        </Section>
+      )}
     </LocationContent>
   )
 }

@@ -58,11 +58,6 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
         walletHat: true
       }
     }
-    locations: {
-      select: {
-        _count: true
-      }
-    }
   }
 }>
 
@@ -127,11 +122,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
       roles: {
         include: {
           walletHat: true,
-        },
-      },
-      locations: {
-        select: {
-          _count: true,
         },
       },
     },

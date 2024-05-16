@@ -56,8 +56,6 @@ export const EditProfileForm = ({
 const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   const bio = profileEditParams?.bio ?? user?.bio ?? ''
   const address = profileEditParams?.address ?? user?.address ?? undefined
-  const neighborhoodExternId =
-    profileEditParams?.neighborhoodExternId ?? user?.neighborhoodExternId
 
   return (
     <UpdateSection title="About">
@@ -67,10 +65,6 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
         onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
         onAddressChange={(address) =>
           onChange({ ...profileEditParams, address })
-        }
-        neighborhoodExternId={neighborhoodExternId}
-        onNeighborhoodChange={(n) =>
-          onChange({ ...profileEditParams, neighborhoodExternId: n || null })
         }
       />
     </UpdateSection>

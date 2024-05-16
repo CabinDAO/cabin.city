@@ -18,7 +18,7 @@ export const OfferDirectoryView = () => {
 
   return (
     <SingleColumnLayout>
-      <TitleCard icon="offer" title="Experiences" />
+      <TitleCard icon="offer" title="Events" />
       <Content>
         <ChipFilterBar>
           <ChipFilter

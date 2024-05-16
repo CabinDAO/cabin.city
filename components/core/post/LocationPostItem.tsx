@@ -27,10 +27,10 @@ export const LocationPostItem = ({
   return (
     <OuterContainer>
       {location.steward.externId && !hideVerifiedTag ? (
-        <VerifiedContainer>
+        <ActiveBadge>
           <Icon name="logo-cabin" color="green400" size={1.6} />
-          <Subline1 $color="green400">Verified</Subline1>
-        </VerifiedContainer>
+          <Subline1 $color="green400">Active</Subline1>
+        </ActiveBadge>
       ) : null}
       <Container onClick={handleOnClick}>
         <ImageContainer>
@@ -70,7 +70,7 @@ const OuterContainer = styled.div`
   width: 100%;
 `
 
-const VerifiedContainer = styled.div`
+const ActiveBadge = styled.div`
   display: flex;
   flex-direction: row;
   gap: 0.95rem;

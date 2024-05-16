@@ -14,7 +14,6 @@ import { ContentCard } from '../../core/ContentCard'
 import { Body2, H3 } from '../../core/Typography'
 import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'
-import { ActionBar } from '@/components/core/ActionBar'
 import { EmptyState } from '@/components/core/EmptyState'
 import { Button } from '@/components/core/Button'
 import { LocationOffersList } from '@/components/offers/edit-offer/LocationOffersList'
@@ -55,24 +54,11 @@ export const OffersStep = ({
   }
 
   return (
-    <SingleColumnLayout
-      actionBar={
-        <ActionBar
-          primaryButton={{
-            onClick: onNext,
-            label: 'Save & Continue',
-          }}
-          secondaryButton={{
-            onClick: onBack,
-            label: 'Back',
-          }}
-        />
-      }
-    >
+    <SingleColumnLayout>
       <TitleCard
         title={'Edit neighborhood'}
         icon="close"
-        iconHref="/my-locations"
+        iconHref="/location"
       />
       <Container>
         <StepIndicator>
@@ -85,10 +71,10 @@ export const OffersStep = ({
           <ContentCard shape="notch">
             <TopContent>
               <Left>
-                <H3>Host Cabin Citizens</H3>
+                <H3>Gather with neighbors</H3>
                 <Body2>
-                  Experiences are exclusive invitations to Cabin Citizens to
-                  visit and stay at your property.
+                  Events are invitations to your neighbors to get together and
+                  do something.
                 </Body2>
               </Left>
               <Right>
@@ -97,7 +83,7 @@ export const OffersStep = ({
                   onClick={handleCreateOfferClick}
                   isFullWidth
                 >
-                  New Experience
+                  New Event
                 </Button>
               </Right>
             </TopContent>
@@ -107,8 +93,8 @@ export const OffersStep = ({
           ) : (
             <StyledEmptyState
               icon="file-document"
-              title="No experiences yet"
-              description="Create new experiences and manage them from here"
+              title="No events yet"
+              description="Create new events and manage them from here"
             />
           )}
         </ContainerGroup>
