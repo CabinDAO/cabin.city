@@ -50,7 +50,12 @@ async function handler(
     return
   }
 
-  const idsInOrder = await sortPrequery(params, skip, take)
+  const idsInOrder = await sortPrequery(
+    params,
+    maybeCurrentPrivyDID,
+    skip,
+    take
+  )
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
@@ -84,6 +89,7 @@ async function handler(
 // get ids for locations sorted in proper order
 const sortPrequery = async (
   params: LocationListParamsType,
+  maybeCurrentPrivyDID: string,
   offset: number,
   limit: number
 ) => {
@@ -108,16 +114,17 @@ const sortPrequery = async (
         : Prisma.empty
     }
     LEFT JOIN "Offer" o ON l.id = o."locationId"
+    LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
     LEFT JOIN "Profile" mem ON l.id = mem."neighborhoodId"
     WHERE ${
       params.locationType
         ? Prisma.sql`l.type = ${params.locationType}`
         : Prisma.sql`1=1`
     }
-    GROUP BY l.id
+    GROUP BY l.id, steward."privyDID"
     ORDER BY ${
-      sort === LocationSort.default
-        ? Prisma.sql`COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
+      sort === LocationSort.default // current users locations go first, then order by num active events
+        ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
         : sortByDist
         ? Prisma.sql`distance_in_km ASC,`
         : sort === LocationSort.membersDesc
