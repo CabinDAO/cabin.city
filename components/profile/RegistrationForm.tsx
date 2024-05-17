@@ -2,17 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
-import { useBackend } from '@/components/hooks/useBackend'
-import {
-  AddressFragmentType,
-  LocationListParamsType,
-  LocationListResponse,
-} from '@/utils/types/location'
-import { SelectOption } from '@/components/hooks/useDropdownLogic'
+import { AddressFragmentType } from '@/utils/types/location'
 import styled from 'styled-components'
 import { AvatarFragmentType } from '@/utils/types/profile'
 import { Button } from '@/components/core/Button'
-import { Dropdown } from '@/components/core/Dropdown'
 import { InputText } from '@/components/core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { MAX_DISPLAY_NAME_LENGTH } from './constants'
@@ -24,10 +17,6 @@ import {
 } from './validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { ADDRESS_ERROR } from '@/utils/validate'
-import LoadingSpinner from '@/components/core/LoadingSpinner'
-import { InputLabel } from '@/components/core/InputLabel'
-import { Caption } from '@/components/core/Typography'
-import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 export function RegistrationForm({
   onSubmit,
@@ -42,9 +31,6 @@ export function RegistrationForm({
   const [avatar, setAvatar] = useState<AvatarFragmentType | undefined>()
   const [name, setName] = useState('')
   const [address, setAddress] = useState<AddressFragmentType>()
-  const [neighborhoodExternId, setNeighborhoodExternId] = useState<
-    string | null | undefined
-  >()
 
   const [canShowNameError, setCanShowNameError] = useState(false)
   const [canShowAddressError, setCanShowAddressError] = useState(false)
@@ -66,7 +52,6 @@ export function RegistrationForm({
     //     email: email.trim(),
     //     address,
     //     avatar,
-    //     neighborhoodExternId: neighborhood?.externId,
     //   })
     //   setSubmitted(true)
     //   return
@@ -85,7 +70,6 @@ export function RegistrationForm({
     // onSubmit,
     // user,
     // submitted,
-    // neighborhood?.externId,
   ])
 
   const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +94,6 @@ export function RegistrationForm({
           name: name.trim(),
           address,
           avatar,
-          neighborhoodExternId: neighborhoodExternId || undefined,
         })
       } else {
         linkEmail()
@@ -151,12 +134,6 @@ export function RegistrationForm({
         </InputContainer>
       </InputGroup>
 
-      <NeighborhoodSelect
-        address={address}
-        neighborhoodExternId={neighborhoodExternId}
-        onNeighborhoodChange={setNeighborhoodExternId}
-      />
-
       <Submission>
         <SubmitButton
           disabled={!!user || submitted}
@@ -167,140 +144,6 @@ export function RegistrationForm({
         </SubmitButton>
       </Submission>
     </Container>
-  )
-}
-
-export function NeighborhoodSelect({
-  address,
-  neighborhoodExternId,
-  onNeighborhoodChange,
-}: {
-  address: AddressFragmentType | undefined
-  neighborhoodExternId: string | null | undefined
-  onNeighborhoodChange: (n: string | null | undefined) => void
-}) {
-  const label = 'Cabin Neighborhood'
-  const { useGet } = useBackend()
-  const { data, isLoading } = useGet<LocationListResponse>(
-    address ? 'LOCATION_LIST' : null,
-    {
-      lat: address?.lat,
-      lng: address?.lng,
-      maxDistance: 200,
-    } as LocationListParamsType
-  )
-  const neighborhoods = !data || 'error' in data ? [] : data.locations
-
-  const neighborhoodSelectOptions = neighborhoods.map((n) => {
-    return {
-      label: n.name,
-      value: n.externId,
-    }
-  })
-
-  if (neighborhoodSelectOptions.length > 0) {
-    neighborhoodSelectOptions.push({
-      label: 'none',
-      value: '',
-    })
-  }
-
-  const [selectedOption, setSelectedOption] = useState<
-    SelectOption | undefined
-  >()
-
-  const selectNeighborhood = (o: SelectOption | undefined) => {
-    setSelectedOption(o)
-
-    if (!o) {
-      onNeighborhoodChange(undefined)
-      return
-    }
-
-    if (o?.value == '') {
-      onNeighborhoodChange(null)
-      return
-    }
-
-    const n = o && neighborhoods.find((ne) => ne.externId === o.value)
-    onNeighborhoodChange(n?.externId)
-  }
-
-  useEffect(() => {
-    if (isLoading) {
-      return
-    }
-
-    if (!neighborhoodSelectOptions.length) {
-      selectNeighborhood(undefined)
-      return
-    }
-
-    if (neighborhoodExternId === undefined) {
-      selectNeighborhood(neighborhoodSelectOptions[0])
-      return
-    }
-
-    const selectedInOptions = neighborhoodSelectOptions.find(
-      (n) =>
-        n.value === (neighborhoodExternId === null ? '' : neighborhoodExternId)
-    )
-
-    if (!selectedInOptions) {
-      selectNeighborhood(neighborhoodSelectOptions[0])
-    } else if (!selectedOption) {
-      setSelectedOption(selectedInOptions)
-    }
-  }, [
-    neighborhoodSelectOptions,
-    neighborhoodExternId,
-    selectedOption,
-    isLoading,
-  ])
-
-  if (!address || !neighborhoods.length) {
-    return (
-      <InputGroup>
-        <InputContainer>
-          <InputLabel required={false} label={label} />
-          <Caption>
-            {!address ? (
-              'Enter a location'
-            ) : (
-              <>
-                No Cabin neighborhoods near you yet. Want to start one?{' '}
-                <ContactUsLink
-                  subject={'new Cabin neighborhood'}
-                  body={`I wanna start a neighborhood in ${address.formattedAddress}.%0D%0A%0D%0AMy relevant background: `}
-                >
-                  Contact us
-                </ContactUsLink>
-              </>
-            )}
-          </Caption>
-        </InputContainer>
-      </InputGroup>
-    )
-  }
-
-  return (
-    <InputGroup>
-      <InputContainer>
-        {isLoading ? (
-          <>
-            <InputLabel required={false} label={label} />
-            <LoadingSpinner />
-          </>
-        ) : (
-          <Dropdown
-            label={label}
-            options={neighborhoodSelectOptions}
-            selectedOption={selectedOption}
-            onSelect={(n) => selectNeighborhood(n)}
-          />
-        )}
-      </InputContainer>
-    </InputGroup>
   )
 }
 

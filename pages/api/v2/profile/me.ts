@@ -57,9 +57,6 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     email: profile.email,
     bio: profile.bio,
     address: profile.address || undefined,
-    neighborhoodExternId: profile.neighborhood
-      ? profile.neighborhood.externId
-      : null,
     inviteCode: profile.inviteCode ?? '',
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
@@ -114,11 +111,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    neighborhood: {
-      select: {
-        externId: true
-      }
-    }
     avatar: {
       select: {
         url: true
@@ -160,11 +152,6 @@ const MyProfileQueryInclude = {
     },
   },
   address: true,
-  neighborhood: {
-    select: {
-      externId: true,
-    },
-  },
   avatar: {
     select: {
       url: true,

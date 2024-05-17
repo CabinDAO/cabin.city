@@ -15,6 +15,7 @@ UPDATE "Location" set type = 'Outpost';
 
 -- DropForeignKey
 ALTER TABLE "Profile" DROP CONSTRAINT "Profile_neighborhoodId_fkey";
+ALTER TABLE "Profile" DROP COLUMN "neighborhoodId";
 
 -- DropForeignKey
 ALTER TABLE "Location" DROP CONSTRAINT "Location_caretakerId_fkey";
@@ -30,10 +31,6 @@ DROP COLUMN "sleepCapacity";
 -- DropTable
 DROP TABLE "Neighborhood";
 
-UPDATE "Profile" set "neighborhoodId" = null;
-
--- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_neighborhoodId_fkey" FOREIGN KEY ("neighborhoodId") REFERENCES "Location" ("id")  ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Location" ADD CONSTRAINT "Location_stewardId_fkey" FOREIGN KEY ("stewardId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

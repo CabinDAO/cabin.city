@@ -142,9 +142,6 @@ model Profile {
   // the invites that this profile has spawned
   invitees   Invite[] @relation("Invitees")
 
-  neighborhood   Location? @relation("Members", fields: [neighborhoodId], references: [id])
-  neighborhoodId Int?
-
   roles              Role[]
   stewardedLocations Location[]         @relation("Steward")
   votes              LocationVote[]
@@ -275,7 +272,6 @@ model Location {
   offers     Offer[]
   votes      LocationVote[]
   activities Activity[]
-  members    Profile[]      @relation("Members")
 }
 
 enum LocationType {

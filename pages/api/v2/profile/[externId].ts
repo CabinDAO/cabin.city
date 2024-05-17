@@ -29,11 +29,6 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    neighborhood: {
-      select: {
-        externId: true
-      }
-    }
     avatar: {
       select: {
         url: true
@@ -95,11 +90,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       address: true,
-      neighborhood: {
-        select: {
-          externId: true,
-        },
-      },
       avatar: {
         select: {
           url: true,
@@ -180,11 +170,6 @@ async function handlePost(
                 update: params.data.address,
               },
             }
-          : undefined,
-        neighborhood: params.data.neighborhoodExternId
-          ? { connect: { externId: params.data.neighborhoodExternId } }
-          : params.data.neighborhoodExternId === null
-          ? { disconnect: true }
           : undefined,
       },
       where: {
@@ -289,9 +274,6 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    neighborhoodExternId: profile.neighborhood
-      ? profile.neighborhood.externId
-      : null,
     address: profile.address
       ? {
           locality: profile.address.locality,

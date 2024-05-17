@@ -61,7 +61,6 @@ export type ProfileListFragment = {
   email: string
   bio: string
   address: ShortAddressFragmentType | null
-  neighborhoodExternId: string | null
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
@@ -138,7 +137,6 @@ export type ProfileBasicFragment = {
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
   address: ShortAddressFragmentType | undefined
-  neighborhoodExternId: string | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {
@@ -203,7 +201,6 @@ export type MeFragment = {
   email: string
   bio: string
   address: AddressFragmentType | undefined
-  neighborhoodExternId: string | null
   inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
@@ -233,7 +230,6 @@ export const ProfileNewParams = z
     address: AddressFragment,
     avatar: AvatarFragment.optional(),
     inviteExternId: z.string().optional(),
-    neighborhoodExternId: z.string().optional(),
   })
   .strict()
 export type ProfileNewParamsType = z.infer<typeof ProfileNewParams>
@@ -247,7 +243,6 @@ export const ProfileEditParams = z
       address: AddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
       avatar: AvatarFragment.optional(),
-      neighborhoodExternId: z.string().nullable().optional(),
     }),
     roleTypes: z.array(z.nativeEnum(RoleType)).optional(),
   })

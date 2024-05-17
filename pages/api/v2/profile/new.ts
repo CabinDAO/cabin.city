@@ -57,7 +57,6 @@ async function handler(
     walletAddress: params.walletAddress,
     name: params.name,
     email: params.email,
-    neighborhoodExternId: params.neighborhoodExternId,
     address: params.address,
     avatar: params.avatar,
     invite,

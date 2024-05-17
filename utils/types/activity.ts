@@ -37,14 +37,11 @@ export type ActivityListFragment = {
     role?: RoleFragment
     location?: Pick<
       LocationFragment,
-      | 'externId'
-      | 'steward'
-      | 'name'
-      | 'tagline'
-      | 'bannerImageIpfsHash'
-      | 'offerCount'
-      | 'memberCount'
-    > & { address: ShortAddressFragmentType }
+      'externId' | 'name' | 'tagline' | 'bannerImageIpfsHash' | 'offerCount'
+    > & {
+      address: ShortAddressFragmentType
+      steward: Pick<LocationFragment['steward'], 'externId'>
+    }
     offer?: Pick<
       OfferFragment,
       | 'externId'
@@ -160,19 +157,17 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         tagline: true
         description: true
         bannerImageIpfsHash: true
-        steward: {
-          select: {
-            externId: true
-            name: true
-            createdAt: true
-          }
-        }
         address: {
           select: {
             locality: true
             admininstrativeAreaLevel1Short: true
             country: true
             countryShort: true
+          }
+        }
+        steward: {
+          select: {
+            externId: true
           }
         }
       }
@@ -257,19 +252,17 @@ export const ActivityQueryInclude = {
       tagline: true,
       description: true,
       bannerImageIpfsHash: true,
-      steward: {
-        select: {
-          externId: true,
-          name: true,
-          createdAt: true,
-        },
-      },
       address: {
         select: {
           locality: true,
           admininstrativeAreaLevel1Short: true,
           country: true,
           countryShort: true,
+        },
+      },
+      steward: {
+        select: {
+          externId: true,
         },
       },
     },

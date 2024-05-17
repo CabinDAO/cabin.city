@@ -15,13 +15,12 @@ import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
 import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
+import { Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import { Tag } from '@/components/core/Tag'
 import Icon from '@/components/core/Icon'
 import { ProfileContact } from '@/components/core/ProfileContact'
-import { ProfilesCount } from '@/components/core/ProfilesCount'
 import { Button } from '@/components/core/Button'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -111,18 +110,6 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
                 )}
               </LocationHeaderInformation>
             </LocationHeaderTitle>
-
-            <LocationHeaderHorizontalBar />
-
-            <MembersContainer>
-              <Members>
-                <Caption>
-                  {location.memberCount}{' '}
-                  {location.memberCount === 1 ? 'Member' : 'Members'}
-                </Caption>
-                <ProfilesCount profiles={location.recentMembers ?? []} />
-              </Members>
-            </MembersContainer>
           </LocationHeader>
 
           {isEditable && (
@@ -290,23 +277,6 @@ const DescriptionDetails = styled.div`
   flex: 1;
 `
 
-const HorizontalBar = styled.div`
-  opacity: 0.12;
-  border-top: 1px solid ${({ theme }) => theme.colors.green900};
-  width: 100%;
-`
-
-const LocationHeaderHorizontalBar = styled.div`
-  opacity: 0.12;
-  border-top: 1px solid ${({ theme }) => theme.colors.green900};
-  width: 100%;
-  display: block;
-
-  ${({ theme }) => theme.bp.md} {
-    display: none;
-  }
-`
-
 const LocationContent = styled.div`
   display: flex;
   flex-direction: column;
@@ -430,27 +400,4 @@ const GalleryPreviewButton = styled(Button)`
 const StyledLink = styled(Link)`
   border: 1px solid ${({ theme }) => theme.colors.black};
   cursor: pointer;
-`
-
-const MembersContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  gap: 1.6rem;
-  justify-content: end;
-`
-
-const Members = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.8rem;
-`
-
-const InternetSpeed = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-
-  ${Body1} {
-    opacity: 0.75;
-  }
 `

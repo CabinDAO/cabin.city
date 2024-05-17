@@ -157,9 +157,6 @@ const profilesToFragments = (
       name: profile.name,
       email: profile.email,
       bio: profile.bio,
-      neighborhoodExternId: profile.neighborhood
-        ? profile.neighborhood.externId
-        : null,
       isAdmin: profile.isAdmin,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
@@ -204,11 +201,6 @@ const profilesToFragments = (
 type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     address: true
-    neighborhood: {
-      select: {
-        externId: true
-      }
-    }
     avatar: true
     wallet: {
       include: {
@@ -230,11 +222,6 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
 // must match ListedProfileWithRelations  above
 const ListedProfileQueryInclude = {
   address: true,
-  neighborhood: {
-    select: {
-      externId: true,
-    },
-  },
   avatar: true,
   wallet: {
     include: {

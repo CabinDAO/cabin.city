@@ -1,7 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 import { Prisma } from '@prisma/client'
-import { AvatarFragmentType, ProfileBasicFragment } from '@/utils/types/profile'
+import { ProfileBasicFragment } from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { APIError, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'
@@ -21,8 +21,6 @@ export enum LocationMediaCategory {
 
 export enum LocationSort {
   default = 'default',
-  nameAsc = 'nameAsc',
-  membersDesc = 'membersDesc',
   distAsc = 'distAsc',
 }
 
@@ -50,11 +48,6 @@ export type ShortAddressFragmentType = Pick<
   'locality' | 'admininstrativeAreaLevel1Short' | 'country' | 'countryShort'
 >
 
-export type RecentMemberFragment = {
-  externId: string
-  avatar: AvatarFragmentType
-}
-
 export type LocationFragment = {
   createdAt: string
   externId: string
@@ -71,8 +64,6 @@ export type LocationFragment = {
   }[]
   // offers: OfferItemFragment[]
   offerCount: number
-  memberCount: number
-  recentMembers: RecentMemberFragment[]
 }
 
 export const LocationListParams = z
@@ -158,24 +149,9 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
       }
     }
     mediaItems: true
-    members: {
-      select: {
-        externId: true
-        avatar: {
-          select: {
-            url: true
-          }
-        }
-      }
-      orderBy: {
-        updatedAt: 'desc'
-      }
-      take: 3
-    }
     _count: {
       select: {
         offers: true
-        members: true
       }
     }
   }
@@ -209,26 +185,11 @@ export const LocationQueryInclude = (
       },
     },
     mediaItems: true,
-    members: {
-      select: {
-        externId: true,
-        avatar: {
-          select: {
-            url: true,
-          },
-        },
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: 3,
-    },
     _count: {
       select: {
         offers: params.activeEventsOnly
           ? { where: { endDate: { gte: new Date().toISOString() } } }
           : true,
-        members: true,
       },
     },
   } satisfies Prisma.LocationInclude

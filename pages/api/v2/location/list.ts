@@ -115,7 +115,6 @@ const sortPrequery = async (
     }
     LEFT JOIN "Offer" o ON l.id = o."locationId"
     LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
-    LEFT JOIN "Profile" mem ON l.id = mem."neighborhoodId"
     WHERE ${
       params.locationType
         ? Prisma.sql`l.type = ${params.locationType}`
@@ -127,8 +126,6 @@ const sortPrequery = async (
         ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
         : sortByDist
         ? Prisma.sql`distance_in_km ASC,`
-        : sort === LocationSort.membersDesc
-        ? Prisma.sql`COALESCE(COUNT(mem.id), 0) DESC,`
         : Prisma.empty
     } l.name ASC, l."createdAt" ASC
     LIMIT ${limit}
@@ -195,14 +192,5 @@ export const locationToFragment = (
       }
     }),
     offerCount: loc._count.offers,
-    memberCount: loc._count.members,
-    recentMembers: loc.members.map((m) => {
-      return {
-        externId: m.externId,
-        avatar: {
-          url: m.avatar ? m.avatar.url : '',
-        },
-      }
-    }),
   }
 }

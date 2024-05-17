@@ -10,7 +10,13 @@ import {
   ActivityWithRelations,
   ActivityQueryInclude,
 } from '@/utils/types/activity'
-import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+import {
+  AvatarFragmentType,
+  CitizenshipStatus,
+  RoleFragment,
+  RoleLevel,
+  RoleType,
+} from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
@@ -124,6 +130,9 @@ const toFragments = (
               description: activity.location.description,
               tagline: activity.location.tagline,
               bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
+              steward: {
+                externId: activity.location.steward.externId,
+              },
               address: {
                 locality: activity.location.address?.locality || '',
                 admininstrativeAreaLevel1Short:
@@ -132,7 +141,6 @@ const toFragments = (
                 country: activity.location.address?.country || '',
                 countryShort: activity.location.address?.countryShort || '',
               },
-              memberCount: 0, // TODO: implement
               offerCount: 0, // TODO: implement
             }
           : undefined,

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import Icon from './Icon'
-import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { emptyFunction } from '@/utils/general'
 import { EMPTY, truncate } from '@/utils/display-utils'
@@ -10,10 +9,7 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
-import {
-  LocationFragment,
-  ShortAddressFragmentType,
-} from '@/utils/types/location'
+import { ShortAddressFragmentType } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
@@ -23,8 +19,6 @@ interface ListingCardProps {
     externId: string
     name: string | null | undefined
     bannerImageIpfsHash: string | null | undefined
-    memberCount: number | null | undefined
-    recentMembers: LocationFragment['recentMembers'] | null | undefined
     address: ShortAddressFragmentType | null | undefined
     offerCount: number | null | undefined
   }
@@ -49,8 +43,7 @@ export const ListingCard = (props: ListingCardProps) => {
     editMode = false,
   } = props
 
-  const { externId, bannerImageIpfsHash, memberCount, recentMembers, address } =
-    location
+  const { externId, bannerImageIpfsHash, address } = location
 
   const name = props.location.name ?? 'New Neighborhood'
 
@@ -89,14 +82,6 @@ export const ListingCard = (props: ListingCardProps) => {
             <NameH2>{truncatedName}</NameH2>
             <Caption>{formatShortAddress(address) ?? EMPTY}</Caption>
           </SummaryContainer>
-          <AggregatedDataContainer>
-            <MembersContainer>
-              {<ProfilesCount profiles={recentMembers ?? []} />}
-              <Caption emphasized>{`(${
-                memberCount?.toLocaleString() ?? 0
-              } Members)`}</Caption>
-            </MembersContainer>
-          </AggregatedDataContainer>
         </ContentContainer>
         <HorizontalDivider />
       </ContainerLink>
@@ -199,15 +184,6 @@ const SummaryContainer = styled.div`
   width: 100%;
 `
 
-const AggregatedDataContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 0.8rem;
-`
-
 const NameH2 = styled(H2)`
   margin-bottom: 0.4rem;
   ${({ theme }) => theme.bp.md} {
@@ -234,12 +210,4 @@ const LocationTagContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-`
-
-const MembersContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  justify-content: flex-start;
-  align-items: center;
 `
