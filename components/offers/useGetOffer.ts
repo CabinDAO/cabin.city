@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import { OfferGetResponse } from '@/utils/types/offer'
+import { canEditLocation } from '@/utils/location'
 
 export const useGetOffer = (offerId: string) => {
   const router = useRouter()
@@ -14,9 +15,7 @@ export const useGetOffer = (offerId: string) => {
 
   const offer = data && 'offer' in data ? data.offer : null
 
-  const isUserSteward = user?.externId === offer?.location.steward.externId
-
-  const isEditable = !!(offer && (user?.isAdmin || isUserSteward))
+  const isEditable = !!offer && canEditLocation(user, offer.location)
 
   const isVisible = !!offer && isEditable
 
@@ -32,7 +31,6 @@ export const useGetOffer = (offerId: string) => {
 
   return {
     offer,
-    isUserSteward,
     isEditable,
     isVisible,
     refetchLocation: async () => {

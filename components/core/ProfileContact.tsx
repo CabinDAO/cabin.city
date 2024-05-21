@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { CitizenshipStatus, ProfileBasicFragment } from '@/utils/types/profile'
+import { ProfileBasicFragment } from '@/utils/types/profile'
 import { roleInfoFromType } from '@/utils/roles'
 import { format, parseISO } from 'date-fns'
 import styled, { css } from 'styled-components'
@@ -8,11 +8,6 @@ import { ProfileIcons } from './ProfileIcons'
 import { Body1, Caption, H4 } from './Typography'
 import { Button } from '@/components/core/Button'
 import { NoWrap } from './NoWrap'
-import { useProfile } from '@/components/auth/useProfile'
-import Icon from '@/components/core/Icon'
-import theme from '@/styles/theme'
-import { StewardContactModal } from '@/components/core/StewardContactModal'
-import { useModal } from '@/components/hooks/useModal'
 
 interface ProfileContactProps {
   profile: ProfileBasicFragment
@@ -20,12 +15,6 @@ interface ProfileContactProps {
 }
 
 export const ProfileContact = ({ profile, onContact }: ProfileContactProps) => {
-  const { showModal } = useModal()
-  const { user } = useProfile()
-
-  const isCitizen =
-    user && user.citizenshipStatus === CitizenshipStatus.Verified
-
   const roleInfos = profile.roles.map((profileRole) =>
     roleInfoFromType(profileRole.type)
   )
@@ -35,85 +24,42 @@ export const ProfileContact = ({ profile, onContact }: ProfileContactProps) => {
   return (
     <Container>
       <Top flexDir={'row'}>
-        {isCitizen ? (
-          <Link href={`/profile/${profile.externId}`}>
-            <Avatar src={profile.avatar?.url} size={7.2} />
-          </Link>
-        ) : (
-          <div
-            style={{
-              width: '7.2rem',
-              height: '7.2rem',
-              backgroundColor: theme.colors.yellow100,
-              border: `1px solid ${theme.colors.green900}`,
-              borderRadius: '50%',
-              display: 'flex',
-              flexShrink: 0,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Icon name={'silhouette'} size={4} />
-          </div>
-        )}
-
+        <Link href={`/profile/${profile.externId}`}>
+          <Avatar src={profile.avatar?.url} size={7.2} />
+        </Link>
         <Info>
           <Name wrapToNextLine={wrapToNextLine}>
-            {isCitizen ? (
-              <>
-                <Link href={`/profile/${profile.externId}`}>
-                  <NoWrap>
-                    <H4>{profile.name}</H4>
-                  </NoWrap>
-                </Link>
-                <ProfileIcons
-                  size={1.6}
-                  citizenshipStatus={profile.citizenshipStatus}
-                  roleInfos={roleInfos}
-                />
-              </>
-            ) : (
-              <>
-                <NoWrap>
-                  <H4>Steward</H4>
-                </NoWrap>
-                <Icon name={'check-star'} size={1.6} />
-              </>
-            )}
+            <Link href={`/profile/${profile.externId}`}>
+              <NoWrap>
+                <H4>{profile.name}</H4>
+              </NoWrap>
+            </Link>
+            <ProfileIcons
+              size={1.6}
+              citizenshipStatus={profile.citizenshipStatus}
+              roleInfos={roleInfos}
+            />
           </Name>
           <Caption>
-            {isCitizen ? (
-              <>
-                {(profile.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
-                ₡ABIN&nbsp;·&nbsp;Joined{' '}
-                {format(parseISO(profile.createdAt), 'yyyy')}
-              </>
-            ) : (
-              <>Become a Citizen to connect with the property&apos;s steward.</>
-            )}
+            {(profile.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
+            ₡ABIN&nbsp;·&nbsp;Joined{' '}
+            {format(parseISO(profile.createdAt), 'yyyy')}
           </Caption>
         </Info>
       </Top>
 
-      <Body1>{isCitizen ? profile?.bio : ''}</Body1>
+      <Body1>{profile.bio}</Body1>
 
       <ContactContainer>
-        {isCitizen ? (
-          <Link href={`mailto:${profile.email}`}>
-            <ContactButton onClick={onContact} variant="tertiary">
-              Contact
-            </ContactButton>
-          </Link>
-        ) : (
-          <ContactButton
-            onClick={() => {
-              showModal(() => <StewardContactModal />)
-            }}
-            variant="tertiary"
-          >
-            Learn More
+        <Link
+          href={`mailto:${profile.email}`}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+        >
+          <ContactButton onClick={onContact} variant="tertiary">
+            Contact
           </ContactButton>
-        )}
+        </Link>
       </ContactContainer>
     </Container>
   )

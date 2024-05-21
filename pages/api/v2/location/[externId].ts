@@ -17,6 +17,7 @@ import {
   LocationWithRelations,
 } from '@/utils/types/location'
 import { locationToFragment } from '@/pages/api/v2/location/list'
+import { canEditLocation } from '@/utils/location'
 
 async function handler(
   req: NextApiRequest,
@@ -85,8 +86,8 @@ async function handlePost(
     return
   }
 
-  if (locationToEdit.steward.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only stewards can edit their locations' })
+  if (!canEditLocation(profile, locationToEdit)) {
+    res.status(403).send({ error: 'You cannot edit this location' })
     return
   }
 
@@ -181,8 +182,8 @@ async function handleDelete(
     return
   }
 
-  if (locationToDelete.steward.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only stewards can delete their locations' })
+  if (!canEditLocation(profile, locationToDelete)) {
+    res.status(403).send({ error: 'You cannot delete this location' })
     return
   }
 

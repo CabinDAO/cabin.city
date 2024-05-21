@@ -103,10 +103,10 @@ export const NewLocationView = () => {
             <JoiningTextContainer>
               <H3>Joining the City Directory</H3>
               <Body2>
-                Cabin&apos;s City Directory is a hub for connecting people and
-                places around the world. If you&apos;re interested in welcoming
-                residents focused on building better ways to live, create,
-                build, and steward the natural land, this is the place for you.
+                Cabin's City Directory is a hub for connecting people and places
+                around the world. If you're interested in welcoming residents
+                focused on building better ways to live, create, build, and
+                steward the natural land, this is the place for you.
               </Body2>
               <Body2>
                 Properties compete to increase their rank on the directory

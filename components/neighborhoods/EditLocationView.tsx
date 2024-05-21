@@ -29,6 +29,7 @@ import {
   validateTitle,
 } from '@/components/neighborhoods/validations'
 import { unique } from '@/utils/array'
+import { canEditLocation } from '@/utils/location'
 import styled from 'styled-components'
 import { Descendant } from 'slate'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
@@ -66,9 +67,6 @@ function EditLocationView() {
 
   const { user } = useProfile({ redirectTo: '/' })
 
-  const isEditable =
-    user?.isAdmin || user?.externId === location?.steward.externId
-
   const [highlightErrors, setHighlightErrors] = useState(false)
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -88,7 +86,7 @@ function EditLocationView() {
     })),
   })
 
-  if (isLoading || !location || !isEditable) {
+  if (isLoading || !location || !canEditLocation(user, location)) {
     return null
   }
 
@@ -238,13 +236,15 @@ function EditLocationView() {
                   errorMessage={REQUIRED_FIELD_ERROR}
                 />
               </FullWidthInputContainer>
-              <InputCoupleContainer>
-                <InputText
-                  placeholder={location.steward.name ?? ''}
-                  label="Steward"
-                  disabled
-                />
-              </InputCoupleContainer>
+              {user?.isAdmin && (
+                <InputCoupleContainer>
+                  <InputText
+                    placeholder={location.steward?.name ?? 'no steward'}
+                    label="Steward"
+                    disabled
+                  />
+                </InputCoupleContainer>
+              )}
               <FullWidthInputContainer>
                 <InputLabel label={'Description'} required />
                 <div style={{ margin: '1rem 0' }}>

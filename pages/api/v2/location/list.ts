@@ -165,26 +165,28 @@ export const locationToFragment = (
         }
       : null,
     bannerImageIpfsHash: loc.bannerImageIpfsHash,
-    steward: {
-      createdAt: loc.steward.createdAt.toISOString(),
-      externId: loc.steward.externId,
-      name: loc.steward.name,
-      email: loc.steward.email,
-      bio: loc.steward.bio,
-      citizenshipStatus: loc.steward
-        .citizenshipStatus as CitizenshipStatus | null,
-      cabinTokenBalanceInt: loc.steward.wallet.cabinTokenBalance.toNumber(),
-      avatar: loc.steward.avatar
-        ? {
-            url: loc.steward.avatar.url,
-          }
-        : undefined,
-      roles: loc.steward.roles.map((role) => ({
-        hatId: role.walletHat?.hatId || null,
-        type: role.type as RoleType,
-        level: role.level as RoleLevel,
-      })),
-    },
+    steward: loc.steward
+      ? {
+          createdAt: loc.steward.createdAt.toISOString(),
+          externId: loc.steward.externId,
+          name: loc.steward.name,
+          email: loc.steward.email,
+          bio: loc.steward.bio,
+          citizenshipStatus: loc.steward
+            .citizenshipStatus as CitizenshipStatus | null,
+          cabinTokenBalanceInt: loc.steward.wallet.cabinTokenBalance.toNumber(),
+          avatar: loc.steward.avatar
+            ? {
+                url: loc.steward.avatar.url,
+              }
+            : undefined,
+          roles: loc.steward.roles.map((role) => ({
+            hatId: role.walletHat?.hatId || null,
+            type: role.type as RoleType,
+            level: role.level as RoleLevel,
+          })),
+        }
+      : null,
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,

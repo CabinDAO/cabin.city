@@ -32,7 +32,7 @@ export const CitizenshipModal = () => {
             target="_blank"
             rel="noopener nofollow"
           >
-            Let&apos;s chat
+            Let's chat
           </StyledLink>
           .
         </Body2>

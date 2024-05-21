@@ -17,6 +17,7 @@ import {
   OfferWithRelations,
 } from '@/utils/types/offer'
 import { offerToFragment } from '@/pages/api/v2/offer/list'
+import { canEditLocation } from '@/utils/location'
 
 async function handler(
   req: NextApiRequest,
@@ -87,8 +88,8 @@ async function handlePost(
     return
   }
 
-  if (offerToEdit.location.stewardId !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only stewards can edit their offers' })
+  if (!canEditLocation(profile, offerToEdit.location)) {
+    res.status(403).send({ error: 'You cannot edit this location' })
     return
   }
 
@@ -169,8 +170,8 @@ async function handleDelete(
     return
   }
 
-  if (offerToDelete.location.steward.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only stewards can delete their offers' })
+  if (!canEditLocation(profile, offerToDelete.location)) {
+    res.status(403).send({ error: 'You cannot delete this offer' })
     return
   }
 

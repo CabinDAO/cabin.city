@@ -13,7 +13,6 @@ import backArrowSvg from './svg/back-arrow.svg'
 import businessHandshakeSvg from './svg/business-handshake.svg'
 import builderSvg from './svg/builder.svg'
 import calendarStarFourPointsSvg from './svg/calendar-star-four-points.svg'
-import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import chatBubbleSvg from './svg/chat-bubble.svg'
 import checkSvg from './svg/check.svg'
@@ -56,6 +55,7 @@ import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import holdingSvg from './svg/holding.svg'
 import infoSvg from './svg/info.svg'
+import keySvg from './svg/key.svg'
 import lightningBoltSvg from './svg/lightning-bolt.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
@@ -160,6 +160,7 @@ export const IconSvgs = {
   'heart-solid': heartSolidSvg,
   holding: holdingSvg,
   info: infoSvg,
+  key: keySvg,
   'lightning-bolt': lightningBoltSvg,
   location: locationSvg,
   lock: lockSvg,
@@ -198,7 +199,6 @@ export const IconSvgs = {
   sleep: sleepSvg,
   stamp: stampSvg,
   stay: staySvg,
-  steward: caretakerSvg,
   takeout: takeoutSvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,

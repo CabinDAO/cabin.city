@@ -51,7 +51,7 @@ export type OfferFragment = {
     address: ShortAddressFragmentType | null
     steward: {
       externId: string
-    }
+    } | null
   }
 }
 

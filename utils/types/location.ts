@@ -57,7 +57,7 @@ export type LocationFragment = {
   description: string
   address: AddressFragmentType | null
   bannerImageIpfsHash: string
-  steward: ProfileBasicFragment
+  steward: ProfileBasicFragment | null
   mediaItems: {
     category: LocationMediaCategory
     ipfsHash: string

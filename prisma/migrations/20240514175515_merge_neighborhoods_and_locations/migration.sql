@@ -21,6 +21,7 @@ ALTER TABLE "Profile" DROP COLUMN "neighborhoodId";
 ALTER TABLE "Location" DROP CONSTRAINT "Location_caretakerId_fkey";
 
 ALTER TABLE "Location" RENAME COLUMN "caretakerId" to "stewardId";
+ALTER TABLE "Location" ALTER COLUMN "stewardId" DROP NOT NULL;
 
 -- AlterTable
 ALTER TABLE "Location" DROP COLUMN "caretakerEmail",
@@ -33,4 +34,4 @@ DROP TABLE "Neighborhood";
 
 
 -- AddForeignKey
-ALTER TABLE "Location" ADD CONSTRAINT "Location_stewardId_fkey" FOREIGN KEY ("stewardId") REFERENCES "Profile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Location" ADD CONSTRAINT "Location_stewardId_fkey" FOREIGN KEY ("stewardId") REFERENCES "Profile"("id") ON DELETE SET NULL ON UPDATE CASCADE;

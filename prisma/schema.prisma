@@ -266,8 +266,8 @@ model Location {
   bannerImageIpfsHash String
   mediaItems          LocationMediaItem[]
 
-  steward   Profile @relation("Steward", fields: [stewardId], references: [id])
-  stewardId Int
+  steward   Profile? @relation("Steward", fields: [stewardId], references: [id])
+  stewardId Int?
 
   offers     Offer[]
   votes      LocationVote[]

@@ -3,7 +3,6 @@
 import {
   BadgeFragment,
   CitizenshipStatus,
-  ProfileFragment,
   RoleFragment,
 } from '@/utils/types/profile'
 import {
@@ -40,7 +39,9 @@ export type ActivityListFragment = {
       'externId' | 'name' | 'tagline' | 'bannerImageIpfsHash' | 'offerCount'
     > & {
       address: ShortAddressFragmentType
-      steward: Pick<LocationFragment['steward'], 'externId'>
+      steward: LocationFragment['steward'] extends null
+        ? null
+        : Pick<NonNullable<LocationFragment['steward']>, 'externId'> | null
     }
     offer?: Pick<
       OfferFragment,

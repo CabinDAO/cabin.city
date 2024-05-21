@@ -32,7 +32,7 @@ export default function CitizenshipBenefits({
               20+ properties and 300+ people in dozens of countries
             </Item>
             <Item icon={'moon-stars'}>
-              7 free nights at the Citizen&apos;s Clubhouse at Neighborhood Zero
+              7 free nights at the Citizen's Clubhouse at Neighborhood Zero
             </Item>
             <Item icon={'business-handshake'}>
               Join us for our seasonal gatherings

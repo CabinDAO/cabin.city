@@ -27,12 +27,10 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
 import { validateTitle } from '@/components/neighborhoods/validations'
 import { Availability } from './Availability'
 import { ApplicationLink } from './ApplicationLink'
 import { Pricing } from './Pricing'
-import { useBackend } from '@/components/hooks/useBackend'
 
 interface EditOfferFormProps {
   offer: OfferFragment

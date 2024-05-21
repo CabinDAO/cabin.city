@@ -4,6 +4,7 @@ import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { OfferNewParams, OfferNewResponse } from '@/utils/types/offer'
+import { canEditLocation } from '@/utils/location'
 
 async function handler(
   req: NextApiRequest,
@@ -31,7 +32,7 @@ async function handler(
     return
   }
 
-  if (location.stewardId != profile.id && !profile.isAdmin) {
+  if (!canEditLocation(profile, location)) {
     res.status(403).send({ error: 'You are not the steward of this location' })
     return
   }

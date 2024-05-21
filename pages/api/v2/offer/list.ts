@@ -92,9 +92,11 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
             countryShort: offer.location.address.countryShort,
           }
         : null,
-      steward: {
-        externId: offer.location.steward.externId,
-      },
+      steward: offer.location.steward
+        ? {
+            externId: offer.location.steward.externId,
+          }
+        : null,
     },
   }
 }

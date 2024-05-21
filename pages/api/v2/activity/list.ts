@@ -130,9 +130,11 @@ const toFragments = (
               description: activity.location.description,
               tagline: activity.location.tagline,
               bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
-              steward: {
-                externId: activity.location.steward.externId,
-              },
+              steward: activity.location.steward
+                ? {
+                    externId: activity.location.steward.externId,
+                  }
+                : null,
               address: {
                 locality: activity.location.address?.locality || '',
                 admininstrativeAreaLevel1Short:
@@ -169,9 +171,11 @@ const toFragments = (
                         activity.offer.location.address.countryShort || '',
                     }
                   : null,
-                steward: {
-                  externId: activity.offer.location.steward.externId,
-                },
+                steward: activity.offer.location.steward
+                  ? {
+                      externId: activity.offer.location.steward.externId,
+                    }
+                  : null,
               },
             }
           : undefined,

@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import { Caption, H4, Subline1, truncateStyles } from '../Typography'
+import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY } from '@/utils/display-utils'
-import Icon from '../Icon'
 import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { ActivityListFragment } from '@/utils/types/activity'
+import { ActiveBadge } from '@/components/core/ActiveBadge'
 
 export const LocationPostItem = ({
   location,
@@ -26,12 +26,7 @@ export const LocationPostItem = ({
 
   return (
     <OuterContainer>
-      {location.steward.externId && !hideVerifiedTag ? (
-        <ActiveBadge>
-          <Icon name="logo-cabin" color="green400" size={1.6} />
-          <Subline1 $color="green400">Active</Subline1>
-        </ActiveBadge>
-      ) : null}
+      {!hideVerifiedTag && <ActiveBadge steward={location.steward} />}
       <Container onClick={handleOnClick}>
         <ImageContainer>
           {bannerImageIpfsHash ? (
@@ -68,20 +63,6 @@ const OuterContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`
-
-const ActiveBadge = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.95rem;
-  padding: 0.8rem 1.2rem;
-  background-color: ${({ theme }) => theme.colors.green900};
-  border: solid 0.1rem ${({ theme }) => theme.colors.green900};
-  border-radius: 0.8rem 0 0 0;
-
-  ${({ theme }) => theme.bp.md} {
-    width: max-content;
-  }
 `
 
 const Container = styled.div`

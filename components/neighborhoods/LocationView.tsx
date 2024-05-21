@@ -10,6 +10,7 @@ import {
   OfferNewResponse,
   OfferType,
 } from '@/utils/types/offer'
+import { canEditLocation } from '@/utils/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
 import events from '@/lib/googleAnalytics/events'
@@ -18,7 +19,6 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
-import { Tag } from '@/components/core/Tag'
 import Icon from '@/components/core/Icon'
 import { ProfileContact } from '@/components/core/ProfileContact'
 import { Button } from '@/components/core/Button'
@@ -27,6 +27,8 @@ import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { ExperienceList } from '@/components/offers/ExperienceList'
+import { ActiveBadge } from '@/components/core/ActiveBadge'
+import { StewardApply } from '@/components/core/StewardApply'
 
 export const LocationView = ({ location }: { location: LocationFragment }) => {
   const { externId, mediaItems } = location
@@ -73,8 +75,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
     : offers
 
   const { user } = useProfile()
-  const isEditable =
-    user?.isAdmin || user?.externId === location.steward.externId
+  const isEditable = canEditLocation(user, location)
 
   return (
     <LocationContent>
@@ -86,15 +87,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
       )}
 
       <LocationDetailsContainer>
-        {location.steward.externId && (
-          <LocationTypeTag
-            label={'Active'}
-            color={'green400'}
-            startAdornment={
-              <Icon name={'logo-cabin'} size={1.8} color={'green400'} />
-            }
-          />
-        )}
+        <ActiveBadge steward={location.steward} />
 
         <StyledContentCard shadow>
           <LocationHeader>
@@ -170,12 +163,17 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
             <StewardDetailsContainer>
               <StewardDetails>
-                <ProfileContact
-                  profile={location.steward}
-                  onContact={() =>
-                    events.contactStewardEvent(location.steward.externId)
-                  }
-                />
+                {location.steward ? (
+                  <ProfileContact
+                    profile={location.steward}
+                    onContact={() =>
+                      location.steward &&
+                      events.contactStewardEvent(location.steward.externId)
+                    }
+                  />
+                ) : (
+                  <StewardApply location={location} />
+                )}
               </StewardDetails>
             </StewardDetailsContainer>
           </DescriptionTwoColumn>
@@ -226,10 +224,6 @@ const SectionHeader = styled.div`
   padding: 1.6rem 2.4rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
   justify-content: space-between;
-`
-
-const LocationTypeTag = styled(Tag)`
-  border-radius: 0.8rem 0 0 0;
 `
 
 const StewardDetailsContainer = styled.div`
