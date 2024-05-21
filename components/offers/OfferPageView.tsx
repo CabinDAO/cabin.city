@@ -6,9 +6,16 @@ import { OfferView } from '@/components/offers/OfferView'
 export const OfferPageView = () => {
   const router = useRouter()
   const { offerId } = router.query
-  const { offer, isEditable } = useGetOffer(offerId as string)
+  const { offer, isPubliclyVisible, isEditable } = useGetOffer(
+    offerId as string
+  )
 
   if (!offer) {
+    return null
+  }
+
+  if (!isPubliclyVisible && !isEditable) {
+    router.push('/location/[id]', `/location/${offer.location.externId}`).then()
     return null
   }
 

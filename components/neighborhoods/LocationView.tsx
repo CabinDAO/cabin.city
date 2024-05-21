@@ -195,7 +195,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
           </SectionHeader>
           <ExperienceList
             offers={bookableOffers}
-            actionButtonText={'Reserve'}
+            actionButtonText={'Details'}
             isEditable={isEditable}
           />
         </Section>

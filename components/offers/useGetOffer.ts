@@ -17,22 +17,21 @@ export const useGetOffer = (offerId: string) => {
 
   const isEditable = !!offer && canEditLocation(user, offer.location)
 
-  const isVisible = !!offer && isEditable
+  const isPubliclyVisible =
+    !!offer && (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10)
 
   useEffect(() => {
     if (!data) {
       return
     } else if (!offer) {
       router.push('/404').then()
-    } else if (!isVisible) {
-      router.push('/city-directory').then()
     }
-  }, [data, offer, router, isVisible])
+  }, [data, offer, router])
 
   return {
     offer,
     isEditable,
-    isVisible,
+    isPubliclyVisible,
     refetchLocation: async () => {
       if (offer) {
         await revalidate(['LOCATION', { externId: offer.location.externId }])
