@@ -126,11 +126,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         {hasPhotos && (
           <GalleryPreviewList>
             <GalleryPreviewListImages>
-              {galleryPreviewUrls.map((url) => (
-                <StyledLink
-                  key={LocationMediaCategory.Features}
-                  href={`/location/${externId}/photos`}
-                >
+              {galleryPreviewUrls.map((url, i) => (
+                <StyledLink key={i} href={`/location/${externId}/photos`}>
                   <ImageFlex
                     sizes={imageSizesString}
                     alt={LocationMediaCategory.Features}

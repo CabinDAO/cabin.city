@@ -23,7 +23,7 @@ export const validateLocationInput = (values: LocationEditParamsType) => {
   const invalid =
     (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
     (values.hasOwnProperty('tagline') && !validateBio(tagline).valid) ||
-    (values.hasOwnProperty('description') && !validateBio(description).valid) ||
+    (values.hasOwnProperty('description') && emptyEditorValue(description)) ||
     (values.hasOwnProperty('address') &&
       !truthyString(address?.formattedAddress))
 
