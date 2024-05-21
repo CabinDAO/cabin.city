@@ -43,9 +43,11 @@ function EditLocationView() {
         <LocationEditForm
           location={location}
           afterSave={() => {
-            refetchLocation().then(() => {
-              router.push(`/location/${location.externId}`).then()
-            })
+            // todo: i dont think refetching is needed but somehow the data doesn't update after save
+            // todo: maybe the cache keys don't exactly match?
+            // refetchLocation().then(() => {
+            router.push(`/location/${location.externId}`).then()
+            // })
           }}
           afterCancel={() => {
             router.push(`/location/${location.externId}`).then()
