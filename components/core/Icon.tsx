@@ -39,9 +39,11 @@ import fileDocumentSvg from './svg/file-document.svg'
 import flagSvg from './svg/flag.svg'
 import flowerSvg from './svg/flower.svg'
 import formatBold from './svg/format-bold.svg'
+import formatButton from './svg/format-button.svg'
 import formatHeader1 from './svg/format-header1.svg'
 import formatHeader2 from './svg/format-header2.svg'
 import formatItalic from './svg/format-italic.svg'
+import formatLink from './svg/format-link.svg'
 import formatListBulleted from './svg/format-list-bulleted.svg'
 import formatListNumbered from './svg/format-list-numbered.svg'
 import formatQuote from './svg/format-quote.svg'
@@ -144,9 +146,11 @@ export const IconSvgs = {
   flag: flagSvg,
   flower: flowerSvg,
   'format-bold': formatBold,
+  'format-button': formatButton,
   'format-header1': formatHeader1,
   'format-header2': formatHeader2,
   'format-italic': formatItalic,
+  'format-link': formatLink,
   'format-list-bulleted': formatListBulleted,
   'format-list-numbered': formatListNumbered,
   'format-quote': formatQuote,

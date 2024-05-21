@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {
   Descendant,
   Editor,
@@ -93,6 +93,7 @@ const Toolbar = () => {
       <BlockButton format="quote" iconName="format-quote" />
       <BlockButton format="list-numbered" iconName="format-list-numbered" />
       <BlockButton format="list-bulleted" iconName="format-list-bulleted" />
+      <BlockButton format="button" iconName="format-button" />
     </ToolbarContainer>
   )
 }
@@ -123,6 +124,7 @@ const MarkButton = ({ format, iconName }: MarkButtonProps) => {
 
   return (
     <ToolbarItem
+      title={format}
       onMouseDown={(e) => {
         e.preventDefault()
         toggleMark(editor, format)
@@ -157,9 +159,10 @@ const BlockButton = ({ format, iconName }: BlockButtonProps) => {
   const isActive = isBlockActive(editor, format)
   return (
     <ToolbarItem
-      onMouseDown={(event) => {
+      title={format}
+      onMouseDown={async (event) => {
         event.preventDefault()
-        toggleBlock(editor, format)
+        await toggleBlock(editor, format)
       }}
     >
       <StyledIcon name={iconName} size={2} isActive={isActive} />
@@ -167,9 +170,10 @@ const BlockButton = ({ format, iconName }: BlockButtonProps) => {
   )
 }
 
-const toggleBlock = (editor: Editor, format: CustomElement['type']) => {
+const toggleBlock = async (editor: Editor, format: CustomElement['type']) => {
   const isActive = isBlockActive(editor, format)
   const isList = LIST_TYPES.includes(format)
+  const isButton = format === 'button'
 
   Transforms.unwrapNodes(editor, {
     match: (n) =>
@@ -178,12 +182,23 @@ const toggleBlock = (editor: Editor, format: CustomElement['type']) => {
       LIST_TYPES.includes(n.type),
     split: true,
   })
+
+  const enablingButton = !isActive && isButton
+  const url = enablingButton
+    ? (await window.prompt('Enter URL for button', 'https://')) || undefined
+    : undefined
+  if (!url && enablingButton) {
+    return
+  }
+
   const newProperties: Partial<SlateElement> = {
     type: isActive ? 'paragraph' : isList ? 'list-item' : format,
+    url: url,
   }
   Transforms.setNodes<SlateElement>(editor, newProperties)
 
-  if (!isActive && isList) {
+  if (!isActive && isList && format !== 'button') {
+    // turning selected text into list
     const block: CustomElement = { type: format, children: [] }
     Transforms.wrapNodes(editor, block)
   }
