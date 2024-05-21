@@ -27,12 +27,6 @@ export const AvatarModal = ({
     setAvatarMode(avatarMode)
   }
 
-  useEffect(() => {
-    if (avatarMode === 'upload') {
-      console.log('upload')
-    }
-  }, [avatarMode])
-
   const [aboutOpen, setAboutOpen] = useState(false)
 
   if (avatarMode === 'nft') {

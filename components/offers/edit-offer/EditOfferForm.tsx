@@ -86,8 +86,6 @@ export const EditOfferForm = ({
         ipfsHash: fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
       }),
     }
-    console.log('old update offer input', updateOfferInput)
-    console.log('new media items', newMediaItems)
     onEdit(newMediaItems)
   }
 

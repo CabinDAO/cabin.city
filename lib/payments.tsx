@@ -62,7 +62,6 @@ export function useCheckForGooglePay() {
     paymentRequest
       .canMakePayment()
       .then((result) => {
-        console.log('google pay support', result)
         setIsGooglePaySupported(result)
       })
       .catch((error) => {

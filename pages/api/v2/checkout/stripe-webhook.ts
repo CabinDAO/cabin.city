@@ -150,7 +150,6 @@ async function handlePaymentIntentNewStatus(
         cartExternId: cart.externId,
         inviteExternId: cart.invite?.externId ?? '',
       } satisfies NewPurchasePayload)
-      console.log(`Sent us a new purchase email`)
       // TODO: if they're minting a citizenship, send them an email with the activation link
     } catch (e: unknown) {
       console.log(`Failed to send new purchase email: ${e}`)
