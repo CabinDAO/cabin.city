@@ -21,20 +21,19 @@ export const StewardContactModal = ({
       <ModalTitle text="Stewardship" />
       <CitizenshipModalContent>
         <StyledIcon name={'key'} size={9.6} />
-        <H2>Upgrade this neighborhood</H2>
+        <H2>Activate this neighborhood</H2>
         <Body2>
           The ideal Cabin neighborhood Steward has a strong desire to make
           friends with their neighbors and make neighbors out of their friends,
           plus a few hours a week to commit to this project over the next 6-12
           months.
         </Body2>
-        <Body1>Tell us about your connection to this place</Body1>
         <ContactUsLink
           subject={`Steward for ${location.name}`}
           body={
-            `I'd like to apply to steward ${location.name} because...%0D%0A%0D%0A` +
-            `Helpful links for the Cabin team:%0D%0A` +
-            `${appDomainWithProto}/location/${location.externId}%0D%0A` +
+            `I'd like to apply to steward ${location.name} because...\r\n\r\n` +
+            `Helpful links for the Cabin team:\r\n` +
+            `${appDomainWithProto}/location/${location.externId}\r\n` +
             (user ? `${appDomainWithProto}/profile/${user.externId}` : '')
           }
         >
