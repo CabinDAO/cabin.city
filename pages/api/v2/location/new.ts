@@ -7,7 +7,7 @@ import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<LocationNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -30,9 +30,7 @@ async function handler(
     },
   })
 
-  res
-    .status(200)
-    .send({ locationExternId: location.externId } as LocationNewResponse)
+  res.status(200).send({ locationExternId: location.externId })
 }
 
 export default withAuth(handler)

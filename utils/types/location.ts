@@ -94,10 +94,11 @@ export type LocationGetResponse =
     }
   | APIError
 
-export type LocationNewResponse = {
-  locationExternId?: string
-  error?: string
-}
+export type LocationNewResponse =
+  | {
+      locationExternId: string
+    }
+  | APIError
 
 export const LocationEditParams = z.object({
   name: z.string().optional(),
@@ -116,14 +117,13 @@ export const LocationEditParams = z.object({
 })
 export type LocationEditParamsType = z.infer<typeof LocationEditParams>
 
-export type LocationEditResponse = {
-  location?: LocationFragment | null
-  error?: string
-}
+export type LocationEditResponse =
+  | {
+      location: LocationFragment
+    }
+  | APIError
 
-export type LocationDeleteResponse = {
-  error?: string
-}
+export type LocationDeleteResponse = Record<string, never> | APIError
 
 // must match LocationQueryInclude below
 export type LocationWithRelations = Prisma.LocationGetPayload<{

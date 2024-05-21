@@ -172,7 +172,7 @@ export const OfferView = ({
 export const Steward = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
   const { data } = useGet<ProfileGetResponse>(['PROFILE', { externId }])
-  const profile = data?.profile
+  const profile = !data || 'error' in data ? null : data.profile
 
   if (!profile) {
     return null

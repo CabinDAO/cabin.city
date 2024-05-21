@@ -103,24 +103,27 @@ export type ProfileVouchParams = {
   action: 'vouch' | 'unvouch'
 }
 
-export type ProfileVouchResponse = {
-  newStatus: CitizenshipStatus
-  error?: string
-}
+export type ProfileVouchResponse =
+  | {
+      newStatus: CitizenshipStatus
+    }
+  | APIError
 
 export type ProfileSetupStateParams = {
   state: 'finished' | 'dismissed'
 }
 
-export type ProfileSetupStateResponse = {
-  success: boolean
-  error?: string
-}
+export type ProfileSetupStateResponse =
+  | {
+      success: boolean
+    }
+  | APIError
 
-export type ProfileGetResponse = {
-  profile: ProfileFragment | null
-  error?: string
-}
+export type ProfileGetResponse =
+  | {
+      profile: ProfileFragment | null
+    }
+  | APIError
 
 export type ProfileBasicFragment = {
   createdAt: string
@@ -186,10 +189,11 @@ export const AvatarFragment = z
   .strict()
 export type AvatarFragmentType = z.infer<typeof AvatarFragment>
 
-export type ProfileMeResponse = {
-  me?: MeFragment | null
-  error?: string
-}
+export type ProfileMeResponse =
+  | {
+      me: MeFragment | null
+    }
+  | APIError
 
 // This is a globally used query to get the current user.
 // It should be kept as light as possible, limited to the top-level fields only.
@@ -249,10 +253,11 @@ export const ProfileEditParams = z
   .strict()
 export type ProfileEditParamsType = z.infer<typeof ProfileEditParams>
 
-export type ProfileEditResponse = {
-  success: boolean
-  error?: string
-}
+export type ProfileEditResponse =
+  | {
+      success: boolean
+    }
+  | APIError
 
 export type ProfileDIDResponse =
   | {

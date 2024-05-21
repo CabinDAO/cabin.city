@@ -29,7 +29,8 @@ export const useProfile = ({
     mutate: refetchProfile,
   } = useGet<ProfileMeResponse>('PROFILE_ME')
 
-  const me = ready && !privyUser ? null : meData?.me
+  const me =
+    (ready && !privyUser) || !meData || 'error' in meData ? null : meData.me
 
   useEffect(() => {
     if (

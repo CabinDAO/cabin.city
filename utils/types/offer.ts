@@ -115,9 +115,7 @@ export type OfferEditResponse =
     }
   | APIError
 
-export type OfferDeleteResponse = {
-  error?: string
-}
+export type OfferDeleteResponse = Record<string, never> | APIError
 
 // must match OfferQueryInclude below
 export type OfferWithRelations = Prisma.OfferGetPayload<{

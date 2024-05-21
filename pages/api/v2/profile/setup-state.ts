@@ -8,7 +8,7 @@ import {
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileSetupStateResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -39,7 +39,7 @@ async function handler(
 
   res.status(200).send({
     success: true,
-  } as ProfileSetupStateResponse)
+  })
 }
 
 export default withAuth(handler)

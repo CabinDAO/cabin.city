@@ -9,7 +9,7 @@ import {
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileVouchResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -49,7 +49,7 @@ async function handler(
 
   res.status(200).send({
     newStatus: vouchedProfile.citizenshipStatus as CitizenshipStatus,
-  } as ProfileVouchResponse)
+  })
 }
 
 export default withAuth(handler)

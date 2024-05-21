@@ -7,12 +7,12 @@ import { ProfileGetResponse } from '@/utils/types/profile'
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
   const {
-    data: profileData,
+    data: data,
     isLoading,
     mutate: refetchProfile,
   } = useGet<ProfileGetResponse>(externId ? ['PROFILE', { externId }] : null)
 
-  const profile = profileData?.profile
+  const profile = !data || 'error' in data ? null : data.profile
 
   if (isLoading) {
     return null

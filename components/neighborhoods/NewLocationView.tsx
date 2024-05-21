@@ -35,8 +35,7 @@ export const NewLocationView = () => {
   const handlePrimaryButtonClick = async () => {
     try {
       const data = await post<LocationNewResponse>('LOCATION_NEW', {})
-
-      const externId = data.locationExternId
+      const externId = !data || 'error' in data ? null : data.locationExternId
 
       if (externId) {
         await sendEmail({

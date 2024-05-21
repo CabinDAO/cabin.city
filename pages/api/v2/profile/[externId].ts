@@ -76,7 +76,10 @@ async function handler(
   }
 }
 
-async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+async function handleGet(
+  req: NextApiRequest,
+  res: NextApiResponse<ProfileGetResponse>
+) {
   const profile = await prisma.profile.findUnique({
     where: {
       externId: req.query.externId as string,
@@ -121,12 +124,12 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     profile: profile
       ? profileToFragment(profile as ProfileWithRelations)
       : null,
-  } as ProfileGetResponse)
+  })
 }
 
 async function handlePost(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileEditResponse>,
   profile: ProfileWithWallet
 ) {
   const parsed = ProfileEditParams.safeParse(req.body)
@@ -263,7 +266,7 @@ async function handlePost(
   await prisma.$transaction(txns)
   res.status(200).send({
     success: true,
-  } as ProfileEditResponse)
+  })
 }
 
 const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
