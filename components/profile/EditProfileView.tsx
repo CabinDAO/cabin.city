@@ -42,7 +42,9 @@ export const EditProfileView = () => {
         data: newValues,
       } as ProfileEditParamsType)
 
-      if (!res.error) {
+      const error = 'error' in res ? res.error : null
+
+      if (!error) {
         await router.push(`/profile/${user.externId}`)
         return
       }
@@ -50,7 +52,7 @@ export const EditProfileView = () => {
       showModal(() => (
         <ErrorModal
           title="Profile Submission Error"
-          description={`Error updating profile: ${res.error}`}
+          description={`Error updating profile: ${error}`}
         />
       ))
     }
