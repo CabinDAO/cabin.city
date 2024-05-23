@@ -1,6 +1,11 @@
+import { CitizenshipStatus } from '@/utils/types/profile'
+
 type profile = { id: number } | { externId: string }
 
 type profileWithAdmin = profile & { isAdmin: boolean }
+type profileWithCitizenshipStatus = profile & {
+  citizenshipStatus: CitizenshipStatus
+}
 
 type stewardedObject =
   | { stewardId: number | null }
@@ -37,4 +42,10 @@ export function canContactSteward(user: profile | null | undefined): boolean {
 
 export function canViewCensus(user: profile | null | undefined): boolean {
   return !!user
+}
+
+export function canCreateListings(
+  user: profileWithCitizenshipStatus | null | undefined
+): boolean {
+  return user?.citizenshipStatus === CitizenshipStatus.Verified
 }

@@ -1,6 +1,7 @@
 import { useBackend } from '@/components/hooks/useBackend'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
+  LocationType,
   LocationFragment,
   LocationListParamsType,
   LocationListResponse,
@@ -8,13 +9,14 @@ import {
 import { ListingCard } from '../core/ListingCard'
 import { LocationListContainer } from './styles'
 
-export const Locations = () => {
+export const Locations = ({ type }: { type: LocationType | undefined }) => {
   const { useGetPaginated } = useBackend()
 
   const { data, page, setPage, isLastPage } =
     useGetPaginated<LocationListResponse>('LOCATION_LIST', {
       activeEventsOnly: 'true',
-    } as LocationListParamsType)
+      locationType: type,
+    } satisfies LocationListParamsType)
 
   const locations = data
     ? data.reduce(

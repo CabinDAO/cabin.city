@@ -117,7 +117,7 @@ const sortPrequery = async (
     LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
     WHERE ${
       params.locationType
-        ? Prisma.sql`l.type = ${params.locationType}`
+        ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
         : Prisma.sql`1=1`
     }
     GROUP BY l.id, steward."privyDID"
