@@ -17,7 +17,7 @@ import {
   OfferWithRelations,
 } from '@/utils/types/offer'
 import { offerToFragment } from '@/pages/api/v2/offer/list'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
   req: NextApiRequest,

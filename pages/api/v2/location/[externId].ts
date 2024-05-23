@@ -17,7 +17,7 @@ import {
   LocationWithRelations,
 } from '@/utils/types/location'
 import { locationToFragment } from '@/pages/api/v2/location/list'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
   req: NextApiRequest,

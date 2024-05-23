@@ -10,17 +10,15 @@ import {
   OfferNewResponse,
   OfferType,
 } from '@/utils/types/offer'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
-import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
 import Icon from '@/components/core/Icon'
-import { ProfileContact } from '@/components/core/ProfileContact'
 import { Button } from '@/components/core/Button'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -28,7 +26,7 @@ import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { ExperienceList } from '@/components/offers/ExperienceList'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
-import { StewardApply } from '@/components/core/StewardApply'
+import { StewardContact } from '@/components/core/StewardContact'
 
 export const LocationView = ({ location }: { location: LocationFragment }) => {
   const { externId, mediaItems } = location
@@ -160,17 +158,11 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
             <StewardDetailsContainer>
               <StewardDetails>
-                {location.steward ? (
-                  <ProfileContact
-                    profile={location.steward}
-                    onContact={() =>
-                      location.steward &&
-                      events.contactStewardEvent(location.steward.externId)
-                    }
-                  />
-                ) : (
-                  <StewardApply location={location} />
-                )}
+                <StewardContact
+                  steward={location.steward}
+                  location={location}
+                />
+                {/*)}*/}
               </StewardDetails>
             </StewardDetailsContainer>
           </DescriptionTwoColumn>

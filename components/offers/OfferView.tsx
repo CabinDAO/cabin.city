@@ -28,7 +28,7 @@ import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { LocationLinkCard } from '@/components/neighborhoods/LinkCards'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
-import { ProfileContact } from '@/components/core/ProfileContact'
+import { StewardContact } from '@/components/core/StewardContact'
 
 export const OfferView = ({
   offer,
@@ -115,7 +115,7 @@ export const OfferView = ({
             {offer.location.steward && (
               <>
                 <H4>Steward</H4>
-                <Steward externId={offer.location.steward?.externId}></Steward>
+                <Steward offer={offer} />
               </>
             )}
           </Left>
@@ -169,18 +169,18 @@ export const OfferView = ({
   )
 }
 
-export const Steward = ({ externId }: { externId: string }) => {
+export const Steward = ({ offer }: { offer: OfferFragment }) => {
   const { useGet } = useBackend()
-  const { data } = useGet<ProfileGetResponse>(['PROFILE', { externId }])
-  const profile = !data || 'error' in data ? null : data.profile
-
-  if (!profile) {
-    return null
-  }
+  const { data } = useGet<ProfileGetResponse>(
+    offer.location.steward
+      ? ['PROFILE', { externId: offer.location.steward.externId }]
+      : null
+  )
+  const steward = !data || 'error' in data ? null : data.profile
 
   return (
     <StewardCard>
-      <ProfileContact profile={profile} />
+      <StewardContact steward={steward} location={offer.location} />
     </StewardCard>
   )
 }

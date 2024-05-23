@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
 import { addressMatch } from '@/utils/address-match'
 import { ProfileMeResponse } from '@/utils/types/profile'
 import { usePrivy } from '@privy-io/react-auth'
@@ -21,6 +21,7 @@ export const useProfile = ({
   redirectTo = '',
   redirectToIfFound = '',
 } = {}) => {
+  const router = useRouter()
   const { user: privyUser, ready } = usePrivy()
   const { useGet } = useBackend()
   const {
@@ -38,18 +39,18 @@ export const useProfile = ({
       privyUser?.wallet?.address &&
       !addressMatch(me.walletAddress, privyUser?.wallet?.address ?? '0x0')
     ) {
-      Router.push('/logout')
+      router.push('/logout').then()
     }
 
     if (me && !isMeLoading && !me.privyDID) {
-      Router.push('/registration')
+      router.push('/registration').then()
     }
 
     // If redirectTo is set, redirect if the user was not found.
     if (redirectTo && !isMeLoading && !me) {
-      Router.push(redirectTo)
+      router.push(redirectTo).then()
     } else if (redirectToIfFound && me) {
-      Router.push(redirectToIfFound)
+      router.push(redirectToIfFound).then()
     }
   }, [redirectTo, redirectToIfFound, privyUser, me, isMeLoading])
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { LocationFragment } from '@/utils/types/location'
 import { OfferFragment } from '@/utils/types/offer'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 import { ContentCard } from '@/components/core/ContentCard'
 import { OffersList } from '../OffersList'
 import { useProfile } from '@/components/auth/useProfile'

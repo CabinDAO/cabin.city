@@ -4,7 +4,7 @@ import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { OfferNewParams, OfferNewResponse } from '@/utils/types/offer'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
   req: NextApiRequest,

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import { OfferGetResponse } from '@/utils/types/offer'
-import { canEditLocation } from '@/utils/location'
+import { canEditLocation } from '@/lib/permissions'
 
 export const useGetOffer = (offerId: string) => {
   const router = useRouter()
