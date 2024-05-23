@@ -122,8 +122,10 @@ const sortPrequery = async (
     }
     GROUP BY l.id, steward."privyDID"
     ORDER BY ${
-      sort === LocationSort.default // current users locations go first, then order by num active events
-        ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
+      sort === LocationSort.default // current users locations go first, then neighborhoods, then order by num active events
+        ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, l.type = ${
+            LocationType.Neighborhood as string
+          } DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, `
         : sortByDist
         ? Prisma.sql`distance_in_km ASC,`
         : Prisma.empty
