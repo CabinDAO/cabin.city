@@ -26,7 +26,7 @@ export interface Env {
   STRIPE_WEBHOOK_SECRET: string
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: string
   CONVERTKIT_API_KEY: string
-  DISCORD_MINTBOT_URL: string
+  DISCORD_WEBHOOK_URL: string
 }
 
 declare global {

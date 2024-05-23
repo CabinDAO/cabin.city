@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
 
 export async function sendToDiscord(msg: string) {
-  const url = process.env.DISCORD_MINTBOT_URL
+  const url = process.env.DISCORD_WEBHOOK_URL
   if (!url) {
-    console.log('discord logs url missing from env vars')
+    console.log('discord webhook url missing from env vars')
     return
   }
 
@@ -15,7 +15,7 @@ export async function sendToDiscord(msg: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: 'MintBot',
+        username: 'cabin.city',
         // avatar_url: "",
         content: msg,
       }),

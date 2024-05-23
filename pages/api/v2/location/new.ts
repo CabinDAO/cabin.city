@@ -4,6 +4,9 @@ import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { sendToDiscord } from '@/lib/discord'
+import { appDomainWithProto } from '@/utils/display-utils'
+import { isProd } from '@/utils/dev'
 
 async function handler(
   req: NextApiRequest,
@@ -29,6 +32,12 @@ async function handler(
       bannerImageIpfsHash: '',
     },
   })
+
+  if (isProd) {
+    await sendToDiscord(
+      `<@202214676761804801> <@733769026009956383> <@481990685881532419> New location listed by ${profile.name}: https://${appDomainWithProto}/location/${location.externId}`
+    )
+  }
 
   res.status(200).send({ locationExternId: location.externId })
 }
