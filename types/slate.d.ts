@@ -29,6 +29,11 @@ type ListItemElement = {
   type: 'list-item'
   children: CustomText[]
 }
+type ButtonElement = {
+  type: 'button'
+  url: string
+  children: CustomText
+}
 
 type CustomElement =
   | ParagraphElement
@@ -38,6 +43,7 @@ type CustomElement =
   | ListNumberedElement
   | ListBulletedElement
   | ListItemElement
+  | ButtonElement
 
 type CustomText = {
   text: string

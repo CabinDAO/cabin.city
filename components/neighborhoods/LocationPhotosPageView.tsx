@@ -7,14 +7,14 @@ import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 
 export const LocationPhotosPageView = () => {
   const router = useRouter()
-  const { id, gallery } = router.query
+  const { id } = router.query
 
   const { useGet } = useBackend()
   const { data } = useGet<LocationGetResponse>(
     id ? ['LOCATION', { externId: `${id}` }] : null
   )
 
-  const location = data?.location
+  const location = data && !('error' in data) ? data.location : null
 
   useEffect(() => {
     if (data && !location) {
@@ -28,7 +28,7 @@ export const LocationPhotosPageView = () => {
 
   return (
     <SingleColumnLayout>
-      <LocationPhotosView location={location} gallery={gallery} />
+      <LocationPhotosView location={location} />
     </SingleColumnLayout>
   )
 }

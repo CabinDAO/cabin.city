@@ -29,11 +29,6 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    neighborhood: {
-      select: {
-        externId: true
-      }
-    }
     avatar: {
       select: {
         url: true
@@ -56,11 +51,6 @@ type ProfileWithRelations = Prisma.ProfileGetPayload<{
     roles: {
       include: {
         walletHat: true
-      }
-    }
-    locations: {
-      select: {
-        _count: true
       }
     }
   }
@@ -86,7 +76,10 @@ async function handler(
   }
 }
 
-async function handleGet(req: NextApiRequest, res: NextApiResponse) {
+async function handleGet(
+  req: NextApiRequest,
+  res: NextApiResponse<ProfileGetResponse>
+) {
   const profile = await prisma.profile.findUnique({
     where: {
       externId: req.query.externId as string,
@@ -100,11 +93,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         },
       },
       address: true,
-      neighborhood: {
-        select: {
-          externId: true,
-        },
-      },
       avatar: {
         select: {
           url: true,
@@ -129,11 +117,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
           walletHat: true,
         },
       },
-      locations: {
-        select: {
-          _count: true,
-        },
-      },
     },
   })
 
@@ -141,12 +124,12 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     profile: profile
       ? profileToFragment(profile as ProfileWithRelations)
       : null,
-  } as ProfileGetResponse)
+  })
 }
 
 async function handlePost(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ProfileEditResponse>,
   profile: ProfileWithWallet
 ) {
   const parsed = ProfileEditParams.safeParse(req.body)
@@ -190,11 +173,6 @@ async function handlePost(
                 update: params.data.address,
               },
             }
-          : undefined,
-        neighborhood: params.data.neighborhoodExternId
-          ? { connect: { externId: params.data.neighborhoodExternId } }
-          : params.data.neighborhoodExternId === null
-          ? { disconnect: true }
           : undefined,
       },
       where: {
@@ -288,7 +266,7 @@ async function handlePost(
   await prisma.$transaction(txns)
   res.status(200).send({
     success: true,
-  } as ProfileEditResponse)
+  })
 }
 
 const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
@@ -299,9 +277,6 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    neighborhoodExternId: profile.neighborhood
-      ? profile.neighborhood.externId
-      : null,
     address: profile.address
       ? {
           locality: profile.address.locality,

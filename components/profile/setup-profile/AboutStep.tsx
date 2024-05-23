@@ -17,9 +17,6 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   const [bio, setBio] = useState(user?.bio ?? '')
   const [address, setAddress] = useState(user?.address)
   const [avatar, setAvatar] = useState(user?.avatar)
-  const [neighborhoodExternId, setNeighborhoodExternId] = useState(
-    user?.neighborhoodExternId
-  )
 
   const { useMutate } = useBackend()
   const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
@@ -47,7 +44,6 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
         bio,
         address,
         avatar,
-        neighborhoodExternId: neighborhoodExternId || null,
       },
     } as ProfileEditParamsType)
 
@@ -63,8 +59,6 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
         onAddressChange={setAddress}
         avatar={avatar}
         onAvatarChange={setAvatar}
-        neighborhoodExternId={neighborhoodExternId}
-        onNeighborhoodChange={setNeighborhoodExternId}
       />
     </SetupStepForm>
   )

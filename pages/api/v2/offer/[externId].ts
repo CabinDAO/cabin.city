@@ -17,6 +17,7 @@ import {
   OfferWithRelations,
 } from '@/utils/types/offer'
 import { offerToFragment } from '@/pages/api/v2/offer/list'
+import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
   req: NextApiRequest,
@@ -87,8 +88,8 @@ async function handlePost(
     return
   }
 
-  if (offerToEdit.location.caretakerId !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can edit their offers' })
+  if (!canEditLocation(profile, offerToEdit.location)) {
+    res.status(403).send({ error: 'You cannot edit this location' })
     return
   }
 
@@ -158,7 +159,7 @@ async function handleDelete(
     include: {
       location: {
         include: {
-          caretaker: true,
+          steward: true,
         },
       },
     },
@@ -169,12 +170,12 @@ async function handleDelete(
     return
   }
 
-  if (offerToDelete.location.caretaker.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can delete their offers' })
+  if (!canEditLocation(profile, offerToDelete.location)) {
+    res.status(403).send({ error: 'You cannot delete this offer' })
     return
   }
 
-  await prisma.location.delete({ where: { id: offerToDelete.id } })
+  await prisma.offer.delete({ where: { id: offerToDelete.id } })
 
   res.status(200).send({})
 }

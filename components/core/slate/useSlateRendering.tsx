@@ -10,6 +10,8 @@ import {
   OrderedList,
   UnorderedList,
 } from '../Typography'
+import { Button } from '@/components/core/Button'
+import Link from 'next/link'
 
 export function useSlateRendering() {
   const renderElement = useCallback(
@@ -42,6 +44,26 @@ const Element = (props: RenderElementProps) => {
       )
     case 'list-numbered':
       return <StyledOrderedList {...attributes}>{children}</StyledOrderedList>
+    case 'button':
+      return (
+        <StyledButton
+          {...attributes}
+          onClick={(e) => {
+            e.preventDefault()
+            console.log(element)
+            const newWindow = window.open(
+              element.url,
+              '_blank',
+              'noopener,noreferrer'
+            )
+            if (newWindow) {
+              newWindow.opener = null // This is an additional safety measure
+            }
+          }}
+        >
+          {children}
+        </StyledButton>
+      )
     default:
       return <StyledBody1 {...attributes}>{children}</StyledBody1>
   }
@@ -75,4 +97,36 @@ const StyledOrderedList = styled(OrderedList)`
 
 const StyledBody1 = styled(Body1)`
   opacity: 0.75;
+`
+
+const StyledButton = styled.button`
+  box-sizing: border-box;
+  user-select: none;
+  font-style: normal;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  font-size: 1.6rem;
+  width: 50%;
+  margin: 0 auto;
+  padding: 1.5rem 2.4rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+
+  opacity: 0.75;
+
+  color: ${({ theme }) => theme.colors.green900};
+  box-shadow: none;
+  background-color: ${({ theme }) => theme.colors.yellow200};
+  outline: 0;
+  border: solid 0.1rem rgb(23, 18, 11, 0.75);
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.yellow100};
+  }
 `

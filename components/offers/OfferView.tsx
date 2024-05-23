@@ -1,10 +1,13 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
-import Icon from '@/components/core/Icon'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileGetResponse } from '@/utils/types/profile'
+import { OfferFragment, OfferType } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash, TempImage } from '@/lib/image'
-import { stringToSlateValue } from '../core/slate/slate-utils'
 import { EMPTY, formatRange } from '@/utils/display-utils'
+import { padding } from '@/styles/theme'
 import {
   Body1,
   body1Styles,
@@ -12,6 +15,8 @@ import {
   H3,
   H4,
 } from '@/components/core/Typography'
+import Icon from '@/components/core/Icon'
+import { stringToSlateValue } from '../core/slate/slate-utils'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
@@ -22,12 +27,8 @@ import { Price } from '@/components/offers/Price'
 import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { LocationLinkCard } from '@/components/neighborhoods/LinkCards'
-import { HostCard } from '@/components/neighborhoods/HostCard'
-import { isAfter, isBefore } from 'date-fns'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
-import { OfferFragment, OfferType } from '@/utils/types/offer'
-import { isProd, isVercelDev } from '@/utils/dev'
+import { StewardContact } from '@/components/core/StewardContact'
 
 export const OfferView = ({
   offer,
@@ -111,10 +112,12 @@ export const OfferView = ({
             <LocationLinkCard location={offer.location} />
             <H4>Description</H4>
             <SlateRenderer value={stringToSlateValue(offer.description)} />
-            <H4>Meet your hosts</H4>
-            {_getHostIds(offer).map((hostId) => (
-              <HostCard key={hostId} externId={hostId}></HostCard>
-            ))}
+            {offer.location.steward && (
+              <>
+                <H4>Steward</H4>
+                <Steward offer={offer} />
+              </>
+            )}
           </Left>
 
           <Right>
@@ -166,23 +169,32 @@ export const OfferView = ({
   )
 }
 
-const _getHostIds = (offer: OfferFragment): string[] => {
-  const charlie = isProd
-    ? '362368728841584721'
-    : isVercelDev
-    ? '359768139021418582'
-    : '373424375382147584'
+export const Steward = ({ offer }: { offer: OfferFragment }) => {
+  const { useGet } = useBackend()
+  const { data } = useGet<ProfileGetResponse>(
+    offer.location.steward
+      ? ['PROFILE', { externId: offer.location.steward.externId }]
+      : null
+  )
+  const steward = !data || 'error' in data ? null : data.profile
 
-  const gatherer =
-    offer.type !== OfferType.CabinWeek ||
-    !offer.startDate ||
-    isAfter(new Date(offer.startDate), new Date('2024-012-01')) ||
-    isBefore(new Date(offer.startDate), new Date('2023-12-01'))
-      ? ''
-      : charlie
-
-  return [offer.location.caretaker.externId, gatherer].filter((i) => !!i)
+  return (
+    <StewardCard>
+      <StewardContact steward={steward} location={offer.location} />
+    </StewardCard>
+  )
 }
+
+const StewardCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 2.4rem;
+  padding: 1.6rem 1.6rem 2.4rem;
+  border: 1px solid ${({ theme }) => theme.colors.green900}12;
+  ${padding('xs')}
+`
 
 const StyledContentCard = styled(ContentCard)`
   padding: 3.2rem 2.4rem;

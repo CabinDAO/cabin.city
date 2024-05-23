@@ -48,11 +48,10 @@ export type OfferFragment = {
     name: string
     type: LocationType
     bannerImageIpfsHash: string
-    publishedAt: string | null
     address: ShortAddressFragmentType | null
-    caretaker: {
+    steward: {
       externId: string
-    }
+    } | null
   }
 }
 
@@ -60,9 +59,7 @@ export const OfferListParams = z
   .object({
     locationId: z.string().optional(),
     offerType: z.nativeEnum(OfferType).optional(),
-    publiclyVisibleOnly: z
-      .union([z.literal('true'), z.literal('false')])
-      .optional(),
+    futureOnly: z.union([z.literal('true'), z.literal('false')]).optional(),
     page: z.coerce.number().optional(),
   })
   .strict()
@@ -118,9 +115,7 @@ export type OfferEditResponse =
     }
   | APIError
 
-export type OfferDeleteResponse = {
-  error?: string
-}
+export type OfferDeleteResponse = Record<string, never> | APIError
 
 // must match OfferQueryInclude below
 export type OfferWithRelations = Prisma.OfferGetPayload<{
@@ -129,7 +124,7 @@ export type OfferWithRelations = Prisma.OfferGetPayload<{
     location: {
       include: {
         address: true
-        caretaker: {
+        steward: {
           select: {
             externId: true
           }
@@ -145,7 +140,7 @@ export const OfferQueryInclude = {
   location: {
     include: {
       address: true,
-      caretaker: {
+      steward: {
         select: {
           externId: true,
         },

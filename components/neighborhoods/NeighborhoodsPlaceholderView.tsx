@@ -6,9 +6,9 @@ import styled from 'styled-components'
 export const NeighborhoodsPlaceholderView = () => {
   return (
     <SingleColumnLayout>
-      <TitleCard title="City Directory" icon="neighborhoods"></TitleCard>
+      <TitleCard title="City Directory" icon="map-fold"></TitleCard>
       <StyledEmptyState
-        icon="neighborhoods"
+        icon="map-fold"
         title="Directory coming"
         description="You’ll be able to browse neighborhoods in the Cabin network here."
         href="https://cabin.city"

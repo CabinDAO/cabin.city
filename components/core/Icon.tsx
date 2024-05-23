@@ -13,7 +13,6 @@ import backArrowSvg from './svg/back-arrow.svg'
 import businessHandshakeSvg from './svg/business-handshake.svg'
 import builderSvg from './svg/builder.svg'
 import calendarStarFourPointsSvg from './svg/calendar-star-four-points.svg'
-import caretakerSvg from './svg/caretaker.svg'
 import cardHeartSvg from './svg/card-heart.svg'
 import chatBubbleSvg from './svg/chat-bubble.svg'
 import checkSvg from './svg/check.svg'
@@ -40,9 +39,11 @@ import fileDocumentSvg from './svg/file-document.svg'
 import flagSvg from './svg/flag.svg'
 import flowerSvg from './svg/flower.svg'
 import formatBold from './svg/format-bold.svg'
+import formatButton from './svg/format-button.svg'
 import formatHeader1 from './svg/format-header1.svg'
 import formatHeader2 from './svg/format-header2.svg'
 import formatItalic from './svg/format-italic.svg'
+import formatLink from './svg/format-link.svg'
 import formatListBulleted from './svg/format-list-bulleted.svg'
 import formatListNumbered from './svg/format-list-numbered.svg'
 import formatQuote from './svg/format-quote.svg'
@@ -56,11 +57,13 @@ import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import holdingSvg from './svg/holding.svg'
 import infoSvg from './svg/info.svg'
+import keySvg from './svg/key.svg'
 import lightningBoltSvg from './svg/lightning-bolt.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
-import mapGreenSvg from './svg/map-green.svg'
+import mapFoldSvg from './svg/map-fold.svg'
+import mapFoldGreenSvg from './svg/map-fold-green.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import minusSvg from './svg/minus.svg'
@@ -70,7 +73,7 @@ import mountainsSvg from './svg/mountains.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
-import neighborhoodsSvg from './svg/neighborhoods.svg'
+import neighborhoodLabelSvg from './svg/neighborhood-label.svg'
 import networkGlobeSvg from './svg/network-globe.svg'
 import nftSvg from './svg/nft.svg'
 import offerSvg from './svg/offer.svg'
@@ -118,7 +121,6 @@ export const IconSvgs = {
   builder: builderSvg,
   'business-handshake': businessHandshakeSvg,
   'calendar-star-four-points': calendarStarFourPointsSvg,
-  caretaker: caretakerSvg,
   'card-heart': cardHeartSvg,
   'chat-bubble': chatBubbleSvg,
   check: checkSvg,
@@ -145,9 +147,11 @@ export const IconSvgs = {
   flag: flagSvg,
   flower: flowerSvg,
   'format-bold': formatBold,
+  'format-button': formatButton,
   'format-header1': formatHeader1,
   'format-header2': formatHeader2,
   'format-italic': formatItalic,
+  'format-link': formatLink,
   'format-list-bulleted': formatListBulleted,
   'format-list-numbered': formatListNumbered,
   'format-quote': formatQuote,
@@ -161,11 +165,13 @@ export const IconSvgs = {
   'heart-solid': heartSolidSvg,
   holding: holdingSvg,
   info: infoSvg,
+  key: keySvg,
   'lightning-bolt': lightningBoltSvg,
   location: locationSvg,
   lock: lockSvg,
   'logo-cabin': logoCabinSvg,
-  'map-green': mapGreenSvg,
+  'map-fold': mapFoldSvg,
+  'map-fold-green': mapFoldGreenSvg,
   members: membersSvg,
   menu: menuSvg,
   minus: minusSvg,
@@ -175,7 +181,7 @@ export const IconSvgs = {
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
-  neighborhoods: neighborhoodsSvg,
+  'neighborhood-label': neighborhoodLabelSvg,
   'network-globe': networkGlobeSvg,
   nft: nftSvg,
   offer: offerSvg,

@@ -17,6 +17,7 @@ import {
   LocationWithRelations,
 } from '@/utils/types/location'
 import { locationToFragment } from '@/pages/api/v2/location/list'
+import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
   req: NextApiRequest,
@@ -46,7 +47,9 @@ async function handleGet(
 ) {
   const query: Prisma.LocationFindUniqueArgs = {
     where: { externId: req.query.externId as string },
-    include: LocationQueryInclude,
+    include: LocationQueryInclude({
+      activeEventsOnly: req.query.activeEventsOnly === 'true',
+    }),
   }
 
   const location = await prisma.location.findUnique(query)
@@ -58,7 +61,7 @@ async function handleGet(
 
   res.status(200).send({
     location: locationToFragment(location as LocationWithRelations),
-  } as LocationGetResponse)
+  })
 }
 
 async function handlePost(
@@ -73,7 +76,7 @@ async function handlePost(
       externId: externId,
     },
     include: {
-      caretaker: true,
+      steward: true,
       mediaItems: true,
     },
   })
@@ -83,8 +86,8 @@ async function handlePost(
     return
   }
 
-  if (locationToEdit.caretaker.id !== profile.id && !profile.isAdmin) {
-    res.status(403).send({ error: 'Only caretakers can edit their locations' })
+  if (!canEditLocation(profile, locationToEdit)) {
+    res.status(403).send({ error: 'You cannot edit this location' })
     return
   }
 
@@ -118,14 +121,11 @@ async function handlePost(
       where: {
         id: locationToEdit.id,
       },
-      include: LocationQueryInclude,
+      include: LocationQueryInclude(),
       data: {
         name: params.name,
         tagline: params.tagline,
         description: params.description,
-        sleepCapacity: params.sleepCapacity,
-        internetSpeedMbps: params.internetSpeedMbps,
-        caretakerEmail: params.caretakerEmail,
         bannerImageIpfsHash: params.bannerImageIpfsHash,
         mediaItems: params.mediaItems
           ? {
@@ -174,7 +174,7 @@ async function handleDelete(
 
   const locationToDelete = await prisma.location.findUnique({
     where: { externId },
-    include: { caretaker: true },
+    include: { steward: true },
   })
 
   if (!locationToDelete) {
@@ -182,10 +182,8 @@ async function handleDelete(
     return
   }
 
-  if (locationToDelete.caretaker.id !== profile.id && !profile.isAdmin) {
-    res
-      .status(403)
-      .send({ error: 'Only caretakers can delete their locations' })
+  if (!canEditLocation(profile, locationToDelete)) {
+    res.status(403).send({ error: 'You cannot delete this location' })
     return
   }
 

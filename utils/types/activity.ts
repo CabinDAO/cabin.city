@@ -36,14 +36,13 @@ export type ActivityListFragment = {
     role?: RoleFragment
     location?: Pick<
       LocationFragment,
-      | 'externId'
-      | 'name'
-      | 'tagline'
-      | 'bannerImageIpfsHash'
-      | 'sleepCapacity'
-      | 'offerCount'
-      | 'voteCount'
-    > & { address: ShortAddressFragmentType }
+      'externId' | 'name' | 'tagline' | 'bannerImageIpfsHash' | 'offerCount'
+    > & {
+      address: ShortAddressFragmentType
+      steward: LocationFragment['steward'] extends null
+        ? null
+        : Pick<NonNullable<LocationFragment['steward']>, 'externId'> | null
+    }
     offer?: Pick<
       OfferFragment,
       | 'externId'
@@ -159,22 +158,17 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         tagline: true
         description: true
         bannerImageIpfsHash: true
-        sleepCapacity: true
-        caretaker: {
-          select: {
-            externId: true
-            name: true
-            createdAt: true
-          }
-        }
-        publishedAt: true
-        internetSpeedMbps: true
         address: {
           select: {
             locality: true
             admininstrativeAreaLevel1Short: true
             country: true
             countryShort: true
+          }
+        }
+        steward: {
+          select: {
+            externId: true
           }
         }
       }
@@ -196,7 +190,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             name: true
             type: true
             bannerImageIpfsHash: true
-            publishedAt: true
             address: {
               select: {
                 locality: true
@@ -205,7 +198,7 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
                 countryShort: true
               }
             }
-            caretaker: {
+            steward: {
               select: {
                 externId: true
               }
@@ -260,22 +253,17 @@ export const ActivityQueryInclude = {
       tagline: true,
       description: true,
       bannerImageIpfsHash: true,
-      sleepCapacity: true,
-      caretaker: {
-        select: {
-          externId: true,
-          name: true,
-          createdAt: true,
-        },
-      },
-      publishedAt: true,
-      internetSpeedMbps: true,
       address: {
         select: {
           locality: true,
           admininstrativeAreaLevel1Short: true,
           country: true,
           countryShort: true,
+        },
+      },
+      steward: {
+        select: {
+          externId: true,
         },
       },
     },
@@ -297,7 +285,6 @@ export const ActivityQueryInclude = {
           name: true,
           type: true,
           bannerImageIpfsHash: true,
-          publishedAt: true,
           address: {
             select: {
               locality: true,
@@ -306,7 +293,7 @@ export const ActivityQueryInclude = {
               countryShort: true,
             },
           },
-          caretaker: {
+          steward: {
             select: {
               externId: true,
             },

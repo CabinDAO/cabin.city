@@ -64,12 +64,12 @@ export const AvatarModalContent = ({
         </Circle>
         <Subline1>Upload photo</Subline1>
       </StyledFileUpload>
-      <AvatarMode onClick={() => onAvatarModeSelected('nft')}>
+      <AvatarModeContainer onClick={() => onAvatarModeSelected('nft')}>
         <Circle>
           <Icon name="nft" color="yellow600" size={2.6} />
         </Circle>
         <Subline1>Choose NFT</Subline1>
-      </AvatarMode>
+      </AvatarModeContainer>
     </Container>
   )
 }
@@ -99,7 +99,7 @@ const Container = styled.div`
   }
 `
 
-const AvatarMode = styled.div`
+const AvatarModeContainer = styled.div`
   ${avatarModeStyles}
 `
 

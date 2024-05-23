@@ -30,8 +30,6 @@ export const loadUnlockCheckout = async (provider: any) => {
   const paywall = new Paywall(networks)
   paywall.setPaywallConfig(paywallConfig)
   paywall.connect(provider)
-
-  console.log('loadinging checkout modal')
   paywall.loadCheckoutModal()
 }
 

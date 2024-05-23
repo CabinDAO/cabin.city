@@ -15,7 +15,7 @@ export const CitizenshipRequiredModal = () => {
       <ModalTitle text="Citizenship" />
       <Content>
         <StyledIcon name={'check-decagram'} size={9.6} />
-        <H2>Unlock Citizenship to connect with Caretakers</H2>
+        <H2>Unlock Citizenship to connect with Stewards</H2>
         <Body2>
           Cabin’s annual membership that gives you access to our community’s
           global adventures.

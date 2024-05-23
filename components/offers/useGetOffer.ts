@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import { OfferGetResponse } from '@/utils/types/offer'
+import { canEditLocation } from '@/lib/permissions'
 
 export const useGetOffer = (offerId: string) => {
   const router = useRouter()
@@ -14,30 +15,23 @@ export const useGetOffer = (offerId: string) => {
 
   const offer = data && 'offer' in data ? data.offer : null
 
-  const isPublished = !!offer?.location.publishedAt
+  const isEditable = !!offer && canEditLocation(user, offer.location)
 
-  const isUserCaretaker = user?.externId === offer?.location.caretaker.externId
-
-  const isEditable = !!(offer && (user?.isAdmin || isUserCaretaker))
-
-  const isVisible = !!offer && (isEditable || isPublished)
+  const isPubliclyVisible =
+    !!offer && (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10)
 
   useEffect(() => {
     if (!data) {
       return
     } else if (!offer) {
       router.push('/404').then()
-    } else if (!isVisible) {
-      router.push('/city-directory').then()
     }
-  }, [data, offer, router, isVisible])
+  }, [data, offer, router])
 
   return {
-    offer: offer,
-    isPublished: isPublished,
-    isUserCaretaker: isUserCaretaker,
-    isEditable: isEditable,
-    isVisible: isVisible,
+    offer,
+    isEditable,
+    isPubliclyVisible,
     refetchLocation: async () => {
       if (offer) {
         await revalidate(['LOCATION', { externId: offer.location.externId }])

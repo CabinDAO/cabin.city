@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { LocationFragment } from '@/utils/types/location'
 import { OfferFragment } from '@/utils/types/offer'
+import { canEditLocation } from '@/lib/permissions'
 import { ContentCard } from '@/components/core/ContentCard'
 import { OffersList } from '../OffersList'
 import { useProfile } from '@/components/auth/useProfile'
@@ -16,7 +17,7 @@ export const LocationOffersList = ({ offers, location }: OffersListProps) => {
     <StyledContentCard>
       <OffersList
         offers={offers}
-        actionsEnabled={user?.externId === location.caretaker.externId}
+        actionsEnabled={canEditLocation(user, location)}
       />
     </StyledContentCard>
   )

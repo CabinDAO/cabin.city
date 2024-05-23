@@ -35,8 +35,7 @@ export const NewLocationView = () => {
   const handlePrimaryButtonClick = async () => {
     try {
       const data = await post<LocationNewResponse>('LOCATION_NEW', {})
-
-      const externId = data.locationExternId
+      const externId = !data || 'error' in data ? null : data.locationExternId
 
       if (externId) {
         await sendEmail({
@@ -76,12 +75,12 @@ export const NewLocationView = () => {
   if (!canCreateListings) {
     return (
       <SingleColumnLayout>
-        <TitleCard title="New listing" icon="close" iconHref="/" />
+        <TitleCard title="New neighborhood" icon="close" iconHref="/" />
         <div style={{ width: '100%' }}>
           <EmptyState
             icon="alert"
             title="Citizens only"
-            description="Only citizens can create new listings."
+            description="Only citizens can create new neighborhoods."
             customCta={() => (
               <Link href={'/citizenship'}>
                 <Button variant={'secondary'}>Become a citizen</Button>
@@ -94,21 +93,8 @@ export const NewLocationView = () => {
   }
 
   return (
-    <SingleColumnLayout
-      actionBar={
-        <ActionBar
-          primaryButton={{
-            label: 'Let’s go!',
-            onClick: handlePrimaryButtonClick,
-          }}
-          secondaryButton={{
-            label: 'Cancel',
-            onClick: handleSecondaryButtonClick,
-          }}
-        />
-      }
-    >
-      <TitleCard title="New listing" icon="close" iconHref="/" />
+    <SingleColumnLayout>
+      <TitleCard title="New neighborhood" icon="close" iconHref="/" />
       <Container>
         <H3>Getting Started</H3>
         <StyledContentCard shape="notch">
@@ -116,10 +102,10 @@ export const NewLocationView = () => {
             <JoiningTextContainer>
               <H3>Joining the City Directory</H3>
               <Body2>
-                Cabin&apos;s City Directory is a hub for connecting people and
-                places around the world. If you&apos;re interested in welcoming
-                residents focused on building better ways to live, create,
-                build, and steward the natural land, this is the place for you.
+                Cabin's City Directory is a hub for connecting people and places
+                around the world. If you're interested in welcoming residents
+                focused on building better ways to live, create, build, and
+                steward the natural land, this is the place for you.
               </Body2>
               <Body2>
                 Properties compete to increase their rank on the directory
@@ -128,19 +114,29 @@ export const NewLocationView = () => {
                 location.
               </Body2>
               <Body2>
-                Properties receive the verified tag when they earn 1,000 votes
-                from the community.
-              </Body2>
-              <Body2>
                 Only Cabin Citizens will be able to contact you through your
                 property listing page.
               </Body2>
             </JoiningTextContainer>
+            <HorizontalDivider />
+            <AppLink
+              external
+              href={EXTERNAL_LINKS.CITY_DIRECTORY}
+              iconSize={0.9}
+            >
+              <Overline>Learn More</Overline>
+            </AppLink>
           </Content>
-          <HorizontalDivider />
-          <AppLink external href={EXTERNAL_LINKS.CITY_DIRECTORY} iconSize={0.9}>
-            <Overline>Learn More</Overline>
-          </AppLink>
+          <ActionBar
+            primaryButton={{
+              label: 'Let’s go!',
+              onClick: handlePrimaryButtonClick,
+            }}
+            secondaryButton={{
+              label: 'Cancel',
+              onClick: handleSecondaryButtonClick,
+            }}
+          />
         </StyledContentCard>
       </Container>
     </SingleColumnLayout>
@@ -158,7 +154,6 @@ const Container = styled.div`
 `
 
 const StyledContentCard = styled(ContentCard)`
-  padding: 3.2rem 2.4rem;
   flex-direction: column;
   gap: 2.4rem;
 `
@@ -166,6 +161,7 @@ const Content = styled.div`
   flex-direction: column;
   display: flex;
   gap: 2.4rem;
+  padding: 3.2rem 2.4rem;
 
   @media ${({ theme }) => theme.bp.md} {
     width: 55%;

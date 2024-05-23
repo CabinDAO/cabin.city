@@ -5,20 +5,14 @@ enum Routes {
   PROFILE_NEW = `/profile/new`,
   PROFILE_LIST = `/profile/list`,
   PROFILE_VOUCH = `/profile/vouch`,
-  PROFILE_VOTES = `/profile/votes`,
   PROFILE_ME = `/profile/me`,
   PROFILE_DID = `/profile/did`, // just for auth
   PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
   PROFILE_SIGNAL_INTEREST = `/profile/signal-interest`,
 
-  NEIGHBORHOOD_LIST = `/neighborhood/list`,
-
   LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,
   LOCATION_LIST = `/location/list`,
-  LOCATION_MINE = `/location/mine`,
-  LOCATION_VOTE = `/location/vote`,
-  LOCATION_PUBLISH = `/location/[externId]/publish`,
 
   OFFER = `/offer/[externId]`,
   OFFER_NEW = `/offer/new`,

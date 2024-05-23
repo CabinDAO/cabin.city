@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { AuthData, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
@@ -7,19 +7,22 @@ import { PAGE_SIZE } from '@/utils/api/backend'
 import {
   LocationFragment,
   LocationListParams,
+  LocationListParamsType,
   LocationListResponse,
-  LocationSort,
-  LocationType,
   LocationMediaCategory,
   LocationQueryInclude,
+  LocationSort,
+  LocationType,
   LocationWithRelations,
 } from '@/utils/types/location'
-import { OfferType } from '@/utils/types/offer'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+
+export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<LocationListResponse>
+  res: NextApiResponse<LocationListResponse>,
+  opts: { auth: AuthData }
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -34,20 +37,34 @@ async function handler(
   }
   const params = parsed.data
 
+  const maybeCurrentPrivyDID = opts.auth.privyDID || '0'
+
   const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
   const take = PAGE_SIZE
 
-  const idsInOrder = await sortByVoteCountPrequery(
-    params.sort || LocationSort.nameAsc,
-    params.offerType,
-    params.locationType,
+  if (
+    params.sort == LocationSort.distAsc &&
+    (params.lat === undefined || params.lng === undefined)
+  ) {
+    res.status(400).send({ error: 'Missing lat/lng for distance sort' })
+    return
+  }
+
+  const idsInOrder = await sortPrequery(
+    params,
+    maybeCurrentPrivyDID,
     skip,
     take
   )
 
   const query: Prisma.LocationFindManyArgs = {
-    where: { id: { in: idsInOrder } },
-    include: LocationQueryInclude,
+    where: {
+      id: { in: idsInOrder },
+      steward: params.mineOnly ? { privyDID: maybeCurrentPrivyDID } : undefined,
+    },
+    include: LocationQueryInclude({
+      activeEventsOnly: params.activeEventsOnly === 'true',
+    }),
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
@@ -70,36 +87,54 @@ async function handler(
 }
 
 // get ids for locations sorted in proper order
-const sortByVoteCountPrequery = async (
-  sort: LocationSort,
-  offerType: OfferType | undefined,
-  locationType: LocationType | undefined,
+const sortPrequery = async (
+  params: LocationListParamsType,
+  maybeCurrentPrivyDID: string,
   offset: number,
   limit: number
 ) => {
-  const ids = await prisma.$queryRaw<{ id: number }[]>`
-    SELECT l.id
+  const sort = params.sort || LocationSort.default
+
+  const sortByDist = sort === LocationSort.distAsc && params.lat && params.lng
+  const maxDistance = sortByDist ? params.maxDist || 100 : null
+  const distQuery = sortByDist
+    ? Prisma.sql`(6371 * 2 * ASIN(SQRT(
+      POWER(SIN((radians(a.lat) - radians(${params.lat})) / 2), 2) +
+      COS(radians(${params.lat})) * COS(radians(a.lat)) *
+      POWER(SIN((radians(a.lng) - radians(${params.lng})) / 2), 2)
+    )))`
+    : Prisma.sql`0`
+
+  const ids = await prisma.$queryRaw<{ id: number; distance_in_km: number }[]>`
+    SELECT l.id, ${distQuery} AS distance_in_km
     FROM "Location" l
     ${
-      offerType
-        ? Prisma.sql`INNER JOIN "Offer" o ON l.id = o."locationId" AND o.type = ${offerType}`
+      sortByDist
+        ? Prisma.sql`INNER JOIN "Address" a ON l.id = a."locationId"`
         : Prisma.empty
     }
-    LEFT JOIN "LocationVote" lv ON l.id = lv."locationId"
-    WHERE l."publishedAt" IS NOT NULL AND ${
-      locationType ? Prisma.sql`l.type = ${locationType}` : Prisma.sql`1=1`
+    LEFT JOIN "Offer" o ON l.id = o."locationId"
+    LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
+    WHERE ${
+      params.locationType
+        ? Prisma.sql`l.type = ${params.locationType}`
+        : Prisma.sql`1=1`
     }
-    GROUP BY l.id
+    GROUP BY l.id, steward."privyDID"
     ORDER BY ${
-      sort === LocationSort.votesDesc
-        ? Prisma.sql`COALESCE(SUM(lv.count), 0) DESC,`
+      sort === LocationSort.default // current users locations go first, then order by num active events
+        ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC,`
+        : sortByDist
+        ? Prisma.sql`distance_in_km ASC,`
         : Prisma.empty
     } l.name ASC, l."createdAt" ASC
     LIMIT ${limit}
     OFFSET ${offset}
   `
 
-  return ids.reduce((acc: number[], val) => [...acc, val.id], [])
+  return ids
+    .filter((row) => !maxDistance || row.distance_in_km <= maxDistance)
+    .reduce((ids: number[], row) => [...ids, row.id], [])
 }
 
 export const locationToFragment = (
@@ -130,30 +165,28 @@ export const locationToFragment = (
         }
       : null,
     bannerImageIpfsHash: loc.bannerImageIpfsHash,
-    sleepCapacity: loc.sleepCapacity,
-    internetSpeedMbps: loc.internetSpeedMbps,
-    caretaker: {
-      createdAt: loc.caretaker.createdAt.toISOString(),
-      externId: loc.caretaker.externId,
-      name: loc.caretaker.name,
-      email: loc.caretaker.email,
-      bio: loc.caretaker.bio,
-      citizenshipStatus: loc.caretaker
-        .citizenshipStatus as CitizenshipStatus | null,
-      cabinTokenBalanceInt: loc.caretaker.wallet.cabinTokenBalance.toNumber(),
-      avatar: loc.caretaker.avatar
-        ? {
-            url: loc.caretaker.avatar.url,
-          }
-        : undefined,
-      roles: loc.caretaker.roles.map((role) => ({
-        hatId: role.walletHat?.hatId || null,
-        type: role.type as RoleType,
-        level: role.level as RoleLevel,
-      })),
-    },
-    caretakerEmail: loc.caretakerEmail,
-    publishedAt: loc.publishedAt ? loc.publishedAt.toISOString() : null,
+    steward: loc.steward
+      ? {
+          createdAt: loc.steward.createdAt.toISOString(),
+          externId: loc.steward.externId,
+          name: loc.steward.name,
+          email: loc.steward.email,
+          bio: loc.steward.bio,
+          citizenshipStatus: loc.steward
+            .citizenshipStatus as CitizenshipStatus | null,
+          cabinTokenBalanceInt: loc.steward.wallet.cabinTokenBalance.toNumber(),
+          avatar: loc.steward.avatar
+            ? {
+                url: loc.steward.avatar.url,
+              }
+            : undefined,
+          roles: loc.steward.roles.map((role) => ({
+            hatId: role.walletHat?.hatId || null,
+            type: role.type as RoleType,
+            level: role.level as RoleLevel,
+          })),
+        }
+      : null,
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,
@@ -161,20 +194,5 @@ export const locationToFragment = (
       }
     }),
     offerCount: loc._count.offers,
-    recentVoters: loc.votes.slice(0, 3).map((vote) => {
-      return {
-        externId: vote.profile.externId,
-        avatar: {
-          url: vote.profile.avatar ? vote.profile.avatar.url : '',
-        },
-      }
-    }),
-    voteCount: loc.votes
-      .map((vote) => {
-        return vote.count
-      })
-      .reduce((a, b) => a + b, 0),
   }
 }
-
-export default withAuth(handler)

@@ -57,9 +57,6 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     email: profile.email,
     bio: profile.bio,
     address: profile.address || undefined,
-    neighborhoodExternId: profile.neighborhood
-      ? profile.neighborhood.externId
-      : null,
     inviteCode: profile.inviteCode ?? '',
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
@@ -77,7 +74,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
     mailingListOptIn: profile.mailingListOptIn,
     walletAddress: profile.wallet.address,
-    locationCount: profile._count.locations,
+    locationCount: profile._count.stewardedLocations,
     contactFields: profile.contactFields.map((cf) => ({
       type: cf.type as ContactFieldType,
       value: cf.value,
@@ -104,7 +101,7 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     _count: {
       select: {
-        locations: true
+        stewardedLocations: true
       }
     }
     voucher: {
@@ -114,11 +111,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    neighborhood: {
-      select: {
-        externId: true
-      }
-    }
     avatar: {
       select: {
         url: true
@@ -150,7 +142,7 @@ const MyProfileQueryInclude = {
   // must match MyProfileWithRelations above
   _count: {
     select: {
-      locations: true,
+      stewardedLocations: true,
     },
   },
   voucher: {
@@ -160,11 +152,6 @@ const MyProfileQueryInclude = {
     },
   },
   address: true,
-  neighborhood: {
-    select: {
-      externId: true,
-    },
-  },
   avatar: {
     select: {
       url: true,

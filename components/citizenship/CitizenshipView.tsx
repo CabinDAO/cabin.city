@@ -26,8 +26,6 @@ export const CitizenshipView = () => {
   const { confirmLoggedIn } = useConfirmLoggedIn()
 
   const performMint = async () => {
-    console.log('performMint() called')
-
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
     )

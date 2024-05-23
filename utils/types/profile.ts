@@ -61,7 +61,6 @@ export type ProfileListFragment = {
   email: string
   bio: string
   address: ShortAddressFragmentType | null
-  neighborhoodExternId: string | null
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
@@ -104,24 +103,27 @@ export type ProfileVouchParams = {
   action: 'vouch' | 'unvouch'
 }
 
-export type ProfileVouchResponse = {
-  newStatus: CitizenshipStatus
-  error?: string
-}
+export type ProfileVouchResponse =
+  | {
+      newStatus: CitizenshipStatus
+    }
+  | APIError
 
 export type ProfileSetupStateParams = {
   state: 'finished' | 'dismissed'
 }
 
-export type ProfileSetupStateResponse = {
-  success: boolean
-  error?: string
-}
+export type ProfileSetupStateResponse =
+  | {
+      success: boolean
+    }
+  | APIError
 
-export type ProfileGetResponse = {
-  profile: ProfileFragment | null
-  error?: string
-}
+export type ProfileGetResponse =
+  | {
+      profile: ProfileFragment | null
+    }
+  | APIError
 
 export type ProfileBasicFragment = {
   createdAt: string
@@ -138,7 +140,6 @@ export type ProfileBasicFragment = {
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
   address: ShortAddressFragmentType | undefined
-  neighborhoodExternId: string | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {
@@ -188,10 +189,11 @@ export const AvatarFragment = z
   .strict()
 export type AvatarFragmentType = z.infer<typeof AvatarFragment>
 
-export type ProfileMeResponse = {
-  me?: MeFragment | null
-  error?: string
-}
+export type ProfileMeResponse =
+  | {
+      me: MeFragment | null
+    }
+  | APIError
 
 // This is a globally used query to get the current user.
 // It should be kept as light as possible, limited to the top-level fields only.
@@ -203,7 +205,6 @@ export type MeFragment = {
   email: string
   bio: string
   address: AddressFragmentType | undefined
-  neighborhoodExternId: string | null
   inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
@@ -233,7 +234,6 @@ export const ProfileNewParams = z
     address: AddressFragment,
     avatar: AvatarFragment.optional(),
     inviteExternId: z.string().optional(),
-    neighborhoodExternId: z.string().optional(),
   })
   .strict()
 export type ProfileNewParamsType = z.infer<typeof ProfileNewParams>
@@ -247,17 +247,17 @@ export const ProfileEditParams = z
       address: AddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
       avatar: AvatarFragment.optional(),
-      neighborhoodExternId: z.string().nullable().optional(),
     }),
     roleTypes: z.array(z.nativeEnum(RoleType)).optional(),
   })
   .strict()
 export type ProfileEditParamsType = z.infer<typeof ProfileEditParams>
 
-export type ProfileEditResponse = {
-  success: boolean
-  error?: string
-}
+export type ProfileEditResponse =
+  | {
+      success: boolean
+    }
+  | APIError
 
 export type ProfileDIDResponse =
   | {

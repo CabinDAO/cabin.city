@@ -32,15 +32,12 @@ async function handler(
   }
   const params = parsed.data
 
-  const publiclyVisibleOnly = params.publiclyVisibleOnly === 'true'
-
   const query: Prisma.OfferFindManyArgs = {
     where: {
       type: params.offerType,
-      endDate: publiclyVisibleOnly ? { gte: new Date() } : undefined,
+      endDate: params.futureOnly === 'true' ? { gte: new Date() } : undefined,
       location: {
         externId: params.locationId,
-        publishedAt: publiclyVisibleOnly ? { not: null } : undefined,
       },
     },
     include: OfferQueryInclude,
@@ -86,9 +83,6 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
       name: offer.location.name,
       type: offer.location.type as LocationType,
       bannerImageIpfsHash: offer.location.bannerImageIpfsHash,
-      publishedAt: offer.location.publishedAt
-        ? offer.location.publishedAt.toISOString()
-        : null,
       address: offer.location.address
         ? {
             locality: offer.location.address.locality,
@@ -98,9 +92,11 @@ export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
             countryShort: offer.location.address.countryShort,
           }
         : null,
-      caretaker: {
-        externId: offer.location.caretaker.externId,
-      },
+      steward: offer.location.steward
+        ? {
+            externId: offer.location.steward.externId,
+          }
+        : null,
     },
   }
 }

@@ -261,7 +261,7 @@ export default function InviteClaimFlow({
                 goToStep(Step.LastStep)
               }}
             >
-              No / I&apos;m Not Sure
+              No / I'm Not Sure
             </Button>
           </ButtonRow>
         </>

@@ -6,20 +6,15 @@ import {
   LocationType,
 } from '@/utils/types/location'
 import styled from 'styled-components'
-import { useLocationVote } from '../hooks/useLocationVote'
 import { Button } from '@/components/core/Button'
 import { ListingCard } from '../core/ListingCard'
 import events from '@/lib/googleAnalytics/events'
 
 export const NeighborhoodsTop6List = () => {
   const { useGet } = useBackend()
-  const { data, mutate: refetchLocations } = useGet<LocationListResponse>(
-    'LOCATION_LIST',
-    {
-      locationType: LocationType.Neighborhood,
-    } as LocationListParamsType
-  )
-  const { voteForLocation } = useLocationVote(refetchLocations)
+  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
+    locationType: LocationType.Neighborhood,
+  } as LocationListParamsType)
 
   if (!data || 'error' in data) {
     return null
@@ -37,7 +32,6 @@ export const NeighborhoodsTop6List = () => {
               key={location.externId}
               position={index + 1}
               location={location}
-              onVote={() => voteForLocation(location)}
             />
           )
         })}

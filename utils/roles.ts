@@ -40,7 +40,7 @@ export const RoleInfoByType: Record<RoleType, RoleInfo> = {
     name: 'Caretaker',
     description:
       'Operator of a neighborhood. Jack-of-all-trades ultimately responsible for a space.',
-    iconName: 'caretaker',
+    iconName: 'key',
     imagePath: '/images/caretaker.png',
     backgroundImagePath: '/images/caretaker-bg.png',
   },

@@ -24,8 +24,8 @@ export const SupperClubSection = () => {
           <Title>Upgrade your neighborhood</Title>
           <Body>
             Make friends with your neighbors and make neighbors out of your
-            friends. Cabin&apos;s neighborhood steward cohort program can guide
-            you every step of the way.
+            friends. Cabin's neighborhood steward cohort program can guide you
+            every step of the way.
           </Body>
           <Buttons>
             <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_TYPEFORM}>

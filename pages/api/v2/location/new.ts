@@ -7,7 +7,7 @@ import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<LocationNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -20,21 +20,17 @@ async function handler(
 
   const location = await prisma.location.create({
     data: {
-      caretakerId: profile.id,
+      stewardId: profile.id,
       externId: randomId('location'),
-      type: $Enums.LocationType.Outpost,
-      name: 'New Listing',
+      type: $Enums.LocationType.Neighborhood,
+      name: 'New neighborhood',
       tagline: '',
       description: '',
-      sleepCapacity: 0,
-      internetSpeedMbps: 0,
       bannerImageIpfsHash: '',
     },
   })
 
-  res
-    .status(200)
-    .send({ locationExternId: location.externId } as LocationNewResponse)
+  res.status(200).send({ locationExternId: location.externId })
 }
 
 export default withAuth(handler)

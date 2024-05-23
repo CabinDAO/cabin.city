@@ -68,11 +68,7 @@ export const Post = (props: PostProps) => {
     showModal(() => (
       <DeleteConfirmationModal
         entityName="post"
-        onDelete={async () => {
-          console.log('delete post')
-          await handleDeleteTextActivity()
-          console.log('deleted')
-        }}
+        onDelete={handleDeleteTextActivity}
       />
     ))
   }

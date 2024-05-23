@@ -1,85 +1,79 @@
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { EMPTY } from '@/utils/display-utils'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
-import { OfferListResponse, OfferType } from '@/utils/types/offer'
+import {
+  OfferListResponse,
+  OfferNewParams,
+  OfferNewResponse,
+  OfferType,
+} from '@/utils/types/offer'
+import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
-import events from '@/lib/googleAnalytics/events'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
-import {
-  Body1,
-  Caption,
-  H1,
-  H3,
-  H4,
-  Overline,
-} from '@/components/core/Typography'
+import { Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '../core/slate/SlateRenderer'
 import { stringToSlateValue } from '../core/slate/slate-utils'
-import { Tag } from '@/components/core/Tag'
 import Icon from '@/components/core/Icon'
-import { ProfileContact } from '@/components/core/ProfileContact'
-import { ProfilesCount } from '@/components/core/ProfilesCount'
 import { Button } from '@/components/core/Button'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
-import { VoteButton } from './styles'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { ExperienceList } from '@/components/offers/ExperienceList'
-import { VERIFIED_VOTE_COUNT } from '@/components/neighborhoods/constants'
+import { ActiveBadge } from '@/components/core/ActiveBadge'
+import { StewardContact } from '@/components/core/StewardContact'
 
-export const LocationView = ({
-  location,
-  onVote,
-}: {
-  location: LocationFragment
-  onVote?: VoidFunction
-}) => {
-  const { externId, offerCount, mediaItems, caretaker, caretakerEmail } =
-    location
+export const LocationView = ({ location }: { location: LocationFragment }) => {
+  const { externId, mediaItems } = location
 
-  const { useGet } = useBackend()
+  const router = useRouter()
+  const { useGet, useMutate } = useBackend()
   const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
-    locationId: externId,
+    locationId: location.externId,
   })
   const offers = !offerData || 'error' in offerData ? [] : offerData.offers
 
-  const galleryPreviewSleeping = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Sleeping
-  )
-  const galleryPreviewSleepingUrl =
-    !!galleryPreviewSleeping && resolveImageUrl(galleryPreviewSleeping, true)
-  const galleryPreviewWorking = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Working
-  )
-  const galleryPreviewWorkingUrl =
-    !!galleryPreviewWorking && resolveImageUrl(galleryPreviewWorking, true)
-  const galleryPreviewFeatures = mediaItems.find(
-    ({ category }) => category === LocationMediaCategory.Features
-  )
-  const galleryPreviewFeaturesUrl =
-    !!galleryPreviewFeatures && resolveImageUrl(galleryPreviewFeatures, true)
-  const { deviceSize } = useDeviceSize()
-  const hasPhotos =
-    !!galleryPreviewSleepingUrl &&
-    !!galleryPreviewWorkingUrl &&
-    !!galleryPreviewFeaturesUrl
+  const { trigger: createOffer } = useMutate<OfferNewResponse>('OFFER_NEW')
+  const handleNewEventClick = async () => {
+    const data = await createOffer({
+      locationExternId: location.externId,
+      offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
+    } as OfferNewParams)
 
+    if ('offerExternId' in data) {
+      router.push(`/experience/${data.offerExternId}/edit`).then(null)
+    }
+  }
+
+  const galleryPreviewUrls =
+    mediaItems.length > 0
+      ? mediaItems
+          .slice(0, 3)
+          .map((mi) => resolveImageUrl(mi, true))
+          .filter((value): value is string => value !== null)
+      : []
+
+  const { deviceSize } = useDeviceSize()
+  const hasPhotos = galleryPreviewUrls.length > 0
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const bookableOffers = offers.filter(
-    (offer) =>
-      (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-      offer.type !== OfferType.Residency
-  )
+  const [bookableOffersOnly, setBookableOffersOnly] = useState(true)
+  const bookableOffers = bookableOffersOnly
+    ? offers.filter(
+        (offer) =>
+          (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+          offer.type !== OfferType.Residency
+      )
+    : offers
 
   const { user } = useProfile()
-  const isEditable =
-    user?.isAdmin || user?.externId === location.caretaker.externId
+  const isEditable = canEditLocation(user, location)
 
   return (
     <LocationContent>
@@ -91,15 +85,7 @@ export const LocationView = ({
       )}
 
       <LocationDetailsContainer>
-        {(location.voteCount ?? 0) >= VERIFIED_VOTE_COUNT && (
-          <LocationTypeTag
-            label={'Verified'}
-            color={'green400'}
-            startAdornment={
-              <Icon name={'logo-cabin'} size={1.8} color={'green400'} />
-            }
-          />
-        )}
+        <ActiveBadge steward={location.steward} />
 
         <StyledContentCard shadow>
           <LocationHeader>
@@ -107,37 +93,28 @@ export const LocationView = ({
               <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
-                <span>Sleeps {location.sleepCapacity ?? EMPTY}</span>
-                <span>
-                  {offerCount} {offerCount === 1 ? 'Experience' : 'Experiences'}
-                </span>
+                {location.offerCount > 0 && (
+                  <span>
+                    {location.offerCount}{' '}
+                    {location.offerCount === 1 ? 'Event' : 'Events'}
+                  </span>
+                )}
               </LocationHeaderInformation>
             </LocationHeaderTitle>
-
-            <LocationHeaderHorizontalBar />
-
-            <VotesContainer>
-              <VotesAvatarContainer>
-                <Caption>
-                  {location.voteCount}{' '}
-                  {location.voteCount === 1 ? 'Vote' : 'Votes'}
-                </Caption>
-                <ProfilesCount profiles={location.recentVoters ?? []} />
-              </VotesAvatarContainer>
-
-              <VoteButton variant="secondary" onClick={onVote}>
-                <Icon name="chevron-up" size={1.6} />
-              </VoteButton>
-            </VotesContainer>
           </LocationHeader>
+
           {isEditable && (
             <EditBar>
               <Link href={`/location/${externId}/edit`}>
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
-                  <Overline>Edit Listing</Overline>
+                  <Overline>Edit</Overline>
                 </Button>
               </Link>
+              <Button variant={'link'} onClick={handleNewEventClick}>
+                <Icon name="plus" size={1.2} />
+                <Overline>New Event</Overline>
+              </Button>
             </EditBar>
           )}
         </StyledContentCard>
@@ -147,48 +124,17 @@ export const LocationView = ({
         {hasPhotos && (
           <GalleryPreviewList>
             <GalleryPreviewListImages>
-              {galleryPreviewFeaturesUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Features}
-                  href={`/location/${externId}/photos?gallery=features`}
-                >
+              {galleryPreviewUrls.map((url, i) => (
+                <StyledLink key={i} href={`/location/${externId}/photos`}>
                   <ImageFlex
                     sizes={imageSizesString}
                     alt={LocationMediaCategory.Features}
-                    src={galleryPreviewFeaturesUrl}
+                    src={url}
                     width={galleryImageWidth}
                     aspectRatio={1}
                   />
                 </StyledLink>
-              )}
-              {galleryPreviewSleepingUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Sleeping}
-                  href={`/location/${externId}/photos?gallery=sleeping`}
-                >
-                  <ImageFlex
-                    sizes={imageSizesString}
-                    alt={LocationMediaCategory.Sleeping}
-                    src={galleryPreviewSleepingUrl}
-                    width={galleryImageWidth}
-                    aspectRatio={1}
-                  />
-                </StyledLink>
-              )}
-              {galleryPreviewWorkingUrl && (
-                <StyledLink
-                  key={LocationMediaCategory.Working}
-                  href={`/location/${externId}/photos?gallery=working`}
-                >
-                  <ImageFlex
-                    sizes={imageSizesString}
-                    alt={LocationMediaCategory.Working}
-                    src={galleryPreviewWorkingUrl}
-                    width={galleryImageWidth}
-                    aspectRatio={1}
-                  />
-                </StyledLink>
-              )}
+              ))}
             </GalleryPreviewListImages>
 
             <Link href={`/location/${externId}/photos`}>
@@ -200,18 +146,6 @@ export const LocationView = ({
         )}
       </GalleryPreviewContainer>
 
-      {!!bookableOffers.length && (
-        <Section>
-          <SectionHeader>
-            <H3>Experiences</H3>
-          </SectionHeader>
-          <ExperienceList
-            offers={bookableOffers}
-            actionButtonText={'Reserve'}
-          />
-        </Section>
-      )}
-
       <Section>
         <SectionHeader>
           <H3>Description</H3>
@@ -220,33 +154,41 @@ export const LocationView = ({
           <DescriptionTwoColumn>
             <DescriptionDetails>
               <SlateRenderer value={stringToSlateValue(location.description)} />
-
-              <HorizontalBar />
-
-              <InternetSpeed>
-                <H4>Internet speed</H4>
-                <Body1>
-                  {location.internetSpeedMbps
-                    ? `${location.internetSpeedMbps} Mbps`
-                    : EMPTY}
-                </Body1>
-              </InternetSpeed>
             </DescriptionDetails>
 
-            <CaretakerDetailsContainer>
-              <CaretakerDetails>
-                <ProfileContact
-                  profile={caretaker}
-                  caretakerEmail={caretakerEmail}
-                  onContact={() =>
-                    events.contactCaretakerEvent(caretaker.externId)
-                  }
+            <StewardDetailsContainer>
+              <StewardDetails>
+                <StewardContact
+                  steward={location.steward}
+                  location={location}
                 />
-              </CaretakerDetails>
-            </CaretakerDetailsContainer>
+                {/*)}*/}
+              </StewardDetails>
+            </StewardDetailsContainer>
           </DescriptionTwoColumn>
         </SectionContent>
       </Section>
+
+      {(bookableOffers.length > 0 || (isEditable && offers.length > 0)) && (
+        <Section>
+          <SectionHeader>
+            <H3>Events</H3>
+            {isEditable && (
+              <Button
+                variant={'link-slim'}
+                onClick={() => setBookableOffersOnly(!bookableOffersOnly)}
+              >
+                {bookableOffersOnly ? 'Show Past Events' : 'Active Events Only'}
+              </Button>
+            )}
+          </SectionHeader>
+          <ExperienceList
+            offers={bookableOffers}
+            actionButtonText={'Details'}
+            isEditable={isEditable}
+          />
+        </Section>
+      )}
     </LocationContent>
   )
 }
@@ -270,13 +212,10 @@ const SectionHeader = styled.div`
   display: flex;
   padding: 1.6rem 2.4rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
+  justify-content: space-between;
 `
 
-const LocationTypeTag = styled(Tag)`
-  border-radius: 0.8rem 0 0 0;
-`
-
-const CaretakerDetailsContainer = styled.div`
+const StewardDetailsContainer = styled.div`
   display: flex;
   flex-flow: column;
   gap: 2.4rem;
@@ -288,7 +227,7 @@ const CaretakerDetailsContainer = styled.div`
   }
 `
 
-const CaretakerDetails = styled.div`
+const StewardDetails = styled.div`
   display: flex;
   flex-flow: row;
   padding-left: 2.4rem;
@@ -319,23 +258,6 @@ const DescriptionDetails = styled.div`
   flex-flow: column;
   gap: 2.4rem;
   flex: 1;
-`
-
-const HorizontalBar = styled.div`
-  opacity: 0.12;
-  border-top: 1px solid ${({ theme }) => theme.colors.green900};
-  width: 100%;
-`
-
-const LocationHeaderHorizontalBar = styled.div`
-  opacity: 0.12;
-  border-top: 1px solid ${({ theme }) => theme.colors.green900};
-  width: 100%;
-  display: block;
-
-  ${({ theme }) => theme.bp.md} {
-    display: none;
-  }
 `
 
 const LocationContent = styled.div`
@@ -461,27 +383,4 @@ const GalleryPreviewButton = styled(Button)`
 const StyledLink = styled(Link)`
   border: 1px solid ${({ theme }) => theme.colors.black};
   cursor: pointer;
-`
-
-const VotesContainer = styled.div`
-  display: flex;
-  flex-flow: row;
-  gap: 1.6rem;
-  justify-content: end;
-`
-
-const VotesAvatarContainer = styled.div`
-  display: flex;
-  flex-flow: column;
-  gap: 0.8rem;
-`
-
-const InternetSpeed = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-
-  ${Body1} {
-    opacity: 0.75;
-  }
 `

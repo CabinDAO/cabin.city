@@ -10,7 +10,13 @@ import {
   ActivityWithRelations,
   ActivityQueryInclude,
 } from '@/utils/types/activity'
-import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+import {
+  AvatarFragmentType,
+  CitizenshipStatus,
+  RoleFragment,
+  RoleLevel,
+  RoleType,
+} from '@/utils/types/profile'
 import { OfferType } from '@/utils/types/offer'
 import { LocationType } from '@/utils/types/location'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
@@ -124,7 +130,11 @@ const toFragments = (
               description: activity.location.description,
               tagline: activity.location.tagline,
               bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
-              sleepCapacity: activity.location.sleepCapacity,
+              steward: activity.location.steward
+                ? {
+                    externId: activity.location.steward.externId,
+                  }
+                : null,
               address: {
                 locality: activity.location.address?.locality || '',
                 admininstrativeAreaLevel1Short:
@@ -133,7 +143,6 @@ const toFragments = (
                 country: activity.location.address?.country || '',
                 countryShort: activity.location.address?.countryShort || '',
               },
-              voteCount: 0, // TODO: implement
               offerCount: 0, // TODO: implement
             }
           : undefined,
@@ -151,9 +160,6 @@ const toFragments = (
                 type: activity.offer.location.type as LocationType,
                 bannerImageIpfsHash:
                   activity.offer.location.bannerImageIpfsHash,
-                publishedAt: activity.offer.location.publishedAt
-                  ? activity.offer.location.publishedAt.toISOString()
-                  : null,
                 address: activity.offer.location.address
                   ? {
                       locality: activity.offer.location.address.locality || '',
@@ -165,9 +171,11 @@ const toFragments = (
                         activity.offer.location.address.countryShort || '',
                     }
                   : null,
-                caretaker: {
-                  externId: activity.offer.location.caretaker.externId,
-                },
+                steward: activity.offer.location.steward
+                  ? {
+                      externId: activity.offer.location.steward.externId,
+                    }
+                  : null,
               },
             }
           : undefined,

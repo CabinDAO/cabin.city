@@ -296,10 +296,11 @@ const Step = ({
             </Link>
           ) : (
             <StyledBody>
-              We&apos;re sorry about that!{' '}
+              We're sorry about that!{' '}
               <ContactUsLink
+                underline
                 subject={'Error during invite process'}
-                body={`%0D%0A%0D%0A%0D%0A--------%0D%0ATo help us fix the problem, include this string: ${cart.externId}`}
+                body={`\r\n\r\n\r\n--------\r\nTo help us fix the problem, include this string: ${cart.externId}`}
               >
                 Shoot us an email
               </ContactUsLink>{' '}

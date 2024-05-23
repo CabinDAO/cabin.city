@@ -22,9 +22,6 @@ export const MobileNavBar = ({ open, profileId }: MobileNavBarProps) => {
         <StyledDivider />
         <MobileMenuProfileItem />
         <MobileMenuItem menuItem={'citizenship'} profileId={profileId} />
-        {user && (
-          <MobileMenuItem menuItem={'myLocations'} profileId={profileId} />
-        )}
         {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
           <MobileMenuItem menuItem={'invite'} profileId={profileId} />
         )}

@@ -42,7 +42,6 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
 
     if (resp.hasOwnProperty('updated')) {
       if (resp.updated) {
-        console.log('Status updated. Refetching user...')
         await refetchProfile()
       }
       checked.current = true

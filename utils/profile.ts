@@ -26,7 +26,6 @@ type ProfileCreateParams = {
   walletAddress: string
   name: string
   email: string
-  neighborhoodExternId?: string
   address?: AddressFragmentType
   avatar?: {
     url: string
@@ -84,9 +83,6 @@ export async function createProfile(
           },
         },
       },
-      neighborhood: params.neighborhoodExternId
-        ? { connect: { externId: params.neighborhoodExternId } }
-        : undefined,
       address: params.address
         ? {
             create: params.address,

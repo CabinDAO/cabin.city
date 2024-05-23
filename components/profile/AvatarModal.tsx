@@ -27,12 +27,6 @@ export const AvatarModal = ({
     setAvatarMode(avatarMode)
   }
 
-  useEffect(() => {
-    if (avatarMode === 'upload') {
-      console.log('upload')
-    }
-  }, [avatarMode])
-
   const [aboutOpen, setAboutOpen] = useState(false)
 
   if (avatarMode === 'nft') {
@@ -82,16 +76,4 @@ export const AvatarModal = ({
 
 const AvatarModalContainer = styled(ModalContainer)`
   height: 100%;
-`
-
-const AvatarMode = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4.2rem 4rem;
-  gap: 0.8rem;
-  width: 100%;
-  border: 1px solid ${({ theme }) => theme.colors.green900}1A;
-  cursor: pointer;
 `

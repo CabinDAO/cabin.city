@@ -26,7 +26,6 @@ export interface RegistrationParams {
   name: string
   address: AddressFragmentType
   avatar: AvatarFragmentType | undefined
-  neighborhoodExternId?: string
 }
 
 export const RegistrationView = () => {
@@ -71,7 +70,6 @@ export const RegistrationView = () => {
       email: externalUser.email?.address || email,
       address,
       avatar,
-      neighborhoodExternId: params.neighborhoodExternId,
     }
 
     try {

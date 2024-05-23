@@ -42,7 +42,9 @@ export const EditProfileView = () => {
         data: newValues,
       } as ProfileEditParamsType)
 
-      if (!res.error) {
+      const error = 'error' in res ? res.error : null
+
+      if (!error) {
         await router.push(`/profile/${user.externId}`)
         return
       }
@@ -50,7 +52,7 @@ export const EditProfileView = () => {
       showModal(() => (
         <ErrorModal
           title="Profile Submission Error"
-          description={`Error updating profile: ${res.error}`}
+          description={`Error updating profile: ${error}`}
         />
       ))
     }
@@ -68,27 +70,30 @@ export const EditProfileView = () => {
   }
 
   return (
-    <StyledLayout
-      actionBar={
-        <ActionBar
-          primaryButton={{
-            label: 'Save Profile',
-            onClick: handleSubmit,
-          }}
-        />
-      }
-    >
+    <StyledLayout>
       <TitleCard
         title="Edit profile"
         icon="close"
         iconHref={`/profile/${user.externId}`}
       />
       <ContentCard shape="notch">
-        <EditProfileForm
-          user={user}
-          profileEditParams={newValues}
-          onChange={handleChange}
-        />
+        <Content>
+          <EditProfileForm
+            user={user}
+            profileEditParams={newValues}
+            onChange={handleChange}
+          />
+          <ActionBar
+            primaryButton={{
+              label: 'Save Profile',
+              onClick: handleSubmit,
+            }}
+            secondaryButton={{
+              label: 'Cancel',
+              onClick: () => router.push(`/profile/${user.externId}`).then(),
+            }}
+          />
+        </Content>
       </ContentCard>
     </StyledLayout>
   )
@@ -100,4 +105,10 @@ const StyledLayout = styled(SingleColumnLayout)`
   ${({ theme }) => theme.bp.md} {
     padding-bottom: 17rem;
   }
+`
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 `

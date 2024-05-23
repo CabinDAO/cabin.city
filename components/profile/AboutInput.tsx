@@ -8,7 +8,6 @@ import { AvatarFragmentType } from '@/utils/types/profile'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { ADDRESS_ERROR } from '@/utils/validate'
 import { AddressFragmentType } from '@/utils/types/location'
-import { NeighborhoodSelect } from '@/components/profile/RegistrationForm'
 
 interface AboutInputProps {
   bio: string
@@ -17,8 +16,6 @@ interface AboutInputProps {
   onAddressChange: (location: AddressFragmentType) => void
   avatar?: AvatarFragmentType
   onAvatarChange?: (avatar: AvatarFragmentType | undefined) => void
-  neighborhoodExternId: string | null | undefined
-  onNeighborhoodChange: (n: string | null | undefined) => void
 }
 
 export const AboutInput = ({
@@ -28,8 +25,6 @@ export const AboutInput = ({
   onAddressChange,
   avatar,
   onAvatarChange,
-  neighborhoodExternId,
-  onNeighborhoodChange,
 }: AboutInputProps) => {
   const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onBioChange(e.target.value)
@@ -55,11 +50,6 @@ export const AboutInput = ({
         }
         error={!isValidAddress(address)}
         errorMessage={ADDRESS_ERROR}
-      />
-      <NeighborhoodSelect
-        address={address}
-        neighborhoodExternId={neighborhoodExternId}
-        onNeighborhoodChange={onNeighborhoodChange}
       />
     </SetupStepContainer>
   )

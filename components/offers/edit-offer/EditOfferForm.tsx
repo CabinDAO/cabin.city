@@ -27,12 +27,10 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
 import { validateTitle } from '@/components/neighborhoods/validations'
 import { Availability } from './Availability'
 import { ApplicationLink } from './ApplicationLink'
 import { Pricing } from './Pricing'
-import { useBackend } from '@/components/hooks/useBackend'
 
 interface EditOfferFormProps {
   offer: OfferFragment
@@ -52,26 +50,6 @@ export const EditOfferForm = ({
   }
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploadingGallery, setUploadingGallery] = useState(false)
-  const { showModal } = useModal()
-  const { useDelete } = useBackend()
-  const { trigger: deleteOffer } = useDelete([
-    'OFFER',
-    { externId: `${offer.externId}` },
-  ])
-
-  const router = useRouter()
-
-  const handleDelete = () => {
-    showModal(() => (
-      <DeleteConfirmationModal
-        entityName="experience"
-        onDelete={async () => {
-          await deleteOffer({})
-          router.push(`/location/${offer.location.externId}/edit?step=3`).then()
-        }}
-      />
-    ))
-  }
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit({ title: e.target.value.slice(0, MAX_OFFER_TITLE_LENGTH) })
@@ -108,8 +86,6 @@ export const EditOfferForm = ({
         ipfsHash: fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
       }),
     }
-    console.log('old update offer input', updateOfferInput)
-    console.log('new media items', newMediaItems)
     onEdit(newMediaItems)
   }
 
@@ -208,7 +184,6 @@ export const EditOfferForm = ({
           onEdit({ price, priceInterval })
         }}
       />
-      )
       <HorizontalDivider />
       <ApplicationLink
         onEdit={(url) => {
@@ -221,13 +196,6 @@ export const EditOfferForm = ({
         errorMessage={REQUIRED_FIELD_ERROR}
       />
       <HorizontalDivider />
-      <DeleteButton
-        startAdornment={<Icon name="trash" size={1.2} />}
-        variant="tertiary"
-        onClick={handleDelete}
-      >
-        Delete Experience
-      </DeleteButton>
     </Container>
   )
 }

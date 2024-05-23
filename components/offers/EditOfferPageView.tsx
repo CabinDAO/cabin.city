@@ -1,34 +1,33 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useError } from '../hooks/useError'
 import { useModal } from '../hooks/useModal'
-import { useNavigation } from '../hooks/useNavigation'
 import { useGetOffer } from './useGetOffer'
 import { useBackend } from '@/components/hooks/useBackend'
-import { OfferEditParamsType, OfferType } from '@/utils/types/offer'
+import { OfferEditParamsType } from '@/utils/types/offer'
+import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
+import { validateOfferInput } from '../neighborhoods/validations'
+import styled from 'styled-components'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { EditOfferView } from './EditOfferView'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
 import { ActionBar } from '../core/ActionBar'
-import { validateOfferInput } from '../neighborhoods/validations'
-import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
+import { TitleCard } from '@/components/core/TitleCard'
+import { EditOfferForm } from '@/components/offers/edit-offer/EditOfferForm'
+import { ContentCard } from '@/components/core/ContentCard'
 
 export const EditOfferPageView = () => {
   const router = useRouter()
   const { showError } = useError()
   const { showModal } = useModal()
 
-  const { history } = useNavigation()
-  const backRoute = (history[history.length - 2] ?? '[offerId]').includes(
-    '[offerId]'
-  )
-    ? `/experience/${router.query.offerId}`
-    : history[history.length - 2]
-
   const { offerId } = router.query
-  const { offer, isEditable, isUserCaretaker } = useGetOffer(offerId as string)
-  const { useMutate } = useBackend()
+  const { offer, isEditable } = useGetOffer(offerId as string)
+
+  const { useMutate, useDelete } = useBackend()
   const { trigger: updateOffer } = useMutate(
+    offer ? ['OFFER', { externId: `${offer.externId}` }] : null
+  )
+  const { trigger: deleteOffer } = useDelete(
     offer ? ['OFFER', { externId: `${offer.externId}` }] : null
   )
 
@@ -59,22 +58,10 @@ export const EditOfferPageView = () => {
   const handleNext = async () => {
     if (offer?.type && validateOfferInput(offer.type, newValues)) {
       await updateOffer(newValues)
-      if (offer.type === OfferType.CabinWeek && !isUserCaretaker) {
-        router.push(`/experience/${offer.externId}`).then()
-      } else {
-        router.push(`/location/${offer.location.externId}/edit?step=3`).then()
-      }
+      router.push(`/experience/${offer.externId}`).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
-    }
-  }
-
-  const handleBack = () => {
-    if (unsavedChanges) {
-      showModal(() => <DiscardChangesModal leaveUrl={backRoute} />)
-    } else {
-      router.push(backRoute).then()
     }
   }
 
@@ -87,9 +74,27 @@ export const EditOfferPageView = () => {
     }))
   }
 
+  const handleBack = () => {
+    const url = `/location/${offer.location.externId}`
+    if (unsavedChanges) {
+      showModal(() => <DiscardChangesModal leaveUrl={url} />)
+    } else {
+      router.push(url).then()
+    }
+  }
+
   return (
-    <SingleColumnLayout
-      actionBar={
+    <SingleColumnLayout>
+      <TitleCard title="Edit Event" icon="close" onIconClick={handleBack} />
+      <StyledContentCard shape="notch">
+        <Contents>
+          <EditOfferForm
+            highlightErrors={highlightErrors}
+            updateOfferInput={newValues}
+            offer={offer}
+            onEdit={handleOnEdit}
+          />
+        </Contents>
         <ActionBar
           primaryButton={{
             onClick: handleNext,
@@ -99,15 +104,24 @@ export const EditOfferPageView = () => {
             onClick: handleBack,
             label: 'Cancel',
           }}
+          trashButton={{
+            onClick: async () => {
+              await deleteOffer({})
+              router.push(`/location/${offer.location.externId}`).then()
+            },
+            label: 'experience',
+          }}
         />
-      }
-    >
-      <EditOfferView
-        highlightErrors={highlightErrors}
-        updateOfferInput={newValues}
-        offer={offer}
-        onEdit={handleOnEdit}
-      />
+      </StyledContentCard>
     </SingleColumnLayout>
   )
 }
+
+const StyledContentCard = styled(ContentCard)`
+  flex-direction: column;
+  margin-bottom: 4.8rem;
+`
+
+const Contents = styled.div`
+  padding: 3.2rem 2.4rem;
+`

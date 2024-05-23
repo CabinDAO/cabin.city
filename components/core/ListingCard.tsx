@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import Icon from './Icon'
-import { ProfilesCount } from './ProfilesCount'
 import { CardActions } from './CardActions'
 import { emptyFunction } from '@/utils/general'
 import { EMPTY, truncate } from '@/utils/display-utils'
@@ -10,10 +9,7 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import events from '@/lib/googleAnalytics/events'
-import {
-  LocationFragment,
-  ShortAddressFragmentType,
-} from '@/utils/types/location'
+import { ShortAddressFragmentType } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
@@ -23,13 +19,9 @@ interface ListingCardProps {
     externId: string
     name: string | null | undefined
     bannerImageIpfsHash: string | null | undefined
-    voteCount: number | null | undefined
-    recentVoters: LocationFragment['recentVoters'] | null | undefined
     address: ShortAddressFragmentType | null | undefined
-    sleepCapacity: number | null | undefined
     offerCount: number | null | undefined
   }
-  onVote?: VoidFunction
   onDelete?: VoidFunction
   onEdit?: VoidFunction
   editMode?: boolean
@@ -51,16 +43,9 @@ export const ListingCard = (props: ListingCardProps) => {
     editMode = false,
   } = props
 
-  const {
-    externId,
-    bannerImageIpfsHash,
-    voteCount,
-    recentVoters,
-    address,
-    sleepCapacity,
-  } = location
+  const { externId, bannerImageIpfsHash, address } = location
 
-  const name = props.location.name ?? 'New Listing'
+  const name = props.location.name ?? 'New Neighborhood'
 
   const { deviceSize } = useDeviceSize()
 
@@ -95,19 +80,8 @@ export const ListingCard = (props: ListingCardProps) => {
         <ContentContainer>
           <SummaryContainer>
             <NameH2>{truncatedName}</NameH2>
-            <Caption>
-              {formatShortAddress(address) ?? EMPTY} · Sleeps {sleepCapacity}
-            </Caption>
+            <Caption>{formatShortAddress(address) ?? EMPTY}</Caption>
           </SummaryContainer>
-          <AggregatedDataContainer>
-            <ListingTypeTag {...props} />
-            <VotersContainer>
-              {<ProfilesCount profiles={recentVoters ?? []} />}
-              <Caption emphasized>{`(${
-                voteCount?.toLocaleString() ?? 0
-              } Votes)`}</Caption>
-            </VotersContainer>
-          </AggregatedDataContainer>
         </ContentContainer>
         <HorizontalDivider />
       </ContainerLink>
@@ -179,6 +153,7 @@ const ContainerLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   gap: 1.6rem;
 `
 
@@ -209,15 +184,6 @@ const SummaryContainer = styled.div`
   width: 100%;
 `
 
-const AggregatedDataContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 0.8rem;
-`
-
 const NameH2 = styled(H2)`
   margin-bottom: 0.4rem;
   ${({ theme }) => theme.bp.md} {
@@ -244,12 +210,4 @@ const LocationTagContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-`
-
-const VotersContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.4rem;
-  justify-content: flex-start;
-  align-items: center;
 `
