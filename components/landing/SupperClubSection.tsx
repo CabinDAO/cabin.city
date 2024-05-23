@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body1, H4, Subline1 } from '@/components/core/Typography'
+import { Body1, H4 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 

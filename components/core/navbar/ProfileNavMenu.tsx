@@ -105,13 +105,6 @@ const Container = styled(motion.div)`
   }
 `
 
-const MenuItemWithNote = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.8rem;
-`
-
 const menuLinkStyles = css`
   display: flex;
   flex-direction: row;

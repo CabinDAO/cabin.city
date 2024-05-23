@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import IconButton from '../core/IconButton'
 import { ModalContainer } from '../core/modals/ModalContainer'
 import { ModalTitle } from '../core/modals/ModalTitle'
