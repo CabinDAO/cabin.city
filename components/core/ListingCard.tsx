@@ -75,7 +75,7 @@ export const ListingCard = (props: ListingCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          <ExperienceCountTag offerCount={location.offerCount ?? 0} />
+          <EventCountTag offerCount={location.offerCount ?? 0} />
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
@@ -95,7 +95,7 @@ export const ListingCard = (props: ListingCardProps) => {
   )
 }
 
-const ExperienceCountTag = ({ offerCount }: { offerCount: number }) => {
+const EventCountTag = ({ offerCount }: { offerCount: number }) => {
   if (!offerCount || offerCount === 0) {
     return null
   }
@@ -104,7 +104,7 @@ const ExperienceCountTag = ({ offerCount }: { offerCount: number }) => {
   return (
     <TagContainer>
       <Subline1>
-        {offerCount} Experience{plural}
+        {offerCount} Event{plural}
       </Subline1>
     </TagContainer>
   )

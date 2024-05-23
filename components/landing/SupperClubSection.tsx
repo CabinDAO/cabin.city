@@ -13,7 +13,7 @@ export const SupperClubSection = () => {
       <Content>
         <Image
           src={pic}
-          alt={'Intro Cabin Experience'}
+          alt={'Intro Cabin Event'}
           style={{
             objectFit: 'cover',
             objectPosition: 'center',

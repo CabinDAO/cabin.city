@@ -44,7 +44,7 @@ export const OfferListItem = (props: {
   const handleOnEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     e.stopPropagation()
-    router.push(`/experience/${offer.externId}/edit`)
+    router.push(`/event/${offer.externId}/edit`)
   }
 
   return (
@@ -52,10 +52,10 @@ export const OfferListItem = (props: {
       authenticated
       href={
         actionsEnabled
-          ? `/experience/${offer.externId}/edit`
-          : `/experience/${offer.externId}`
+          ? `/event/${offer.externId}/edit`
+          : `/event/${offer.externId}`
       }
-      onClick={() => events.viewExperiencesEvent(offer.externId)}
+      onClick={() => events.viewEventsEvent(offer.externId)}
     >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>

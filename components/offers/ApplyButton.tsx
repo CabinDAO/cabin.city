@@ -31,7 +31,7 @@ export const ApplyButton = ({ offer }: { offer: OfferFragment }) => {
 
     return (
       <Link
-        onClick={() => events.applyToExperienceEvent(offer.externId)}
+        onClick={() => events.applyToEventsEvent(offer.externId)}
         href={formatUrl(offer.applicationUrl) ?? ''}
         target="_blank"
         rel="noopener nofollow noreferrer"

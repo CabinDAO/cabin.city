@@ -20,11 +20,11 @@ export const OfferPostItem = ({
   const formattedDate = formatRange(new Date(startDate), new Date(endDate))
 
   return (
-    <Container href={`/experience/${externId}`}>
+    <Container href={`/event/${externId}`}>
       <ImageContainer>
         {imageIpfsHash ? (
           <Image
-            alt={title ?? 'Experience'}
+            alt={title ?? 'Event'}
             src={getImageUrlByIpfsHash(imageIpfsHash) ?? ''}
             width={96}
             height={96}

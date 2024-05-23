@@ -80,10 +80,10 @@ export const CitizenNFTContainer = () => {
             vouch for up to ten people per year. Citizens are granted
             chip-embedded passports, a numbered Citizen NFT, and ₡ABIN to
             participate in governance. They have exclusive access to
-            residencies, coliving experiences, and build weeks at neighborhoods
-            and outposts in the City Directory. Citizens also receive exclusive
-            access to our annual gathering, citizens-only discord channels,
-            merch, and partnership perks.
+            residencies, coliving, and build weeks at neighborhoods and outposts
+            in the City Directory. Citizens also receive exclusive access to our
+            annual gathering, citizens-only discord channels, merch, and
+            partnership perks.
           </Body2>
           <AppLink external href={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0.9}>
             <Overline>Learn More</Overline>

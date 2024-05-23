@@ -13,17 +13,15 @@ import { HorizontalDivider } from './Divider'
 const BANNER_IMAGE_WIDTH = 388
 const BANNER_IMAGE_HEIGHT = 258
 
-export interface ExperienceCardProps {
+interface EventCardProps {
   className?: string
-  variant?: ExperienceCardVariant
+  variant?: 'default' | 'no-icon'
   offer: OfferFragment
   isLocked?: boolean
   actionsEnabled?: boolean
 }
 
-type ExperienceCardVariant = 'default' | 'no-icon'
-
-export const ExperienceCard = (props: ExperienceCardProps) => {
+export const EventCard = (props: EventCardProps) => {
   const offer = props.offer
   const formattedLocation = `${offer.location.name ?? '-'} · ${
     offer.location.address ?? '-'
@@ -37,8 +35,8 @@ export const ExperienceCard = (props: ExperienceCardProps) => {
   return (
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
-        href={`/experience/${offer.externId}`}
-        onClick={() => events.viewExperiencesEvent(offer.externId)}
+        href={`/event/${offer.externId}`}
+        onClick={() => events.viewEventsEvent(offer.externId)}
       >
         <ImageContainer>
           {imageHash ? (

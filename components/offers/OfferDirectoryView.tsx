@@ -24,17 +24,17 @@ export const OfferDirectoryView = () => {
           <ChipFilter
             label="All"
             selected={!offerType}
-            onClick={() => router.push('/experiences')}
+            onClick={() => router.push('/events')}
           />
           <ChipFilter
             label="Cabin Week"
             selected={offerType === OfferType.CabinWeek}
-            onClick={() => router.push('/experiences/cabin-week')}
+            onClick={() => router.push('/events/cabin-week')}
           />
           <ChipFilter
             label="Coliving"
             selected={offerType === OfferType.PaidColiving}
-            onClick={() => router.push('/experiences/coliving')}
+            onClick={() => router.push('/events/coliving')}
           />
         </ChipFilterBar>
         <OfferTabList offerType={offerType} />

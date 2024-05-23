@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { CollapsibleData } from '@/utils/landing'
+import { CollapsibleData } from '@/components/landing/CollapsibleList'
 import Image from 'next/image'
 import { pxToRem } from '@/utils/display-utils'
 import { CollapsibleList } from './CollapsibleList'

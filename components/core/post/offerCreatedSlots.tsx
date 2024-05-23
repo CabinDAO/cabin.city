@@ -6,7 +6,7 @@ import { useProfile } from '@/components/auth/useProfile'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const OfferContent = (props: PostProps) => {
-  return <Body1>Posted a new experience</Body1>
+  return <Body1>Posted a new event</Body1>
 }
 
 const OfferMedia = (props: PostProps) => {

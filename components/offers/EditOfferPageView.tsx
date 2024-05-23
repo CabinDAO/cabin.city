@@ -58,7 +58,7 @@ export const EditOfferPageView = () => {
   const handleNext = async () => {
     if (offer?.type && validateOfferInput(offer.type, newValues)) {
       await updateOffer(newValues)
-      router.push(`/experience/${offer.externId}`).then()
+      router.push(`/event/${offer.externId}`).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
@@ -98,7 +98,7 @@ export const EditOfferPageView = () => {
         <ActionBar
           primaryButton={{
             onClick: handleNext,
-            label: 'Save Experience',
+            label: 'Save Event',
           }}
           secondaryButton={{
             onClick: handleBack,
@@ -109,7 +109,7 @@ export const EditOfferPageView = () => {
               await deleteOffer({})
               router.push(`/location/${offer.location.externId}`).then()
             },
-            label: 'experience',
+            label: 'event',
           }}
         />
       </StyledContentCard>

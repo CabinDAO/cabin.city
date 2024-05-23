@@ -140,8 +140,8 @@ export const EditOfferForm = ({
       <Pair>
         <H3>Details</H3>
         <OpaqueBody2>
-          Promote your location and set expectations for the experience using
-          the fields provided.
+          Promote your location and set expectations for the event using the
+          fields provided.
         </OpaqueBody2>
       </Pair>
       <InputText

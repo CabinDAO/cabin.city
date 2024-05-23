@@ -76,14 +76,14 @@ export const OfferView = ({
       )}
 
       <TitleCard
-        title={'Experience'}
+        title={'Event'}
         icon="offer"
         end={
           isEditable ? (
             <Button
               variant={'link-slim'}
               onClick={() => {
-                router.push(`/experience/${offer.externId}/edit`).then()
+                router.push(`/event/${offer.externId}/edit`).then()
               }}
             >
               <Icon name="pencil" size={1.2} />

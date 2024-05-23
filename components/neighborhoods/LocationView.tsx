@@ -24,7 +24,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
-import { ExperienceList } from '@/components/offers/ExperienceList'
+import { EventList } from '@/components/offers/EventList'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { StewardContact } from '@/components/core/StewardContact'
 
@@ -46,7 +46,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
     } as OfferNewParams)
 
     if ('offerExternId' in data) {
-      router.push(`/experience/${data.offerExternId}/edit`).then(null)
+      router.push(`/event/${data.offerExternId}/edit`).then(null)
     }
   }
 
@@ -182,7 +182,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               </Button>
             )}
           </SectionHeader>
-          <ExperienceList
+          <EventList
             offers={bookableOffers}
             actionButtonText={'Details'}
             isEditable={isEditable}

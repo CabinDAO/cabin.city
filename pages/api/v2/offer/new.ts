@@ -39,7 +39,7 @@ async function handler(
 
   const offer = await prisma.offer.create({
     data: {
-      externId: randomId('experience'),
+      externId: randomId('event'),
       locationId: location.id,
       title: 'New Offer',
       description: '',

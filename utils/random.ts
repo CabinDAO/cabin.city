@@ -4,7 +4,7 @@ enum Prefixes {
   profile = 'pr',
   location = 'lc',
   activity = 'ac',
-  experience = 'ex',
+  event = 'ev',
   invite = 'in',
   cart = 'ct',
   neighborhood = 'nh',

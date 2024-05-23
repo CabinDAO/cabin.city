@@ -13,7 +13,7 @@ import Link from 'next/link'
 import Icon from '@/components/core/Icon'
 import React from 'react'
 
-export const ExperienceList = ({
+export const EventList = ({
   offers,
   actionButtonText,
   isEditable,
@@ -61,14 +61,14 @@ export const ExperienceList = ({
               </Expandable>
             </Details>
             <Buttons>
-              <Link href={`/experience/${offer.externId}`}>
+              <Link href={`/event/${offer.externId}`}>
                 <Button isFullWidth>{actionButtonText}</Button>
               </Link>
             </Buttons>
           </Contents>
           {isEditable && (
             <AdminActions>
-              <Link href={`/experience/${offer.externId}/edit`}>
+              <Link href={`/event/${offer.externId}/edit`}>
                 <Button variant="link">
                   <Icon name="pencil" size={1.6} />
                   Edit

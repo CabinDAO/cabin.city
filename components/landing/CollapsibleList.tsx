@@ -1,8 +1,17 @@
-import { CollapsibleData } from '@/utils/landing'
 import styled from 'styled-components'
 import { HHero, Subline1 } from '../core/Typography'
 import { CollapsibleItem } from './CollapsibleItem'
 import { useState } from 'react'
+
+export type CollapsibleData = {
+  title: string
+  subtitle: string
+  image: string
+  items: {
+    title: string
+    description: string
+  }[]
+}
 
 interface CollapsibleListProps {
   data: CollapsibleData

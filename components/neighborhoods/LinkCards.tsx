@@ -45,7 +45,7 @@ interface OfferLinkCardProps {
 export const OfferLinkCard = ({ offer }: OfferLinkCardProps) => {
   const offerType = offerInfoFromType(offer.offerType).name
   return (
-    <Container href={`/experience/${offer._id}`}>
+    <Container href={`/event/${offer._id}`}>
       <Image
         src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
         alt={offerType}

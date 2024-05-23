@@ -7,9 +7,9 @@ import {
   OfferListResponse,
   OfferType,
 } from '@/utils/types/offer'
-import { ExperienceListContainer } from './styles'
+import { EventListContainer } from './styles'
 import { ListEmptyState } from '../core/ListEmptyState'
-import { ExperienceCard } from '../core/ExperienceCard'
+import { EventCard } from '../core/EventCard'
 
 export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
   const { user } = useProfile()
@@ -30,7 +30,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
     : []
 
   return (
-    <ExperienceListContainer withScroll>
+    <EventListContainer withScroll>
       <InfiniteScroll
         hasMore={!isLastPage}
         dataLength={offers.length}
@@ -48,15 +48,11 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
               return null
             }
             return (
-              <ExperienceCard
-                key={offer.externId}
-                offer={offer}
-                isLocked={!user}
-              />
+              <EventCard key={offer.externId} offer={offer} isLocked={!user} />
             )
           })
         )}
       </InfiniteScroll>
-    </ExperienceListContainer>
+    </EventListContainer>
   )
 }

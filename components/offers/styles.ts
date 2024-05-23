@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 
-export const experienceListStyles = css`
+export const eventListStyles = css`
   display: grid;
   grid-template-columns: 1fr;
   flex-direction: column;
@@ -12,7 +12,7 @@ export const experienceListStyles = css`
   }
 `
 
-export const ExperienceListContainer = styled.div<{ withScroll?: boolean }>`
+export const EventListContainer = styled.div<{ withScroll?: boolean }>`
   display: grid;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.green900};
@@ -23,12 +23,12 @@ export const ExperienceListContainer = styled.div<{ withScroll?: boolean }>`
     if (withScroll) {
       return css`
         .infinite-scroll-component {
-          ${experienceListStyles}
+          ${eventListStyles}
         }
       `
     } else {
       return css`
-        ${experienceListStyles}
+        ${eventListStyles}
       `
     }
   }}

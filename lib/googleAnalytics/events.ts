@@ -40,13 +40,13 @@ export const contactStewardEvent = (stewardId: string): void => {
 }
 
 /**
- * @param experienceId - The id of the experience being applied to.
+ * @param eventId - The id of the event being applied to.
  **/
-export const applyToExperienceEvent = (experienceId: string): void => {
+export const applyToEventEvent = (eventId: string): void => {
   event({
-    action: 'apply_to_experience_click',
+    action: 'apply_to_event_click',
     params: {
-      experience_id: experienceId,
+      event_id: eventId,
     },
   })
 }
@@ -104,13 +104,13 @@ export const viewCityDirectoryEvent = (specificListingId?: string): void => {
 }
 
 /**
- * @param experienceId - The id of the experience being applied to.
+ * @param eventId - The id of the event being applied to.
  **/
-export const viewExperiencesEvent = (experienceId?: string): void => {
+export const viewEventsEvent = (eventId?: string): void => {
   event({
-    action: 'view_experiences',
+    action: 'view_events',
     params: {
-      experience_id: experienceId,
+      event_id: eventId,
     },
   })
 }
@@ -207,8 +207,9 @@ const events = {
   event,
   signInEvent,
   shareEvent,
-  contactStewardEvent: contactStewardEvent,
-  applyToExperienceEvent,
+  contactStewardEvent,
+  applyToEventEvent,
+  viewEventsEvent,
   externalLinkEvent,
   navBarEvent,
   reactToPostEvent,
@@ -217,7 +218,6 @@ const events = {
   faqItemExpand,
   roleCardsSlideshowEvent,
   foundCitizenLearnMoreEvent,
-  viewExperiencesEvent,
   signalInterestEvent,
   citizenshipShareDiscordEvent,
   subscribeToNewsletterEvent,
