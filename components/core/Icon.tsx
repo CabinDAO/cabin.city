@@ -62,7 +62,8 @@ import lightningBoltSvg from './svg/lightning-bolt.svg'
 import locationSvg from './svg/location.svg'
 import lockSvg from './svg/lock.svg'
 import logoCabinSvg from './svg/logo-cabin.svg'
-import mapGreenSvg from './svg/map-green.svg'
+import mapFoldSvg from './svg/map-fold.svg'
+import mapFoldGreenSvg from './svg/map-fold-green.svg'
 import membersSvg from './svg/members.svg'
 import menuSvg from './svg/menu.svg'
 import minusSvg from './svg/minus.svg'
@@ -72,7 +73,7 @@ import mountainsSvg from './svg/mountains.svg'
 import moreMenuSvg from './svg/more-menu.svg'
 import naturalistSvg from './svg/naturalist.svg'
 import neighborhoodSvg from './svg/neighborhood.svg'
-import neighborhoodsSvg from './svg/neighborhoods.svg'
+import neighborhoodLabelSvg from './svg/neighborhood-label.svg'
 import networkGlobeSvg from './svg/network-globe.svg'
 import nftSvg from './svg/nft.svg'
 import offerSvg from './svg/offer.svg'
@@ -169,7 +170,8 @@ export const IconSvgs = {
   location: locationSvg,
   lock: lockSvg,
   'logo-cabin': logoCabinSvg,
-  'map-green': mapGreenSvg,
+  'map-fold': mapFoldSvg,
+  'map-fold-green': mapFoldGreenSvg,
   members: membersSvg,
   menu: menuSvg,
   minus: minusSvg,
@@ -179,7 +181,7 @@ export const IconSvgs = {
   'more-menu': moreMenuSvg,
   naturalist: naturalistSvg,
   neighborhood: neighborhoodSvg,
-  neighborhoods: neighborhoodsSvg,
+  'neighborhood-label': neighborhoodLabelSvg,
   'network-globe': networkGlobeSvg,
   nft: nftSvg,
   offer: offerSvg,

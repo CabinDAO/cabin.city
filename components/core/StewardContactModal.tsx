@@ -1,14 +1,14 @@
-import styled from 'styled-components'
-import { ModalTitle } from '../core/modals/ModalTitle'
-import { ModalContainer } from '../core/modals/ModalContainer'
-import { Body1, Body2, H2 } from '../core/Typography'
-import Icon from '@/components/core/Icon'
-import { ContactUsLink } from '@/components/core/ContactUsLink'
 import React from 'react'
-import { Button } from '@/components/core/Button'
 import { useProfile } from '@/components/auth/useProfile'
 import { LocationFragment } from '@/utils/types/location'
 import { appDomainWithProto } from '@/utils/display-utils'
+import styled from 'styled-components'
+import { Body2, H2 } from '../core/Typography'
+import Icon from '@/components/core/Icon'
+import { Button } from '@/components/core/Button'
+import { ModalTitle } from '../core/modals/ModalTitle'
+import { ModalContainer } from '../core/modals/ModalContainer'
+import { ContactUsLink } from '@/components/core/ContactUsLink'
 
 export const StewardContactModal = ({
   location,
@@ -17,10 +17,10 @@ export const StewardContactModal = ({
 }) => {
   const { user } = useProfile()
   return (
-    <CitizenshipModalContainer>
+    <Container>
       <ModalTitle text="Stewardship" />
-      <CitizenshipModalContent>
-        <StyledIcon name={'key'} size={9.6} />
+      <Content>
+        <StyledIcon name={'neighborhood'} size={9.6} />
         <H2>Activate this neighborhood</H2>
         <Body2>
           The ideal Cabin neighborhood Steward has a strong desire to make
@@ -39,16 +39,16 @@ export const StewardContactModal = ({
         >
           <Button variant="tertiary">Apply</Button>
         </ContactUsLink>
-      </CitizenshipModalContent>
-    </CitizenshipModalContainer>
+      </Content>
+    </Container>
   )
 }
 
-const CitizenshipModalContainer = styled(ModalContainer)`
+const Container = styled(ModalContainer)`
   overflow-y: auto;
 `
 
-const CitizenshipModalContent = styled.div`
+const Content = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

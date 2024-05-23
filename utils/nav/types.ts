@@ -42,7 +42,7 @@ export const MenuItemsAuthenticatedMap: Record<
     iconSize: 2.5,
   },
   neighborhoods: {
-    icon: 'neighborhoods',
+    icon: 'map-fold',
     path: '/city-directory',
     displayText: 'City Directory',
     iconSize: 2,
@@ -89,7 +89,7 @@ export const MenuItemsUnauthenticatedMap: Record<
   activity: null,
   members: null,
   neighborhoods: {
-    icon: 'neighborhoods',
+    icon: 'map-fold',
     path: '/city-directory',
     displayText: 'City Directory',
     iconSize: 2,

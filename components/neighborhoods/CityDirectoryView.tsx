@@ -14,7 +14,7 @@ export const CityDirectoryView = () => {
     <SingleColumnLayout>
       <TitleCard
         title="City Directory"
-        icon="neighborhoods"
+        icon="map-fold"
         end={canCreateListings ? <NewListingButton /> : null}
       ></TitleCard>
       <Locations />

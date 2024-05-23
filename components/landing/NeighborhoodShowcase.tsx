@@ -16,7 +16,7 @@ export const NeighborhoodShowcase = () => {
 
   return (
     <Container>
-      <Icon name={'map-green'} size={8} />
+      <Icon name={'map-fold-green'} size={8} />
       <Subline1>Citizenship unlocks the City Directory</Subline1>
       <H2>Our network of connected properties</H2>
       <Neighborhoods>
