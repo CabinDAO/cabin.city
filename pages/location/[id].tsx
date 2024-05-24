@@ -1,3 +1,4 @@
+import React from 'react'
 import { LocationPageView } from '@/components/neighborhoods/LocationPageView'
 import { AppHead } from '@/components/shared/head'
 import { getImageUrlByIpfsHash } from '@/lib/image'
@@ -43,16 +44,20 @@ export async function getServerSideProps({
     },
   })
 
-  return {
-    props: {
-      location: {
-        externId: location?.externId,
-        title: location?.name,
-        description: location?.tagline,
-        image: getImageUrlByIpfsHash(location?.bannerImageIpfsHash, true),
-      },
-    } as LocationPageProps,
-  }
+  return location
+    ? {
+        props: {
+          location: {
+            externId: location.externId,
+            title: location.name,
+            description: location.tagline,
+            image: getImageUrlByIpfsHash(location.bannerImageIpfsHash, true),
+          },
+        } as LocationPageProps,
+      }
+    : {
+        notFound: true,
+      }
 }
 
 export default LocationPage
