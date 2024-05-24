@@ -15,11 +15,9 @@ import React from 'react'
 
 export const EventList = ({
   offers,
-  actionButtonText,
   isEditable,
 }: {
   offers: OfferFragment[]
-  actionButtonText: string
   isEditable?: boolean
 }) => {
   return (
@@ -61,11 +59,16 @@ export const EventList = ({
               </Expandable>
             </Details>
             <Buttons>
-              <Link href={`/event/${offer.externId}`}>
-                <Button isFullWidth>{actionButtonText}</Button>
+              <Link
+                href={offer.applicationUrl}
+                target="_blank"
+                rel="noopener nofollow noreferrer"
+              >
+                <Button isFullWidth>RSVP</Button>
               </Link>
             </Buttons>
           </Contents>
+
           {isEditable && (
             <AdminActions>
               <Link href={`/event/${offer.externId}/edit`}>

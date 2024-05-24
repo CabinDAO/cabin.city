@@ -12,7 +12,7 @@ import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
 import { ActionBar } from '../core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
-import { EditOfferForm } from '@/components/offers/edit-offer/EditOfferForm'
+import { EditOfferForm } from '@/components/offers/EditOfferForm'
 import { ContentCard } from '@/components/core/ContentCard'
 
 export const EditOfferPageView = () => {
@@ -55,10 +55,10 @@ export const EditOfferPageView = () => {
     return null
   }
 
-  const handleNext = async () => {
-    if (offer?.type && validateOfferInput(offer.type, newValues)) {
+  const handleSave = async () => {
+    if (offer.type && validateOfferInput(offer.type, newValues)) {
       await updateOffer(newValues)
-      router.push(`/event/${offer.externId}`).then()
+      router.push(`/location/${offer.location.externId}`).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
@@ -97,8 +97,8 @@ export const EditOfferPageView = () => {
         </Contents>
         <ActionBar
           primaryButton={{
-            onClick: handleNext,
-            label: 'Save Event',
+            onClick: handleSave,
+            label: 'Save',
           }}
           secondaryButton={{
             onClick: handleBack,

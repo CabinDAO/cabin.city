@@ -17,6 +17,3 @@ export const ADDRESS_ERROR = 'Include at least your city or state'
 
 export const REQUIRED_FIELDS_TOAST_ERROR =
   'Oops! It seems that one or more fields require your attention.'
-
-export const REQUIRED_SECTIONS_TOAST_ERROR =
-  'Oops! It seems that one or more sections require your attention.'

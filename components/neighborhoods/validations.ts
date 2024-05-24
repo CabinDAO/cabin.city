@@ -3,14 +3,11 @@ import {
   EMAIL_VALID_REGEX,
   INVALID_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
-  isNumber,
   truthyString,
 } from '@/utils/validate'
 import { emptyEditorValue } from '../core/slate/slate-utils'
 import { OfferEditParamsType, OfferType } from '@/utils/types/offer'
 import { LocationEditParamsType } from '@/utils/types/location'
-
-export type ValidationType = 'missing' | 'invalid' | 'valid'
 
 type ValidationResult = {
   error: string
@@ -39,9 +36,6 @@ export const validateOfferInput = (
     emptyEditorValue(newValues.description) ||
     (newValues.hasOwnProperty('applicationUrl') &&
       !truthyString(newValues.applicationUrl)) ||
-    (type === OfferType.PaidColiving &&
-      newValues.hasOwnProperty('price') &&
-      !isNumber(newValues.price)) ||
     (newValues.hasOwnProperty('imageIpfsHash') &&
       !truthyString(newValues.imageIpfsHash))
 

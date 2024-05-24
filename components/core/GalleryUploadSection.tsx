@@ -6,18 +6,6 @@ import { BannerPreview } from '../neighborhoods/edit-location/BannerPreview'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { ImagesPreview } from '../neighborhoods/edit-location/ImagesPreview'
 
-interface GalleryUploadSectionProps {
-  title: string
-  instructions: string
-  isBanner?: boolean
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  ipfsHashList?: string[]
-  onDelete?: (ipfsHash: string) => void
-  onStartUploading?: VoidFunction
-  uploading?: boolean
-  errorMessage?: string
-}
-
 export const GalleryUploadSection = ({
   title,
   instructions,
@@ -25,10 +13,22 @@ export const GalleryUploadSection = ({
   onStartUploading,
   uploading = false,
   isBanner = false,
+  multiple = false,
   ipfsHashList,
   onDelete,
   errorMessage,
-}: GalleryUploadSectionProps) => {
+}: {
+  title: string
+  instructions: string
+  isBanner?: boolean
+  multiple?: boolean
+  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+  ipfsHashList?: string[]
+  onDelete?: (ipfsHash: string) => void
+  onStartUploading?: VoidFunction
+  uploading?: boolean
+  errorMessage?: string
+}) => {
   if (!ipfsHashList) {
     return null
   }
@@ -53,7 +53,7 @@ export const GalleryUploadSection = ({
           <Body2>{instructions}</Body2>
           <FileUploadButton
             onStartUploading={onStartUploading}
-            multiple={!isBanner}
+            multiple={multiple}
             onFilesUploaded={onFilesUploaded}
             removeEnabled={!!bannerImageUrl}
           />
