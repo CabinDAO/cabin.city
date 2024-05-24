@@ -2,7 +2,7 @@
 
 import { Prisma } from '@prisma/client'
 import { ProfileBasicFragment } from '@/utils/types/profile'
-import { OfferType } from '@/utils/types/offer'
+import { EventType } from '@/utils/types/event'
 import { APIError, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'
 
@@ -63,7 +63,7 @@ export type LocationFragment = {
     ipfsHash: string
   }[]
   // offers: OfferItemFragment[]
-  offerCount: number
+  eventCount: number
 }
 
 export const LocationListParams = z

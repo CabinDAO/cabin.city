@@ -3,12 +3,11 @@ import Image from 'next/image'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY, formatRange } from '@/utils/display-utils'
 import Link from 'next/link'
-import { OfferNameByType } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
 import { ActivityListFragment } from '@/utils/types/activity'
 
-export const OfferPostItem = ({
+export const EventPostItem = ({
   imageIpfsHash,
   title,
   type,
@@ -35,9 +34,7 @@ export const OfferPostItem = ({
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
         <TruncatedCaption>
-          {`${OfferNameByType[type]} · ${location.name} · ${formatShortAddress(
-            location.address
-          )}`}
+          {`${location.name} · ${formatShortAddress(location.address)}`}
         </TruncatedCaption>
       </Data>
     </Container>

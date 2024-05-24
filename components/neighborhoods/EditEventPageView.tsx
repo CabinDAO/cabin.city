@@ -2,80 +2,89 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useError } from '../hooks/useError'
 import { useModal } from '../hooks/useModal'
-import { useGetOffer } from './useGetOffer'
 import { useBackend } from '@/components/hooks/useBackend'
-import { OfferEditParamsType } from '@/utils/types/offer'
+import { EventEditParamsType, EventGetResponse } from '@/utils/types/event'
 import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
-import { validateOfferInput } from '../neighborhoods/validations'
+import { validateEventInput } from '../neighborhoods/validations'
 import styled from 'styled-components'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { DiscardChangesModal } from '../core/DiscardChangesModal'
 import { ActionBar } from '../core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
-import { EditOfferForm } from '@/components/offers/EditOfferForm'
+import { EditEventForm } from '@/components/neighborhoods/EditEventForm'
 import { ContentCard } from '@/components/core/ContentCard'
+import { useProfile } from '@/components/auth/useProfile'
+import { canEditLocation } from '@/lib/permissions'
 
-export const EditOfferPageView = () => {
+export const EditEventPageView = () => {
   const router = useRouter()
   const { showError } = useError()
   const { showModal } = useModal()
 
-  const { offerId } = router.query
-  const { offer, isEditable } = useGetOffer(offerId as string)
+  const { user } = useProfile()
+  const { useGet } = useBackend()
+
+  const { eventId } = router.query
+  const { data } = useGet<EventGetResponse>(
+    eventId ? ['EVENT', { externId: eventId as string }] : null
+  )
+  const event = data && 'event' in data ? data.event : null
+
+  const isEditable = !!event && canEditLocation(user, event.location)
 
   const { useMutate, useDelete } = useBackend()
-  const { trigger: updateOffer } = useMutate(
-    offer ? ['OFFER', { externId: `${offer.externId}` }] : null
+  const { trigger: updateEvent } = useMutate(
+    event ? ['EVENT', { externId: `${event.externId}` }] : null
   )
-  const { trigger: deleteOffer } = useDelete(
-    offer ? ['OFFER', { externId: `${offer.externId}` }] : null
+  const { trigger: deleteEvent } = useDelete(
+    event ? ['EVENT', { externId: `${event.externId}` }] : null
   )
 
   const [highlightErrors, setHighlightErrors] = useState(false)
   const [unsavedChanges, setUnsavedChanges] = useState(false)
-  const [newValues, setNewValues] = useState<OfferEditParamsType>({})
+  const [newValues, setNewValues] = useState<EventEditParamsType>({})
 
   useEffect(() => {
-    if (offer) {
+    if (event) {
       setNewValues({
-        title: offer?.title ?? undefined,
-        description: offer?.description ?? undefined,
-        imageIpfsHash: offer?.imageIpfsHash ?? undefined,
-        startDate: offer?.startDate ?? undefined,
-        endDate: offer?.endDate ?? undefined,
-        price: offer?.price ?? undefined,
-        priceInterval: offer?.priceInterval ?? undefined,
-        applicationUrl: offer?.applicationUrl ?? undefined,
-        mediaItems: offer?.mediaItems ?? undefined,
+        title: event?.title ?? undefined,
+        description: event?.description ?? undefined,
+        imageIpfsHash: event?.imageIpfsHash ?? undefined,
+        startDate: event?.startDate ?? undefined,
+        endDate: event?.endDate ?? undefined,
+        price: event?.price ?? undefined,
+        priceInterval: event?.priceInterval ?? undefined,
+        applicationUrl: event?.applicationUrl ?? undefined,
+        mediaItems: event?.mediaItems ?? undefined,
       })
     }
-  }, [offer])
+  }, [event])
 
-  if (!offer || !isEditable) {
+  if (!event || !isEditable) {
     return null
   }
 
   const handleSave = async () => {
-    if (offer.type && validateOfferInput(offer.type, newValues)) {
-      await updateOffer(newValues)
-      router.push(`/location/${offer.location.externId}`).then()
+    if (event.type && validateEventInput(event.type, newValues)) {
+      await updateEvent(newValues)
+      router.push(`/location/${event.location.externId}`).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
     }
   }
 
-  const handleOnEdit = (updateOfferInput: OfferEditParamsType) => {
+  const handleOnEdit = (updateEventInput: EventEditParamsType) => {
     setUnsavedChanges(true)
 
     setNewValues((prev) => ({
       ...prev,
-      ...updateOfferInput,
+      ...updateEventInput,
     }))
   }
 
   const handleBack = () => {
-    const url = `/location/${offer.location.externId}`
+    const url = `/location/${event.location.externId}`
     if (unsavedChanges) {
       showModal(() => <DiscardChangesModal leaveUrl={url} />)
     } else {
@@ -88,10 +97,10 @@ export const EditOfferPageView = () => {
       <TitleCard title="Edit Event" icon="close" onIconClick={handleBack} />
       <StyledContentCard shape="notch">
         <Contents>
-          <EditOfferForm
+          <EditEventForm
             highlightErrors={highlightErrors}
-            updateOfferInput={newValues}
-            offer={offer}
+            updateEventInput={newValues}
+            event={event}
             onEdit={handleOnEdit}
           />
         </Contents>
@@ -106,8 +115,8 @@ export const EditOfferPageView = () => {
           }}
           trashButton={{
             onClick: async () => {
-              await deleteOffer({})
-              router.push(`/location/${offer.location.externId}`).then()
+              await deleteEvent({})
+              router.push(`/location/${event.location.externId}`).then()
             },
             label: 'event',
           }}

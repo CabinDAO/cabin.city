@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { OfferEditParamsType, OfferFragment } from '@/utils/types/offer'
+import { EventEditParamsType, EventFragment } from '@/utils/types/event'
 import {
   REQUIRED_FIELD_ERROR,
   REQUIRED_SECTION_ERROR,
@@ -20,15 +20,15 @@ import { getYear } from 'date-fns'
 
 const maxTitleLength = 48
 
-export const EditOfferForm = ({
-  offer,
-  updateOfferInput,
+export const EditEventForm = ({
+  event,
+  updateEventInput,
   onEdit,
   highlightErrors,
 }: {
-  offer: OfferFragment
-  updateOfferInput: OfferEditParamsType
-  onEdit: (updateOfferInput: OfferEditParamsType) => void
+  event: EventFragment
+  updateEventInput: EventEditParamsType
+  onEdit: (updateEventInput: EventEditParamsType) => void
   highlightErrors?: boolean
 }) => {
   const handleEditorChange = (val: Descendant[]) => {
@@ -45,9 +45,9 @@ export const EditOfferForm = ({
     end: Date
   }>({
     start: new Date(
-      updateOfferInput.startDate || offer.startDate || new Date()
+      updateEventInput.startDate || event.startDate || new Date()
     ),
-    end: new Date(updateOfferInput.endDate || offer.endDate || new Date()),
+    end: new Date(updateEventInput.endDate || event.endDate || new Date()),
   })
   const handleStartDateChange = (date: Date | undefined) => {
     if (!date) {
@@ -82,14 +82,14 @@ export const EditOfferForm = ({
     onEdit({ applicationUrl: e.target.value })
   }
 
-  const description = updateOfferInput.description || offer.description
+  const description = updateEventInput.description || event.description
   const slateProps = description ? { value: JSON.parse(description) } : {}
 
-  const titleValidation = validateTitle(updateOfferInput.title)
+  const titleValidation = validateTitle(updateEventInput.title)
 
   const emptyDescription =
-    !truthyString(updateOfferInput.description) ||
-    updateOfferInput.description === JSON.stringify(defaultSlateValue)
+    !truthyString(updateEventInput.description) ||
+    updateEventInput.description === JSON.stringify(defaultSlateValue)
 
   const handleBannerUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
@@ -105,7 +105,7 @@ export const EditOfferForm = ({
       <GalleryUploadSection
         onStartUploading={() => setUploadingBanner(true)}
         ipfsHashList={
-          updateOfferInput.imageIpfsHash ? [updateOfferInput.imageIpfsHash] : []
+          updateEventInput.imageIpfsHash ? [updateEventInput.imageIpfsHash] : []
         }
         uploading={uploadingBanner}
         instructions="Choose a square JPG or PNG no larger than 5 MB."
@@ -115,7 +115,7 @@ export const EditOfferForm = ({
           onEdit({ imageIpfsHash: '' })
         }}
         errorMessage={
-          highlightErrors && !updateOfferInput.imageIpfsHash
+          highlightErrors && !updateEventInput.imageIpfsHash
             ? REQUIRED_SECTION_ERROR
             : undefined
         }
@@ -136,9 +136,9 @@ export const EditOfferForm = ({
         required
         placeholder="Name"
         helperText={`${
-          updateOfferInput.title?.length || 0
+          updateEventInput.title?.length || 0
         } / ${maxTitleLength}`}
-        value={updateOfferInput.title ?? ''}
+        value={updateEventInput.title ?? ''}
         onChange={handleTitleChange}
         error={highlightErrors && !titleValidation.valid}
         errorMessage={titleValidation.error}
@@ -189,9 +189,9 @@ export const EditOfferForm = ({
             required
             placeholder="URL"
             onChange={handleExternalLinkChange}
-            value={updateOfferInput.applicationUrl ?? ''}
+            value={updateEventInput.applicationUrl ?? ''}
             error={
-              highlightErrors && !truthyString(updateOfferInput.applicationUrl)
+              highlightErrors && !truthyString(updateEventInput.applicationUrl)
             }
             errorMessage={REQUIRED_FIELD_ERROR}
           />

@@ -14,9 +14,9 @@ enum Routes {
   LOCATION_NEW = `/location/new`,
   LOCATION_LIST = `/location/list`,
 
-  OFFER = `/offer/[externId]`,
-  OFFER_NEW = `/offer/new`,
-  OFFER_LIST = `/offer/list`,
+  EVENT = `/event/[externId]`,
+  EVENT_NEW = `/event/new`,
+  EVENT_LIST = `/event/list`,
 
   ACTIVITY = `/activity/[externId]`,
   ACTIVITY_NEW = `/activity/new`,

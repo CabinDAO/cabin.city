@@ -9,14 +9,14 @@ import {
   withAuth,
 } from '@/utils/api/withAuth'
 import {
-  OfferDeleteResponse,
-  OfferEditParams,
-  OfferEditResponse,
-  OfferGetResponse,
-  OfferQueryInclude,
-  OfferWithRelations,
-} from '@/utils/types/offer'
-import { offerToFragment } from '@/pages/api/v2/offer/list'
+  EventDeleteResponse,
+  EventEditParams,
+  EventEditResponse,
+  EventGetResponse,
+  EventQueryInclude,
+  EventWithRelations,
+} from '@/utils/types/event'
+import { eventToFragment } from '@/pages/api/v2/event/list'
 import { canEditLocation } from '@/lib/permissions'
 
 async function handler(
@@ -43,31 +43,31 @@ async function handler(
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<OfferGetResponse>
+  res: NextApiResponse<EventGetResponse>
 ) {
   const query: Prisma.OfferFindUniqueArgs = {
     where: { externId: req.query.externId as string },
-    include: OfferQueryInclude,
+    include: EventQueryInclude,
   }
 
-  const offer = await prisma.offer.findUnique(query)
+  const event = await prisma.offer.findUnique(query)
 
-  if (!offer) {
+  if (!event) {
     res.status(404).send({ error: 'Offer not found' })
     return
   }
 
   res.status(200).send({
-    offer: offerToFragment(offer as OfferWithRelations),
+    event: eventToFragment(event as EventWithRelations),
   })
 }
 
 async function handlePost(
   req: NextApiRequest,
-  res: NextApiResponse<OfferEditResponse>,
+  res: NextApiResponse<EventEditResponse>,
   profile: ProfileWithWallet
 ) {
-  const parsed = OfferEditParams.safeParse(req.body)
+  const parsed = EventEditParams.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).send({ error: toErrorString(parsed.error) })
     return
@@ -76,26 +76,26 @@ async function handlePost(
 
   const externId = req.query.externId as string
 
-  const offerToEdit = await prisma.offer.findUnique({
+  const eventToEdit = await prisma.offer.findUnique({
     where: {
       externId: externId,
     },
-    include: OfferQueryInclude,
+    include: EventQueryInclude,
   })
 
-  if (!offerToEdit) {
+  if (!eventToEdit) {
     res.status(404).send({ error: 'Offer not found' })
     return
   }
 
-  if (!canEditLocation(profile, offerToEdit.location)) {
+  if (!canEditLocation(profile, eventToEdit.location)) {
     res.status(403).send({ error: 'You cannot edit this location' })
     return
   }
 
   const mediaItemsToDelete: number[] = []
   if (params.mediaItems) {
-    for (const mediaItem of offerToEdit.mediaItems) {
+    for (const mediaItem of eventToEdit.mediaItems) {
       if (
         !params.mediaItems.find(
           (newMediaItem) => newMediaItem.ipfsHash === mediaItem.ipfsHash
@@ -106,15 +106,15 @@ async function handlePost(
     }
   }
 
-  const [, updatedOffer] = await prisma.$transaction([
+  const [, updatedEvent] = await prisma.$transaction([
     prisma.offerMediaItem.deleteMany({
       where: { id: { in: mediaItemsToDelete } },
     }),
     prisma.offer.update({
       where: {
-        id: offerToEdit.id,
+        id: eventToEdit.id,
       },
-      include: OfferQueryInclude,
+      include: EventQueryInclude,
       data: {
         title: params.title,
         description: params.description,
@@ -128,7 +128,7 @@ async function handlePost(
               connectOrCreate: params.mediaItems.map((mediaItem) => ({
                 where: {
                   offerId_ipfsHash: {
-                    offerId: offerToEdit.id,
+                    offerId: eventToEdit.id,
                     ipfsHash: mediaItem.ipfsHash,
                   },
                 },
@@ -143,13 +143,13 @@ async function handlePost(
   ])
 
   res.status(200).send({
-    offer: offerToFragment(updatedOffer as OfferWithRelations),
+    event: eventToFragment(updatedEvent as EventWithRelations),
   })
 }
 
 async function handleDelete(
   req: NextApiRequest,
-  res: NextApiResponse<OfferDeleteResponse>,
+  res: NextApiResponse<EventDeleteResponse>,
   profile: ProfileWithWallet
 ) {
   const externId = req.query.externId as string

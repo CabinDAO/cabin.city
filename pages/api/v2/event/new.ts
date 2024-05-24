@@ -3,12 +3,13 @@ import { prisma } from '@/lib/prisma'
 import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
-import { OfferNewParams, OfferNewResponse } from '@/utils/types/offer'
+import { EventNewParams, EventNewResponse } from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
+import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<OfferNewResponse>,
+  res: NextApiResponse<EventNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -19,11 +20,16 @@ async function handler(
 
   const profile = await requireProfile(req, res, opts)
 
-  const body = req.body as OfferNewParams
+  const parsed = EventNewParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
 
   const location = await prisma.location.findUnique({
     where: {
-      externId: body.locationExternId,
+      externId: params.locationExternId,
     },
   })
 
@@ -37,13 +43,13 @@ async function handler(
     return
   }
 
-  const offer = await prisma.offer.create({
+  const event = await prisma.offer.create({
     data: {
       externId: randomId('event'),
       locationId: location.id,
       title: 'New Event',
       description: '',
-      type: OfferType.PaidColiving,
+      type: OfferType.Event,
       startDate: new Date(),
       endDate: new Date(),
       price: 0,
@@ -53,7 +59,7 @@ async function handler(
     },
   })
 
-  const activityKey = `OfferCreated|${offer.externId}`
+  const activityKey = `OfferCreated|${event.externId}`
   await prisma.activity.upsert({
     where: {
       key: activityKey,
@@ -63,12 +69,12 @@ async function handler(
       key: activityKey,
       type: ActivityType.OfferCreated,
       profileId: profile.id,
-      offerId: offer.id,
+      offerId: event.id,
     },
     update: {},
   })
 
-  res.status(200).send({ offerExternId: offer.externId })
+  res.status(200).send({ eventExternId: event.externId })
 }
 
 export default withAuth(handler)

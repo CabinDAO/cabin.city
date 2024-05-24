@@ -370,6 +370,7 @@ enum OfferType {
   PaidColiving
   Residency
   CabinWeek
+  Event
 }
 
 enum OfferPriceInterval {

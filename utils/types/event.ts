@@ -6,10 +6,11 @@ import { LocationType, ShortAddressFragmentType } from '@/utils/types/location'
 import { APIError, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.OfferType
-export enum OfferType {
+export enum EventType {
   PaidColiving = 'PaidColiving',
   Residency = 'Residency',
   CabinWeek = 'CabinWeek',
+  Event = 'Event',
 }
 
 // must match prisma's $Enums.OfferPriceInterval
@@ -21,19 +22,13 @@ export enum OfferPriceInterval {
   Monthly = 'Monthly',
 }
 
-export const OfferNameByType: Record<string, string> = {
-  [OfferType.PaidColiving]: 'Colive',
-  [OfferType.Residency]: 'Residency',
-  [OfferType.CabinWeek]: 'Cabin Week',
-}
-
-export type OfferMediaItemFragment = {
+export type EventMediaItemFragment = {
   ipfsHash: string
 }
 
-export type OfferFragment = {
+export type EventFragment = {
   externId: string
-  type: OfferType
+  type: EventType
   title: string
   description: string
   startDate: string
@@ -42,7 +37,7 @@ export type OfferFragment = {
   price: number
   priceInterval: OfferPriceInterval
   applicationUrl: string
-  mediaItems: OfferMediaItemFragment[]
+  mediaItems: EventMediaItemFragment[]
   location: {
     externId: string
     name: string
@@ -55,40 +50,42 @@ export type OfferFragment = {
   }
 }
 
-export const OfferListParams = z
+export const EventListParams = z
   .object({
     locationId: z.string().optional(),
-    offerType: z.nativeEnum(OfferType).optional(),
+    eventType: z.nativeEnum(EventType).optional(),
     futureOnly: z.union([z.literal('true'), z.literal('false')]).optional(),
     page: z.coerce.number().optional(),
   })
   .strict()
-export type OfferListParamsType = z.infer<typeof OfferListParams>
+export type EventListParamsType = z.infer<typeof EventListParams>
 
-export type OfferListResponse =
+export type EventListResponse =
   | ({
-      offers: OfferFragment[]
+      events: EventFragment[]
     } & Paginated)
   | APIError
 
-export type OfferNewParams = {
-  locationExternId?: string
-  offerType?: OfferType
-}
+export const EventNewParams = z
+  .object({
+    locationExternId: z.string(),
+  })
+  .strict()
+export type EventNewParamsType = z.infer<typeof EventNewParams>
 
-export type OfferNewResponse =
+export type EventNewResponse =
   | {
-      offerExternId: string
+      eventExternId: string
     }
   | APIError
 
-export type OfferGetResponse =
+export type EventGetResponse =
   | {
-      offer: OfferFragment
+      event: EventFragment
     }
   | APIError
 
-export const OfferEditParams = z
+export const EventEditParams = z
   .object({
     title: z.string().optional(),
     description: z.string().optional(),
@@ -107,18 +104,18 @@ export const OfferEditParams = z
       .optional(),
   })
   .strict()
-export type OfferEditParamsType = z.infer<typeof OfferEditParams>
+export type EventEditParamsType = z.infer<typeof EventEditParams>
 
-export type OfferEditResponse =
+export type EventEditResponse =
   | {
-      offer: OfferFragment | null
+      event: EventFragment | null
     }
   | APIError
 
-export type OfferDeleteResponse = Record<string, never> | APIError
+export type EventDeleteResponse = Record<string, never> | APIError
 
-// must match OfferQueryInclude below
-export type OfferWithRelations = Prisma.OfferGetPayload<{
+// must match EventQueryInclude below
+export type EventWithRelations = Prisma.OfferGetPayload<{
   include: {
     mediaItems: true
     location: {
@@ -134,8 +131,8 @@ export type OfferWithRelations = Prisma.OfferGetPayload<{
   }
 }>
 
-// must match OfferWithRelations type above
-export const OfferQueryInclude = {
+// must match EventWithRelations type above
+export const EventQueryInclude = {
   mediaItems: true,
   location: {
     include: {

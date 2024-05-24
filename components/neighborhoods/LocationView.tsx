@@ -5,11 +5,12 @@ import { EMPTY } from '@/utils/display-utils'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
 import {
-  OfferListResponse,
-  OfferNewParams,
-  OfferNewResponse,
-  OfferType,
-} from '@/utils/types/offer'
+  EventListParamsType,
+  EventListResponse,
+  EventNewParamsType,
+  EventNewResponse,
+  EventType,
+} from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
@@ -24,7 +25,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
-import { EventList } from '@/components/offers/EventList'
+import { EventList } from '@/components/neighborhoods/EventList'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { StewardContact } from '@/components/core/StewardContact'
 
@@ -33,20 +34,19 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
   const router = useRouter()
   const { useGet, useMutate } = useBackend()
-  const { data: offerData } = useGet<OfferListResponse>(`OFFER_LIST`, {
+  const { data: eventData } = useGet<EventListResponse>(`EVENT_LIST`, {
     locationId: location.externId,
-  })
-  const offers = !offerData || 'error' in offerData ? [] : offerData.offers
+  } satisfies EventListParamsType)
+  const events = !eventData || 'error' in eventData ? [] : eventData.events
 
-  const { trigger: createOffer } = useMutate<OfferNewResponse>('OFFER_NEW')
+  const { trigger: createOffer } = useMutate<EventNewResponse>('EVENT_NEW')
   const handleNewEventClick = async () => {
     const data = await createOffer({
       locationExternId: location.externId,
-      offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
-    } satisfies OfferNewParams)
+    } satisfies EventNewParamsType)
 
-    if ('offerExternId' in data) {
-      router.push(`/event/${data.offerExternId}/edit`).then(null)
+    if (!('error' in data)) {
+      router.push(`/event/${data.eventExternId}/edit`).then(null)
     }
   }
 
@@ -63,14 +63,14 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const [bookableOffersOnly, setBookableOffersOnly] = useState(true)
-  const bookableOffers = bookableOffersOnly
-    ? offers.filter(
-        (offer) =>
-          (offer.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-          offer.type !== OfferType.Residency
+  const [activeEventsOnly, setActiveEventsOnly] = useState(true)
+  const activeEvents = activeEventsOnly
+    ? events.filter(
+        (event) =>
+          (event.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+          event.type !== EventType.Residency
       )
-    : offers
+    : events
 
   const { user } = useProfile()
   const isEditable = canEditLocation(user, location)
@@ -93,10 +93,10 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
-                {location.offerCount > 0 && (
+                {location.eventCount > 0 && (
                   <span>
-                    {location.offerCount}{' '}
-                    {location.offerCount === 1 ? 'Event' : 'Events'}
+                    {location.eventCount}{' '}
+                    {location.eventCount === 1 ? 'Event' : 'Events'}
                   </span>
                 )}
               </LocationHeaderInformation>
@@ -169,20 +169,20 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         </SectionContent>
       </Section>
 
-      {(bookableOffers.length > 0 || (isEditable && offers.length > 0)) && (
+      {(activeEvents.length > 0 || (isEditable && events.length > 0)) && (
         <Section>
           <SectionHeader>
             <H3>Events</H3>
             {isEditable && (
               <Button
                 variant={'link-slim'}
-                onClick={() => setBookableOffersOnly(!bookableOffersOnly)}
+                onClick={() => setActiveEventsOnly(!activeEventsOnly)}
               >
-                {bookableOffersOnly ? 'Show Past Events' : 'Active Events Only'}
+                {activeEventsOnly ? 'Show Past Events' : 'Active Events Only'}
               </Button>
             )}
           </SectionHeader>
-          <EventList offers={bookableOffers} isEditable={isEditable} />
+          <EventList events={activeEvents} isEditable={isEditable} />
         </Section>
       )}
     </LocationContent>

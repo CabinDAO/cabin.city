@@ -14,10 +14,10 @@ export const LocationPostItem = ({
   location: NonNullable<ActivityListFragment['metadata']['location']>
   hideVerifiedTag: boolean
 }) => {
-  const { name, bannerImageIpfsHash, address, offerCount, tagline, externId } =
+  const { name, bannerImageIpfsHash, address, eventCount, tagline, externId } =
     location
 
-  const offerCountString = offerCount === 1 ? 'Offer' : 'Offers'
+  const eventCountString = eventCount === 1 ? 'Event' : 'Events'
   const router = useRouter()
 
   const handleOnClick = () => {
@@ -41,7 +41,7 @@ export const LocationPostItem = ({
         <Data>
           <TruncatedH4>{name}</TruncatedH4>
           <AddressCaption>
-            {`${address ?? EMPTY} · ${offerCount} ${offerCountString}`}
+            {`${address ?? EMPTY} · ${eventCount} ${eventCountString}`}
           </AddressCaption>
 
           <TruncateCaption>{tagline}</TruncateCaption>

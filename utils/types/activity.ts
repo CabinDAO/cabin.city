@@ -9,7 +9,7 @@ import {
   LocationFragment,
   ShortAddressFragmentType,
 } from '@/utils/types/location'
-import { OfferFragment } from '@/utils/types/offer'
+import { EventFragment } from '@/utils/types/event'
 import { Prisma } from '@prisma/client'
 import { APIError, Paginated } from '@/utils/types/shared'
 
@@ -36,7 +36,7 @@ export type ActivityListFragment = {
     role?: RoleFragment
     location?: Pick<
       LocationFragment,
-      'externId' | 'name' | 'tagline' | 'bannerImageIpfsHash' | 'offerCount'
+      'externId' | 'name' | 'tagline' | 'bannerImageIpfsHash' | 'eventCount'
     > & {
       address: ShortAddressFragmentType
       steward: LocationFragment['steward'] extends null
@@ -44,7 +44,7 @@ export type ActivityListFragment = {
         : Pick<NonNullable<LocationFragment['steward']>, 'externId'> | null
     }
     offer?: Pick<
-      OfferFragment,
+      EventFragment,
       | 'externId'
       | 'type'
       | 'title'

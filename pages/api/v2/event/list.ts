@@ -4,20 +4,20 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { PAGE_SIZE } from '@/utils/api/backend'
 import {
-  OfferFragment,
-  OfferListParams,
-  OfferListResponse,
-  OfferQueryInclude,
-  OfferType,
-  OfferWithRelations,
+  EventFragment,
+  EventListParams,
+  EventListResponse,
+  EventQueryInclude,
+  EventType,
+  EventWithRelations,
   OfferPriceInterval,
-} from '@/utils/types/offer'
+} from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
 import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<OfferListResponse>
+  res: NextApiResponse<EventListResponse>
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -25,7 +25,7 @@ async function handler(
     return
   }
 
-  const parsed = OfferListParams.safeParse(req.query)
+  const parsed = EventListParams.safeParse(req.query)
   if (!parsed.success) {
     res.status(400).send({ error: toErrorString(parsed.error) })
     return
@@ -34,13 +34,13 @@ async function handler(
 
   const query: Prisma.OfferFindManyArgs = {
     where: {
-      type: params.offerType,
+      type: params.eventType,
       endDate: params.futureOnly === 'true' ? { gte: new Date() } : undefined,
       location: {
         externId: params.locationId,
       },
     },
-    include: OfferQueryInclude,
+    include: EventQueryInclude,
     orderBy: {
       createdAt: 'desc',
     },
@@ -49,52 +49,52 @@ async function handler(
   }
 
   // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [offers, totalCount] = await prisma.$transaction([
+  const [events, totalCount] = await prisma.$transaction([
     prisma.offer.findMany(query),
     prisma.offer.count({ where: query.where }),
   ])
 
   res.status(200).send({
-    offers: offers.map((offer) => offerToFragment(offer as OfferWithRelations)),
-    count: offers.length,
+    events: events.map((event) => eventToFragment(event as EventWithRelations)),
+    count: events.length,
     totalCount,
   })
 }
 
-export const offerToFragment = (offer: OfferWithRelations): OfferFragment => {
+export const eventToFragment = (event: EventWithRelations): EventFragment => {
   return {
-    externId: offer.externId,
-    type: offer.type as OfferType,
-    title: offer.title,
-    description: offer.description,
-    startDate: offer.startDate.toISOString(),
-    endDate: offer.endDate.toISOString(),
-    imageIpfsHash: offer.imageIpfsHash,
-    price: offer.price.toNumber(),
-    priceInterval: offer.priceInterval as OfferPriceInterval,
-    applicationUrl: offer.applicationUrl,
-    mediaItems: offer.mediaItems.map((mediaItem) => {
+    externId: event.externId,
+    type: event.type as EventType,
+    title: event.title,
+    description: event.description,
+    startDate: event.startDate.toISOString(),
+    endDate: event.endDate.toISOString(),
+    imageIpfsHash: event.imageIpfsHash,
+    price: event.price.toNumber(),
+    priceInterval: event.priceInterval as OfferPriceInterval,
+    applicationUrl: event.applicationUrl,
+    mediaItems: event.mediaItems.map((mediaItem) => {
       return {
         ipfsHash: mediaItem.ipfsHash,
       }
     }),
     location: {
-      externId: offer.location.externId,
-      name: offer.location.name,
-      type: offer.location.type as LocationType,
-      bannerImageIpfsHash: offer.location.bannerImageIpfsHash,
-      address: offer.location.address
+      externId: event.location.externId,
+      name: event.location.name,
+      type: event.location.type as LocationType,
+      bannerImageIpfsHash: event.location.bannerImageIpfsHash,
+      address: event.location.address
         ? {
-            locality: offer.location.address.locality,
+            locality: event.location.address.locality,
             admininstrativeAreaLevel1Short:
-              offer.location.address.admininstrativeAreaLevel1Short,
-            country: offer.location.address.country,
-            countryShort: offer.location.address.countryShort,
+              event.location.address.admininstrativeAreaLevel1Short,
+            country: event.location.address.country,
+            countryShort: event.location.address.countryShort,
           }
         : null,
-      steward: offer.location.steward
+      steward: event.location.steward
         ? {
-            externId: offer.location.steward.externId,
+            externId: event.location.steward.externId,
           }
         : null,
     },

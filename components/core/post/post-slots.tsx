@@ -6,7 +6,7 @@ import { profileRoleAddedSlots } from './profileRoleAddedSlots'
 import { verifiedCitizenshipSlots } from './verifiedCitizenshipSlots'
 import { textSlots } from './textSlots'
 import { locationPublishedSlots } from './locationPublishedSlots'
-import { offerCreatedSlots } from './offerCreatedSlots'
+import { eventCreatedSlots } from './eventCreatedSlots'
 import { vouchRequestedSlots } from './vouchRequestedSlots'
 
 /*
@@ -51,7 +51,7 @@ export const getPostSlots = (props: PostProps): PostSlots => {
   }
 
   if (activity.type === ActivityType.OfferCreated) {
-    return offerCreatedSlots
+    return eventCreatedSlots
   }
 
   if (activity.type === ActivityType.VouchRequested) {

@@ -193,6 +193,6 @@ export const locationToFragment = (
         ipfsHash: mi.ipfsHash,
       }
     }),
-    offerCount: loc._count.offers,
+    eventCount: loc._count.offers,
   }
 }

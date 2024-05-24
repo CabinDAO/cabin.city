@@ -1,44 +1,54 @@
-import styled from 'styled-components'
-import { OfferFragment } from '@/utils/types/offer'
-import { Button } from '@/components/core/Button'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { OfferNameAndDates } from '@/components/offers/OfferNameAndDates'
+import React from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
+import { parseISO } from 'date-fns'
+import { formatRange } from '@/utils/display-utils'
+import { getImageUrlByIpfsHash } from '@/lib/image'
+import { EventFragment } from '@/utils/types/event'
+import styled from 'styled-components'
 import { padding } from '@/styles/theme'
+import { Button } from '@/components/core/Button'
 import { stringToSlateValue } from '@/components/core/slate/slate-utils'
 import { SlateRenderer } from '@/components/core/slate/SlateRenderer'
 import ShowMoreText from '@/components/showmore/ShowMoreText'
-import { body2Styles } from '@/components/core/Typography'
-import Link from 'next/link'
+import { body2Styles, H2, H5 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import React from 'react'
 
 export const EventList = ({
-  offers,
+  events,
   isEditable,
 }: {
-  offers: OfferFragment[]
+  events: EventFragment[]
   isEditable?: boolean
 }) => {
   return (
     <>
-      {offers.map((offer) => (
+      {events.map((event) => (
         <Item
-          key={offer.externId}
-          active={offer.endDate >= new Date().toISOString().slice(0, 10)}
+          key={event.externId}
+          active={event.endDate >= new Date().toISOString().slice(0, 10)}
         >
           <Contents>
-            {offer.imageIpfsHash && (
+            {event.imageIpfsHash && (
               <StyledImage
-                src={getImageUrlByIpfsHash(offer.imageIpfsHash) ?? ''}
-                alt={offer.title ?? ''}
+                src={getImageUrlByIpfsHash(event.imageIpfsHash) ?? ''}
+                alt={event.title ?? ''}
                 width={0}
                 height={0}
                 sizes="100vw"
               />
             )}
             <Details>
-              <OfferNameAndDates offer={offer} withPrice noImage />
+              <NameAndDate>
+                <H5>
+                  {formatRange(
+                    parseISO(event.startDate),
+                    parseISO(event.endDate)
+                  )}
+                </H5>
+
+                <H2>{event.title}</H2>
+              </NameAndDate>
               <Expandable
                 more={
                   <span
@@ -55,30 +65,38 @@ export const EventList = ({
                   </span>
                 }
               >
-                <SlateRenderer value={stringToSlateValue(offer.description)} />
+                <SlateRenderer value={stringToSlateValue(event.description)} />
               </Expandable>
             </Details>
             <Buttons>
               <Link
-                href={offer.applicationUrl}
+                href={event.applicationUrl}
                 target="_blank"
                 rel="noopener nofollow noreferrer"
               >
                 <Button isFullWidth>RSVP</Button>
               </Link>
+              {isEditable && (
+                <Link href={`/event/${event.externId}/edit`}>
+                  <Button variant="link">
+                    <Icon name="pencil" size={1.6} />
+                    Edit
+                  </Button>
+                </Link>
+              )}
             </Buttons>
           </Contents>
 
-          {isEditable && (
-            <AdminActions>
-              <Link href={`/event/${offer.externId}/edit`}>
-                <Button variant="link">
-                  <Icon name="pencil" size={1.6} />
-                  Edit
-                </Button>
-              </Link>
-            </AdminActions>
-          )}
+          {/*{isEditable && (*/}
+          {/*  <AdminActions>*/}
+          {/*    <Link href={`/event/${event.externId}/edit`}>*/}
+          {/*      <Button variant="link">*/}
+          {/*        <Icon name="pencil" size={1.6} />*/}
+          {/*        Edit*/}
+          {/*      </Button>*/}
+          {/*    </Link>*/}
+          {/*  </AdminActions>*/}
+          {/*)}*/}
         </Item>
       ))}
     </>
@@ -131,6 +149,13 @@ const Details = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2.4rem;
+`
+
+const NameAndDate = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  width: 100%;
 `
 
 const StyledImage = styled(Image)`

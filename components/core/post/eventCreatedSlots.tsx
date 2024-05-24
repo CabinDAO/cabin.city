@@ -1,26 +1,26 @@
 import { Body1 } from '../Typography'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
-import { OfferPostItem } from './OfferPostItem'
+import { EventPostItem } from './EventPostItem'
 import { useProfile } from '@/components/auth/useProfile'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OfferContent = (props: PostProps) => {
+const EventContent = (props: PostProps) => {
   return <Body1>Posted a new event</Body1>
 }
 
-const OfferMedia = (props: PostProps) => {
-  const offer = props.activity.metadata?.offer
+const EventMedia = (props: PostProps) => {
+  const event = props.activity.metadata?.offer
   const { user } = useProfile()
 
-  if (offer && user) {
-    return <OfferPostItem {...offer} />
+  if (event && user) {
+    return <EventPostItem {...event} />
   } else {
     return null
   }
 }
 
-export const offerCreatedSlots: PostSlots = {
-  Content: OfferContent,
-  Media: OfferMedia,
+export const eventCreatedSlots: PostSlots = {
+  Content: EventContent,
+  Media: EventMedia,
 }

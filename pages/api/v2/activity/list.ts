@@ -17,7 +17,7 @@ import {
   RoleLevel,
   RoleType,
 } from '@/utils/types/profile'
-import { OfferType } from '@/utils/types/offer'
+import { EventType } from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
 
@@ -143,13 +143,13 @@ const toFragments = (
                 country: activity.location.address?.country || '',
                 countryShort: activity.location.address?.countryShort || '',
               },
-              offerCount: 0, // TODO: implement
+              eventCount: 0, // TODO: implement
             }
           : undefined,
         offer: activity.offer
           ? {
               externId: activity.offer.externId,
-              type: activity.offer.type as OfferType,
+              type: activity.offer.type as EventType,
               title: activity.offer.title,
               startDate: activity.offer.startDate.toISOString(),
               endDate: activity.offer.endDate.toISOString(),

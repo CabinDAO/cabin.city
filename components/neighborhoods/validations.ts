@@ -6,7 +6,7 @@ import {
   truthyString,
 } from '@/utils/validate'
 import { emptyEditorValue } from '../core/slate/slate-utils'
-import { OfferEditParamsType, OfferType } from '@/utils/types/offer'
+import { EventEditParamsType, EventType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 
 type ValidationResult = {
@@ -27,9 +27,9 @@ export const validateLocationInput = (values: LocationEditParamsType) => {
   return !invalid
 }
 
-export const validateOfferInput = (
-  type: OfferType,
-  newValues: OfferEditParamsType
+export const validateEventInput = (
+  type: EventType,
+  newValues: EventEditParamsType
 ) => {
   const invalid =
     !validateTitle(newValues.title).valid ||

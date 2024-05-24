@@ -20,7 +20,7 @@ interface ListingCardProps {
     name: string | null | undefined
     bannerImageIpfsHash: string | null | undefined
     address: ShortAddressFragmentType | null | undefined
-    offerCount: number | null | undefined
+    eventCount: number | null | undefined
   }
   onDelete?: VoidFunction
   onEdit?: VoidFunction
@@ -75,7 +75,7 @@ export const ListingCard = (props: ListingCardProps) => {
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          <EventCountTag offerCount={location.offerCount ?? 0} />
+          <EventCountTag eventCount={location.eventCount ?? 0} />
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
@@ -95,16 +95,16 @@ export const ListingCard = (props: ListingCardProps) => {
   )
 }
 
-const EventCountTag = ({ offerCount }: { offerCount: number }) => {
-  if (!offerCount || offerCount === 0) {
+const EventCountTag = ({ eventCount }: { eventCount: number }) => {
+  if (!eventCount || eventCount === 0) {
     return null
   }
 
-  const plural = offerCount === 1 ? '' : 's'
+  const plural = eventCount === 1 ? '' : 's'
   return (
     <TagContainer>
       <Subline1>
-        {offerCount} Event{plural}
+        {eventCount} Event{plural}
       </Subline1>
     </TagContainer>
   )
