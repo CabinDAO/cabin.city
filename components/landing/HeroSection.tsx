@@ -15,7 +15,7 @@ export const HeroSection = () => {
         </HeaderText>
         <ButtonWrapper>
           <Buttons>
-            <AuthenticatedLink href="/events">
+            <AuthenticatedLink href="/city-directory">
               <Button>Find one near you</Button>
             </AuthenticatedLink>
             <Link

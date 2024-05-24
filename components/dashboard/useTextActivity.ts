@@ -13,7 +13,7 @@ export const useTextActivity = (
 
   const handleCreateTextActivity = useCallback(
     async (text: string) => {
-      await createTextActivity({ text: text } as ActivityNewParams)
+      await createTextActivity({ text: text } satisfies ActivityNewParams)
       await afterPost()
     },
     [createTextActivity, afterPost]

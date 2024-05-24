@@ -43,7 +43,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
     const data = await createOffer({
       locationExternId: location.externId,
       offerType: OfferType.PaidColiving, // TODO: get rid of offer types completely
-    } as OfferNewParams)
+    } satisfies OfferNewParams)
 
     if ('offerExternId' in data) {
       router.push(`/event/${data.offerExternId}/edit`).then(null)
@@ -182,11 +182,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               </Button>
             )}
           </SectionHeader>
-          <EventList
-            offers={bookableOffers}
-            actionButtonText={'Details'}
-            isEditable={isEditable}
-          />
+          <EventList offers={bookableOffers} isEditable={isEditable} />
         </Section>
       )}
     </LocationContent>

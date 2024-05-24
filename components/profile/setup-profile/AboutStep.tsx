@@ -45,7 +45,7 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
         address,
         avatar,
       },
-    } as ProfileEditParamsType)
+    } satisfies ProfileEditParamsType)
 
     onNext()
   }

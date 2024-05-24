@@ -3,7 +3,7 @@ import { OfferFragment } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { offerInfoFromType } from '@/utils/offer'
 import { formatRange } from '@/utils/display-utils'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import { Price } from '@/components/offers/Price'
@@ -36,7 +36,7 @@ export const EventCard = (props: EventCardProps) => {
     <OuterContainer inactive={!!inactive}>
       <ContainerLink
         href={`/event/${offer.externId}`}
-        onClick={() => events.viewEventsEvent(offer.externId)}
+        onClick={() => analytics.viewEventsEvent(offer.externId)}
       >
         <ImageContainer>
           {imageHash ? (

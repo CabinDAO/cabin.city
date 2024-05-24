@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components'
 import Icon from '../Icon'
 import { Subline1 } from '../Typography'
 import { AuthenticatedLink } from '../AuthenticatedLink'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 interface MobileMenuItemProps {
   menuItem: MenuItemOption
@@ -26,10 +26,10 @@ export const MobileMenuItem = ({
     : MenuItemsUnauthenticatedMap[menuItem]
 
   const handleClick = () => {
-    events.navBarEvent(menuItem)
+    analytics.navBarEvent(menuItem)
 
     if (menuItem === 'signIn') {
-      events.signInEvent()
+      analytics.signInEvent()
     }
   }
 

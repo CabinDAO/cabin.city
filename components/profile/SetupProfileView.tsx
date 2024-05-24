@@ -31,7 +31,7 @@ export const SetupProfileView = ({}) => {
     } else if (isLastStep) {
       post('PROFILE_SETUP_STATE', {
         state: 'finished',
-      } as ProfileSetupStateParams).then(() => {
+      } satisfies ProfileSetupStateParams).then(() => {
         router.push('/profile/[id]', `/profile/${profileId}`)
       })
     }

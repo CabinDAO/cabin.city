@@ -32,8 +32,8 @@ export const SelectNftModalContent = ({
           acquired from various NFT marketplaces that operate on the blockchain.
         </Caption>
         <Caption>
-          Cabin let&#39;s you select NFTs in your connected wallet to set as
-          your profile picture.
+          Cabin lets you select NFTs in your connected wallet to set as your
+          profile picture.
         </Caption>
       </AboutExplainer>
     )

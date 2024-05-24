@@ -7,7 +7,7 @@ import { ListItem } from './ListItem'
 import { Button } from './Button'
 import { useRouter } from 'next/router'
 import { formatRange } from '@/utils/display-utils'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import React from 'react'
 import { OfferFragment } from '@/utils/types/offer'
 import { getImageUrlByIpfsHash } from '@/lib/image'
@@ -55,7 +55,7 @@ export const OfferListItem = (props: {
           ? `/event/${offer.externId}/edit`
           : `/event/${offer.externId}`
       }
-      onClick={() => events.viewEventsEvent(offer.externId)}
+      onClick={() => analytics.viewEventsEvent(offer.externId)}
     >
       <InnerContainer>
         <OfferInfoContainer active={!inactive} className={className}>
@@ -64,7 +64,7 @@ export const OfferListItem = (props: {
               {imageUrl ? (
                 <StyledImage
                   src={imageUrl}
-                  alt={offer.title ?? 'Offer'}
+                  alt={offer.title ?? 'Event'}
                   width={64}
                   height={64}
                 />

@@ -19,7 +19,7 @@ export const OfferTabList = ({ offerType }: { offerType?: OfferType }) => {
     useGetPaginated<OfferListResponse>('OFFER_LIST', {
       offerType: offerType ?? undefined,
       futureOnly: 'true',
-    } as OfferListParamsType)
+    } satisfies OfferListParamsType)
 
   const offers = data
     ? data.reduce(

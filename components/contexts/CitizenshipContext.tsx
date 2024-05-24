@@ -38,7 +38,7 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
 
     const resp = await get<RefetchResponse>('UNLOCK_REFETCH_STATUS', {
       address: externalUser?.wallet?.address,
-    } as RefetchParams)
+    } satisfies RefetchParams)
 
     if (resp.hasOwnProperty('updated')) {
       if (resp.updated) {

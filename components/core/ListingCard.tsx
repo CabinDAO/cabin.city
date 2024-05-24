@@ -8,7 +8,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import { ShortAddressFragmentType } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
@@ -59,7 +59,7 @@ export const ListingCard = (props: ListingCardProps) => {
         href={editMode ? `/location/${externId}/edit` : `/location/${externId}`}
         shallow
         passHref
-        onClick={() => events.viewCityDirectoryEvent(externId)}
+        onClick={() => analytics.viewCityDirectoryEvent(externId)}
       >
         <ImageContainer widthPx={cardWidth}>
           {bannerImageIpfsHash ? (

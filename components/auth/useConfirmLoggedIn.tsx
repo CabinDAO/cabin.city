@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 export const useConfirmLoggedIn = (logAnalyticsEvent?: boolean) => {
   const { authenticated, ready } = usePrivy()
@@ -10,7 +10,7 @@ export const useConfirmLoggedIn = (logAnalyticsEvent?: boolean) => {
     (onConfirmed?: VoidFunction) => {
       if (ready && !authenticated) {
         if (logAnalyticsEvent) {
-          events.signInEvent()
+          analytics.signInEvent()
         }
         login()
       } else if (authenticated) {

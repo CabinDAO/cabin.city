@@ -203,7 +203,7 @@ export const event = ({ action, params }: GTagEvent): void => {
   }
 }
 
-const events = {
+const analytics = {
   event,
   signInEvent,
   shareEvent,
@@ -223,4 +223,4 @@ const events = {
   subscribeToNewsletterEvent,
 }
 
-export default events
+export default analytics

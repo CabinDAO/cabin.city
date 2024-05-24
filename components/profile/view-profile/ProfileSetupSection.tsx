@@ -6,7 +6,7 @@ import { ColorName } from '@/styles/theme'
 import Icon from '../../core/Icon'
 import { useRouter } from 'next/router'
 import { Button } from '@/components/core/Button'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
 import { useBackend } from '@/components/hooks/useBackend'
 import { useState } from 'react'
@@ -37,11 +37,11 @@ export const ProfileSetupSection = ({
     setHideLinkContainer(true)
     post('PROFILE_SETUP_STATE', {
       state: 'dismissed',
-    } as ProfileSetupStateParams)
+    } satisfies ProfileSetupStateParams)
   }
 
   const handleTwitterShareClick = () => {
-    events.shareEvent('twitter', 'profile_setup', profileId)
+    analytics.shareEvent('twitter', 'profile_setup', profileId)
 
     const text = encodeURIComponent(
       `I'm live on the @cabindotcity Census. Check it out on cabin.city.`

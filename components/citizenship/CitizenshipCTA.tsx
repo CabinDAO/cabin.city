@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Button } from '../core/Button'
 import { Body2, H2 } from '../core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 type CTAConfig = {
   title: string
@@ -57,7 +57,7 @@ export const CitizenshipCTA = ({
       button: () => (
         <a
           href={EXTERNAL_LINKS.GENERAL_CHAT_DISCORD_CHANNEL}
-          onClick={() => events.citizenshipShareDiscordEvent(profileId)}
+          onClick={() => analytics.citizenshipShareDiscordEvent(profileId)}
           target="_blank"
           rel="noopener nofollow noreferrer"
         >

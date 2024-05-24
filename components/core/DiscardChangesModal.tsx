@@ -21,7 +21,7 @@ export const DiscardChangesModal = ({ leaveUrl }: DiscardChangesModalProps) => {
 
   return (
     <DiscardChangesModalContainer>
-      <ModalTitle text="Changes Made" />
+      <ModalTitle text="Unsaved Changes" />
       <DeleteModalContent>
         <QuestionContainer>
           <Question>

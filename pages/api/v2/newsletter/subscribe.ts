@@ -2,13 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { subscribe } from '@/lib/convertkit'
 import { AxiosError } from 'axios'
 
+export type SubscribeParams = {
+  email: string
+}
+
 export type SubscribeResponse = {
   success: boolean
   message: string
-}
-
-export type SubscribeData = {
-  email: string
 }
 
 async function handler(
@@ -22,7 +22,7 @@ async function handler(
     return
   }
 
-  const body = req.body as SubscribeData
+  const body = req.body as SubscribeParams
   const email = body.email
   if (!email) {
     res.send({ success: false, message: 'Enter your email and try again.' })

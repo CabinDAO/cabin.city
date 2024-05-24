@@ -277,6 +277,7 @@ export function LocationEditForm({
           onDelete={deleteByIpfsHash}
           title="Photos"
           instructions="Add at least 3 images for the photo gallery. Choose JPG or PNG file formats no larger than 5 MB."
+          multiple
           ipfsHashList={unique<string>(
             (locationInput.mediaItems || []).map((mi) => mi.ipfsHash)
           )}

@@ -8,13 +8,13 @@ import {
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { ListingCard } from '../core/ListingCard'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 export const NeighborhoodsTop6List = () => {
   const { useGet } = useBackend()
   const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
     locationType: LocationType.Neighborhood,
-  } as LocationListParamsType)
+  } satisfies LocationListParamsType)
 
   if (!data || 'error' in data) {
     return null
@@ -37,7 +37,7 @@ export const NeighborhoodsTop6List = () => {
         })}
       </NeighborhoodsTop6ListContainer>
       <Link
-        onClick={() => events.viewCityDirectoryEvent()}
+        onClick={() => analytics.viewCityDirectoryEvent()}
         href="/city-directory"
       >
         <Button variant="secondary" isFullWidth>

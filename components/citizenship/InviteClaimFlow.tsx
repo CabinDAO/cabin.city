@@ -156,7 +156,7 @@ export default function InviteClaimFlow({
             email,
             walletAddressOrENS: hasWallet ? walletAddress : '',
           },
-    } as InviteClaimParams)
+    } satisfies InviteClaimParams)
 
     if ('error' in inviteClaimRes) {
       showError(inviteClaimRes.error)

@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import styled, { css } from 'styled-components'
 import Link from 'next/link'
 import Icon, { IconName } from './Icon'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 interface AppLinkProps {
   href: string
@@ -28,7 +28,7 @@ export const AppLink = ({
   const handleClick = () => {
     onClick?.()
     if (external) {
-      events.externalLinkEvent(href)
+      analytics.externalLinkEvent(href)
     }
   }
 

@@ -7,7 +7,7 @@ import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import { LocationFragment } from '@/utils/types/location'
 import { format, parseISO } from 'date-fns'
 import { appDomainWithProto } from '@/utils/display-utils'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import Icon from '@/components/core/Icon'
@@ -86,7 +86,7 @@ export const StewardContact = ({
                   if (newWindow) {
                     newWindow.opener = null // This is an additional safety measure
                   }
-                  events.contactStewardEvent(steward.externId)
+                  analytics.contactStewardEvent(steward.externId)
                 }
               : () => {
                   showModal(() => <Modal user={user} location={location} />)

@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 interface SlideshowProps {
   className?: string
@@ -31,7 +31,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
   const canNavigatePrevious = loop || currSlide > 0
 
   const onNextSlide = () => {
-    events.roleCardsSlideshowEvent()
+    analytics.roleCardsSlideshowEvent()
     let nextSlide = Math.min(
       slideSizes.length - numSlidesVisible,
       currSlide + 1
@@ -43,7 +43,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
   }
 
   const onPreviousSlide = () => {
-    events.roleCardsSlideshowEvent()
+    analytics.roleCardsSlideshowEvent()
     let prevSlide = Math.max(0, currSlide - 1)
     if (loop && prevSlide == currSlide) {
       prevSlide = slideSizes.length - numSlidesVisible

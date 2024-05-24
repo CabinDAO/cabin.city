@@ -7,7 +7,7 @@ import { ActivityType } from '@prisma/client'
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<ActivityNewResponse>,
   opts: { auth: AuthData }
 ) {
   if (req.method != 'POST') {
@@ -29,7 +29,7 @@ async function handler(
     },
   })
 
-  res.status(200).send({ externId: activity.externId } as ActivityNewResponse)
+  res.status(200).send({ externId: activity.externId })
 }
 
 export default withAuth(handler)

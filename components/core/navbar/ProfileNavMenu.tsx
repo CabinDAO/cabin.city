@@ -8,7 +8,7 @@ import { Avatar } from '../Avatar'
 import { HorizontalDivider } from '../Divider'
 import Icon from '../Icon'
 import { Caption, Subline1 } from '../Typography'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import { MenuItemOption } from '@/utils/nav/types'
 import { CitizenshipStatus } from '@/utils/types/profile'
 
@@ -29,7 +29,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
   }
 
   const handleClick = (menuItemOption: MenuItemOption) => {
-    events.navBarEvent(menuItemOption)
+    analytics.navBarEvent(menuItemOption)
   }
 
   return (

@@ -4,7 +4,7 @@ import Icon from '@/components/core/Icon'
 import { H3, Subline2, hhStyles } from '@/components/core/Typography'
 import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
 import { useProfile } from '@/components/auth/useProfile'
@@ -22,7 +22,7 @@ export const Footer = () => {
             <Section>
               <Header>Product</Header>
               <AppLink
-                onClick={() => events.viewCityDirectoryEvent()}
+                onClick={() => analytics.viewCityDirectoryEvent()}
                 href="/city-directory"
                 iconSize={0}
               >

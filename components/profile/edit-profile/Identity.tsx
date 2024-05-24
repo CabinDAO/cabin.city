@@ -65,11 +65,10 @@ export const Identity = ({
       externalUser.email.address !== user.email
     ) {
       updateProfile({
-        profileExternId: user.externId,
         data: {
           email: externalUser.email.address,
         },
-      } as ProfileEditParamsType)
+      } satisfies ProfileEditParamsType)
     }
   }, [externalUser?.email?.address, updateProfile, user])
 

@@ -41,7 +41,7 @@ async function handler(
     data: {
       externId: randomId('event'),
       locationId: location.id,
-      title: 'New Offer',
+      title: 'New Event',
       description: '',
       type: OfferType.PaidColiving,
       startDate: new Date(),

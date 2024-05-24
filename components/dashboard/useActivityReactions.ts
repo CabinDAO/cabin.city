@@ -1,4 +1,4 @@
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import {
   ActivityReactResponse,
   ActivityListFragment,
@@ -9,7 +9,7 @@ export const useActivityReactions = () => {
   const { post } = useBackend()
 
   const handleLikeActivity = async (activity: ActivityListFragment) => {
-    events.reactToPostEvent(`${activity.externId}`, 'like')
+    analytics.reactToPostEvent(`${activity.externId}`, 'like')
 
     await post<ActivityReactResponse>('ACTIVITY_REACT', {
       externId: activity.externId,
@@ -18,7 +18,7 @@ export const useActivityReactions = () => {
   }
 
   const handleUnlikeActivity = async (activity: ActivityListFragment) => {
-    events.reactToPostEvent(`${activity.externId}`, 'like')
+    analytics.reactToPostEvent(`${activity.externId}`, 'like')
 
     await post<ActivityReactResponse>('ACTIVITY_REACT', {
       externId: activity.externId,

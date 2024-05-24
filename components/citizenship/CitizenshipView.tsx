@@ -9,7 +9,7 @@ import { useWallets } from '@privy-io/react-auth'
 import { useChainSwitch } from '../hooks/useChainSwitch'
 import { addressMatch } from '@/utils/address-match'
 import { useExternalUser } from '../auth/useExternalUser'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 import { useEmail } from '@/components/hooks/useEmail'
 import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 import { useNavigation } from '@/components/hooks/useNavigation'
@@ -52,7 +52,7 @@ export const CitizenshipView = () => {
   const handleMint = async () => {
     if (!user) return
 
-    events.mintEvent(user.externId ?? '')
+    analytics.mintEvent(user.externId ?? '')
 
     const currentUserWallet = wallets.find((w) =>
       addressMatch(w.address, externalUser?.wallet?.address ?? '')
@@ -71,7 +71,7 @@ export const CitizenshipView = () => {
 
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {
-      events.signalInterestEvent(user?.externId ?? '')
+      analytics.signalInterestEvent(user?.externId ?? '')
 
       sendEmail({
         type: EmailType.VOUCH_REQUESTED,

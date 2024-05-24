@@ -5,7 +5,7 @@ import {
 } from '@/utils/nav/types'
 import IconLink from '../IconLink'
 import { Tooltip } from '../Tooltip'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 interface MenuItemLinkProps {
   menuItem: MenuItemOption
@@ -23,10 +23,10 @@ export const MenuItemLink = ({
     : MenuItemsUnauthenticatedMap[menuItem]
 
   const handleClick = () => {
-    events.navBarEvent(menuItem)
+    analytics.navBarEvent(menuItem)
 
     if (menuItem === 'signIn') {
-      events.signInEvent()
+      analytics.signInEvent()
     }
   }
 

@@ -106,7 +106,7 @@ export const JourneySection = () => {
               local area and participating online.
               <ul>
                 <li>
-                  <AuthenticatedLink href={'/events'}>
+                  <AuthenticatedLink href={'/city-directory'}>
                     Sign in & create your profile
                   </AuthenticatedLink>
                 </li>

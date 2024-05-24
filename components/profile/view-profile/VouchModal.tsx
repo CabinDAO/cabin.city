@@ -26,7 +26,7 @@ export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {
     const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
       externId: profile.externId,
       action: 'vouch',
-    } as ProfileVouchParams)
+    } satisfies ProfileVouchParams)
 
     const newStatus = !result || 'error' in result ? null : result.newStatus
     if (newStatus === CitizenshipStatus.Vouched) {
@@ -39,7 +39,7 @@ export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {
     const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
       externId: profile.externId,
       action: 'unvouch',
-    } as ProfileVouchParams)
+    } satisfies ProfileVouchParams)
 
     const newStatus = !result || 'error' in result ? null : result.newStatus
     if (newStatus === CitizenshipStatus.VouchRequested) {

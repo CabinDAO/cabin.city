@@ -151,7 +151,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
       'CHECKOUT_CREATE_PAYMENT_INTENT',
       {
         cartId: cart.externId,
-      } as CreatePaymentIntentParams
+      } satisfies CreatePaymentIntentParams
     )
 
     if ('error' in intentRes) {

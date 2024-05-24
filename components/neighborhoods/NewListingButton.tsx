@@ -6,7 +6,7 @@ import { AuthenticatedLink } from '../core/AuthenticatedLink'
 export const NewListingButton = () => (
   <NewListing href="/location/new">
     <Icon name="plus" size={1} />
-    <Overline>New Neighborhood</Overline>
+    <Overline>List Your Neighborhood</Overline>
   </NewListing>
 )
 

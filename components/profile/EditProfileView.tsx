@@ -40,7 +40,7 @@ export const EditProfileView = () => {
     if (user && validateProfileInput(newValues)) {
       const res = await updateUser({
         data: newValues,
-      } as ProfileEditParamsType)
+      } satisfies ProfileEditParamsType)
 
       const error = 'error' in res ? res.error : null
 

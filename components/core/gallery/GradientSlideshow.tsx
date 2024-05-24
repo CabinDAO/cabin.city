@@ -9,7 +9,7 @@ import {
 } from 'react'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 interface SlideshowProps {
   className?: string
@@ -30,14 +30,14 @@ export const GradientSlideshow = ({ children, className }: SlideshowProps) => {
   const canNavigatePrevious = startingSlide > 0
 
   const onNextSlide = () => {
-    events.roleCardsSlideshowEvent()
+    analytics.roleCardsSlideshowEvent()
     setStartingSlide(
       Math.min(slideSizes.length - slidesVisible, startingSlide + 1)
     )
   }
 
   const onPreviousSlide = () => {
-    events.roleCardsSlideshowEvent()
+    analytics.roleCardsSlideshowEvent()
     setStartingSlide(Math.max(0, startingSlide - 1))
   }
 

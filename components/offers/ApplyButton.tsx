@@ -8,7 +8,7 @@ import { formatUrl } from '@/utils/display-utils'
 import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
 import { CitizenshipRequiredModal } from '@/components/neighborhoods/CitizenshipRequiredModal'
-import events from '@/lib/googleAnalytics/events'
+import analytics from '@/lib/googleAnalytics/analytics'
 
 export const ApplyButton = ({ offer }: { offer: OfferFragment }) => {
   const { showModal } = useModal()
@@ -31,7 +31,7 @@ export const ApplyButton = ({ offer }: { offer: OfferFragment }) => {
 
     return (
       <Link
-        onClick={() => events.applyToEventEvent(offer.externId)}
+        onClick={() => analytics.applyToEventEvent(offer.externId)}
         href={formatUrl(offer.applicationUrl) ?? ''}
         target="_blank"
         rel="noopener nofollow noreferrer"

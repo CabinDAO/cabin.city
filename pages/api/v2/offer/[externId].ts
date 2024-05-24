@@ -59,7 +59,7 @@ async function handleGet(
 
   res.status(200).send({
     offer: offerToFragment(offer as OfferWithRelations),
-  } as OfferGetResponse)
+  })
 }
 
 async function handlePost(
