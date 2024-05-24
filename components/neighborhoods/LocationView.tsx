@@ -39,9 +39,9 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   } satisfies EventListParamsType)
   const events = !eventData || 'error' in eventData ? [] : eventData.events
 
-  const { trigger: createOffer } = useMutate<EventNewResponse>('EVENT_NEW')
+  const { trigger: createEvent } = useMutate<EventNewResponse>('EVENT_NEW')
   const handleNewEventClick = async () => {
-    const data = await createOffer({
+    const data = await createEvent({
       locationExternId: location.externId,
     } satisfies EventNewParamsType)
 

@@ -20,7 +20,7 @@ async function handler(
 
   const profile = await requireProfile(req, res, opts)
 
-  const parsed = EventNewParams.safeParse(req.query)
+  const parsed = EventNewParams.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).send({ error: toErrorString(parsed.error) })
     return

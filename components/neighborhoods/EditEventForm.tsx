@@ -79,7 +79,11 @@ export const EditEventForm = ({
   }
 
   const handleExternalLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onEdit({ applicationUrl: e.target.value })
+    let value = e.target.value
+    if (!value.startsWith('http')) {
+      value = `https://${value}`
+    }
+    onEdit({ applicationUrl: value })
   }
 
   const description = updateEventInput.description || event.description
