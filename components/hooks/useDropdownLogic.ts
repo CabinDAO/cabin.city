@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
-import { IconName } from '../core/Icon'
+import { IconName } from '@/components/core/Icon'
 import lodash from 'lodash'
 
 export interface SelectOption {

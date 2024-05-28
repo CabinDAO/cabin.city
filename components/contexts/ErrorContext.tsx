@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import { ErrorToast } from '../core/toasts/ErrorToast'
+import { ErrorToast } from '@/components/core/toasts/ErrorToast'
 
 export const ErrorContext = createContext<ErrorState | null>(null)
 

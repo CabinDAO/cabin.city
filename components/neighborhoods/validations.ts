@@ -5,7 +5,7 @@ import {
   REQUIRED_FIELD_ERROR,
   truthyString,
 } from '@/utils/validate'
-import { emptyEditorValue } from '../core/slate/slate-utils'
+import { emptyEditorValue } from '@/components/core/slate/slate-utils'
 import { EventEditParamsType, EventType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 

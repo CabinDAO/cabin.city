@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { pxToRem } from '@/utils/display-utils'
 import { CollapsibleList } from './CollapsibleList'
 import { DeviceSize, useDeviceSize } from '../hooks/useDeviceSize'
-import { ImageFlex } from '../core/gallery/ImageFlex'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 
 interface CollapsibleInfoSectionProps {
   variant: 'left' | 'right'

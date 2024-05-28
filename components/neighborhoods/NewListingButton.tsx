@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { Overline } from '../core/Typography'
-import Icon from '../core/Icon'
-import { AuthenticatedLink } from '../core/AuthenticatedLink'
+import { Overline } from '@/components/core/Typography'
+import Icon from '@/components/core/Icon'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const NewListingButton = () => (
   <NewListing href="/location/new">

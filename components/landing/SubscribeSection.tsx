@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Body1, H4 } from '../core/Typography'
+import { Body1, H4 } from '@/components/core/Typography'
 import { SubscribeForm } from './SubscribeForm'
 
 export const SubscribeSection = () => {

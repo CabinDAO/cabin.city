@@ -2,9 +2,9 @@ import { IconName } from '@/components/core/Icon'
 
 export type MenuItemOption =
   | 'home'
+  | 'neighborhoods'
   | 'members'
   | 'activity'
-  | 'neighborhoods'
   | 'profile'
   | 'citizenship'
   | 'invite'
@@ -29,11 +29,11 @@ export const MenuItemsAuthenticatedMap: Record<
     displayText: 'Home',
     iconSize: 3.2,
   },
-  activity: {
-    icon: 'dashboard',
-    path: '/dashboard',
-    displayText: 'Activity',
-    iconSize: 2.5,
+  neighborhoods: {
+    icon: 'map-fold',
+    path: '/city-directory',
+    displayText: 'City Directory',
+    iconSize: 2,
   },
   members: {
     icon: 'members',
@@ -41,11 +41,11 @@ export const MenuItemsAuthenticatedMap: Record<
     displayText: 'Census',
     iconSize: 2.5,
   },
-  neighborhoods: {
-    icon: 'map-fold',
-    path: '/city-directory',
-    displayText: 'City Directory',
-    iconSize: 2,
+  activity: {
+    icon: 'dashboard',
+    path: '/dashboard',
+    displayText: 'Activity',
+    iconSize: 2.5,
   },
   profile: {
     icon: 'profile',
@@ -86,14 +86,14 @@ export const MenuItemsUnauthenticatedMap: Record<
     displayText: 'Home',
     iconSize: 3.2,
   },
-  activity: null,
-  members: null,
   neighborhoods: {
     icon: 'map-fold',
     path: '/city-directory',
     displayText: 'City Directory',
     iconSize: 2,
   },
+  members: null,
+  activity: null,
   profile: null,
   citizenship: null,
   invite: null,

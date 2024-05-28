@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { AppLink } from '../core/AppLink'
-import { H4, Subline2 } from '../core/Typography'
+import { AppLink } from '@/components/core/AppLink'
+import { H4, Subline2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const LaunchBanner = () => {

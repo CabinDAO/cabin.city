@@ -4,7 +4,7 @@ import { useDeviceSize } from '../hooks/useDeviceSize'
 import { LocationFragment } from '@/utils/types/location'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ImageGallery } from '@/components/core/gallery/ImageGallery'
-import { ImageBrowserModal } from '../core/gallery/ImageBrowserModal'
+import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
 
 export const LocationPhotosView = ({
   location,

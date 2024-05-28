@@ -6,7 +6,7 @@ import {
   LocationListParamsType,
   LocationListResponse,
 } from '@/utils/types/location'
-import { ListingCard } from '../core/ListingCard'
+import { ListingCard } from '@/components/core/ListingCard'
 import { LocationListContainer } from './styles'
 
 export const Locations = ({ type }: { type: LocationType | undefined }) => {

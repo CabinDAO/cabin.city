@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { Caption } from '../core/Typography'
-import { Button } from '../core/Button'
+import { Caption } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import { Tooltip } from '../core/Tooltip'
+import { Tooltip } from '@/components/core/Tooltip'
 import { truncate } from '@/utils/display-utils'
 
 interface AccountActionProps {

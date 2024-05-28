@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { ImageFlex } from '../core/gallery/ImageFlex'
-import { hhStyles } from '../core/Typography'
-import { AppLink } from '../core/AppLink'
+import { ImageFlex } from '@/components/core/gallery/ImageFlex'
+import { hhStyles } from '@/components/core/Typography'
+import { AppLink } from '@/components/core/AppLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import theme from '@/styles/theme'
 

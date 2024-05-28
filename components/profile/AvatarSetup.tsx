@@ -7,8 +7,8 @@ import { getImageUrlByIpfsHash } from '@/lib/image'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import { useModal } from '../hooks/useModal'
 import styled from 'styled-components'
-import { Avatar } from '../core/Avatar'
-import { Button } from '../core/Button'
+import { Avatar } from '@/components/core/Avatar'
+import { Button } from '@/components/core/Button'
 import { AvatarModal } from './AvatarModal'
 
 export type ExtendedOwnedNft = OwnedNft & {

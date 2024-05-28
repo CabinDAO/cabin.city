@@ -10,11 +10,11 @@ import {
 } from '@/utils/types/profile'
 import { validateProfileInput } from './validations'
 import { EditProfileForm } from './EditProfileForm'
-import { ContentCard } from '../core/ContentCard'
-import { TitleCard } from '../core/TitleCard'
+import { ContentCard } from '@/components/core/ContentCard'
+import { TitleCard } from '@/components/core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { ErrorModal } from '../ErrorModal'
-import { ActionBar } from '../core/ActionBar'
+import { ActionBar } from '@/components/core/ActionBar'
 
 export const EditProfileView = () => {
   const router = useRouter()

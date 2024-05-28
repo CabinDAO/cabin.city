@@ -1,6 +1,6 @@
-import { TitleCard } from '../core/TitleCard'
+import { TitleCard } from '@/components/core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { EmptyState } from '../core/EmptyState'
+import { EmptyState } from '@/components/core/EmptyState'
 import styled from 'styled-components'
 
 export const NeighborhoodsPlaceholderView = () => {

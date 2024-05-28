@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useCallback, useState } from 'react'
-import Modal from '../core/modals/Modal'
+import Modal from '@/components/core/modals/Modal'
 
 export const ModalContext = createContext<ModalState | null>(null)
 

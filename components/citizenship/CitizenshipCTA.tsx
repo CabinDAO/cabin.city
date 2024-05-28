@@ -1,8 +1,8 @@
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { ReactElement } from 'react'
 import styled from 'styled-components'
-import { Button } from '../core/Button'
-import { Body2, H2 } from '../core/Typography'
+import { Button } from '@/components/core/Button'
+import { Body2, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import analytics from '@/lib/googleAnalytics/analytics'
 

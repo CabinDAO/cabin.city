@@ -1,6 +1,6 @@
-import { Caption } from '../core/Typography'
+import { Caption } from '@/components/core/Typography'
 import styled from 'styled-components'
-import { AppLink } from '../core/AppLink'
+import { AppLink } from '@/components/core/AppLink'
 
 interface FieldValue {
   value: string

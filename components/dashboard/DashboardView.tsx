@@ -10,7 +10,7 @@ import { useActivityReactions } from '@/components/dashboard/useActivityReaction
 import { useTextActivity } from './useTextActivity'
 import styled from 'styled-components'
 import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
-import { DataContainer } from '../core/DataContainer'
+import { DataContainer } from '@/components/core/DataContainer'
 import { TextPost } from './TextPost'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Post } from '@/components/core/post/Post'
@@ -71,7 +71,7 @@ export const DashboardView = () => {
   if (!user) return null
 
   return (
-    <TwoColumnLayout withFooter title="Cabin Activity">
+    <TwoColumnLayout title="Cabin Activity">
       <ActivitiesContainer>
         <TextPost onPost={handleOnPost} />
         <ContentCard shape="notch">

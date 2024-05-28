@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Body1, HHero } from '../core/Typography'
+import { Body1, HHero } from '@/components/core/Typography'
 import { NeighborhoodsTop6List } from './NeighborhoodsTop6List'
 import { SectionContent } from './styles'
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { HHero, Subline1 } from '../core/Typography'
+import { HHero, Subline1 } from '@/components/core/Typography'
 import { CollapsibleItem } from './CollapsibleItem'
 import { useState } from 'react'
 

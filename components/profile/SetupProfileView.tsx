@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useProfile } from '../auth/useProfile'
-import { TitleCard } from '../core/TitleCard'
+import { TitleCard } from '@/components/core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { StepConfig, steps } from './setup-profile/step-configuration'
 import { ProfileSetupStateParams } from '@/utils/types/profile'

@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
-import { Button } from '../core/Button'
-import { InputTextArea } from '../core/InputTextArea'
-import { ContentCard } from '../core/ContentCard'
+import { Button } from '@/components/core/Button'
+import { InputTextArea } from '@/components/core/InputTextArea'
+import { ContentCard } from '@/components/core/ContentCard'
 import { MAX_POST_LENGTH } from './constants'
 
 interface TextPostInputProps {

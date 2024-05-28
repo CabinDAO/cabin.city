@@ -1,11 +1,11 @@
-import { ModalExplainer } from '../core/modals/ModalExplainer'
-import { Caption } from '../core/Typography'
+import { ModalExplainer } from '@/components/core/modals/ModalExplainer'
+import { Caption } from '@/components/core/Typography'
 import styled, { css } from 'styled-components'
-import Icon from '../core/Icon'
-import { Subline1 } from '../core/Typography'
+import Icon from '@/components/core/Icon'
+import { Subline1 } from '@/components/core/Typography'
 import { ExtendedOwnedNft } from './AvatarSetup'
 import { AvatarMode } from './AvatarModal'
-import { FileUpload } from '../core/FileUpload'
+import { FileUpload } from '@/components/core/FileUpload'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 
 interface AvatarModalContentProps {

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import { Body1, H4, Subline1 } from '../core/Typography'
-import IconButton from '../core/IconButton'
+import { Body1, H4, Subline1 } from '@/components/core/Typography'
+import IconButton from '@/components/core/IconButton'
 import analytics from '@/lib/googleAnalytics/analytics'
 
 interface CollapsibleItemProps {

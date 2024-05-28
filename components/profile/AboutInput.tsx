@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { InputTextArea } from '../core/InputTextArea'
+import { InputTextArea } from '@/components/core/InputTextArea'
 import { MAX_BIO_LENGTH } from './constants'
 import { isValidAddress, isValidBio } from './validations'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'

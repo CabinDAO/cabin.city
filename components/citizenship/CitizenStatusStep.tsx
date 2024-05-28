@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Icon, { IconName } from '../core/Icon'
-import { Body2, Subline1 } from '../core/Typography'
+import Icon, { IconName } from '@/components/core/Icon'
+import { Body2, Subline1 } from '@/components/core/Typography'
 
 interface CitizenshipStatusStepProps {
   step: number

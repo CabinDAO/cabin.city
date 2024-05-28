@@ -2,20 +2,12 @@ import React, { HTMLAttributes } from 'react'
 import { useDeviceSize } from '../hooks/useDeviceSize'
 import styled from 'styled-components'
 import { LaunchBanner } from '../citizenship/LaunchBanner'
-import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
-import { Navbar } from '../core/Navbar'
+import { MobileNavbar } from '../profile/MobileNavbar'
+import { Navbar } from '@/components/core/Navbar'
 import { MainContent, NavbarContainer } from './common.styles'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 export type LayoutVariant = 'default' | 'full'
-
-interface LayoutProps {
-  children: React.ReactNode
-  displayLaunchBanner?: boolean
-  hideNavbar?: boolean
-  className?: string
-  variant?: LayoutVariant
-}
 
 export const SingleColumnLayout = ({
   children,
@@ -23,7 +15,13 @@ export const SingleColumnLayout = ({
   hideNavbar,
   className,
   variant,
-}: LayoutProps) => {
+}: {
+  children: React.ReactNode
+  displayLaunchBanner?: boolean
+  hideNavbar?: boolean
+  className?: string
+  variant?: LayoutVariant
+}) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
@@ -36,7 +34,7 @@ export const SingleColumnLayout = ({
           {!hideNavbar && (
             <>
               {isMobile ? (
-                <MobileFloatingMenu />
+                <MobileNavbar />
               ) : (
                 <NavbarContainer variant={variant}>
                   <Navbar />

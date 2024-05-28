@@ -1,8 +1,8 @@
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import styled from 'styled-components'
 import { useProfile } from '../auth/useProfile'
-import { HorizontalDivider } from '../core/Divider'
-import { H3, H1, Caption, H4, Body2 } from '../core/Typography'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { H3, H1, Caption, H4, Body2 } from '@/components/core/Typography'
 import { NFTDataList } from './NFTDataList'
 
 export const CitizenshipNFTPreviewData = () => {

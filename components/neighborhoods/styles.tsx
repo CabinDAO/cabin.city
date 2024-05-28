@@ -1,7 +1,7 @@
 import { pxToRem } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { Button } from '../core/Button'
-import LoadingSpinner from '../core/LoadingSpinner'
+import { Button } from '@/components/core/Button'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 const IMAGE_HEIGHT_PX = 230.67
 const MOBILE_IMAGE_HEIGHT_PX = 127

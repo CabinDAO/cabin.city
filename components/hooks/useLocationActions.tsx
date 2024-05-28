@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useModal } from './useModal'
 import { useBackend } from '@/components/hooks/useBackend'
-import { DeleteConfirmationModal } from '../core/DeleteConfirmationModal'
+import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
 
 export const useLocationActions = (
   locationExternId: string,

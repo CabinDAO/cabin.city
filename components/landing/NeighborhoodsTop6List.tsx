@@ -7,7 +7,7 @@ import {
 } from '@/utils/types/location'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
-import { ListingCard } from '../core/ListingCard'
+import { ListingCard } from '@/components/core/ListingCard'
 import analytics from '@/lib/googleAnalytics/analytics'
 
 export const NeighborhoodsTop6List = () => {

@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { ContentCard } from '../core/ContentCard'
+import { ContentCard } from '@/components/core/ContentCard'
 import { TextPostInput } from './TextPostInput'
 import styled from 'styled-components'
-import { Avatar } from '../core/Avatar'
+import { Avatar } from '@/components/core/Avatar'
 import { useProfile } from '../auth/useProfile'
-import { Subline1 } from '../core/Typography'
+import { Subline1 } from '@/components/core/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
 
 interface TextPostProps {

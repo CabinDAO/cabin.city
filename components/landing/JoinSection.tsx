@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { Body1, fonts } from '../core/Typography'
+import { Body1, fonts } from '@/components/core/Typography'
 import { LandingSectionContent } from './styles'
 import Image from 'next/image'
-import { Button } from '../core/Button'
-import { AuthenticatedLink } from '../core/AuthenticatedLink'
+import { Button } from '@/components/core/Button'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const JoinSection = () => {

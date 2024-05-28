@@ -1,9 +1,9 @@
 import styled from 'styled-components'
-import { Body1 } from '../core/Typography'
-import { ModalContainer } from '../core/modals/ModalContainer'
-import { ModalContent } from '../core/modals/ModalContent'
-import { ModalTitle } from '../core/modals/ModalTitle'
-import Icon from '../core/Icon'
+import { Body1 } from '@/components/core/Typography'
+import { ModalContainer } from '@/components/core/modals/ModalContainer'
+import { ModalContent } from '@/components/core/modals/ModalContent'
+import { ModalTitle } from '@/components/core/modals/ModalTitle'
+import Icon from '@/components/core/Icon'
 
 export const WalletModal = () => {
   return (

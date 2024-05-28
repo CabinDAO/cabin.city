@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 // import theme from '@/styles/theme'
-import { Body2, H4 } from '../core/Typography'
+import { Body2, H4 } from '@/components/core/Typography'
 import { LandingSectionContent } from './styles'
 
 export const QuotesSection = () => {

@@ -1,23 +1,13 @@
 import styled from 'styled-components'
-import { IconName } from '../core/Icon'
-import { TitleCard } from '../core/TitleCard'
-import { Navbar } from '../core/Navbar'
+import { IconName } from '@/components/core/Icon'
+import { TitleCard } from '@/components/core/TitleCard'
+import { Navbar } from '@/components/core/Navbar'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import { MobileFloatingMenu } from '../profile/MobileFloatingMenu'
+import { MobileNavbar } from '../profile/MobileNavbar'
 import { FixedWidthMainContent, NavbarContainer } from './common.styles'
 import { H3 } from '@/components/core/Typography'
 import React from 'react'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
-
-interface LayoutProps {
-  children: React.ReactNode
-  title: string
-  icon?: IconName
-  iconHref?: string
-  onIconClick?: VoidFunction
-  subheader?: string
-  withFooter?: boolean
-}
 
 export const TwoColumnLayout = ({
   children,
@@ -26,14 +16,20 @@ export const TwoColumnLayout = ({
   iconHref,
   onIconClick,
   subheader,
-  withFooter,
-}: LayoutProps) => {
+}: {
+  children: React.ReactNode
+  title: string
+  icon?: IconName
+  iconHref?: string
+  onIconClick?: VoidFunction
+  subheader?: string
+}) => {
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
   return (
     <>
-      <Container withFooter={withFooter}>
+      <Container>
         <FixedWidthMainContent>
           <TitleCard
             title={title}
@@ -45,25 +41,22 @@ export const TwoColumnLayout = ({
           <ColumnsContainer>{children}</ColumnsContainer>
         </FixedWidthMainContent>
         {isMobile ? (
-          <MobileFloatingMenu />
+          <MobileNavbar />
         ) : (
           <NavbarContainer>
             <Navbar />
           </NavbarContainer>
         )}
       </Container>
-      {withFooter && <Footer />}
+      <Footer />
     </>
   )
 }
 
-const Container = styled.div<{
-  withFooter?: boolean
-}>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  min-height: ${({ withFooter }) =>
-    withFooter ? `calc(100vh - ${FOOTER_HEIGHT}px)` : '100vh'};
+  min-height: ${`calc(100vh - ${FOOTER_HEIGHT}px)`};
   min-width: 100%;
   justify-content: flex-start;
   align-items: flex-start;

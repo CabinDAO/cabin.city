@@ -1,5 +1,5 @@
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { TitleCard } from '../core/TitleCard'
+import { TitleCard } from '@/components/core/TitleCard'
 import { useProfile } from '../auth/useProfile'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
 import { CitizenNFTContainer } from './CitizenNFTContainer'

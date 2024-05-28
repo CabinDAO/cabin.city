@@ -56,9 +56,9 @@ export const Navbar = () => {
         </SingleMenuItem>
         <Divider />
         <NeighborhoodsItemGroup>
-          <MenuItemLink menuItem={'activity'} profileId={externId} />
-          <MenuItemLink menuItem={'members'} profileId={externId} />
           <MenuItemLink menuItem={'neighborhoods'} profileId={externId} />
+          <MenuItemLink menuItem={'members'} profileId={externId} />
+          <MenuItemLink menuItem={'activity'} profileId={externId} />
         </NeighborhoodsItemGroup>
         <Divider />
         <SingleMenuItem>
