@@ -5,7 +5,7 @@ import { Avatar } from '../../core/Avatar'
 import { ContentCard } from '../../core/ContentCard'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { H1, Subline2 } from '../../core/Typography'
-import useEns from '../@/components/hooks/useEns'
+import useEns from '@/components/hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
 
 import { citizenshipInfoFromStatus } from '@/utils/citizenship'
