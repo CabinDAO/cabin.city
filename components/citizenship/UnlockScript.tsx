@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
 import { useProfile } from '../auth/useProfile'
-import { useCitizenship } from '../hooks/useCitizenship'
+import { useCitizenship } from '@/components/hooks/useCitizenship'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { Paywall } from '@unlock-protocol/paywall'

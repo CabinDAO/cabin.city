@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Tooltip } from '@/components/core/Tooltip'
 import { truncate } from '@/utils/display-utils'
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useProfile } from '../auth/useProfile'
-import { useModal } from '../hooks/useModal'
+import { useModal } from '@/components/hooks/useModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileEditParamsType,

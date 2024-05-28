@@ -5,7 +5,7 @@ import { ProgressBar } from '@/components/core/ProgressBar'
 import { CitizenStatusStep } from './CitizenStatusStep'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { CitizenshipCTA } from './CitizenshipCTA'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface CitizenshipStatusBarProps {
   status: CitizenshipStatus | undefined | null

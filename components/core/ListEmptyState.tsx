@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import Icon, { IconName } from './Icon'
 import { Body2, H2 } from './Typography'
 

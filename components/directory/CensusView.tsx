@@ -1,7 +1,7 @@
 import { ChangeEvent, useMemo, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import {

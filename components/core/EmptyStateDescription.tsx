@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Body2, H2 } from './Typography'
 import Icon, { IconName } from './Icon'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 interface EmptyStateDescriptionProps {
   title: string

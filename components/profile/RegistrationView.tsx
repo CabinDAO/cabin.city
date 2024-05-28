@@ -10,7 +10,7 @@ import {
 } from '@/utils/types/profile'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { useExternalUser } from '../auth/useExternalUser'
-import { useModal } from '../hooks/useModal'
+import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
 import { MainContent } from '@/components/layouts/SingleColumnLayout'
 import { TitleCard } from '@/components/core/TitleCard'

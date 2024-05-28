@@ -1,5 +1,7 @@
 import styled from 'styled-components'
-import useDropdownLogic, { SelectOption } from '../hooks/useDropdownLogic'
+import useDropdownLogic, {
+  SelectOption,
+} from '@/components/hooks/useDropdownLogic'
 import { ChevronButton } from './ChevronButton'
 import ClickAway from './ClickAway'
 import Icon from './Icon'

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 const DESKTOP_WIDTH_PX = 1440
 const DESKTOP_HEIGHT_PX = 730

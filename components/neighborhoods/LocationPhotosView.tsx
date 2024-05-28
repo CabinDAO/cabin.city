@@ -1,6 +1,6 @@
 import { TempImage } from '@/lib/image'
-import { useModal } from '../hooks/useModal'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useModal } from '@/components/hooks/useModal'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { LocationFragment } from '@/utils/types/location'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ImageGallery } from '@/components/core/gallery/ImageGallery'

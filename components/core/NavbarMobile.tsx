@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useProfile } from '../auth/useProfile'
-import { useModal } from '../hooks/useModal'
+import { useModal } from '@/components/hooks/useModal'
 import useEns from '@/components/hooks/useEns'
 import {
   MenuItemOption,
@@ -20,7 +20,7 @@ import { Avatar } from '@/components/core/Avatar'
 import { Caption, Subline1 } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
-export const MobileNavbar = () => {
+export const NavbarMobile = () => {
   const { user } = useProfile()
   const { active } = useModal()
 

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import useDropdownLogic, { SelectOption } from '../hooks/useDropdownLogic'
+import useDropdownLogic, {
+  SelectOption,
+} from '@/components/hooks/useDropdownLogic'
 import styled from 'styled-components'
 import { ChevronButton } from './ChevronButton'
 import ClickAway from './ClickAway'

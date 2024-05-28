@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
-import { useGetUnlockNFT } from '../hooks/useGetUnlockNFT'
+import { useGetUnlockNFT } from '@/components/hooks/useGetUnlockNFT'
 import { useProfile } from '@/components/auth/useProfile'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import styled from 'styled-components'

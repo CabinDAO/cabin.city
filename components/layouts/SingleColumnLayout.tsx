@@ -1,8 +1,8 @@
 import React, { HTMLAttributes } from 'react'
-import { useDeviceSize } from '../hooks/useDeviceSize'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled, { css } from 'styled-components'
-import { LaunchBanner } from '../citizenship/LaunchBanner'
-import { MobileNavbar } from '../profile/MobileNavbar'
+import { LaunchBanner } from '@/components/citizenship/LaunchBanner'
+import { NavbarMobile } from '@/components/core/NavbarMobile'
 import { Navbar } from '@/components/core/Navbar'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
@@ -33,7 +33,7 @@ export const SingleColumnLayout = ({
           {!hideNavbar && (
             <>
               {isMobile ? (
-                <MobileNavbar />
+                <NavbarMobile />
               ) : (
                 <NavbarContainer variant={variant}>
                   <Navbar />
