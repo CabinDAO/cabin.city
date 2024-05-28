@@ -4,24 +4,20 @@ import { useBackend } from '@/components/hooks/useBackend'
 import {
   ActivityListFragment,
   ActivityListResponse,
-  ActivitySummaryResponse,
 } from '@/utils/types/activity'
-import { useActivityReactions } from '@/components/dashboard/useActivityReactions'
+import { useActivityReactions } from '@/components/activity/useActivityReactions'
 import { useTextActivity } from './useTextActivity'
 import styled from 'styled-components'
-import { TwoColumnLayout } from '../layouts/TwoColumnLayout'
-import { DataContainer } from '@/components/core/DataContainer'
 import { TextPost } from './TextPost'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Post } from '@/components/core/post/Post'
+import { TitleCard } from '@/components/core/TitleCard'
+import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
 
-export const DashboardView = () => {
-  const { useGet, useGetPaginated } = useBackend()
+export const ActivityView = () => {
+  const { useGetPaginated } = useBackend()
 
   const { user } = useProfile({ redirectTo: '/logout' })
-
-  const { data: summaryData } =
-    useGet<ActivitySummaryResponse>('ACTIVITY_SUMMARY')
 
   const {
     data,
@@ -44,26 +40,6 @@ export const DashboardView = () => {
 
   const baseDate = new Date()
 
-  const dashboardItems = [
-    {
-      name: 'Members',
-      value:
-        !summaryData || 'error' in summaryData ? 0 : summaryData?.profilesCount,
-    },
-    {
-      name: 'Token Holders',
-      value:
-        !summaryData || 'error' in summaryData
-          ? 0
-          : summaryData?.tokenHoldersCount,
-    },
-    {
-      name: 'Citizens',
-      value:
-        !summaryData || 'error' in summaryData ? 0 : summaryData?.citizensCount,
-    },
-  ]
-
   const handleOnPost = (text: string) => {
     handleCreateTextActivity(text).then()
   }
@@ -71,11 +47,12 @@ export const DashboardView = () => {
   if (!user) return null
 
   return (
-    <TwoColumnLayout title="Cabin Activity">
-      <ActivitiesContainer>
+    <SingleColumnLayout>
+      <TitleCard icon="citizen" title="Cabin Activity" />
+      <Container>
         <TextPost onPost={handleOnPost} />
         <ContentCard shape="notch">
-          <InnerContainer>
+          <Activities>
             <InfiniteScroll
               hasMore={!isLastPage}
               style={{ overflowX: 'hidden' }}
@@ -96,15 +73,14 @@ export const DashboardView = () => {
                 />
               ))}
             </InfiniteScroll>
-          </InnerContainer>
-        </ContentCard>{' '}
-      </ActivitiesContainer>
-      <DataContainer title="Dashboard" items={dashboardItems} />
-    </TwoColumnLayout>
+          </Activities>
+        </ContentCard>
+      </Container>
+    </SingleColumnLayout>
   )
 }
 
-const ActivitiesContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
@@ -113,9 +89,8 @@ const ActivitiesContainer = styled.div`
   width: 100%;
 `
 
-const InnerContainer = styled.div`
-  margin: 1.6rem;
-  margin-top: 3.2rem;
+const Activities = styled.div`
+  margin: 3.2rem 1.6rem 1.6rem;
   display: flex;
   flex-direction: column;
   width: 100%;

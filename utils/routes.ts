@@ -22,7 +22,6 @@ enum Routes {
   ACTIVITY_NEW = `/activity/new`,
   ACTIVITY_LIST = `/activity/list`,
   ACTIVITY_REACT = `/activity/react`,
-  ACTIVITY_SUMMARY = `/activity/summary`,
 
   EMAIL_SEND = '/email/send',
   NEWSLETTER_SUBSCRIBE = '/newsletter/subscribe',

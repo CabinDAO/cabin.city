@@ -27,6 +27,14 @@ export const getStaticProps = (async (context) => {
     lockContract.totalSupply(),
   ])
 
+  // const tokenHoldersCount = await prisma.wallet.count({
+  //   where: {
+  //     cabinTokenBalance: {
+  //       gt: 0,
+  //     },
+  //   },
+  // })
+
   return {
     props: {
       mapData: {

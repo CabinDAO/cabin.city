@@ -37,7 +37,7 @@ export const JoinSection = () => {
             height={43}
           />
           <h3>Become a Member</h3>
-          <AuthenticatedLink href="/dashboard">
+          <AuthenticatedLink href="/activity">
             <Button variant="secondary">Sign Up</Button>
           </AuthenticatedLink>
           <Body>

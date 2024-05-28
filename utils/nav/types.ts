@@ -43,7 +43,7 @@ export const MenuItemsAuthenticatedMap: Record<
   },
   activity: {
     icon: 'dashboard',
-    path: '/dashboard',
+    path: '/activity',
     displayText: 'Activity',
     iconSize: 2.5,
   },

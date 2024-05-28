@@ -12,7 +12,7 @@ import { MoreMenu } from '../MoreMenu'
 import { useProfile } from '@/components/auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
 import { DeleteConfirmationModal } from '../DeleteConfirmationModal'
-import { useTextActivity } from '@/components/dashboard/useTextActivity'
+import { useTextActivity } from '@/components/activity/useTextActivity'
 import { ActivityListFragment, ActivityType } from '@/utils/types/activity'
 
 type PostVariant = 'full' | 'compact'

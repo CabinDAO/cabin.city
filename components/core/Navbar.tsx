@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { notch } from '../layouts/common.styles'
+import { notch } from '../layouts/notch'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'

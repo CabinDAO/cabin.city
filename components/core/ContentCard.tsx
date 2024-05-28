@@ -1,7 +1,6 @@
-import styled, { css } from 'styled-components'
-import { notch, NotchPosition } from '../layouts/common.styles'
-import { NotchOutline } from './NotchOutline'
 import React from 'react'
+import styled, { css } from 'styled-components'
+import { notch, NotchPosition, NotchOutline } from '@/components/layouts/notch'
 
 type ContainerShape = 'default' | 'notch' | 'curve' | 'notch-all'
 type ContainerFillType = 'outline' | 'soft' | 'hard'

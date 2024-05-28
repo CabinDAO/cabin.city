@@ -29,7 +29,7 @@ export const TopLogoSection = () => {
                 '2px 2px 4px rgba(0, 0, 0, 1), 4px 4px 8px rgba(0, 0, 0, 0.8), 6px 6px 12px rgba(0, 0, 0, 0.7), 8px 8px 16px rgba(0, 0, 0, 0.5)',
             }}
           >
-            <AuthenticatedLink href="/dashboard">
+            <AuthenticatedLink href="/city-directory">
               <Button variant={'link-inverted'}>Log in &bull; Sign up</Button>
             </AuthenticatedLink>
           </span>

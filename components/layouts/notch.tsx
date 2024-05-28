@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components'
-import { HTMLAttributes } from 'react'
-import { LayoutVariant } from '@/components/layouts/SingleColumnLayout'
+import { ColorName } from '@/styles/theme'
 
 export type NotchPosition =
   | 'top-left'
@@ -8,59 +7,6 @@ export type NotchPosition =
   | 'bottom-left'
   | 'bottom-right'
   | 'all'
-
-interface MainContentProps extends HTMLAttributes<HTMLElement> {
-  variant?: LayoutVariant
-}
-
-export const MainContent = styled.main<MainContentProps>`
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-  justify-content: center;
-  align-items: center;
-  gap: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
-  height: 100%;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: ${({ variant }) => (variant === 'full' ? '100%' : '84rem')};
-    align-self: flex-start;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    align-self: center;
-  }
-`
-
-export const FixedWidthMainContent = styled(MainContent)`
-  width: 100%;
-  overflow-y: hidden;
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 84rem;
-  }
-`
-
-export const NavbarContainer = styled.div<MainContentProps>`
-  ${({ theme }) => theme.bp.md} {
-    display: flex;
-
-    ${({ variant }) =>
-      variant === 'full' &&
-      css`
-        position: fixed;
-        top: 4rem;
-        left: 2.4rem;
-      `}
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    position: fixed;
-    top: 4rem;
-    left: 4rem;
-  }
-`
 
 // Applies a square notch to the top left corner of the element
 // 400% is used to ensure the parent element has some space to overflow - the extra space does not affect the elements around it
@@ -131,3 +77,57 @@ export const notch = (size = 1.6, position: NotchPosition = 'top-left') => {
       return ''
   }
 }
+
+interface NotchOutlineProps {
+  notchSize: number
+  notchPosition?: NotchPosition
+  color?: ColorName
+}
+
+export const NotchOutline = ({
+  notchSize,
+  notchPosition = 'top-left',
+}: NotchOutlineProps) => {
+  return <Container notchSize={notchSize} notchPosition={notchPosition} />
+}
+
+const Container = styled.div<NotchOutlineProps>`
+  position: absolute;
+  --calculated-color: var(
+    --border-color,
+    ${({ theme, color }) => theme.colors[color ?? 'black']}
+  );
+  width: ${(props) => props.notchSize}rem;
+  height: ${(props) => props.notchSize}rem;
+  background-color: var(--calculated-color);
+  border: solid 1px var(--calculated-color);
+  ${({ notchPosition }) => {
+    switch (notchPosition) {
+      case 'top-left':
+        return css`
+          top: 0;
+          left: 0;
+        `
+      case 'top-right':
+        return css`
+          top: 0;
+          right: 0;
+        `
+      case 'bottom-left':
+        return css`
+          bottom: 0;
+          left: 0;
+        `
+      case 'bottom-right':
+        return css`
+          bottom: 0;
+          right: 0;
+        `
+      default:
+        return css`
+          top: 0;
+          left: 0;
+        `
+    }
+  }}
+`

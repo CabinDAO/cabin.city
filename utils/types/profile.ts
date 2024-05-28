@@ -259,6 +259,13 @@ export type ProfileEditResponse =
     }
   | APIError
 
+export const ProfileDIDParams = z
+  .object({
+    did: z.string(),
+  })
+  .strict()
+export type ProfileDIDParamsType = z.infer<typeof ProfileDIDParams>
+
 export type ProfileDIDResponse =
   | {
       externId: string | null

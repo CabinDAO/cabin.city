@@ -16,7 +16,7 @@ interface CitzenshipProviderProps {
 }
 
 const allowCheckPages = [
-  '/dashboard',
+  '/activity',
   '/citizenship',
   '/profile',
   '/profile/[id]',

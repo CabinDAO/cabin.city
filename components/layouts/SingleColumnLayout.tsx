@@ -1,10 +1,9 @@
 import React, { HTMLAttributes } from 'react'
 import { useDeviceSize } from '../hooks/useDeviceSize'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { LaunchBanner } from '../citizenship/LaunchBanner'
 import { MobileNavbar } from '../profile/MobileNavbar'
 import { Navbar } from '@/components/core/Navbar'
-import { MainContent, NavbarContainer } from './common.styles'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 export type LayoutVariant = 'default' | 'full'
@@ -86,5 +85,49 @@ const Container = styled.div<ContainerProps>`
     gap: 2.4rem;
     padding: ${({ variant }) => (variant === 'full' ? '0' : '4rem')};
     flex-direction: column;
+  }
+`
+
+interface MainContentProps extends HTMLAttributes<HTMLElement> {
+  variant?: LayoutVariant
+}
+
+export const MainContent = styled.main<MainContentProps>`
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
+  align-items: center;
+  gap: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
+  height: 100%;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: ${({ variant }) => (variant === 'full' ? '100%' : '84rem')};
+    align-self: flex-start;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    align-self: center;
+  }
+`
+
+const NavbarContainer = styled.div<MainContentProps>`
+  ${({ theme }) => theme.bp.md} {
+    display: flex;
+
+    ${({ variant }) =>
+      variant === 'full' &&
+      css`
+        position: fixed;
+        top: 4rem;
+        left: 2.4rem;
+      `}
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    position: fixed;
+    top: 4rem;
+    left: 4rem;
   }
 `

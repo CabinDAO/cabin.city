@@ -106,14 +106,6 @@ export type ActivityDeleteResponse =
     }
   | APIError
 
-export type ActivitySummaryResponse =
-  | {
-      profilesCount: number
-      tokenHoldersCount: number
-      citizensCount: number
-    }
-  | APIError
-
 // must match ActivityQueryInclude below
 export type ActivityWithRelations = Prisma.ActivityGetPayload<{
   include: {
