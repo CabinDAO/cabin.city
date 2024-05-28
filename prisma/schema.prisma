@@ -1,8 +1,8 @@
 generator client {
-  provider = "prisma-client-js"
-  // output   = "./generated/client" // if you do this, replace imports of '@prisma/client' with './prisma/generated/client'
-  // previewFeatures = ["relationJoins"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
   // previewFeatures = ["postgresqlExtensions"]
+  // output   = "./generated/client" // if you do this, replace imports of '@prisma/client' with './prisma/generated/client'
 }
 
 // npm i prisma-zod-generator
