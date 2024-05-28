@@ -62,6 +62,7 @@ const Container = styled.div`
   align-items: flex-start;
   gap: 4.8rem;
   padding: 1.6rem;
+  padding-left: calc(100vw - 100%);
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row-reverse;

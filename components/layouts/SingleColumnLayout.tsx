@@ -57,6 +57,7 @@ const OuterContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
+  padding-left: calc(100vw - 100%);
 `
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
