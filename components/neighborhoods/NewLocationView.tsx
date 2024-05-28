@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useModal } from '../hooks/useModal'
 import { useProfile } from '../auth/useProfile'
@@ -9,16 +10,14 @@ import { CitizenshipStatus } from '@/utils/types/profile'
 import { EmailType, NewLocationPayload } from '@/lib/mail/types'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
-import { Body2, H3, Overline } from '../core/Typography'
+import { padding } from '@/styles/theme'
+import { Body1, H2 } from '../core/Typography'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
 import { ActionBar } from '../core/ActionBar'
 import { TitleCard } from '../core/TitleCard'
 import { ErrorModal } from '../ErrorModal'
 import { ContentCard } from '../core/ContentCard'
-import { HorizontalDivider } from '../core/Divider'
-import { AppLink } from '../core/AppLink'
 import { Button } from '@/components/core/Button'
-import Link from 'next/link'
 import { EmptyState } from '@/components/core/EmptyState'
 
 export const NewLocationView = () => {
@@ -96,36 +95,49 @@ export const NewLocationView = () => {
     <SingleColumnLayout>
       <TitleCard title="New neighborhood" icon="close" iconHref="/" />
       <Container>
-        <H3>Getting Started</H3>
         <StyledContentCard shape="notch">
           <Content>
-            <JoiningTextContainer>
-              <H3>Joining the City Directory</H3>
-              <Body2>
-                Cabin's City Directory is a hub for connecting people and places
-                around the world. If you're interested in welcoming residents
-                focused on building better ways to live, create, build, and
-                steward the natural land, this is the place for you.
-              </Body2>
-              <Body2>
-                Properties compete to increase their rank on the directory
-                leaderboard. Improving your rank starts with creating an
-                attractive listing and providing a quality experience at your
-                location.
-              </Body2>
-              <Body2>
-                Only Cabin Citizens will be able to contact you through your
-                property listing page.
-              </Body2>
-            </JoiningTextContainer>
-            <HorizontalDivider />
-            <AppLink
-              external
-              href={EXTERNAL_LINKS.CITY_DIRECTORY}
-              iconSize={0.9}
-            >
-              <Overline>Learn More</Overline>
-            </AppLink>
+            <H2>Joining the City Directory</H2>
+            <Body1>
+              Cabin’s City Directory is a hub for connecting aligned people with
+              communities around the world.
+            </Body1>
+            <Body1>
+              Listing your neighborhood here is a great way to attract new
+              community members to your neighborhood.
+            </Body1>
+            <Body1>
+              To get started, fill out the form on the next page with details
+              about your neighborhood, including its location, a brief
+              description, and what makes it special. Be sure to include
+              pictures, any unique features, and ongoing events or projects that
+              define your community.
+            </Body1>
+            <Body1>
+              If you’d like support in starting and growing your neighborhood,
+              check out our{' '}
+              <Link
+                style={{ textDecoration: 'underline' }}
+                target="_blank"
+                rel="noopener nofollow noreferrer"
+                href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}
+              >
+                Neighborhood Accelerator Program
+              </Link>
+              .
+            </Body1>
+            <Body1>
+              If you need any help, feel free to email{' '}
+              <Link
+                style={{ textDecoration: 'underline' }}
+                target="_blank"
+                rel="noopener nofollow noreferrer"
+                href={'mailto:savannah@cabin.city'}
+              >
+                savannah@cabin.city
+              </Link>
+              .
+            </Body1>
           </Content>
           <ActionBar
             primaryButton={{
@@ -158,25 +170,15 @@ const StyledContentCard = styled(ContentCard)`
   gap: 2.4rem;
 `
 const Content = styled.div`
-  flex-direction: column;
-  display: flex;
-  gap: 2.4rem;
-  padding: 3.2rem 2.4rem;
-
-  @media ${({ theme }) => theme.bp.md} {
-    width: 55%;
-  }
-`
-
-const JoiningTextContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 2rem;
   align-items: flex-start;
   justify-content: center;
+  ${padding('sm')};
 
-  p {
-    opacity: 0.75;
+  ${({ theme }) => theme.bp.md} {
+    width: 80%;
   }
 `
