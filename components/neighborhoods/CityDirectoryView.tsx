@@ -5,9 +5,11 @@ import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '../core/TitleCard'
 import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
-import { NewListingButton } from './NewListingButton'
 import { Locations } from '@/components/neighborhoods/Locations'
 import { ChipFilter, ChipFilterBar } from '@/components/core/ChipFilterBar'
+import Icon from '@/components/core/Icon'
+import { Overline } from '@/components/core/Typography'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const CityDirectoryView = () => {
   const { user } = useProfile()
@@ -18,7 +20,14 @@ export const CityDirectoryView = () => {
       <TitleCard
         title="City Directory"
         icon="map-fold"
-        end={canCreateListings(user) ? <NewListingButton /> : null}
+        end={
+          canCreateListings(user) ? (
+            <NewListingButton href="/location/new">
+              <Icon name="plus" size={1} />
+              <Overline>List Your Neighborhood</Overline>
+            </NewListingButton>
+          ) : null
+        }
       />
       <Content>
         <ChipFilterBar>
@@ -49,4 +58,17 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+`
+
+const NewListingButton = styled(AuthenticatedLink)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+
+  ${Overline} {
+    margin: 0;
+    line-height: 1;
+  }
 `

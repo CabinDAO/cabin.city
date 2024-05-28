@@ -47,5 +47,6 @@ export function canViewCensus(user: profile | null | undefined): boolean {
 export function canCreateListings(
   user: profileWithCitizenshipStatus | null | undefined
 ): boolean {
-  return user?.citizenshipStatus === CitizenshipStatus.Verified
+  return !!user
+  // return user?.citizenshipStatus === CitizenshipStatus.Verified
 }
