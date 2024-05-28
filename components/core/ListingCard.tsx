@@ -122,7 +122,7 @@ const ListingTypeTag = (props: ListingCardProps) => {
 
 const EmptyImageContainer = styled.div`
   display: flex;
-  position: absolute;
+  min-height: 20rem;
   justify-content: center;
   align-items: center;
   width: 100%;
