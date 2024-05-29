@@ -4,7 +4,7 @@ import { LocationType } from '@/utils/types/location'
 import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { Locations } from '@/components/neighborhoods/Locations'
 import { ChipFilter, ChipFilterBar } from '@/components/core/ChipFilterBar'
 import Icon from '@/components/core/Icon'
@@ -16,7 +16,7 @@ export const CityDirectoryView = () => {
   const [type, setType] = useState<LocationType | undefined>(undefined)
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard
         title="City Directory"
         icon="map-fold"
@@ -50,7 +50,7 @@ export const CityDirectoryView = () => {
 
         <Locations type={type} />
       </Content>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

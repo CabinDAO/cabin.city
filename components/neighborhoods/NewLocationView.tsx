@@ -12,7 +12,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Body1, H2 } from '@/components/core/Typography'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { ActionBar } from '@/components/core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ErrorModal } from '../ErrorModal'
@@ -73,7 +73,7 @@ export const NewLocationView = () => {
 
   if (!canCreateListings) {
     return (
-      <SingleColumnLayout>
+      <BaseLayout>
         <TitleCard title="New neighborhood" icon="close" iconHref="/" />
         <div style={{ width: '100%' }}>
           <EmptyState
@@ -87,12 +87,12 @@ export const NewLocationView = () => {
             )}
           />
         </div>
-      </SingleColumnLayout>
+      </BaseLayout>
     )
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard title="New neighborhood" icon="close" iconHref="/" />
       <Container>
         <StyledContentCard shape="notch">
@@ -151,7 +151,7 @@ export const NewLocationView = () => {
           />
         </StyledContentCard>
       </Container>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

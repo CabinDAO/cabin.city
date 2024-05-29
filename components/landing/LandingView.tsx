@@ -1,7 +1,7 @@
 import { MapData } from '@/components/landing/MapSectionDynamic'
 import styled from 'styled-components'
 import headerBg from './header.jpg'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { TestimonialSection } from './TestimonialSection'
 import { HeroSection } from './HeroSection'
@@ -18,7 +18,7 @@ import { SubscribeSection } from '@/components/landing/SubscribeSection'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
-    <StyledLayout variant="full">
+    <BaseLayout variant="full">
       <LandingSection
         fullWidth
         noVertPadding
@@ -89,13 +89,9 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
           width={84}
         />
       </LandingSection>
-    </StyledLayout>
+    </BaseLayout>
   )
 }
-
-const StyledLayout = styled(SingleColumnLayout)`
-  margin-bottom: 0rem;
-`
 
 const OpaqueDiv = styled.div`
   display: flex;

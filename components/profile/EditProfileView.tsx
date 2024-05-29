@@ -12,7 +12,7 @@ import { validateProfileInput } from './validations'
 import { EditProfileForm } from './EditProfileForm'
 import { ContentCard } from '@/components/core/ContentCard'
 import { TitleCard } from '@/components/core/TitleCard'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { ErrorModal } from '../ErrorModal'
 import { ActionBar } from '@/components/core/ActionBar'
 
@@ -70,7 +70,7 @@ export const EditProfileView = () => {
   }
 
   return (
-    <StyledLayout>
+    <BaseLayout>
       <TitleCard
         title="Edit profile"
         icon="close"
@@ -95,17 +95,9 @@ export const EditProfileView = () => {
           />
         </Content>
       </ContentCard>
-    </StyledLayout>
+    </BaseLayout>
   )
 }
-
-const StyledLayout = styled(SingleColumnLayout)`
-  padding-bottom: 11.5rem;
-
-  ${({ theme }) => theme.bp.md} {
-    padding-bottom: 17rem;
-  }
-`
 
 const Content = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
 import Error from 'next/error'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { ProfileContent } from './view-profile/ProfileContent'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
@@ -22,8 +22,8 @@ export const ProfileView = ({ externId }: { externId: string }) => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <ProfileContent profile={profile} refetchProfile={refetchProfile} />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }

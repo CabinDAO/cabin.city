@@ -8,7 +8,7 @@ import { padding } from '@/styles/theme'
 import { Body1, H2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Button } from '@/components/core/Button'
 import { usePrivy } from '@privy-io/react-auth'
@@ -98,7 +98,7 @@ const CheckoutConfirmPageView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard icon="citizen" title="Checkout" />
       <Outline shape="notch" notchSize={1.6}>
         <Progress
@@ -107,7 +107,7 @@ const CheckoutConfirmPageView = () => {
           firstTime={firstTime}
         />
       </Outline>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

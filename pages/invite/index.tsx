@@ -3,7 +3,7 @@ import { useWindowSize } from 'react-use'
 import { QRCodeSVG } from 'qrcode.react'
 import { CitizenshipStatus, MeFragment } from '@/utils/types/profile'
 import { useProfile } from '@/components/auth/useProfile'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Body1, H1, H3 } from '@/components/core/Typography'
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ export default function InvitePage() {
 
   return (
     <>
-      <SingleColumnLayout>
+      <BaseLayout>
         <TitleCard title="Invite Your Friends" icon="citizen" />
         <Content>
           {isUserLoading ? (
@@ -31,7 +31,7 @@ export default function InvitePage() {
             <InviteContent user={user} />
           )}
         </Content>
-      </SingleColumnLayout>
+      </BaseLayout>
     </>
   )
 }

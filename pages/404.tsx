@@ -1,11 +1,11 @@
 import { Button } from '@/components/core/Button'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { EmptyState } from '@/components/core/EmptyState'
 import Link from 'next/link'
 
 export default function Home() {
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <EmptyState
         icon="mountain"
         title="404 - Oops, page not found"
@@ -13,7 +13,7 @@ export default function Home() {
         href="/"
         customCta={CustomCTA}
       />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

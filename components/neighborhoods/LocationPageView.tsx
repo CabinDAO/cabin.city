@@ -4,7 +4,7 @@ import { useBackend } from '@/components/hooks/useBackend'
 import { LocationGetResponse } from '@/utils/types/location'
 import { useProfile } from '@/components/auth/useProfile'
 import { LocationView } from '@/components/neighborhoods/LocationView'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 
 export const LocationPageView = () => {
   const router = useRouter()
@@ -29,8 +29,8 @@ export const LocationPageView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <LocationView location={location} />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }

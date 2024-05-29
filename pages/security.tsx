@@ -1,4 +1,4 @@
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
@@ -39,7 +39,7 @@ const DebugPage = () => {
   // })
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard icon="info" title="How do I report a security issue?" />
       <DebugContent>
         <Body1 style={{ marginBottom: '2rem' }}>
@@ -57,7 +57,7 @@ const DebugPage = () => {
           provided and severity.
         </Body1>
       </DebugContent>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

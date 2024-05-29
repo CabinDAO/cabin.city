@@ -7,7 +7,7 @@ import { canEditLocation } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationEditForm } from '@/components/neighborhoods/LocationEditForm'
 
 export default EditLocationView
@@ -33,7 +33,7 @@ function EditLocationView() {
   }
 
   return (
-    <StyledLayout>
+    <BaseLayout>
       <TitleCard
         title={`Edit Neighborhood`}
         icon="close"
@@ -57,17 +57,9 @@ function EditLocationView() {
           }}
         />
       </Contents>
-    </StyledLayout>
+    </BaseLayout>
   )
 }
-
-const StyledLayout = styled(SingleColumnLayout)`
-  padding-bottom: 20vh;
-
-  ${({ theme }) => theme.bp.md} {
-    padding-bottom: 0;
-  }
-`
 
 const Contents = styled(ContentCard)`
   margin-top: 3.2rem;

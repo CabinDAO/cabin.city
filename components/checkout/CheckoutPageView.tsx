@@ -3,7 +3,7 @@ import { CartFragment } from '@/utils/types/cart'
 import styled from 'styled-components'
 import { Body1, H2 } from '@/components/core/Typography'
 import theme, { padding } from '@/styles/theme'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { ContentCard } from '@/components/core/ContentCard'
 import { PaymentForm } from '@/components/checkout/PaymentForm'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -11,7 +11,7 @@ import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 
 const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard icon="citizen" title="Checkout" />
       <Content shape="notch" notchSize={1.6}>
         <H2>Cart</H2>
@@ -46,7 +46,7 @@ const CheckoutPageView = ({ cart }: { cart: CartFragment }) => {
           <PaymentForm cart={cart} />
         </FormContainer>
       </Content>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

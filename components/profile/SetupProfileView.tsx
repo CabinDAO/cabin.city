@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { TitleCard } from '@/components/core/TitleCard'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { StepConfig, steps } from './setup-profile/step-configuration'
 import { ProfileSetupStateParams } from '@/utils/types/profile'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -46,7 +46,7 @@ export const SetupProfileView = ({}) => {
   const CurrentComponent = currentStep.component
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard
         title="Profile setup"
         icon="close"
@@ -57,6 +57,6 @@ export const SetupProfileView = ({}) => {
         onNext={handleNext}
         onBack={handleBack}
       />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }

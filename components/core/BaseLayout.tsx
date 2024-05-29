@@ -8,16 +8,14 @@ import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
 type LayoutVariant = 'default' | 'full'
 
-export const SingleColumnLayout = ({
+export const BaseLayout = ({
   children,
   displayLaunchBanner,
-  hideNavbar,
   className,
   variant = 'default',
 }: {
   children: React.ReactNode
   displayLaunchBanner?: boolean
-  hideNavbar?: boolean
   className?: string
   variant?: LayoutVariant
 }) => {
@@ -27,20 +25,18 @@ export const SingleColumnLayout = ({
   return (
     <OuterContainer className={className}>
       {displayLaunchBanner && <LaunchBanner />}
-      <Container variant={variant}>
-        <MainContent variant={variant}>{children}</MainContent>
-        {!hideNavbar && (
-          <>
-            {isMobile ? (
-              <NavbarMobile />
-            ) : (
-              <NavbarContainer variant={variant}>
-                <Navbar />
-              </NavbarContainer>
-            )}
-          </>
-        )}
-      </Container>
+      <ScrollPadFix variant={variant}>
+        <Container variant={variant}>
+          {isMobile ? (
+            <NavbarMobile />
+          ) : (
+            <NavbarContainer variant={variant}>
+              <Navbar />
+            </NavbarContainer>
+          )}
+          <MainContent variant={variant}>{children}</MainContent>
+        </Container>
+      </ScrollPadFix>
       <Footer />
     </OuterContainer>
   )
@@ -60,33 +56,47 @@ const OuterContainer = styled.div`
   position: relative;
 `
 
+const ScrollPadFix = styled.div<withVariant>`
+  width: 100%;
+  ${({ variant }) =>
+    variant !== 'full' &&
+    css`
+      padding-left: calc(100vw - 100%);
+    `};
+`
+
 const Container = styled.div<withVariant>`
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
   justify-content: flex-start;
-  align-items: center;
-  padding: ${({ variant }) => (variant === 'full' ? '0' : '1.6rem')};
-  ${({ variant }) => variant !== 'full' && `padding-left: calc(100vw - 100%);`};
+  align-items: flex-start;
+
+  ${({ variant }) =>
+    variant !== 'full' &&
+    css`
+      padding: 1.6rem 1.6rem 10rem;
+    `};
 
   ${({ theme }) => theme.bp.md} {
-    flex-direction: ${({ variant }) =>
-      variant === 'full' ? 'column' : 'row-reverse'};
-    align-items: flex-start;
-    padding: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
-    ${({ variant }) =>
-      variant !== 'full' && `padding-left: calc(100vw - 100%);`};
+    flex-direction: row;
     gap: 4rem;
-    margin-bottom: 0;
+    ${({ variant }) =>
+      variant !== 'full' &&
+      css`
+        padding: 2.4rem 2.4rem 15rem;
+      `};
   }
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: column;
     gap: 2.4rem;
-    padding: ${({ variant }) => (variant === 'full' ? '0' : '4rem')};
     ${({ variant }) =>
-      variant !== 'full' && `padding-left: calc(100vw - 100%);`};
+      variant !== 'full' &&
+      css`
+        padding: 4rem 4rem 20rem;
+      `};
   }
 `
 
@@ -111,21 +121,19 @@ export const MainContent = styled.main<withVariant>`
 `
 
 const NavbarContainer = styled.div<withVariant>`
-  ${({ theme }) => theme.bp.md} {
-    display: flex;
+  display: flex;
 
-    ${({ variant }) =>
-      variant === 'full' &&
-      css`
-        position: fixed;
-        top: 4rem;
-        left: 2.4rem;
-      `}
-  }
+  ${({ variant }) =>
+    variant === 'full' &&
+    css`
+      position: fixed;
+      top: 4rem;
+      left: 2.4rem;
+    `}
 
   ${({ theme }) => theme.bp.lg} {
     position: fixed;
     top: 4rem;
-    left: 4rem;
+    left: 2.4rem;
   }
 `

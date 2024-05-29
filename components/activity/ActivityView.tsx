@@ -12,7 +12,7 @@ import { TextPost } from './TextPost'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Post } from '@/components/core/post/Post'
 import { TitleCard } from '@/components/core/TitleCard'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 
 export const ActivityView = () => {
   const { useGetPaginated } = useBackend()
@@ -47,7 +47,7 @@ export const ActivityView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard icon="citizen" title="Cabin Activity" />
       <Container>
         <TextPost onPost={handleOnPost} />
@@ -76,7 +76,7 @@ export const ActivityView = () => {
           </Activities>
         </ContentCard>
       </Container>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

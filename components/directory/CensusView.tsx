@@ -20,7 +20,7 @@ import { DIRECTORY_SORT_FIELDS } from './directory-sort'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { Sort, SortOption } from '@/components/core/Sort'
 import { Filter, FilterContainer, FilterGroup } from '@/components/core/Filter'
 import { FilterCount } from '@/components/core/FilterCount'
@@ -138,7 +138,7 @@ export const CensusView = () => {
   if (!user) return null
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
       <FilterContainer>
         <SearchContainer>
@@ -221,7 +221,7 @@ export const CensusView = () => {
           )}
         </InfiniteScroll>
       </List>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

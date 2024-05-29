@@ -10,7 +10,7 @@ export type NotchPosition =
 
 // Applies a square notch to the top left corner of the element
 // 400% is used to ensure the parent element has some space to overflow - the extra space does not affect the elements around it
-export const notch = (size = 1.6, position: NotchPosition = 'top-left') => {
+export function notch(size = 1.6, position: NotchPosition = 'top-left') {
   switch (position) {
     case 'top-left':
       return css`

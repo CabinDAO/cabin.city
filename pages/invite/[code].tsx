@@ -1,7 +1,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { prisma } from '@/lib/prisma'
 import React, { useState } from 'react'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import {
   Body1,
@@ -25,7 +25,7 @@ export default function Page({
   const [hideBenefits, setHideBenefits] = useState(false)
   return (
     <>
-      <SingleColumnLayout>
+      <BaseLayout>
         <TitleCard title="Citizenship" icon="citizen" />
         <StyledContentCard shape={'notch'} notchSize={1.6}>
           {inviter ? (
@@ -62,7 +62,7 @@ export default function Page({
             </ErrorMessage>
           )}
         </StyledContentCard>
-      </SingleColumnLayout>
+      </BaseLayout>
     </>
   )
 }

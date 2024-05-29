@@ -7,7 +7,7 @@ import { EventEditParamsType, EventGetResponse } from '@/utils/types/event'
 import { REQUIRED_FIELDS_TOAST_ERROR } from '@/utils/validate'
 import { validateEventInput } from '../neighborhoods/validations'
 import styled from 'styled-components'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { DiscardChangesModal } from '@/components/core/DiscardChangesModal'
 import { ActionBar } from '@/components/core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -93,7 +93,7 @@ export const EditEventPageView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard title="Edit Event" icon="close" onIconClick={handleBack} />
       <StyledContentCard shape="notch">
         <Contents>
@@ -122,7 +122,7 @@ export const EditEventPageView = () => {
           }}
         />
       </StyledContentCard>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 

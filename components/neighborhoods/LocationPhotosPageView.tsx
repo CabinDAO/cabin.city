@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationGetResponse } from '@/utils/types/location'
 import { LocationPhotosView } from '@/components/neighborhoods/LocationPhotosView'
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 
 export const LocationPhotosPageView = () => {
   const router = useRouter()
@@ -27,8 +27,8 @@ export const LocationPhotosPageView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <LocationPhotosView location={location} />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }

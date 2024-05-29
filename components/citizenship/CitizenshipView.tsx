@@ -1,4 +1,4 @@
-import { SingleColumnLayout } from '../layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { useProfile } from '../auth/useProfile'
 import { CitizenshipStatusBar } from './CitizenshipStatusBar'
@@ -87,7 +87,7 @@ export const CitizenshipView = () => {
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard
         title="Citizenship"
         icon="back-arrow"
@@ -106,6 +106,6 @@ export const CitizenshipView = () => {
         />
       )}
       <CitizenNFTContainer />
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }

@@ -4,7 +4,7 @@ import Error from 'next/error'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { profileFromApiCookies } from '@/utils/api/withAuth'
-import { SingleColumnLayout } from '@/components/layouts/SingleColumnLayout'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Body1 } from '@/components/core/Typography'
 
@@ -16,12 +16,12 @@ export default function Page({
   }
 
   return (
-    <SingleColumnLayout>
+    <BaseLayout>
       <TitleCard title="Admin" icon="peace-sign" />
       <StyledContentCard>
         <Body1>This page is for admin purposes only.</Body1>
       </StyledContentCard>
-    </SingleColumnLayout>
+    </BaseLayout>
   )
 }
 
