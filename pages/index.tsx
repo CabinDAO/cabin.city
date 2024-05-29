@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
-import { MapData } from '@/components/landing/MapSectionDynamic'
+import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
 
 export default function Home({

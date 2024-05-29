@@ -122,6 +122,7 @@ export const MainContent = styled.main<withVariant>`
 
 const NavbarContainer = styled.div<withVariant>`
   display: flex;
+  z-index: 5;
 
   ${({ variant }) =>
     variant === 'full' &&

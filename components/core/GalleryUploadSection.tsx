@@ -2,7 +2,7 @@ import { FileUploadButton } from '@/components/core/FileUploadButton'
 import { Body2, Caption, H3 } from '@/components/core/Typography'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
-import { BannerPreview } from '../neighborhoods/edit-location/BannerPreview'
+import { BannerImagePreview } from '../neighborhoods/edit-location/BannerImagePreview'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { ImagesPreview } from '../neighborhoods/edit-location/ImagesPreview'
 
@@ -60,7 +60,7 @@ export const GalleryUploadSection = ({
         </UploadFormContainer>
       </UploadContainer>
       {isBanner ? (
-        <BannerPreview uploading={uploading} imageUrl={bannerImageUrl} />
+        <BannerImagePreview uploading={uploading} imageUrl={bannerImageUrl} />
       ) : null}
       {(uploading || imageUrls?.length) && !isBanner ? (
         <ImagesPreview

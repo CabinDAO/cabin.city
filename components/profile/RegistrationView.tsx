@@ -100,7 +100,7 @@ export const RegistrationView = () => {
 
   return (
     <Container>
-      <MainContent>
+      <MainContent variant={'default'}>
         <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
         <ContentCard shape="notch">
           <RegistrationForm onSubmit={handleSubmit} />

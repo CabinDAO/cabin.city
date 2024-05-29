@@ -1,4 +1,3 @@
-import { MapData } from '@/components/landing/MapSectionDynamic'
 import styled from 'styled-components'
 import headerBg from './header.jpg'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -13,7 +12,7 @@ import { LearnMoreSection } from './LearnMoreSection'
 import { ValuesSection } from '@/components/landing/ValuesSection'
 import { SupperClubSection } from '@/components/landing/SupperClubSection'
 import { JourneySection } from '@/components/landing/JourneySection'
-import { MapSection } from '@/components/landing/MapSection'
+import { MapData, MapSection } from '@/components/landing/MapSection'
 import { SubscribeSection } from '@/components/landing/SubscribeSection'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
