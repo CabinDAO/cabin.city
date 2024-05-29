@@ -1,24 +1,24 @@
 import React from 'react'
-import styled from 'styled-components'
-import Icon from '@/components/core/Icon'
-import { H3, Subline2, hhStyles } from '@/components/core/Typography'
-import { AppLink } from '@/components/core/AppLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import analytics from '@/lib/googleAnalytics/analytics'
-import { H1, fonts } from '@/components/core/Typography'
-import { TextContent } from '@/components/landing/TextSection'
 import { useProfile } from '@/components/auth/useProfile'
 import { CitizenshipStatus } from '@/utils/types/profile'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import analytics from '@/lib/googleAnalytics/analytics'
+import styled from 'styled-components'
+import { H3, Subline2, hhStyles } from '@/components/core/Typography'
+import Icon from '@/components/core/Icon'
+import { AppLink } from '@/components/core/AppLink'
+import { H1, fonts } from '@/components/core/Typography'
+import { TextContent } from '@/components/landing/TextSection'
 
 export const FOOTER_HEIGHT = '265' // TODO: fix this huge hack
 
 export const Footer = () => {
   const { user } = useProfile()
   return (
-    <Container>
-      <LandingContent>
-        <FooterContainer>
-          <TextSections>
+    <BgAndOuterWrap>
+      <InnerWrap>
+        <Content>
+          <Links>
             <Section>
               <Header>Product</Header>
               <AppLink
@@ -86,7 +86,7 @@ export const Footer = () => {
                 <Name>Instagram</Name>
               </AppLink>
             </Section>
-          </TextSections>
+          </Links>
 
           <Section>
             <FooterLogo>
@@ -94,13 +94,13 @@ export const Footer = () => {
               <IconText>Cabin</IconText>
             </FooterLogo>
           </Section>
-        </FooterContainer>
-      </LandingContent>
-    </Container>
+        </Content>
+      </InnerWrap>
+    </BgAndOuterWrap>
   )
 }
 
-const Container = styled.div`
+const BgAndOuterWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -109,6 +109,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.colors.green800};
   width: 100%;
   gap: 2.4rem;
+  padding-left: calc(100vw - 100%);
 
   ${H1}, ${TextContent} {
     font-family: ${fonts.poppins};
@@ -121,7 +122,7 @@ const Container = styled.div`
   }
 `
 
-export const LandingContent = styled.div`
+export const InnerWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-self: flex-start;
@@ -142,7 +143,7 @@ export const LandingContent = styled.div`
   }
 `
 
-export const FooterContainer = styled.div`
+export const Content = styled.div`
   display: flex;
   width: 100%;
   gap: 4rem;
@@ -154,7 +155,7 @@ export const FooterContainer = styled.div`
   }
 `
 
-export const TextSections = styled.div`
+export const Links = styled.div`
   display: flex;
   gap: 4rem;
   flex-direction: column;

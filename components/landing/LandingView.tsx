@@ -40,7 +40,12 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       {/*</LandingSection>*/}
 
       <LandingSection fullWidth noVertPadding>
-        <MapSection data={mapData} />
+        <MapSection
+          data={mapData}
+          onMove={(t, b, l, r) => {
+            console.log(t, b, l, r)
+          }}
+        />
       </LandingSection>
 
       <LandingSection>

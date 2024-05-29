@@ -6,14 +6,14 @@ import { NavbarMobile } from '@/components/core/NavbarMobile'
 import { Navbar } from '@/components/core/Navbar'
 import { Footer, FOOTER_HEIGHT } from '@/components/navigation/Footer'
 
-export type LayoutVariant = 'default' | 'full'
+type LayoutVariant = 'default' | 'full'
 
 export const SingleColumnLayout = ({
   children,
   displayLaunchBanner,
   hideNavbar,
   className,
-  variant,
+  variant = 'default',
 }: {
   children: React.ReactNode
   displayLaunchBanner?: boolean
@@ -25,27 +25,29 @@ export const SingleColumnLayout = ({
   const isMobile = deviceSize === 'mobile'
 
   return (
-    <>
-      <OuterContainer className={className}>
-        {displayLaunchBanner && <LaunchBanner />}
-        <Container variant={variant}>
-          <MainContent variant={variant}>{children}</MainContent>
-          {!hideNavbar && (
-            <>
-              {isMobile ? (
-                <NavbarMobile />
-              ) : (
-                <NavbarContainer variant={variant}>
-                  <Navbar />
-                </NavbarContainer>
-              )}
-            </>
-          )}
-        </Container>
-      </OuterContainer>
+    <OuterContainer className={className}>
+      {displayLaunchBanner && <LaunchBanner />}
+      <Container variant={variant}>
+        <MainContent variant={variant}>{children}</MainContent>
+        {!hideNavbar && (
+          <>
+            {isMobile ? (
+              <NavbarMobile />
+            ) : (
+              <NavbarContainer variant={variant}>
+                <Navbar />
+              </NavbarContainer>
+            )}
+          </>
+        )}
+      </Container>
       <Footer />
-    </>
+    </OuterContainer>
   )
+}
+
+interface withVariant extends HTMLAttributes<HTMLDivElement> {
+  variant: LayoutVariant
 }
 
 const OuterContainer = styled.div`
@@ -56,14 +58,9 @@ const OuterContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  padding-left: calc(100vw - 100%);
 `
 
-interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: LayoutVariant
-}
-
-const Container = styled.div<ContainerProps>`
+const Container = styled.div<withVariant>`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -71,28 +68,29 @@ const Container = styled.div<ContainerProps>`
   justify-content: flex-start;
   align-items: center;
   padding: ${({ variant }) => (variant === 'full' ? '0' : '1.6rem')};
+  ${({ variant }) => variant !== 'full' && `padding-left: calc(100vw - 100%);`};
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: ${({ variant }) =>
       variant === 'full' ? 'column' : 'row-reverse'};
     align-items: flex-start;
     padding: ${({ variant }) => (variant === 'full' ? '0' : '2.4rem')};
+    ${({ variant }) =>
+      variant !== 'full' && `padding-left: calc(100vw - 100%);`};
     gap: 4rem;
     margin-bottom: 0;
   }
 
   ${({ theme }) => theme.bp.lg} {
+    flex-direction: column;
     gap: 2.4rem;
     padding: ${({ variant }) => (variant === 'full' ? '0' : '4rem')};
-    flex-direction: column;
+    ${({ variant }) =>
+      variant !== 'full' && `padding-left: calc(100vw - 100%);`};
   }
 `
 
-interface MainContentProps extends HTMLAttributes<HTMLElement> {
-  variant?: LayoutVariant
-}
-
-export const MainContent = styled.main<MainContentProps>`
+export const MainContent = styled.main<withVariant>`
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -112,7 +110,7 @@ export const MainContent = styled.main<MainContentProps>`
   }
 `
 
-const NavbarContainer = styled.div<MainContentProps>`
+const NavbarContainer = styled.div<withVariant>`
   ${({ theme }) => theme.bp.md} {
     display: flex;
 
