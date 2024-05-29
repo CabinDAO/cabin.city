@@ -28,8 +28,8 @@ export const MapDynamic = ({
 }) => {
   // const mapRef = useRef(null)
   const { width } = useWindowSize()
-  const { latitude, longitude, error } = useGeolocation()
-  console.log('latlng', latitude, longitude, error)
+  // const { latitude, longitude, error } = useGeolocation()
+  // console.log('latlng', latitude, longitude, error)
 
   L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling)
 
@@ -67,16 +67,16 @@ export const MapDynamic = ({
           </CircleMarker>
         ))}
 
-        {latitude && longitude && (
-          <CircleMarker
-            center={[latitude, longitude]}
-            radius={12}
-            color={theme.colors.yellow400}
-            fillColor={theme.colors.yellow100}
-          >
-            <Pin>You are here</Pin>
-          </CircleMarker>
-        )}
+        {/*{latitude && longitude && (*/}
+        {/*  <CircleMarker*/}
+        {/*    center={[latitude, longitude]}*/}
+        {/*    radius={12}*/}
+        {/*    color={theme.colors.yellow400}*/}
+        {/*    fillColor={theme.colors.yellow100}*/}
+        {/*  >*/}
+        {/*    <Pin>You are here</Pin>*/}
+        {/*  </CircleMarker>*/}
+        {/*)}*/}
       </MapContainer>
     </MapWrapper>
   )
