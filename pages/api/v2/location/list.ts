@@ -11,7 +11,6 @@ import {
   LocationListResponse,
   LocationMediaCategory,
   LocationQueryInclude,
-  LocationSort,
   LocationType,
   LocationWithRelations,
 } from '@/utils/types/location'
@@ -42,11 +41,10 @@ async function handler(
   const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
   const take = PAGE_SIZE
 
-  if (
-    params.sort == LocationSort.distAsc &&
-    (params.lat === undefined || params.lng === undefined)
-  ) {
-    res.status(400).send({ error: 'Missing lat/lng for distance sort' })
+  if ((params.lat === undefined) !== (params.lng === undefined)) {
+    res
+      .status(400)
+      .send({ error: 'One of lat/lng is provided but the other is missing' })
     return
   }
 
@@ -63,7 +61,7 @@ async function handler(
       steward: params.mineOnly ? { privyDID: maybeCurrentPrivyDID } : undefined,
     },
     include: LocationQueryInclude({
-      activeEventsOnly: params.activeEventsOnly === 'true',
+      countActiveEventsOnly: params.countActiveEventsOnly === 'true',
     }),
   }
 
@@ -93,48 +91,71 @@ const sortPrequery = async (
   offset: number,
   limit: number
 ) => {
-  const sort = params.sort || LocationSort.default
-
-  const sortByDist = sort === LocationSort.distAsc && params.lat && params.lng
-  const maxDistance = sortByDist ? params.maxDist || 100 : null
-  const distQuery = sortByDist
-    ? Prisma.sql`(6371 * 2 * ASIN(SQRT(
+  const calculateDistance = params.lat && params.lng
+  const distanceQuery = calculateDistance
+    ? Prisma.sql`COALESCE(6371 * 2 * ASIN(SQRT(
       POWER(SIN((radians(a.lat) - radians(${params.lat})) / 2), 2) +
       COS(radians(${params.lat})) * COS(radians(a.lat)) *
       POWER(SIN((radians(a.lng) - radians(${params.lng})) / 2), 2)
-    )))`
-    : Prisma.sql`0`
+    )), 999999)`
+    : Prisma.sql`999999`
 
-  const ids = await prisma.$queryRaw<{ id: number; distance_in_km: number }[]>`
-    SELECT l.id, ${distQuery} AS distance_in_km
-    FROM "Location" l
-    ${
-      sortByDist
-        ? Prisma.sql`INNER JOIN "Address" a ON l.id = a."locationId"`
-        : Prisma.empty
-    }
-    LEFT JOIN "Offer" o ON l.id = o."locationId"
-    LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
-    WHERE ${
-      params.locationType
-        ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
-        : Prisma.sql`1=1`
-    }
-    GROUP BY l.id, steward."privyDID"
-    ORDER BY ${
-      sort === LocationSort.default // current users locations go first, then neighborhoods, then order by num active events
-        ? Prisma.sql`steward."privyDID" = ${maybeCurrentPrivyDID} DESC, l.type = ${LocationType.Neighborhood}::"LocationType" DESC, COALESCE(SUM(CASE WHEN o."endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, `
-        : sortByDist
-        ? Prisma.sql`distance_in_km ASC,`
-        : Prisma.empty
-    } l.name ASC, l."createdAt" ASC
+  const bounds = params.latLngBounds
+    ? params.latLngBounds.split(',').map((s) => parseFloat(s))
+    : []
+
+  // NOTE: if we ever drop maxDist, we can drop the WITH clause and merge back down to a single SELECT
+
+  const sqlQuery = Prisma.sql`
+    WITH with_distance AS (
+      SELECT 
+        l.id as "id", l.type as "type", l.name as "name", l."createdAt" as "createdAt",
+        MAX(o."endDate") as "endDate", steward."privyDID" as "privyDID",
+        ${distanceQuery} AS "distanceInKM"
+      FROM "Location" l
+      LEFT JOIN "Address" a ON l.id = a."locationId"
+      LEFT JOIN "Offer" o ON l.id = o."locationId"
+      LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
+      WHERE 
+        ${
+          params.locationType
+            ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
+            : Prisma.sql`1=1`
+        }
+        AND
+        ${
+          bounds.length === 4
+            ? Prisma.sql`a.lat <= ${bounds[0]} AND a.lat >= ${bounds[1]} AND a.lng <= ${bounds[2]} AND a.lng >= ${bounds[3]}`
+            : Prisma.sql`1=1`
+        }
+      GROUP BY 
+        l.id, steward."privyDID", a.lat, a.lng
+    )
+    SELECT id
+    FROM with_distance
+    GROUP BY 
+      id, "distanceInKM", "privyDID", type, name, "createdAt", "endDate"
+    HAVING
+      ${
+        params.maxDist
+          ? Prisma.sql`"distanceInKM" <= ${params.maxDist}`
+          : Prisma.sql`1=1`
+      }
+    ORDER BY 
+      "distanceInKM" ASC, 
+      "privyDID" = ${maybeCurrentPrivyDID} DESC, 
+      type = ${LocationType.Neighborhood}::"LocationType" DESC, 
+      COALESCE(SUM(CASE WHEN "endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, 
+      name ASC, 
+      "createdAt" ASC
     LIMIT ${limit}
     OFFSET ${offset}
   `
 
-  return ids
-    .filter((row) => !maxDistance || row.distance_in_km <= maxDistance)
-    .reduce((ids: number[], row) => [...ids, row.id], [])
+  // console.log(formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values))
+  const ids = await prisma.$queryRaw<{ id: number }[]>(sqlQuery)
+
+  return ids.reduce((ids: number[], row) => [...ids, row.id], [])
 }
 
 export const locationToFragment = (

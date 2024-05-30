@@ -19,11 +19,6 @@ export enum LocationMediaCategory {
   Features = 'Features',
 }
 
-export enum LocationSort {
-  default = 'default',
-  distAsc = 'distAsc',
-}
-
 export const AddressFragment = z
   .object({
     lat: z.number().nullable(),
@@ -69,12 +64,12 @@ export type LocationFragment = {
 export const LocationListParams = z
   .object({
     locationType: z.nativeEnum(LocationType).optional(),
-    sort: z.nativeEnum(LocationSort).optional(),
-    lat: z.number().optional(),
-    lng: z.number().optional(),
-    maxDist: z.number().optional(),
-    mineOnly: z.union([z.literal('true'), z.literal('false')]).optional(),
-    activeEventsOnly: z
+    lat: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng
+    lng: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng
+    maxDist: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // filter by distance from lat/lng (km)
+    latLngBounds: z.string().optional(), // filter by bounds
+    mineOnly: z.union([z.literal('true'), z.literal('false')]).optional(), // filter by steward
+    countActiveEventsOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),
     page: z.coerce.number().optional(),
@@ -87,6 +82,15 @@ export type LocationListResponse =
       locations: LocationFragment[]
     } & Paginated)
   | APIError
+
+export const LocationGetParams = z
+  .object({
+    countActiveEventsOnly: z
+      .union([z.literal('true'), z.literal('false')])
+      .optional(),
+  })
+  .strict()
+export type LocationGetParamsType = z.infer<typeof LocationGetParams>
 
 export type LocationGetResponse =
   | {
@@ -160,7 +164,7 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
 // must match LocationWithRelations type above
 export const LocationQueryInclude = (
   params: {
-    activeEventsOnly?: boolean
+    countActiveEventsOnly?: boolean
   } = {}
 ) => {
   return {
@@ -187,7 +191,7 @@ export const LocationQueryInclude = (
     mediaItems: true,
     _count: {
       select: {
-        offers: params.activeEventsOnly
+        offers: params.countActiveEventsOnly
           ? { where: { endDate: { gte: new Date().toISOString() } } }
           : true,
       },

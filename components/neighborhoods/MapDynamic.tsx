@@ -14,17 +14,20 @@ import 'leaflet/dist/leaflet.css'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
+import { onMoveFn } from '@/components/neighborhoods/Map'
 
 export const MapDynamic = ({
+  height,
   locations,
   onMove,
 }: {
+  height: string
   locations: {
     label: string
     lat: number
     lng: number
   }[]
-  onMove?: (top: number, bottom: number, left: number, right: number) => void
+  onMove?: onMoveFn
 }) => {
   // const mapRef = useRef(null)
   const { width } = useWindowSize()
@@ -34,7 +37,7 @@ export const MapDynamic = ({
   L.Map.addInitHook('addHandler', 'gestureHandling', GestureHandling)
 
   return (
-    <MapWrapper>
+    <MapWrapper height={height}>
       <MapContainer
         // ref={mapRef}
         center={[20, -30]}
@@ -45,6 +48,13 @@ export const MapDynamic = ({
         scrollWheelZoom={false}
         dragging={true}
         style={{ width: '100%', height: '100%', zIndex: '0' }}
+        minZoom={1.5}
+        // worldCopyJump={true}
+        maxBounds={[
+          [90, -180],
+          [-90, 180],
+        ]}
+        maxBoundsViscosity={1}
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         gestureHandling={true}
@@ -82,41 +92,49 @@ export const MapDynamic = ({
   )
 }
 
-function lngClamp(degrees: number) {
-  return Math.abs(degrees) % 360 > 180
-    ? 360 - (Math.abs(degrees) % 360)
-    : degrees % 360
-}
+// function lngClamp(degrees: number) {
+//   const sign = -1 * (Math.floor(degrees / 180) % 2)
+//   return Math.abs(degrees) % 360 > 180
+//     ? sign * (360 - (degrees % 360))
+//     : degrees % 360
+// }
 
-const Hooks = ({
-  onMove,
-}: {
-  onMove?: (top: number, bottom: number, left: number, right: number) => void
-}) => {
+const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
   const map = useMap()
   useMapEvent('moveend', (e) => {
+    const center = map.getCenter()
     const bounds = map.getBounds()
-    const leftLng = lngClamp(bounds.getWest())
-    const rightLng = lngClamp(bounds.getEast())
 
     if (onMove) {
-      onMove(bounds.getNorth(), bounds.getSouth(), leftLng, rightLng)
+      onMove({
+        center: {
+          lat: center.lat,
+          lng: center.lng,
+        },
+        bounds: {
+          north: bounds.getNorth(),
+          south: bounds.getSouth(),
+          east: bounds.getEast(),
+          west: bounds.getWest(),
+        },
+        zoom: map.getZoom(),
+      })
     }
   })
   return null
 }
 
-const MapWrapper = styled.div`
+const MapWrapper = styled.div<{ height: string }>`
   // Important! Always set the container height explicitly
   width: 100%;
-  height: 80vh;
+  height: ${({ height }) => height};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  ${({ theme }) => theme.bp.md} {
-    height: 60vh;
+  .leaflet-container {
+    outline: 0 !important;
   }
 `
 

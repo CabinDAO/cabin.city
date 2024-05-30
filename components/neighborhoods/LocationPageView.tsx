@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useBackend } from '@/components/hooks/useBackend'
-import { LocationGetResponse } from '@/utils/types/location'
+import {
+  LocationGetParamsType,
+  LocationGetResponse,
+} from '@/utils/types/location'
 import { useProfile } from '@/components/auth/useProfile'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -13,7 +16,7 @@ export const LocationPageView = () => {
   const { useGet } = useBackend()
   const { data } = useGet<LocationGetResponse>(
     id ? ['LOCATION', { externId: `${id}` }] : null,
-    { activeEventsOnly: 'true' }
+    { countActiveEventsOnly: 'true' } satisfies LocationGetParamsType
   )
 
   const location = !data || 'error' in data ? null : data?.location

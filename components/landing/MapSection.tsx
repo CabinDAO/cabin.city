@@ -3,7 +3,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { formatValue } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { h1Styles } from '@/components/core/Typography'
-import { Map } from '@/components/neighborhoods/Map'
+import { Map, onMoveFn } from '@/components/neighborhoods/Map'
 
 export type MapData = {
   members: number
@@ -20,7 +20,7 @@ export const MapSection = ({
   onMove,
 }: {
   data: MapData
-  onMove?: (top: number, bottom: number, left: number, right: number) => void
+  onMove?: onMoveFn
 }) => {
   // const mapRef = useRef(null)
   const { deviceSize } = useDeviceSize()
@@ -34,7 +34,7 @@ export const MapSection = ({
         {deviceSize !== 'mobile' && <span>|</span>}
         <span>{data.locations.length} Neighborhoods</span>
       </Stats>
-      <Map locations={data.locations} onMove={onMove} />
+      <Map height="80vh" locations={data.locations} onMove={onMove} />
     </>
   )
 }

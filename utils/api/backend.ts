@@ -173,7 +173,7 @@ const cleanParams = (params: UrlParams) => {
 
     Object.keys(params).forEach((key) => {
       const val = params[key]
-      if (val) {
+      if (val !== undefined && val !== null) {
         // if params[key] is an array, join it with commas
         if (Array.isArray(val)) {
           if ((val.length || 0) > 0) {

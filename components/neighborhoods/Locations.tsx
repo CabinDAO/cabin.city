@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
@@ -8,15 +9,22 @@ import {
 } from '@/utils/types/location'
 import styled from 'styled-components'
 import { ListingCard } from '@/components/core/ListingCard'
-import { Map } from '@/components/neighborhoods/Map'
+import { Map, onMoveParams } from '@/components/neighborhoods/Map'
 
 export const Locations = ({ type }: { type: LocationType | undefined }) => {
   const { useGetPaginated } = useBackend()
 
+  const [latLngBounds, setLatLngBounds] = useState<
+    onMoveParams['bounds'] | undefined
+  >(undefined)
+
   const { data, page, setPage, isLastPage } =
     useGetPaginated<LocationListResponse>('LOCATION_LIST', {
-      activeEventsOnly: 'true',
+      countActiveEventsOnly: 'true',
       locationType: type,
+      latLngBounds: latLngBounds
+        ? `${latLngBounds.north},${latLngBounds.south},${latLngBounds.east},${latLngBounds.west}`
+        : undefined,
     } satisfies LocationListParamsType)
 
   const locations = data
@@ -30,17 +38,21 @@ export const Locations = ({ type }: { type: LocationType | undefined }) => {
   return (
     <>
       <LocationListContainer>
-        {/*<Map*/}
-        {/*  locations={locations*/}
-        {/*    .filter((l) => l.address)*/}
-        {/*    .map((l) => {*/}
-        {/*      return {*/}
-        {/*        label: l.name,*/}
-        {/*        lat: l.address?.lat || 0,*/}
-        {/*        lng: l.address?.lng || 0,*/}
-        {/*      }*/}
-        {/*    })}*/}
-        {/*/>*/}
+        <Map
+          height="20rem"
+          locations={locations
+            .filter((l) => l.address)
+            .map((l) => {
+              return {
+                label: l.name,
+                lat: l.address?.lat || 0,
+                lng: l.address?.lng || 0,
+              }
+            })}
+          onMove={(params) => {
+            setLatLngBounds(params.bounds)
+          }}
+        />
         <InfiniteScroll
           hasMore={!isLastPage}
           dataLength={locations.length}
