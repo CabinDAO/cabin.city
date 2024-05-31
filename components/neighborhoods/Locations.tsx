@@ -18,14 +18,17 @@ export const Locations = ({ type }: { type: LocationType | undefined }) => {
     onMoveParams['bounds'] | undefined
   >(undefined)
 
-  const { data, page, setPage, isLastPage } =
-    useGetPaginated<LocationListResponse>('LOCATION_LIST', {
+  const { data, next, hasMore } = useGetPaginated<LocationListResponse>(
+    'LOCATION_LIST',
+    {
       countActiveEventsOnly: 'true',
       locationType: type,
       latLngBounds: latLngBounds
         ? `${latLngBounds.north},${latLngBounds.south},${latLngBounds.east},${latLngBounds.west}`
         : undefined,
-    } satisfies LocationListParamsType)
+    } satisfies LocationListParamsType,
+    { pageSize: 100 }
+  )
 
   const locations = data
     ? data.reduce(
@@ -39,7 +42,7 @@ export const Locations = ({ type }: { type: LocationType | undefined }) => {
     <>
       <LocationListContainer>
         <Map
-          height="20rem"
+          height="40rem"
           locations={locations
             .filter((l) => l.address)
             .map((l) => {
@@ -54,11 +57,9 @@ export const Locations = ({ type }: { type: LocationType | undefined }) => {
           }}
         />
         <InfiniteScroll
-          hasMore={!isLastPage}
+          hasMore={hasMore}
           dataLength={locations.length}
-          next={async () => {
-            await setPage(page + 1)
-          }}
+          next={next}
           loader="..."
         >
           {locations.map((location, index) => {

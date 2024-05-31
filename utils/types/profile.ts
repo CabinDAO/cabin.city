@@ -1,5 +1,10 @@
 // need these types in a separate file because prisma cant be imported in the frontend
-import { APIError, Paginated } from '@/utils/types/shared'
+import {
+  APIError,
+  commaSeparatedArrayOf,
+  PageParams,
+  Paginated,
+} from '@/utils/types/shared'
 import { z } from 'zod'
 import { isAddress } from 'viem'
 import {
@@ -76,19 +81,20 @@ export type ProfileListFragment = {
 export const ProfileListParams = z
   .object({
     searchQuery: z.string().optional(),
-    roleTypes: z.array(z.nativeEnum(RoleType)).optional(),
-    levelTypes: z.array(z.nativeEnum(RoleLevel)).optional(),
-    citizenshipStatuses: z.array(z.nativeEnum(CitizenshipStatus)).optional(),
+    roleTypes: commaSeparatedArrayOf(RoleType).optional(),
+    levelTypes: commaSeparatedArrayOf(RoleLevel).optional(),
+    citizenshipStatuses: commaSeparatedArrayOf(CitizenshipStatus).optional(),
     withLocation: z.union([z.literal('true'), z.literal('false')]).optional(),
     sort: z.nativeEnum(ProfileSort).optional(),
-    page: z.coerce.number().optional(),
   })
+  .merge(PageParams)
   .strict()
 export type ProfileListParamsType = z.infer<typeof ProfileListParams>
 
 export type ProfileListResponse =
   | ({
       profiles: ProfileListFragment[]
+      totalCount: number
     } & Paginated)
   | APIError
 
@@ -248,7 +254,7 @@ export const ProfileEditParams = z
       contactFields: z.array(ContactFragment).optional(),
       avatar: AvatarFragment.optional(),
     }),
-    roleTypes: z.array(z.nativeEnum(RoleType)).optional(),
+    roleTypes: commaSeparatedArrayOf(RoleType).optional(),
   })
   .strict()
 export type ProfileEditParamsType = z.infer<typeof ProfileEditParams>

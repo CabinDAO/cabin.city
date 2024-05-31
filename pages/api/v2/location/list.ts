@@ -3,7 +3,7 @@ import { AuthData, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
-import { PAGE_SIZE } from '@/utils/api/backend'
+import { getPageParams } from '@/utils/api/backend'
 import {
   LocationFragment,
   LocationListParams,
@@ -35,11 +35,9 @@ async function handler(
     return
   }
   const params = parsed.data
+  const { skip, take } = getPageParams(params)
 
   const maybeCurrentPrivyDID = opts.auth.privyDID || '0'
-
-  const skip = params.page ? PAGE_SIZE * (params.page - 1) : 0
-  const take = PAGE_SIZE
 
   if ((params.lat === undefined) !== (params.lng === undefined)) {
     res
@@ -65,11 +63,7 @@ async function handler(
     }),
   }
 
-  // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [locations, totalCount] = await prisma.$transaction([
-    prisma.location.findMany(query),
-    prisma.location.count({ where: query.where }),
-  ])
+  const locations = await prisma.location.findMany(query)
 
   const sortedLocations = locations.sort((a, b) => {
     return idsInOrder.indexOf(a.id) - idsInOrder.indexOf(b.id)
@@ -80,7 +74,6 @@ async function handler(
       locationToFragment(location as LocationWithRelations)
     ),
     count: locations.length,
-    totalCount,
   })
 }
 

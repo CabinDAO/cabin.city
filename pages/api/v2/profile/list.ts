@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { resolveAddressOrName } from '@/lib/ens'
-import { PAGE_SIZE } from '@/utils/api/backend'
+import { getPageParams } from '@/utils/api/backend'
 import {
   RoleType,
   RoleLevel,
@@ -35,6 +35,7 @@ async function handler(
     return
   }
   const params = parsed.data
+  const { skip, take } = getPageParams(params)
 
   const resolvedAddress = params.searchQuery
     ? await resolveAddressOrName(params.searchQuery)
@@ -84,17 +85,16 @@ async function handler(
     },
     include: ListedProfileQueryInclude,
     orderBy: sortOrder(params.sort),
-    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
-    take: PAGE_SIZE,
+    skip: skip,
+    take: take,
   }
 
-  // await Promise.all() might be even better here because its parallel, while transaction is sequential
+  // todo: await Promise.all() might be even better here because its parallel, while transaction is sequential
   const [profiles, totalCount] = await prisma.$transaction([
     prisma.profile.findMany(profileQuery),
     prisma.profile.count({ where: profileQuery.where }),
   ])
 
-  // console.log(count, profiles)
   res.status(200).send({
     profiles: profilesToFragments(profiles as ListedProfileWithRelations[]),
     count: profiles.length,

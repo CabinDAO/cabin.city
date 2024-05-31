@@ -2,8 +2,7 @@
 
 import { Prisma } from '@prisma/client'
 import { ProfileBasicFragment } from '@/utils/types/profile'
-import { EventType } from '@/utils/types/event'
-import { APIError, Paginated } from '@/utils/types/shared'
+import { APIError, PageParams, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'
 
 // must match prisma's $Enums.LocationType
@@ -72,8 +71,8 @@ export const LocationListParams = z
     countActiveEventsOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),
-    page: z.coerce.number().optional(),
   })
+  .merge(PageParams)
   .strict()
 export type LocationListParamsType = z.infer<typeof LocationListParams>
 

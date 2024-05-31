@@ -21,9 +21,8 @@ export const ActivityView = () => {
 
   const {
     data,
-    page,
-    setPage,
-    isLastPage,
+    next,
+    hasMore,
     mutate: refetchActivities,
   } = useGetPaginated<ActivityListResponse>('ACTIVITY_LIST')
 
@@ -54,12 +53,10 @@ export const ActivityView = () => {
         <ContentCard shape="notch">
           <Activities>
             <InfiniteScroll
-              hasMore={!isLastPage}
+              hasMore={hasMore}
               style={{ overflowX: 'hidden' }}
               dataLength={activities.length}
-              next={async () => {
-                await setPage(page + 1)
-              }}
+              next={next}
               loader="..."
             >
               {activities?.map((activity) => (

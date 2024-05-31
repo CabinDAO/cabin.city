@@ -31,7 +31,8 @@ type BackendState = {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useGetPaginated: <Data extends Paginated | APIError = any>(
     route: Route,
-    params?: UrlParams
+    params?: UrlParams,
+    options?: PaginationOptions
   ) => ReturnType<typeof useAPIGetPaginated<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   useMutate: <Data = any>(
@@ -69,9 +70,15 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   const useGetPaginated = <Data extends Paginated | APIError = any>(
     route: Route,
-    params: UrlParams = {}
+    params: UrlParams = {},
+    options?: PaginationOptions
   ) => {
-    return useAPIGetPaginated<Data>(route, params, getAccessToken)
+    return useAPIGetPaginated<Data>(
+      route,
+      params,
+      options?.pageSize,
+      getAccessToken
+    )
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -120,4 +127,8 @@ export const useBackend = () => {
     )
   }
   return c
+}
+
+type PaginationOptions = {
+  pageSize?: number
 }
