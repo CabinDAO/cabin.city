@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import { Network, OwnedNft } from 'alchemy-sdk'
+import React, { useState } from 'react'
 import { ProfileEditParamsType } from '@/utils/types/profile'
-import { getImageUrlFromNft } from '@/lib/image'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
@@ -9,36 +7,27 @@ import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
 import { Avatar } from '@/components/core/Avatar'
 import { Button } from '@/components/core/Button'
-import { AvatarModal } from './AvatarModal'
+import { Caption } from '@/components/core/Typography'
+import { FileUpload } from '@/components/core/FileUpload'
 
-export type ExtendedOwnedNft = OwnedNft & {
-  network: Network
-}
-
-interface AvatarSetupProps {
-  onNftSelected: (
-    nft: ProfileEditParamsType['data']['avatar'] | undefined
+export const AvatarSetup = ({
+  onSelected,
+  avatar,
+  error = false,
+}: {
+  onSelected: (
+    avatar: ProfileEditParamsType['data']['avatar'] | undefined
   ) => void
   avatar?: ProfileEditParamsType['data']['avatar'] | undefined | null
-}
-
-export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
+  error?: boolean
+}) => {
   const { deviceSize } = useDeviceSize()
   const [uploading, setUploading] = useState(false)
-  const { showModal, hideModal } = useModal()
-  const openSelectNftModal = () => {
-    showModal(() => (
-      <AvatarModal
-        onStartUpload={handleStartUpload}
-        onPhotoUploaded={handlePhotoUploaded}
-        onNftSelect={handleNftSelect}
-      />
-    ))
-  }
+  const { hideModal } = useModal()
 
   const handleStartUpload = () => {
     setUploading(true)
-    onNftSelected(undefined)
+    onSelected(undefined)
     hideModal()
   }
 
@@ -50,7 +39,7 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
     if (ipfsHash) {
       setUploading(false)
 
-      onNftSelected({
+      onSelected({
         url: getImageUrlByIpfsHash(ipfsHash, true) as string,
       })
 
@@ -58,46 +47,39 @@ export const AvatarSetup = ({ onNftSelected, avatar }: AvatarSetupProps) => {
     }
   }
 
-  const handleNftSelect = (nft: ExtendedOwnedNft) => {
-    const url = getImageUrlFromNft(nft)
-
-    if (!url) {
-      throw new Error('NFT does not have a media URL')
-    }
-    onNftSelected({
-      url,
-      network: nft.network,
-      contractAddress: nft.contract.address,
-      title: nft.name,
-      tokenId: nft.tokenId,
-      tokenUri: nft.raw.tokenUri,
-    })
-    hideModal()
-  }
-
   return (
     <Container>
       <Avatar
         isLoading={uploading}
-        onClick={openSelectNftModal}
         size={deviceSize === 'mobile' ? 9.6 : 8.8}
-        hoverShadow
         src={avatar?.url}
       />
       {avatar ? (
         <AvatarButton
           variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-          onClick={() => onNftSelected(undefined)}
+          onClick={() => onSelected(undefined)}
         >
-          Remove
+          Remove photo
         </AvatarButton>
       ) : (
-        <AvatarButton
-          variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-          onClick={openSelectNftModal}
+        <FileUpload
+          multiple={false}
+          onStartUploading={handleStartUpload}
+          onFilesUploaded={handlePhotoUploaded}
+          isFullWidth={deviceSize === 'mobile'}
         >
-          Choose avatar
-        </AvatarButton>
+          <AvatarButton
+            variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
+            isFullWidth
+          >
+            Upload profile photo
+          </AvatarButton>
+        </FileUpload>
+      )}
+      {error && (
+        <Caption $color="red600" emphasized>
+          Profile photo required
+        </Caption>
       )}
     </Container>
   )

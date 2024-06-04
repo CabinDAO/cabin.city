@@ -1,7 +1,5 @@
 import { EditProfileView } from '@/components/profile/EditProfileView'
 
-const EditPage = () => {
+export default function ProfileEditPage() {
   return <EditProfileView />
 }
-
-export default EditPage

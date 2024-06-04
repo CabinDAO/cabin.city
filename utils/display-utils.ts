@@ -34,7 +34,7 @@ export const pxToRem = (px: number) => `${px / 10}`
 
 export const remToPx = (rem: number) => `${rem * 10}`
 
-export const shortenedAddress = (address: string | undefined) =>
+export const shortenedAddress = (address: string | null | undefined) =>
   address ? `${address.slice(0, 4)}...${address.slice(-4)}` : null
 
 export const shortenedContactField = (value: string | undefined) => {

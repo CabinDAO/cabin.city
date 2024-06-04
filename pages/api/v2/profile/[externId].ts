@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@/lib/prisma'
+import { cabinTokenConfig } from '@/lib/protocol-config'
+import { getAlchemySdk } from '@/lib/chains'
+import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import {
@@ -16,45 +18,10 @@ import {
   ProfileFragment,
   ContactFieldType,
   ProfileEditParams,
+  ProfileQueryInclude,
+  ProfileWithRelations,
   ProfileEditResponse,
 } from '@/utils/types/profile'
-
-// must match the includes on query below
-type ProfileWithRelations = Prisma.ProfileGetPayload<{
-  include: {
-    voucher: {
-      select: {
-        externId: true
-        name: true
-      }
-    }
-    address: true
-    avatar: {
-      select: {
-        url: true
-      }
-    }
-    wallet: {
-      select: {
-        address: true
-        cabinTokenBalance: true
-        badges: {
-          select: {
-            id: true
-            otterspaceBadgeId: true
-            spec: true
-          }
-        }
-      }
-    }
-    contactFields: true
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
-  }
-}>
 
 async function handler(
   req: NextApiRequest,
@@ -84,40 +51,7 @@ async function handleGet(
     where: {
       externId: req.query.externId as string,
     },
-    include: {
-      // must match ProfileWithRelations above
-      voucher: {
-        select: {
-          externId: true,
-          name: true,
-        },
-      },
-      address: true,
-      avatar: {
-        select: {
-          url: true,
-        },
-      },
-      wallet: {
-        select: {
-          address: true,
-          cabinTokenBalance: true,
-          badges: {
-            select: {
-              id: true,
-              otterspaceBadgeId: true,
-              spec: true,
-            },
-          },
-        },
-      },
-      contactFields: true,
-      roles: {
-        include: {
-          walletHat: true,
-        },
-      },
-    },
+    include: ProfileQueryInclude,
   })
 
   res.status(profile ? 200 : 404).send({
@@ -160,6 +94,18 @@ async function handlePost(
     return
   }
 
+  const tokenBalance = params.data.walletAddress
+    ? onchainAmountToDecimal(
+        (
+          await getAlchemySdk(
+            cabinTokenConfig.networkName
+          ).core.getTokenBalances(params.data.walletAddress, [
+            cabinTokenConfig.contractAddress,
+          ])
+        ).tokenBalances[0].tokenBalance ?? '0'
+      )
+    : new Prisma.Decimal(0)
+
   const txns: Prisma.PrismaPromise<unknown>[] = [
     prisma.profile.update({
       data: {
@@ -172,6 +118,23 @@ async function handlePost(
                 create: params.data.address,
                 update: params.data.address,
               },
+            }
+          : undefined,
+        wallet: params.data.walletAddress
+          ? {
+              connectOrCreate: {
+                where: {
+                  address: params.data.walletAddress,
+                },
+                create: {
+                  address: params.data.walletAddress,
+                  cabinTokenBalance: tokenBalance,
+                },
+              },
+            }
+          : params.data.walletAddress === null
+          ? {
+              disconnect: true,
             }
           : undefined,
       },
@@ -264,8 +227,14 @@ async function handlePost(
   }
 
   await prisma.$transaction(txns)
+
+  const newProfileValues = await prisma.profile.findUnique({
+    where: { id: profileToEdit.id },
+    include: ProfileQueryInclude,
+  })
+
   res.status(200).send({
-    success: true,
+    profile: profileToFragment(newProfileValues as ProfileWithRelations),
   })
 }
 
@@ -292,7 +261,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
       ? profile.citizenshipMintedAt.toISOString()
       : null,
     cabinTokenBalanceInt: Math.floor(
-      profile.wallet.cabinTokenBalance.toNumber()
+      profile.wallet?.cabinTokenBalance.toNumber() || 0
     ),
     avatar: {
       url: profile.avatar ? profile.avatar.url : '',
@@ -303,18 +272,20 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
           name: profile.voucher.name,
         }
       : null,
-    wallet: {
-      address: profile.wallet.address,
-      badges: profile.wallet.badges.map((badge) => ({
-        id: badge.id,
-        otterspaceBadgeId: badge.otterspaceBadgeId,
-        spec: {
-          name: badge.spec.name,
-          description: badge.spec.description,
-          image: badge.spec.image,
-        },
-      })),
-    },
+    wallet: profile.wallet
+      ? {
+          address: profile.wallet.address,
+          badges: profile.wallet.badges.map((badge) => ({
+            id: badge.id,
+            otterspaceBadgeId: badge.otterspaceBadgeId,
+            spec: {
+              name: badge.spec.name,
+              description: badge.spec.description,
+              image: badge.spec.image,
+            },
+          })),
+        }
+      : null,
     contactFields: profile.contactFields.map((cf) => ({
       type: cf.type as ContactFieldType,
       value: cf.value,

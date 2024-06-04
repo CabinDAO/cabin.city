@@ -22,7 +22,7 @@ export const ProfileHeaderSection = ({
   profile,
   refetchProfile,
 }: ProfileHeaderProps) => {
-  const { ens } = useEns(profile?.wallet.address)
+  const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
   const citizenship = citizenshipInfoFromStatus(profile?.citizenshipStatus)
@@ -33,28 +33,31 @@ export const ProfileHeaderSection = ({
         <ProfileSummary>
           <Avatar
             size={deviceSize === 'desktop' ? 8.8 : 6.4}
-            src={profile?.avatar?.url}
+            src={profile.avatar?.url}
           />
           <ProfileInfoContainer>
             <CitizenContainer>
-              <H1>{profile?.name}</H1>
+              <H1>{profile.name}</H1>
               {citizenship && (
                 <Tooltip tooltip={citizenship.text} animate position="top">
                   <Icon name={citizenship.iconName} size={1.4} />
                 </Tooltip>
               )}
             </CitizenContainer>
-            <BalanceAddressContainer>
-              <Subline2>{`${
-                profile?.cabinTokenBalanceInt ?? 0
-              } ₡ABIN`}</Subline2>
-              <Subline2>·</Subline2>
-              <CopyToClipboard text={ens ?? profile?.wallet.address ?? ''}>
-                <Subline2>
-                  {ens ?? shortenedAddress(profile?.wallet.address)}
-                </Subline2>
-              </CopyToClipboard>
-            </BalanceAddressContainer>
+
+            {profile.wallet && (
+              <BalanceAddressContainer>
+                <Subline2>{`${
+                  profile.cabinTokenBalanceInt ?? 0
+                } ₡ABIN`}</Subline2>
+                <Subline2>·</Subline2>
+                <CopyToClipboard text={ens ?? profile.wallet.address ?? ''}>
+                  <Subline2>
+                    {ens ?? shortenedAddress(profile.wallet.address)}
+                  </Subline2>
+                </CopyToClipboard>
+              </BalanceAddressContainer>
+            )}
           </ProfileInfoContainer>
         </ProfileSummary>
         <ProfileHeaderButton

@@ -12,7 +12,7 @@ import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { useExternalUser } from '../auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
-import { MainContent } from '@/components/core/BaseLayout'
+import { BaseLayout, MainContent } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
@@ -59,24 +59,20 @@ export const RegistrationView = () => {
     }
 
     const walletAddress = externalUser.wallet?.address
-    if (!walletAddress) {
-      showError('No connected wallet found')
+
+    if (!avatar?.url) {
+      showError('Avatar required')
       return
     }
 
-    const createProfileBody: ProfileNewParamsType = {
-      walletAddress: walletAddress as Address,
-      name,
-      email: externalUser.email?.address || email,
-      address,
-      avatar,
-    }
-
     try {
-      const resp = await post<ProfileNewResponse>(
-        'PROFILE_NEW',
-        createProfileBody
-      )
+      const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
+        walletAddress: walletAddress ? (walletAddress as Address) : undefined,
+        name,
+        email: externalUser.email?.address || email,
+        address,
+        avatar,
+      } satisfies ProfileNewParamsType)
 
       if ('error' in resp) {
         showModal(() => (
@@ -99,14 +95,12 @@ export const RegistrationView = () => {
   }
 
   return (
-    <Container>
-      <MainContent variant={'default'}>
-        <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
-        <ContentCard shape="notch">
-          <RegistrationForm onSubmit={handleSubmit} />
-        </ContentCard>
-      </MainContent>
-    </Container>
+    <BaseLayout hideNavAndFooter>
+      <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
+      <ContentCard shape="notch">
+        <RegistrationForm onSubmit={handleSubmit} />
+      </ContentCard>
+    </BaseLayout>
   )
 }
 

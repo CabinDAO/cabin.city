@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useModal } from './useModal'
 import { useBackend } from '@/components/hooks/useBackend'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
 
 export const useLocationActions = (
   locationExternId: string,
@@ -14,12 +14,14 @@ export const useLocationActions = (
 
   const deleteLocation = () => {
     showModal(() => (
-      <DeleteConfirmationModal
-        onDelete={async () => {
+      <ActionConfirmationModal
+        title={'Delete Listing'}
+        text={'Are you sure you want to delete this listing?'}
+        confirmText={'Delete'}
+        onConfirm={async () => {
           await trigger({})
           await afterDelete()
         }}
-        entityName="listing"
       />
     ))
   }

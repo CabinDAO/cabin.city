@@ -64,7 +64,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
       ? profile.citizenshipMintedAt.toISOString()
       : null,
     cabinTokenBalanceInt: Math.floor(
-      profile.wallet.cabinTokenBalance.toNumber()
+      profile.wallet?.cabinTokenBalance.toNumber() || 0
     ),
     avatar: {
       url: profile.avatar ? profile.avatar.url : '',
@@ -73,7 +73,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     isProfileSetupFinished: profile.isProfileSetupFinished,
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
     mailingListOptIn: profile.mailingListOptIn,
-    walletAddress: profile.wallet.address,
+    walletAddress: profile.wallet?.address || null,
     locationCount: profile._count.stewardedLocations,
     contactFields: profile.contactFields.map((cf) => ({
       type: cf.type as ContactFieldType,

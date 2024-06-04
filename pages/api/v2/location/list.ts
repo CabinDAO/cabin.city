@@ -188,7 +188,8 @@ export const locationToFragment = (
           bio: loc.steward.bio,
           citizenshipStatus: loc.steward
             .citizenshipStatus as CitizenshipStatus | null,
-          cabinTokenBalanceInt: loc.steward.wallet.cabinTokenBalance.toNumber(),
+          cabinTokenBalanceInt:
+            loc.steward.wallet?.cabinTokenBalance.toNumber() || 0,
           avatar: loc.steward.avatar
             ? {
                 url: loc.steward.avatar.url,

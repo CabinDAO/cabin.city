@@ -15,7 +15,7 @@ export const ProfilePassportsSection = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
-  const list = profile.wallet.badges
+  const list = profile.wallet?.badges || []
   const count = list.length
   const start = PASSPORT_PAGE_SIZE * currentPage
   const end = (currentPage + 1) * PASSPORT_PAGE_SIZE

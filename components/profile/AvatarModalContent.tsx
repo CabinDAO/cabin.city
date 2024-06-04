@@ -3,18 +3,9 @@ import { Caption } from '@/components/core/Typography'
 import styled, { css } from 'styled-components'
 import Icon from '@/components/core/Icon'
 import { Subline1 } from '@/components/core/Typography'
-import { ExtendedOwnedNft } from './AvatarSetup'
-import { AvatarMode } from './AvatarModal'
+import { ExtendedOwnedNft, AvatarMode } from './AvatarModal'
 import { FileUpload } from '@/components/core/FileUpload'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-
-interface AvatarModalContentProps {
-  aboutOpen: boolean
-  onNftSelect: (nft: ExtendedOwnedNft) => void
-  onAvatarModeSelected: (avatarMode: AvatarMode) => void
-  onPhotoUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  onStartUpload: VoidFunction
-}
 
 const AboutExplainer = styled.div`
   display: flex;
@@ -28,7 +19,13 @@ export const AvatarModalContent = ({
   onPhotoUploaded,
   onAvatarModeSelected,
   onStartUpload,
-}: AvatarModalContentProps) => {
+}: {
+  aboutOpen: boolean
+  onNftSelect: (nft: ExtendedOwnedNft) => void
+  onAvatarModeSelected: (avatarMode: AvatarMode) => void
+  onPhotoUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+  onStartUpload: VoidFunction
+}) => {
   if (aboutOpen) {
     const explanation = (
       <AboutExplainer>

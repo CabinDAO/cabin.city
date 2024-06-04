@@ -6,7 +6,7 @@ import IconButton from '@/components/core/IconButton'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { SelectNftModalContent } from './SelectNftModalContent'
-import { ExtendedOwnedNft } from './AvatarSetup'
+import { ExtendedOwnedNft } from './AvatarModal'
 
 interface SelectNftModalProps {
   onSelect: (nft: ExtendedOwnedNft) => void

@@ -109,8 +109,8 @@ model Profile {
   externId  String   @unique // for external-facing use, e.g. urls
   privyDID  String   @unique
 
-  wallet   Wallet @relation(fields: [walletId], references: [id])
-  walletId Int    @unique
+  wallet   Wallet? @relation(fields: [walletId], references: [id])
+  walletId Int?    @unique
 
   name                    String
   email                   String

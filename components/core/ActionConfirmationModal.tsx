@@ -1,44 +1,48 @@
+import React from 'react'
+import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
-import { ModalContainer } from './modals/ModalContainer'
-import { ModalTitle } from './modals/ModalTitle'
 import { Body2, H4 } from './Typography'
 import { Button } from './Button'
-import { useModal } from '@/components/hooks/useModal'
+import { ModalContainer } from './modals/ModalContainer'
+import { ModalTitle } from './modals/ModalTitle'
 
-interface DeleteConfirmationModalProps {
-  onDelete: VoidFunction
-  entityName: string
-}
-
-export const DeleteConfirmationModal = ({
-  entityName,
-  onDelete,
-}: DeleteConfirmationModalProps) => {
+export const ActionConfirmationModal = ({
+  onConfirm,
+  text,
+  title,
+  helpText,
+  confirmText,
+}: {
+  onConfirm: VoidFunction
+  text: string
+  title?: string
+  helpText?: string
+  confirmText?: string
+}) => {
   const { hideModal } = useModal()
 
-  const handleDelete = () => {
-    onDelete()
+  const handleConfirm = () => {
+    onConfirm()
     hideModal()
   }
 
   return (
     <DeleteConfirmationModalContainer>
-      <ModalTitle text={`Delete ${entityName}`} />
+      <ModalTitle text={title || 'Confirm Action'} />
       <DeleteModalContent>
         <QuestionContainer>
           <Question>
-            <H4>Are you sure you want to delete</H4>
-            <H4>{`this ${entityName}?`}</H4>
+            <H4>{text}</H4>
           </Question>
-          <Body2>This action cannot be undone.</Body2>
+          <Body2>{helpText || 'This action cannot be undone.'}</Body2>
         </QuestionContainer>
         <Actions>
           <ActionButton isActive variant="tertiary" onClick={hideModal}>
             Cancel
           </ActionButton>
-          <DeleteButton variant="primary" onClick={handleDelete}>
-            Delete
-          </DeleteButton>
+          <ConfirmButton variant="primary" onClick={handleConfirm}>
+            {confirmText || 'Confirm'}
+          </ConfirmButton>
         </Actions>
       </DeleteModalContent>
     </DeleteConfirmationModalContainer>
@@ -69,8 +73,7 @@ const Question = styled.div`
 const DeleteModalContent = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 4rem;
-  padding-bottom: 3.2rem;
+  padding: 4rem 4rem 3.2rem;
   gap: 3.2rem;
 `
 
@@ -87,7 +90,7 @@ const ActionButton = styled(Button)`
   width: 100%;
 `
 
-const DeleteButton = styled(ActionButton)`
+const ConfirmButton = styled(ActionButton)`
   background-color: ${({ theme }) => theme.colors.red600};
   color: ${({ theme }) => theme.colors.yellow100};
 `

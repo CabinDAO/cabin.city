@@ -7,7 +7,7 @@ export const useAuth = () => {
   const router = useRouter()
   const { logout } = usePrivy()
 
-  const handleLogin = async (user: User) => {
+  const handleLogin = async (user: User, isNewUser: boolean) => {
     const privyDID = user.id
     // todo: security issue? this call lets anyone know we have an account for a did
     const data = await apiGet<ProfileDIDResponse>(

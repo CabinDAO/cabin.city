@@ -11,9 +11,9 @@ type PrivyConfigContextType = {
 }
 
 const defaultConfig: PrivyClientConfig = {
-  loginMethods: ['email', 'wallet'],
+  loginMethods: ['email'],
   embeddedWallets: {
-    createOnLogin: 'users-without-wallets',
+    createOnLogin: 'off',
     requireUserPasswordOnCreate: false,
   },
   walletConnectCloudProjectId:
@@ -24,14 +24,14 @@ const defaultConfig: PrivyClientConfig = {
     logo: isProd
       ? `${appDomainWithProto}/images/cabin-auth.png`
       : `${appDomainWithProto}/images/cabin-auth-dev.png`,
-    showWalletLoginFirst: true,
-    walletList: [
-      'detected_wallets',
-      'metamask',
-      'coinbase_wallet',
-      'rainbow',
-      'wallet_connect',
-    ],
+    showWalletLoginFirst: false,
+    // walletList: [
+    //   'detected_wallets',
+    //   'metamask',
+    //   'coinbase_wallet',
+    //   'rainbow',
+    //   'wallet_connect',
+    // ],
   },
 
   // mfa: {

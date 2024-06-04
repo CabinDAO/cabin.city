@@ -6,7 +6,7 @@ import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { Caption, WordBreak } from '@/components/core/Typography'
 import { ScrollToTop } from '@/components/core/ScrollToTop'
 import { getImageUrlFromNft } from '@/lib/image'
-import { ExtendedOwnedNft } from './AvatarSetup'
+import { ExtendedOwnedNft } from './AvatarModal'
 
 interface SearchNftsProps {
   nfts: ExtendedOwnedNft[]

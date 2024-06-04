@@ -17,7 +17,7 @@ import { SubscribeSection } from '@/components/landing/SubscribeSection'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
-    <BaseLayout variant="full">
+    <BaseLayout variant="landing">
       <LandingSection
         fullWidth
         noVertPadding

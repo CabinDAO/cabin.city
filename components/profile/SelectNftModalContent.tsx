@@ -3,7 +3,7 @@ import { ModalExplainer } from '@/components/core/modals/ModalExplainer'
 import { Caption } from '@/components/core/Typography'
 import { SearchNft } from './SearchNft'
 import styled from 'styled-components'
-import { ExtendedOwnedNft } from './AvatarSetup'
+import { ExtendedOwnedNft } from './AvatarModal'
 
 interface SelectNftModalContentProps {
   nfts: ExtendedOwnedNft[] | null

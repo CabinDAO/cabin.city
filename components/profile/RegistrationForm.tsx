@@ -34,6 +34,7 @@ export function RegistrationForm({
 
   const [canShowNameError, setCanShowNameError] = useState(false)
   const [canShowAddressError, setCanShowAddressError] = useState(false)
+  const [canShowAvatarError, setCanShowAvatarError] = useState(false)
 
   const [submitted, setSubmitted] = useState(false)
 
@@ -82,11 +83,22 @@ export function RegistrationForm({
     setAddress(address)
   }
 
+  const onAvatarChange = (avatar: AvatarFragmentType | undefined) => {
+    setCanShowAvatarError(false)
+    setAvatar(avatar)
+  }
+
   const handleSubmit = async () => {
     setCanShowNameError(true)
     setCanShowAddressError(true)
+    setCanShowAvatarError(true)
 
-    if (isValidName(name) && address && isValidAddress(address)) {
+    if (
+      isValidName(name) &&
+      address &&
+      isValidAddress(address) &&
+      avatar?.url
+    ) {
       if (externalUser?.email?.address) {
         setSubmitted(true)
         onSubmit({
@@ -103,7 +115,11 @@ export function RegistrationForm({
 
   return (
     <Container>
-      <AvatarSetup onNftSelected={setAvatar} avatar={avatar} />
+      <AvatarSetup
+        onSelected={onAvatarChange}
+        avatar={avatar}
+        error={canShowAvatarError && !avatar?.url}
+      />
       <InputGroup>
         <InputContainer>
           <InputText
