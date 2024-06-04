@@ -7,11 +7,13 @@ import {
 } from '@/utils/types/profile'
 import {
   LocationFragment,
+  LocationType,
   ShortAddressFragmentType,
 } from '@/utils/types/location'
 import { EventFragment } from '@/utils/types/event'
 import { Prisma } from '@prisma/client'
-import { APIError, Paginated } from '@/utils/types/shared'
+import { APIError, PageParams, Paginated } from '@/utils/types/shared'
+import { z } from 'zod'
 
 // must match prisma's $Enums.ActivityType
 export enum ActivityType {
@@ -67,11 +69,13 @@ export type ActivityListFragment = {
   hasReactionByMe: boolean
 }
 
-export type ActivityListParams = {
-  profileId?: string
-  page?: number
-  pageSize?: number
-}
+export const ActivityListParams = z
+  .object({
+    profileId: z.string().optional(),
+  })
+  .merge(PageParams)
+  .strict()
+export type ActivityListParamsType = z.infer<typeof ActivityListParams>
 
 export type ActivityListResponse =
   | ({

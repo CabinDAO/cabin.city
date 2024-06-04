@@ -63,8 +63,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const [activeEventsOnly, setActiveEventsOnly] = useState(true)
-  const activeEvents = activeEventsOnly
+  const [showActiveEventsOnly, setShowActiveEventsOnly] = useState(true)
+  const activeEvents = showActiveEventsOnly
     ? events.filter(
         (event) =>
           (event.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
@@ -176,9 +176,11 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
             {isEditable && (
               <Button
                 variant={'link-slim'}
-                onClick={() => setActiveEventsOnly(!activeEventsOnly)}
+                onClick={() => setShowActiveEventsOnly(!showActiveEventsOnly)}
               >
-                {activeEventsOnly ? 'Show Past Events' : 'Active Events Only'}
+                {showActiveEventsOnly
+                  ? 'Show Past Events'
+                  : 'Active Events Only'}
               </Button>
             )}
           </SectionHeader>

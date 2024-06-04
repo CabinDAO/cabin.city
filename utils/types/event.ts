@@ -3,7 +3,7 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { LocationType, ShortAddressFragmentType } from '@/utils/types/location'
-import { APIError, Paginated } from '@/utils/types/shared'
+import { APIError, PageParams, Paginated } from '@/utils/types/shared'
 
 // must match prisma's $Enums.OfferType
 export enum EventType {
@@ -55,8 +55,8 @@ export const EventListParams = z
     locationId: z.string().optional(),
     eventType: z.nativeEnum(EventType).optional(),
     futureOnly: z.union([z.literal('true'), z.literal('false')]).optional(),
-    page: z.coerce.number().optional(),
   })
+  .merge(PageParams)
   .strict()
 export type EventListParamsType = z.infer<typeof EventListParams>
 

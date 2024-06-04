@@ -2,10 +2,17 @@ import { expandRoute, Route } from '@/utils/routes'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import useSWRInfinite from 'swr/infinite'
-import { APIError, Paginated } from '@/utils/types/shared'
+import { APIError, PageParamsType, Paginated } from '@/utils/types/shared'
 // import {URL} from 'url'
 
-export const PAGE_SIZE = 20
+const defaultPageSize = 20
+
+export function getPageParams(params: PageParamsType) {
+  const pageSize = params.pageSize || defaultPageSize
+  const skip = params.page ? pageSize * (params.page - 1) : 0
+  const take = pageSize
+  return { pageSize, skip, take }
+}
 
 export const NO_TOKEN = async () => null
 
@@ -50,12 +57,13 @@ export const useAPIGet = <Data = any>(
 export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
   route: Route,
   params: UrlParams = {},
+  pageSize: number = defaultPageSize,
   tokenFn: () => Promise<string | null>
 ) => {
   const getKey = (pageIndex: number, previousPageData: Data | null) => {
     if (
       previousPageData &&
-      (!('count' in previousPageData) || previousPageData.count < PAGE_SIZE)
+      (!('count' in previousPageData) || previousPageData.count < pageSize)
     ) {
       return null
     }
@@ -63,7 +71,7 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
     const url = expandRoute(route)
     const searchParams = new URLSearchParams(cleanParams(params))
     const queryString =
-      `?page=${pageIndex + 1}` +
+      `?pageSize=${pageSize}&page=${pageIndex + 1}` +
       (searchParams ? '&' + searchParams : '').replace(/[\?\&]$/, '')
 
     return url + queryString
@@ -81,21 +89,25 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
   const isLoadingInitialData = !data && !error
   const isLoadingMore =
     isLoadingInitialData ||
-    (size > 0 && data && typeof data[size - 1] === 'undefined')
-  const isEmpty =
-    data?.[0] && 'count' in data?.[0] ? data?.[0]?.count === 0 : true
+    (size > 0 && !!data && typeof data[size - 1] === 'undefined')
+  const noResults =
+    !data || !data[0] || 'error' in data[0] || data[0].count === 0
+
   const lastItem = data?.[data.length - 1]
-  const isLastPage =
-    isEmpty || (lastItem && 'count' in lastItem && lastItem.count < PAGE_SIZE)
+  const noMore =
+    noResults || !lastItem || 'error' in lastItem || lastItem.count < pageSize // if last item is smaller than page size, we know we're done
+
+  const next = async () => setSize(size + 1)
+  const rewind = async () => setSize(1)
 
   return {
     data,
+    next,
+    rewind,
     error,
-    isEmpty,
+    noResults,
     isLoadingMore,
-    page: size,
-    setPage: setSize,
-    isLastPage,
+    hasMore: !noMore,
     mutate,
   }
 }
@@ -173,7 +185,7 @@ const cleanParams = (params: UrlParams) => {
 
     Object.keys(params).forEach((key) => {
       const val = params[key]
-      if (val) {
+      if (val !== undefined && val !== null) {
         // if params[key] is an array, join it with commas
         if (Array.isArray(val)) {
           if ((val.length || 0) > 0) {

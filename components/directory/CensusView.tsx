@@ -31,6 +31,7 @@ import { NoWrap } from '@/components/core/NoWrap'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ChevronButton } from '@/components/core/ChevronButton'
+import { Body1 } from '@/components/core/Typography'
 
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -61,8 +62,11 @@ export const CensusView = () => {
     }
   }, [searchValue, roleTypes, levelTypes, citizenshipStatuses, profileSortType])
 
-  const { data, page, setPage, isEmpty, isLastPage } =
-    useGetPaginated<ProfileListResponse>('PROFILE_LIST', input)
+  const { data, next, rewind, noResults, hasMore } =
+    useGetPaginated<ProfileListResponse>(
+      'PROFILE_LIST',
+      input satisfies ProfileListParamsType
+    )
 
   const profiles = data
     ? data.reduce(
@@ -91,24 +95,24 @@ export const CensusView = () => {
 
   const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
     setSearchInput(e.target.value)
-    await setPage(1)
+    await rewind()
   }
 
   const handleSelectedRoles = async (selectedRoles: RoleType[]) => {
     setRoleTypes(selectedRoles)
-    await setPage(1)
+    await rewind()
   }
 
   const handleSelectedLevels = async (selectedLevels: RoleLevel[]) => {
     setLevelTypes(selectedLevels)
-    await setPage(1)
+    await rewind()
   }
 
   const handleSelectedCitizenshipStatuses = async (
     selectedCitizenshipStatuses: CitizenshipStatus[]
   ) => {
     setCitizenshipStatuses(selectedCitizenshipStatuses)
-    await setPage(1)
+    await rewind()
   }
 
   const handleClearFilters = async () => {
@@ -116,12 +120,12 @@ export const CensusView = () => {
     setRoleTypes([])
     setLevelTypes([])
     setCitizenshipStatuses([])
-    await setPage(1)
+    await rewind()
   }
 
   const handleSort = async (option: SortOption<ProfileSort>) => {
     setProfileSortType(option.key)
-    await setPage(1)
+    await rewind()
   }
 
   const [open, setOpen] = useState(false)
@@ -204,15 +208,13 @@ export const CensusView = () => {
         }
       >
         <InfiniteScroll
-          hasMore={!isLastPage}
+          hasMore={hasMore}
           dataLength={profiles.length}
           style={{ overflowX: 'hidden' }}
-          next={async () => {
-            await setPage(page + 1)
-          }}
+          next={next}
           loader="..."
         >
-          {isEmpty ? (
+          {noResults ? (
             <ListEmptyState iconName="profile2" />
           ) : (
             profiles.map((profile) => (

@@ -9,10 +9,11 @@ import {
   withAuth,
 } from '@/utils/api/withAuth'
 import {
-  LocationDeleteResponse,
+  LocationGetParams,
+  LocationGetResponse,
   LocationEditParams,
   LocationEditResponse,
-  LocationGetResponse,
+  LocationDeleteResponse,
   LocationQueryInclude,
   LocationWithRelations,
 } from '@/utils/types/location'
@@ -45,15 +46,22 @@ async function handleGet(
   req: NextApiRequest,
   res: NextApiResponse<LocationGetResponse>
 ) {
+  const { externId, ...queryParams } = req.query
+  const parsed = LocationGetParams.safeParse(queryParams)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
+
   const query: Prisma.LocationFindUniqueArgs = {
-    where: { externId: req.query.externId as string },
+    where: { externId: externId as string },
     include: LocationQueryInclude({
-      activeEventsOnly: req.query.activeEventsOnly === 'true',
+      countActiveEventsOnly: params.countActiveEventsOnly === 'true',
     }),
   }
 
   const location = await prisma.location.findUnique(query)
-
   if (!location) {
     res.status(404).send({ error: 'Location not found' })
     return

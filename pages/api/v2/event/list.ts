@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { PAGE_SIZE } from '@/utils/api/backend'
+import { getPageParams } from '@/utils/api/backend'
 import {
   EventFragment,
   EventListParams,
@@ -31,6 +31,7 @@ async function handler(
     return
   }
   const params = parsed.data
+  const { skip, take } = getPageParams(params)
 
   const query: Prisma.OfferFindManyArgs = {
     where: {
@@ -44,20 +45,15 @@ async function handler(
     orderBy: {
       createdAt: 'desc',
     },
-    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
-    take: PAGE_SIZE,
+    skip: skip,
+    take: take,
   }
 
-  // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [events, totalCount] = await prisma.$transaction([
-    prisma.offer.findMany(query),
-    prisma.offer.count({ where: query.where }),
-  ])
+  const events = await prisma.offer.findMany(query)
 
   res.status(200).send({
     events: events.map((event) => eventToFragment(event as EventWithRelations)),
     count: events.length,
-    totalCount,
   })
 }
 

@@ -1,25 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
-import { PAGE_SIZE } from '@/utils/api/backend'
+import { getPageParams } from '@/utils/api/backend'
 import {
-  ActivityListParams,
   ActivityListFragment,
   ActivityListResponse,
   ActivityType,
   ActivityWithRelations,
   ActivityQueryInclude,
+  ActivityListParams,
 } from '@/utils/types/activity'
-import {
-  AvatarFragmentType,
-  CitizenshipStatus,
-  RoleFragment,
-  RoleLevel,
-  RoleType,
-} from '@/utils/types/profile'
+import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { EventType } from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
 import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
@@ -31,15 +26,13 @@ async function handler(
     return
   }
 
-  const params: ActivityListParams = {
-    profileId: req.query.profileId
-      ? (req.query.profileId as string)
-      : undefined,
-    page: req.query.page ? parseInt(req.query.page as string) : undefined,
-    pageSize: req.query.pageSize
-      ? Math.max(Math.min(parseInt(req.query.pageSize as string), PAGE_SIZE), 1)
-      : undefined,
+  const parsed = ActivityListParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
   }
+  const params = parsed.data
+  const { skip, take } = getPageParams(params)
 
   const activityQuery: Prisma.ActivityFindManyArgs = {
     where: params.profileId
@@ -53,15 +46,11 @@ async function handler(
     orderBy: {
       createdAt: 'desc',
     },
-    skip: params.page ? PAGE_SIZE * (params.page - 1) : undefined,
-    take: params.pageSize ?? PAGE_SIZE,
+    skip: skip,
+    take: take,
   }
 
-  // await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [activities, totalCount] = await prisma.$transaction([
-    prisma.activity.findMany(activityQuery),
-    prisma.activity.count({ where: activityQuery.where }),
-  ])
+  const activities = await prisma.activity.findMany(activityQuery)
 
   let activtiesWithMyReactions: { [key: number]: boolean } = {}
   if (opts.auth.authToken) {
@@ -89,7 +78,6 @@ async function handler(
       activtiesWithMyReactions
     ),
     count: activities.length,
-    totalCount,
   })
 }
 

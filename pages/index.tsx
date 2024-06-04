@@ -18,7 +18,11 @@ export const getStaticProps = (async (context) => {
     getEthersAlchemyProvider(unlockConfigForEnv.networkName)
   )
 
-  const [locations, numProfiles, citizens] = await Promise.all([
+  const [profiles, locations, numProfiles, citizens] = await Promise.all([
+    prisma.profile.findMany({
+      select: { address: true },
+      where: { address: { lat: { not: null } } },
+    }),
     prisma.location.findMany({
       select: { name: true, address: true },
       where: { address: { lat: { not: null } } },
@@ -40,6 +44,10 @@ export const getStaticProps = (async (context) => {
       mapData: {
         members: numProfiles,
         citizens: Number(citizens),
+        profiles: profiles.map((p) => ({
+          lat: p.address?.lat || 0,
+          lng: p.address?.lng || 0,
+        })),
         locations: locations.map((l) => ({
           label: l.name,
           lat: l.address?.lat || 0,

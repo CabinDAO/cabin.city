@@ -1,13 +1,18 @@
 import React from 'react'
+import { useWindowSize } from 'react-use'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { formatValue } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { h1Styles } from '@/components/core/Typography'
-import { Map } from '@/components/neighborhoods/Map'
+import { Map, onMoveFn } from '@/components/neighborhoods/Map'
 
 export type MapData = {
   members: number
   citizens: number
+  profiles: {
+    lat: number
+    lng: number
+  }[]
   locations: {
     label: string
     lat: number
@@ -20,10 +25,11 @@ export const MapSection = ({
   onMove,
 }: {
   data: MapData
-  onMove?: (top: number, bottom: number, left: number, right: number) => void
+  onMove?: onMoveFn
 }) => {
   // const mapRef = useRef(null)
   const { deviceSize } = useDeviceSize()
+  const { width } = useWindowSize()
 
   return (
     <>
@@ -34,7 +40,13 @@ export const MapSection = ({
         {deviceSize !== 'mobile' && <span>|</span>}
         <span>{data.locations.length} Neighborhoods</span>
       </Stats>
-      <Map locations={data.locations} onMove={onMove} />
+      <Map
+        height="80vh"
+        initialZoom={width > 1200 ? 3 : 2}
+        locations={data.locations}
+        clusteredLocations={data.profiles}
+        onMove={onMove}
+      />
     </>
   )
 }
