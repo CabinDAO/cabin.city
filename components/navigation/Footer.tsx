@@ -10,8 +10,6 @@ import { AppLink } from '@/components/core/AppLink'
 import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
 
-export const FOOTER_HEIGHT = '265' // TODO: fix this huge hack
-
 export const Footer = () => {
   const { user } = useProfile()
   return (
@@ -103,6 +101,7 @@ export const Footer = () => {
 const BgAndOuterWrap = styled.div`
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   justify-content: center;
   align-items: center;
   overflow: hidden;

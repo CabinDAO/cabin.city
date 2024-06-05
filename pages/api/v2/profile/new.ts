@@ -40,16 +40,18 @@ async function handler(
     }
   }
 
-  const existingWallet = await prisma.wallet.findUnique({
-    where: { address: params.walletAddress },
-    include: { profile: true },
-  })
+  if (params.walletAddress) {
+    const existingWallet = await prisma.wallet.findUnique({
+      where: { address: params.walletAddress },
+      include: { profile: true },
+    })
 
-  if (existingWallet && existingWallet.profile) {
-    res
-      .status(400)
-      .send({ error: 'This wallet is already connected to an account' })
-    return
+    if (existingWallet && existingWallet.profile) {
+      res
+        .status(400)
+        .send({ error: 'This wallet is already connected to an account' })
+      return
+    }
   }
 
   const profile = await createProfile({

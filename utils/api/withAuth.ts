@@ -10,7 +10,7 @@ import { privy } from '@/lib/privy'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
 
 export type ProfileWithWallet = Profile & {
-  wallet: Wallet
+  wallet: Wallet | null
 }
 
 class AuthenticationError extends Error {

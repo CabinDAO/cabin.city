@@ -1,12 +1,12 @@
 import { useState } from 'react'
+import { Network, OwnedNft } from 'alchemy-sdk'
+import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import styled from 'styled-components'
 import IconButton from '@/components/core/IconButton'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { AvatarModalContent } from './AvatarModalContent'
-import { ExtendedOwnedNft } from './AvatarSetup'
-import styled from 'styled-components'
 import { SelectNftModal } from './SelectNftModal'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 
 interface AvatarModalProps {
   onNftSelect: (nft: ExtendedOwnedNft) => void
@@ -15,6 +15,10 @@ interface AvatarModalProps {
 }
 
 export type AvatarMode = 'nft' | 'upload'
+
+export type ExtendedOwnedNft = OwnedNft & {
+  network: Network
+}
 
 export const AvatarModal = ({
   onNftSelect,

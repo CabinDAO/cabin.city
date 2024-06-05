@@ -1,19 +1,9 @@
-import styled from 'styled-components'
+import React, { useRef } from 'react'
 import { useFilesUpload } from '../neighborhoods/useFilesUpload'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { useRef } from 'react'
 import { SUPPORTED_FILE_TYPES } from '@/lib/file-storage/configuration'
 import { emptyFunction } from '@/utils/general'
-
-interface FileUploadProps {
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
-  removeEnabled?: boolean
-  multiple?: boolean
-  onStartUploading?: VoidFunction
-  children: React.ReactNode
-  className?: string
-}
+import styled from 'styled-components'
 
 export const FileUpload = ({
   onFilesUploaded,
@@ -23,7 +13,17 @@ export const FileUpload = ({
   multiple = false,
   removeEnabled = false,
   className,
-}: FileUploadProps) => {
+  isFullWidth,
+}: {
+  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
+  removeEnabled?: boolean
+  multiple?: boolean
+  onStartUploading?: VoidFunction
+  children: React.ReactNode
+  className?: string
+  isFullWidth?: boolean
+}) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { handleChange } = useFilesUpload({
     onFilesUploaded,
@@ -33,7 +33,7 @@ export const FileUpload = ({
 
   const handleButtonClick = () => {
     if (removeEnabled) {
-      onFilesUploaded({})
+      onFilesUploaded({}).then()
     } else {
       inputRef?.current?.click()
     }
@@ -48,7 +48,11 @@ export const FileUpload = ({
         onChange={handleChange}
         accept={`${SUPPORTED_FILE_TYPES.join(',')}`}
       />
-      <Wrapper className={className} onClick={handleButtonClick}>
+      <Wrapper
+        className={className}
+        onClick={handleButtonClick}
+        style={{ width: isFullWidth ? '100%' : 'min-content' }}
+      >
         {children}
       </Wrapper>
     </>
@@ -57,7 +61,6 @@ export const FileUpload = ({
 
 const Wrapper = styled.div`
   cursor: pointer;
-  width: min-content;
   display: flex;
   flex-direction: column;
 `

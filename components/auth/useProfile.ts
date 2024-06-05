@@ -36,6 +36,7 @@ export const useProfile = ({
   useEffect(() => {
     if (
       me &&
+      me.walletAddress &&
       privyUser?.wallet?.address &&
       !addressMatch(me.walletAddress, privyUser?.wallet?.address ?? '0x0')
     ) {

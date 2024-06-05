@@ -33,7 +33,7 @@ export const AboutInput = ({
   return (
     <SetupStepContainer>
       {onAvatarChange && (
-        <AvatarSetup avatar={avatar} onNftSelected={onAvatarChange} />
+        <AvatarSetup avatar={avatar} onSelected={onAvatarChange} />
       )}
       <StyledInputTextArea
         label="Bio"

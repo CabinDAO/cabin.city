@@ -23,7 +23,7 @@ import { NonPayableOverrides } from '@/generated/ethers/common'
 
 type ProfileCreateParams = {
   privyDID: string
-  walletAddress: string
+  walletAddress?: string
   name: string
   email: string
   address?: AddressFragmentType
@@ -72,17 +72,19 @@ export async function createProfile(
       bio: '',
       location: '',
       inviteCode: randomInviteCode(),
-      wallet: {
-        connectOrCreate: {
-          where: {
-            address: params.walletAddress,
-          },
-          create: {
-            address: params.walletAddress,
-            cabinTokenBalance: '0',
-          },
-        },
-      },
+      wallet: params.walletAddress
+        ? {
+            connectOrCreate: {
+              where: {
+                address: params.walletAddress,
+              },
+              create: {
+                address: params.walletAddress,
+                cabinTokenBalance: '0',
+              },
+            },
+          }
+        : undefined,
       address: params.address
         ? {
             create: params.address,
@@ -123,6 +125,10 @@ export async function createProfile(
 }
 
 async function createHats(profile: Profile) {
+  if (!profile.walletId) {
+    return
+  }
+
   const walletHats = await prisma.walletHat.findMany({
     where: {
       walletId: profile.walletId,
@@ -132,7 +138,9 @@ async function createHats(profile: Profile) {
     },
   })
 
-  if (!walletHats.length) return
+  if (!walletHats.length) {
+    return
+  }
 
   const rolesToAdd = walletHats
     .map((wh) => {
@@ -164,7 +172,7 @@ export async function grantOrExtendCitizenship(
 ) {
   const invite = profile.invite
 
-  if (!invite) {
+  if (!invite || !profile.wallet) {
     return null
   }
 

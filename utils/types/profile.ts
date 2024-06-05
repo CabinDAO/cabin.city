@@ -1,4 +1,6 @@
 // need these types in a separate file because prisma cant be imported in the frontend
+
+import { Prisma } from '@prisma/client'
 import {
   APIError,
   commaSeparatedArrayOf,
@@ -151,7 +153,7 @@ export type ProfileFragment = ProfileBasicFragment & {
   wallet: {
     address: string
     badges: BadgeFragment[]
-  }
+  } | null
   voucher: {
     externId: string
     name: string
@@ -195,6 +197,10 @@ export const AvatarFragment = z
   .strict()
 export type AvatarFragmentType = z.infer<typeof AvatarFragment>
 
+const WalletAddress = z
+  .string()
+  .refine(isAddress, { message: 'invalid address' })
+
 export type ProfileMeResponse =
   | {
       me: MeFragment | null
@@ -221,7 +227,7 @@ export type MeFragment = {
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
   avatar: AvatarFragmentType
-  walletAddress: string
+  walletAddress: string | null
   voucher: {
     externId: string
     name: string
@@ -234,7 +240,7 @@ export type MeFragment = {
 
 export const ProfileNewParams = z
   .object({
-    walletAddress: z.string().refine(isAddress, { message: 'invalid address' }),
+    walletAddress: WalletAddress.optional(),
     name: z.string(),
     email: z.string().email(),
     address: AddressFragment,
@@ -250,6 +256,7 @@ export const ProfileEditParams = z
       name: z.string().optional(),
       email: z.string().email().optional(),
       bio: z.string().optional(),
+      walletAddress: z.union([WalletAddress, z.null()]).optional(),
       address: AddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
       avatar: AvatarFragment.optional(),
@@ -259,11 +266,7 @@ export const ProfileEditParams = z
   .strict()
 export type ProfileEditParamsType = z.infer<typeof ProfileEditParams>
 
-export type ProfileEditResponse =
-  | {
-      success: boolean
-    }
-  | APIError
+export type ProfileEditResponse = ProfileGetResponse
 
 export const ProfileDIDParams = z
   .object({
@@ -277,3 +280,75 @@ export type ProfileDIDResponse =
       externId: string | null
     }
   | APIError
+
+// must match ProfileQueryInclude above
+export type ProfileWithRelations = Prisma.ProfileGetPayload<{
+  include: {
+    voucher: {
+      select: {
+        externId: true
+        name: true
+      }
+    }
+    address: true
+    avatar: {
+      select: {
+        url: true
+      }
+    }
+    wallet: {
+      select: {
+        address: true
+        cabinTokenBalance: true
+        badges: {
+          select: {
+            id: true
+            otterspaceBadgeId: true
+            spec: true
+          }
+        }
+      }
+    }
+    contactFields: true
+    roles: {
+      include: {
+        walletHat: true
+      }
+    }
+  }
+}>
+
+// must match ProfileWithRelations above
+export const ProfileQueryInclude = {
+  voucher: {
+    select: {
+      externId: true,
+      name: true,
+    },
+  },
+  address: true,
+  avatar: {
+    select: {
+      url: true,
+    },
+  },
+  wallet: {
+    select: {
+      address: true,
+      cabinTokenBalance: true,
+      badges: {
+        select: {
+          id: true,
+          otterspaceBadgeId: true,
+          spec: true,
+        },
+      },
+    },
+  },
+  contactFields: true,
+  roles: {
+    include: {
+      walletHat: true,
+    },
+  },
+}

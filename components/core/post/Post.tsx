@@ -11,7 +11,7 @@ import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
 import { useProfile } from '@/components/auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
-import { DeleteConfirmationModal } from '../DeleteConfirmationModal'
+import { ActionConfirmationModal } from '../ActionConfirmationModal'
 import { useTextActivity } from '@/components/activity/useTextActivity'
 import { ActivityListFragment, ActivityType } from '@/utils/types/activity'
 
@@ -66,9 +66,11 @@ export const Post = (props: PostProps) => {
 
   const handleDeletePost = () => {
     showModal(() => (
-      <DeleteConfirmationModal
-        entityName="post"
-        onDelete={handleDeleteTextActivity}
+      <ActionConfirmationModal
+        onConfirm={handleDeleteTextActivity}
+        title={'Delete Post'}
+        text={'Are you sure you want to delete this post?'}
+        confirmText={'Delete'}
       />
     ))
   }

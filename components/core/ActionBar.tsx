@@ -3,7 +3,7 @@ import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
 import { Button } from './Button'
 import Icon from '@/components/core/Icon'
-import { DeleteConfirmationModal } from '@/components/core/DeleteConfirmationModal'
+import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
 
 const defaultButtonConfig = {
   label: 'OK',
@@ -33,9 +33,10 @@ export const ActionBar = ({
   const handleDelete = () => {
     if (!trashButton) return
     showModal(() => (
-      <DeleteConfirmationModal
-        entityName={trashButton.label}
-        onDelete={trashButton.onClick}
+      <ActionConfirmationModal
+        onConfirm={trashButton.onClick}
+        text={`Are you sure you want to delete this ${trashButton.label}?`}
+        confirmText={'Delete'}
       />
     ))
   }
