@@ -29,7 +29,6 @@ model Wallet {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  faunaId   String?  @unique // TODO: remove this
 
   profile Profile?
 
@@ -44,7 +43,6 @@ model Hat {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  faunaId   String?  @unique // TODO: remove this
 
   hatsProtocolId String @unique
   details        String
@@ -70,7 +68,6 @@ model Badge {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  faunaId   String?  @unique // TODO: remove this
 
   otterspaceBadgeId String @unique
 
@@ -88,7 +85,6 @@ model BadgeSpec {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  faunaId   String?  @unique // TODO: remove this
 
   otterspaceSpecId String @unique
   name             String
