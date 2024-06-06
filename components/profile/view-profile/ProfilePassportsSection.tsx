@@ -4,9 +4,10 @@ import { EmptyState } from '../../core/EmptyState'
 import { useState } from 'react'
 import { Badge } from '@/components/core/Badge'
 import IconButton from '@/components/core/IconButton'
-import { PASSPORT_PAGE_SIZE } from '../constants'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { ProfileFragment } from '@/utils/types/profile'
+
+const PASSPORT_PAGE_SIZE = 8
 
 export const ProfilePassportsSection = ({
   profile,

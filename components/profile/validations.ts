@@ -1,8 +1,10 @@
 import { ProfileEditParamsType } from '@/utils/types/profile'
-import { MAX_DISPLAY_NAME_LENGTH, MAX_BIO_LENGTH } from './constants'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
 import { AddressFragmentType } from '@/utils/types/location'
+
+export const MAX_DISPLAY_NAME_LENGTH = 48
+export const MAX_BIO_LENGTH = 300
 
 export const validateProfileInput = (
   editProfileInput: ProfileEditParamsType['data']

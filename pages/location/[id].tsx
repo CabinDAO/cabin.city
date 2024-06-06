@@ -39,7 +39,6 @@ export async function getServerSideProps({
     select: {
       externId: true,
       name: true,
-      tagline: true,
       bannerImageIpfsHash: true,
     },
   })
@@ -50,7 +49,6 @@ export async function getServerSideProps({
           location: {
             externId: location.externId,
             title: location.name,
-            description: location.tagline,
             image: getImageUrlByIpfsHash(location.bannerImageIpfsHash, true),
           },
         } as LocationPageProps,

@@ -47,7 +47,6 @@ export type LocationFragment = {
   externId: string
   type: LocationType
   name: string
-  tagline: string
   description: string
   address: AddressFragmentType | null
   bannerImageIpfsHash: string
@@ -105,7 +104,6 @@ export type LocationNewResponse =
 
 export const LocationEditParams = z.object({
   name: z.string().optional(),
-  tagline: z.string().optional(),
   description: z.string().optional(),
   address: AddressFragment.nullable().optional(),
   bannerImageIpfsHash: z.string().optional(),

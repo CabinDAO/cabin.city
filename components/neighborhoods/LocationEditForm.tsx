@@ -11,10 +11,6 @@ import {
 } from '@/utils/types/location'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import {
-  MAX_LOCATION_BIO_LENGTH,
-  MAX_LOCATION_TITLE_LENGTH,
-} from '@/components/neighborhoods/constants'
-import {
   PHOTO_REQUIRED_ERROR,
   REQUIRED_FIELD_ERROR,
   REQUIRED_FIELDS_TOAST_ERROR,
@@ -22,7 +18,7 @@ import {
   truthyString,
 } from '@/utils/validate'
 import {
-  validateBio,
+  MAX_LOCATION_TITLE_LENGTH,
   validateLocationInput,
   validateTitle,
 } from '@/components/neighborhoods/validations'
@@ -70,7 +66,6 @@ export function LocationEditForm({
 
   const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     name: location.name,
-    tagline: location.tagline,
     description: location.description,
     bannerImageIpfsHash: location.bannerImageIpfsHash,
     mediaItems: location.mediaItems?.map((mi) => ({
@@ -89,7 +84,6 @@ export function LocationEditForm({
     : {}
 
   const nameValidation = validateTitle(locationInput.name)
-  const shortBioValidation = validateBio(locationInput.tagline)
 
   const handleSave = async () => {
     if (
@@ -114,11 +108,6 @@ export function LocationEditForm({
       setLocationInput((prev) => ({
         ...prev,
         [field]: e.target.value.slice(0, MAX_LOCATION_TITLE_LENGTH),
-      }))
-    } else if (field === 'tagline') {
-      setLocationInput((prev) => ({
-        ...prev,
-        [field]: e.target.value.slice(0, MAX_LOCATION_BIO_LENGTH),
       }))
     } else {
       setLocationInput((prev) => ({
@@ -194,20 +183,6 @@ export function LocationEditForm({
             placeholder="Name"
             error={highlightErrors && !nameValidation.valid}
             errorMessage={nameValidation.error}
-          />
-        </FullWidthInputContainer>
-        <FullWidthInputContainer>
-          <InputText
-            required
-            value={locationInput.tagline ?? ''}
-            onChange={(event) => handleOnChange(event, 'tagline')}
-            helperText={`${
-              locationInput.tagline?.length ?? 0
-            }/${MAX_LOCATION_BIO_LENGTH}`}
-            label="Short description"
-            placeholder="1 sentence description of your neighborhood"
-            error={highlightErrors && !shortBioValidation.valid}
-            errorMessage={shortBioValidation.error}
           />
         </FullWidthInputContainer>
         <FullWidthInputContainer>

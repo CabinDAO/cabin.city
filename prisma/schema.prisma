@@ -256,7 +256,6 @@ model Location {
 
   type                LocationType
   name                String
-  tagline             String
   description         String // Rich text
   address             Address?
   bannerImageIpfsHash String

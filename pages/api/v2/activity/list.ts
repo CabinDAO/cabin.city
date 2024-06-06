@@ -116,7 +116,6 @@ const toFragments = (
               externId: activity.location.externId,
               name: activity.location.name,
               description: activity.location.description,
-              tagline: activity.location.tagline,
               bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
               steward: activity.location.steward
                 ? {

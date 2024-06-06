@@ -1,4 +1,3 @@
-import { MAX_LOCATION_TITLE_LENGTH, MAX_LOCATION_BIO_LENGTH } from './constants'
 import {
   EMAIL_VALID_REGEX,
   INVALID_FIELD_ERROR,
@@ -9,17 +8,18 @@ import { emptyEditorValue } from '@/components/core/slate/slate-utils'
 import { EventEditParamsType, EventType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 
+export const MAX_LOCATION_TITLE_LENGTH = 48
+
 type ValidationResult = {
   error: string
   valid: boolean
 }
 
 export const validateLocationInput = (values: LocationEditParamsType) => {
-  const { name, tagline, description, address } = values
+  const { name, description, address } = values
 
   const invalid =
     (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
-    (values.hasOwnProperty('tagline') && !validateBio(tagline).valid) ||
     (values.hasOwnProperty('description') && emptyEditorValue(description)) ||
     (values.hasOwnProperty('address') &&
       !truthyString(address?.formattedAddress))
@@ -51,25 +51,6 @@ export const validateTitle = (name: ConditionalString): ValidationResult => {
       valid: false,
     }
   } else if ((name?.length ?? 0) > MAX_LOCATION_TITLE_LENGTH) {
-    return {
-      error: INVALID_FIELD_ERROR,
-      valid: false,
-    }
-  } else {
-    return {
-      error: '',
-      valid: true,
-    }
-  }
-}
-
-export const validateBio = (description: ConditionalString) => {
-  if (!truthyString(description)) {
-    return {
-      error: REQUIRED_FIELD_ERROR,
-      valid: false,
-    }
-  } else if ((description?.length ?? 0) > MAX_LOCATION_BIO_LENGTH) {
     return {
       error: INVALID_FIELD_ERROR,
       valid: false,

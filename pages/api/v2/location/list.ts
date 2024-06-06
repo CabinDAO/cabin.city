@@ -159,7 +159,6 @@ export const locationToFragment = (
     externId: loc.externId,
     type: loc.type as LocationType,
     name: loc.name,
-    tagline: loc.tagline,
     description: loc.description,
     address: loc.address
       ? {

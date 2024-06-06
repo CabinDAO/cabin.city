@@ -132,7 +132,6 @@ async function handlePost(
       include: LocationQueryInclude(),
       data: {
         name: params.name,
-        tagline: params.tagline,
         description: params.description,
         bannerImageIpfsHash: params.bannerImageIpfsHash,
         mediaItems: params.mediaItems

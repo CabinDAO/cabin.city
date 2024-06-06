@@ -27,7 +27,6 @@ async function handler(
       externId: randomId('location'),
       type: $Enums.LocationType.Neighborhood,
       name: 'New neighborhood',
-      tagline: '',
       description: '',
       bannerImageIpfsHash: '',
     },

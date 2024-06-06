@@ -8,10 +8,10 @@ import { AvatarFragmentType } from '@/utils/types/profile'
 import { Button } from '@/components/core/Button'
 import { InputText } from '@/components/core/InputText'
 import { AvatarSetup } from './AvatarSetup'
-import { MAX_DISPLAY_NAME_LENGTH } from './constants'
 import { RegistrationParams } from './RegistrationView'
 import {
   INVALID_NAME_MESSAGE,
+  MAX_DISPLAY_NAME_LENGTH,
   isValidAddress,
   isValidName,
 } from './validations'
