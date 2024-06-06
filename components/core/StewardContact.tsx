@@ -18,6 +18,7 @@ import { Avatar } from '@/components/core/Avatar'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const StewardContact = ({
   steward,
@@ -185,8 +186,20 @@ const Modal = ({
         <Body2>
           The ideal Cabin neighborhood Steward has a strong desire to make
           friends with their neighbors and make neighbors out of their friends,
-          plus a few hours a week to commit to this project over the next 6-12
-          months.
+          and is willing to commit several hours a week to this project over the
+          next 6-12 months.
+        </Body2>
+        <Body2>
+          If you’d like support in this endeavor, check out our{' '}
+          <Link
+            style={{ textDecoration: 'underline' }}
+            target="_blank"
+            rel="noopener nofollow noreferrer"
+            href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}
+          >
+            Neighborhood Accelerator Program
+          </Link>
+          .
         </Body2>
         <ContactUsLink
           subject={`Steward for ${location.name}`}
