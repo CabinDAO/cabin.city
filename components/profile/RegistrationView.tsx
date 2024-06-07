@@ -1,25 +1,24 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { Address } from 'viem'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '../auth/useProfile'
+import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { useExternalUser } from '../auth/useExternalUser'
+import { useModal } from '@/components/hooks/useModal'
+import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileNewParamsType,
   AvatarFragmentType,
   ProfileNewResponse,
 } from '@/utils/types/profile'
-import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { useExternalUser } from '../auth/useExternalUser'
-import { useModal } from '@/components/hooks/useModal'
-import styled from 'styled-components'
-import { BaseLayout, MainContent } from '@/components/core/BaseLayout'
+import { AddressFragmentType } from '@/utils/types/location'
+import { ErrorModal } from '../ErrorModal'
+import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { RegistrationForm } from './RegistrationForm'
-import { ErrorModal } from '../ErrorModal'
-import { AddressFragmentType } from '@/utils/types/location'
-import { Address } from 'viem'
-import { useError } from '@/components/hooks/useError'
 
 export interface RegistrationParams {
   email: string
@@ -103,25 +102,3 @@ export const RegistrationView = () => {
     </BaseLayout>
   )
 }
-
-// TODO: instead of <Container> and <MainContent>, we should be using SingleColumnLayout and hiding the footer and nav sidebar
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  min-width: 100vw;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 4.8rem;
-  padding: 2.5rem 1.6rem;
-
-  ${({ theme }) => theme.bp.md} {
-    padding: 2.5rem 8rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    padding: 0 1.6rem;
-    justify-content: center;
-  }
-`

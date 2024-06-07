@@ -10,8 +10,6 @@ import {
   OrderedList,
   UnorderedList,
 } from '../Typography'
-import { Button } from '@/components/core/Button'
-import Link from 'next/link'
 
 export function useSlateRendering() {
   const renderElement = useCallback(

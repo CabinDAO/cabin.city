@@ -12,7 +12,7 @@ export default function Home({
   return <LandingView mapData={mapData} />
 }
 
-export const getStaticProps = (async (context) => {
+export const getStaticProps = (async (/*context*/) => {
   const lockContract = PublicLock__factory.connect(
     unlockConfigForEnv.contractAddress,
     getEthersAlchemyProvider(unlockConfigForEnv.networkName)

@@ -133,16 +133,16 @@ const Contents = styled.div`
   }
 `
 
-const AdminActions = styled.div`
-  display: flex;
-  justify-content: center;
-
-  ${({ theme }) => theme.bp.md} {
-    justify-content: flex-end;
-    border-top: solid 1px ${({ theme }) => theme.colors.green900};
-    border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
-  }
-`
+// const AdminActions = styled.div`
+//   display: flex;
+//   justify-content: center;
+//
+//   ${({ theme }) => theme.bp.md} {
+//     justify-content: flex-end;
+//     border-top: solid 1px ${({ theme }) => theme.colors.green900};
+//     border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
+//   }
+// `
 
 const Details = styled.div`
   flex-grow: 1;

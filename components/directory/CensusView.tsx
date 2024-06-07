@@ -31,7 +31,6 @@ import { NoWrap } from '@/components/core/NoWrap'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ChevronButton } from '@/components/core/ChevronButton'
-import { Body1 } from '@/components/core/Typography'
 
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')

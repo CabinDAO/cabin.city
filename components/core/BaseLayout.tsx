@@ -117,7 +117,7 @@ const NavAndContent = styled.div<withVariant>`
   }
 `
 
-export const MainContent = styled.main<withVariant>`
+const MainContent = styled.main<withVariant>`
   display: flex;
   flex-direction: column;
   align-self: center;

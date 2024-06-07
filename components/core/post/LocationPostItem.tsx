@@ -48,10 +48,6 @@ export const LocationPostItem = ({
   )
 }
 
-const TruncateCaption = styled(Caption)`
-  ${truncateStyles}
-`
-
 const TruncatedH4 = styled(H4)`
   ${truncateStyles}
 `

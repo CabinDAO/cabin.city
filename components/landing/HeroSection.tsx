@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-import { H4, HHero } from '@/components/core/Typography'
-import { SubscribeForm } from '@/components/landing/SubscribeForm'
+import { HHero } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
@@ -102,19 +101,19 @@ const ButtonWrapper = styled.div`
   }
 `
 
-const Newsletter = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 2.4rem;
-  width: 100%;
-  h4 {
-    color: ${({ theme }) => theme.colors.yellow100};
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
-      3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
-  }
-`
+// const Newsletter = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   gap: 2.4rem;
+//   width: 100%;
+//   h4 {
+//     color: ${({ theme }) => theme.colors.yellow100};
+//     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
+//       3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
+//   }
+// `
 
 const HeaderText = styled(HHero)`
   width: 28.8rem;

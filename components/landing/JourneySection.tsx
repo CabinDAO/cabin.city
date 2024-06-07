@@ -8,7 +8,6 @@ import pic2 from './journey2.png'
 import pic3 from './journey3.png'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { useEffect, useState } from 'react'
-import Icon from '@/components/core/Icon'
 
 export const JourneySection = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0)

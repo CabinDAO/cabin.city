@@ -10,7 +10,6 @@ import { ActivityListFragment } from '@/utils/types/activity'
 export const EventPostItem = ({
   imageIpfsHash,
   title,
-  type,
   startDate,
   endDate,
   location,
@@ -48,11 +47,10 @@ const TruncatedCaption = styled(Caption)`
 const Container = styled(Link)`
   display: flex;
   flex-direction: column;
-  padding: 0.8rem;
+  padding: 0.8rem 0.8rem 1.9rem;
   gap: 1.6rem;
   background-color: ${({ theme }) => theme.colors.yellow200};
   border: 0.1rem solid ${({ theme }) => theme.colors.green900}1A;
-  padding-bottom: 1.9rem;
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {

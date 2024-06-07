@@ -1,8 +1,6 @@
 import styled from 'styled-components'
 import { Caption, H2, Subline1 } from './Typography'
 import Icon from './Icon'
-import { CardActions } from './CardActions'
-import { emptyFunction } from '@/utils/general'
 import { EMPTY, truncate } from '@/utils/display-utils'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import Link from 'next/link'
@@ -14,7 +12,10 @@ import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
 type CardVariant = 'home' | 'city-directory'
-interface ListingCardProps {
+
+const bannerImageHeight = 258
+
+export const ListingCard = (props: {
   location: {
     externId: string
     name: string | null | undefined
@@ -22,26 +23,10 @@ interface ListingCardProps {
     address: ShortAddressFragmentType | null | undefined
     eventCount: number | null | undefined
   }
-  onDelete?: VoidFunction
-  onEdit?: VoidFunction
-  editMode?: boolean
-  hideNeighborTag?: boolean
-  position?: number
-  className?: string
   variant?: CardVariant
-}
-
-const BANNER_IMAGE_HEIGHT = 258
-
-export const ListingCard = (props: ListingCardProps) => {
-  const {
-    location,
-    onDelete,
-    onEdit,
-    className,
-    variant = 'city-directory',
-    editMode = false,
-  } = props
+  position?: number
+}) => {
+  const { location, variant = 'city-directory' } = props
 
   const { externId, bannerImageIpfsHash, address } = location
 
@@ -54,9 +39,9 @@ export const ListingCard = (props: ListingCardProps) => {
   const cardWidth = variant === 'home' ? 412 : 388
 
   return (
-    <OuterContainer variant={variant} widthPx={cardWidth} className={className}>
+    <OuterContainer variant={variant} widthPx={cardWidth}>
       <ContainerLink
-        href={editMode ? `/location/${externId}/edit` : `/location/${externId}`}
+        href={`/location/${externId}`}
         shallow
         passHref
         onClick={() => analytics.viewCityDirectoryEvent(externId)}
@@ -66,7 +51,7 @@ export const ListingCard = (props: ListingCardProps) => {
             <ImageFlex
               sizes={`${cardWidth}px`}
               quality={40}
-              aspectRatio={cardWidth / BANNER_IMAGE_HEIGHT}
+              aspectRatio={cardWidth / bannerImageHeight}
               src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
               alt={name}
             />
@@ -85,12 +70,6 @@ export const ListingCard = (props: ListingCardProps) => {
         </ContentContainer>
         <HorizontalDivider />
       </ContainerLink>
-      {editMode && (
-        <CardActions
-          onDelete={onDelete ?? emptyFunction}
-          onEdit={onEdit ?? emptyFunction}
-        />
-      )}
     </OuterContainer>
   )
 }
@@ -110,8 +89,7 @@ const EventCountTag = ({ eventCount }: { eventCount: number }) => {
   )
 }
 
-const ListingTypeTag = (props: ListingCardProps) => {
-  const { position } = props
+const ListingTypeTag = ({ position }: { position: number }) => {
   return (
     <LocationTagContainer>
       <Icon color={'green400'} size={1.1} name={'logo-cabin'} />

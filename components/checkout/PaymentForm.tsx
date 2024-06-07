@@ -11,7 +11,7 @@ import {
   Layout,
   loadStripe,
   StripeElementsOptionsMode,
-  StripePaymentElement,
+  // StripePaymentElement,
 } from '@stripe/stripe-js'
 import {
   useStripe,
@@ -188,7 +188,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
     setIsLoading(false)
   }
 
-  const handleOnReady = async (element: StripePaymentElement) => {
+  const handleOnReady = async (/*element: StripePaymentElement*/) => {
     setIsLoading(false)
   }
 

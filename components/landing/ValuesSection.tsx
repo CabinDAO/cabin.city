@@ -1,12 +1,8 @@
 import styled from 'styled-components'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Body1, H2, H4, fonts } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import value1 from './value1.jpg'
-import value2 from './value2.jpg'
-import value3 from './value3.jpg'
 
 export const ValuesSection = () => {
   return (

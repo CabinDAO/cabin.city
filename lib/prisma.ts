@@ -96,7 +96,8 @@ export const formatQuery = (
   const params =
     typeof rawParams === 'string'
       ? parseParams(rawParams)
-      : rawParams.map((p: any) => p.toString())
+      : // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        rawParams.map((p: any) => p.toString())
 
   query = query.replace(/\s/g, ' ').replace(/\s{2,}/g, ' ')
 

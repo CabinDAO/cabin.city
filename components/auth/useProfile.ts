@@ -53,7 +53,7 @@ export const useProfile = ({
     } else if (redirectToIfFound && me) {
       router.push(redirectToIfFound).then()
     }
-  }, [redirectTo, redirectToIfFound, privyUser, me, isMeLoading])
+  }, [redirectTo, redirectToIfFound, privyUser, me, isMeLoading, router])
 
   return {
     user: me,

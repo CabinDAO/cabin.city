@@ -17,11 +17,7 @@ function EditLocationView() {
   const { id: locationId } = router.query
 
   const { useGet } = useBackend()
-  const {
-    data,
-    isLoading,
-    mutate: refetchLocation,
-  } = useGet<LocationGetResponse>(
+  const { data, isLoading } = useGet<LocationGetResponse>(
     locationId ? ['LOCATION', { externId: locationId as string }] : null
   )
   const location = !data || 'error' in data ? null : data.location
