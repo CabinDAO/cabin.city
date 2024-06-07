@@ -1,5 +1,4 @@
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import Error from 'next/error'
 import { prisma } from '@/lib/prisma'
 import { CartFragment, PaymentStatus } from '@/utils/types/cart'
 import CheckoutPageView from '@/components/checkout/CheckoutPageView'
@@ -7,7 +6,7 @@ import CheckoutPageView from '@/components/checkout/CheckoutPageView'
 export default function CheckoutPage({
   cart,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  return cart ? <CheckoutPageView cart={cart} /> : <Error statusCode={404} />
+  return <CheckoutPageView cart={cart} />
 }
 
 export const getServerSideProps = (async (context) => {
@@ -22,6 +21,10 @@ export const getServerSideProps = (async (context) => {
     include: { invite: true },
   })
 
+  if (!cart) {
+    return { notFound: true }
+  }
+
   if (cart && cart.paymentStatus == PaymentStatus.Paid) {
     return {
       redirect: {
@@ -31,14 +34,14 @@ export const getServerSideProps = (async (context) => {
     }
   }
 
-  const data: CartFragment | null = !cart
-    ? null
-    : {
+  return {
+    props: {
+      cart: {
         externId: cart.externId,
         amount: cart.amount.toNumber(),
         paymentStatus: cart.paymentStatus as PaymentStatus,
         // inviteExternId: cart.invite?.externId || '',
-      }
-
-  return { props: { cart: data } }
-}) satisfies GetServerSideProps<{ cart: CartFragment | null }>
+      },
+    },
+  }
+}) satisfies GetServerSideProps<{ cart: CartFragment }>

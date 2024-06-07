@@ -1,8 +1,8 @@
-import Error from 'next/error'
-import { BaseLayout } from '@/components/core/BaseLayout'
-import { ProfileContent } from './view-profile/ProfileContent'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
+import Error404 from '@/pages/404'
+import { BaseLayout } from '@/components/core/BaseLayout'
+import { ProfileContent } from './view-profile/ProfileContent'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
@@ -17,8 +17,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
   if (isLoading) {
     return null
   } else if (!profile) {
-    // todo: should we do useEffect() to redirect to /404? look at how this redirect is done elsewhere
-    return <Error statusCode={404} />
+    return Error404()
   }
 
   return (

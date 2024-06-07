@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import Error from 'next/error'
 import React from 'react'
 import { prisma } from '@/lib/prisma'
 import {
@@ -10,6 +9,7 @@ import {
 import { locationToFragment } from '@/pages/api/v2/location/list'
 import { AppHead } from '@/components/shared/head'
 import { BaseLayout } from '@/components/core/BaseLayout'
+import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
@@ -17,7 +17,8 @@ export default function LocationPage({
   location,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   if (!location) {
-    return <Error statusCode={404} />
+    // idk why this is necessary (you'd think notFound:true would cover it), but it is
+    return Error404()
   }
 
   return (
@@ -50,11 +51,13 @@ export const getStaticProps = (async (context) => {
     include: LocationQueryInclude({ countActiveEventsOnly: true }),
   })
 
+  if (!location) {
+    return { notFound: true }
+  }
+
   return {
     props: {
-      location: location
-        ? locationToFragment(location as LocationWithRelations)
-        : null,
+      location: locationToFragment(location as LocationWithRelations),
     },
   }
-}) satisfies GetStaticProps<{ location: LocationFragment | null }>
+}) satisfies GetStaticProps<{ location: LocationFragment }>
