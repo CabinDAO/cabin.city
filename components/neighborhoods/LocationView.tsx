@@ -148,7 +148,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
       <Section>
         <SectionHeader>
-          <H3>Description</H3>
+          <H3>About</H3>
         </SectionHeader>
         <SectionContent>
           <DescriptionTwoColumn>
