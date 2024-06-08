@@ -30,8 +30,8 @@ export const EXTERNAL_LINKS = {
     'https://cabindotcity.typeform.com/to/ZhyOQyQM?utm_source=cabin.city&utm_medium=web',
   CARETAKER_TYPEFORM:
     'https://cabindotcity.typeform.com/to/CgI1OjLD?utm_source=cabin.city-footer&utm_medium=web',
-  NEIGHBORHOOD_COHORT_TYPEFORM:
-    'https://form.typeform.com/to/NnorddGU?utm_source=cabin.city&utm_medium=web',
+  NEIGHBORHOOD_COHORT_APPLICATION_FORM:
+    'https://airtable.com/appPL8AkfAbUptVu9/pag4n0nxeSPFDRzUk/form',
   NEIGHBORHOOD_COHORT_INFO:
     'https://forum.cabin.city/t/launching-cabin-neighborhood-cohorts/213',
   SUPPER_CLUB_LUMA: 'https://lu.ma/cabinsupperclubs',

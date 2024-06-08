@@ -28,7 +28,7 @@ export const SupperClubSection = () => {
             every step of the way.
           </Body>
           <Buttons>
-            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_TYPEFORM}>
+            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}>
               <Button variant={'primary'}>Get started</Button>
             </Link>
             <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}>
