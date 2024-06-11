@@ -150,23 +150,14 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         <SectionHeader>
           <H3>About</H3>
         </SectionHeader>
-        <SectionContent>
-          <DescriptionTwoColumn>
-            <DescriptionDetails>
-              <SlateRenderer value={stringToSlateValue(location.description)} />
-            </DescriptionDetails>
-
-            <StewardDetailsContainer>
-              <StewardDetails>
-                <StewardContact
-                  steward={location.steward}
-                  location={location}
-                />
-                {/*)}*/}
-              </StewardDetails>
-            </StewardDetailsContainer>
-          </DescriptionTwoColumn>
-        </SectionContent>
+        <AboutContent>
+          <SlateRenderer value={stringToSlateValue(location.description)} />
+          <StewardContainer>
+            <StewardDetails>
+              <StewardContact steward={location.steward} location={location} />
+            </StewardDetails>
+          </StewardContainer>
+        </AboutContent>
       </Section>
 
       {(activeEvents.length > 0 || (isEditable && events.length > 0)) && (
@@ -199,13 +190,6 @@ const Section = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.green900};
 `
 
-const SectionContent = styled.div`
-  padding: 2.4rem;
-  padding-top: 3.2rem;
-  display: flex;
-  width: 100%;
-`
-
 const SectionHeader = styled.div`
   display: flex;
   padding: 1.6rem 2.4rem;
@@ -213,49 +197,29 @@ const SectionHeader = styled.div`
   justify-content: space-between;
 `
 
-const StewardDetailsContainer = styled.div`
+const AboutContent = styled.div`
+  width: 100%;
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   gap: 2.4rem;
-  width: 28.5rem;
-  flex-shrink: 0;
+  padding: 3.2rem 2.4rem 2.4rem;
+`
 
-  ${({ theme }) => theme.bp.lg_max} {
-    width: 100%;
-  }
+const StewardContainer = styled.div`
+  width: 100%;
+  padding-top: 2.4rem;
+  border-top: 1px solid ${({ theme }) => theme.colors.green900}1e;
 `
 
 const StewardDetails = styled.div`
-  display: flex;
-  flex-flow: row;
-  padding-left: 2.4rem;
-  gap: 0.8em;
-  border-left: 1px solid ${({ theme }) => theme.colors.green900}1e;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    border-left: none;
-    border-top: 1px solid ${({ theme }) => theme.colors.green900}1e;
-    padding-left: 0;
-    padding-top: 2.4rem;
-  }
-`
-
-const DescriptionTwoColumn = styled.div`
-  display: flex;
-  flex-flow: row;
-  gap: 2.4rem;
   width: 100%;
-
-  ${({ theme }) => theme.bp.lg_max} {
-    flex-flow: column;
-  }
-`
-
-const DescriptionDetails = styled.div`
   display: flex;
-  flex-flow: column;
-  gap: 2.4rem;
-  flex: 1;
+  flex-direction: column;
+  gap: 2.4em;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+  }
 `
 
 const LocationContent = styled.div`
