@@ -5,7 +5,7 @@ import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
 import { Descendant } from 'slate'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { emptyEditorValue } from '@/components/core/slate/slate-utils'
+import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
@@ -150,7 +150,7 @@ export const EditEventForm = ({
           onChange={handleEditorChange}
           {...slateProps}
           error={
-            highlightErrors && emptyEditorValue(updateEventInput.description)
+            highlightErrors && isEmptyEditoryValue(updateEventInput.description)
               ? REQUIRED_FIELD_ERROR
               : null
           }

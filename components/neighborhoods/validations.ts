@@ -3,7 +3,7 @@ import {
   INVALID_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
 } from '@/utils/validate'
-import { emptyEditorValue } from '@/components/core/slate/slate-utils'
+import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
 import { EventEditParamsType, EventType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 
@@ -23,7 +23,8 @@ export const validateLocationInput = (values: LocationEditParamsType) => {
 
   const invalid =
     (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
-    (values.hasOwnProperty('description') && emptyEditorValue(description)) ||
+    (values.hasOwnProperty('description') &&
+      isEmptyEditoryValue(description)) ||
     (values.hasOwnProperty('address') &&
       !truthyString(address?.formattedAddress))
 
@@ -36,7 +37,7 @@ export const validateEventInput = (
 ) => {
   const invalid =
     !validateTitle(newValues.title).valid ||
-    emptyEditorValue(newValues.description) ||
+    isEmptyEditoryValue(newValues.description) ||
     (newValues.hasOwnProperty('applicationUrl') &&
       !truthyString(newValues.applicationUrl)) ||
     (newValues.hasOwnProperty('imageIpfsHash') &&

@@ -1,12 +1,17 @@
 import React, { useState } from 'react'
-import { Descendant } from 'slate'
-import { Editable, Slate } from 'slate-react'
-import { createEditor } from './editor'
+import { BaseEditor, Descendant, createEditor as baseCreateEditor } from 'slate'
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
 import styled from 'styled-components'
 import { Caption, Subline1, body1Styles } from '../Typography'
 import Toolbar from '@/components/core/slate/Toolbar'
+import { withButton } from '@/components/core/slate/ButtonPlugin'
+import { withImage } from '@/components/core/slate/ImagePlugin'
+
+export function createEditor(): BaseEditor & ReactEditor {
+  return withReact(withButton(withImage(baseCreateEditor())))
+}
 
 export const SlateEditor = ({
   value = defaultSlateValue,

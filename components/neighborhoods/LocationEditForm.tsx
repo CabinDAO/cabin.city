@@ -26,7 +26,7 @@ import { unique } from '@/utils/array'
 import styled from 'styled-components'
 import { Descendant } from 'slate'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { emptyEditorValue } from '@/components/core/slate/slate-utils'
+import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
 import { Body2 } from '@/components/core/Typography'
 import { ActionBar } from '@/components/core/ActionBar'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
@@ -78,7 +78,7 @@ export function LocationEditForm({
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploading, setUploading] = useState(false)
 
-  const emptyDescription = emptyEditorValue(locationInput?.description)
+  const emptyDescription = isEmptyEditoryValue(locationInput?.description)
   const slateProps = locationInput?.description
     ? { value: JSON.parse(locationInput.description) }
     : {}

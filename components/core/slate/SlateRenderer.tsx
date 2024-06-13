@@ -2,9 +2,9 @@ import styled from 'styled-components'
 import { useState } from 'react'
 import { Descendant } from 'slate'
 import { Editable, Slate } from 'slate-react'
-import { createEditor } from './editor'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
+import { createEditor } from '@/components/core/slate/SlateEditor'
 
 export const SlateRenderer = ({
   value = defaultSlateValue,
