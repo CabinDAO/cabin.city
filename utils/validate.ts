@@ -1,14 +1,6 @@
 export const EMAIL_VALID_REGEX =
   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
-export const truthyString = (value: string | undefined | null | number) => {
-  return value && value !== ''
-}
-
-export const isNumber = (value: string | undefined | null | number) => {
-  return !!value && !isNaN(Number(value))
-}
-
 export const REQUIRED_FIELD_ERROR = 'This field is required'
 export const INVALID_FIELD_ERROR = 'This field is invalid'
 export const REQUIRED_SECTION_ERROR = 'This section is required'

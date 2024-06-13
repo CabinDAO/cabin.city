@@ -7,7 +7,7 @@ import {
   LocationWithRelations,
 } from '@/utils/types/location'
 import { locationToFragment } from '@/pages/api/v2/location/list'
-import { AppHead } from '@/components/shared/head'
+import { AppHead } from '@/components/head'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'

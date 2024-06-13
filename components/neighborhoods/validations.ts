@@ -2,7 +2,6 @@ import {
   EMAIL_VALID_REGEX,
   INVALID_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
-  truthyString,
 } from '@/utils/validate'
 import { emptyEditorValue } from '@/components/core/slate/slate-utils'
 import { EventEditParamsType, EventType } from '@/utils/types/event'
@@ -13,6 +12,10 @@ export const MAX_LOCATION_TITLE_LENGTH = 48
 type ValidationResult = {
   error: string
   valid: boolean
+}
+
+export const truthyString = (value: string | undefined | null | number) => {
+  return value && value !== ''
 }
 
 export const validateLocationInput = (values: LocationEditParamsType) => {

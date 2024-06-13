@@ -56,6 +56,7 @@ import handWaveGreenSvg from './svg/hand-wave-green.svg'
 import heartOutlineSvg from './svg/heart-outline.svg'
 import heartSolidSvg from './svg/heart-solid.svg'
 import holdingSvg from './svg/holding.svg'
+import image from './svg/image.svg'
 import infoSvg from './svg/info.svg'
 import keySvg from './svg/key.svg'
 import lightningBoltSvg from './svg/lightning-bolt.svg'
@@ -164,6 +165,7 @@ export const IconSvgs = {
   'heart-outline': heartOutlineSvg,
   'heart-solid': heartSolidSvg,
   holding: holdingSvg,
+  image: image,
   info: infoSvg,
   key: keySvg,
   'lightning-bolt': lightningBoltSvg,

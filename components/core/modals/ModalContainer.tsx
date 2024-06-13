@@ -11,9 +11,4 @@ export const ModalContainer = styled.div`
     height: 52.4rem;
     width: 44rem;
   }
-
-  ${({ theme }) => theme.bp.lg} {
-    height: 52.4rem;
-    width: 44rem;
-  }
 `

@@ -1,6 +1,6 @@
 import { CitizenshipProvider } from '@/components/contexts/CitizenshipContext'
 import { ModalProvider } from '@/components/contexts/ModalContext'
-import { AppHead } from '@/components/shared/head'
+import { AppHead } from '@/components/head'
 import theme from '@/styles/theme'
 import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'styled-components'

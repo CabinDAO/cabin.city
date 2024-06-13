@@ -1,20 +1,19 @@
 import React, { useState } from 'react'
 import { EventEditParamsType, EventFragment } from '@/utils/types/event'
-import {
-  REQUIRED_FIELD_ERROR,
-  REQUIRED_SECTION_ERROR,
-  truthyString,
-} from '@/utils/validate'
+import { REQUIRED_FIELD_ERROR, REQUIRED_SECTION_ERROR } from '@/utils/validate'
 import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import styled from 'styled-components'
 import { Descendant } from 'slate'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { defaultSlateValue } from '@/components/core/slate/slate-utils'
+import { emptyEditorValue } from '@/components/core/slate/slate-utils'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
-import { validateTitle } from '@/components/neighborhoods/validations'
+import {
+  truthyString,
+  validateTitle,
+} from '@/components/neighborhoods/validations'
 import { DateSelect } from '@/components/core/DateSelect'
 import { getYear } from 'date-fns'
 
@@ -91,10 +90,6 @@ export const EditEventForm = ({
 
   const titleValidation = validateTitle(updateEventInput.title)
 
-  const emptyDescription =
-    !truthyString(updateEventInput.description) ||
-    updateEventInput.description === JSON.stringify(defaultSlateValue)
-
   const handleBannerUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
@@ -154,8 +149,11 @@ export const EditEventForm = ({
           placeholder="Describe your event"
           onChange={handleEditorChange}
           {...slateProps}
-          error={highlightErrors && emptyDescription}
-          errorMessage={REQUIRED_FIELD_ERROR}
+          error={
+            highlightErrors && emptyEditorValue(updateEventInput.description)
+              ? REQUIRED_FIELD_ERROR
+              : null
+          }
         />
       </EditorContainer>
 

@@ -12,16 +12,15 @@ const InputHelperText = styled(Caption)`
   opacity: 0.75;
 `
 
-interface InputLabelProps {
-  label?: string
-  helperText?: string
-  required: boolean
-}
 export const InputLabel = ({
-  required,
   label,
   helperText,
-}: InputLabelProps) => (
+  required = false,
+}: {
+  label?: string
+  helperText?: string
+  required?: boolean
+}) => (
   <InputDescriptionContainer>
     {label && <Subline1>{`${label} ${required ? '*' : ''}`}</Subline1>}
     {helperText && <InputHelperText>{helperText}</InputHelperText>}

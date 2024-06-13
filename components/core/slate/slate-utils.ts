@@ -1,5 +1,6 @@
-import { ParagraphElement } from '@/types/slate'
+import { Element, Editor } from 'slate'
 import { Descendant } from 'slate'
+import { createEditor } from '@/components/core/slate/editor'
 
 export const defaultSlateValue: Descendant[] = [
   {
@@ -19,9 +20,9 @@ export const emptyEditorValue = (description: string | null | undefined) => {
     return true
   }
 
-  const parsed = stringToSlateValue(description)[0] as ParagraphElement
+  const editor = createEditor()
 
-  if (parsed && parsed.children[0].text === '') {
-    return true
-  }
+  const parsed = stringToSlateValue(description)[0] as Element
+
+  return parsed && Editor.isEmpty(editor, parsed)
 }

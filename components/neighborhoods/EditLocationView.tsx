@@ -17,7 +17,11 @@ function EditLocationView() {
   const { id: locationId } = router.query
 
   const { useGet } = useBackend()
-  const { data, isLoading } = useGet<LocationGetResponse>(
+  const {
+    data,
+    isLoading,
+    mutate: refetchLocation,
+  } = useGet<LocationGetResponse>(
     locationId ? ['LOCATION', { externId: locationId as string }] : null
   )
   const location = !data || 'error' in data ? null : data.location
@@ -39,11 +43,9 @@ function EditLocationView() {
         <LocationEditForm
           location={location}
           afterSave={() => {
-            // todo: i dont think refetching is needed but somehow the data doesn't update after save
-            // todo: maybe the cache keys don't exactly match?
-            // refetchLocation().then(() => {
-            router.push(`/location/${location.externId}`).then()
-            // })
+            refetchLocation().then(() => {
+              router.push(`/location/${location.externId}`).then()
+            })
           }}
           afterCancel={() => {
             router.push(`/location/${location.externId}`).then()

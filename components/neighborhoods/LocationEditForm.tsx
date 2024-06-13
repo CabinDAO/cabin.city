@@ -15,12 +15,12 @@ import {
   REQUIRED_FIELD_ERROR,
   REQUIRED_FIELDS_TOAST_ERROR,
   REQUIRED_SECTION_ERROR,
-  truthyString,
 } from '@/utils/validate'
 import {
   MAX_LOCATION_TITLE_LENGTH,
   validateLocationInput,
   validateTitle,
+  truthyString,
 } from '@/components/neighborhoods/validations'
 import { unique } from '@/utils/array'
 import styled from 'styled-components'
@@ -209,8 +209,11 @@ export function LocationEditForm({
               {...slateProps}
               placeholder="Share a description of your neighborhood here"
               onChange={handleEditorChange}
-              error={highlightErrors && emptyDescription}
-              errorMessage={REQUIRED_FIELD_ERROR}
+              error={
+                highlightErrors && emptyDescription
+                  ? REQUIRED_FIELD_ERROR
+                  : null
+              }
             />
           </div>
           <Body2>

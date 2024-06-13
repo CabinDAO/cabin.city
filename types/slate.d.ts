@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CustomTypes } from 'slate'
+import { ImageElement } from '@/components/core/slate/ImagePlugin'
+import { ButtonElement } from '@/components/core/slate/ButtonPlugin'
 
 type ParagraphElement = {
   type: 'paragraph'
@@ -17,6 +18,10 @@ type QuoteElement = {
   type: 'quote'
   children: CustomText[]
 }
+type ListItemElement = {
+  type: 'list-item'
+  children: CustomText[]
+}
 type ListNumberedElement = {
   type: 'list-numbered'
   children: ListItemElement[]
@@ -24,15 +29,6 @@ type ListNumberedElement = {
 type ListBulletedElement = {
   type: 'list-bulleted'
   children: ListItemElement[]
-}
-type ListItemElement = {
-  type: 'list-item'
-  children: CustomText[]
-}
-type ButtonElement = {
-  type: 'button'
-  url: string
-  children: CustomText
 }
 
 type CustomElement =
@@ -44,6 +40,11 @@ type CustomElement =
   | ListBulletedElement
   | ListItemElement
   | ButtonElement
+  | ImageElement
+
+type MarkType = 'bold' | 'italic' | 'underline'
+
+type ElementType = CustomElement['type'] | MarkType
 
 type CustomText = {
   text: string

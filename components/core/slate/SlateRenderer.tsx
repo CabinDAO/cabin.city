@@ -1,17 +1,17 @@
 import styled from 'styled-components'
 import { useState } from 'react'
-import { Descendant, createEditor } from 'slate'
-import { Editable, Slate, withReact } from 'slate-react'
+import { Descendant } from 'slate'
+import { Editable, Slate } from 'slate-react'
+import { createEditor } from './editor'
 import { useSlateRendering } from './useSlateRendering'
 import { defaultSlateValue } from './slate-utils'
 
-interface SlateRendererProps {
+export const SlateRenderer = ({
+  value = defaultSlateValue,
+}: {
   value?: Descendant[]
-}
-
-export const SlateRenderer = (props: SlateRendererProps) => {
-  const { value = defaultSlateValue } = props
-  const [readOnlyEditor] = useState(() => withReact(createEditor()))
+}) => {
+  const [readOnlyEditor] = useState(() => createEditor())
   const { renderElement, renderLeaf } = useSlateRendering()
 
   return (
