@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
 import { Circle } from './Circle'
@@ -51,6 +51,11 @@ export const Avatar = ({
 const StyledCircle = styled(Circle)<{
   onClick?: VoidFunction
 }>`
-  cursor: ${({ onClick }) => (onClick ? 'pointer' : 'default')};
+  ${({ onClick }) =>
+    onClick &&
+    css`
+      cursor: pointer;
+    `}
+
   position: relative; // need this because the image inside has 'fill' attribute
 `
