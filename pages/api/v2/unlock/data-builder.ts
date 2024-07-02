@@ -19,8 +19,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseJson>
 ) {
-  const query = req.query
-  const recipient = query.recipient as string
+  const recipient = req.query.recipient as string
 
   // Here we can interrogate the local database to see if the user has a confirmed voucher
   const hasVoucher = await _hasVoucher(recipient)
@@ -41,7 +40,7 @@ export default async function handler(
 
   const digest = coder.encode(
     ['string', 'address', 'uint256'],
-    ['CabinUnlockData', query.recipient, chainId]
+    ['CabinUnlockData', recipient, chainId]
   )
 
   // Without this signature, anyone could pass any data to the checkout flow and the user would be able to purchase a key without a voucher

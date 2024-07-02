@@ -15,7 +15,7 @@ export const loadUnlockCheckout = async (provider: any) => {
     locks: {
       [unlockConfigForEnv.contractAddress]: {
         network: unlockConfigForEnv.chainId,
-        recurringPayments: 10,
+        // recurringPayments: 10,
       },
     },
     useDelegatedProvider: true,
