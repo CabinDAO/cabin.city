@@ -3,7 +3,6 @@ import { HHero } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const HeroSection = () => {
   return (
@@ -14,9 +13,9 @@ export const HeroSection = () => {
         </HeaderText>
         <ButtonWrapper>
           <Buttons>
-            <AuthenticatedLink href="/city-directory">
+            <Link href="/city-directory">
               <Button>Find one near you</Button>
-            </AuthenticatedLink>
+            </Link>
             <Link
               href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
               target="_blank"
