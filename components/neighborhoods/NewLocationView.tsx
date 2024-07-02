@@ -74,7 +74,11 @@ export const NewLocationView = () => {
   if (!canCreateListings) {
     return (
       <BaseLayout>
-        <TitleCard title="New neighborhood" icon="close" iconHref="/" />
+        <TitleCard
+          title="New neighborhood"
+          icon="close"
+          iconHref="/city-directory"
+        />
         <div style={{ width: '100%' }}>
           <EmptyState
             icon="alert"
@@ -93,7 +97,11 @@ export const NewLocationView = () => {
 
   return (
     <BaseLayout>
-      <TitleCard title="New neighborhood" icon="close" iconHref="/" />
+      <TitleCard
+        title="New neighborhood"
+        icon="close"
+        iconHref="/city-directory"
+      />
       <Container>
         <StyledContentCard shape="notch">
           <Content>
