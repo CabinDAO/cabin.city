@@ -42,9 +42,7 @@ async function handler(
       },
     },
     include: EventQueryInclude,
-    orderBy: {
-      createdAt: 'desc',
-    },
+    orderBy: [{ startDate: 'desc' }, { createdAt: 'desc' }],
     skip: skip,
     take: take,
   }

@@ -5,6 +5,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
 import {
+  EventFragment,
   EventListParamsType,
   EventListResponse,
   EventNewParamsType,
@@ -63,14 +64,12 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
   const imageSizesString = '269px'
 
-  const [showActiveEventsOnly, setShowActiveEventsOnly] = useState(true)
-  const activeEvents = showActiveEventsOnly
-    ? events.filter(
-        (event) =>
-          (event.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-          event.type !== EventType.Residency
-      )
-    : events
+  const [showActiveEvents, setShowActiveEvents] = useState(true)
+  const visibleEvents = events
+    .filter((e) => (showActiveEvents ? isActiveEvent(e) : !isActiveEvent(e)))
+    .sort((a, b) => {
+      return (a.startDate > b.startDate ? 1 : -1) * (showActiveEvents ? 1 : -1)
+    })
 
   const { user } = useProfile()
   const isEditable = canEditLocation(user, location)
@@ -160,25 +159,30 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         </AboutContent>
       </Section>
 
-      {(activeEvents.length > 0 || (isEditable && events.length > 0)) && (
+      {(visibleEvents.length > 0 || (isEditable && events.length > 0)) && (
         <Section>
           <SectionHeader>
             <H3>Events</H3>
             {isEditable && (
               <Button
                 variant={'link-slim'}
-                onClick={() => setShowActiveEventsOnly(!showActiveEventsOnly)}
+                onClick={() => setShowActiveEvents(!showActiveEvents)}
               >
-                {showActiveEventsOnly
-                  ? 'Show Past Events'
-                  : 'Active Events Only'}
+                {showActiveEvents ? 'Show Past Events' : 'Show Active Events'}
               </Button>
             )}
           </SectionHeader>
-          <EventList events={activeEvents} isEditable={isEditable} />
+          <EventList events={visibleEvents} isEditable={isEditable} />
         </Section>
       )}
     </LocationContent>
+  )
+}
+
+function isActiveEvent(event: EventFragment) {
+  return (
+    (event.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
+    event.type !== EventType.Residency
   )
 }
 
