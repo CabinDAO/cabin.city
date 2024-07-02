@@ -28,8 +28,8 @@ export const NewLocationView = () => {
   const { goBack } = useNavigation()
   const { post } = useBackend()
 
-  const canCreateListings =
-    user?.citizenshipStatus === CitizenshipStatus.Verified
+  const canCreateListings = true
+  // user?.citizenshipStatus === CitizenshipStatus.Verified
 
   const handlePrimaryButtonClick = async () => {
     try {
