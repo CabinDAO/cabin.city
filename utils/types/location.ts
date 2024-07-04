@@ -50,6 +50,7 @@ export type LocationFragment = {
   description: string
   address: AddressFragmentType | null
   bannerImageIpfsHash: string
+  publishedAt: string | null
   steward: ProfileBasicFragment | null
   mediaItems: {
     category: LocationMediaCategory
@@ -66,7 +67,6 @@ export const LocationListParams = z
     lng: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng
     maxDist: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // filter by distance from lat/lng (km)
     latLngBounds: z.string().optional(), // filter by bounds
-    mineOnly: z.union([z.literal('true'), z.literal('false')]).optional(), // filter by steward
     countActiveEventsOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),
@@ -105,8 +105,9 @@ export type LocationNewResponse =
 export const LocationEditParams = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
-  address: AddressFragment.nullable().optional(),
+  published: z.union([z.literal('true'), z.literal('false')]).optional(),
   bannerImageIpfsHash: z.string().optional(),
+  address: AddressFragment.nullable().optional(),
   mediaItems: z
     .array(
       z.object({

@@ -9,6 +9,8 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationEditForm } from '@/components/neighborhoods/LocationEditForm'
+import { Body1 } from '@/components/core/Typography'
+import { padding } from '@/styles/theme'
 
 export default EditLocationView
 
@@ -60,12 +62,25 @@ function EditLocationView() {
 }
 
 const Contents = styled(ContentCard)`
-  margin-top: 3.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   width: 100%;
   gap: 1.6rem;
-  // margin-bottom: 4.8rem;
+`
+
+const Banner = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2.4rem;
+  background: ${({ theme }) => theme.colors.yellow300};
+  ${padding('sm')};
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `

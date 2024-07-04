@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { ImageFlex } from './gallery/ImageFlex'
 import { HorizontalDivider } from './Divider'
 import analytics from '@/lib/googleAnalytics/analytics'
-import { ShortAddressFragmentType } from '@/utils/types/location'
+import { LocationFragment } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 
@@ -15,44 +15,44 @@ type CardVariant = 'home' | 'city-directory'
 
 const bannerImageHeight = 258
 
-export const ListingCard = (props: {
-  location: {
-    externId: string
-    name: string | null | undefined
-    bannerImageIpfsHash: string | null | undefined
-    address: ShortAddressFragmentType | null | undefined
-    eventCount: number | null | undefined
-  }
+export const ListingCard = ({
+  location,
+  variant = 'city-directory',
+  position,
+}: {
+  location: LocationFragment
   variant?: CardVariant
   position?: number
 }) => {
-  const { location, variant = 'city-directory' } = props
-
-  const { externId, bannerImageIpfsHash, address } = location
-
-  const name = props.location.name ?? 'New Neighborhood'
+  const name = location.name ?? 'New Neighborhood'
 
   const { deviceSize } = useDeviceSize()
 
-  const truncatedName = deviceSize === 'tablet' ? truncate(name, 30) : name
+  const truncatedName =
+    (!location.publishedAt ? '[PRIVATE] ' : '') +
+    (deviceSize === 'tablet' ? truncate(name, 30) : name)
 
   const cardWidth = variant === 'home' ? 412 : 388
 
   return (
-    <OuterContainer variant={variant} widthPx={cardWidth}>
+    <OuterContainer
+      variant={variant}
+      widthPx={cardWidth}
+      style={{ opacity: location.publishedAt ? 1 : 0.5 }}
+    >
       <ContainerLink
-        href={`/location/${externId}`}
+        href={`/location/${location.externId}`}
         shallow
         passHref
-        onClick={() => analytics.viewCityDirectoryEvent(externId)}
+        onClick={() => analytics.viewCityDirectoryEvent(location.externId)}
       >
         <ImageContainer widthPx={cardWidth}>
-          {bannerImageIpfsHash ? (
+          {location.bannerImageIpfsHash ? (
             <ImageFlex
               sizes={`${cardWidth}px`}
               quality={40}
               aspectRatio={cardWidth / bannerImageHeight}
-              src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
+              src={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
               alt={name}
             />
           ) : (
@@ -65,7 +65,7 @@ export const ListingCard = (props: {
         <ContentContainer>
           <SummaryContainer>
             <NameH2>{truncatedName}</NameH2>
-            <Caption>{formatShortAddress(address) ?? EMPTY}</Caption>
+            <Caption>{formatShortAddress(location.address) ?? EMPTY}</Caption>
           </SummaryContainer>
         </ContentContainer>
         <HorizontalDivider />

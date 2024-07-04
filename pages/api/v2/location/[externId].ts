@@ -5,6 +5,7 @@ import { toErrorString } from '@/utils/api/error'
 import {
   AuthData,
   ProfileWithWallet,
+  findProfile,
   requireProfile,
   withAuth,
 } from '@/utils/api/withAuth'
@@ -27,7 +28,7 @@ async function handler(
 ) {
   switch (req.method) {
     case 'GET':
-      await handleGet(req, res)
+      await handleGet(req, res, opts)
       return
     case 'POST':
       await handlePost(req, res, await requireProfile(req, res, opts))
@@ -44,7 +45,8 @@ async function handler(
 
 async function handleGet(
   req: NextApiRequest,
-  res: NextApiResponse<LocationGetResponse>
+  res: NextApiResponse<LocationGetResponse>,
+  opts: { auth: AuthData }
 ) {
   const { externId, ...queryParams } = req.query
   const parsed = LocationGetParams.safeParse(queryParams)
@@ -65,6 +67,13 @@ async function handleGet(
   if (!location) {
     res.status(404).send({ error: 'Location not found' })
     return
+  }
+
+  if (!location.publishedAt) {
+    const profile = await findProfile(req, res, opts)
+    if (!profile || !canEditLocation(profile, location)) {
+      res.status(404).send({ error: 'Location not found' })
+    }
   }
 
   res.status(200).send({
@@ -133,6 +142,12 @@ async function handlePost(
       data: {
         name: params.name,
         description: params.description,
+        publishedAt:
+          params.published == 'true'
+            ? new Date()
+            : params.published == 'false'
+            ? null
+            : undefined,
         bannerImageIpfsHash: params.bannerImageIpfsHash,
         mediaItems: params.mediaItems
           ? {

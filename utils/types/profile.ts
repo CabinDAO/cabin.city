@@ -141,7 +141,7 @@ export type ProfileBasicFragment = {
   bio: string
   citizenshipStatus: CitizenshipStatus | null
   cabinTokenBalanceInt: number
-  avatar?: AvatarFragmentType
+  avatar: AvatarFragmentType | null
   roles: RoleFragment[]
 }
 

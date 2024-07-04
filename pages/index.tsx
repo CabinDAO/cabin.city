@@ -25,7 +25,7 @@ export const getStaticProps = (async (/*context*/) => {
     }),
     prisma.location.findMany({
       select: { name: true, address: true },
-      where: { address: { lat: { not: null } } },
+      where: { address: { lat: { not: null } }, publishedAt: { not: null } },
     }),
     prisma.profile.count(),
     lockContract.totalSupply(),

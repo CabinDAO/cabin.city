@@ -260,6 +260,7 @@ model Location {
   address             Address?
   bannerImageIpfsHash String
   mediaItems          LocationMediaItem[]
+  publishedAt         DateTime?
 
   steward   Profile? @relation("Steward", fields: [stewardId], references: [id])
   stewardId Int?

@@ -5,7 +5,7 @@ import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { Locations } from '@/components/neighborhoods/Locations'
+import { LocationList } from '@/components/neighborhoods/LocationList'
 import { ChipFilter, ChipFilterBar } from '@/components/core/ChipFilterBar'
 import Icon from '@/components/core/Icon'
 import { Overline } from '@/components/core/Typography'
@@ -48,7 +48,7 @@ export const CityDirectoryView = () => {
         {/*  />*/}
         {/*</ChipFilterBar>*/}
 
-        <Locations type={type} />
+        <LocationList type={type} />
       </Content>
     </BaseLayout>
   )

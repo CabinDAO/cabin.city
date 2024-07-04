@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
+import { useRouter } from 'next/router'
 import React from 'react'
 import { prisma } from '@/lib/prisma'
 import {
@@ -16,32 +17,44 @@ import { getImageUrlByIpfsHash } from '@/lib/image'
 export default function LocationPage({
   location,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  if (!location) {
+  // NOTE: location can still be null if serving a fallback version of the page
+  // https://nextjs.org/docs/pages/api-reference/functions/get-static-paths#fallback-pages
+  const router = useRouter()
+  if (!router.isFallback && !location) {
     // idk why this is necessary (you'd think notFound:true would cover it), but it is
     return Error404()
   }
 
   return (
     <>
-      <AppHead
-        title={location.name}
-        description={location.description}
-        imageUrl={
-          getImageUrlByIpfsHash(location.bannerImageIpfsHash, true) || undefined
-        }
-        pathname={`/location/${location.externId}`}
-      />
+      {location && location.publishedAt && (
+        <AppHead
+          title={location.name}
+          description={location.description}
+          imageUrl={
+            getImageUrlByIpfsHash(location.bannerImageIpfsHash, true) ||
+            undefined
+          }
+          pathname={`/location/${location.externId}`}
+        />
+      )}
       <BaseLayout>
-        <LocationView location={location} />
+        {!router.isFallback && <LocationView location={location} />}
       </BaseLayout>
     </>
   )
 }
 
 export const getStaticPaths = (async () => {
+  const locations = await prisma.location.findMany({
+    // where: { publishedAt: { not: null } },
+  })
+
   return {
-    paths: [],
-    fallback: true, // or false or "blocking"
+    paths: locations.map((location) => ({
+      params: { id: location.externId },
+    })),
+    fallback: true, // true or false or "blocking"
   }
 }) satisfies GetStaticPaths
 

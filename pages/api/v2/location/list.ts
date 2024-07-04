@@ -1,5 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, withAuth } from '@/utils/api/withAuth'
+import {
+  AuthData,
+  findProfile,
+  ProfileWithWallet,
+  withAuth,
+} from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
@@ -37,8 +42,6 @@ async function handler(
   const params = parsed.data
   const { skip, take } = getPageParams(params)
 
-  const maybeCurrentPrivyDID = opts.auth.privyDID || '0'
-
   if ((params.lat === undefined) !== (params.lng === undefined)) {
     res
       .status(400)
@@ -46,17 +49,12 @@ async function handler(
     return
   }
 
-  const idsInOrder = await sortPrequery(
-    params,
-    maybeCurrentPrivyDID,
-    skip,
-    take
-  )
+  const profile = await findProfile(req, res, opts)
+  const idsInOrder = await sortPrequery(profile, params, skip, take)
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
       id: { in: idsInOrder },
-      steward: params.mineOnly ? { privyDID: maybeCurrentPrivyDID } : undefined,
     },
     include: LocationQueryInclude({
       countActiveEventsOnly: params.countActiveEventsOnly === 'true',
@@ -79,8 +77,8 @@ async function handler(
 
 // get ids for locations sorted in proper order
 const sortPrequery = async (
+  profile: ProfileWithWallet | null,
   params: LocationListParamsType,
-  maybeCurrentPrivyDID: string,
   offset: number,
   limit: number
 ) => {
@@ -103,6 +101,7 @@ const sortPrequery = async (
     WITH with_distance AS (
       SELECT 
         l.id as "id", l.type as "type", l.name as "name", l."createdAt" as "createdAt",
+        l."publishedAt" as "publishedAt",
         MAX(o."endDate") as "endDate", steward."privyDID" as "privyDID",
         ${distanceQuery} AS "distanceInKM"
       FROM "Location" l
@@ -121,13 +120,22 @@ const sortPrequery = async (
             ? Prisma.sql`a.lat <= ${bounds[0]} AND a.lat >= ${bounds[1]} AND a.lng <= ${bounds[2]} AND a.lng >= ${bounds[3]}`
             : Prisma.sql`1=1`
         }
+        AND
+        ${
+          profile?.isAdmin
+            ? Prisma.sql`1=1`
+            : Prisma.sql`l."publishedAt" IS NOT NULL ${
+                profile &&
+                Prisma.sql`OR steward."privyDID" = ${profile.privyDID}`
+              }`
+        }
       GROUP BY 
         l.id, steward."privyDID", a.lat, a.lng
     )
     SELECT id
     FROM with_distance
     GROUP BY 
-      id, "distanceInKM", "privyDID", type, name, "createdAt", "endDate"
+      id, "distanceInKM", "privyDID", type, name, "createdAt", "publishedAt", "endDate"
     HAVING
       ${
         params.maxDist
@@ -136,7 +144,8 @@ const sortPrequery = async (
       }
     ORDER BY 
       "distanceInKM" ASC, 
-      "privyDID" = ${maybeCurrentPrivyDID} DESC, 
+      ${profile && Prisma.sql`"privyDID" = ${profile.privyDID} DESC,`}
+      "publishedAt" IS NOT NULL ASC,
       type = ${LocationType.Neighborhood}::"LocationType" DESC, 
       COALESCE(SUM(CASE WHEN "endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, 
       name ASC, 
@@ -160,6 +169,7 @@ export const locationToFragment = (
     type: loc.type as LocationType,
     name: loc.name,
     description: loc.description,
+    publishedAt: loc.publishedAt?.toISOString() || null,
     address: loc.address
       ? {
           lat: loc.address.lat,
@@ -193,7 +203,7 @@ export const locationToFragment = (
             ? {
                 url: loc.steward.avatar.url,
               }
-            : undefined,
+            : null,
           roles: loc.steward.roles.map((role) => ({
             hatId: role.walletHat?.hatId || null,
             type: role.type as RoleType,

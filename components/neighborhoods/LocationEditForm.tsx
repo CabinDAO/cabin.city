@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useError } from '@/components/hooks/useError'
+import { useProfile } from '@/components/auth/useProfile'
+import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   AddressFragmentType,
@@ -34,7 +36,7 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { InputLabel } from '@/components/core/InputLabel'
 import { InputText } from '@/components/core/InputText'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { useProfile } from '@/components/auth/useProfile'
+import { Dropdown } from '@/components/core/Dropdown'
 
 export function LocationEditForm({
   location,
@@ -67,6 +69,7 @@ export function LocationEditForm({
   const [locationInput, setLocationInput] = useState<LocationEditParamsType>({
     name: location.name,
     description: location.description,
+    published: location.publishedAt ? 'true' : 'false',
     bannerImageIpfsHash: location.bannerImageIpfsHash,
     mediaItems: location.mediaItems?.map((mi) => ({
       ipfsHash: mi?.ipfsHash,
@@ -124,6 +127,25 @@ export function LocationEditForm({
   const handleLocationChange = (value: AddressFragmentType) => {
     setAddress(value)
   }
+
+  const visibilityOptions = [
+    {
+      label: 'Public (anyone can see)',
+      value: true,
+    },
+    {
+      label: 'Private (only stewards can see)',
+      value: false,
+    },
+  ]
+
+  const handleVisibilityChange = (value: SelectOption) => {
+    setLocationInput({
+      ...locationInput,
+      published: value.value ? 'true' : 'false',
+    })
+  }
+
   const handleFilesUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
@@ -185,6 +207,7 @@ export function LocationEditForm({
             errorMessage={nameValidation.error}
           />
         </FullWidthInputContainer>
+
         <FullWidthInputContainer>
           <LocationAutocompleteInput
             onLocationChange={handleLocationChange}
@@ -193,15 +216,7 @@ export function LocationEditForm({
             errorMessage={REQUIRED_FIELD_ERROR}
           />
         </FullWidthInputContainer>
-        {user?.isAdmin && (
-          <InputCoupleContainer>
-            <InputText
-              placeholder={location.steward?.name ?? 'no steward'}
-              label="Steward"
-              disabled
-            />
-          </InputCoupleContainer>
-        )}
+
         <FullWidthInputContainer>
           <InputLabel label={'Description'} required />
           <div style={{ margin: '1rem 0' }}>
@@ -222,6 +237,26 @@ export function LocationEditForm({
             special.
           </Body2>
         </FullWidthInputContainer>
+
+        <InputCoupleContainer>
+          <Dropdown
+            selectedOption={
+              locationInput.published === 'true'
+                ? visibilityOptions[0]
+                : visibilityOptions[1]
+            }
+            onSelect={handleVisibilityChange}
+            label="Visibility"
+            options={visibilityOptions}
+          />
+          {user?.isAdmin && (
+            <InputText
+              placeholder={location.steward?.name ?? 'no steward'}
+              label="Steward"
+              disabled
+            />
+          )}
+        </InputCoupleContainer>
 
         <HorizontalDivider />
 

@@ -18,7 +18,7 @@ import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
 import styled from 'styled-components'
 import { EMPTY } from '@/utils/display-utils'
 import { ContentCard } from '@/components/core/ContentCard'
-import { Caption, H1, H3, Overline } from '@/components/core/Typography'
+import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
 import { SlateRenderer } from '@/components/core/slate/SlateRenderer'
 import { stringToSlateValue } from '@/components/core/slate/slate-utils'
 import Icon from '@/components/core/Icon'
@@ -29,6 +29,8 @@ import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { EventList } from '@/components/neighborhoods/EventList'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { StewardContact } from '@/components/core/StewardContact'
+import { EmptyState } from '@/components/core/EmptyState'
+import { padding } from '@/styles/theme'
 
 export const LocationView = ({ location }: { location: LocationFragment }) => {
   const { externId, mediaItems } = location
@@ -71,8 +73,27 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
       return (a.startDate > b.startDate ? 1 : -1) * (showActiveEvents ? 1 : -1)
     })
 
-  const { user } = useProfile()
+  const { user, isUserLoading } = useProfile()
   const isEditable = canEditLocation(user, location)
+
+  if (isUserLoading) {
+    return null
+  }
+
+  if (!location.publishedAt && !isEditable) {
+    return (
+      <EmptyState
+        icon="mountain"
+        title="Oops, page not found"
+        description="This page doesn’t exist or was removed!"
+        customCta={() => (
+          <Link href="/">
+            <Button variant="secondary">Return home</Button>
+          </Link>
+        )}
+      />
+    )
+  }
 
   return (
     <LocationContent>
@@ -118,6 +139,21 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
           )}
         </StyledContentCard>
       </LocationDetailsContainer>
+
+      {!location.publishedAt && (
+        <Banner>
+          <Body1>
+            Only you can see this page.{' '}
+            <Link
+              href={`/location/${externId}/edit`}
+              style={{ textDecoration: 'underline' }}
+            >
+              Make it public
+            </Link>{' '}
+            when you're ready for others to see it.
+          </Body1>
+        </Banner>
+      )}
 
       <GalleryPreviewContainer>
         {hasPhotos && (
@@ -349,4 +385,19 @@ const GalleryPreviewButton = styled(Button)`
 const StyledLink = styled(Link)`
   border: 1px solid ${({ theme }) => theme.colors.black};
   cursor: pointer;
+`
+
+const Banner = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 2.4rem;
+  background: ${({ theme }) => theme.colors.yellow300};
+  ${padding('sm')};
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `
