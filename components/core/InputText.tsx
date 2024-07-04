@@ -64,7 +64,7 @@ export interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
 export const InputText = forwardRef<HTMLInputElement, InputTextProps>(
   (
     {
-      id = 'input',
+      id,
       label,
       required,
       info,

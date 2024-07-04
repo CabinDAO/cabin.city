@@ -56,7 +56,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
 }
 
 export const InputTextArea = ({
-  id = 'input',
+  id,
   label,
   required,
   info,

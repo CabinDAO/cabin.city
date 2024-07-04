@@ -47,7 +47,7 @@ interface DropdownProps {
 }
 
 export const Dropdown = ({
-  id = 'input',
+  id,
   label,
   required,
   info,
@@ -95,6 +95,7 @@ export const Dropdown = ({
   return (
     <ClickAway className={className} onClickAway={handleSoftClose}>
       <Container
+        id={id}
         onFocus={() => setActive(true)}
         onBlur={() => setActive(false)}
         onClick={toggleOpen}
@@ -115,7 +116,6 @@ export const Dropdown = ({
           />
         ) : (
           <InputBase
-            id={id}
             label={label}
             required={required}
             info={info}

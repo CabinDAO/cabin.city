@@ -30,6 +30,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   helperTextPosition?: HelperTextPosition
 }
 export const InputBase = ({
+  id,
   label,
   required = false,
   filled,
@@ -49,6 +50,7 @@ export const InputBase = ({
 }: InputBaseProps) => {
   return (
     <Container
+      id={id}
       disabled={disabled}
       filled={filled}
       onClick={onClick}

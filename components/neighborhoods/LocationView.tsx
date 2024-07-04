@@ -31,6 +31,7 @@ import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
+import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
 
 export const LocationView = ({ location }: { location: LocationFragment }) => {
   const { externId, mediaItems } = location
@@ -143,14 +144,14 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
       {!location.publishedAt && (
         <Banner>
           <Body1>
-            Only you can see this page.{' '}
+            Only stewards can see this page.{' '}
             <Link
-              href={`/location/${externId}/edit`}
+              href={`/location/${externId}/edit#${VISIBILITY_FIELD_ID}`}
               style={{ textDecoration: 'underline' }}
             >
               Make it public
             </Link>{' '}
-            when you're ready for others to see it.
+            when you're ready.
           </Body1>
         </Banner>
       )}

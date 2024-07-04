@@ -42,7 +42,7 @@ interface MultipleDropdownOptions {
 }
 
 export const MultipleDropdown = ({
-  id = 'input',
+  id,
   label,
   required,
   info,

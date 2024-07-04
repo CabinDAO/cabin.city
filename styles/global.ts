@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components'
-import { Inter } from "next/font/google"
+import { Inter } from 'next/font/google'
 
 const inter = Inter({
   display: 'swap',
@@ -14,6 +14,7 @@ export default createGlobalStyle`
     font-size: 62.5%; /* base 10px */
     overscroll-behavior: none;
     -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
   }
 
   #privy-dialog {

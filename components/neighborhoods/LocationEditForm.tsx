@@ -38,6 +38,8 @@ import { InputText } from '@/components/core/InputText'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { Dropdown } from '@/components/core/Dropdown'
 
+export const VISIBILITY_FIELD_ID = 'visibility'
+
 export function LocationEditForm({
   location,
   afterSave,
@@ -240,6 +242,7 @@ export function LocationEditForm({
 
         <InputCoupleContainer>
           <Dropdown
+            id={VISIBILITY_FIELD_ID}
             selectedOption={
               locationInput.published === 'true'
                 ? visibilityOptions[0]
