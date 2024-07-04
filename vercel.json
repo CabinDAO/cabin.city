@@ -1,5 +1,5 @@
 {
-  "buildCommand": "([ -n \"${NEXT_PUBLIC_VERCEL}\"] && [ -n \"${POSTGRES_URL}\" ] && npx prisma migrate deploy || true) && npm run build",
+  "buildCommand": "npm run build && ([ -n \"${NEXT_PUBLIC_VERCEL}\"] && [ -n \"${POSTGRES_URL}\" ] && npx prisma migrate deploy || true)",
   "crons": [
     {
       "path": "/api/v2/sync/token",
