@@ -30,23 +30,23 @@ export const CityDirectoryView = () => {
         }
       />
       <Content>
-        <ChipFilterBar>
-          <ChipFilter
-            label="All"
-            selected={type === undefined}
-            onClick={() => setType(undefined)}
-          />
-          <ChipFilter
-            label="Neighborhoods"
-            selected={type === LocationType.Neighborhood}
-            onClick={() => setType(LocationType.Neighborhood)}
-          />
-          <ChipFilter
-            label="Outposts"
-            selected={type === LocationType.Outpost}
-            onClick={() => setType(LocationType.Outpost)}
-          />
-        </ChipFilterBar>
+        {/*<ChipFilterBar>*/}
+        {/*  <ChipFilter*/}
+        {/*    label="All"*/}
+        {/*    selected={type === undefined}*/}
+        {/*    onClick={() => setType(undefined)}*/}
+        {/*  />*/}
+        {/*  <ChipFilter*/}
+        {/*    label="Neighborhoods"*/}
+        {/*    selected={type === LocationType.Neighborhood}*/}
+        {/*    onClick={() => setType(LocationType.Neighborhood)}*/}
+        {/*  />*/}
+        {/*  <ChipFilter*/}
+        {/*    label="Outposts"*/}
+        {/*    selected={type === LocationType.Outpost}*/}
+        {/*    onClick={() => setType(LocationType.Outpost)}*/}
+        {/*  />*/}
+        {/*</ChipFilterBar>*/}
 
         <Locations type={type} />
       </Content>
