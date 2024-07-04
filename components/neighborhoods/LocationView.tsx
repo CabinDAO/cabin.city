@@ -61,8 +61,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
   const { deviceSize } = useDeviceSize()
   const hasPhotos = galleryPreviewUrls.length > 0
-  const galleryImageWidth = deviceSize === 'desktop' ? 26.9 : undefined
-  const imageSizesString = '269px'
+  const galleryImageWidth = deviceSize === 'desktop' ? 26.8 : undefined
+  const imageSizesString = '268px'
 
   const [showActiveEvents, setShowActiveEvents] = useState(true)
   const visibleEvents = events
@@ -317,7 +317,7 @@ const GalleryPreviewListImages = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-auto-flow: column;
-  grid-gap: 1.6rem;
+  grid-gap: 1.5rem;
 
   > *:not(:first-child) {
     display: none;
