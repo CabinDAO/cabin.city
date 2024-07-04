@@ -132,11 +132,11 @@ export function LocationEditForm({
 
   const visibilityOptions = [
     {
-      label: 'Public (anyone can see)',
+      label: 'Public (visible to anyone)',
       value: true,
     },
     {
-      label: 'Private (only stewards can see)',
+      label: 'Private (only visible to you)',
       value: false,
     },
   ]

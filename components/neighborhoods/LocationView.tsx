@@ -144,7 +144,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
       {!location.publishedAt && (
         <Banner>
           <Body1>
-            Only stewards can see this page.{' '}
+            Only you can see this page.{' '}
             <Link
               href={`/location/${externId}/edit#${VISIBILITY_FIELD_ID}`}
               style={{ textDecoration: 'underline' }}
