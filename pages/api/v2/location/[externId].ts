@@ -182,6 +182,8 @@ async function handlePost(
     }),
   ])
 
+  await res.revalidate(`/location/${updatedLocation.externId}`)
+
   res.status(200).send({
     location: locationToFragment(updatedLocation as LocationWithRelations),
   })
