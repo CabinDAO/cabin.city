@@ -156,8 +156,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
         </Banner>
       )}
 
-      <GalleryPreviewContainer>
-        {hasPhotos && (
+      {hasPhotos && (
+        <GalleryPreviewContainer>
           <GalleryPreviewList>
             <GalleryPreviewListImages>
               {galleryPreviewUrls.map((url, i) => (
@@ -179,8 +179,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               </GalleryPreviewButton>
             </Link>
           </GalleryPreviewList>
-        )}
-      </GalleryPreviewContainer>
+        </GalleryPreviewContainer>
+      )}
 
       <Section>
         <SectionHeader>
