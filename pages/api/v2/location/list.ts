@@ -125,8 +125,9 @@ const sortPrequery = async (
           profile?.isAdmin
             ? Prisma.sql`1=1`
             : Prisma.sql`l."publishedAt" IS NOT NULL ${
-                profile &&
-                Prisma.sql`OR steward."privyDID" = ${profile.privyDID}`
+                profile
+                  ? Prisma.sql`OR steward."privyDID" = ${profile.privyDID}`
+                  : Prisma.sql``
               }`
         }
       GROUP BY 
@@ -144,7 +145,11 @@ const sortPrequery = async (
       }
     ORDER BY 
       "distanceInKM" ASC, 
-      ${profile && Prisma.sql`"privyDID" = ${profile.privyDID} DESC,`}
+      ${
+        profile
+          ? Prisma.sql`"privyDID" = ${profile.privyDID} DESC,`
+          : Prisma.sql``
+      }
       "publishedAt" IS NOT NULL ASC,
       type = ${LocationType.Neighborhood}::"LocationType" DESC, 
       COALESCE(SUM(CASE WHEN "endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, 
