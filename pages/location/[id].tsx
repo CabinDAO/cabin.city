@@ -30,7 +30,7 @@ export default function LocationPage({
       {location && location.publishedAt && (
         <AppHead
           title={location.name}
-          description={location.description}
+          description={'a Cabin.city neighborhood'}
           imageUrl={
             getImageUrlByIpfsHash(location.bannerImageIpfsHash, true) ||
             undefined
