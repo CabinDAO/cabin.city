@@ -14,6 +14,10 @@ import { SupperClubSection } from '@/components/landing/SupperClubSection'
 import { JourneySection } from '@/components/landing/JourneySection'
 import { MapData, MapSection } from '@/components/landing/MapSection'
 import { SubscribeSection } from '@/components/landing/SubscribeSection'
+import Link from 'next/link'
+import { Button } from '@/components/core/Button'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import React from 'react'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
@@ -30,7 +34,24 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       >
         <OpaqueDiv>
           <TopLogoSection />
-          <HeroSection />
+          <HeroSection
+            headerText={
+              'A network of neighborhoods where you’d want to grow up'
+            }
+            buttons={[
+              <Link key="1" href="/city-directory">
+                <Button>Find one near you</Button>
+              </Link>,
+              <Link
+                key="2"
+                href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
+                target="_blank"
+                rel="noopener nofollow noreferrer"
+              >
+                <Button variant={'secondary'}>Book a welcome call</Button>
+              </Link>,
+            ]}
+          />
         </OpaqueDiv>
       </LandingSection>
 

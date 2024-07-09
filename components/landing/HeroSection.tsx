@@ -1,29 +1,25 @@
+import React from 'react'
 import styled from 'styled-components'
-import { HHero } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
-import Link from 'next/link'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { H2, HHero } from '@/components/core/Typography'
 
-export const HeroSection = () => {
+export const HeroSection = ({
+  headerText,
+  subheaderText = '',
+  buttons = [],
+}: {
+  headerText: string
+  subheaderText?: string
+  buttons?: React.ReactNode[]
+}) => {
   return (
     <Content>
       <TopWrapper>
-        <HeaderText>
-          A network of neighborhoods where you’d want to grow up
-        </HeaderText>
+        <Header>
+          <HeaderText>{headerText}</HeaderText>
+          {subheaderText && <SubheaderText>{subheaderText}</SubheaderText>}
+        </Header>
         <ButtonWrapper>
-          <Buttons>
-            <Link href="/city-directory">
-              <Button>Find one near you</Button>
-            </Link>
-            <Link
-              href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
-              target="_blank"
-              rel="noopener nofollow noreferrer"
-            >
-              <Button variant={'secondary'}>Book a welcome call</Button>
-            </Link>
-          </Buttons>
+          <Buttons>{buttons.map((button) => button)}</Buttons>
         </ButtonWrapper>
       </TopWrapper>
       {/*<Newsletter>*/}
@@ -114,6 +110,18 @@ const ButtonWrapper = styled.div`
 //   }
 // `
 
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 2.4rem;
+  }
+`
+
 const HeaderText = styled(HHero)`
   width: 28.8rem;
   text-align: center;
@@ -125,5 +133,19 @@ const HeaderText = styled(HHero)`
     width: 100%;
     font-size: 4rem;
     line-height: 1.25;
+  }
+`
+
+const SubheaderText = styled(H2)`
+  width: 28.8rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.white};
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
+    3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
+
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
+    //font-size: 4rem;
+    line-height: 1.5;
   }
 `
