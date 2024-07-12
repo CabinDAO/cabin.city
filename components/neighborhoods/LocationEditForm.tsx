@@ -132,11 +132,11 @@ export function LocationEditForm({
 
   const visibilityOptions = [
     {
-      label: 'Public (visible to anyone)',
+      label: 'Published (visible to anyone)',
       value: true,
     },
     {
-      label: 'Private (only visible to you)',
+      label: 'Draft (only visible to you)',
       value: false,
     },
   ]

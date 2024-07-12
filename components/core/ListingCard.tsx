@@ -29,7 +29,7 @@ export const ListingCard = ({
   const { deviceSize } = useDeviceSize()
 
   const truncatedName =
-    (!location.publishedAt ? '[PRIVATE] ' : '') +
+    (!location.publishedAt ? '[DRAFT] ' : '') +
     (deviceSize === 'tablet' ? truncate(name, 30) : name)
 
   const cardWidth = variant === 'home' ? 412 : 388
