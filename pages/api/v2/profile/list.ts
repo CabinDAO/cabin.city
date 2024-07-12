@@ -190,9 +190,9 @@ const profilesToFragments = (
         level: role.level as RoleLevel,
       })),
       badgeCount: profile.wallet?._count.badges || 0,
-      cabinTokenBalanceInt: Math.floor(
-        profile.wallet?.cabinTokenBalance.toNumber() || 0
-      ),
+      cabinTokenBalanceInt: profile.wallet
+        ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
+        : null,
     }
   })
 }

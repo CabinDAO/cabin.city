@@ -77,7 +77,7 @@ export type ProfileListFragment = {
   avatar?: AvatarFragmentType
   roles: RoleFragment[]
   badgeCount: number
-  cabinTokenBalanceInt: number
+  cabinTokenBalanceInt: number | null
 }
 
 export const ProfileListParams = z
@@ -140,7 +140,7 @@ export type ProfileBasicFragment = {
   email: string
   bio: string
   citizenshipStatus: CitizenshipStatus | null
-  cabinTokenBalanceInt: number
+  cabinTokenBalanceInt: number | null
   avatar: AvatarFragmentType | null
   roles: RoleFragment[]
 }
@@ -221,7 +221,7 @@ export type MeFragment = {
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  cabinTokenBalanceInt: number
+  cabinTokenBalanceInt: number | null
   isAdmin: boolean
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean

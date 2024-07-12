@@ -52,9 +52,13 @@ export const StewardContact = ({
           <Caption>
             {steward ? (
               <>
-                {(steward.cabinTokenBalanceInt ?? 0).toLocaleString('en-US')}{' '}
-                ₡ABIN&nbsp;·&nbsp;Joined{' '}
-                {format(parseISO(steward.createdAt), 'yyyy')}
+                {steward.cabinTokenBalanceInt !== null && (
+                  <>
+                    {steward.cabinTokenBalanceInt.toLocaleString('en-US')}{' '}
+                    ₡ABIN&nbsp;·&nbsp;
+                  </>
+                )}
+                Joined {format(parseISO(steward.createdAt), 'yyyy')}
               </>
             ) : (
               'Maybe you?'

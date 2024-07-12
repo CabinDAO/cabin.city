@@ -260,9 +260,9 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     citizenshipMintedAt: profile.citizenshipMintedAt
       ? profile.citizenshipMintedAt.toISOString()
       : null,
-    cabinTokenBalanceInt: Math.floor(
-      profile.wallet?.cabinTokenBalance.toNumber() || 0
-    ),
+    cabinTokenBalanceInt: profile.wallet
+      ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
+      : null,
     avatar: {
       url: profile.avatar ? profile.avatar.url : '',
     },

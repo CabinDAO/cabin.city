@@ -32,7 +32,9 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
             />
           </NameContainer>
           <Caption>
-            {profile.cabinTokenBalanceInt ?? 0} ₡ABIN &nbsp;·&nbsp;{' '}
+            {profile.cabinTokenBalanceInt !== null && (
+              <>{profile.cabinTokenBalanceInt} ₡ABIN &nbsp;·&nbsp; </>
+            )}
             {profile.badgeCount} stamps
           </Caption>
           <StyledBody2>{truncate(profile.bio ?? '', 90)}</StyledBody2>
