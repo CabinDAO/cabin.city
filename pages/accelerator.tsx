@@ -1,7 +1,7 @@
 import React from 'react'
 import { AppHead } from '@/components/head'
-import { AcceleratorPageView } from '@/components/landing/AcceleratorPageView'
-import previewImg from '@/components/landing/accelerator-header.jpg'
+import { AcceleratorPageView } from '@/components/accelerator/AcceleratorPageView'
+import previewImg from '@/components/accelerator/accelerator-header.jpg'
 
 export default function Accelerator() {
   return (

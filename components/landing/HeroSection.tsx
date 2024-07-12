@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { H2, HHero } from '@/components/core/Typography'
+import { fonts, H1, H2, HHero } from '@/components/core/Typography'
 
 export const HeroSection = ({
   headerText,
@@ -136,9 +136,10 @@ const HeaderText = styled(HHero)`
   }
 `
 
-const SubheaderText = styled(H2)`
+const SubheaderText = styled(H1)`
   width: 28.8rem;
   text-align: center;
+  font-family: ${fonts.poppins};
   color: ${({ theme }) => theme.colors.white};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
     3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
