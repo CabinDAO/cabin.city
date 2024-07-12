@@ -21,6 +21,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  return res.json({ message: 'Sync is off for now' })
+
   await attemptSync({
     type: BlockSyncType.Hats,
     provider: getEthersAlchemyProvider(hatsConfig.networkName),
