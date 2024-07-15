@@ -21,7 +21,7 @@ export const AppHead = ({
   const pageTitle = title?.trim() ?? DEFAULT_TITLE
   const pageDescription = description?.trim() ?? DESCRIPTION
 
-  const fullUrl = `${appDomainWithProto}/${pathname}`
+  const fullUrl = `${appDomainWithProto}${pathname}`
 
   return (
     <>

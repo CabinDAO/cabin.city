@@ -1,29 +1,22 @@
+import React from 'react'
 import styled from 'styled-components'
 import { HHero } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
-import Link from 'next/link'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 
-export const HeroSection = () => {
+export const HeroSection = ({
+  headerText,
+  buttons = [],
+}: {
+  headerText: string
+  buttons?: React.ReactNode[]
+}) => {
   return (
     <Content>
       <TopWrapper>
-        <HeaderText>
-          A network of neighborhoods where you’d want to grow up
-        </HeaderText>
+        <Header>
+          <HeaderText>{headerText}</HeaderText>
+        </Header>
         <ButtonWrapper>
-          <Buttons>
-            <Link href="/city-directory">
-              <Button>Find one near you</Button>
-            </Link>
-            <Link
-              href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
-              target="_blank"
-              rel="noopener nofollow noreferrer"
-            >
-              <Button variant={'secondary'}>Book a welcome call</Button>
-            </Link>
-          </Buttons>
+          <Buttons>{buttons.map((button) => button)}</Buttons>
         </ButtonWrapper>
       </TopWrapper>
       {/*<Newsletter>*/}
@@ -113,6 +106,18 @@ const ButtonWrapper = styled.div`
 //       3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
 //   }
 // `
+
+const Header = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 2.4rem;
+  }
+`
 
 const HeaderText = styled(HHero)`
   width: 28.8rem;

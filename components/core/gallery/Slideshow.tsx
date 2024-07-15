@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import {
   Children,
   ReactElement,
@@ -7,6 +6,8 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useInterval } from 'react-use'
+import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import analytics from '@/lib/googleAnalytics/analytics'
@@ -15,14 +16,21 @@ interface SlideshowProps {
   className?: string
   children: ReactElement | ReactElement[]
   loop?: boolean
+  advanceAfter?: number
 }
 
-export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
+export const Slideshow = ({
+  children,
+  className,
+  loop,
+  advanceAfter,
+}: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
   const [numSlidesVisible, setNumSlidesVisible] = useState(0)
   const [slideSizes, setSlideSizes] = useState<DOMRect[]>([])
   const [currSlide, setCurrSlide] = useState(0)
+  const [autoAdvanceStopped, setAutoAdvanceStopped] = useState(false)
   const firstSlideSize = slideSizes[0]
   const currSlideSize = slideSizes[currSlide]
   const currSlideOffset = (firstSlideSize?.x ?? 0) - (currSlideSize?.x ?? 0)
@@ -30,8 +38,7 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
     loop || currSlide < slideSizes.length - numSlidesVisible
   const canNavigatePrevious = loop || currSlide > 0
 
-  const onNextSlide = () => {
-    analytics.roleCardsSlideshowEvent()
+  const gotoNextSlide = () => {
     let nextSlide = Math.min(
       slideSizes.length - numSlidesVisible,
       currSlide + 1
@@ -40,15 +47,31 @@ export const Slideshow = ({ children, className, loop }: SlideshowProps) => {
       nextSlide = 0
     }
     setCurrSlide(nextSlide)
+    setAutoAdvanceStopped(true)
   }
 
-  const onPreviousSlide = () => {
-    analytics.roleCardsSlideshowEvent()
+  const gotoPrevSlide = () => {
     let prevSlide = Math.max(0, currSlide - 1)
     if (loop && prevSlide == currSlide) {
       prevSlide = slideSizes.length - numSlidesVisible
     }
     setCurrSlide(prevSlide)
+    setAutoAdvanceStopped(true)
+  }
+
+  useInterval(
+    gotoNextSlide,
+    !autoAdvanceStopped && advanceAfter ? advanceAfter * 1000 : null
+  )
+
+  const onNextSlide = () => {
+    analytics.roleCardsSlideshowEvent()
+    gotoNextSlide()
+  }
+
+  const onPreviousSlide = () => {
+    analytics.roleCardsSlideshowEvent()
+    gotoPrevSlide()
   }
 
   const calculateSizes = useCallback(() => {
