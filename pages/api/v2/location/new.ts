@@ -26,7 +26,7 @@ async function handler(
       stewardId: profile.id,
       externId: randomId('location'),
       type: $Enums.LocationType.Neighborhood,
-      name: 'New neighborhood',
+      name: `${profile.name}'s New Neighborhood`,
       description: '',
       bannerImageIpfsHash: '',
     },
