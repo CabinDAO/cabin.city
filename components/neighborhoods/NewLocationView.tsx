@@ -1,12 +1,11 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
-import { useProfile } from '../auth/useProfile'
+import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 import { useNavigation } from '@/components/hooks/useNavigation'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationNewResponse } from '@/utils/types/location'
-import { CitizenshipStatus } from '@/utils/types/profile'
 import { EmailType, NewLocationPayload } from '@/lib/mail/types'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
@@ -23,7 +22,7 @@ import { EmptyState } from '@/components/core/EmptyState'
 export const NewLocationView = () => {
   const router = useRouter()
   const { showModal } = useModal()
-  const { user } = useProfile({ redirectTo: '/' })
+  const { confirmLoggedIn } = useConfirmLoggedIn()
   const { sendEmail } = useEmail()
   const { goBack } = useNavigation()
   const { post } = useBackend()
@@ -32,19 +31,29 @@ export const NewLocationView = () => {
   // user?.citizenshipStatus === CitizenshipStatus.Verified
 
   const handlePrimaryButtonClick = async () => {
-    try {
-      const data = await post<LocationNewResponse>('LOCATION_NEW', {})
-      const externId = !data || 'error' in data ? null : data.locationExternId
+    confirmLoggedIn(async () => {
+      try {
+        const data = await post<LocationNewResponse>('LOCATION_NEW', {})
+        const externId = !data || 'error' in data ? null : data.locationExternId
 
-      if (externId) {
-        await sendEmail({
-          type: EmailType.NEW_LOCATION,
-          data: {
-            locationId: externId,
-          } as NewLocationPayload,
-        })
-        router.push(`/location/${externId}/edit`).then()
-      } else {
+        if (externId) {
+          await sendEmail({
+            type: EmailType.NEW_LOCATION,
+            data: {
+              locationId: externId,
+            } as NewLocationPayload,
+          })
+          router.push(`/location/${externId}/edit`).then()
+        } else {
+          showModal(() => (
+            <ErrorModal
+              title="Location Creation Error"
+              description="There was an error creating your location"
+            />
+          ))
+        }
+      } catch (error) {
+        console.error(error)
         showModal(() => (
           <ErrorModal
             title="Location Creation Error"
@@ -52,23 +61,11 @@ export const NewLocationView = () => {
           />
         ))
       }
-    } catch (error) {
-      console.error(error)
-      showModal(() => (
-        <ErrorModal
-          title="Location Creation Error"
-          description="There was an error creating your location"
-        />
-      ))
-    }
+    })
   }
 
   const handleSecondaryButtonClick = () => {
     goBack()
-  }
-
-  if (!user) {
-    return null
   }
 
   if (!canCreateListings) {
