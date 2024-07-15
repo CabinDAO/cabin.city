@@ -147,10 +147,10 @@ const sortPrequery = async (
       "distanceInKM" ASC, 
       ${
         profile
-          ? Prisma.sql`"privyDID" = ${profile.privyDID} DESC,`
+          ? Prisma.sql`"privyDID" = ${profile.privyDID} AND "publishedAt" IS NULL DESC, "privyDID" = ${profile.privyDID} DESC,`
           : Prisma.sql``
       }
-      "publishedAt" IS NOT NULL ASC,
+      "publishedAt" IS NULL ASC,
       type = ${LocationType.Neighborhood}::"LocationType" DESC, 
       COALESCE(SUM(CASE WHEN "endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, 
       name ASC, 
