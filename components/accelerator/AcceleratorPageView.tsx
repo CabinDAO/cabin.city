@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { Body1, H2, H3 } from '@/components/core/Typography'
 // import headerBg from '@/components/accelerator/accelerator-header.jpg'
 // import { BaseLayout } from '@/components/core/BaseLayout'
@@ -12,13 +12,17 @@ import querystring from 'querystring'
 export const AcceleratorPageView = () => {
   const router = useRouter()
 
-  router
-    .push(
-      `${
-        EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM
-      }?${querystring.stringify(router.query)}`
-    )
-    .then()
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      router
+        .push(
+          `${
+            EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM
+          }?${querystring.stringify(router.query)}`
+        )
+        .then()
+    }
+  })
 
   return null
 
