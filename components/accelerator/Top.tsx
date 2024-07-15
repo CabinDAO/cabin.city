@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
-import { Body1, fonts, H1, HHero } from '@/components/core/Typography'
+import { Body1, fonts, H2, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { Countdown } from '@/components/core/Countdown'
 import { Button } from '@/components/core/Button'
@@ -76,7 +76,7 @@ const HeaderText = styled(HHero)`
   }
 `
 
-const SubheaderText = styled(H1)`
+const SubheaderText = styled(H2)`
   width: 28.8rem;
   text-align: center;
   font-family: ${fonts.poppins};

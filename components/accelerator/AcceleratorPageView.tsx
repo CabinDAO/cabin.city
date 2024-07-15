@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Body1, fonts, H1, H2, H3 } from '@/components/core/Typography'
+// import { Body1, H2, H3 } from '@/components/core/Typography'
 // import headerBg from '@/components/accelerator/accelerator-header.jpg'
 // import { BaseLayout } from '@/components/core/BaseLayout'
 // import { LandingSection } from '@/components/landing/LandingSection'
@@ -19,6 +19,8 @@ export const AcceleratorPageView = () => {
       }?${querystring.stringify(router.query)}`
     )
     .then()
+
+  return null
 
   // return (
   //   <BaseLayout variant="landing">
