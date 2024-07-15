@@ -54,7 +54,7 @@ export const getStaticPaths = (async () => {
     paths: locations.map((location) => ({
       params: { id: location.externId },
     })),
-    fallback: true, // true or false or "blocking"
+    fallback: 'blocking', // true or false or "blocking"
   }
 }) satisfies GetStaticPaths
 
