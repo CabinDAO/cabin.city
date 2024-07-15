@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
-import { useNavigation } from '@/components/hooks/useNavigation'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationNewResponse } from '@/utils/types/location'
@@ -24,8 +23,9 @@ export const NewLocationView = () => {
   const { showModal } = useModal()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { sendEmail } = useEmail()
-  const { goBack } = useNavigation()
   const { post } = useBackend()
+
+  const onCloseUrl = '/city-directory'
 
   const canCreateListings = true
   // user?.citizenshipStatus === CitizenshipStatus.Verified
@@ -65,7 +65,7 @@ export const NewLocationView = () => {
   }
 
   const handleSecondaryButtonClick = () => {
-    goBack()
+    router.push(onCloseUrl).then()
   }
 
   if (!canCreateListings) {
@@ -74,7 +74,7 @@ export const NewLocationView = () => {
         <TitleCard
           title="New neighborhood"
           icon="close"
-          iconHref="/city-directory"
+          iconHref={onCloseUrl}
         />
         <div style={{ width: '100%' }}>
           <EmptyState
@@ -94,11 +94,7 @@ export const NewLocationView = () => {
 
   return (
     <BaseLayout>
-      <TitleCard
-        title="New neighborhood"
-        icon="close"
-        iconHref="/city-directory"
-      />
+      <TitleCard title="New neighborhood" icon="close" iconHref={onCloseUrl} />
       <Container>
         <StyledContentCard shape="notch">
           <Content>
