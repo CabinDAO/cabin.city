@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
+import { useProfile } from '@/components/auth/useProfile'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -9,7 +10,7 @@ import { EmailType, NewLocationPayload } from '@/lib/mail/types'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
-import { Body1, H2 } from '@/components/core/Typography'
+import { Body1, H3 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ActionBar } from '@/components/core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -17,10 +18,12 @@ import { ErrorModal } from '../ErrorModal'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
 import { EmptyState } from '@/components/core/EmptyState'
+import { HorizontalDivider } from '@/components/core/Divider'
 
 export const NewLocationView = () => {
   const router = useRouter()
   const { showModal } = useModal()
+  const { user } = useProfile()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { sendEmail } = useEmail()
   const { post } = useBackend()
@@ -94,28 +97,32 @@ export const NewLocationView = () => {
 
   return (
     <BaseLayout>
-      <TitleCard title="New neighborhood" icon="close" iconHref={onCloseUrl} />
+      <TitleCard
+        title="List your neighborhood"
+        icon="close"
+        iconHref={onCloseUrl}
+      />
       <Container>
         <StyledContentCard shape="notch">
           <Content>
-            <H2>Joining the City Directory</H2>
             <Body1>
-              Cabin’s City Directory is a hub for connecting aligned people with
-              communities around the world.
+              Cabin’s City Directory connects local neighborhoods with aligned
+              people around the world.
             </Body1>
+            <H3>Make New Friends</H3>
+            <Body1>Invite friendly visitors to join your next gathering.</Body1>
+            <H3>Find New Neighbors</H3>
             <Body1>
-              Listing your neighborhood here is a great way to attract new
-              community members to your neighborhood.
+              Cabin members make excellent community members. Help one move to
+              your neck of the woods.
             </Body1>
+            <H3>Join the Network City</H3>
             <Body1>
-              To get started, fill out the form on the next page with details
-              about your neighborhood, including its location, a brief
-              description, and what makes it special. Be sure to include
-              pictures, any unique features, and ongoing events or projects that
-              define your community.
+              Connect with other neighborhoods to share resources and ideas.
             </Body1>
+            <HorizontalDivider />
             <Body1>
-              If you’d like support in starting and growing your neighborhood,
+              If you’d like support in starting or growing your neighborhood,
               check out our{' '}
               <Link
                 style={{ textDecoration: 'underline' }}
@@ -128,7 +135,7 @@ export const NewLocationView = () => {
               .
             </Body1>
             <Body1>
-              If you need any help, feel free to email{' '}
+              Need any help? Feel free to email{' '}
               <Link
                 style={{ textDecoration: 'underline' }}
                 target="_blank"
@@ -142,7 +149,7 @@ export const NewLocationView = () => {
           </Content>
           <ActionBar
             primaryButton={{
-              label: 'Let’s go!',
+              label: user ? 'Let’s go!' : 'Sign in to continue',
               onClick: handlePrimaryButtonClick,
             }}
             secondaryButton={{
@@ -177,7 +184,7 @@ const Content = styled.div`
   gap: 2rem;
   align-items: flex-start;
   justify-content: center;
-  ${padding('sm')};
+  ${padding('md', 'sm')};
 
   ${({ theme }) => theme.bp.md} {
     width: 80%;
