@@ -123,7 +123,7 @@ const AboutSubsection = styled.div`
   flex-direction: column;
   padding: var(--children-padding);
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 1.6rem;
   height: 100%;
   width: 100%;

@@ -14,7 +14,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
 
   const profile = !data || 'error' in data ? null : data.profile
 
-  if (isLoading) {
+  if (!externId || isLoading) {
     return null
   } else if (!profile) {
     return Error404()

@@ -4,7 +4,7 @@ import {
 } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
-import { Caption } from '../../core/Typography'
+import { Caption, WordBreak } from '../../core/Typography'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ProfileFragment } from '@/utils/types/profile'
 
@@ -15,17 +15,17 @@ export const ProfileContactList = ({
   contactFields,
 }: ProfileContactListProps) => {
   return (
-    <ProfileListContainer>
-      <ContactFields>
-        {contactFields.map((field) => (
-          <Caption key={field.type}>{field.type}</Caption>
-        ))}
-      </ContactFields>
-      <ContactFields>
-        {contactFields.map((field) => (
+    <ProfileListContainer count={contactFields.length}>
+      {contactFields.map((field) => (
+        <>
+          <Caption key={field.type} style={{ flexGrow: 0 }}>
+            {field.type}
+          </Caption>
+          <div></div>
           <ContactField key={field.type} field={field} />
-        ))}
-      </ContactFields>
+          <div></div>
+        </>
+      ))}
     </ProfileListContainer>
   )
 }
@@ -55,20 +55,18 @@ const ContactField = ({ field }: ContactFieldProps) => {
   }
 }
 
-const ProfileListContainer = styled.div`
+const ProfileListContainer = styled.div<{ count: number }>`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(
+    ${({ count }) => count},
+    min-content 0.8rem min-content 2rem
+  );
   width: 100%;
+  word-break: break-word;
 
   ${({ theme }) => theme.bp.md} {
-    display: flex;
-    flex-direction: row;
-    gap: 6rem;
+    grid-template-rows: initial;
+    grid-template-columns: 10rem 1.6rem 1fr 0;
+    row-gap: 1.6rem;
   }
-`
-
-const ContactFields = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
 `
