@@ -9,7 +9,7 @@ import { ProfileFragment } from '@/utils/types/profile'
 
 const PASSPORT_PAGE_SIZE = 8
 
-export const ProfilePassportsSection = ({
+export const ProfileStampsSection = ({
   profile,
 }: {
   profile: ProfileFragment
@@ -21,6 +21,10 @@ export const ProfilePassportsSection = ({
   const start = PASSPORT_PAGE_SIZE * currentPage
   const end = (currentPage + 1) * PASSPORT_PAGE_SIZE
   const currentBadges = list.slice(start, end)
+
+  if (count == 0) {
+    return null
+  }
 
   const handleClickNext = () => {
     if (currentPage < Math.ceil(list.length / PASSPORT_PAGE_SIZE) - 1) {

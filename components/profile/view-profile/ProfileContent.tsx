@@ -3,7 +3,7 @@ import { ProfileSetupSection } from './ProfileSetupSection'
 import { ProfileInnerContainer } from '../profile.styles'
 import { ProfileAboutSection } from './ProfileAboutSection'
 import { ProfileHeaderSection } from './ProfileHeaderSection'
-import { ProfilePassportsSection } from './ProfilePassportsSection'
+import { ProfileStampsSection } from './ProfileStampsSection'
 import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
 import { ProfileFragment } from '@/utils/types/profile'
@@ -27,7 +27,7 @@ export const ProfileContent = ({
       )}
       <ProfileAboutSection profile={profile} />
       <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
-      <ProfilePassportsSection profile={profile} />
+      <ProfileStampsSection profile={profile} />
       <ProfileActivitiesSection profile={profile} />
     </ProfileInnerContainer>
   )
