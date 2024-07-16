@@ -6,7 +6,6 @@ import { monthYearFormat } from '@/utils/display-utils'
 import styled from 'styled-components'
 import Icon, { IconName } from '../../core/Icon'
 import { ContentCard } from '../../core/ContentCard'
-import { ResponsiveDivider } from '../../core/Divider'
 import { Body2, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
 
@@ -51,7 +50,6 @@ export const ProfileAboutSection = ({
       </AboutSubsection>
       {profile.contactFields.length ? (
         <ContactContainer>
-          <ResponsiveDivider />
           <ContactSubsection>
             <H3>Contact</H3>
             <ProfileContactList contactFields={profile.contactFields} />
