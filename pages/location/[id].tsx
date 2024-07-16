@@ -39,7 +39,7 @@ export default function LocationPage({
         />
       )}
       <BaseLayout>
-        {!router.isFallback && <LocationView location={location} />}
+        {!router.isFallback && <LocationView externId={location.externId} />}
       </BaseLayout>
     </>
   )

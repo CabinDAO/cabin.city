@@ -3,7 +3,10 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useBackend } from '@/components/hooks/useBackend'
-import { LocationMediaCategory, LocationFragment } from '@/utils/types/location'
+import {
+  LocationMediaCategory,
+  LocationGetResponse,
+} from '@/utils/types/location'
 import {
   EventFragment,
   EventListParamsType,
@@ -33,18 +36,24 @@ import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
 
-export const LocationView = ({ location }: { location: LocationFragment }) => {
-  const { externId, mediaItems } = location
-
+export const LocationView = ({ externId }: { externId: string }) => {
   const router = useRouter()
   const { useGet, useMutate } = useBackend()
-  const { data: eventData } = useGet<EventListResponse>(`EVENT_LIST`, {
-    locationId: location.externId,
-  } satisfies EventListParamsType)
+
+  const { data, isLoading } = useGet<LocationGetResponse>(
+    externId ? ['LOCATION', { externId: externId as string }] : null
+  )
+  const location = !data || 'error' in data ? null : data.location
+
+  const { data: eventData } = useGet<EventListResponse>(
+    location ? `EVENT_LIST` : null,
+    { locationId: location?.externId } satisfies EventListParamsType
+  )
   const events = !eventData || 'error' in eventData ? [] : eventData.events
 
   const { trigger: createEvent } = useMutate<EventNewResponse>('EVENT_NEW')
   const handleNewEventClick = async () => {
+    if (!location) return
     const data = await createEvent({
       locationExternId: location.externId,
     } satisfies EventNewParamsType)
@@ -55,8 +64,8 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
   }
 
   const galleryPreviewUrls =
-    mediaItems.length > 0
-      ? mediaItems
+    location && location.mediaItems.length > 0
+      ? location.mediaItems
           .slice(0, 3)
           .map((mi) => resolveImageUrl(mi, true))
           .filter((value): value is string => value !== null)
@@ -75,9 +84,9 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
     })
 
   const { user, isUserLoading } = useProfile()
-  const isEditable = canEditLocation(user, location)
+  const isEditable = !!location && canEditLocation(user, location)
 
-  if (isUserLoading) {
+  if (!location || isUserLoading) {
     return null
   }
 
@@ -126,7 +135,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
 
           {isEditable && (
             <EditBar>
-              <Link href={`/location/${externId}/edit`}>
+              <Link href={`/location/${location.externId}/edit`}>
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
                   <Overline>Edit</Overline>
@@ -146,7 +155,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
           <Body1>
             Only you can see this page.{' '}
             <Link
-              href={`/location/${externId}/edit#${VISIBILITY_FIELD_ID}`}
+              href={`/location/${location.externId}/edit#${VISIBILITY_FIELD_ID}`}
               style={{ textDecoration: 'underline' }}
             >
               Make it public
@@ -161,7 +170,10 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
           <GalleryPreviewList>
             <GalleryPreviewListImages>
               {galleryPreviewUrls.map((url, i) => (
-                <StyledLink key={i} href={`/location/${externId}/photos`}>
+                <StyledLink
+                  key={i}
+                  href={`/location/${location.externId}/photos`}
+                >
                   <ImageFlex
                     sizes={imageSizesString}
                     alt={LocationMediaCategory.Features}
@@ -173,7 +185,7 @@ export const LocationView = ({ location }: { location: LocationFragment }) => {
               ))}
             </GalleryPreviewListImages>
 
-            <Link href={`/location/${externId}/photos`}>
+            <Link href={`/location/${location.externId}/photos`}>
               <GalleryPreviewButton variant="secondary">
                 <Icon name="right-arrow" size={2.4} />
               </GalleryPreviewButton>

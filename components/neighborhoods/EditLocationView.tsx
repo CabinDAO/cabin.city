@@ -9,7 +9,6 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationEditForm } from '@/components/neighborhoods/LocationEditForm'
-import { Body1 } from '@/components/core/Typography'
 import { padding } from '@/styles/theme'
 
 export default EditLocationView
