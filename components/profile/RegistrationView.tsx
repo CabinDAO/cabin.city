@@ -25,6 +25,7 @@ export interface RegistrationParams {
   name: string
   address: AddressFragmentType
   avatar: AvatarFragmentType | undefined
+  subscribeToNewsletter: boolean
 }
 
 export const RegistrationView = () => {
@@ -44,8 +45,6 @@ export const RegistrationView = () => {
   }, [externalUser]) // don't add linkEmail() to deps. it causes a bug where useEffect is called many times and the popup never shows the screen to enter the code Privy emails you
 
   const handleSubmit = async (params: RegistrationParams) => {
-    const { email, name, address, avatar } = params
-
     if (!isUserLoading && !externalUser) {
       confirmLoggedIn(() => {
         router.push('/registration')
@@ -59,7 +58,7 @@ export const RegistrationView = () => {
 
     const walletAddress = externalUser.wallet?.address
 
-    if (!avatar?.url) {
+    if (!params.avatar?.url) {
       showError('Avatar required')
       return
     }
@@ -67,10 +66,11 @@ export const RegistrationView = () => {
     try {
       const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
         walletAddress: walletAddress ? (walletAddress as Address) : undefined,
-        name,
-        email: externalUser.email?.address || email,
-        address,
-        avatar,
+        name: params.name,
+        email: externalUser.email?.address || params.email,
+        address: params.address,
+        avatar: params.avatar,
+        subscribeToNewsletter: params.subscribeToNewsletter,
       } satisfies ProfileNewParamsType)
 
       if ('error' in resp) {

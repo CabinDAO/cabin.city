@@ -245,6 +245,7 @@ export const ProfileNewParams = z
     email: z.string().email(),
     address: AddressFragment,
     avatar: AvatarFragment.optional(),
+    subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
   })
   .strict()

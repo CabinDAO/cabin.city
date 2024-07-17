@@ -1,8 +1,11 @@
+import React from 'react'
 import styled from 'styled-components'
+import { Subline1 } from '@/components/core/Typography'
 import Icon from './Icon'
 
 interface CheckboxProps {
   selected: boolean
+  label?: string
   disabled?: boolean
   onClick?: VoidFunction
 }
@@ -11,9 +14,14 @@ export const Checkbox = (props: CheckboxProps) => {
   const iconColor = props.selected ? 'white' : 'green900'
 
   return (
-    <Container {...props}>
-      {props.selected && <Icon color={iconColor} name="check" size={1.5} />}
-    </Container>
+    <>
+      <Container {...props}>
+        {props.selected && <Icon color={iconColor} name="check" size={1.5} />}
+      </Container>
+      {props.label && (
+        <Subline1 onClick={props.onClick}>{props.label} </Subline1>
+      )}
+    </>
   )
 }
 

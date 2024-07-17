@@ -6,6 +6,7 @@ import { AddressFragmentType } from '@/utils/types/location'
 import styled from 'styled-components'
 import { AvatarFragmentType } from '@/utils/types/profile'
 import { Button } from '@/components/core/Button'
+import { Checkbox } from '@/components/core/Checkbox'
 import { InputText } from '@/components/core/InputText'
 import { AvatarSetup } from './AvatarSetup'
 import { RegistrationParams } from './RegistrationView'
@@ -31,6 +32,7 @@ export function RegistrationForm({
   const [avatar, setAvatar] = useState<AvatarFragmentType | undefined>()
   const [name, setName] = useState('')
   const [address, setAddress] = useState<AddressFragmentType>()
+  const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
 
   const [canShowNameError, setCanShowNameError] = useState(false)
   const [canShowAddressError, setCanShowAddressError] = useState(false)
@@ -106,6 +108,7 @@ export function RegistrationForm({
           name: name.trim(),
           address,
           avatar,
+          subscribeToNewsletter,
         })
       } else {
         linkEmail()
@@ -148,6 +151,16 @@ export function RegistrationForm({
             errorMessage={ADDRESS_ERROR}
           />
         </InputContainer>
+      </InputGroup>
+
+      <InputGroup>
+        <SubscribeContainer>
+          <Checkbox
+            selected={subscribeToNewsletter}
+            label={`Subscribe to Cabin's newsletter`}
+            onClick={() => setSubscribeToNewsletter(!subscribeToNewsletter)}
+          />
+        </SubscribeContainer>
       </InputGroup>
 
       <Submission>
@@ -220,4 +233,12 @@ export const InputContainer = styled.div`
   justify-content: flex-start;
   width: 100%;
   gap: 0.6rem;
+`
+
+const SubscribeContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 `
