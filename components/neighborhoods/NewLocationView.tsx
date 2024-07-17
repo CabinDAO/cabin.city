@@ -75,7 +75,7 @@ export const NewLocationView = () => {
     return (
       <BaseLayout>
         <TitleCard
-          title="New neighborhood"
+          title="List your neighborhood"
           icon="close"
           iconHref={onCloseUrl}
         />
@@ -120,7 +120,9 @@ export const NewLocationView = () => {
             <Body1>
               Connect with other neighborhoods to share resources and ideas.
             </Body1>
+
             <HorizontalDivider />
+
             <Body1>
               If you’d like support in starting or growing your neighborhood,
               check out our{' '}
@@ -171,6 +173,10 @@ const Container = styled.div`
   width: 100%;
   align-items: flex-start;
   justify-content: center;
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 80%;
+  }
 `
 
 const StyledContentCard = styled(ContentCard)`
@@ -185,8 +191,4 @@ const Content = styled.div`
   align-items: flex-start;
   justify-content: center;
   ${padding('md', 'sm')};
-
-  ${({ theme }) => theme.bp.md} {
-    width: 80%;
-  }
 `
