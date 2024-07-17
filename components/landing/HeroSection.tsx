@@ -35,17 +35,17 @@ const Content = styled.div`
   align-items: center;
   gap: 8rem;
   margin-top: 4rem;
-  margin-bottom: 4rem;
+  margin-bottom: 10rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
     gap: 16rem;
-    margin-bottom: 12rem;
+    margin-bottom: 20rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     width: 67rem;
-    margin-bottom: 16rem;
+    margin-bottom: 26rem;
   }
 `
 
