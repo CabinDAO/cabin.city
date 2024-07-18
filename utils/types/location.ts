@@ -133,11 +133,6 @@ export type LocationWithRelations = Prisma.LocationGetPayload<{
     address: true
     steward: {
       include: {
-        avatar: {
-          select: {
-            url: true
-          }
-        }
         wallet: {
           select: {
             cabinTokenBalance: true
@@ -169,11 +164,6 @@ export const LocationQueryInclude = (
     address: true,
     steward: {
       include: {
-        avatar: {
-          select: {
-            url: true,
-          },
-        },
         wallet: {
           select: {
             cabinTokenBalance: true,

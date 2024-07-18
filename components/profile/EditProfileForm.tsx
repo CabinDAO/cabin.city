@@ -6,7 +6,6 @@ import {
 } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { H3 } from '@/components/core/Typography'
-import { HorizontalDivider } from '@/components/core/Divider'
 import { AboutInput } from '@/components/profile/AboutInput'
 import { ContactInput } from '@/components/profile/ContactInput'
 import { Identity } from './edit-profile/Identity'
@@ -32,18 +31,16 @@ export const EditProfileForm = ({
 
   return (
     <InnerContainer>
-      <Identity
-        user={user}
-        profileEditParams={profileEditParams}
-        onChange={onChange}
-      />
-      <HorizontalDivider />
       <About
         user={user}
         profileEditParams={profileEditParams}
         onChange={onChange}
       />
-      <HorizontalDivider />
+      <Identity
+        user={user}
+        profileEditParams={profileEditParams}
+        onChange={onChange}
+      />
       <Contact
         user={user}
         profileEditParams={profileEditParams}
@@ -54,17 +51,25 @@ export const EditProfileForm = ({
 }
 
 const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
+  const name = profileEditParams?.name ?? user?.name ?? ''
   const bio = profileEditParams?.bio ?? user?.bio ?? ''
   const address = profileEditParams?.address ?? user?.address ?? undefined
+  const avatarUrl = profileEditParams?.avatarUrl ?? user?.avatarUrl ?? undefined
 
   return (
     <UpdateSection title="About">
       <AboutInput
+        name={name}
         bio={bio}
         address={address}
+        avatarUrl={avatarUrl}
+        onNameChange={(name) => onChange({ ...profileEditParams, name })}
         onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
         onAddressChange={(address) =>
           onChange({ ...profileEditParams, address })
+        }
+        onAvatarUrlChange={(avatarUrl) =>
+          onChange({ ...profileEditParams, avatarUrl })
         }
       />
     </UpdateSection>
@@ -123,7 +128,7 @@ const InnerContainer = styled.div`
   justify-content: center;
   width: 100%;
   padding: 1.6rem;
-  gap: 2.4rem;
+  gap: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     padding: 2.4rem;

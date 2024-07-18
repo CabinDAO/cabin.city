@@ -8,11 +8,7 @@ import { useExternalUser } from '../auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
-import {
-  ProfileNewParamsType,
-  AvatarFragmentType,
-  ProfileNewResponse,
-} from '@/utils/types/profile'
+import { ProfileNewParamsType, ProfileNewResponse } from '@/utils/types/profile'
 import { AddressFragmentType } from '@/utils/types/location'
 import { ErrorModal } from '../ErrorModal'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -24,7 +20,7 @@ export interface RegistrationParams {
   email: string
   name: string
   address: AddressFragmentType
-  avatar: AvatarFragmentType | undefined
+  avatarUrl: string
   subscribeToNewsletter: boolean
 }
 
@@ -58,7 +54,7 @@ export const RegistrationView = () => {
 
     const walletAddress = externalUser.wallet?.address
 
-    if (!params.avatar?.url) {
+    if (!params.avatarUrl) {
       showError('Avatar required')
       return
     }
@@ -69,7 +65,7 @@ export const RegistrationView = () => {
         name: params.name,
         email: externalUser.email?.address || params.email,
         address: params.address,
-        avatar: params.avatar,
+        avatarUrl: params.avatarUrl,
         subscribeToNewsletter: params.subscribeToNewsletter,
       } satisfies ProfileNewParamsType)
 

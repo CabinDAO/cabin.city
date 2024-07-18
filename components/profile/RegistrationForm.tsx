@@ -4,7 +4,6 @@ import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { AddressFragmentType } from '@/utils/types/location'
 import styled from 'styled-components'
-import { AvatarFragmentType } from '@/utils/types/profile'
 import { Button } from '@/components/core/Button'
 import { Checkbox } from '@/components/core/Checkbox'
 import { InputText } from '@/components/core/InputText'
@@ -29,7 +28,7 @@ export function RegistrationForm({
   const { user } = useProfile()
   const [email, setEmail] = useState('')
 
-  const [avatar, setAvatar] = useState<AvatarFragmentType | undefined>()
+  const [avatarUrl, setAvatarUrl] = useState('')
   const [name, setName] = useState('')
   const [address, setAddress] = useState<AddressFragmentType>()
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
@@ -85,9 +84,9 @@ export function RegistrationForm({
     setAddress(address)
   }
 
-  const onAvatarChange = (avatar: AvatarFragmentType | undefined) => {
+  const onAvatarChange = (avatarUrl: string) => {
     setCanShowAvatarError(false)
-    setAvatar(avatar)
+    setAvatarUrl(avatarUrl)
   }
 
   const handleSubmit = async () => {
@@ -95,19 +94,14 @@ export function RegistrationForm({
     setCanShowAddressError(true)
     setCanShowAvatarError(true)
 
-    if (
-      isValidName(name) &&
-      address &&
-      isValidAddress(address) &&
-      avatar?.url
-    ) {
+    if (isValidName(name) && address && isValidAddress(address) && avatarUrl) {
       if (externalUser?.email?.address) {
         setSubmitted(true)
         onSubmit({
           email: email.trim(),
           name: name.trim(),
           address,
-          avatar,
+          avatarUrl: avatarUrl,
           subscribeToNewsletter,
         })
       } else {
@@ -120,8 +114,8 @@ export function RegistrationForm({
     <Container>
       <AvatarSetup
         onSelected={onAvatarChange}
-        avatar={avatar}
-        error={canShowAvatarError && !avatar?.url}
+        avatarUrl={avatarUrl}
+        error={canShowAvatarError && !avatarUrl}
       />
       <InputGroup>
         <InputContainer>

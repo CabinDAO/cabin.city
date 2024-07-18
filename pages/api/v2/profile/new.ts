@@ -63,7 +63,7 @@ async function handler(
     name: params.name,
     email: params.email,
     address: params.address,
-    avatar: params.avatar,
+    avatarUrl: params.avatarUrl,
     invite,
   })
 

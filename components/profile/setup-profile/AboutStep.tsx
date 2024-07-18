@@ -1,22 +1,23 @@
 import { useState } from 'react'
+import { useProfile } from '@/components/auth/useProfile'
+import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileEditParamsType,
   ProfileEditResponse,
 } from '@/utils/types/profile'
-import { useProfile } from '@/components/auth/useProfile'
+import { isValidAddress, isValidBio } from '../validations'
 import { StepProps } from './step-configuration'
 import { SetupStepForm } from './SetupStepForm'
 import { AboutInput } from '../AboutInput'
-import { isValidAddress, isValidBio } from '../validations'
-import { useError } from '@/components/hooks/useError'
 
-export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
+export const AboutStep = ({ stepName, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const { showError } = useError()
+  const [name, setName] = useState(user?.name ?? '')
   const [bio, setBio] = useState(user?.bio ?? '')
   const [address, setAddress] = useState(user?.address)
-  const [avatar, setAvatar] = useState(user?.avatar)
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl ?? '')
 
   const { useMutate } = useBackend()
   const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
@@ -24,8 +25,8 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   )
 
   const handleNext = async () => {
-    if (!avatar?.url) {
-      showError('Please select an avatar photo')
+    if (!avatarUrl) {
+      showError('Select an avatar photo')
       return
     }
 
@@ -43,7 +44,7 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
       data: {
         bio,
         address,
-        avatar,
+        avatarUrl: avatarUrl,
       },
     } satisfies ProfileEditParamsType)
 
@@ -51,14 +52,16 @@ export const AboutStep = ({ name, onBack, onNext }: StepProps) => {
   }
 
   return (
-    <SetupStepForm name={name} onNext={handleNext} onBack={onBack}>
+    <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
       <AboutInput
+        name={name}
+        onNameChange={setName}
         bio={bio}
         onBioChange={setBio}
         address={address}
         onAddressChange={setAddress}
-        avatar={avatar}
-        onAvatarChange={setAvatar}
+        avatarUrl={avatarUrl}
+        onAvatarUrlChange={setAvatarUrl}
       />
     </SetupStepForm>
   )

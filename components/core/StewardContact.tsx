@@ -36,7 +36,7 @@ export const StewardContact = ({
       <Top>
         {steward ? (
           <Link href={`/profile/${steward.externId}`}>
-            <Avatar src={steward.avatar?.url} size={7.2} />
+            <Avatar src={steward.avatarUrl} size={7.2} />
           </Link>
         ) : (
           <IconWarp>

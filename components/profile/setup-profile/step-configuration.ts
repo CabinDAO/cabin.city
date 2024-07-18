@@ -3,23 +3,23 @@ import { AboutStep } from './AboutStep'
 import { ContactStep } from './ContactStep'
 
 export type StepConfig = {
-  name: string
+  stepName: string
   component: ({ onBack, onNext }: StepProps) => JSX.Element | null
 }
 
 export type StepProps = {
-  name: string
+  stepName: string
   onNext: VoidFunction
   onBack: VoidFunction
 }
 
 export const steps: StepConfig[] = [
   {
-    name: 'About',
+    stepName: 'About',
     component: AboutStep,
   },
   {
-    name: 'Contact',
+    stepName: 'Contact',
     component: ContactStep,
   },
 ]

@@ -122,14 +122,10 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         name: true
         citizenshipStatus: true
         citizenshipTokenId: true
+        avatarUrl: true
         roles: {
           include: {
             walletHat: true
-          }
-        }
-        avatar: {
-          select: {
-            url: true
           }
         }
       }
@@ -216,14 +212,10 @@ export const ActivityQueryInclude = {
       name: true,
       citizenshipStatus: true,
       citizenshipTokenId: true,
+      avatarUrl: true,
       roles: {
         include: {
           walletHat: true,
-        },
-      },
-      avatar: {
-        select: {
-          url: true,
         },
       },
     },

@@ -157,6 +157,7 @@ const profilesToFragments = (
       name: profile.name,
       email: profile.email,
       bio: profile.bio,
+      avatarUrl: profile.avatarUrl,
       isAdmin: profile.isAdmin,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
@@ -174,16 +175,6 @@ const profilesToFragments = (
             countryShort: profile.address.countryShort,
           }
         : null,
-      avatar: profile.avatar
-        ? {
-            url: profile.avatar.url,
-            contractAddress: profile.avatar.contractAddress,
-            network: profile.avatar.network,
-            title: profile.avatar.title,
-            tokenId: profile.avatar.tokenId,
-            tokenUri: profile.avatar.tokenUri,
-          }
-        : undefined,
       roles: profile.roles.map((role) => ({
         hatId: role.walletHat?.hatId || null,
         type: role.type as RoleType,
@@ -201,7 +192,6 @@ const profilesToFragments = (
 type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     address: true
-    avatar: true
     wallet: {
       include: {
         _count: {
@@ -222,7 +212,6 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
 // must match ListedProfileWithRelations  above
 const ListedProfileQueryInclude = {
   address: true,
-  avatar: true,
   wallet: {
     include: {
       _count: {

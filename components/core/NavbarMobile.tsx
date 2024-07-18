@@ -141,7 +141,7 @@ const MobileMenuProfileItem = () => {
 
   return (
     <ProfileLink href={`/profile/${user.externId}`}>
-      <Avatar size={2.4} src={user.avatar?.url} />
+      <Avatar size={2.4} src={user.avatarUrl} />
       <ProfileNameContainer>
         <Subline1 $color="yellow100">{user.name}</Subline1>
         {displayCaption && (

@@ -52,7 +52,7 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
         onClick={() => handleClick('profile')}
         href={`/profile/${user.externId}`}
       >
-        <Avatar size={2.4} src={user.avatar?.url} />
+        <Avatar size={2.4} src={user.avatarUrl} />
         <Name>
           <Subline1 $color="yellow100">{user.name}</Subline1>
           <Caption $color="yellow100">{displayCaption}</Caption>

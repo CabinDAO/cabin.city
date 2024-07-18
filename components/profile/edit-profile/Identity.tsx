@@ -1,5 +1,9 @@
 import React, { useEffect } from 'react'
+import { Address } from 'viem'
+import { useModal } from '@/components/hooks/useModal'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import useEns from '@/components/hooks/useEns'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -10,19 +14,11 @@ import {
 import { shortenedAddress, truncate } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { H3 } from '@/components/core/Typography'
-import { InputText } from '@/components/core/InputText'
-import { AvatarSetup } from '../AvatarSetup'
-import { isValidName, MAX_DISPLAY_NAME_LENGTH } from '../validations'
 import { UpdateProfileProps } from '../EditProfileForm'
-import { InputContainer } from '../RegistrationForm'
 import { Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Tooltip } from '@/components/core/Tooltip'
-import { Address } from 'viem'
-import { useProfile } from '@/components/auth/useProfile'
 import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
-import { useModal } from '@/components/hooks/useModal'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 
 // TODO: deal with creating embedded wallet
@@ -38,12 +34,8 @@ export const Identity = ({
   const { refetchProfile } = useProfile()
   const { showModal } = useModal()
 
-  const name = profileEditParams?.name ?? user?.name
   const email = externalUser?.email?.address ?? user?.email
   const walletAddress = profileEditParams?.walletAddress ?? user?.walletAddress
-  const avatar = profileEditParams?.hasOwnProperty('avatar')
-    ? profileEditParams.avatar
-    : user?.avatar
 
   const { ens } = useEns(walletAddress)
   const hasWallet = !!externalUser?.wallet
@@ -88,10 +80,6 @@ export const Identity = ({
     }
   }, [externalUser?.wallet?.address, updateProfile, user])
 
-  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange({ ...profileEditParams, name: e.target.value })
-  }
-
   const handleWalletUnlink = async () => {
     if (!user.walletAddress) {
       return
@@ -127,22 +115,6 @@ export const Identity = ({
 
   return (
     <AboutContainer>
-      <AvatarSetup
-        avatar={avatar}
-        onSelected={(avatar) => onChange({ ...profileEditParams, avatar })}
-      />
-      <InputGroup>
-        <InputContainer>
-          <InputText
-            error={!isValidName(name)}
-            required
-            label="Name"
-            value={name}
-            onChange={onNameChange}
-            helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
-          />
-        </InputContainer>
-      </InputGroup>
       <InputGroup>
         <AccountContainer>
           <H3>Account</H3>

@@ -33,7 +33,7 @@ export const ProfileHeaderSection = ({
         <ProfileSummary>
           <Avatar
             size={deviceSize === 'desktop' ? 8.8 : 6.4}
-            src={profile.avatar?.url}
+            src={profile.avatarUrl}
           />
           <ProfileInfoContainer>
             <CitizenContainer>

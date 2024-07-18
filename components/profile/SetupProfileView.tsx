@@ -53,7 +53,7 @@ export const SetupProfileView = ({}) => {
         iconHref={`/profile/${profileId}`}
       />
       <CurrentComponent
-        name={currentStep.name}
+        stepName={currentStep.stepName}
         onNext={handleNext}
         onBack={handleBack}
       />

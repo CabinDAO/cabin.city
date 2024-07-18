@@ -1,46 +1,68 @@
 import React from 'react'
-import styled from 'styled-components'
-import { InputTextArea } from '@/components/core/InputTextArea'
-import { MAX_BIO_LENGTH, isValidAddress, isValidBio } from './validations'
-import { AvatarSetup } from '@/components/profile/AvatarSetup'
-import { AvatarFragmentType } from '@/utils/types/profile'
-import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { ADDRESS_ERROR } from '@/utils/validate'
 import { AddressFragmentType } from '@/utils/types/location'
+import { ADDRESS_ERROR } from '@/utils/validate'
+import {
+  MAX_BIO_LENGTH,
+  isValidAddress,
+  isValidBio,
+  isValidName,
+  MAX_DISPLAY_NAME_LENGTH,
+} from './validations'
+import styled from 'styled-components'
+import { InputText } from '@/components/core/InputText'
+import { InputTextArea } from '@/components/core/InputTextArea'
+import { AvatarSetup } from '@/components/profile/AvatarSetup'
+import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 
 interface AboutInputProps {
+  name: string
+  onNameChange: (bio: string) => void
   bio: string
   onBioChange: (bio: string) => void
   address?: AddressFragmentType
   onAddressChange: (location: AddressFragmentType) => void
-  avatar?: AvatarFragmentType
-  onAvatarChange?: (avatar: AvatarFragmentType | undefined) => void
+  avatarUrl: string
+  onAvatarUrlChange: (avatarUrl: string) => void
 }
 
 export const AboutInput = ({
+  name,
   bio,
   address,
+  onNameChange,
   onBioChange,
   onAddressChange,
-  avatar,
-  onAvatarChange,
+  avatarUrl,
+  onAvatarUrlChange,
 }: AboutInputProps) => {
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onNameChange(e.target.value)
+  }
+
   const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onBioChange(e.target.value)
   }
 
   return (
     <SetupStepContainer>
-      {onAvatarChange && (
-        <AvatarSetup avatar={avatar} onSelected={onAvatarChange} />
-      )}
-      <StyledInputTextArea
+      <AvatarSetup avatarUrl={avatarUrl} onSelected={onAvatarUrlChange} />
+      <InputText
+        error={!isValidName(name)}
+        required
+        label="Name"
+        value={name}
+        onChange={handleNameChange}
+        helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
+      />
+
+      <InputTextArea
         label="Bio"
         helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
         value={bio}
         onChange={handleBioChange}
         error={!isValidBio(bio)}
       />
+
       <LocationAutocompleteInput
         initialValue={address}
         onLocationChange={onAddressChange}
@@ -60,8 +82,4 @@ const SetupStepContainer = styled.div`
   align-items: center;
   width: 100%;
   gap: 1.6rem;
-`
-
-const StyledInputTextArea = styled(InputTextArea)`
-  height: 15.2rem;
 `

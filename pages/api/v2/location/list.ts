@@ -205,11 +205,7 @@ export const locationToFragment = (
           cabinTokenBalanceInt: loc.steward.wallet
             ? loc.steward.wallet.cabinTokenBalance.toNumber()
             : null,
-          avatar: loc.steward.avatar
-            ? {
-                url: loc.steward.avatar.url,
-              }
-            : null,
+          avatarUrl: loc.steward.avatarUrl,
           roles: loc.steward.roles.map((role) => ({
             hatId: role.walletHat?.hatId || null,
             type: role.type as RoleType,

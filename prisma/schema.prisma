@@ -117,9 +117,9 @@ model Profile {
   mailingListOptIn        Boolean?
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
+  avatarUrl               String                @default("")
 
   address ProfileAddress?
-  avatar  Avatar?
 
   citizenshipStatus   CitizenshipStatus?
   citizenshipTokenId  Int?
@@ -149,22 +149,6 @@ enum CitizenshipStatus {
   VouchRequested
   Vouched
   Verified
-}
-
-model Avatar {
-  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId Int     @unique
-
-  url String
-
-  // NFT Metadata
-  contractAddress String? @db.Char(42)
-  network         String?
-  title           String?
-  tokenId         String?
-  tokenUri        String?
-
-  @@id([profileId])
 }
 
 model ProfileContactField {

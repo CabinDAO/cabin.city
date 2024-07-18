@@ -66,9 +66,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     cabinTokenBalanceInt: profile.wallet
       ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
       : null,
-    avatar: {
-      url: profile.avatar ? profile.avatar.url : '',
-    },
+    avatarUrl: profile.avatarUrl,
     isAdmin: profile.isAdmin,
     isProfileSetupFinished: profile.isProfileSetupFinished,
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
@@ -111,11 +109,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    avatar: {
-      select: {
-        url: true
-      }
-    }
     wallet: {
       select: {
         address: true
@@ -152,11 +145,6 @@ const MyProfileQueryInclude = {
     },
   },
   address: true,
-  avatar: {
-    select: {
-      url: true,
-    },
-  },
   wallet: {
     select: {
       address: true,

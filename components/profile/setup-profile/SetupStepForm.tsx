@@ -6,31 +6,31 @@ import { H3 } from '../../core/Typography'
 import { steps } from './step-configuration'
 
 interface SetupStepFormProps {
+  stepName: string
   onNext?: VoidFunction
   onBack?: VoidFunction
   children: React.ReactNode
-  name: string
 }
 
 export const SetupStepForm = ({
+  stepName,
   onNext = () => console.log('next'),
   onBack = () => console.log('back'),
   children,
-  name,
 }: SetupStepFormProps) => {
-  const isFirstStep = steps[0].name === name
-  const isLastStep = steps[steps.length - 1].name === name
+  const isFirstStep = steps[0].stepName === stepName
+  const isLastStep = steps[steps.length - 1].stepName === stepName
 
   const stepIndicatorText = () => {
-    const names = steps.map((step) => step.name)
-    const currentStepIndex = names.indexOf(name)
-    return `Step ${currentStepIndex + 1} of ${names.length}`
+    const stepNames = steps.map((step) => step.stepName)
+    const currentStepIndex = stepNames.indexOf(stepName)
+    return `Step ${currentStepIndex + 1} of ${stepNames.length}`
   }
 
   return (
     <Container>
       <StepIndicator>
-        <H3>{name}</H3>
+        <H3>{stepName}</H3>
         <H3>{stepIndicatorText()}</H3>
       </StepIndicator>
       <ContentCard shape="notch">

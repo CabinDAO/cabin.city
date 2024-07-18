@@ -40,7 +40,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
   const router = useRouter()
   const { useGet, useMutate } = useBackend()
 
-  const { data, isLoading } = useGet<LocationGetResponse>(
+  const { data } = useGet<LocationGetResponse>(
     externId ? ['LOCATION', { externId: externId as string }] : null
   )
   const location = !data || 'error' in data ? null : data.location

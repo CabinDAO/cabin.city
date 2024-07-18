@@ -64,7 +64,7 @@ export const Navbar = () => {
         <SingleMenuItem>
           {externId && (
             <Avatar
-              src={user?.avatar?.url}
+              src={user?.avatarUrl}
               size={3.2}
               onClick={() => setProfileMenuVisible(!profileMenuVisible)}
             />

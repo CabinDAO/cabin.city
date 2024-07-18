@@ -68,13 +68,13 @@ export type ProfileListFragment = {
   email: string
   bio: string
   address: ShortAddressFragmentType | null
+  avatarUrl: string
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
   citizenshipStatus: CitizenshipStatus | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  avatar?: AvatarFragmentType
   roles: RoleFragment[]
   badgeCount: number
   cabinTokenBalanceInt: number | null
@@ -141,7 +141,7 @@ export type ProfileBasicFragment = {
   bio: string
   citizenshipStatus: CitizenshipStatus | null
   cabinTokenBalanceInt: number | null
-  avatar: AvatarFragmentType | null
+  avatarUrl: string
   roles: RoleFragment[]
 }
 
@@ -185,18 +185,6 @@ export type BadgeFragment = {
   }
 }
 
-export const AvatarFragment = z
-  .object({
-    url: z.string(),
-    contractAddress: z.string().nullable().optional(),
-    title: z.string().nullable().optional(),
-    tokenId: z.string().nullable().optional(),
-    tokenUri: z.string().nullable().optional(),
-    network: z.string().nullable().optional(),
-  })
-  .strict()
-export type AvatarFragmentType = z.infer<typeof AvatarFragment>
-
 const WalletAddress = z
   .string()
   .refine(isAddress, { message: 'invalid address' })
@@ -226,7 +214,7 @@ export type MeFragment = {
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
-  avatar: AvatarFragmentType
+  avatarUrl: string
   walletAddress: string | null
   voucher: {
     externId: string
@@ -244,7 +232,7 @@ export const ProfileNewParams = z
     name: z.string(),
     email: z.string().email(),
     address: AddressFragment,
-    avatar: AvatarFragment.optional(),
+    avatarUrl: z.string().optional(),
     subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
   })
@@ -260,7 +248,7 @@ export const ProfileEditParams = z
       walletAddress: z.union([WalletAddress, z.null()]).optional(),
       address: AddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
-      avatar: AvatarFragment.optional(),
+      avatarUrl: z.string().optional(),
     }),
     roleTypes: commaSeparatedArrayOf(RoleType).optional(),
   })
@@ -292,11 +280,6 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     address: true
-    avatar: {
-      select: {
-        url: true
-      }
-    }
     wallet: {
       select: {
         address: true
@@ -328,11 +311,6 @@ export const ProfileQueryInclude = {
     },
   },
   address: true,
-  avatar: {
-    select: {
-      url: true,
-    },
-  },
   wallet: {
     select: {
       address: true,

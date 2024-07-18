@@ -11,14 +11,14 @@ import { Caption } from '@/components/core/Typography'
 import { FileUpload } from '@/components/core/FileUpload'
 
 export const AvatarSetup = ({
+  avatarUrl,
   onSelected,
-  avatar,
   error = false,
 }: {
+  avatarUrl: ProfileEditParamsType['data']['avatarUrl']
   onSelected: (
-    avatar: ProfileEditParamsType['data']['avatar'] | undefined
+    avatarUrl: NonNullable<ProfileEditParamsType['data']['avatarUrl']>
   ) => void
-  avatar?: ProfileEditParamsType['data']['avatar'] | undefined | null
   error?: boolean
 }) => {
   const { deviceSize } = useDeviceSize()
@@ -27,7 +27,6 @@ export const AvatarSetup = ({
 
   const handleStartUpload = () => {
     setUploading(true)
-    onSelected(undefined)
     hideModal()
   }
 
@@ -39,9 +38,7 @@ export const AvatarSetup = ({
     if (ipfsHash) {
       setUploading(false)
 
-      onSelected({
-        url: getImageUrlByIpfsHash(ipfsHash, true) as string,
-      })
+      onSelected(getImageUrlByIpfsHash(ipfsHash, true) as string)
 
       hideModal()
     }
@@ -52,12 +49,12 @@ export const AvatarSetup = ({
       <Avatar
         isLoading={uploading}
         size={deviceSize === 'mobile' ? 9.6 : 8.8}
-        src={avatar?.url}
+        src={avatarUrl}
       />
-      {avatar ? (
+      {avatarUrl ? (
         <AvatarButton
           variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-          onClick={() => onSelected(undefined)}
+          onClick={() => onSelected('')}
         >
           Remove photo
         </AvatarButton>

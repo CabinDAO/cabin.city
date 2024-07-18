@@ -27,14 +27,7 @@ type ProfileCreateParams = {
   name: string
   email: string
   address?: AddressFragmentType
-  avatar?: {
-    url: string
-    contractAddress?: string | null
-    title?: string | null
-    tokenId?: string | null
-    tokenUri?: string | null
-    network?: string | null
-  }
+  avatarUrl?: string
   invite: Prisma.InviteGetPayload<null> | null
 }
 
@@ -72,6 +65,7 @@ export async function createProfile(
       bio: '',
       location: '',
       inviteCode: randomInviteCode(),
+      avatarUrl: params.avatarUrl || '',
       wallet: params.walletAddress
         ? {
             connectOrCreate: {
@@ -88,11 +82,6 @@ export async function createProfile(
       address: params.address
         ? {
             create: params.address,
-          }
-        : undefined,
-      avatar: params.avatar
-        ? {
-            create: params.avatar,
           }
         : undefined,
 

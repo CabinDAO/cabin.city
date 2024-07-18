@@ -6,7 +6,7 @@ import { useProfile } from '@/components/auth/useProfile'
 import { StepProps } from './step-configuration'
 import { useBackend } from '@/components/hooks/useBackend'
 
-export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
+export const ContactStep = ({ stepName, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const [contactList, setContactList] = useState<ContactFragmentType[]>([])
   const { useMutate } = useBackend()
@@ -33,7 +33,7 @@ export const ContactStep = ({ name, onBack, onNext }: StepProps) => {
   }
 
   return (
-    <SetupStepForm name={name} onNext={handleNext} onBack={onBack}>
+    <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
       <ContactInput
         profile={user}
         contactList={contactList}

@@ -84,9 +84,6 @@ async function handlePost(
     where: {
       externId: externId,
     },
-    include: {
-      avatar: true,
-    },
   })
 
   if (!profileToEdit) {
@@ -112,6 +109,7 @@ async function handlePost(
         name: params.data.name,
         email: params.data.email,
         bio: params.data.bio,
+        avatarUrl: params.data.avatarUrl,
         address: params.data.address
           ? {
               upsert: {
@@ -159,26 +157,6 @@ async function handlePost(
           value: field.value,
           profileId: profileToEdit.id,
         })),
-      })
-    )
-  }
-
-  if (params.data.avatar) {
-    if (profileToEdit.avatar) {
-      txns.push(
-        prisma.avatar.delete({
-          where: {
-            profileId: profileToEdit.id,
-          },
-        })
-      )
-    }
-    txns.push(
-      prisma.avatar.create({
-        data: {
-          profileId: profileToEdit.id,
-          ...params.data.avatar,
-        },
       })
     )
   }
@@ -246,6 +224,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
+    avatarUrl: profile.avatarUrl,
     address: profile.address
       ? {
           locality: profile.address.locality,
@@ -263,9 +242,6 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     cabinTokenBalanceInt: profile.wallet
       ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
       : null,
-    avatar: {
-      url: profile.avatar ? profile.avatar.url : '',
-    },
     voucher: profile.voucher
       ? {
           externId: profile.voucher.externId,

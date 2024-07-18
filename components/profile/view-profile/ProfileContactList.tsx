@@ -4,7 +4,7 @@ import {
 } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
-import { Caption, WordBreak } from '../../core/Typography'
+import { Caption } from '../../core/Typography'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ProfileFragment } from '@/utils/types/profile'
 
@@ -16,13 +16,13 @@ export const ProfileContactList = ({
 }: ProfileContactListProps) => {
   return (
     <ProfileListContainer count={contactFields.length}>
-      {contactFields.map((field) => (
+      {contactFields.map((field, i) => (
         <>
-          <Caption key={field.type} style={{ flexGrow: 0 }}>
+          <Caption key={`caption_${i}`} style={{ flexGrow: 0 }}>
             {field.type}
           </Caption>
           <div></div>
-          <ContactField key={field.type} field={field} />
+          <ContactField key={`value_${i}`} field={field} />
           <div></div>
         </>
       ))}

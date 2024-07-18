@@ -12,7 +12,7 @@ import {
   RoleType,
 } from '@/utils/types/profile'
 
-export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
+export const RoleStep = ({ stepName, onBack, onNext }: StepProps) => {
   const { user } = useProfile()
   const roles = Object.keys(RoleType) as RoleType[]
 
@@ -52,7 +52,7 @@ export const RoleStep = ({ name, onBack, onNext }: StepProps) => {
   }
 
   return (
-    <SetupStepForm name={name} onNext={handleNext} onBack={onBack}>
+    <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
       <SetupStepContainer>
         <Subline1>Choose your interests</Subline1>
         <RoleGroup>
