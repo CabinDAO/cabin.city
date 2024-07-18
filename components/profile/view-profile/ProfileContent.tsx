@@ -26,7 +26,7 @@ export const ProfileContent = ({
         <ProfileSetupSection profileId={profile.externId} me={me} />
       )}
       <ProfileAboutSection profile={profile} />
-      <ProfileCitizenSection isOwnProfile={isOwnProfile} profile={profile} />
+      <ProfileCitizenSection profile={profile} />
       <ProfileStampsSection profile={profile} />
       <ProfileActivitiesSection profile={profile} />
     </ProfileInnerContainer>
