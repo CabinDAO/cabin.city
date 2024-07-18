@@ -234,9 +234,8 @@ export function LocationEditForm({
             />
           </div>
           <Body2>
-            Get specific, but be clear and brief. Describe what your
-            neighborhood is about, what happens there, and what makes it
-            special.
+            Describe what your neighborhood is about, what happens there, and
+            what makes it special.
           </Body2>
         </FullWidthInputContainer>
 
