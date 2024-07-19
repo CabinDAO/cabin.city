@@ -7,6 +7,13 @@ export const Map = dynamic(
   { ssr: false }
 )
 
+export type Marker = {
+  label: string
+  lat: number
+  lng: number
+  imgUrl?: string
+}
+
 export type onMoveParams = {
   center: {
     lat: number

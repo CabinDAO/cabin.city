@@ -1,5 +1,6 @@
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
+import { getImageUrlByIpfsHash } from '@/lib/image'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
@@ -24,7 +25,7 @@ export const getStaticProps = (async (/*context*/) => {
       where: { address: { lat: { not: null } } },
     }),
     prisma.location.findMany({
-      select: { name: true, address: true },
+      select: { name: true, address: true, bannerImageIpfsHash: true },
       where: { address: { lat: { not: null } }, publishedAt: { not: null } },
     }),
     prisma.profile.count(),
@@ -52,6 +53,7 @@ export const getStaticProps = (async (/*context*/) => {
           label: l.name,
           lat: l.address?.lat || 0,
           lng: l.address?.lng || 0,
+          imgUrl: getImageUrlByIpfsHash(l.bannerImageIpfsHash) || '',
         })),
       },
     },

@@ -24,7 +24,8 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.markercluster/dist/leaflet.markercluster.js'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
-import { onMoveFn } from '@/components/neighborhoods/Map'
+import { Marker, onMoveFn } from '@/components/neighborhoods/Map'
+import { AutoImage } from '@/components/core/AutoImage'
 
 export const MapDynamic = ({
   height,
@@ -34,11 +35,7 @@ export const MapDynamic = ({
   initialZoom = 1.5,
 }: {
   height: string
-  locations: {
-    label: string
-    lat: number
-    lng: number
-  }[]
+  locations: Marker[]
   clusteredLocations?: {
     lat: number
     lng: number
@@ -136,11 +133,7 @@ const Markers = ({
   locations,
   profiles,
 }: {
-  locations: {
-    label: string
-    lat: number
-    lng: number
-  }[]
+  locations: Marker[]
   profiles?: {
     lat: number
     lng: number
@@ -178,7 +171,10 @@ const Markers = ({
           color={theme.colors.green800}
           fillColor={theme.colors.green400}
         >
-          <StyledPopup>{l.label}</StyledPopup>
+          <StyledPopup>
+            {l.imgUrl && <AutoImage src={l.imgUrl} alt={l.label} />}
+            {l.label}
+          </StyledPopup>
         </CircleMarker>
       ))}
     </>
