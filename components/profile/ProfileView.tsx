@@ -3,6 +3,7 @@ import { ProfileGetResponse } from '@/utils/types/profile'
 import Error404 from '@/pages/404'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ProfileContent } from './view-profile/ProfileContent'
+import Head from 'next/head'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
@@ -21,8 +22,13 @@ export const ProfileView = ({ externId }: { externId: string }) => {
   }
 
   return (
-    <BaseLayout>
-      <ProfileContent profile={profile} refetchProfile={refetchProfile} />
-    </BaseLayout>
+    <>
+      <Head>
+        <title>{profile.name}'s Cabin Profile</title>
+      </Head>
+      <BaseLayout>
+        <ProfileContent profile={profile} refetchProfile={refetchProfile} />
+      </BaseLayout>
+    </>
   )
 }

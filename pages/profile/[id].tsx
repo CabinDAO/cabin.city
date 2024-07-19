@@ -6,7 +6,7 @@ const ProfilePage = () => {
   return (
     <ProfileView
       externId={router.query.id ? (router.query.id as string) : ''}
-    ></ProfileView>
+    />
   )
 }
 

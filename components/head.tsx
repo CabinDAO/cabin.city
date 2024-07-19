@@ -2,24 +2,22 @@ import Head from 'next/head'
 import { NextSeo } from 'next-seo'
 import { appDomainWithProto } from '@/utils/display-utils'
 
-const DEFAULT_TITLE = 'Cabin'
-const DESCRIPTION = `Neighborhoods that you’d want to grow up in`
-
-export interface AppHeadProps {
-  description?: string
-  pathname?: string
-  title?: string
-  imageUrl?: string
-}
+const SITE_NAME = 'Cabin'
 
 export const AppHead = ({
-  description,
+  title = undefined,
+  description = undefined,
   pathname = '',
-  title,
   imageUrl = `${appDomainWithProto}/images/cabin_social.png`,
-}: AppHeadProps) => {
-  const pageTitle = title?.trim() ?? DEFAULT_TITLE
-  const pageDescription = description?.trim() ?? DESCRIPTION
+}: {
+  title?: string
+  description?: string
+  pathname?: string
+  imageUrl?: string
+}) => {
+  const pageTitle = title?.trim() ?? 'Cabin'
+  const pageDescription =
+    description?.trim() ?? `Neighborhoods that you’d want to grow up in`
 
   const fullUrl = `${appDomainWithProto}${pathname}`
 
@@ -63,9 +61,6 @@ export const AppHead = ({
         ))}
 
         <link rel="manifest" href="/manifest.json" />
-
-        {/* todo: why is noindex here */}
-        <meta name="robots" content="noindex, nosnippet, noimageindex" />
       </Head>
       <NextSeo
         title={pageTitle}
@@ -75,7 +70,8 @@ export const AppHead = ({
           url: fullUrl,
           title: pageTitle,
           description: pageDescription,
-          siteName: DEFAULT_TITLE,
+          siteName: SITE_NAME,
+          site_name: SITE_NAME,
           images: [
             {
               url: imageUrl,
@@ -84,7 +80,6 @@ export const AppHead = ({
               alt: pageDescription,
             },
           ],
-          site_name: DEFAULT_TITLE,
         }}
         twitter={{
           handle: '@cabindotcity',
