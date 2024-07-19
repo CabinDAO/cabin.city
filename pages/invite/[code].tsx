@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { padding } from '@/styles/theme'
 import { YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
-import Image from 'next/image'
+import { AutoImage } from '@/components/core/AutoImage'
 import InviteClaimFlow, {
   Inviter,
 } from '@/components/citizenship/InviteClaimFlow'
@@ -30,13 +30,9 @@ export default function Page({
         <StyledContentCard shape={'notch'} notchSize={1.6}>
           {inviter ? (
             <>
-              <Image
+              <AutoImage
                 src={'/images/citizenship-campfire.jpg'}
                 alt={'around a campfire'}
-                width={0}
-                height={0}
-                sizes="100vw"
-                style={{ width: '100%', height: 'auto' }}
               />
 
               <Content>

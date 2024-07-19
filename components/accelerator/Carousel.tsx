@@ -1,9 +1,9 @@
 import React from 'react'
-import Image from 'next/image'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { Body1, H1, H3 } from '@/components/core/Typography'
+import { AutoImage } from '@/components/core/AutoImage'
 
 import forestWalk from '@/components/accelerator/forest-walk.jpg'
 import firePit from '@/components/accelerator/fire-pit.jpg'
@@ -75,14 +75,7 @@ const Slide = (props: Datum) => {
         <H3>{props.sideText}</H3>
       </Left>
       <Right>
-        <Picture
-          src={props.imgUrl}
-          alt={props.caption}
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: '100%', height: 'auto' }}
-        />
+        <Picture src={props.imgUrl} alt={props.caption} />
         <Text>{props.caption}</Text>
       </Right>
     </SlideContent>
@@ -130,7 +123,7 @@ const Right = styled.div`
   max-height: 100%;
 `
 
-const Picture = styled(Image)`
+const Picture = styled(AutoImage)`
   filter: drop-shadow(4px 4px 0 ${({ theme }) => theme.colors.yellow500});
 `
 

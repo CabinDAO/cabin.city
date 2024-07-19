@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import Image from 'next/image'
 import { StaticImageData } from 'next/image'
 import { Caption } from '@/components/core/Typography'
+import { AutoImage } from '@/components/core/AutoImage'
 
 interface HeroImageProps {
   src: string | StaticImageData
@@ -13,14 +13,7 @@ export const HeroImage = ({ alt, src, caption }: HeroImageProps) => {
   return (
     <OuterContainer>
       <ImageContainer>
-        <Image
-          alt={alt}
-          src={src}
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: '100%', height: 'auto' }}
-        />
+        <AutoImage alt={alt} src={src} />
       </ImageContainer>
       {caption && <Caption>{caption}</Caption>}
     </OuterContainer>

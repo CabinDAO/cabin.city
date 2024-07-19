@@ -1,16 +1,16 @@
+import { useState } from 'react'
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { RoleType } from '@/utils/types/profile'
 import { pxToRem } from '@/utils/display-utils'
 import { roleInfoFromType } from '@/utils/roles'
-import Image from 'next/image'
 import styled from 'styled-components'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { AutofitImage } from './AutofitImage'
+import { AutoImage } from '@/components/core/AutoImage'
 import { Checkbox } from './Checkbox'
 import { ContentCard } from './ContentCard'
 import Icon from './Icon'
 import { H5 } from './Typography'
-import { motion } from 'framer-motion'
-import { useState } from 'react'
 
 interface RoleChipProps {
   roleType: RoleType
@@ -58,7 +58,7 @@ export const RoleChip = ({
                   height={IMAGE_SIZE_PX}
                 />
               ) : (
-                <AutofitImage src={roleInfo.imagePath} alt={roleInfo.name} />
+                <AutoImage src={roleInfo.imagePath} alt={roleInfo.name} />
               )}
             </motion.div>
           </OuterImageContainer>

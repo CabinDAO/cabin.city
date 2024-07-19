@@ -2,7 +2,6 @@ import { Editor, Transforms, Element } from 'slate'
 import { CustomText } from '@/types/slate'
 import { RenderElementProps, useSlate } from 'slate-react'
 import React, { useState } from 'react'
-import Image from 'next/image'
 import { useError } from '@/components/hooks/useError'
 import { useModal } from '@/components/hooks/useModal'
 import { ToolbarButton } from '@/components/core/slate/Toolbar'
@@ -11,6 +10,7 @@ import { InputLabel } from '@/components/core/InputLabel'
 import { InputText } from '@/components/core/InputText'
 import { Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
+import { AutoImage } from '@/components/core/AutoImage'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { RenderPluginProps } from '@/components/core/slate/useSlateRendering'
@@ -53,14 +53,7 @@ function RenderImage({ attributes, children, element }: RenderElementProps) {
 
   return (
     <ImageContainer {...attributes} contentEditable={false}>
-      <Image
-        src={element.url}
-        alt={element.caption}
-        width={0}
-        height={0}
-        sizes="100vw"
-        style={{ width: '100%', height: 'auto' }}
-      />
+      <AutoImage src={element.url} alt={element.caption} />
       <Caption>{element.caption}</Caption>
       {children}
     </ImageContainer>

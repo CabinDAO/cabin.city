@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Subline1 } from '@/components/core/Typography'
 import { AutofitNextImage } from '@/components/core/AutofitNextImage'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { AutoImage } from '@/components/core/AutoImage'
 
 export function BannerImagePreview({
   imageUrl,

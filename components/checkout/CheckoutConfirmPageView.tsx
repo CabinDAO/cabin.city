@@ -1,4 +1,6 @@
 import Link from 'next/link'
+import { usePrivy } from '@privy-io/react-auth'
+import { useProfile } from '@/components/auth/useProfile'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -11,10 +13,8 @@ import { ContentCard } from '@/components/core/ContentCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Button } from '@/components/core/Button'
-import { usePrivy } from '@privy-io/react-auth'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
-import Image from 'next/image'
-import { useProfile } from '@/components/auth/useProfile'
+import { AutoImage } from '@/components/core/AutoImage'
 
 const CheckoutConfirmPageView = () => {
   const router = useRouter()
@@ -228,13 +228,9 @@ const Progress = ({
                       email you provided by clicking the button below and
                       selecting Email as shown in the image.
                     </Body1>
-                    <Image
+                    <AutoImage
                       src={'/images/email-login-demo.png'}
                       alt={'email login demo'}
-                      width={0}
-                      height={0}
-                      sizes="100vw"
-                      style={{ width: '100%', height: 'auto' }}
                     />
                   </>
                 )}

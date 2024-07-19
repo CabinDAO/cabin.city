@@ -1,11 +1,11 @@
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { getImageUrlFromNft } from '@/lib/image'
 import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
 import Icon from '@/components/core/Icon'
-import { AutofitImage } from '@/components/core/AutofitImage'
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { AutoImage } from '@/components/core/AutoImage'
 import { Caption, WordBreak } from '@/components/core/Typography'
 import { ScrollToTop } from '@/components/core/ScrollToTop'
-import { getImageUrlFromNft } from '@/lib/image'
 import { ExtendedOwnedNft } from './AvatarModal'
 
 interface SearchNftsProps {
@@ -58,10 +58,7 @@ export const SearchNft = ({ nfts, onSelect }: SearchNftsProps) => {
               onClick={() => handleSearchResultClick(nft)}
             >
               <NftImage>
-                <AutofitImage
-                  src={getImageUrlFromNft(nft)}
-                  alt={nft.name || ''}
-                />
+                <AutoImage src={getImageUrlFromNft(nft)} alt={nft.name || ''} />
               </NftImage>
               <CaptionContainer>
                 <Caption emphasized>{nft.name}</Caption>
