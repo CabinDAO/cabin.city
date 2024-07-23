@@ -10,8 +10,7 @@ export const EXTERNAL_LINKS = {
   PASSPORTS: 'https://forum.cabin.city/t/census-and-roles/54',
   PRIVACY_AND_TERMS:
     'https://forum.cabin.city/t/safety-privacy-policy-and-terms-of-service/89',
-  VISION:
-    'https://creators.mirror.xyz/zHox-AfvHbX0Q2JxAbcfwiAmOXRy7BzYafhZNlvHnmM',
+  VISION: 'https://paragraph.xyz/@cabin/network-city',
   PRINCIPLES:
     'https://creators.mirror.xyz/2-Feb6ft2PCWQ5-I5lFe8caSZTpSQALOLSvIFlnYSHc',
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',

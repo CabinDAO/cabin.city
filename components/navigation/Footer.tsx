@@ -26,9 +26,6 @@ export const Footer = () => {
               >
                 <Name>City Directory</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.CITIZENSHIP} iconSize={0}>
-                <Name>Citizenship</Name>
-              </AppLink>
               {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
                 <AppLink external href="/invite" iconSize={0}>
                   <Name>Invite Friends</Name>
