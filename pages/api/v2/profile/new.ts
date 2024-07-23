@@ -4,6 +4,7 @@ import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
+import { isProd } from '@/utils/dev'
 import { createProfile } from '@/utils/profile'
 import { toErrorString } from '@/utils/api/error'
 import { subscribe } from '@/lib/convertkit'
@@ -67,7 +68,7 @@ async function handler(
     invite,
   })
 
-  if (params.subscribeToNewsletter) {
+  if (isProd && params.subscribeToNewsletter) {
     try {
       await subscribe(params.email, { skipConfirmEmail: true })
       analytics.subscribeToNewsletterEvent(params.email)
