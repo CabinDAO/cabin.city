@@ -64,7 +64,7 @@ const PushFooterToBottom = styled.div<withVariant>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   justify-content: space-between;
   gap: ${({ variant }) => (variant === 'landing' ? '0' : '10rem')};
 

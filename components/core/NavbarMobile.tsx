@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
 import useEns from '@/components/hooks/useEns'
@@ -22,54 +22,69 @@ import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const NavbarMobile = () => {
   const { user } = useProfile()
+
   const { active } = useModal()
+  useEffect(() => {
+    if (active) setOpen(false)
+  }, [active])
 
   const [open, setOpen] = useState(false)
+  const [lastToggle, setLastToggle] = useState(new Date())
 
-  const toggleOpen = () => {
-    setOpen(!open)
-  }
-
-  if (active) {
-    return null
+  const toggleOpen = (clickAway: boolean) => {
+    if (
+      (clickAway && !open) || // clickaway is triggered even if the menu is closed
+      lastToggle.getTime() + 100 > new Date().getTime() // clickaway is also triggered when you click the button
+    ) {
+      return
+    }
+    setLastToggle(new Date())
+    setOpen(clickAway ? false : !open)
   }
 
   return (
-    <ClickAway onClickAway={() => setOpen(false)}>
-      <MobileNavContainer open={open}>
-        <InnerContainer>
-          <MobileMenuItem menuItem={'home'} profileId={user?.externId} />
-          <MobileMenuItem
-            menuItem={'neighborhoods'}
-            profileId={user?.externId}
-          />
-          <MobileMenuItem menuItem={'members'} profileId={user?.externId} />
-          <MobileMenuItem menuItem={'activity'} profileId={user?.externId} />
-          <StyledDivider />
-          <MobileMenuProfileItem />
-          <MobileMenuItem menuItem={'citizenship'} profileId={user?.externId} />
-          {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
-            <MobileMenuItem menuItem={'invite'} profileId={user?.externId} />
-          )}
-          {user && user.isAdmin && (
-            <MobileMenuItem menuItem={'admin'} profileId={user?.externId} />
-          )}
-          <MobileMenuItem menuItem={'signOut'} profileId={user?.externId} />
-          <MobileMenuItem
-            authenticated
-            menuItem={'signIn'}
-            profileId={user?.externId}
-          />
-        </InnerContainer>
-      </MobileNavContainer>
+    <>
+      <ClickAway
+        onClickAway={() => {
+          toggleOpen(true)
+        }}
+      >
+        <MobileNavContainer open={open}>
+          <InnerContainer>
+            <MobileMenuItem menuItem={'home'} profileId={user?.externId} />
+            <MobileMenuItem
+              menuItem={'neighborhoods'}
+              profileId={user?.externId}
+            />
+            <MobileMenuItem menuItem={'members'} profileId={user?.externId} />
+            <MobileMenuItem menuItem={'activity'} profileId={user?.externId} />
+            <StyledDivider />
+            <MobileMenuProfileItem />
+            <MobileMenuItem
+              menuItem={'citizenship'}
+              profileId={user?.externId}
+            />
+            {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
+              <MobileMenuItem menuItem={'invite'} profileId={user?.externId} />
+            )}
+            {user && user.isAdmin && (
+              <MobileMenuItem menuItem={'admin'} profileId={user?.externId} />
+            )}
+            <MobileMenuItem menuItem={'signOut'} profileId={user?.externId} />
+            <MobileMenuItem
+              authenticated
+              menuItem={'signIn'}
+              profileId={user?.externId}
+            />
+          </InnerContainer>
+        </MobileNavContainer>
 
-      {!open && (
-        <FloatingMenuContainer onClick={toggleOpen}>
-          <Icon name={open ? 'close' : 'menu'} size={2.4} color={'green400'} />
-          <Notch notchSize={1} />
+        <FloatingMenuContainer onClick={() => toggleOpen(false)}>
+          <Icon name={open ? 'close' : 'menu'} size={2} color={'green400'} />
+          {/*<Notch notchSize={1} />*/}
         </FloatingMenuContainer>
-      )}
-    </ClickAway>
+      </ClickAway>
+    </>
   )
 }
 
@@ -112,15 +127,14 @@ const FloatingMenuContainer = styled.nav`
   z-index: 2;
   cursor: pointer;
   padding: 1.6rem;
-  bottom: 9.3rem;
-  left: 2.4rem;
+  top: 0;
+  right: 0;
   background-color: ${({ theme }) => theme.colors.green800};
   justify-content: center;
   align-items: center;
   border: 0.1rem solid ${({ theme }) => theme.colors.green900};
-  border-bottom-right-radius: 2.5rem;
-  box-shadow: 0.8rem 0.8rem 0rem ${({ theme }) => theme.colors.yellow900};
-  ${notch(1)}
+  border-bottom-left-radius: 2rem;
+  box-shadow: -0.4rem 0.4rem 0rem ${({ theme }) => theme.colors.yellow900};
 `
 
 const Notch = styled.div<{ notchSize: number }>`

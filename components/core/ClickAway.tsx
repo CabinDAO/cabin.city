@@ -1,12 +1,15 @@
 import { ReactNode, useEffect, useRef } from 'react'
+import styled from 'styled-components'
 
-interface ClickAwayProps {
+const ClickAway = ({
+  children,
+  onClickAway,
+  className,
+}: {
   onClickAway: ((event: MouseEvent) => void) | null
   children: ReactNode
   className?: string
-}
-
-const ClickAway = ({ children, onClickAway, className }: ClickAwayProps) => {
+}) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -26,14 +29,14 @@ const ClickAway = ({ children, onClickAway, className }: ClickAwayProps) => {
   }, [onClickAway, wrapperRef])
 
   return (
-    <div
-      className={className}
-      ref={wrapperRef}
-      style={{ width: 'fit-content' }}
-    >
+    <ClickawayWrapper className={className} ref={wrapperRef}>
       {children}
-    </div>
+    </ClickawayWrapper>
   )
 }
+
+const ClickawayWrapper = styled.div`
+  width: fit-content;
+`
 
 export default ClickAway
