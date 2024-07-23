@@ -5,6 +5,7 @@ import { LaunchBanner } from '@/components/citizenship/LaunchBanner'
 import { NavbarMobile } from '@/components/core/NavbarMobile'
 import { Navbar } from '@/components/core/Navbar'
 import { Footer } from '@/components/navigation/Footer'
+import { useProfile } from '@/components/auth/useProfile'
 
 type LayoutVariant = 'default' | 'landing'
 
@@ -24,6 +25,11 @@ export const BaseLayout = ({
   const { deviceSize } = useDeviceSize()
   const isMobile = deviceSize === 'mobile'
 
+  // hide mobile nav on homepage if logged out so there's room for the login button
+  // and there's nothing in the mobile nav for unauth users anyway
+  const { user } = useProfile()
+  const hideMobileNav = variant === 'landing' && !user
+
   return (
     <OuterContainer className={className}>
       {displayLaunchBanner && <LaunchBanner />}
@@ -32,7 +38,7 @@ export const BaseLayout = ({
           <NavAndContent variant={variant}>
             {!hideNavAndFooter &&
               (isMobile ? (
-                <NavbarMobile />
+                !hideMobileNav && <NavbarMobile />
               ) : (
                 <NavbarContainer variant={variant}>
                   <Navbar />
