@@ -26,13 +26,22 @@ type SubscribeData = {
 }
 
 const FORM_ID = 5111496 // cabin's main form
+const DIRECT_FORM_ID = 6866329
 
 // https://developers.convertkit.com/#add-subscriber-to-a-form
-const subscribe = (email: string) => {
-  return httpClient.post<SubscribeData>(`/forms/${FORM_ID}/subscribe`, {
-    api_key: process.env.CONVERTKIT_API_KEY,
-    email: email,
-  })
+const subscribe = (
+  email: string,
+  options: {
+    skipConfirmEmail?: boolean
+  } = {}
+) => {
+  return httpClient.post<SubscribeData>(
+    `/forms/${options.skipConfirmEmail ? DIRECT_FORM_ID : FORM_ID}/subscribe`,
+    {
+      api_key: process.env.CONVERTKIT_API_KEY,
+      email: email,
+    }
+  )
 }
 
 export { subscribe }

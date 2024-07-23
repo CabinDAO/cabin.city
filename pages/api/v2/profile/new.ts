@@ -69,7 +69,7 @@ async function handler(
 
   if (params.subscribeToNewsletter) {
     try {
-      await subscribe(params.email)
+      await subscribe(params.email, { skipConfirmEmail: true })
       analytics.subscribeToNewsletterEvent(params.email)
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
