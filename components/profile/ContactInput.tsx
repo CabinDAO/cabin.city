@@ -11,7 +11,11 @@ import Icon from '@/components/core/Icon'
 import { InputText } from '@/components/core/InputText'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
-import { contactFieldDisplayNameMapping } from './setup-profile/step-configuration'
+import {
+  contactFieldDisplayNameMapping,
+  contactFieldPlaceholderMapping,
+} from './setup-profile/step-configuration'
+import { sanitizeContactValue } from '@/components/profile/validations'
 
 const contactOptions = Object.values(ContactFieldType).map(
   (type) =>
@@ -89,6 +93,17 @@ export const ContactInput = ({
     })
   }
 
+  const sanitizeValue = (
+    type: ContactFieldType,
+    value: string,
+    position: number
+  ) => {
+    const { sanitizedValue, error } = sanitizeContactValue(type, value)
+    if (!error) {
+      handleInputTextChange(sanitizedValue, position)
+    }
+  }
+
   return (
     <SetupStepContainer>
       <ContactTypeGroup>
@@ -109,8 +124,12 @@ export const ContactInput = ({
                 />
                 <InputText
                   label={contactFieldDisplayNameMapping[contact.type]}
+                  placeholder={contactFieldPlaceholderMapping[contact.type]}
                   value={contact.value}
                   onChange={(e) => handleInputTextChange(e.target.value, index)}
+                  onBlur={(e) =>
+                    sanitizeValue(contact.type, e.target.value, index)
+                  }
                 />
               </ContactTypePair>
               <IconContainer onClick={() => deleteContactList(index)}>

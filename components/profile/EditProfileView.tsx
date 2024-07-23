@@ -3,12 +3,14 @@ import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useProfile } from '../auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
+import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
+  ContactFieldType,
   ProfileEditParamsType,
   ProfileEditResponse,
 } from '@/utils/types/profile'
-import { validateProfileInput } from './validations'
+import { sanitizeContactValue, validateProfileInput } from './validations'
 import { EditProfileForm } from './EditProfileForm'
 import { ContentCard } from '@/components/core/ContentCard'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -19,6 +21,7 @@ import { ActionBar } from '@/components/core/ActionBar'
 export const EditProfileView = () => {
   const router = useRouter()
   const { user } = useProfile({ redirectTo: '/' })
+  const { showError } = useError()
 
   const { useMutate } = useBackend()
   const { trigger: updateUser } = useMutate<ProfileEditResponse>(
@@ -35,6 +38,18 @@ export const EditProfileView = () => {
       newValues.contactFields = newValues.contactFields.filter(
         (contactField) => contactField.value !== ''
       )
+
+      for (const i in newValues.contactFields) {
+        const { sanitizedValue, error } = sanitizeContactValue(
+          newValues.contactFields[i].type,
+          newValues.contactFields[i].value
+        )
+        if (error) {
+          showError(error)
+          return
+        }
+        newValues.contactFields[i].value = sanitizedValue
+      }
     }
 
     if (user && validateProfileInput(newValues)) {

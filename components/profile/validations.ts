@@ -1,4 +1,4 @@
-import { ProfileEditParamsType } from '@/utils/types/profile'
+import { ContactFieldType, ProfileEditParamsType } from '@/utils/types/profile'
 import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
 import { AddressFragmentType } from '@/utils/types/location'
@@ -44,4 +44,129 @@ export const isValidEmail = (email: ConditionalString) => {
 
 export const isValidAddressOrENSFormat = (address: ConditionalString) => {
   return address && (isAddress(address) || address.endsWith('.eth'))
+}
+
+export function sanitizeContactValue(type: ContactFieldType, value: string) {
+  let sanitizedValue = value.trim()
+  let error = ''
+
+  switch (type) {
+    case ContactFieldType.Discord:
+      sanitizedValue = sanitizedValue.toLowerCase()
+      if (!/^[a-z0-9.#_]{2,37}$/i.test(sanitizedValue)) {
+        error = 'Invalid Discord handle'
+      }
+      break
+    case ContactFieldType.Email:
+      const emailPattern =
+        /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
+      if (!emailPattern.test(sanitizedValue)) {
+        error = 'Invalid email address'
+      }
+      break
+    case ContactFieldType.Farcaster:
+      const wcPattern =
+        /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,15})(?:\/.*)?$/i
+      const wcMatch = sanitizedValue.match(wcPattern)
+
+      if (wcMatch) {
+        sanitizedValue = wcMatch[1]
+      }
+
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
+      if (!/^[a-z0-9][a-z0-9-]{0,15}$/.test(sanitizedValue)) {
+        error = 'Invalid Farcaster handle'
+      }
+      break
+    case ContactFieldType.Instagram:
+      const instaPattern =
+        /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-z0-9._]{1,30})(?:\/.*)?$/i
+      const instaMatch = sanitizedValue.match(instaPattern)
+
+      if (instaMatch) {
+        sanitizedValue = instaMatch[1]
+      }
+
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
+      if (!/^[A-Za-z0-9._]{1,30}$/.test(sanitizedValue)) {
+        error = 'Invalid Instagram handle'
+      }
+      break
+    case ContactFieldType.Lens:
+      const lensPattern =
+        /^(?:https?:\/\/)?(?:www\.)?hey\.xyz\/u\/([a-z0-9-]{1,100})(?:\/.*)?$/i
+      const lensMatch = sanitizedValue.match(lensPattern)
+
+      if (lensMatch) {
+        sanitizedValue = lensMatch[1]
+      }
+
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
+      if (sanitizedValue.startsWith('lens/')) {
+        sanitizedValue = sanitizedValue.slice(5)
+      }
+
+      if (!/^[a-z][a-z0-9_]{4,25}$/.test(sanitizedValue)) {
+        error = 'Invalid Lens handle'
+      }
+      break
+
+    case ContactFieldType.LinkedIn:
+      const linkedinPattern =
+        /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([a-z0-9-]{1,100})(?:\/.*)?$/i
+      const linkedinMatch = sanitizedValue.match(linkedinPattern)
+
+      if (linkedinMatch) {
+        sanitizedValue = linkedinMatch[1]
+      }
+
+      if (!/^[A-Za-z0-9-]{1,100}$/.test(sanitizedValue)) {
+        error = 'Invalid LinkedIn handle'
+      }
+      break
+    case ContactFieldType.Telegram:
+      const tgPattern =
+        /^(?:https?:\/\/)?(?:www\.)?t(?:elegram)?\.me\/([a-z0-9_]{5,32})(?:\/.*)?$/i
+      const tgMatch = sanitizedValue.match(tgPattern)
+
+      if (tgMatch) {
+        sanitizedValue = tgMatch[1]
+      }
+
+      if (!/^[A-Za-z0-9_]{5,32}$/.test(sanitizedValue)) {
+        error = 'Invalid Telegram handle'
+      }
+
+      break
+    case ContactFieldType.Twitter:
+      const twitterPattern =
+        /^(?:https?:\/\/)?(?:www\.)?(?:twitter|x)\.com\/([a-z0-9_]{1,15})(?:\/.*)?$/i
+      const twitterMatch = sanitizedValue.match(twitterPattern)
+
+      if (twitterMatch) {
+        sanitizedValue = twitterMatch[1]
+      }
+
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
+      if (!/^[A-Za-z0-9_]{1,15}$/.test(sanitizedValue)) {
+        error = 'Invalid Twitter handle'
+      }
+      break
+    case ContactFieldType.Website:
+      break
+  }
+
+  return { sanitizedValue, error }
 }
