@@ -66,7 +66,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
       break
     case ContactFieldType.Farcaster:
       const wcPattern =
-        /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,15})(?:\/.*)?$/i
+        /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,15}(\.eth)?)(?:\/.*)?$/i
       const wcMatch = sanitizedValue.match(wcPattern)
 
       if (wcMatch) {
