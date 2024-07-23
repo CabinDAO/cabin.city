@@ -7,7 +7,7 @@ export const SubscribeSection = () => {
     <SubscribeSectionContainer>
       <SubscribeInstructions>
         <H4>Subscribe to our newsletter</H4>
-        <Body1>Stay up-to-date on Cabin's latest events</Body1>
+        <Body1>Stay up-to-date</Body1>
       </SubscribeInstructions>
       <FormContainer>
         <SubscribeForm />

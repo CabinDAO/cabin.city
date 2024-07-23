@@ -37,10 +37,10 @@ export const JourneySection = () => {
     <>
       <Header>
         {/*<Icon name={'backpack-green'} size={8} />*/}
-        <Title>Join us on our journey</Title>
+        <Title>Grow your neighborhood</Title>
         <BodyText>
           We are a global network of local community builders. Together, we are
-          creating the future of places we want to live.
+          creating places we want to live.
         </BodyText>
       </Header>
 

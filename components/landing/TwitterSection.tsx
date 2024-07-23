@@ -141,7 +141,7 @@ const Item = (props: Tweet) => {
         </Link>
       </Top>
       <Text>{props.text}</Text>
-      <Date>{props.date}</Date>
+      {/*<Date>{props.date}</Date>*/}
     </StyledItem>
   )
 }
@@ -213,7 +213,7 @@ const Name = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.2rem;
+  gap: 0.5rem;
   width: 100%;
   overflow: hidden;
 `

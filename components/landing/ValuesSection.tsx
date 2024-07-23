@@ -9,7 +9,7 @@ export const ValuesSection = () => {
     <>
       <Title>What we believe</Title>
       <Subtitle>
-        Our community shares three obvious truths. Most people agree with these
+        Our community shares three Obvious Truths. Most people agree with these
         beliefs—but we don’t just talk about our ideals, we live them.
       </Subtitle>
 
@@ -17,17 +17,17 @@ export const ValuesSection = () => {
         <Value>
           <ValueTitle>Live Near Friends </ValueTitle>
           <ValueBody>
-            We are our best selves when we live with people we admire. Thanks to
-            the internet, we can connect with like-minded individuals online and
-            come together in-person to deepen relationships.
+            We are our best selves when we live near people we admire. We make a
+            habit of turning our neighbors into friends and our friends into
+            neighbors.
           </ValueBody>
         </Value>
         <Value>
-          <ValueTitle>Create Together</ValueTitle>
+          <ValueTitle>It Takes A Village</ValueTitle>
           <ValueBody>
-            Co-creation builds trust among collaborators through transparency
-            and empowerment. We practice a culture of cooperation, reciprocity,
-            and do-ocracy.
+            It takes a village to raise kids—and it takes kids to raise a
+            village. Whether you have kids or not, we believe that
+            intergenerational neighborhoods make us all better people.
           </ValueBody>
         </Value>
         <Value>
@@ -35,14 +35,14 @@ export const ValuesSection = () => {
           <ValueBody>
             We spend time online, but we believe that unplugging from technology
             and being present with people and nature is good for our well being.
-            Together, we grow regenerative local communities towards a
-            resilient, sustainable, abundant future.
+            Together, we grow our local communities towards a resilient,
+            regenerative, abundant future.
           </ValueBody>
         </Value>
       </Content>
 
-      <Link href={EXTERNAL_LINKS.PRINCIPLES} target="_blank" rel="noreferer">
-        <Button variant={'tertiary'}>View our guiding principles</Button>
+      <Link href={EXTERNAL_LINKS.VISION} target="_blank" rel="noreferer">
+        <Button variant={'tertiary'}>More about our Network City vision</Button>
       </Link>
     </>
   )

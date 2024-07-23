@@ -24,12 +24,12 @@ export const SupperClubSection = () => {
           <Title>Upgrade your neighborhood</Title>
           <Body>
             Make friends with your neighbors and make neighbors out of your
-            friends. Cabin's neighborhood steward cohort program can guide you
-            every step of the way.
+            friends. Our Neighborhood Accelerator Program can guide you every
+            step of the way.
           </Body>
           <Buttons>
             <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}>
-              <Button variant={'primary'}>Get started</Button>
+              <Button variant={'primary'}>Apply</Button>
             </Link>
             <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}>
               <Button variant={'secondary'}>Learn more</Button>

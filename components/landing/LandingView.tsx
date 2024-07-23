@@ -80,7 +80,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       </LandingSection>
 
       <LandingSection title={'What people are saying'} variant={'light'}>
-        <TestimonialSection />
+        {/*<TestimonialSection />*/}
         <TwitterSection />
       </LandingSection>
 
