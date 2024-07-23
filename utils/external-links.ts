@@ -12,7 +12,7 @@ export const EXTERNAL_LINKS = {
     'https://forum.cabin.city/t/safety-privacy-policy-and-terms-of-service/89',
   VISION: 'https://paragraph.xyz/@cabin/network-city',
   PRINCIPLES:
-    'https://creators.mirror.xyz/2-Feb6ft2PCWQ5-I5lFe8caSZTpSQALOLSvIFlnYSHc',
+    'https://paragraph.xyz/@cabin/guiding-principles-and-obvious-truths',
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   TWITTER: 'https://twitter.com/cabindotcity',
   DISCORD: 'https://discord.gg/EfuE8PYuB7',
