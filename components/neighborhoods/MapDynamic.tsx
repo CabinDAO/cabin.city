@@ -26,6 +26,7 @@ import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import { Marker, onMoveFn } from '@/components/neighborhoods/Map'
 import { AutoImage } from '@/components/core/AutoImage'
+import Link from 'next/link'
 
 export const MapDynamic = ({
   height,
@@ -172,12 +173,30 @@ const Markers = ({
           fillColor={theme.colors.green400}
         >
           <StyledPopup>
-            {l.imgUrl && <AutoImage src={l.imgUrl} alt={l.label} />}
-            {l.label}
+            <MaybeLink url={l.linkUrl}>
+              {l.imgUrl && <AutoImage src={l.imgUrl} alt={l.label} />}
+              {l.label}
+            </MaybeLink>
           </StyledPopup>
         </CircleMarker>
       ))}
     </>
+  )
+}
+
+const MaybeLink = ({
+  url,
+  children,
+}: {
+  url?: string
+  children: React.ReactNode
+}) => {
+  return url ? (
+    <Link style={{ cursor: 'pointer' }} href={url}>
+      {children}
+    </Link>
+  ) : (
+    <>{children}</>
   )
 }
 

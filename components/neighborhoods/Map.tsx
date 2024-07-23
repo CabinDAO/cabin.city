@@ -12,6 +12,7 @@ export type Marker = {
   lat: number
   lng: number
   imgUrl?: string
+  linkUrl?: string
 }
 
 export type onMoveParams = {

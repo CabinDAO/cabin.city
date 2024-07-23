@@ -17,7 +17,12 @@ export const getStaticProps = (async (/*context*/) => {
       where: { address: { lat: { not: null } } },
     }),
     prisma.location.findMany({
-      select: { name: true, address: true, bannerImageIpfsHash: true },
+      select: {
+        name: true,
+        externId: true,
+        address: true,
+        bannerImageIpfsHash: true,
+      },
       where: { address: { lat: { not: null } }, publishedAt: { not: null } },
     }),
     prisma.profile.count(),
@@ -36,6 +41,7 @@ export const getStaticProps = (async (/*context*/) => {
           lat: l.address?.lat || 0,
           lng: l.address?.lng || 0,
           imgUrl: getImageUrlByIpfsHash(l.bannerImageIpfsHash) || '',
+          linkUrl: `/location/${l.externId}`,
         })),
       },
     },
