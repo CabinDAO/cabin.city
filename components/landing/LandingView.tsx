@@ -29,7 +29,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         style={{
           backgroundImage: `url(${headerBg.src})`,
           backgroundSize: 'cover',
-          backgroundPosition: '50% 15%',
+          backgroundPosition: '50% 27%',
         }}
       >
         <OpaqueDiv>
