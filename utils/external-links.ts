@@ -16,7 +16,7 @@ export const EXTERNAL_LINKS = {
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   TWITTER: 'https://twitter.com/cabindotcity',
   DISCORD: 'https://discord.gg/EfuE8PYuB7',
-  BLOG: 'https://creators.mirror.xyz/',
+  BLOG: 'https://paragraph.xyz/@cabin',
   PODCAST: 'https://campfire-by-cabin.simplecast.com',
   SNAPSHOT: 'https://snapshot.org/#/cabindao.eth',
   UNLOCK_KEY_MANAGE: 'https://app.unlock-protocol.com/keychain',
