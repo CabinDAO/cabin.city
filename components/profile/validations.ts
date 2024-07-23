@@ -100,7 +100,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
       break
     case ContactFieldType.Lens:
       const lensPattern =
-        /^(?:https?:\/\/)?(?:www\.)?hey\.xyz\/u\/([a-z0-9-]{1,100})(?:\/.*)?$/i
+        /^(?:https?:\/\/)?(?:www\.)?(?:hey|lenster)\.xyz\/u\/([a-z0-9-]{1,100})(?:\/.*)?$/i
       const lensMatch = sanitizedValue.match(lensPattern)
 
       if (lensMatch) {

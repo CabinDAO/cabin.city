@@ -38,12 +38,12 @@ export const contactFieldDisplayNameMapping = {
 
 export const contactFieldPlaceholderMapping = {
   [ContactFieldType.Email]: 'jon@cabin.city',
-  [ContactFieldType.Discord]: '@cabin',
-  [ContactFieldType.Twitter]: '@cabindotcity',
-  [ContactFieldType.Instagram]: '@cabindotcity',
+  [ContactFieldType.Discord]: 'cabin',
+  [ContactFieldType.Twitter]: 'cabindotcity',
+  [ContactFieldType.Instagram]: 'cabindotcity',
   [ContactFieldType.LinkedIn]: 'https://www.linkedin.com/in/cabin/',
-  [ContactFieldType.Telegram]: '@cabin',
-  [ContactFieldType.Lens]: '@cabin',
+  [ContactFieldType.Telegram]: 'cabin',
+  [ContactFieldType.Lens]: 'cabin',
   [ContactFieldType.Website]: 'https://cabin.city',
-  [ContactFieldType.Farcaster]: '@cabin',
+  [ContactFieldType.Farcaster]: 'cabin',
 }
