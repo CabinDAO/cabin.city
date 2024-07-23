@@ -8,7 +8,6 @@ import { Map, Marker, onMoveFn } from '@/components/neighborhoods/Map'
 
 export type MapData = {
   members: number
-  citizens: number
   profiles: {
     lat: number
     lng: number
@@ -31,8 +30,6 @@ export const MapSection = ({
     <>
       <Stats>
         <span>{formatValue(data.members, 1)} Members</span>
-        {deviceSize !== 'mobile' && <span>|</span>}
-        <span>{data.citizens} Citizens</span>
         {deviceSize !== 'mobile' && <span>|</span>}
         <span>{data.locations.length} Neighborhoods</span>
       </Stats>

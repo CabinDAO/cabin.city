@@ -1,9 +1,6 @@
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
 import { getImageUrlByIpfsHash } from '@/lib/image'
-import { getEthersAlchemyProvider } from '@/lib/chains'
-import { PublicLock__factory } from '@/generated/ethers'
-import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
 
@@ -14,12 +11,7 @@ export default function Home({
 }
 
 export const getStaticProps = (async (/*context*/) => {
-  const lockContract = PublicLock__factory.connect(
-    unlockConfigForEnv.contractAddress,
-    getEthersAlchemyProvider(unlockConfigForEnv.networkName)
-  )
-
-  const [profiles, locations, numProfiles, citizens] = await Promise.all([
+  const [profiles, locations, numProfiles] = await Promise.all([
     prisma.profile.findMany({
       select: { address: true },
       where: { address: { lat: { not: null } } },
@@ -29,22 +21,12 @@ export const getStaticProps = (async (/*context*/) => {
       where: { address: { lat: { not: null } }, publishedAt: { not: null } },
     }),
     prisma.profile.count(),
-    lockContract.totalSupply(),
   ])
-
-  // const tokenHoldersCount = await prisma.wallet.count({
-  //   where: {
-  //     cabinTokenBalance: {
-  //       gt: 0,
-  //     },
-  //   },
-  // })
 
   return {
     props: {
       mapData: {
         members: numProfiles,
-        citizens: Number(citizens),
         profiles: profiles.map((p) => ({
           lat: p.address?.lat || 0,
           lng: p.address?.lng || 0,
