@@ -47,28 +47,29 @@ export const AboutInput = ({
     <SetupStepContainer>
       <AvatarSetup avatarUrl={avatarUrl} onSelected={onAvatarUrlChange} />
       <InputText
-        error={!isValidName(name)}
-        required
         label="Name"
+        required
         value={name}
-        onChange={handleNameChange}
         helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
+        onChange={handleNameChange}
+        error={!isValidName(name)}
       />
 
       <InputTextArea
         label="Bio"
-        helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
+        required
         value={bio}
+        helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
         onChange={handleBioChange}
         error={!isValidBio(bio)}
       />
 
       <LocationAutocompleteInput
         initialValue={address}
-        onLocationChange={onAddressChange}
         bottomHelpText={
           'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
         }
+        onLocationChange={onAddressChange}
         error={!isValidAddress(address)}
         errorMessage={ADDRESS_ERROR}
       />

@@ -35,7 +35,7 @@ export const isValidAddress = (
 export const INVALID_NAME_MESSAGE = `Name required and must be at most ${MAX_DISPLAY_NAME_LENGTH} characters`
 
 export const isValidBio = (bio: ConditionalString) => {
-  return (bio?.length ?? 0) <= MAX_BIO_LENGTH
+  return bio !== '' && (bio?.length ?? 0) <= MAX_BIO_LENGTH
 }
 
 export const isValidEmail = (email: ConditionalString) => {
