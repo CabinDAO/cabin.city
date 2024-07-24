@@ -28,11 +28,11 @@ export const MapSection = ({
 
   return (
     <>
-      <Stats>
-        <span>{formatValue(data.members, 1)} Members</span>
-        {deviceSize !== 'mobile' && <span>|</span>}
-        <span>{data.locations.length} Neighborhoods</span>
-      </Stats>
+      {/*<Stats>*/}
+      {/*<span>{formatValue(data.members, 1)} Members</span>*/}
+      {/*{deviceSize !== 'mobile' && <span>|</span>}*/}
+      {/*<span>{data.locations.length} Neighborhoods</span>*/}
+      {/*</Stats>*/}
       <Map
         height="80vh"
         initialZoom={width > 1200 ? 3 : 2}
