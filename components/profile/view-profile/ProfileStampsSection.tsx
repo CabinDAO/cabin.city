@@ -77,7 +77,7 @@ export const ProfileStampsSection = ({
           icon="stamp"
           title="Collect Passport Stamps"
           description="Build your Cabin creds"
-          href={EXTERNAL_LINKS.PASSPORTS}
+          // href={EXTERNAL_LINKS.PASSPORTS}
         />
       )}
     </Container>
