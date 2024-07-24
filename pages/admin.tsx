@@ -6,15 +6,27 @@ import { profileFromApiCookies } from '@/utils/api/withAuth'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Body1 } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
+import { useBackend } from '@/components/hooks/useBackend'
 
 export default function Page({}: InferGetServerSidePropsType<
   typeof getServerSideProps
 >) {
+  const { post } = useBackend()
   return (
     <BaseLayout>
       <TitleCard title="Admin" icon="peace-sign" />
       <StyledContentCard>
         <Body1>This page is for admin purposes only.</Body1>
+        <Button
+          onClick={async () => {
+            console.log('posting')
+            const res = await post('DEV', {})
+            console.log(res)
+          }}
+        >
+          fix contact info
+        </Button>
       </StyledContentCard>
     </BaseLayout>
   )
