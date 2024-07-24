@@ -2,10 +2,27 @@ import { prisma } from '../lib/prisma'
 import { getEthersAlchemyProvider } from '../lib/chains'
 import { CabinToken__factory } from '../generated/ethers'
 import { cabinTokenConfig } from '../lib/protocol-config'
-import { randomId } from '@/utils/random'
+import { sanitizeContactValue } from '@/components/profile/validations'
+import { ContactFieldType } from '@/utils/types/profile'
 
 async function main() {
-  console.log(randomId('neighborhood'))
+  const contacts = await prisma.profileContactField.findMany({})
+
+  for (const contact of contacts) {
+    const { sanitizedValue, error } = sanitizeContactValue(
+      contact.type as ContactFieldType,
+      contact.value
+    )
+    if (error) {
+      console.error(error, contact.value, sanitizedValue, contact.id)
+    } else if (sanitizedValue !== contact.value) {
+      // await prisma.profileContactField.update({
+      //   data: { value: sanitizedValue },
+      //   where: { id: contact.id },
+      // })
+    }
+  }
+
   return
 
   const provider = getEthersAlchemyProvider(cabinTokenConfig.networkName)

@@ -53,10 +53,16 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
   switch (type) {
     case ContactFieldType.Discord:
       sanitizedValue = sanitizedValue.toLowerCase()
+
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
       if (!/^[a-z0-9.#_]{2,37}$/i.test(sanitizedValue)) {
         error = 'Invalid Discord handle'
       }
       break
+
     case ContactFieldType.Email:
       const emailPattern =
         /^[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
@@ -64,6 +70,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         error = 'Invalid email address'
       }
       break
+
     case ContactFieldType.Farcaster:
       const wcPattern =
         /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,15}(\.eth)?)(?:\/.*)?$/i
@@ -77,10 +84,11 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         sanitizedValue = sanitizedValue.slice(1)
       }
 
-      if (!/^[a-z0-9][a-z0-9-]{0,15}$/.test(sanitizedValue)) {
+      if (!/^[a-z0-9][a-z0-9-]{0,15}(\.eth)?$/i.test(sanitizedValue)) {
         error = 'Invalid Farcaster handle'
       }
       break
+
     case ContactFieldType.Instagram:
       const instaPattern =
         /^(?:https?:\/\/)?(?:www\.)?instagram\.com\/([a-z0-9._]{1,30})(?:\/.*)?$/i
@@ -98,9 +106,10 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         error = 'Invalid Instagram handle'
       }
       break
+
     case ContactFieldType.Lens:
       const lensPattern =
-        /^(?:https?:\/\/)?(?:www\.)?(?:hey|lenster)\.xyz\/u\/([a-z0-9-]{1,100})(?:\/.*)?$/i
+        /^(?:https?:\/\/)?(?:www\.)?(?:hey|lenster|lensfrens)\.xyz\/(?:u\/)?([a-z0-9-.]{1,50})(?:\/.*)?$/i
       const lensMatch = sanitizedValue.match(lensPattern)
 
       if (lensMatch) {
@@ -115,7 +124,11 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         sanitizedValue = sanitizedValue.slice(5)
       }
 
-      if (!/^[a-z][a-z0-9_]{4,25}$/.test(sanitizedValue)) {
+      if (sanitizedValue.endsWith('.lens')) {
+        sanitizedValue = sanitizedValue.slice(0, -5)
+      }
+
+      if (!/^[a-z0-9][a-z0-9_]{4,25}$/i.test(sanitizedValue)) {
         error = 'Invalid Lens handle'
       }
       break
@@ -133,6 +146,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         error = 'Invalid LinkedIn handle'
       }
       break
+
     case ContactFieldType.Telegram:
       const tgPattern =
         /^(?:https?:\/\/)?(?:www\.)?t(?:elegram)?\.me\/([a-z0-9_]{5,32})(?:\/.*)?$/i
@@ -142,11 +156,16 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         sanitizedValue = tgMatch[1]
       }
 
+      if (sanitizedValue.startsWith('@')) {
+        sanitizedValue = sanitizedValue.slice(1)
+      }
+
       if (!/^[A-Za-z0-9_]{5,32}$/.test(sanitizedValue)) {
         error = 'Invalid Telegram handle'
       }
 
       break
+
     case ContactFieldType.Twitter:
       const twitterPattern =
         /^(?:https?:\/\/)?(?:www\.)?(?:twitter|x)\.com\/([a-z0-9_]{1,15})(?:\/.*)?$/i
@@ -164,7 +183,14 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         error = 'Invalid Twitter handle'
       }
       break
+
     case ContactFieldType.Website:
+      if (
+        !sanitizedValue.startsWith('http://') &&
+        !sanitizedValue.startsWith('https://')
+      ) {
+        sanitizedValue = `https://${sanitizedValue}`
+      }
       break
   }
 

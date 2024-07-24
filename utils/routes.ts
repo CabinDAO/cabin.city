@@ -34,6 +34,8 @@ enum Routes {
   CART = `/cart/[externId]`,
   CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
   CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook', // called by Stripe
+
+  DEV = '/dev',
 }
 
 export const expandRoute = (r: Route): string => {
