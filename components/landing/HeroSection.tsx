@@ -1,12 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
-import { HHero } from '@/components/core/Typography'
+import { H2, HHero } from '@/components/core/Typography'
 
 export const HeroSection = ({
   headerText,
+  subheaderText,
   buttons = [],
 }: {
   headerText: string
+  subheaderText?: string
   buttons?: React.ReactNode[]
 }) => {
   return (
@@ -14,6 +16,7 @@ export const HeroSection = ({
       <TopWrapper>
         <Header>
           <HeaderText>{headerText}</HeaderText>
+          {subheaderText && <SubheaderText>{subheaderText}</SubheaderText>}
         </Header>
         <ButtonWrapper>
           <Buttons>{buttons.map((button) => button)}</Buttons>
@@ -112,10 +115,10 @@ const Header = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  gap: 1.6rem;
+  gap: 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
-    gap: 2.4rem;
+    gap: 4rem;
   }
 `
 
@@ -129,6 +132,20 @@ const HeaderText = styled(HHero)`
   ${({ theme }) => theme.bp.md} {
     width: 100%;
     font-size: 4rem;
+    line-height: 1.25;
+  }
+`
+
+const SubheaderText = styled(H2)`
+  width: 48.8rem;
+  text-align: center;
+  color: ${({ theme }) => theme.colors.white};
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
+    3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
+
+  ${({ theme }) => theme.bp.md} {
+    width: 100%;
+    font-size: 2.5rem;
     line-height: 1.25;
   }
 `

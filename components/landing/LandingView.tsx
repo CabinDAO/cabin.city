@@ -38,6 +38,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
             headerText={
               'A network of neighborhoods where you’d want to grow up'
             }
+            // subheaderText={`${mapData.members} community members | ${mapData.locations.length} neighborhoods`}
             buttons={[
               <Link key="1" href="/city-directory">
                 <Button>Find one near you</Button>
