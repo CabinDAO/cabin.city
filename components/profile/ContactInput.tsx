@@ -126,6 +126,9 @@ export const ContactInput = ({
                   label={contactFieldDisplayNameMapping[contact.type]}
                   placeholder={contactFieldPlaceholderMapping[contact.type]}
                   value={contact.value}
+                  type={
+                    contact.type === ContactFieldType.Email ? 'email' : 'text'
+                  }
                   onChange={(e) => handleInputTextChange(e.target.value, index)}
                   onBlur={(e) =>
                     sanitizeValue(contact.type, e.target.value, index)
