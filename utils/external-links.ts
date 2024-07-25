@@ -1,6 +1,7 @@
 export const EXTERNAL_LINKS = {
   GENERAL_EMAIL_ADDRESS: 'home@cabin.city',
   SECURITY_EMAIL_ADDRESS: 'security@cabin.city',
+  ACCELERATOR_EMAIL: 'savannah@cabin.city',
   WIKI: 'https://forum.cabin.city/c/wiki/8',
   CITIZENSHIP: 'https://forum.cabin.city/t/cabin-citizenship/52',
   CITIZENSHIP_PERKS:

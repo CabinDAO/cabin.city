@@ -69,10 +69,12 @@ const themeColor = (
   variant: LandingSectionVariant | undefined
 ): string => {
   switch (variant) {
-    case 'light':
-      return fgBg == 'fg' ? theme.colors.green900 : theme.colors.yellow100
     case 'dark':
       return fgBg == 'fg' ? theme.colors.yellow100 : theme.colors.green800
+    case 'orange':
+      return fgBg == 'fg' ? theme.colors.green900 : theme.colors.yellow400
+    case 'light':
+      return fgBg == 'fg' ? theme.colors.green900 : theme.colors.yellow100
     case 'clear':
       return fgBg == 'fg' ? theme.colors.yellow100 : 'transparent'
     default:
