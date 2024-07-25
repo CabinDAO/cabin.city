@@ -212,6 +212,7 @@ export function LocationEditForm({
 
         <FullWidthInputContainer>
           <LocationAutocompleteInput
+            preciseLocation
             onLocationChange={handleLocationChange}
             initialValue={address}
             error={highlightErrors && !truthyString(address?.formattedAddress)}

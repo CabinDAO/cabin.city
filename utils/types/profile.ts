@@ -60,6 +60,14 @@ export enum ContactFieldType {
   LinkedIn = 'LinkedIn',
 }
 
+export const ProfileAddressFragment = AddressFragment.omit({
+  streetNumber: true,
+  route: true,
+  routeShort: true,
+  postalCode: true,
+}).strict()
+export type ProfileAddressFragmentType = z.infer<typeof ProfileAddressFragment>
+
 export type ProfileListFragment = {
   createdAt: string
   externId: string
@@ -204,7 +212,7 @@ export type MeFragment = {
   name: string
   email: string
   bio: string
-  address: AddressFragmentType | undefined
+  address: ProfileAddressFragmentType | undefined
   inviteCode: string
   citizenshipStatus: CitizenshipStatus
   citizenshipTokenId: number | null
@@ -231,7 +239,7 @@ export const ProfileNewParams = z
     walletAddress: WalletAddress.optional(),
     name: z.string(),
     email: z.string().email(),
-    address: AddressFragment,
+    address: ProfileAddressFragment,
     avatarUrl: z.string().optional(),
     subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
@@ -246,7 +254,7 @@ export const ProfileEditParams = z
       email: z.string().email().optional(),
       bio: z.string().optional(),
       walletAddress: z.union([WalletAddress, z.null()]).optional(),
-      address: AddressFragment.optional(),
+      address: ProfileAddressFragment.optional(),
       contactFields: z.array(ContactFragment).optional(),
       avatarUrl: z.string().optional(),
     }),
@@ -330,4 +338,41 @@ export const ProfileQueryInclude = {
       walletHat: true,
     },
   },
+}
+
+// these conversion functions are here rather than @/utils/profile.ts because that file imports prisma
+export function toFullAddress(
+  address: ProfileAddressFragmentType | undefined
+): AddressFragmentType {
+  return {
+    ...{
+      lat: null,
+      lng: null,
+      formattedAddress: null,
+      streetNumber: null,
+      route: null,
+      routeShort: null,
+      locality: null,
+      admininstrativeAreaLevel1: null,
+      admininstrativeAreaLevel1Short: null,
+      country: null,
+      countryShort: null,
+      postalCode: null,
+    },
+    ...address,
+  }
+}
+export function toProfileAddress(
+  address: AddressFragmentType
+): ProfileAddressFragmentType {
+  return {
+    lat: address.lat,
+    lng: address.lng,
+    formattedAddress: address.formattedAddress,
+    locality: address.locality,
+    admininstrativeAreaLevel1: address.admininstrativeAreaLevel1,
+    admininstrativeAreaLevel1Short: address.admininstrativeAreaLevel1Short,
+    country: address.country,
+    countryShort: address.countryShort,
+  }
 }

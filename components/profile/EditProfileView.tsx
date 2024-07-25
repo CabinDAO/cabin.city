@@ -6,7 +6,6 @@ import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
-  ContactFieldType,
   ProfileEditParamsType,
   ProfileEditResponse,
 } from '@/utils/types/profile'

@@ -3,37 +3,39 @@ import { usePlacesWidget } from 'react-google-autocomplete'
 import { AddressFragmentType } from '@/utils/types/location'
 import { InputText } from '@/components/core/InputText'
 
-interface LocationAutocompleteInputProps {
-  onLocationChange: (value: AddressFragmentType) => void
-  initialValue?: AddressFragmentType | null
-  error: boolean
-  errorMessage?: string
-  bottomHelpText?: string
-  disabled?: boolean
-  placeholder?: string
-}
-
 export const LocationAutocompleteInput = ({
   onLocationChange,
   initialValue,
+  preciseLocation,
   error,
   errorMessage,
   bottomHelpText,
   disabled,
   placeholder,
-}: LocationAutocompleteInputProps) => {
+}: {
+  onLocationChange: (value: AddressFragmentType) => void
+  initialValue?: AddressFragmentType | null
+  preciseLocation?: boolean
+  error: boolean
+  errorMessage?: string
+  bottomHelpText?: string
+  disabled?: boolean
+  placeholder?: string
+}) => {
   const [value, setValue] = useState(initialValue?.formattedAddress || '')
   const { ref: inputRef } = usePlacesWidget<HTMLInputElement>({
     apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
     options: {
       fields: ['address_components', 'geometry.location', 'formatted_address'],
       // https://developers.google.com/maps/documentation/javascript/supported_types
-      types: [
-        'geocode',
-        // 'address',
-        // '(regions)',
-        // '(cities)',
-      ],
+      types: preciseLocation
+        ? ['geocode']
+        : [
+            // 'geocode',
+            // 'address',
+            // '(regions)',
+            '(cities)',
+          ],
     },
     onPlaceSelected: (place) => {
       const addr = getFragment(place)
@@ -52,9 +54,7 @@ export const LocationAutocompleteInput = ({
         placeholder={placeholder}
         required
         disabled={disabled}
-        bottomHelpText={
-          bottomHelpText || 'Your precise location will not be shown publicly'
-        }
+        bottomHelpText={bottomHelpText}
         error={error}
         errorMessage={errorMessage}
       />

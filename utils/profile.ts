@@ -8,7 +8,7 @@ import {
   ActivityType,
   CitizenshipStatus,
 } from '@prisma/client'
-import { AddressFragmentType } from '@/utils/types/location'
+import { ProfileAddressFragmentType } from '@/utils/types/profile'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
@@ -26,7 +26,7 @@ type ProfileCreateParams = {
   walletAddress?: string
   name: string
   email: string
-  address?: AddressFragmentType
+  address?: ProfileAddressFragmentType
   avatarUrl?: string
   invite: Prisma.InviteGetPayload<null> | null
 }

@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
-import { AddressFragmentType } from '@/utils/types/location'
+import {
+  ProfileAddressFragmentType,
+  toFullAddress,
+  toProfileAddress,
+} from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Checkbox } from '@/components/core/Checkbox'
@@ -30,7 +34,7 @@ export function RegistrationForm({
 
   const [avatarUrl, setAvatarUrl] = useState('')
   const [name, setName] = useState('')
-  const [address, setAddress] = useState<AddressFragmentType>()
+  const [address, setAddress] = useState<ProfileAddressFragmentType>()
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
 
   const [canShowNameError, setCanShowNameError] = useState(false)
@@ -79,7 +83,7 @@ export function RegistrationForm({
     setName(e.target.value)
   }
 
-  const onAddressChange = (address: AddressFragmentType) => {
+  const onAddressChange = (address: ProfileAddressFragmentType) => {
     setCanShowAddressError(false)
     setAddress(address)
   }
@@ -136,11 +140,11 @@ export function RegistrationForm({
         <InputContainer>
           <LocationAutocompleteInput
             disabled={!!user || submitted}
-            initialValue={address}
-            onLocationChange={onAddressChange}
-            bottomHelpText={
-              'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
+            initialValue={toFullAddress(address)}
+            onLocationChange={(address) =>
+              onAddressChange(toProfileAddress(address))
             }
+            bottomHelpText={'What city do you spend most of your time in?'}
             error={canShowAddressError && !isValidAddress(address)}
             errorMessage={ADDRESS_ERROR}
           />

@@ -1,6 +1,10 @@
-import { ContactFieldType, ProfileEditParamsType } from '@/utils/types/profile'
-import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import { isAddress } from 'viem'
+import { EMAIL_VALID_REGEX } from '@/utils/validate'
+import {
+  ContactFieldType,
+  ProfileAddressFragmentType,
+  ProfileEditParamsType,
+} from '@/utils/types/profile'
 import { AddressFragmentType } from '@/utils/types/location'
 
 export const MAX_DISPLAY_NAME_LENGTH = 48
@@ -27,7 +31,7 @@ export const isValidName = (name: ConditionalString) => {
 }
 
 export const isValidAddress = (
-  address: AddressFragmentType | null | undefined
+  address: AddressFragmentType | ProfileAddressFragmentType | null | undefined
 ): boolean => {
   return !!(address && address.admininstrativeAreaLevel1)
 }

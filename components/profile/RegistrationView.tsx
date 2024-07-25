@@ -8,8 +8,11 @@ import { useExternalUser } from '../auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileNewParamsType, ProfileNewResponse } from '@/utils/types/profile'
-import { AddressFragmentType } from '@/utils/types/location'
+import {
+  ProfileAddressFragmentType,
+  ProfileNewParamsType,
+  ProfileNewResponse,
+} from '@/utils/types/profile'
 import { ErrorModal } from '../ErrorModal'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -19,7 +22,7 @@ import { RegistrationForm } from './RegistrationForm'
 export interface RegistrationParams {
   email: string
   name: string
-  address: AddressFragmentType
+  address: ProfileAddressFragmentType
   avatarUrl: string
   subscribeToNewsletter: boolean
 }

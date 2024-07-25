@@ -184,15 +184,11 @@ model ProfileAddress {
   lat                            Float?
   lng                            Float?
   formattedAddress               String?
-  streetNumber                   String?
-  route                          String? // Street, e.g. Cascade Street
-  routeShort                     String? // e.g. Cascade St
   locality                       String? // City
   admininstrativeAreaLevel1      String? // State, e.g. Colorado
   admininstrativeAreaLevel1Short String? // e.g. CO
   country                        String? // e.g. Costa Rica
   countryShort                   String? // e.g. CR
-  postalCode                     String?
 
   @@id([profileId])
 }

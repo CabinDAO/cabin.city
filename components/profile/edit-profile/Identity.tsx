@@ -17,7 +17,6 @@ import { H3 } from '@/components/core/Typography'
 import { UpdateProfileProps } from '../EditProfileForm'
 import { Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import { Tooltip } from '@/components/core/Tooltip'
 import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 
@@ -25,11 +24,7 @@ import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 // embedded wallets cannot be unlinked, so if you have one you should still be able to link an external wallet
 // so also handle the case where you have both an embedded and external wallet. eg when you unlink an external wallet, it falls back to the embedded wallet
 
-export const Identity = ({
-  user,
-  profileEditParams,
-  onChange,
-}: UpdateProfileProps) => {
+export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const { externalUser } = useExternalUser()
   const { refetchProfile } = useProfile()
   const { showModal } = useModal()

@@ -1,5 +1,9 @@
 import React from 'react'
-import { AddressFragmentType } from '@/utils/types/location'
+import {
+  ProfileAddressFragmentType,
+  toFullAddress,
+  toProfileAddress,
+} from '@/utils/types/profile'
 import { ADDRESS_ERROR } from '@/utils/validate'
 import {
   MAX_BIO_LENGTH,
@@ -19,8 +23,8 @@ interface AboutInputProps {
   onNameChange: (bio: string) => void
   bio: string
   onBioChange: (bio: string) => void
-  address?: AddressFragmentType
-  onAddressChange: (location: AddressFragmentType) => void
+  address: ProfileAddressFragmentType | undefined
+  onAddressChange: (location: ProfileAddressFragmentType) => void
   avatarUrl: string
   onAvatarUrlChange: (avatarUrl: string) => void
 }
@@ -65,11 +69,11 @@ export const AboutInput = ({
       />
 
       <LocationAutocompleteInput
-        initialValue={address}
-        bottomHelpText={
-          'Precise location will not be public. If nomadic, what city do you spend the biggest chunk of time?'
+        initialValue={toFullAddress(address)}
+        bottomHelpText={'What city do you spend most of your time in?'}
+        onLocationChange={(address) =>
+          onAddressChange(toProfileAddress(address))
         }
-        onLocationChange={onAddressChange}
         error={!isValidAddress(address)}
         errorMessage={ADDRESS_ERROR}
       />

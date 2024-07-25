@@ -9,7 +9,6 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationEditForm } from '@/components/neighborhoods/LocationEditForm'
-import { padding } from '@/styles/theme'
 
 export default EditLocationView
 
@@ -67,19 +66,4 @@ const Contents = styled(ContentCard)`
   justify-content: flex-start;
   width: 100%;
   gap: 1.6rem;
-`
-
-const Banner = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 2.4rem;
-  background: ${({ theme }) => theme.colors.yellow300};
-  ${padding('sm')};
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-  }
 `

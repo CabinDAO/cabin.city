@@ -39,7 +39,7 @@ export const EditProfileForm = ({
       <Identity
         user={user}
         profileEditParams={profileEditParams}
-        onChange={onChange}
+        onChange={() => null}
       />
       <Contact
         user={user}
