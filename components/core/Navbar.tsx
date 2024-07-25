@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import { notch } from '@/components/core/notch'
 import { Avatar } from './Avatar'
 import { MenuItemLink } from './navbar/MenuItemLink'
 import { ProfileNavMenu } from './navbar/ProfileNavMenu'
@@ -23,7 +22,6 @@ const Container = styled.nav`
   border: 0.1rem solid ${({ theme }) => theme.colors.green900};
   border-bottom-right-radius: 2.5rem;
   box-shadow: 0.8rem 0.8rem 0rem ${({ theme }) => theme.colors.yellow900};
-  ${notch(1)}
 `
 
 const Divider = styled.div`
