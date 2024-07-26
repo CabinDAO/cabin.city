@@ -131,8 +131,13 @@ export const IsItRightSection = () => {
                 September 8th.
               </span>
             </BlockTitle>
-            <Countdown target={new Date('2024-09-08')} />
-            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}>
+            <Countdown light />
+            <Link
+              href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+              style={{ width: 'min-content' }}
+              target="_blank"
+              rel="noopener"
+            >
               <Button
                 variant={'primary'}
                 // endAdornment={<Icon name={'right-arrow'} size={2} />}

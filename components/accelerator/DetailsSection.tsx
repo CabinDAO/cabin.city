@@ -52,41 +52,36 @@ export const DetailsSection = () => {
               <strong>learn the best practices and patterns</strong> of
               neighborhood building and then put them into practice in our
               neighborhoods. We’ll cover:
-              <List>
-                <li>Building Meaningful Relationships with Neighbors</li>
-                <li>
-                  Helping Your Friends + Family Move Into Your Neighborhood
-                </li>
-                <li>Creating Third Places</li>
-                <li>Hosting Engaging Events</li>
-                <li>Creating a Sense of Group Ownership</li>
-                <li>Neighborhood Comms & Group Message Threads</li>
-                <li>Knocking on Doors</li>
-                <li>
-                  Solving Local Problems Together: Placemaking, Tactical
-                  Urbanism & Collective Action
-                </li>
-              </List>
             </BoxBody>
+            <List>
+              <li>Building Meaningful Relationships with Neighbors</li>
+              <li>Helping Your Friends + Family Move Into Your Neighborhood</li>
+              <li>Creating Third Places</li>
+              <li>Hosting Engaging Events</li>
+              <li>Creating a Sense of Group Ownership</li>
+              <li>Neighborhood Comms & Group Message Threads</li>
+              <li>Knocking on Doors</li>
+              <li>
+                Solving Local Problems Together: Placemaking, Tactical Urbanism
+                & Collective Action
+              </li>
+            </List>
           </Box>
           <Box>
             <BoxTitle>Live Calls</BoxTitle>
-            <BoxBody>
-              <List>
-                <li>
-                  <strong>Weekly Small Group Call</strong>: Learn proven
-                  neighborhood-building strategies, share progress, and get
-                  feedback and support from your group. (Calls will consist of
-                  6-8 people in a pod)
-                </li>
-                <li>
-                  <strong>Regular Mentor Calls</strong>: Experienced
-                  neighborhood builders share their stories of building their
-                  neighborhoods, offer personalized coaching, and answer
-                  questions.
-                </li>
-              </List>
-            </BoxBody>
+            <List>
+              <li>
+                <strong>Weekly Small Group Call</strong>: Learn proven
+                neighborhood-building strategies, share progress, and get
+                feedback and support from your group. (Calls will consist of 6-8
+                people in a pod)
+              </li>
+              <li>
+                <strong>Regular Mentor Calls</strong>: Experienced neighborhood
+                builders share their stories of building their neighborhoods,
+                offer personalized coaching, and answer questions.
+              </li>
+            </List>
             <BoxBody>
               Call timing will be based on participant availability.
             </BoxBody>
@@ -165,8 +160,10 @@ const BoxBody = styled(Body1)`
 `
 
 const List = styled.ul`
-  margin-top: 1rem;
   margin-left: 2.4rem;
+  opacity: 0.8;
+  line-height: 1.4;
+  font-size: 1.6rem;
 
   li {
     margin-bottom: 1rem;

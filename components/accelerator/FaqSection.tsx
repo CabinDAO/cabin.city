@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled, { css } from 'styled-components'
-import { Body1, fonts, H2 } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
-import { padding } from '@/styles/theme'
 
 const faqs = [
   {
@@ -178,7 +177,7 @@ export const FaqSection = () => {
       <Body1>
         Have additional questions?{' '}
         <Link
-          href={EXTERNAL_LINKS.ACCELERATOR_EMAIL}
+          href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}
           style={{ textDecoration: 'underline' }}
         >
           Email us

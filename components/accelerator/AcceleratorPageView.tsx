@@ -13,6 +13,7 @@ import { DetailsSection } from '@/components/accelerator/DetailsSection'
 import { FaqSection } from '@/components/accelerator/FaqSection'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
 import { IsItRightSection } from '@/components/accelerator/IsItRightSection'
+import { PriceSection } from '@/components/accelerator/PriceSection'
 
 export const subscribeSectionID = 'updates'
 
@@ -53,9 +54,7 @@ export const AcceleratorPageView = () => {
       </LandingSection>
 
       <LandingSection variant={'default'}>
-        <AcceleratorSectionTitle>
-          Ready to transform your neighborhood?
-        </AcceleratorSectionTitle>
+        <PriceSection />
       </LandingSection>
 
       <LandingSection variant={'orange'}>
