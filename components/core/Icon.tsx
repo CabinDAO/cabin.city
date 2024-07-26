@@ -26,6 +26,7 @@ import chevronRightSvg from './svg/chevron-right.svg'
 import chevronUpSvg from './svg/chevron-up.svg'
 import citizenSvg from './svg/citizen.svg'
 import closeSvg from './svg/close.svg'
+import closeLong from './svg/close-long.svg'
 import coinSvg from './svg/coin.svg'
 import copySvg from './svg/copy.svg'
 import creatorSvg from './svg/creator.svg'
@@ -135,6 +136,7 @@ export const IconSvgs = {
   'chevron-up': chevronUpSvg,
   citizen: citizenSvg,
   close: closeSvg,
+  'close-long': closeLong,
   coin: coinSvg,
   copy: copySvg,
   creator: creatorSvg,

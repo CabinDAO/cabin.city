@@ -56,10 +56,12 @@ const Content = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
+    margin-bottom: 8rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     width: 67rem;
+    margin-bottom: 12rem;
   }
 `
 

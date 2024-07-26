@@ -1,7 +1,16 @@
 import React from 'react'
-import { Body1, H3 } from '@/components/core/Typography'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import Link from 'next/link'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
+import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
+import Icon from '@/components/core/Icon'
+import { Button } from '@/components/core/Button'
+import { Countdown } from '@/components/accelerator/Countdown'
+import {
+  AcceleratorSectionTitle,
+  subscribeSectionID,
+} from '@/components/accelerator/AcceleratorPageView'
+import theme from '@/styles/theme'
 
 const yesBlocks = [
   {
@@ -104,23 +113,72 @@ export const IsItRightSection = () => {
         Is the Neighborhood Accelerator for you?
       </AcceleratorSectionTitle>
 
-      <H3>This program is for you if you want to</H3>
+      <Section>
+        <SectionTitle>This program is for you if you want to:</SectionTitle>
+        <Blocks>
+          {yesBlocks.map((block, i) => (
+            <Block key={i}>
+              <Icon name={'check'} size={2} color={'green400'} />
+              <BlockTitle>{block.title}</BlockTitle>
+              {block.text}
+            </Block>
+          ))}
+          <CTABlock>
+            <BlockTitle>Ready to transform your neighborhood?</BlockTitle>
+            <BlockTitle>
+              Apply for NA2 by{' '}
+              <span style={{ color: theme.colors.green400 }}>
+                September 8th.
+              </span>
+            </BlockTitle>
+            <Countdown target={new Date('2024-09-08')} />
+            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}>
+              <Button
+                variant={'primary'}
+                // endAdornment={<Icon name={'right-arrow'} size={2} />}
+              >
+                Apply
+              </Button>
+            </Link>
+          </CTABlock>
+        </Blocks>
+      </Section>
 
-      {yesBlocks.map((block, i) => (
-        <Block key={i}>
-          <H3>{block.title}</H3>
-          {block.text}
-        </Block>
-      ))}
+      <Section>
+        <SectionTitle>It's not for you if:</SectionTitle>
+        <Blocks>
+          {noBlocks.map((block, i) => (
+            <Block key={i}>
+              <Icon name={'close-long'} size={2} color={'red500'} />
+              <BlockTitle>{block.title}</BlockTitle>
+              {block.text}
+            </Block>
+          ))}
+        </Blocks>
+      </Section>
 
-      <H3>This program is not for you if</H3>
-
-      {noBlocks.map((block, i) => (
-        <Block key={i}>
-          <H3>{block.title}</H3>
-          {block.text}
-        </Block>
-      ))}
+      <BottomSection>
+        <div>
+          <SectionTitle>
+            Not the right time yet? Wanna revisit in the future? All good.
+          </SectionTitle>
+          <Body1>
+            Be the first to know about future rounds of the program.
+          </Body1>
+        </div>
+        <span>
+          <Button
+            variant={'secondary'}
+            onClick={() => {
+              document
+                .querySelector(`#${subscribeSectionID}`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}
+          >
+            Get Updates
+          </Button>
+        </span>
+      </BottomSection>
     </Container>
   )
 }
@@ -129,13 +187,91 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 2.4rem;
+  gap: 4rem;
+  margin-bottom: 2rem;
 
   ${H3}, ${Body1} {
-    color: ${({ theme }) => theme.colors.yellow200};
+    color: ${({ theme }) => theme.colors.yellow100};
+  }
+
+  ${Body1} {
+    font-weight: 400;
+    line-height: 1.4;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    width: 55rem;
+    gap: 6rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 80rem;
   }
 `
+
+const Section = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`
+
+const SectionTitle = styled(H3)`
+  font-family: ${fonts.poppins};
+  color: ${({ theme }) => theme.colors.yellow100};
+  font-size: 2.4rem;
+  text-transform: none;
+
+  ${({ theme }) => theme.bp.md} {
+    margin-bottom: 2rem;
+  }
+`
+
+const BottomSection = styled(Section)`
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
+
+  ${SectionTitle} {
+    ${({ theme }) => theme.bp.md} {
+      font-size: 2rem;
+      margin-bottom: 0;
+    }
+  }
+`
+
+const Blocks = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4rem;
+  }
+`
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.8rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 45%;
+    margin-bottom: 1rem;
+  }
+`
+
+const CTABlock = styled(Block)`
+  border: solid 1px ${({ theme }) => theme.colors.green400};
+  background-color: ${({ theme }) => theme.colors.green700}33;
+  padding: 2rem;
+  gap: 2rem;
+`
+
+const BlockTitle = styled(H4)`
+  font-family: ${fonts.poppins};
+  color: ${({ theme }) => theme.colors.yellow100};
+  font-size: 1.7rem;
 `

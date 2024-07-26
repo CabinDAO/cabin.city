@@ -14,6 +14,8 @@ import { FaqSection } from '@/components/accelerator/FaqSection'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
 import { IsItRightSection } from '@/components/accelerator/IsItRightSection'
 
+export const subscribeSectionID = 'updates'
+
 export const AcceleratorPageView = () => {
   return (
     <BaseLayout variant="landing">
@@ -24,7 +26,7 @@ export const AcceleratorPageView = () => {
         style={{
           backgroundImage: `url(${headerBg.src})`,
           backgroundSize: 'cover',
-          backgroundPosition: '50% 40%',
+          backgroundPosition: '50% 70%',
         }}
       >
         <Top />
@@ -66,11 +68,11 @@ export const AcceleratorPageView = () => {
         </AcceleratorSectionTitle>
       </LandingSection>
 
-      <LandingSection variant={'dark'}>
+      <LandingSection variant={'dark'} id={subscribeSectionID}>
         <AcceleratorSectionTitle light>
           Can't join us for this round?
         </AcceleratorSectionTitle>
-        <Body1 style={{ color: theme.colors.yellow200 }}>
+        <Body1 style={{ color: theme.colors.yellow100 }}>
           No worries. Be the first to know about future rounds of the program.
         </Body1>
         <SubscribeForm />{' '}
@@ -95,7 +97,7 @@ export const AcceleratorSectionTitle = styled(H2)<{ light?: boolean }>`
   ${({ light }) =>
     light &&
     css`
-      color: ${theme.colors.yellow200};
+      color: ${theme.colors.yellow100};
     `}
 
   ${({ theme }) => theme.bp.md} {
