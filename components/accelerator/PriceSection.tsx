@@ -28,7 +28,7 @@ export const PriceSection = () => {
           {items.map((item, index) => (
             <Item key={index}>
               <Checkmark>
-                <Icon name={'check'} size={3} color={'green400'} />
+                <Icon name={'check'} size={3} color={'green700'} />
               </Checkmark>
               <Body1>{item}</Body1>
             </Item>
@@ -68,7 +68,7 @@ export const PriceSection = () => {
       </Box>
       <RefundBox>
         <CheckCircle>
-          <Icon name={'check-star'} size={2.4} color={'green400'} />
+          <Icon name={'check-star'} size={2.4} color={'green900'} />
         </CheckCircle>
         <Body1>
           If you’re not 100% satisfied within the first 14 days, you can request
@@ -183,13 +183,13 @@ const Checkmark = styled.div`
 `
 
 const CheckCircle = styled.div`
-  background-color: ${({ theme }) => theme.colors.green900};
+  background-color: ${({ theme }) => theme.colors.yellow400};
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 5rem;
-  height: 5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   flex-shrink: 0;
 `
 

@@ -107,9 +107,11 @@ const noBlocks = [
 export const IsItRightSection = () => {
   return (
     <Container>
-      <SectionTitle light>
-        Is the Neighborhood Accelerator for you?
-      </SectionTitle>
+      <TitleContainer>
+        <SectionTitle light style={{ maxWidth: '65rem' }}>
+          Is the Neighborhood Accelerator for you?
+        </SectionTitle>
+      </TitleContainer>
 
       <Section>
         <Subtitle>This program is for you if you want to:</Subtitle>
@@ -124,7 +126,7 @@ export const IsItRightSection = () => {
           <CTABlock>
             <BlockTitle>Ready to transform your neighborhood?</BlockTitle>
             <BlockTitle>
-              Apply for NA2 by{' '}
+              Apply by{' '}
               <span style={{ color: theme.colors.green400 }}>
                 September 8th.
               </span>
@@ -210,6 +212,10 @@ const Container = styled.div`
   ${({ theme }) => theme.bp.lg} {
     width: 80rem;
   }
+`
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `
 
 const Section = styled.div`
