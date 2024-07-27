@@ -54,11 +54,11 @@ export const AcceleratorPageView = () => {
         <DetailsSection />
       </LandingSection>
 
-      <LandingSection variant={'default'} precedesNoVertPadding>
+      <LandingSection variant={'default'}>
         <PriceSection />
       </LandingSection>
 
-      <LandingSection variant={'orange'} fullWidth noVertPadding>
+      <LandingSection variant={'orange'}>
         <FaqSection />
       </LandingSection>
 
