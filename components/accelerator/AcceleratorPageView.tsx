@@ -1,8 +1,7 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import headerBg from '@/components/accelerator/accelerator-header.jpg'
-import { Body1, fonts, H2, H3 } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { LandingSection } from '@/components/landing/LandingSection'
@@ -14,6 +13,8 @@ import { FaqSection } from '@/components/accelerator/FaqSection'
 import { SubscribeForm } from '@/components/landing/SubscribeForm'
 import { IsItRightSection } from '@/components/accelerator/IsItRightSection'
 import { PriceSection } from '@/components/accelerator/PriceSection'
+import { VisionSection } from '@/components/accelerator/VisionSection'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 
 export const subscribeSectionID = 'updates'
 
@@ -46,31 +47,27 @@ export const AcceleratorPageView = () => {
       </LandingSection>
 
       <LandingSection variant={'default'}>
-        <AcceleratorSectionTitle>Neighborhood stories</AcceleratorSectionTitle>
+        <SectionTitle>Neighborhood stories</SectionTitle>
       </LandingSection>
 
       <LandingSection variant={'orange'}>
         <DetailsSection />
       </LandingSection>
 
-      <LandingSection variant={'default'}>
+      <LandingSection variant={'default'} precedesNoVertPadding>
         <PriceSection />
       </LandingSection>
 
-      <LandingSection variant={'orange'}>
+      <LandingSection variant={'orange'} fullWidth noVertPadding>
         <FaqSection />
       </LandingSection>
 
       <LandingSection variant={'default'}>
-        <AcceleratorSectionTitle>
-          We’re creating a network of modern villages
-        </AcceleratorSectionTitle>
+        <VisionSection />
       </LandingSection>
 
       <LandingSection variant={'dark'} id={subscribeSectionID}>
-        <AcceleratorSectionTitle light>
-          Can't join us for this round?
-        </AcceleratorSectionTitle>
+        <SectionTitle light>Can't join us for this round?</SectionTitle>
         <Body1 style={{ color: theme.colors.yellow100 }}>
           No worries. Be the first to know about future rounds of the program.
         </Body1>
@@ -88,22 +85,3 @@ export const AcceleratorPageView = () => {
     </BaseLayout>
   )
 }
-
-export const AcceleratorSectionTitle = styled(H2)<{ light?: boolean }>`
-  font-family: ${fonts.inter};
-  font-size: 4.4rem;
-  text-align: center;
-  ${({ light }) =>
-    light &&
-    css`
-      color: ${theme.colors.yellow100};
-    `}
-
-  ${({ theme }) => theme.bp.md} {
-    width: 55rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
-  }
-`

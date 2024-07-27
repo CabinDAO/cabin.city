@@ -2,15 +2,13 @@ import React from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
+import theme from '@/styles/theme'
 import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
 import { Countdown } from '@/components/accelerator/Countdown'
-import {
-  AcceleratorSectionTitle,
-  subscribeSectionID,
-} from '@/components/accelerator/AcceleratorPageView'
-import theme from '@/styles/theme'
+import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 
 const yesBlocks = [
   {
@@ -109,12 +107,12 @@ const noBlocks = [
 export const IsItRightSection = () => {
   return (
     <Container>
-      <AcceleratorSectionTitle light>
+      <SectionTitle light>
         Is the Neighborhood Accelerator for you?
-      </AcceleratorSectionTitle>
+      </SectionTitle>
 
       <Section>
-        <SectionTitle>This program is for you if you want to:</SectionTitle>
+        <Subtitle>This program is for you if you want to:</Subtitle>
         <Blocks>
           {yesBlocks.map((block, i) => (
             <Block key={i}>
@@ -150,7 +148,7 @@ export const IsItRightSection = () => {
       </Section>
 
       <Section>
-        <SectionTitle>It's not for you if:</SectionTitle>
+        <Subtitle>It's not for you if:</Subtitle>
         <Blocks>
           {noBlocks.map((block, i) => (
             <Block key={i}>
@@ -164,9 +162,9 @@ export const IsItRightSection = () => {
 
       <BottomSection>
         <div>
-          <SectionTitle>
+          <Subtitle>
             Not the right time yet? Wanna revisit in the future? All good.
-          </SectionTitle>
+          </Subtitle>
           <Body1>
             Be the first to know about future rounds of the program.
           </Body1>
@@ -220,7 +218,7 @@ const Section = styled.div`
   gap: 2.4rem;
 `
 
-const SectionTitle = styled(H3)`
+const Subtitle = styled(H3)`
   font-family: ${fonts.poppins};
   color: ${({ theme }) => theme.colors.yellow100};
   font-size: 2.4rem;
@@ -236,7 +234,7 @@ const BottomSection = styled(Section)`
     flex-direction: row;
   }
 
-  ${SectionTitle} {
+  ${Subtitle} {
     ${({ theme }) => theme.bp.md} {
       font-size: 2rem;
       margin-bottom: 0;

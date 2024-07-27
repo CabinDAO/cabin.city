@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 import Icon from '@/components/core/Icon'
 import { Body1, fonts } from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
@@ -22,9 +22,7 @@ export const PriceSection = () => {
   const { deviceSize } = useDeviceSize()
   return (
     <Container>
-      <AcceleratorSectionTitle>
-        Ready to transform your neighborhood?
-      </AcceleratorSectionTitle>
+      <SectionTitle>Ready to transform your neighborhood?</SectionTitle>
       <Box>
         <Items>
           {items.map((item, index) => (

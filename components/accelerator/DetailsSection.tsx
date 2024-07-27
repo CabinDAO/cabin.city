@@ -1,7 +1,7 @@
 import Masonry from 'react-masonry-css'
 import styled from 'styled-components'
 import { Body1, H2, H4, fonts } from '@/components/core/Typography'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 
 export const DetailsSection = () => {
@@ -9,7 +9,7 @@ export const DetailsSection = () => {
 
   return (
     <>
-      <AcceleratorSectionTitle>Program details</AcceleratorSectionTitle>
+      <SectionTitle>Program details</SectionTitle>
 
       <Content>
         <Masonry

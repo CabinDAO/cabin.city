@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled, { css } from 'styled-components'
-import { Body1 } from '@/components/core/Typography'
+import { Body1, fonts } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { AutoImage } from '@/components/core/AutoImage'
+import img from '@/components/accelerator/picnic.jpg'
 
 const faqs = [
   {
@@ -153,37 +155,32 @@ const faqs = [
 ]
 
 export const FaqSection = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-
   return (
     <Container>
-      <AcceleratorSectionTitle>FAQs</AcceleratorSectionTitle>
+      <ImageContainer>
+        <AutoImage src={img.src} alt={'picnic in the plaza'} />
+        <ImageCaption>
+          Cabin folk gather in a popup village at Edge Esmerelda
+        </ImageCaption>
+      </ImageContainer>
+      <Faq>
+        <SectionTitle>FAQs</SectionTitle>
 
-      {faqs.map((faq, i) => (
-        <QuestionAnswer
-          key={i}
-          q={faq.q}
-          a={faq.a}
-          isOpen={i === openIndex}
-          onOpen={() => {
-            setOpenIndex(i)
-          }}
-          onClose={() => {
-            setOpenIndex(null)
-          }}
-        />
-      ))}
+        {faqs.map((faq, i) => (
+          <QuestionAnswer key={i} q={faq.q} a={faq.a} />
+        ))}
 
-      <Body1>
-        Have additional questions?{' '}
-        <Link
-          href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}
-          style={{ textDecoration: 'underline' }}
-        >
-          Email us
-        </Link>
-        .
-      </Body1>
+        <Body1>
+          Have additional questions?{' '}
+          <Link
+            href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}
+            style={{ textDecoration: 'underline' }}
+          >
+            Email us
+          </Link>
+          .
+        </Body1>
+      </Faq>
     </Container>
   )
 }
@@ -191,34 +188,58 @@ export const FaqSection = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  align-items: center;
+  justify-content: center;
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    width: 45rem;
+    flex-direction: row;
+    max-height: 700px;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
   }
 `
 
-const QuestionAnswer = ({
-  q,
-  a,
-  isOpen,
-  onOpen,
-  onClose,
-}: {
-  q: string
-  a: React.ReactNode
-  isOpen: boolean
-  onOpen: () => void
-  onClose: () => void
-}) => {
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+    max-height: 700px;
+  }
+`
+
+const ImageCaption = styled.div`
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  font-family: ${fonts.ibmPlexMono};
+  font-size: 1.6rem;
+  padding: 0.5rem 1rem;
+  background-color: ${({ theme }) => theme.colors.yellow100};
+  border: solid 1px ${({ theme }) => theme.colors.green900};
+`
+
+const Faq = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  width: 100%;
+  padding: 6.4rem 4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 50%;
+  }
+`
+
+const QuestionAnswer = ({ q, a }: { q: string; a: React.ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <QuestionContainer>
-      <Question onClick={isOpen ? onClose : onOpen}>
+      <Question onClick={() => setIsOpen(!isOpen)}>
         <QuestionText>{q}</QuestionText>
         <Chevron>
           <SpinningIcon name={'chevron-down'} size={2} isOpen={isOpen} />

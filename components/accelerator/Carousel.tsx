@@ -8,16 +8,14 @@ import { AutoImage } from '@/components/core/AutoImage'
 import forestWalk from '@/components/accelerator/forest-walk.jpg'
 import firePit from '@/components/accelerator/fire-pit.jpg'
 import parkPicnic from '@/components/accelerator/park-picnic.jpg'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 
 export const Carousel = () => {
   const { deviceSize } = useDeviceSize()
 
   return (
     <Content>
-      <AcceleratorSectionTitle light>
-        Imagine a neighborhood where...
-      </AcceleratorSectionTitle>
+      <SectionTitle light>Imagine a neighborhood where...</SectionTitle>
       <Slideshow key={deviceSize} loop advanceAfter={9}>
         {testimonials.map((i, n) => (
           <Slide key={n} {...i} />

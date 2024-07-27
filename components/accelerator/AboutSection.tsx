@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
-import { AcceleratorSectionTitle } from '@/components/accelerator/AcceleratorPageView'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 import { AutoImage } from '@/components/core/AutoImage'
 import img from '@/components/accelerator/accel-imgs.jpg'
 import { useWindowSize } from 'react-use'
@@ -119,7 +119,7 @@ const Right = styled.div`
   }
 `
 
-const Title = styled(AcceleratorSectionTitle)`
+const Title = styled(SectionTitle)`
   ${({ theme }) => theme.bp.lg} {
     width: auto;
   }
