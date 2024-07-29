@@ -2,19 +2,20 @@ import React from 'react'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { Body1, H1, H3 } from '@/components/core/Typography'
+import { Body1, H3 } from '@/components/core/Typography'
 import { AutoImage } from '@/components/core/AutoImage'
 
 import forestWalk from '@/components/accelerator/forest-walk.jpg'
 import firePit from '@/components/accelerator/fire-pit.jpg'
 import parkPicnic from '@/components/accelerator/park-picnic.jpg'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 
 export const Carousel = () => {
   const { deviceSize } = useDeviceSize()
 
   return (
     <Content>
-      <H1 emphasized>Imagine a neighborhood where...</H1>
+      <SectionTitle light>Imagine a neighborhood where...</SectionTitle>
       <Slideshow key={deviceSize} loop advanceAfter={9}>
         {testimonials.map((i, n) => (
           <Slide key={n} {...i} />
