@@ -34,9 +34,9 @@ export const AcceleratorPageView = () => {
         <Top />
       </LandingSection>
 
-      <LandingSection variant={'dark'}>
-        <Carousel />
-      </LandingSection>
+      {/*<LandingSection variant={'dark'}>*/}
+      {/*  <Carousel />*/}
+      {/*</LandingSection>*/}
 
       <LandingSection variant={'default'}>
         <AboutSection />
@@ -46,9 +46,9 @@ export const AcceleratorPageView = () => {
         <IsItRightSection />
       </LandingSection>
 
-      <LandingSection variant={'default'}>
-        <SectionTitle>Neighborhood stories</SectionTitle>
-      </LandingSection>
+      {/*<LandingSection variant={'default'}>*/}
+      {/*  <SectionTitle>Neighborhood stories</SectionTitle>*/}
+      {/*</LandingSection>*/}
 
       <LandingSection variant={'orange'}>
         <DetailsSection />
