@@ -7,7 +7,7 @@ export const LaunchBanner = () => {
   return (
     <Banner>
       <H4>Citizenship minting opens on May 23rd</H4>
-      <AppLink external href={EXTERNAL_LINKS.TWITTER}>
+      <AppLink external href={EXTERNAL_LINKS.TWITTER} iconSize={1}>
         <Subline2>Follow us on Twitter for updates</Subline2>
       </AppLink>
     </Banner>

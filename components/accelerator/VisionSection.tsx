@@ -10,6 +10,7 @@ import { AutoImage } from '@/components/core/AutoImage'
 import { Button } from '@/components/core/Button'
 import mapAndPolaroids from '@/components/accelerator/map-and-polaroids.jpg'
 import mapOnly from '@/components/accelerator/map-only.jpg'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 export const VisionSection = () => {
   const { width } = useWindowSize()
@@ -40,6 +41,7 @@ export const VisionSection = () => {
           <Buttons>
             <Link
               href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+              onClick={() => acceleratorApplyClickEvent('accelerator-vision')}
               style={{ width: 'min-content' }}
               target="_blank"
               rel="noopener"

@@ -6,6 +6,7 @@ import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 import pic from './supperclub.jpg'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 export const SupperClubSection = () => {
   return (
@@ -28,7 +29,12 @@ export const SupperClubSection = () => {
             step of the way.
           </Body>
           <Buttons>
-            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}>
+            <Link
+              href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+              onClick={() =>
+                acceleratorApplyClickEvent('landing-upgradesection')
+              }
+            >
               <Button variant={'primary'}>Apply</Button>
             </Link>
             <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}>

@@ -4,7 +4,15 @@ import Link from 'next/link'
 import Icon, { IconName } from './Icon'
 import analytics from '@/lib/googleAnalytics/analytics'
 
-interface AppLinkProps {
+export const AppLink = ({
+  href,
+  children,
+  external,
+  className,
+  iconName = 'chevron-right',
+  iconSize,
+  onClick,
+}: {
   href: string
   external?: boolean
   children: ReactNode
@@ -12,17 +20,7 @@ interface AppLinkProps {
   iconSize?: number
   className?: string
   onClick?: VoidFunction
-}
-
-export const AppLink = ({
-  href,
-  children,
-  external,
-  className,
-  iconName = 'chevron-right',
-  iconSize = 1,
-  onClick,
-}: AppLinkProps) => {
+}) => {
   iconName = external ? 'up-right-arrow' : iconName
 
   const handleClick = () => {

@@ -63,6 +63,13 @@ export const externalLinkEvent = (url: string): void => {
   })
 }
 
+export const acceleratorApplyClickEvent = (source: string): void => {
+  event({
+    action: 'accelerator_apply_click',
+    params: { source },
+  })
+}
+
 /**
  * @param activityId - The id of the activity being reacted to.
  **/
@@ -221,6 +228,7 @@ const analytics = {
   signalInterestEvent,
   citizenshipShareDiscordEvent,
   subscribeToNewsletterEvent,
+  acceleratorApplyClickEvent,
 }
 
 export default analytics

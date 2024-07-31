@@ -22,45 +22,45 @@ export const Footer = () => {
               <AppLink
                 onClick={() => analytics.viewCityDirectoryEvent()}
                 href="/city-directory"
-                iconSize={0}
               >
                 <Name>City Directory</Name>
               </AppLink>
+              <AppLink
+                onClick={() => analytics.acceleratorApplyClickEvent('footer')}
+                href="/accelerator"
+              >
+                <Name>Accelerator</Name>
+              </AppLink>
               {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
-                <AppLink external href="/invite" iconSize={0}>
+                <AppLink external href="/invite">
                   <Name>Invite Friends</Name>
                 </AppLink>
               )}
-              <AppLink
-                external
-                href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}
-                iconSize={0}
-              >
+              <AppLink external href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}>
                 <Name>Privacy & Terms</Name>
               </AppLink>
-              <AppLink href="/security" iconSize={0}>
+              <AppLink href="/security">
                 <Name>Security</Name>
               </AppLink>
             </Section>
 
             <Section>
               <Header>Resources</Header>
-              <AppLink external href={EXTERNAL_LINKS.VISION} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.VISION}>
                 <Name>Vision</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.BLOG} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.BLOG}>
                 <Name>Blog</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.PODCAST} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.PODCAST}>
                 <Name>Podcast</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.STORE} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.STORE}>
                 <Name>Store</Name>
               </AppLink>
               <AppLink
                 external
                 href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-                iconSize={0}
               >
                 <Name>Contact Us</Name>
               </AppLink>
@@ -68,16 +68,16 @@ export const Footer = () => {
 
             <Section>
               <Header>Social</Header>
-              <AppLink external href={EXTERNAL_LINKS.DISCORD} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.DISCORD}>
                 <Name>Discord</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.FORUM} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.FORUM}>
                 <Name>Forum</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.TWITTER} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.TWITTER}>
                 <Name>Twitter</Name>
               </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.INSTAGRAM} iconSize={0}>
+              <AppLink external href={EXTERNAL_LINKS.INSTAGRAM}>
                 <Name>Instagram</Name>
               </AppLink>
             </Section>

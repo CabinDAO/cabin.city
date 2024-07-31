@@ -9,6 +9,7 @@ import { Body1, fonts } from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { Countdown } from '@/components/accelerator/Countdown'
 import { Button } from '@/components/core/Button'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const items = [
   'Build a thriving, connected community in your neighborhood',
@@ -56,6 +57,7 @@ export const PriceSection = () => {
             <Countdown />
             <Link
               href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+              onClick={() => acceleratorApplyClickEvent('accelerator-price')}
               target="_blank"
               rel="noopener"
             >

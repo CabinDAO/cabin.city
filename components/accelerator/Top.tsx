@@ -2,9 +2,10 @@ import React from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
-import { Body1, fonts, H2, HHero } from '@/components/core/Typography'
+import { fonts, H2, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { Button } from '@/components/core/Button'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 export const Top = () => {
   return (
@@ -22,8 +23,8 @@ export const Top = () => {
         {/*<Countdown target={new Date('2024-09-23')} />*/}
         <Buttons>
           <Link
-            key="1"
             href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+            onClick={() => acceleratorApplyClickEvent('accelerator-top')}
           >
             <Button>Apply</Button>
           </Link>

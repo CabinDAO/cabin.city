@@ -5,6 +5,7 @@ import styled, { css } from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const faqs = [
   {
@@ -15,6 +16,7 @@ const faqs = [
           1. You apply{' '}
           <Link
             href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+            onClick={() => acceleratorApplyClickEvent('accelerator-faq')}
             style={{ textDecoration: 'underline' }}
           >
             here
