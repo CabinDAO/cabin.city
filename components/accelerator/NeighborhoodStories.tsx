@@ -34,7 +34,7 @@ export function NeighborhoodStories() {
       </Subtitle>
 
       {deviceSize === 'mobile' ? (
-        pics.map((i, n) => <AutoImage key={i} src={i.src} alt={'slide'} />)
+        pics.map((i, n) => <AutoImage key={n} src={i.src} alt={'slide'} />)
       ) : (
         <Slideshow key={deviceSize} loop>
           {pics.map((i, n) => (
