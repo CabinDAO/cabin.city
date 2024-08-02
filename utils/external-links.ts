@@ -34,6 +34,8 @@ export const EXTERNAL_LINKS = {
     'https://airtable.com/appPL8AkfAbUptVu9/pag4n0nxeSPFDRzUk/form',
   NEIGHBORHOOD_COHORT_INFO:
     'https://forum.cabin.city/t/launching-cabin-neighborhood-cohorts/213',
+  NEIGHBORHOOD_MONTH_ONE_UPDATE:
+    'https://forum.cabin.city/t/month-1-update-neighborhood-accelerator-summer-2024/269',
   SUPPER_CLUB_LUMA: 'https://lu.ma/cabinsupperclubs',
   SUPPER_CLUB_INFO: 'https://forum.cabin.city/t/supper-club-guide/62',
   STORE: 'https://store.cabin.city',

@@ -53,10 +53,11 @@ const yesBlocks = [
     title: 'Build a Network City of Distributed Neighborhoods',
     text: (
       <Body1>
-        Cabin’s larger vision is create a network of interconnected neighborhood
-        communities around the world where people can easily find their tribe,
-        live near friends, and create vibrant, multigenerational communities. If
-        this excites you, <strong>you’re in the right place</strong>.
+        Cabin’s larger vision is to create a network of interconnected
+        neighborhood communities around the world where people can easily find
+        their tribe, live near friends, and create vibrant, multigenerational
+        communities. If this excites you,{' '}
+        <strong>you’re in the right place</strong>.
       </Body1>
     ),
   },

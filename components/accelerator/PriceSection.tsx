@@ -40,7 +40,7 @@ export const PriceSection = () => {
           <Left>
             <Price>$400</Price>
             <Body1>
-              Scholarships are very available. If money is preventing you from
+              Scholarships are available. If money is preventing you from
               applying, please{' '}
               <Link
                 href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}

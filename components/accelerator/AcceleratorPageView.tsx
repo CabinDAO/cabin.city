@@ -5,7 +5,6 @@ import { Body1 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { LandingSection } from '@/components/landing/LandingSection'
-import { Carousel } from '@/components/accelerator/Carousel'
 import { Top } from '@/components/accelerator/Top'
 import { AboutSection } from '@/components/accelerator/AboutSection'
 import { DetailsSection } from '@/components/accelerator/DetailsSection'
@@ -15,6 +14,7 @@ import { IsItRightSection } from '@/components/accelerator/IsItRightSection'
 import { PriceSection } from '@/components/accelerator/PriceSection'
 import { VisionSection } from '@/components/accelerator/VisionSection'
 import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { NeighborhoodStories } from '@/components/accelerator/NeighborhoodStories'
 
 export const subscribeSectionID = 'updates'
 
@@ -46,9 +46,9 @@ export const AcceleratorPageView = () => {
         <IsItRightSection />
       </LandingSection>
 
-      {/*<LandingSection variant={'default'}>*/}
-      {/*  <SectionTitle>Neighborhood stories</SectionTitle>*/}
-      {/*</LandingSection>*/}
+      <LandingSection variant={'default'}>
+        <NeighborhoodStories />
+      </LandingSection>
 
       <LandingSection variant={'orange'}>
         <DetailsSection />
