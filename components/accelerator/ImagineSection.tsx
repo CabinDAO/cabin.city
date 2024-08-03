@@ -87,7 +87,11 @@ const SlideContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
-  width: 44rem;
+  width: 80vw;
+
+  ${({ theme }) => theme.bp.md} {
+    width: 44rem;
+  }
 
   ${({ theme }) => theme.bp.lg} {
     width: 62rem;
