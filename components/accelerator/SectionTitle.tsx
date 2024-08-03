@@ -20,3 +20,25 @@ export const SectionTitle = styled(H2)<{ light?: boolean }>`
     width: 80rem;
   }
 `
+
+import underline from '@/components/accelerator/green-underline.png'
+
+export const GreenUnderline = styled.span`
+  white-space: nowrap;
+  display: inline-block;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -15px;
+    width: 100%;
+    height: 20px;
+    background-image: url(${underline.src});
+    //background-size: contain;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+`

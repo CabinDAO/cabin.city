@@ -8,7 +8,10 @@ import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
 import { Countdown } from '@/components/accelerator/Countdown'
 import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import {
+  GreenUnderline,
+  SectionTitle,
+} from '@/components/accelerator/SectionTitle'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const yesBlocks = [
@@ -116,7 +119,10 @@ export const IsItRightSection = () => {
       </TitleContainer>
 
       <Section>
-        <Subtitle>This program is for you if you want to:</Subtitle>
+        <Subtitle>
+          This program is <GreenUnderline>for you</GreenUnderline> if you want
+          to:
+        </Subtitle>
         <Blocks>
           {yesBlocks.map((block, i) => (
             <Block key={i}>

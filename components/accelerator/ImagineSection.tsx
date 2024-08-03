@@ -1,7 +1,10 @@
 import React from 'react'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import {
+  GreenUnderline,
+  SectionTitle,
+} from '@/components/accelerator/SectionTitle'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { AutoImage } from '@/components/core/AutoImage'
 import { fonts } from '@/components/core/Typography'
@@ -10,7 +13,6 @@ import sk from '@/components/accelerator/sk-neighborhood.jpg'
 import forest from '@/components/accelerator/forest-neighborhood.jpg'
 import bethany from '@/components/accelerator/bethany-neighborhood.jpg'
 import shani2 from '@/components/accelerator/shani2-neighborhood.jpg'
-import underline from '@/components/accelerator/green-underline.png'
 
 export function ImagineSection() {
   const { deviceSize } = useDeviceSize()
@@ -112,24 +114,4 @@ const BottomText = styled.div`
   color: ${({ theme }) => theme.colors.yellow100};
   font-size: 3.2rem;
   text-align: center;
-`
-
-const GreenUnderline = styled.span`
-  white-space: nowrap;
-  display: inline-block;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -15px;
-    width: 100%;
-    height: 20px;
-    background-image: url(${underline.src});
-    //background-size: contain;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    pointer-events: none;
-  }
 `
