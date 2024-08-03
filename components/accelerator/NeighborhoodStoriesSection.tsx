@@ -11,7 +11,7 @@ import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
 import Kathi from '@/components/accelerator/Kathi Slide.png'
 
-export function NeighborhoodStories() {
+export function NeighborhoodStoriesSection() {
   const { deviceSize } = useDeviceSize()
   return (
     <Container>

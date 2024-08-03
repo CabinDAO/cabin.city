@@ -6,6 +6,7 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { LandingSection } from '@/components/landing/LandingSection'
 import { Top } from '@/components/accelerator/Top'
+import { SectionTitle } from '@/components/accelerator/SectionTitle'
 import { AboutSection } from '@/components/accelerator/AboutSection'
 import { DetailsSection } from '@/components/accelerator/DetailsSection'
 import { FaqSection } from '@/components/accelerator/FaqSection'
@@ -13,8 +14,8 @@ import { SubscribeForm } from '@/components/landing/SubscribeForm'
 import { IsItRightSection } from '@/components/accelerator/IsItRightSection'
 import { PriceSection } from '@/components/accelerator/PriceSection'
 import { VisionSection } from '@/components/accelerator/VisionSection'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
-import { NeighborhoodStories } from '@/components/accelerator/NeighborhoodStories'
+import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
+import { ImagineSection } from '@/components/accelerator/ImagineSection'
 
 export const subscribeSectionID = 'updates'
 
@@ -34,9 +35,9 @@ export const AcceleratorPageView = () => {
         <Top />
       </LandingSection>
 
-      {/*<LandingSection variant={'dark'}>*/}
-      {/*  <Carousel />*/}
-      {/*</LandingSection>*/}
+      <LandingSection variant={'dark'}>
+        <ImagineSection />
+      </LandingSection>
 
       <LandingSection variant={'default'}>
         <AboutSection />
@@ -47,7 +48,7 @@ export const AcceleratorPageView = () => {
       </LandingSection>
 
       <LandingSection variant={'default'}>
-        <NeighborhoodStories />
+        <NeighborhoodStoriesSection />
       </LandingSection>
 
       <LandingSection variant={'orange'}>
