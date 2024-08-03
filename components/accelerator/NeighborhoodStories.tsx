@@ -9,7 +9,6 @@ import { Body1 } from '@/components/core/Typography'
 import { AutoImage } from '@/components/core/AutoImage'
 import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
-import jackson from '@/components/accelerator/Jackson Slide.png'
 import Kathi from '@/components/accelerator/Kathi Slide.png'
 
 export function NeighborhoodStories() {
@@ -46,7 +45,7 @@ export function NeighborhoodStories() {
   )
 }
 
-const pics = [Kathi, jackson, bethany, savannah]
+const pics = [Kathi, bethany, savannah]
 
 const Container = styled.div`
   display: flex;
