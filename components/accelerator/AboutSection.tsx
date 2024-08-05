@@ -9,17 +9,19 @@ export const AboutSection = () => {
   const { width } = useWindowSize()
   return (
     <Container width={width}>
-      <Title>The Cabin Neighborhood Accelerator</Title>
       <Content>
         <Left>
           <TopSection>
-            <strong>
+            <Title>The Cabin Neighborhood Accelerator</Title>
+            <Subtitle>
               A 10-week program that helps people build a sense of community in
               their neighborhoods.
-            </strong>{' '}
-            Whether you’re just starting out or want to take your community to
-            the next level, we want to help you turn your neighborhood into a
-            thriving community.
+            </Subtitle>
+            <Body1>
+              Whether you’re just starting out or want to take your community to
+              the next level, we want to help you turn your neighborhood into a
+              thriving community.
+            </Body1>
           </TopSection>
 
           <Boxes>
@@ -52,8 +54,8 @@ export const AboutSection = () => {
             <Box>
               <BoxTitle>Accountability</BoxTitle>
               <BoxBody>
-                You’ll be held accountable to take specific, time-tested actions
-                each week to build a neighborhood you’re proud of.
+                You’ll be held accountable by your fellow stewards to take
+                action each week to build a neighborhood you’re proud of.
               </BoxBody>
             </Box>
             <Box>
@@ -78,14 +80,11 @@ const Container = styled.div<{ width: number }>`
   display: flex;
   flex-direction: column;
   gap: 4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 55rem;
-  }
+  width: 100%;
 
   ${({ theme }) => theme.bp.lg} {
-    width: auto;
-    max-width: ${({ width }) => (width > 1320 ? '1100' : width - 220)}px;
+    width: calc(100vw - 30rem);
+    max-width: 130rem;
   }
 `
 
@@ -120,15 +119,25 @@ const Right = styled.div`
 `
 
 const Title = styled(SectionTitle)`
+  font-size: 5rem;
+  text-align: left;
   ${({ theme }) => theme.bp.lg} {
     width: auto;
   }
 `
 
-const TopSection = styled(Body1)`
+const Subtitle = styled(Body1)`
+  font-weight: 700;
+  font-size: 2.4rem;
+`
+
+const TopSection = styled.div`
+  display: flex;
+  flex-direction: column;
   font-size: 2rem;
   width: 100%;
   margin-bottom: 2rem;
+  gap: 2rem;
 `
 
 const Boxes = styled.div`

@@ -1,5 +1,5 @@
 import React from 'react'
-import theme from '@/styles/theme'
+import theme, { padding } from '@/styles/theme'
 import headerBg from '@/components/accelerator/accelerator-header.jpg'
 import { Body1 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -16,6 +16,7 @@ import { PriceSection } from '@/components/accelerator/PriceSection'
 import { VisionSection } from '@/components/accelerator/VisionSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
 import { ImagineSection } from '@/components/accelerator/ImagineSection'
+import styled, { css } from 'styled-components'
 
 export const subscribeSectionID = 'updates'
 
@@ -35,45 +36,45 @@ export const AcceleratorPageView = () => {
         <Top />
       </LandingSection>
 
-      <LandingSection variant={'dark'}>
+      <Section variant={'dark'}>
         <ImagineSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'default'}>
+      <Section variant={'default'}>
         <AboutSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'dark'}>
+      <Section variant={'dark'}>
         <IsItRightSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'default'}>
+      <Section variant={'default'}>
         <NeighborhoodStoriesSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'orange'}>
+      <Section variant={'orange'}>
         <DetailsSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'default'}>
+      <Section variant={'default'}>
         <PriceSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'orange'}>
+      <Section variant={'orange'}>
         <FaqSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'default'}>
+      <Section variant={'default'}>
         <VisionSection />
-      </LandingSection>
+      </Section>
 
-      <LandingSection variant={'dark'} id={subscribeSectionID}>
-        <SectionTitle light>Can't join us for this round?</SectionTitle>
-        <Body1 style={{ color: theme.colors.yellow100 }}>
+      <Section variant={'default'} id={subscribeSectionID}>
+        <SectionTitle>Can't join us for this round?</SectionTitle>
+        <Body1>
           No worries. Be the first to know about future rounds of the program.
         </Body1>
         <SubscribeForm />{' '}
-      </LandingSection>
+      </Section>
 
       <LandingSection fullWidth noVertPadding>
         <ImageFlex
@@ -86,3 +87,14 @@ export const AcceleratorPageView = () => {
     </BaseLayout>
   )
 }
+
+const Section = styled(LandingSection)`
+  ${padding.top('xl')};
+  ${padding.bottom('xl')};
+
+  ${({ variant }) =>
+    variant === 'dark' &&
+    css`
+      background-color: ${({ theme }) => theme.colors.green900};
+    `}
+`

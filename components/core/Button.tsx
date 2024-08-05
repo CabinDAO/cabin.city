@@ -1,8 +1,8 @@
-import theme from '@/styles/theme'
+import React, { MouseEventHandler } from 'react'
 import { motion } from 'framer-motion'
+import theme from '@/styles/theme'
 import styled, { css } from 'styled-components'
 import { buttonStyles } from './Typography'
-import React, { MouseEventHandler } from 'react'
 
 type ButtonVariant =
   | 'primary'
@@ -128,6 +128,7 @@ export interface ButtonProps {
   isActive?: boolean
   disabled?: boolean
   isFullWidth?: boolean
+  style?: React.CSSProperties
 }
 
 export const Button = ({
@@ -139,6 +140,7 @@ export const Button = ({
   startAdornment,
   endAdornment,
   onClick,
+  style,
   ...props
 }: ButtonProps) => {
   let hoverAnimation = {}
@@ -224,6 +226,7 @@ export const Button = ({
       }}
       variant={variant}
       onClick={onClick}
+      style={style}
       {...props}
     >
       {startAdornment}

@@ -68,11 +68,7 @@ const Container = styled.div`
   justify-content: center;
 
   ${({ theme }) => theme.bp.md} {
-    width: 55rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
+    width: calc(100vw - 30rem);
   }
 `
 

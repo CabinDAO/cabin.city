@@ -19,8 +19,8 @@ const yesBlocks = [
     title: 'Turn Your Neighbors Into Friends',
     text: (
       <Body1>
-        Feeling a rich sense of <strong>belonging</strong> and connection in
-        your neighborhood is deeply important to you.
+        You’re excited to build relationships with many different kinds of
+        people in your neighborhood.
       </Body1>
     ),
   },
@@ -28,8 +28,8 @@ const yesBlocks = [
     title: 'Turn Your Friends Into Your Neighbors',
     text: (
       <Body1>
-        You want to get your friends to live within walking distance of you and
-        make <strong>hanging out frictionless</strong>.
+        You want to help your friends move close to you and make hanging out
+        frictionless.
       </Body1>
     ),
   },
@@ -37,9 +37,8 @@ const yesBlocks = [
     title: 'Create a Strong Community',
     text: (
       <Body1>
-        You want to co-create the social infrastructure to make sure people are
-        taken care of when they need it most. Maybe you want to{' '}
-        <strong>create "the village" that it takes to raise a child</strong>.
+        You want to co-create a culture where people show up for each other when
+        it counts.
       </Body1>
     ),
   },
@@ -47,8 +46,8 @@ const yesBlocks = [
     title: 'Get After It & Grow as a Person',
     text: (
       <Body1>
-        You’re willing to try different things, run experiments, be wrong, try
-        something new, and <strong>keep going even when it’s hard</strong>.
+        You’re willing to try different things, make mistakes, try something
+        new, and <strong>keep going even when it’s hard</strong>.
       </Body1>
     ),
   },
@@ -56,9 +55,8 @@ const yesBlocks = [
     title: 'Build a Network City of Distributed Neighborhoods',
     text: (
       <Body1>
-        Cabin’s larger vision is to create a network of interconnected
-        neighborhood communities around the world where people can easily find
-        their tribe, live near friends, and create vibrant, multigenerational
+        We are creating a network of interconnected neighborhoods where people
+        can easily find their tribe and create vibrant, multigenerational
         communities. If this excites you,{' '}
         <strong>you’re in the right place</strong>.
       </Body1>
@@ -68,12 +66,12 @@ const yesBlocks = [
 
 const noBlocks = [
   {
-    title: `You're looking for instant results or a quick fix`,
+    title: `You're looking for instant results`,
     text: (
       <Body1>
-        Neighborhood building is hard, deeply personal work. If you’re not
-        willing to put in the work required each week to build something
-        meaningful, this program is not for you.
+        This is hard, deeply personal work. If you’re not willing to put in the
+        effort each week to build something meaningful, this program isn’t for
+        you.
       </Body1>
     ),
   },
@@ -82,8 +80,8 @@ const noBlocks = [
     text: (
       <Body1>
         If you're not committed to investing in your current neighborhood for
-        the long term, this program isn’t for you. We’d love to have you once
-        you’re committed.
+        the foreseeable future, this program isn’t for you. We’d love to have
+        you once you’re settled and committed.
       </Body1>
     ),
   },
@@ -91,19 +89,8 @@ const noBlocks = [
     title: `You're extremely busy`,
     text: (
       <Body1>
-        Participation in this program takes on average 4 hours a week. If you
-        don’t have the space to participate and make things happen in your
-        neighborhood, this program isn’t for you.
-      </Body1>
-    ),
-  },
-  {
-    title: `You're on a solo journey`,
-    text: (
-      <Body1>
-        Supporting other folks in the program, comparing approaches, sharing
-        ideas are all fundamental to the collective success of our
-        neighborhoods.
+        We recommend people block out about 4 hours a week to participate in
+        this program. Consider if you have the space to fully commit.
       </Body1>
     ),
   },
@@ -161,7 +148,9 @@ export const IsItRightSection = () => {
       </Section>
 
       <Section>
-        <Subtitle>It's not for you if:</Subtitle>
+        <Subtitle>
+          This program is <GreenUnderline>not for you</GreenUnderline> if:
+        </Subtitle>
         <Blocks>
           {noBlocks.map((block, i) => (
             <Block key={i}>
@@ -170,31 +159,25 @@ export const IsItRightSection = () => {
               {block.text}
             </Block>
           ))}
+          <CTABlock>
+            <BlockTitle>Not the right time yet? All good.</BlockTitle>
+            <Body1>
+              Be the first to know about future rounds of the program.
+            </Body1>
+            <Button
+              variant={'secondary'}
+              style={{ width: 'min-content' }}
+              onClick={() => {
+                document
+                  .querySelector(`#${subscribeSectionID}`)
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }}
+            >
+              Get Updates
+            </Button>
+          </CTABlock>
         </Blocks>
       </Section>
-
-      <BottomSection>
-        <div>
-          <Subtitle>
-            Not the right time yet? Wanna revisit in the future? All good.
-          </Subtitle>
-          <Body1>
-            Be the first to know about future rounds of the program.
-          </Body1>
-        </div>
-        <span>
-          <Button
-            variant={'secondary'}
-            onClick={() => {
-              document
-                .querySelector(`#${subscribeSectionID}`)
-                ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }}
-          >
-            Get Updates
-          </Button>
-        </span>
-      </BottomSection>
     </Container>
   )
 }
@@ -293,5 +276,5 @@ const CTABlock = styled(Block)`
 const BlockTitle = styled(H4)`
   font-family: ${fonts.poppins};
   color: ${({ theme }) => theme.colors.yellow100};
-  font-size: 1.7rem;
+  font-size: 2rem;
 `
