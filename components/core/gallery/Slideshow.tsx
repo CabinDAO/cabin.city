@@ -17,6 +17,7 @@ interface SlideshowProps {
   children: ReactElement | ReactElement[]
   loop?: boolean
   advanceAfter?: number
+  forceShowControls?: boolean
 }
 
 export const Slideshow = ({
@@ -24,6 +25,7 @@ export const Slideshow = ({
   className,
   loop,
   advanceAfter,
+  forceShowControls,
 }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
@@ -37,6 +39,7 @@ export const Slideshow = ({
   const canNavigateNext =
     loop || currSlide < slideSizes.length - numSlidesVisible
   const canNavigatePrevious = loop || currSlide > 0
+  const showControls = forceShowControls || slideSizes.length > numSlidesVisible
 
   const gotoNextSlide = () => {
     let nextSlide = Math.min(
@@ -153,25 +156,27 @@ export const Slideshow = ({
         </SlideshowReel>
       </SlideshowViewport>
 
-      <SlideshowControls>
-        <ControlButton
-          variant="secondary"
-          aria-label="Previous"
-          onClick={onPreviousSlide}
-          disabled={!canNavigatePrevious}
-        >
-          <Icon name="chevron-left" size={1.6} />
-        </ControlButton>
+      {showControls && (
+        <SlideshowControls>
+          <ControlButton
+            variant="secondary"
+            aria-label="Previous"
+            onClick={onPreviousSlide}
+            disabled={!canNavigatePrevious}
+          >
+            <Icon name="chevron-left" size={1.6} />
+          </ControlButton>
 
-        <ControlButton
-          variant="secondary"
-          aria-label="Next"
-          onClick={onNextSlide}
-          disabled={!canNavigateNext}
-        >
-          <Icon name="chevron-right" size={1.6} />
-        </ControlButton>
-      </SlideshowControls>
+          <ControlButton
+            variant="secondary"
+            aria-label="Next"
+            onClick={onNextSlide}
+            disabled={!canNavigateNext}
+          >
+            <Icon name="chevron-right" size={1.6} />
+          </ControlButton>
+        </SlideshowControls>
+      )}
     </SlideshowContainer>
   )
 }
