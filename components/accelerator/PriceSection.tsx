@@ -84,15 +84,13 @@ export const PriceSection = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  align-items: center;
+  gap: 4rem;
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    width: 45rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
+    width: calc(100vw - 30rem);
+    max-width: 80rem;
   }
 `
 
@@ -111,7 +109,7 @@ const Items = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
   gap: 2.8rem;
 
@@ -133,6 +131,7 @@ const Item = styled.div`
 const BoxBottom = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   gap: 2.5rem;
 

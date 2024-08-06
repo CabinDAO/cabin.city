@@ -121,7 +121,7 @@ const Right = styled.div`
 const Title = styled(SectionTitle)`
   font-size: 5rem;
   text-align: left;
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     width: auto;
   }
 `

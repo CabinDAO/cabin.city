@@ -20,7 +20,7 @@ export const VisionSection = () => {
       <Content>
         <Left>
           <StyledH3>Our Vision at Cabin</StyledH3>
-          <Title>A network of modern villages</Title>
+          <Title>We’re creating a network of modern villages.</Title>
           <Body1>
             We’re building neighborhoods we’d want to grow up in and grow old
             in. We are our best selves when we live near people we admire. We
@@ -74,14 +74,11 @@ const Container = styled.div<{ width: number }>`
   display: flex;
   flex-direction: column;
   gap: 3rem;
+  width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    width: 55rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: auto;
-    max-width: ${({ width }) => (width > 1320 ? '1100' : width - 220)}px;
+    width: calc(100vw - 30rem);
+    max-width: 130rem;
   }
 `
 
