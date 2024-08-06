@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { fonts, H2, HHero } from '@/components/core/Typography'
+import { fonts, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { ApplyButton } from '@/components/accelerator/shared'
 
