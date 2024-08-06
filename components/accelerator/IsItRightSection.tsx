@@ -1,6 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
 import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
@@ -13,7 +11,6 @@ import {
   GreenUnderline,
   SectionTitle,
 } from '@/components/accelerator/shared'
-import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const yesBlocks = [
   {
@@ -185,12 +182,9 @@ const Container = styled.div`
   }
 
   ${({ theme }) => theme.bp.md} {
-    width: 55rem;
+    width: calc(100vw - 30rem);
+    max-width: 100rem;
     gap: 6rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
   }
 `
 const TitleContainer = styled.div`

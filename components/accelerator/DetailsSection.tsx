@@ -115,9 +115,9 @@ const Content = styled.div`
   margin-bottom: 4rem;
   gap: 10rem;
 
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     width: calc(100vw - 30rem);
-    max-width: 130rem;
+    max-width: 110rem;
   }
 
   .masonry {

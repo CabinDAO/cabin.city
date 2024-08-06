@@ -21,12 +21,10 @@ export const SectionTitle = styled(H2)<{ light?: boolean }>`
 
   ${({ theme }) => theme.bp.md} {
     font-size: 5rem;
-    width: 55rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
     font-size: 5.5rem;
-    width: 80rem;
   }
 `
 

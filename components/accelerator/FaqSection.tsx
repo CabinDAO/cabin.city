@@ -186,11 +186,8 @@ const Container = styled.div`
   width: 100%;
 
   ${({ theme }) => theme.bp.md} {
-    width: 45rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 80rem;
+    width: calc(100vw - 30rem);
+    max-width: 80rem;
   }
 `
 

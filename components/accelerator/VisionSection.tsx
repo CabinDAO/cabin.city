@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import { useWindowSize } from 'react-use'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
@@ -10,13 +9,11 @@ import { AutoImage } from '@/components/core/AutoImage'
 import { Button } from '@/components/core/Button'
 import mapAndPolaroids from '@/components/accelerator/map-and-polaroids.jpg'
 import mapOnly from '@/components/accelerator/map-only.jpg'
-import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 export const VisionSection = () => {
-  const { width } = useWindowSize()
   const { deviceSize } = useDeviceSize()
   return (
-    <Container width={width}>
+    <Container>
       <Content>
         <Left>
           <StyledH3>Our Vision at Cabin</StyledH3>
@@ -62,7 +59,7 @@ export const VisionSection = () => {
   )
 }
 
-const Container = styled.div<{ width: number }>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 3rem;

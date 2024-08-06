@@ -68,13 +68,15 @@ export const AcceleratorPageView = () => {
         <VisionSection />
       </Section>
 
-      <Section variant={'default'} id={subscribeSectionID}>
-        <SectionTitle>Can't join us for this round?</SectionTitle>
-        <Body1>
-          No worries. Be the first to know about future rounds of the program.
-        </Body1>
-        <SubscribeForm />{' '}
-      </Section>
+      <LandingSection variant={'default'} id={subscribeSectionID} noVertPadding>
+        <SubscribeContainer>
+          <SectionTitle>Can't join us for this round?</SectionTitle>
+          <Body1>
+            No worries. Be the first to know about future rounds of the program.
+          </Body1>
+          <SubscribeForm />
+        </SubscribeContainer>
+      </LandingSection>
 
       <LandingSection fullWidth noVertPadding>
         <ImageFlex
@@ -97,4 +99,20 @@ const Section = styled(LandingSection)`
     css`
       background-color: ${({ theme }) => theme.colors.green900};
     `}
+`
+
+const SubscribeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2.4rem;
+  margin-bottom: 4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    width: calc(100vw - 30rem);
+    max-width: 130rem;
+    margin-top: 4rem;
+    margin-bottom: 10rem;
+  }
 `

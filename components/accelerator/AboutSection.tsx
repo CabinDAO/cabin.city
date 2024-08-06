@@ -3,12 +3,10 @@ import { Body1, H4 } from '@/components/core/Typography'
 import { SectionTitle } from '@/components/accelerator/shared'
 import { AutoImage } from '@/components/core/AutoImage'
 import img from '@/components/accelerator/accel-imgs.jpg'
-import { useWindowSize } from 'react-use'
 
 export const AboutSection = () => {
-  const { width } = useWindowSize()
   return (
-    <Container width={width}>
+    <Container>
       <Content>
         <Left>
           <TopSection>
@@ -76,13 +74,13 @@ export const AboutSection = () => {
   )
 }
 
-const Container = styled.div<{ width: number }>`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4rem;
   width: 100%;
 
-  ${({ theme }) => theme.bp.lg} {
+  ${({ theme }) => theme.bp.md} {
     width: calc(100vw - 30rem);
     max-width: 130rem;
   }
@@ -121,9 +119,6 @@ const Right = styled.div`
 const Title = styled(SectionTitle)`
   font-size: 5rem;
   text-align: left;
-  ${({ theme }) => theme.bp.md} {
-    width: auto;
-  }
 `
 
 const Subtitle = styled(Body1)`
