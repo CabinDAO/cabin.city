@@ -10,6 +10,8 @@ import { AutoImage } from '@/components/core/AutoImage'
 import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
 import Kathi from '@/components/accelerator/Kathi Slide.png'
+import jackson from '@/components/accelerator/Jackson Slide.png'
+import shani from '@/components/accelerator/Shani Slide.png'
 
 export function NeighborhoodStoriesSection() {
   const { deviceSize } = useDeviceSize()
@@ -26,7 +28,7 @@ export function NeighborhoodStoriesSection() {
             target={'_blank'}
             rel={'noopener'}
           >
-            NA1 1-Month Update
+            Accelerator 1-Month Update
           </Link>
           .
         </Body1>
@@ -45,7 +47,7 @@ export function NeighborhoodStoriesSection() {
   )
 }
 
-const pics = [Kathi, bethany, savannah]
+const pics = [Kathi, jackson, bethany, savannah, shani]
 
 const Container = styled.div`
   display: flex;
