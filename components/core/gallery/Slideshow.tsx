@@ -29,21 +29,34 @@ export const Slideshow = ({
 }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
-  const [numSlidesVisible, setNumSlidesVisible] = useState(0)
+  const [numSlidesFullyVisible, setNumSlidesFullyVisible] = useState(0)
   const [slideSizes, setSlideSizes] = useState<DOMRect[]>([])
   const [currSlide, setCurrSlide] = useState(0)
   const [autoAdvanceStopped, setAutoAdvanceStopped] = useState(false)
   const firstSlideSize = slideSizes[0]
   const currSlideSize = slideSizes[currSlide]
   const currSlideOffset = (firstSlideSize?.x ?? 0) - (currSlideSize?.x ?? 0)
-  const canNavigateNext =
-    loop || currSlide < slideSizes.length - numSlidesVisible
+  const hasOffscreenSlide =
+    currSlide < slideSizes.length - numSlidesFullyVisible
+  const canNavigateNext = loop || hasOffscreenSlide
   const canNavigatePrevious = loop || currSlide > 0
-  const showControls = forceShowControls || slideSizes.length > numSlidesVisible
+  const showControls =
+    forceShowControls || slideSizes.length > numSlidesFullyVisible
+
+  const [viewportWidth, setViewportWidth] = useState(0)
+  const pxVisibleFromNextSlide = hasOffscreenSlide
+    ? Math.max(
+        0,
+        currSlideSize?.x +
+          viewportWidth -
+          slideSizes[currSlide + numSlidesFullyVisible].x
+      ) // min() ensures non-negative to adjust for gaps between slides
+    : 0
+  const fadeRightEdge = viewportWidth > 0 && pxVisibleFromNextSlide > 0
 
   const gotoNextSlide = () => {
     let nextSlide = Math.min(
-      slideSizes.length - numSlidesVisible,
+      slideSizes.length - numSlidesFullyVisible,
       currSlide + 1
     )
     if (loop && nextSlide == currSlide) {
@@ -56,7 +69,7 @@ export const Slideshow = ({
   const gotoPrevSlide = () => {
     let prevSlide = Math.max(0, currSlide - 1)
     if (loop && prevSlide == currSlide) {
-      prevSlide = slideSizes.length - numSlidesVisible
+      prevSlide = slideSizes.length - numSlidesFullyVisible
     }
     setCurrSlide(prevSlide)
     setAutoAdvanceStopped(true)
@@ -83,6 +96,7 @@ export const Slideshow = ({
     }
 
     const viewportSize = viewportRef.current.getBoundingClientRect()
+    setViewportWidth(viewportSize.width)
     const newSlideSizes = slidesRef.current.map(
       (slide) => slide?.getBoundingClientRect() ?? new DOMRect()
     )
@@ -104,7 +118,7 @@ export const Slideshow = ({
       (firstSlideSize?.height ?? 0) != (newFirstSlideSize?.height ?? 0)
 
     if (
-      newSlidesVisible != numSlidesVisible ||
+      newSlidesVisible != numSlidesFullyVisible ||
       newSlideSizes.length != slideSizes.length ||
       slideSizeChanged
     ) {
@@ -112,9 +126,9 @@ export const Slideshow = ({
         Math.max(Math.min(slideSizes.length - newSlidesVisible, currSlide), 0)
       )
       setSlideSizes(newSlideSizes)
-      setNumSlidesVisible(newSlidesVisible)
+      setNumSlidesFullyVisible(newSlidesVisible)
     }
-  }, [currSlide, slideSizes, numSlidesVisible, firstSlideSize])
+  }, [currSlide, slideSizes, numSlidesFullyVisible, firstSlideSize])
 
   useEffect(() => {
     calculateSizes()
@@ -139,6 +153,7 @@ export const Slideshow = ({
       aria-roledescription="slideshow"
     >
       <SlideshowViewport ref={viewportRef}>
+        <RightEdgeFade visible={fadeRightEdge} />
         <SlideshowReel
           style={{ transform: `translateX(${currSlideOffset}px)` }}
         >
@@ -188,6 +203,23 @@ const SlideshowContainer = styled.div`
   gap: 4rem;
   position: relative;
   overflow: hidden;
+`
+
+const RightEdgeFade = styled.div<{ visible: boolean }>`
+  opacity: ${({ visible }) => (visible ? '1' : '0')};
+  transition: opacity ease-out 500ms;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0) 94%,
+    rgba(0, 0, 0, 0.75) 98%,
+    rgba(0, 0, 0, 0.8) 100%
+  );
 `
 
 const SlideshowViewport = styled.div`
