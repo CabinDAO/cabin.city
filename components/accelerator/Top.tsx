@@ -35,7 +35,6 @@ const OpaqueDiv = styled.div`
   width: 100%;
   background-color: rgba(0, 0, 0, 0.3);
   gap: 2.4rem;
-  padding: 4rem;
 `
 
 const Content = styled.div`

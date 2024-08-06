@@ -117,8 +117,9 @@ const Right = styled.div`
 `
 
 const Title = styled(SectionTitle)`
-  font-size: 5rem;
-  text-align: left;
+  ${({ theme }) => theme.bp.lg} {
+    text-align: left;
+  }
 `
 
 const Subtitle = styled(Body1)`
