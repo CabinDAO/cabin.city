@@ -75,14 +75,14 @@ const faqs = [
         <Body1>
           Here’s the deal. There are 100% going to be people who couldn’t be
           bothered to participate in the community you’re building. And that’s
-          ok. We’re not after them. together.
+          ok. We’re not after them.
         </Body1>
         <Body1>
           We’re after the people who are secretly yearning for more connection.
           The people who are lonely and don’t know what to do about it. The
           people who would be deeply touched by the fact that you want to start
           something in y’all’s neighborhood. We’re after the people who are
-          waiting for something beautiful to be a part of.{' '}
+          waiting for something beautiful to be a part of.
         </Body1>
         <Body1>
           Cultures vary across the globe, but people are inherently the same.

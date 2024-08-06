@@ -11,7 +11,7 @@ export const DetailsSection = () => {
 
   return (
     <>
-      <SectionTitle>Program details</SectionTitle>
+      <SectionTitle>Program Details</SectionTitle>
 
       <Content>
         <Masonry
