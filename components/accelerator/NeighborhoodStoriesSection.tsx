@@ -47,7 +47,7 @@ export function NeighborhoodStoriesSection() {
   )
 }
 
-const pics = [Kathi, jackson, bethany, savannah, shani]
+const pics = [Kathi, bethany, savannah]
 
 const Container = styled.div`
   display: flex;
