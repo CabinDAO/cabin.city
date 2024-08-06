@@ -5,7 +5,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { Body1, H3 } from '@/components/core/Typography'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import { AutoImage } from '@/components/core/AutoImage'
 import { Button } from '@/components/core/Button'
 import mapAndPolaroids from '@/components/accelerator/map-and-polaroids.jpg'
@@ -39,15 +39,7 @@ export const VisionSection = () => {
             <strong>If this excites you, we’d love for you to join us</strong>.
           </Body1>
           <Buttons>
-            <Link
-              href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
-              onClick={() => acceleratorApplyClickEvent('accelerator-vision')}
-              style={{ width: 'min-content' }}
-              target="_blank"
-              rel="noopener"
-            >
-              <Button variant={'primary'}>Apply</Button>
-            </Link>
+            <ApplyButton source={'accelerator-vision'} />
             <Link
               href={EXTERNAL_LINKS.VISION}
               style={{ width: 'min-content' }}

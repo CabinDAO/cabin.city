@@ -1,10 +1,7 @@
 import React from 'react'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
-import {
-  GreenUnderline,
-  SectionTitle,
-} from '@/components/accelerator/SectionTitle'
+import { GreenUnderline, SectionTitle } from '@/components/accelerator/shared'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { AutoImage } from '@/components/core/AutoImage'
 import { fonts } from '@/components/core/Typography'

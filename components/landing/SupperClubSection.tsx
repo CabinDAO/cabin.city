@@ -31,6 +31,8 @@ export const SupperClubSection = () => {
           <Buttons>
             <Link
               href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
+              target="_blank"
+              rel="noopener"
               onClick={() =>
                 acceleratorApplyClickEvent('landing-upgradesection')
               }

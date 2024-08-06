@@ -9,9 +9,10 @@ import { Button } from '@/components/core/Button'
 import { Countdown } from '@/components/accelerator/Countdown'
 import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
 import {
+  ApplyButton,
   GreenUnderline,
   SectionTitle,
-} from '@/components/accelerator/SectionTitle'
+} from '@/components/accelerator/shared'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const yesBlocks = [
@@ -127,22 +128,7 @@ export const IsItRightSection = () => {
               </span>
             </BlockTitle>
             <Countdown light />
-            <Link
-              href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
-              onClick={() =>
-                acceleratorApplyClickEvent('accelerator-isitright')
-              }
-              style={{ width: 'min-content' }}
-              target="_blank"
-              rel="noopener"
-            >
-              <Button
-                variant={'primary'}
-                // endAdornment={<Icon name={'right-arrow'} size={2} />}
-              >
-                Apply
-              </Button>
-            </Link>
+            <ApplyButton source={'accelerator-isitright'} />
           </CTABlock>
         </Blocks>
       </Section>

@@ -8,7 +8,7 @@ import { AutoImage } from '@/components/core/AutoImage'
 import forestWalk from '@/components/accelerator/forest-walk.jpg'
 import firePit from '@/components/accelerator/fire-pit.jpg'
 import parkPicnic from '@/components/accelerator/park-picnic.jpg'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { SectionTitle } from '@/components/accelerator/shared'
 
 export const Carousel = () => {
   const { deviceSize } = useDeviceSize()

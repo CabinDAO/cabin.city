@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { SectionTitle } from '@/components/accelerator/shared'
 import { AutoImage } from '@/components/core/AutoImage'
 import img from '@/components/accelerator/accel-imgs.jpg'
 import { useWindowSize } from 'react-use'

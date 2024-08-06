@@ -1,7 +1,7 @@
 import Masonry from 'react-masonry-css'
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { SectionTitle } from '@/components/accelerator/shared'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { AutoImage } from '@/components/core/AutoImage'
 import polaroids from '@/components/accelerator/polaroids.jpg'

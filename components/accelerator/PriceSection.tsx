@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import Icon from '@/components/core/Icon'
 import { Body1, fonts } from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
@@ -55,16 +55,7 @@ export const PriceSection = () => {
           </Left>
           <Right>
             <Countdown />
-            <Link
-              href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
-              onClick={() => acceleratorApplyClickEvent('accelerator-price')}
-              target="_blank"
-              rel="noopener"
-            >
-              <Button variant={'primary'} isFullWidth={deviceSize === 'mobile'}>
-                Apply
-              </Button>
-            </Link>
+            <ApplyButton source={'accelerator-price'} />
           </Right>
         </BoxBottom>
       </Box>

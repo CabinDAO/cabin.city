@@ -4,7 +4,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled, { css } from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import { SectionTitle } from '@/components/accelerator/SectionTitle'
+import { SectionTitle } from '@/components/accelerator/shared'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const faqs = [
@@ -18,6 +18,8 @@ const faqs = [
             href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
             onClick={() => acceleratorApplyClickEvent('accelerator-faq')}
             style={{ textDecoration: 'underline' }}
+            target="_blank"
+            rel="noopener"
           >
             here
           </Link>{' '}

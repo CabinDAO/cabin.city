@@ -1,11 +1,8 @@
 import React from 'react'
-import Link from 'next/link'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { fonts, H2, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
-import { Button } from '@/components/core/Button'
-import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
+import { ApplyButton } from '@/components/accelerator/shared'
 
 export const Top = () => {
   return (
@@ -15,20 +12,16 @@ export const Top = () => {
         <HeaderText>
           Turn your neighborhood into a thriving community
         </HeaderText>
-        <SubheaderText>Join the Cabin Neighborhood Accelerator</SubheaderText>
-        <SubheaderText>Application Deadline: September 8, 2024</SubheaderText>
-        {/*<Body1 style={{ color: 'white' }}>*/}
-        {/*  Application Deadline: September 8, 2024*/}
-        {/*</Body1>*/}
-        {/*<Countdown target={new Date('2024-09-23')} />*/}
-        <Buttons>
-          <Link
-            href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
-            onClick={() => acceleratorApplyClickEvent('accelerator-top')}
-          >
-            <Button>Apply</Button>
-          </Link>
-        </Buttons>
+        <Subheader>
+          <SubheaderText>
+            <p>Join the Cabin Neighborhood Accelerator</p>
+            <p>Application Deadline: September 8, 2024</p>
+          </SubheaderText>
+          <ApplyButton
+            source={'accelerator-top'}
+            style={{ padding: '2rem 2.4rem', fontSize: '1.7rem' }}
+          />
+        </Subheader>
       </Content>
     </OpaqueDiv>
   )
@@ -81,31 +74,37 @@ const HeaderText = styled(HHero)`
   }
 `
 
-const SubheaderText = styled(H2)`
-  width: 30rem;
-  text-align: center;
+const Subheader = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 2rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    gap: 4rem;
+  }
+`
+
+const SubheaderText = styled.div`
   font-family: ${fonts.poppins};
   color: ${({ theme }) => theme.colors.white};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
     3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
-  font-size: 2.5rem;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 100%;
-    font-size: 3rem;
-    line-height: 1.4;
-  }
-`
-
-const Buttons = styled.div`
+  font-size: 2rem;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-    align-items: center;
+  p {
     text-align: center;
-    gap: 1.6rem;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    p {
+      text-align: left;
+    }
   }
 `
