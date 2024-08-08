@@ -11,7 +11,7 @@ import underline from '@/components/accelerator/green-underline.png'
 
 export const SectionTitle = styled(H2)<{ light?: boolean }>`
   font-family: ${fonts.inter};
-  font-size: 4.4rem;
+  font-size: 4rem;
   text-align: center;
   ${({ light }) =>
     light &&
@@ -20,11 +20,11 @@ export const SectionTitle = styled(H2)<{ light?: boolean }>`
     `}
 
   ${({ theme }) => theme.bp.md} {
-    font-size: 5rem;
+    font-size: 4.2rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    font-size: 5.5rem;
+    font-size: 4.5rem;
   }
 `
 

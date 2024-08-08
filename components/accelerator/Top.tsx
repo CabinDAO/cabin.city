@@ -46,29 +46,30 @@ const Content = styled.div`
   align-items: center;
   margin-top: 4rem;
   gap: 4rem;
+  padding: 0 5rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
     margin-bottom: 8rem;
+    padding: 0;
   }
 
   ${({ theme }) => theme.bp.lg} {
-    width: 67rem;
+    width: 73rem;
     margin-bottom: 12rem;
   }
 `
 
 const HeaderText = styled(HHero)`
-  width: 40rem;
   text-align: center;
-  font-size: 4.4rem;
+  font-size: 4.5rem;
   color: ${({ theme }) => theme.colors.white};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),
     3px 3px 6px rgba(0, 0, 0, 0.5), 4px 4px 8px rgba(0, 0, 0, 0.3);
 
   ${({ theme }) => theme.bp.md} {
     width: 100%;
-    font-size: 5rem;
+    font-size: 5.5rem;
     line-height: 1.25;
   }
 `
