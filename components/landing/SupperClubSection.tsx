@@ -1,12 +1,12 @@
-import styled from 'styled-components'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Body1, H4 } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-
-import pic from './supperclub.jpg'
+import styled from 'styled-components'
+import { Body1 } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
+import { LandingSectionTitle } from '@/components/landing/shared'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
+import pic from './supperclub.jpg'
 
 export const SupperClubSection = () => {
   return (
@@ -39,7 +39,7 @@ export const SupperClubSection = () => {
             >
               <Button variant={'primary'}>Apply</Button>
             </Link>
-            <Link href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}>
+            <Link href={'/accelerator'}>
               <Button variant={'secondary'}>Learn more</Button>
             </Link>
           </Buttons>
@@ -90,11 +90,7 @@ const Text = styled.div`
   }
 `
 
-const Title = styled(H4)`
-  font-size: 3.2rem;
-  line-height: 120%; /* 3.84rem */
-  font-weight: 600;
-
+const Title = styled(LandingSectionTitle)`
   ${({ theme }) => theme.bp.lg} {
     max-width: 30rem;
   }

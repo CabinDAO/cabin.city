@@ -1,13 +1,14 @@
-import styled from 'styled-components'
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { body1Styles, H2, H4, fonts } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import styled from 'styled-components'
+import { LandingSectionTitle } from '@/components/landing/shared'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { body1Styles, H4 } from '@/components/core/Typography'
 import pic1 from './journey1.png'
 import pic2 from './journey2.png'
 import pic3 from './journey3.png'
-import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
-import { useEffect, useState } from 'react'
 
 export const JourneySection = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0)
@@ -37,7 +38,7 @@ export const JourneySection = () => {
     <>
       <Header>
         {/*<Icon name={'backpack-green'} size={8} />*/}
-        <Title>Grow your neighborhood</Title>
+        <LandingSectionTitle>Grow your neighborhood</LandingSectionTitle>
         <BodyText>
           We are a global network of local community builders. Together, we are
           creating places we want to live.
@@ -49,7 +50,7 @@ export const JourneySection = () => {
 
         <Content>
           <Value style={{ gridArea: 'a' }}>
-            <ValueTitle>Meet at the trailhead</ValueTitle>
+            <ValueTitle>Learn more about Cabin</ValueTitle>
             <BodyText>
               Learn more about Cabin and how you can get involved in growing a
               network city.
@@ -74,11 +75,11 @@ export const JourneySection = () => {
                 </li>
                 <li>
                   <Link
-                    href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpagetimeline`}
+                    href={EXTERNAL_LINKS.FORUM}
                     target="_blank"
                     rel="noopener nofollow"
                   >
-                    Book an intro call
+                    Check out the forum
                   </Link>
                 </li>
               </ul>
@@ -99,32 +100,19 @@ export const JourneySection = () => {
           />
 
           <Value style={{ gridArea: 'c' }}>
-            <ValueTitle>Connect and contribute</ValueTitle>
+            <ValueTitle>Join a neighborhood</ValueTitle>
             <BodyText>
               Co-create Cabin’s future by joining community members in your
               local area and participating online.
               <ul>
                 <li>
                   <AuthenticatedLink href={'/city-directory'}>
-                    Sign in & create your profile
+                    Sign in & locate like-minded people near you
                   </AuthenticatedLink>
                 </li>
                 <li>
-                  <Link
-                    href={EXTERNAL_LINKS.SUPPER_CLUB_LUMA}
-                    target="_blank"
-                    rel="noopener nofollow"
-                  >
-                    Attend a local event
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href={EXTERNAL_LINKS.DISCORD}
-                    target="_blank"
-                    rel="noopener nofollow noreferrer"
-                  >
-                    Join our Discord
+                  <Link href={'/city-directory'}>
+                    Find neighborhoods where community thrives
                   </Link>
                 </li>
               </ul>
@@ -145,28 +133,29 @@ export const JourneySection = () => {
           />
 
           <Value style={{ gridArea: 'e' }}>
-            <ValueTitle>Reach the summit</ValueTitle>
+            <ValueTitle>Start a neighborhood</ValueTitle>
             <BodyText>
               Grow your local neighborhood into a modern village that’s part of
               a global network city.
               <ul>
                 <li>
-                  <AuthenticatedLink href={'/citizenship'}>
-                    Earn a vouch and become a Citizen
+                  <Link
+                    href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpagetimeline`}
+                    target="_blank"
+                    rel="noopener nofollow"
+                  >
+                    Book a call to get started building your neighborhood
+                  </Link>
+                </li>
+                <li>
+                  <Link href={'/accelerator'}>
+                    Join the Neighborhood Accelerator program
+                  </Link>
+                </li>
+                <li>
+                  <AuthenticatedLink href={'/city-directory'}>
+                    List your neighborhood on the city directory
                   </AuthenticatedLink>
-                </li>
-                <li>
-                  <Link href={'/city-directory'}>
-                    Explore the City Directory
-                  </Link>
-                </li>
-                <li>
-                  <Link href={EXTERNAL_LINKS.SNAPSHOT}>Vote on proposals</Link>
-                </li>
-                <li>
-                  <Link href={EXTERNAL_LINKS.SUPPER_CLUB_INFO}>
-                    Host a Supper Club
-                  </Link>
                 </li>
               </ul>
             </BodyText>
@@ -206,11 +195,6 @@ const Header = styled.div`
   ${({ theme }) => theme.bp.lg} {
     width: 56rem;
   }
-`
-
-const Title = styled(H2)`
-  font-family: ${fonts.inter};
-  font-size: 3.2rem;
 `
 
 const ProgressBarWrapper = styled.div`

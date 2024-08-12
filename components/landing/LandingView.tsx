@@ -17,6 +17,7 @@ import Link from 'next/link'
 import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import React from 'react'
+import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
@@ -59,16 +60,20 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       {/*  <HeroVideo />*/}
       {/*</LandingSection>*/}
 
+      <LandingSection precedesNoVertPadding>
+        <SubscribeSection />
+      </LandingSection>
+
       <LandingSection fullWidth noVertPadding>
         <MapSection data={mapData} />
       </LandingSection>
 
       <LandingSection>
-        <JourneySection />
+        <NeighborhoodStoriesSection variant={'landing'} />
       </LandingSection>
 
-      <LandingSection precedesNoVertPadding>
-        <SubscribeSection />
+      <LandingSection>
+        <JourneySection />
       </LandingSection>
 
       <LandingSection fullWidth noVertPadding variant={'light'}>

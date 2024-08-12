@@ -199,7 +199,7 @@ const Modal = ({
             style={{ textDecoration: 'underline' }}
             target="_blank"
             rel="noopener nofollow noreferrer"
-            href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_INFO}
+            href={'/accelerator'}
           >
             Neighborhood Accelerator Program
           </Link>

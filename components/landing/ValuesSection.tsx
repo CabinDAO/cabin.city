@@ -1,13 +1,14 @@
-import styled from 'styled-components'
 import Link from 'next/link'
-import { Body1, H2, H4, fonts } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
+import styled from 'styled-components'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { LandingSectionTitle } from '@/components/landing/shared'
+import { Body1, H4 } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
 
 export const ValuesSection = () => {
   return (
     <>
-      <Title>What we believe</Title>
+      <LandingSectionTitle>What we believe</LandingSectionTitle>
       <Subtitle>
         Our community shares three Obvious Truths. Most people agree with these
         beliefs—but we don’t just talk about our ideals, we live them.
@@ -47,11 +48,6 @@ export const ValuesSection = () => {
     </>
   )
 }
-
-const Title = styled(H2)`
-  font-family: ${fonts.inter};
-  font-size: 3.2rem;
-`
 
 const Subtitle = styled(Body1)`
   text-align: center;

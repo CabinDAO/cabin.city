@@ -4,20 +4,27 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { SectionTitle } from '@/components/accelerator/shared'
+import { LandingSectionTitle } from '@/components/landing/shared'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
 import { Body1 } from '@/components/core/Typography'
 import { AutoImage } from '@/components/core/AutoImage'
 import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
 import Kathi from '@/components/accelerator/Kathi Slide.png'
-import jackson from '@/components/accelerator/Jackson Slide.png'
-import shani from '@/components/accelerator/Shani Slide.png'
 
-export function NeighborhoodStoriesSection() {
+export function NeighborhoodStoriesSection({
+  variant,
+}: {
+  variant?: 'accelerator' | 'landing'
+}) {
   const { deviceSize } = useDeviceSize()
   return (
     <Container>
-      <SectionTitle>Neighborhood Stories</SectionTitle>
+      {variant === 'landing' ? (
+        <LandingSectionTitle>Neighborhood Stories</LandingSectionTitle>
+      ) : (
+        <SectionTitle>Neighborhood Stories</SectionTitle>
+      )}
       <Subtitle>
         <Body1>
           Real moments + stories from the incredible folks in our program. Read

@@ -49,7 +49,7 @@ export const AcceleratorPageView = () => {
       </Section>
 
       <Section variant={'default'}>
-        <NeighborhoodStoriesSection />
+        <NeighborhoodStoriesSection variant={'accelerator'} />
       </Section>
 
       <Section variant={'orange'}>
