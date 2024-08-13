@@ -192,7 +192,14 @@ const MaybeLink = ({
   children: React.ReactNode
 }) => {
   return url ? (
-    <Link style={{ cursor: 'pointer' }} href={url}>
+    <Link
+      style={{
+        cursor: 'pointer',
+        textDecoration: 'underline',
+        color: theme.colors.green900,
+      }}
+      href={url}
+    >
       {children}
     </Link>
   ) : (
