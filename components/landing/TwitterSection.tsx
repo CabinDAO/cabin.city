@@ -1,14 +1,18 @@
+import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 import styled from 'styled-components'
 import { Body1, Body2, H4 } from '@/components/core/Typography'
-import Image from 'next/image'
 import Icon from '@/components/core/Icon'
-import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
 
-import lucaPFP from './luca.jpg'
-import eileenPFP from './eileenvert.jpg'
-import zoyaPFP from './zoya.jpg'
-import adrianPFP from './adrian.jpg'
+import savannahPFP from './savannah-pfp.jpg'
+import bethanyPFP from './bethany-pfp.jpg'
+import jacksonPFP from './jackson-pfp.jpg'
+import stefiPFP from './stefi-pfp.jpg'
+import bethanyPic from './bethany-tweetimg.png'
+import jacksonPic from './jackson-tweetimg.png'
+import savannahPic from './savannah-tweetimg.png'
+import { AutoImage } from '@/components/core/AutoImage'
 
 export const TwitterSection = () => {
   const contentRef = useRef<HTMLDivElement>(null)
@@ -60,7 +64,7 @@ export const TwitterSection = () => {
   })
 
   return (
-    <Content>
+    <Container>
       <Slider
         ref={contentRef}
         style={{ transform: `translateX(${xOffset}px)` }}
@@ -69,51 +73,103 @@ export const TwitterSection = () => {
           <Item key={i.name} {...i} />
         ))}
       </Slider>
-    </Content>
+    </Container>
   )
 }
+
+const Text = styled(Body2)`
+  opacity: 75%;
+`
 
 type Tweet = {
   pfpUrl: string
   name: string
   handle: string
-  text: string
+  content: React.ReactNode
   date: string
   srcUrl: string
 }
 
 const tweets: Tweet[] = [
   {
-    pfpUrl: eileenPFP.src,
-    name: 'Eileen',
-    handle: '@eileenvert',
-    text: 'I am so grateful to have found @Montaialife through @cabindotcity last year. Now I am back! This place rly is a home, a basecamp, a taproot to return to.',
-    date: 'Jun 11, 2023',
-    srcUrl: 'https://twitter.com/eileenvert/status/1667764485288005632',
+    pfpUrl: savannahPFP.src,
+    name: 'Savannah Kruger',
+    handle: '@savkruger',
+    content: (
+      <>
+        <Text>
+          Favorite quote from our neighborhood park hang this evening:
+        </Text>
+        <Text>"I came tonight because I wanted to feel belonging."</Text>
+        <Text>Guys, we did it. We did the thing.</Text>
+        <AutoImage src={savannahPic.src} alt={'savannah park hang'} />
+      </>
+    ),
+    date: 'May 20, 2024',
+    srcUrl: 'https://twitter.com/savkruger/status/1792428314323493070',
   },
   {
-    pfpUrl: lucaPFP.src,
-    name: 'Luca',
-    handle: '@luca_tomescu',
-    text: 'One of the coolest opportunities out there. No matter who you are or what you want to build',
-    date: 'Feb 14, 2023',
-    srcUrl: 'https://twitter.com/luca_tomescu',
+    pfpUrl: bethanyPFP.src,
+    name: 'Bethany Crystal',
+    handle: '@bethanymarz',
+    content: (
+      <>
+        <Text>
+          Some messages that I've got since starting to build community on my
+          block (step 1 of the @cabindotcity "Neighborhood Accelerator" plan).
+        </Text>
+        <Text></Text>
+        <Text>1 - from a neighbor</Text>
+        <Text>2 - another neighbor</Text>
+        <Text>3 - from the building manager next door</Text>
+        <Text>4 - from the building landlord (already nervous, lol)</Text>
+        <AutoImage src={bethanyPic.src} alt={'bethany texts'} />
+      </>
+    ),
+    date: 'Jun 19, 2024',
+    srcUrl: 'https://twitter.com/bethanymarz/status/1803451606744051785',
   },
   {
-    pfpUrl: zoyaPFP.src,
-    name: 'Zoya Yaseka',
-    handle: '@zoyayaseka',
-    text: 'The way this opportunity is changing lives and setting the foundation for new ways to live and commune 🥰✨👏🏾',
-    date: 'Jun 28, 2023',
-    srcUrl: 'https://twitter.com/zoyayaseka',
+    pfpUrl: jacksonPFP.src,
+    name: 'Jackson Steger',
+    handle: '@JacksonSteger',
+    content: (
+      <>
+        <Text>
+          Hosted another brunch for 117 creative and curious Venice Beach
+          residents🎨
+        </Text>
+        <Text>
+          We had stand-up comedy, 2 poetry readings, 4 musical acts, a
+          portraitist, water painting, seed planets, and a freestyle jam (seen
+          here) that lasted 6 hours
+        </Text>
+        <Text>Thanks to @cabindotcity for helping us do it!</Text>
+        <AutoImage src={jacksonPic.src} alt={'creative kickback pic'} />
+      </>
+    ),
+    date: 'May 2, 2024',
+    srcUrl: 'https://twitter.com/JacksonSteger/status/1786184851810562510',
   },
   {
-    pfpUrl: adrianPFP.src,
-    name: 'Adrian Seneca',
-    handle: '@adrian_seneca',
-    text: 'it has been an incredibly expansive and nourishing experience. Connecting, weaving and integrating with community while surrounded by land is 100% my vibe.',
-    date: 'Mar 10, 2023',
-    srcUrl: 'https://twitter.com/adrian_seneca',
+    pfpUrl: stefiPFP.src,
+    name: 'SteFi',
+    handle: '@NFTMami',
+    content: (
+      <>
+        <Text>
+          Thank you Cabin fam for always supporting your community. It was
+          Creator Cabins that was pivotal for me to find my place in an onchain
+          world.
+        </Text>
+        <Text>
+          I hope some of you will join my and my friends for a creative
+          residency after #ETHCC.
+        </Text>
+      </>
+    ),
+    date: 'May 16, 2024',
+    srcUrl: 'https://twitter.com/NFTMami/status/1791170556190163451',
   },
 ]
 
@@ -140,13 +196,13 @@ const Item = (props: Tweet) => {
           <XLogo name={'x-logo'} size={3.2} />
         </Link>
       </Top>
-      <Text>{props.text}</Text>
+      <TweetContent>{props.content}</TweetContent>
       {/*<Date>{props.date}</Date>*/}
     </StyledItem>
   )
 }
 
-const Content = styled.div`
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,6 +240,7 @@ const StyledItem = styled.div`
   align-items: flex-start;
   gap: 1.6rem;
   width: 100%;
+  height: min-content;
   background-color: ${({ theme }) => theme.colors.white};
   padding: 2.4rem;
 
@@ -218,6 +275,17 @@ const Name = styled.div`
   overflow: hidden;
 `
 
+const TweetContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+
+  img {
+    margin-top: 1rem;
+  }
+`
+
 const XLogo = styled(Icon)`
   flex-shrink: 0;
 `
@@ -225,10 +293,6 @@ const XLogo = styled(Icon)`
 const DisplayName = styled(H4)``
 
 const Handle = styled(Body1)`
-  opacity: 75%;
-`
-
-const Text = styled(Body2)`
   opacity: 75%;
 `
 

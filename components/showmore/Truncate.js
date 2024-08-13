@@ -393,7 +393,7 @@ export default class Truncate extends React.Component {
         <span>{text}</span>
         <span
           ref={(textEl) => {
-            this.elements.text = textEl
+            this.elements.content = textEl
           }}
         >
           {children}
