@@ -14,6 +14,7 @@ export const EXTERNAL_LINKS = {
   VISION: 'https://paragraph.xyz/@cabin/network-city',
   PRINCIPLES:
     'https://paragraph.xyz/@cabin/guiding-principles-and-obvious-truths',
+  FARCASTER: 'https://warpcast.com/~/channel/cabin',
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   TWITTER: 'https://twitter.com/cabindotcity',
   DISCORD: 'https://discord.gg/EfuE8PYuB7',

@@ -18,6 +18,7 @@ import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import React from 'react'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
+import { LandingSectionTitle } from '@/components/landing/shared'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
@@ -84,7 +85,8 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <ValuesSection />
       </LandingSection>
 
-      <LandingSection title={'What people are saying'} variant={'light'}>
+      <LandingSection variant={'light'}>
+        <LandingSectionTitle>What people are saying</LandingSectionTitle>
         {/*<TestimonialSection />*/}
         <TwitterSection />
       </LandingSection>
@@ -93,11 +95,8 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <FeaturedInSection />
       </LandingSection>
 
-      <LandingSection
-        title={'Want to learn more?'}
-        // icon={'hand-wave-green'}
-        precedesNoVertPadding
-      >
+      <LandingSection precedesNoVertPadding>
+        <LandingSectionTitle>Want to learn more?</LandingSectionTitle>
         <LearnMoreSection />
       </LandingSection>
 

@@ -80,6 +80,9 @@ export const Footer = () => {
               <AppLink external href={EXTERNAL_LINKS.INSTAGRAM}>
                 <Name>Instagram</Name>
               </AppLink>
+              <AppLink external href={EXTERNAL_LINKS.FARCASTER}>
+                <Name>Farcaster</Name>
+              </AppLink>
             </Section>
           </Links>
 

@@ -8,7 +8,6 @@ import Icon, { IconName } from '@/components/core/Icon'
 
 interface LandingSectionProps extends ContainerProps {
   icon?: IconName
-  title?: string
   children?: React.ReactNode
 }
 
@@ -19,7 +18,6 @@ export const LandingSection = (props: LandingSectionProps) => {
       {...props}
     >
       {props.icon && <Icon name={props.icon} size={8} />}
-      {props.title && <H1 emphasized>{props.title}</H1>}
       {props.children}
     </Container>
   )
