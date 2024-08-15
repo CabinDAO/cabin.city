@@ -37,7 +37,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
           <TopLogoSection />
           <HeroSection
             headerText={
-              'A network of neighborhoods where you’d want to grow up'
+              'A rocketship of neighborhoods where you’d want to grow up'
             }
             subheaderText={`${mapData.members} community members | ${mapData.locations.length} neighborhoods`}
             buttons={[
