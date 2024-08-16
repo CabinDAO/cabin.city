@@ -107,12 +107,12 @@ export const JourneySection = () => {
               <ul>
                 <li>
                   <AuthenticatedLink href={'/city-directory'}>
-                    Sign in & locate like-minded people near you
+                    Sign in & find people near you
                   </AuthenticatedLink>
                 </li>
                 <li>
                   <Link href={'/city-directory'}>
-                    Find neighborhoods where community thrives
+                    Find neighborhoods to live in
                   </Link>
                 </li>
               </ul>
@@ -144,17 +144,17 @@ export const JourneySection = () => {
                     target="_blank"
                     rel="noopener nofollow"
                   >
-                    Book a call to get started building your neighborhood
+                    Book a call to get started
                   </Link>
                 </li>
                 <li>
                   <Link href={'/accelerator'}>
-                    Join the Neighborhood Accelerator program
+                    Join the Neighborhood Accelerator
                   </Link>
                 </li>
                 <li>
                   <AuthenticatedLink href={'/city-directory'}>
-                    List your neighborhood on the city directory
+                    List your neighborhood
                   </AuthenticatedLink>
                 </li>
               </ul>
