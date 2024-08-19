@@ -36,6 +36,15 @@ export function NeighborhoodStoriesSection({
             rel={'noopener'}
           >
             Accelerator 1-Month Update
+          </Link>{' '}
+          and{' '}
+          <Link
+            href={EXTERNAL_LINKS.NEIGHBORHOOD_MONTH_TWO_UPDATE}
+            style={{ textDecoration: 'underline' }}
+            target={'_blank'}
+            rel={'noopener'}
+          >
+            Accelerator 2-Month Update
           </Link>
           .
         </Body1>
@@ -72,7 +81,7 @@ const Container = styled.div`
 
 const Subtitle = styled.div`
   width: 80%;
-
+  text-align: center;
   ${({ theme }) => theme.bp.lg} {
     width: 55rem;
   }
@@ -87,9 +96,9 @@ const Slide = ({ src }: { src: string }) => {
 }
 
 const SlideContent = styled.div`
-  width: 44rem;
+  width: 30rem;
 
   ${({ theme }) => theme.bp.lg} {
-    width: 62rem;
+    width: 48rem;
   }
 `

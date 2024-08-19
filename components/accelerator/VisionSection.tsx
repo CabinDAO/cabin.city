@@ -105,6 +105,7 @@ const Title = styled(SectionTitle)`
   ${({ theme }) => theme.bp.lg} {
     width: auto;
     text-align: left;
+    line-height: 1.1;
   }
 `
 
