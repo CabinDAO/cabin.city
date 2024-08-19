@@ -7,11 +7,9 @@ import Head from 'next/head'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
-  const {
-    data: data,
-    isLoading,
-    mutate: refetchProfile,
-  } = useGet<ProfileGetResponse>(externId ? ['PROFILE', { externId }] : null)
+  const { data: data, isLoading } = useGet<ProfileGetResponse>(
+    externId ? ['PROFILE', { externId }] : null
+  )
 
   const profile = !data || 'error' in data ? null : data.profile
 
@@ -27,7 +25,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <title>{profile.name}'s Cabin Profile</title>
       </Head>
       <BaseLayout>
-        <ProfileContent profile={profile} refetchProfile={refetchProfile} />
+        <ProfileContent profile={profile} />
       </BaseLayout>
     </>
   )
