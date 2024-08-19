@@ -1,35 +1,24 @@
+import Link from 'next/link'
 import { useProfile } from '@/components/auth/useProfile'
-import { useRouter } from 'next/router'
-import { Button } from '../../core/Button'
-import styled from 'styled-components'
 import { ProfileFragment } from '@/utils/types/profile'
+import styled from 'styled-components'
+import { Button } from '../../core/Button'
 
-interface ProfileHeaderButtonProps {
+export const ProfileHeaderButton = ({
+  profile,
+}: {
   profile: ProfileFragment
-  refetchProfile: VoidFunction
-}
-
-export const ProfileHeaderButton = ({ profile }: ProfileHeaderButtonProps) => {
-  const router = useRouter()
+}) => {
   const { user } = useProfile()
-
-  if (!user) return null
-
-  const isOwnProfile = user.externId === profile?.externId
-
-  const handleProfileHeaderButtonClick = () => {
-    router.push(`/profile/${profile?.externId}/edit`).then()
-  }
-
-  if (isOwnProfile && user.isProfileSetupFinished) {
-    return (
-      <StyledButton variant="tertiary" onClick={handleProfileHeaderButtonClick}>
-        Edit Profile
-      </StyledButton>
-    )
-  } else {
+  if (!user || user.externId !== profile.externId) {
     return null
   }
+
+  return (
+    <Link href={`/profile/${profile.externId}/edit`}>
+      <StyledButton variant="tertiary">Edit Profile</StyledButton>
+    </Link>
+  )
 }
 
 const StyledButton = styled(Button)`

@@ -36,17 +36,23 @@ export function canEditLocation(
   return isAdmin || stewardIdMatch || externIdMatch
 }
 
-export function canContactSteward(user: profile | null | undefined): boolean {
-  return !!user
-}
-
-export function canViewCensus(user: profile | null | undefined): boolean {
-  return !!user
-}
-
 export function canCreateListings(
   user: profileWithCitizenshipStatus | null | undefined
 ): boolean {
   return !!user
   // return user?.citizenshipStatus === CitizenshipStatus.Verified
+}
+
+export function canEditProfile(
+  user: profileWithAdmin | null | undefined,
+  profile: profile
+): boolean {
+  if (!user) return false
+  if (user.isAdmin) return true
+  return (
+    ('id' in user && 'id' in profile && user.id === profile.id) ||
+    ('externId' in user &&
+      'externId' in profile &&
+      user.externId === profile.externId)
+  )
 }

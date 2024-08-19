@@ -8,20 +8,14 @@ import { ProfileActivitiesSection } from './ProfileActivitiesSection'
 import { ProfileCitizenSection } from './ProfileCitizenSection'
 import { ProfileFragment } from '@/utils/types/profile'
 
-export const ProfileContent = ({
-  profile,
-  refetchProfile,
-}: {
-  profile: ProfileFragment
-  refetchProfile: VoidFunction
-}) => {
+export const ProfileContent = ({ profile }: { profile: ProfileFragment }) => {
   const { user: me } = useProfile()
 
   const isOwnProfile = me?.externId === profile.externId
 
   return (
     <ProfileInnerContainer>
-      <ProfileHeaderSection profile={profile} refetchProfile={refetchProfile} />
+      <ProfileHeaderSection profile={profile} />
       {isOwnProfile && (
         <ProfileSetupSection profileId={profile.externId} me={me} />
       )}

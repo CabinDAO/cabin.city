@@ -13,15 +13,11 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Tooltip } from '@/components/core/Tooltip'
 import { ProfileFragment } from '@/utils/types/profile'
 
-interface ProfileHeaderProps {
-  profile: ProfileFragment
-  refetchProfile: VoidFunction
-}
-
 export const ProfileHeaderSection = ({
   profile,
-  refetchProfile,
-}: ProfileHeaderProps) => {
+}: {
+  profile: ProfileFragment
+}) => {
   const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
@@ -60,10 +56,7 @@ export const ProfileHeaderSection = ({
             )}
           </ProfileInfoContainer>
         </ProfileSummary>
-        <ProfileHeaderButton
-          profile={profile}
-          refetchProfile={refetchProfile}
-        />
+        <ProfileHeaderButton profile={profile} />
       </Container>
     </ContentCard>
   )
