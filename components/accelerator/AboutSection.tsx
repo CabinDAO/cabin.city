@@ -117,6 +117,7 @@ const Right = styled.div`
 `
 
 const Title = styled(SectionTitle)`
+  line-height: 1.1;
   ${({ theme }) => theme.bp.lg} {
     text-align: left;
   }
@@ -132,7 +133,7 @@ const TopSection = styled.div`
   flex-direction: column;
   font-size: 2rem;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   gap: 2rem;
 `
 
@@ -150,7 +151,7 @@ const Box = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  gap: 1.6rem;
+  gap: 0.5rem;
   background-color: white;
   border: solid 1px #000;
   box-shadow: 4px 4px 0px 0px #000;

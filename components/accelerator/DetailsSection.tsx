@@ -140,7 +140,7 @@ const Box = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  gap: 1.6rem;
+  gap: 0.7rem;
   background-color: white;
   border: solid 1px #000;
   box-shadow: 4px 4px 0px 0px #000;
