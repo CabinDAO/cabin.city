@@ -85,10 +85,6 @@ const SlideContent = styled.div`
   width: 80vw;
 
   ${({ theme }) => theme.bp.md} {
-    width: 44rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
     width: 40rem;
   }
 `

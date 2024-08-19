@@ -82,6 +82,7 @@ const Container = styled.div`
 const Subtitle = styled.div`
   width: 80%;
   text-align: center;
+
   ${({ theme }) => theme.bp.lg} {
     width: 55rem;
   }
