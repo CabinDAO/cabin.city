@@ -54,7 +54,7 @@ export function NeighborhoodStoriesSection({
         pics.map((i, n) => <AutoImage key={n} src={i.src} alt={'slide'} />)
       ) : (
         <SlideshowCenteringDiv>
-          <Slideshow key={deviceSize} loop>
+          <Slideshow key={deviceSize} loop fadeColor={'yellow200'}>
             {pics.map((i, n) => (
               <Slide key={n} src={i.src} />
             ))}

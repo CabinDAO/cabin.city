@@ -8,6 +8,7 @@ import {
 } from 'react'
 import { useInterval } from 'react-use'
 import styled from 'styled-components'
+import { ColorName } from '@/styles/theme'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import analytics from '@/lib/googleAnalytics/analytics'
@@ -18,6 +19,7 @@ interface SlideshowProps {
   loop?: boolean
   advanceAfter?: number
   forceShowControls?: boolean
+  fadeColor?: ColorName
 }
 
 export const Slideshow = ({
@@ -26,6 +28,7 @@ export const Slideshow = ({
   loop,
   advanceAfter,
   forceShowControls,
+  fadeColor = 'black',
 }: SlideshowProps) => {
   const viewportRef = useRef<HTMLDivElement>(null)
   const slidesRef = useRef<(HTMLDivElement | null)[]>([])
@@ -153,7 +156,7 @@ export const Slideshow = ({
       aria-roledescription="slideshow"
     >
       <SlideshowViewport ref={viewportRef}>
-        <RightEdgeFade visible={fadeRightEdge} />
+        <RightEdgeFade visible={fadeRightEdge} color={fadeColor} />
         <SlideshowReel
           style={{ transform: `translateX(${currSlideOffset}px)` }}
         >
@@ -205,7 +208,7 @@ const SlideshowContainer = styled.div`
   overflow: hidden;
 `
 
-const RightEdgeFade = styled.div<{ visible: boolean }>`
+const RightEdgeFade = styled.div<{ visible: boolean; color: ColorName }>`
   opacity: ${({ visible }) => (visible ? '1' : '0')};
   transition: opacity ease-out 500ms;
   position: absolute;
@@ -217,8 +220,9 @@ const RightEdgeFade = styled.div<{ visible: boolean }>`
   background: linear-gradient(
     to right,
     rgba(0, 0, 0, 0) 94%,
-    rgba(0, 0, 0, 0.75) 98%,
-    rgba(0, 0, 0, 0.8) 100%
+    // hex opacity codes: https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4
+    ${({ theme, color }) => theme.colors[color]}BF 98%,
+    ${({ theme, color }) => theme.colors[color]}CC 100%
   );
 `
 

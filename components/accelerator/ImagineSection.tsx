@@ -17,7 +17,7 @@ export function ImagineSection() {
     <Container>
       <SectionTitle light>Imagine a neighborhood where...</SectionTitle>
 
-      <Slideshow key={deviceSize} loop>
+      <Slideshow key={deviceSize} loop fadeColor={'green900'}>
         {slides.map((i, n) => (
           <Slide key={n} {...i} />
         ))}
