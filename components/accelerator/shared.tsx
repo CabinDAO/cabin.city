@@ -12,6 +12,7 @@ import underline from '@/components/accelerator/green-underline.png'
 export const SectionTitle = styled(H2)<{ light?: boolean }>`
   font-family: ${fonts.inter};
   font-size: 4rem;
+  line-height: 1.1;
   text-align: center;
   ${({ light }) =>
     light &&

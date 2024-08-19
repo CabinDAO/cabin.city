@@ -36,6 +36,8 @@ export const EXTERNAL_LINKS = {
     'https://forum.cabin.city/t/launching-cabin-neighborhood-cohorts/213',
   NEIGHBORHOOD_MONTH_ONE_UPDATE:
     'https://forum.cabin.city/t/month-1-update-neighborhood-accelerator-summer-2024/269',
+  NEIGHBORHOOD_MONTH_TWO_UPDATE:
+    'https://forum.cabin.city/t/month-2-update-neighborhood-accelerator-cohort-1/289',
   LUMA: 'https://lu.ma/cabin',
   SUPPER_CLUB_INFO: 'https://forum.cabin.city/t/supper-club-guide/62',
   STORE: 'https://store.cabin.city',

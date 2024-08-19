@@ -85,20 +85,16 @@ const SlideContent = styled.div`
   width: 80vw;
 
   ${({ theme }) => theme.bp.md} {
-    width: 44rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 62rem;
+    width: 40rem;
   }
 `
 
 const Subtext = styled.div`
   font-family: ${fonts.inter};
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.2;
   color: ${({ theme }) => theme.colors.yellow100};
-  font-size: 2.4rem;
+  font-size: 2rem;
 `
 
 const BottomText = styled.div`

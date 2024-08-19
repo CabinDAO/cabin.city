@@ -81,6 +81,7 @@ const Subheader = styled.div`
   align-items: center;
   width: 100%;
   gap: 2rem;
+  margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;

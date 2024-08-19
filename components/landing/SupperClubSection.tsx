@@ -22,7 +22,7 @@ export const SupperClubSection = () => {
         />
 
         <Text>
-          <Title>Upgrade your neighborhood</Title>
+          <Title>Join the Neighborhood Accelerator</Title>
           <Body>
             Make friends with your neighbors and make neighbors out of your
             friends. Our Neighborhood Accelerator Program can guide you every
