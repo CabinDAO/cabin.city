@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -7,14 +5,6 @@ import {
   LocationMediaCategory,
   LocationGetResponse,
 } from '@/utils/types/location'
-import {
-  EventFragment,
-  EventListParamsType,
-  EventListResponse,
-  EventNewParamsType,
-  EventNewResponse,
-  EventType,
-} from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
@@ -29,39 +19,18 @@ import { Button } from '@/components/core/Button'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { useProfile } from '@/components/auth/useProfile'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
-import { EventList } from '@/components/neighborhoods/EventList'
-import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
 
 export const LocationView = ({ externId }: { externId: string }) => {
-  const router = useRouter()
-  const { useGet, useMutate } = useBackend()
+  const { useGet } = useBackend()
 
   const { data } = useGet<LocationGetResponse>(
     externId ? ['LOCATION', { externId: externId as string }] : null
   )
   const location = !data || 'error' in data ? null : data.location
-
-  const { data: eventData } = useGet<EventListResponse>(
-    location ? `EVENT_LIST` : null,
-    { locationId: location?.externId } satisfies EventListParamsType
-  )
-  const events = !eventData || 'error' in eventData ? [] : eventData.events
-
-  const { trigger: createEvent } = useMutate<EventNewResponse>('EVENT_NEW')
-  const handleNewEventClick = async () => {
-    if (!location) return
-    const data = await createEvent({
-      locationExternId: location.externId,
-    } satisfies EventNewParamsType)
-
-    if (!('error' in data)) {
-      router.push(`/event/${data.eventExternId}/edit`).then(null)
-    }
-  }
 
   const galleryPreviewUrls =
     location && location.mediaItems.length > 0
@@ -75,13 +44,6 @@ export const LocationView = ({ externId }: { externId: string }) => {
   const hasPhotos = galleryPreviewUrls.length > 0
   const galleryImageWidth = deviceSize === 'desktop' ? 26.8 : undefined
   const imageSizesString = '268px'
-
-  const [showActiveEvents, setShowActiveEvents] = useState(true)
-  const visibleEvents = events
-    .filter((e) => (showActiveEvents ? isActiveEvent(e) : !isActiveEvent(e)))
-    .sort((a, b) => {
-      return (a.startDate > b.startDate ? 1 : -1) * (showActiveEvents ? 1 : -1)
-    })
 
   const { user, isUserLoading } = useProfile()
   const isEditable = !!location && canEditLocation(user, location)
@@ -115,20 +77,12 @@ export const LocationView = ({ externId }: { externId: string }) => {
       )}
 
       <LocationDetailsContainer>
-        <ActiveBadge steward={location.steward} />
-
         <StyledContentCard shadow>
           <LocationHeader>
             <LocationHeaderTitle>
               <H1>{location.name ?? EMPTY}</H1>
               <LocationHeaderInformation>
                 <span>{formatShortAddress(location.address) ?? EMPTY}</span>
-                {location.eventCount > 0 && (
-                  <span>
-                    {location.eventCount}{' '}
-                    {location.eventCount === 1 ? 'Event' : 'Events'}
-                  </span>
-                )}
               </LocationHeaderInformation>
             </LocationHeaderTitle>
           </LocationHeader>
@@ -141,10 +95,6 @@ export const LocationView = ({ externId }: { externId: string }) => {
                   <Overline>Edit</Overline>
                 </Button>
               </Link>
-              <Button variant={'link'} onClick={handleNewEventClick}>
-                <Icon name="plus" size={1.2} />
-                <Overline>New Event</Overline>
-              </Button>
             </EditBar>
           )}
         </StyledContentCard>
@@ -207,31 +157,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
           </StewardContainer>
         </AboutContent>
       </Section>
-
-      {(visibleEvents.length > 0 || (isEditable && events.length > 0)) && (
-        <Section>
-          <SectionHeader>
-            <H3>Events</H3>
-            {isEditable && (
-              <Button
-                variant={'link-slim'}
-                onClick={() => setShowActiveEvents(!showActiveEvents)}
-              >
-                {showActiveEvents ? 'Show Past Events' : 'Show Active Events'}
-              </Button>
-            )}
-          </SectionHeader>
-          <EventList events={visibleEvents} isEditable={isEditable} />
-        </Section>
-      )}
     </LocationContent>
-  )
-}
-
-function isActiveEvent(event: EventFragment) {
-  return (
-    (event.endDate ?? '') >= new Date().toISOString().slice(0, 10) &&
-    event.type !== EventType.Residency
   )
 }
 

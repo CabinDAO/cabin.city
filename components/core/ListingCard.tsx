@@ -60,7 +60,6 @@ export const ListingCard = ({
               <Icon name="mountain" size={6} color="yellow500" />
             </EmptyImageContainer>
           )}
-          <EventCountTag eventCount={location.eventCount ?? 0} />
         </ImageContainer>
         <ContentContainer>
           <SummaryContainer>
@@ -71,21 +70,6 @@ export const ListingCard = ({
         <HorizontalDivider />
       </ContainerLink>
     </OuterContainer>
-  )
-}
-
-const EventCountTag = ({ eventCount }: { eventCount: number }) => {
-  if (!eventCount || eventCount === 0) {
-    return null
-  }
-
-  const plural = eventCount === 1 ? '' : 's'
-  return (
-    <TagContainer>
-      <Subline1>
-        {eventCount} Event{plural}
-      </Subline1>
-    </TagContainer>
   )
 }
 
