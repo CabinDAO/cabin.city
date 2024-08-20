@@ -2,7 +2,6 @@ import { ChangeEvent, useMemo, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { useProfile } from '../auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileListParamsType,
@@ -45,7 +44,6 @@ export const CensusView = () => {
   )
 
   const { deviceSize } = useDeviceSize()
-  const { user } = useProfile({ redirectTo: '/' })
   const { useGetPaginated } = useBackend()
 
   const input = useMemo<ProfileListParamsType>(() => {
@@ -137,8 +135,6 @@ export const CensusView = () => {
       (searchInput ? 1 : 0),
     [roleTypes, levelTypes, citizenshipStatuses, searchInput]
   )
-
-  if (!user) return null
 
   return (
     <BaseLayout>
