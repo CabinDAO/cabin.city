@@ -4,7 +4,6 @@ export type MenuItemOption =
   | 'home'
   | 'neighborhoods'
   | 'members'
-  | 'activity'
   | 'profile'
   | 'signOut'
   | 'signIn'
@@ -37,12 +36,6 @@ export const MenuItemsAuthenticatedMap: Record<
     icon: 'members',
     path: '/census',
     displayText: 'Census',
-    iconSize: 2.5,
-  },
-  activity: {
-    icon: 'dashboard',
-    path: '/activity',
-    displayText: 'Activity',
     iconSize: 2.5,
   },
   profile: {
@@ -81,7 +74,6 @@ export const MenuItemsUnauthenticatedMap: Record<
     iconSize: 2,
   },
   members: null,
-  activity: null,
   profile: null,
   admin: null,
   signOut: null,

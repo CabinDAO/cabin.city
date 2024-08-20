@@ -56,7 +56,6 @@ export const NavbarMobile = () => {
               profileId={user?.externId}
             />
             <MobileMenuItem menuItem={'members'} profileId={user?.externId} />
-            <MobileMenuItem menuItem={'activity'} profileId={user?.externId} />
             <StyledDivider />
             <MobileMenuProfileItem />
             {user && user.isAdmin && (
