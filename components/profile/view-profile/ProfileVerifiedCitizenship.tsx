@@ -20,13 +20,11 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { ProfileFragment } from '@/utils/types/profile'
 
-interface ProfileVerifiedCitizenshipProps {
-  profile: ProfileFragment
-}
-
 export const ProfileVerifiedCitizenship = ({
   profile,
-}: ProfileVerifiedCitizenshipProps) => {
+}: {
+  profile: ProfileFragment
+}) => {
   const { user } = useProfile()
   const isOwnProfile = user?.externId === profile.externId
   const [hovered, setHovered] = useState(false)
@@ -180,11 +178,7 @@ const NFTContainer = styled.a`
   }
 `
 
-interface ImageBackgroundProps {
-  src: string
-}
-
-const ImageBackground = styled.div<ImageBackgroundProps>`
+const ImageBackground = styled.div<{ src: string }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -223,11 +217,7 @@ const NFTNameContainer = styled.div`
   }
 `
 
-interface ExternalIconProps {
-  hovered: boolean
-}
-
-const ExternalIcon = styled(Icon)<ExternalIconProps>`
+const ExternalIcon = styled(Icon)<{ hovered: boolean }>`
   transition: transform 0.15s ease-in-out;
   transform: ${({ hovered }) => (hovered ? 'translateX(0.3rem)' : 'none')};
 `

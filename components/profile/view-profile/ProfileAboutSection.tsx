@@ -29,22 +29,6 @@ export const ProfileAboutSection = ({
               captionContent={formatShortAddress(profile.address)}
             />
           )}
-          {profile.voucher && (
-            <ProfileDataText
-              iconName="citizen"
-              captionContent={
-                <>
-                  Vouched for by{' '}
-                  <Link
-                    href={`/profile/${profile.voucher.externId}`}
-                    style={{ textDecoration: 'underline' }}
-                  >
-                    {profile.voucher.name}
-                  </Link>
-                </>
-              }
-            />
-          )}
         </ProfileDataGroup>
         {profile.bio && <Body2>{profile.bio}</Body2>}
       </AboutSubsection>
