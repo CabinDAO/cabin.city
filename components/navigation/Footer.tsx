@@ -20,16 +20,19 @@ export const Footer = () => {
             <Section>
               <Header>Product</Header>
               <AppLink
+                onClick={() => analytics.acceleratorApplyClickEvent('footer')}
+                href="/accelerator"
+              >
+                <Name>Accelerator</Name>
+              </AppLink>
+              <AppLink
                 onClick={() => analytics.viewCityDirectoryEvent()}
                 href="/city-directory"
               >
                 <Name>City Directory</Name>
               </AppLink>
-              <AppLink
-                onClick={() => analytics.acceleratorApplyClickEvent('footer')}
-                href="/accelerator"
-              >
-                <Name>Accelerator</Name>
+              <AppLink href="/census">
+                <Name>Census</Name>
               </AppLink>
               <AppLink external href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}>
                 <Name>Privacy & Terms</Name>
