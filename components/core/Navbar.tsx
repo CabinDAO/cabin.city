@@ -1,15 +1,84 @@
-import { useState } from 'react'
-import styled from 'styled-components'
-import { Avatar } from './Avatar'
-import { MenuItemLink } from './navbar/MenuItemLink'
-import { ProfileNavMenu } from './navbar/ProfileNavMenu'
+import Link from 'next/link'
 import { useProfile } from '@/components/auth/useProfile'
+import { MenuItemName, MenuItems } from '@/utils/nav/types'
+import analytics from '@/lib/googleAnalytics/analytics'
+import styled from 'styled-components'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import Icon from '@/components/core/Icon'
+import { Tooltip } from '@/components/core/Tooltip'
+import { Avatar } from '@/components/core/Avatar'
+import { MeFragment } from '@/utils/types/profile'
 
-const SingleMenuItem = styled.div`
-  padding: 1.6rem;
-  justify-content: center;
-  align-items: center;
-`
+export const Navbar = () => {
+  const { user } = useProfile()
+
+  return (
+    <Container>
+      <Group>
+        <MenuItem name={'home'} user={user} />
+      </Group>
+      <Divider />
+      <Group>
+        <MenuItem name={'neighborhoods'} user={user} />
+        <MenuItem name={'members'} user={user} />
+      </Group>
+      <Divider />
+      <Group>
+        <MenuItem name={'profile'} user={user} />
+        <MenuItem name={'signOut'} user={user} />
+        <MenuItem name={'signIn'} user={user} />
+        {user?.isAdmin && <MenuItem name={'admin'} user={user} />}
+      </Group>
+    </Container>
+  )
+}
+
+const MenuItem = ({
+  name,
+  user,
+}: {
+  name: MenuItemName
+  user: MeFragment | null
+}) => {
+  const item = MenuItems[name]
+
+  const visible =
+    item.visibility === 'always' ||
+    (user && item.visibility === 'authOnly') ||
+    (!user && item.visibility === 'unauthOnly')
+
+  if (!visible) return null
+
+  return (
+    <Tooltip tooltip={item.displayText ?? ''} position="right" animate>
+      {name === 'signIn' ? (
+        <AuthenticatedLink logSignInEvent>
+          <Icon
+            name={item.icon}
+            onClick={() => {
+              analytics.navBarEvent('signIn')
+              analytics.signInEvent()
+            }}
+            size={item.iconSize ?? 2.5}
+            color={'green400'}
+          />
+        </AuthenticatedLink>
+      ) : (
+        <Link onClick={() => analytics.navBarEvent(name)} href={item.path}>
+          {user && name == 'profile' ? (
+            <Avatar src={user.avatarUrl} size={3.2} />
+          ) : (
+            <Icon
+              name={item.icon}
+              size={item.iconSize ?? 2.5}
+              color={'green400'}
+            />
+          )}
+        </Link>
+      )}
+    </Tooltip>
+  )
+}
 
 const Container = styled.nav`
   display: flex;
@@ -24,56 +93,17 @@ const Container = styled.nav`
   box-shadow: 0.8rem 0.8rem 0rem ${({ theme }) => theme.colors.yellow900};
 `
 
+const Group = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
+  margin: 1.8rem 1.6rem;
+`
+
 const Divider = styled.div`
   width: 100%;
   height: 0.1rem;
   background-color: ${({ theme }) => theme.colors.green900};
 `
-
-const NeighborhoodsItemGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2.7rem 1.6rem;
-  justify-content: center;
-  align-items: center;
-  gap: 2.7rem;
-`
-
-export const Navbar = () => {
-  const { user } = useProfile()
-
-  const externId = user?.externId
-
-  const [profileMenuVisible, setProfileMenuVisible] = useState(false)
-
-  return (
-    <>
-      <Container>
-        <SingleMenuItem>
-          <MenuItemLink menuItem={'home'} profileId={externId} />
-        </SingleMenuItem>
-        <Divider />
-        <NeighborhoodsItemGroup>
-          <MenuItemLink menuItem={'neighborhoods'} profileId={externId} />
-          <MenuItemLink menuItem={'members'} profileId={externId} />
-        </NeighborhoodsItemGroup>
-        <Divider />
-        <SingleMenuItem>
-          {externId && (
-            <Avatar
-              src={user?.avatarUrl}
-              size={3.2}
-              onClick={() => setProfileMenuVisible(!profileMenuVisible)}
-            />
-          )}
-          <MenuItemLink
-            authenticated
-            menuItem={'signIn'}
-            profileId={externId}
-          />
-        </SingleMenuItem>
-      </Container>
-      <ProfileNavMenu visible={profileMenuVisible} />
-    </>
-  )
-}

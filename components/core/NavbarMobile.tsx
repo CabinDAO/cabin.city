@@ -2,22 +2,16 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
-import useEns from '@/components/hooks/useEns'
-import {
-  MenuItemOption,
-  MenuItemsAuthenticatedMap,
-  MenuItemsUnauthenticatedMap,
-} from '@/utils/nav/types'
-import { CitizenshipStatus } from '@/utils/types/profile'
+import { MenuItemName, MenuItems } from '@/utils/nav/types'
 import analytics from '@/lib/googleAnalytics/analytics'
-import { shortenedAddress } from '@/utils/display-utils'
 import styled, { css } from 'styled-components'
 import Icon from '@/components/core/Icon'
 import ClickAway from '@/components/core/ClickAway'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { Avatar } from '@/components/core/Avatar'
-import { Caption, Subline1 } from '@/components/core/Typography'
+import { Subline1 } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { MeFragment } from '@/utils/types/profile'
 
 export const NavbarMobile = () => {
   const { user } = useProfile()
@@ -50,23 +44,16 @@ export const NavbarMobile = () => {
       >
         <MobileNavContainer open={open}>
           <InnerContainer>
-            <MobileMenuItem menuItem={'home'} profileId={user?.externId} />
-            <MobileMenuItem
-              menuItem={'neighborhoods'}
-              profileId={user?.externId}
-            />
-            <MobileMenuItem menuItem={'members'} profileId={user?.externId} />
+            <MobileMenuItem menuItem={'home'} user={user} />
+            <MobileMenuItem menuItem={'neighborhoods'} user={user} />
+            <MobileMenuItem menuItem={'members'} user={user} />
             <StyledDivider />
-            <MobileMenuProfileItem />
+            <MobileMenuItem menuItem={'profile'} user={user} />
+            <MobileMenuItem menuItem={'signOut'} user={user} />
+            <MobileMenuItem menuItem={'signIn'} user={user} />
             {user && user.isAdmin && (
-              <MobileMenuItem menuItem={'admin'} profileId={user?.externId} />
+              <MobileMenuItem menuItem={'admin'} user={user} />
             )}
-            <MobileMenuItem menuItem={'signOut'} profileId={user?.externId} />
-            <MobileMenuItem
-              authenticated
-              menuItem={'signIn'}
-              profileId={user?.externId}
-            />
           </InnerContainer>
         </MobileNavContainer>
 
@@ -128,64 +115,14 @@ const FloatingMenuContainer = styled.nav`
   box-shadow: -0.4rem 0.4rem 0rem ${({ theme }) => theme.colors.yellow900};
 `
 
-const Notch = styled.div<{ notchSize: number }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: ${(props) => props.notchSize}rem;
-  height: ${(props) => props.notchSize}rem;
-  border: 0.1rem solid ${({ theme }) => theme.colors.green900};
-`
-
-const MobileMenuProfileItem = () => {
-  const { user } = useProfile()
-  const { ens } = useEns(user?.walletAddress)
-  const displayCaption = ens ?? shortenedAddress(user?.walletAddress)
-
-  if (!user) return null
-
-  return (
-    <ProfileLink href={`/profile/${user.externId}`}>
-      <Avatar size={2.4} src={user.avatarUrl} />
-      <ProfileNameContainer>
-        <Subline1 $color="yellow100">{user.name}</Subline1>
-        {displayCaption && (
-          <Caption $color="yellow100">{displayCaption}</Caption>
-        )}
-      </ProfileNameContainer>
-    </ProfileLink>
-  )
-}
-
-const ProfileNameContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  align-items: flex-start;
-  justify-content: center;
-`
-
-export const ProfileLink = styled(Link)`
-  display: flex;
-  flex-direction: row;
-  gap: 1.5rem;
-  width: 100%;
-  align-items: flex-start;
-  justify-content: flex-start;
-`
-
 const MobileMenuItem = ({
   menuItem,
-  profileId,
-  authenticated,
+  user,
 }: {
-  menuItem: MenuItemOption
-  profileId?: string
-  authenticated?: boolean
+  menuItem: MenuItemName
+  user: MeFragment | null
 }) => {
-  const menuItemConfig = profileId
-    ? MenuItemsAuthenticatedMap[menuItem]
-    : MenuItemsUnauthenticatedMap[menuItem]
+  const item = MenuItems[menuItem]
 
   const handleClick = () => {
     analytics.navBarEvent(menuItem)
@@ -195,17 +132,31 @@ const MobileMenuItem = ({
     }
   }
 
-  if (!menuItemConfig) return null
+  const visible =
+    item.visibility === 'always' ||
+    (user && item.visibility === 'authOnly') ||
+    (!user && item.visibility === 'unauthOnly')
 
-  return authenticated ? (
-    <StyledAuthenticatedLink logSignInEvent={menuItem === 'signIn'}>
-      <Icon name={menuItemConfig.icon} size={1.9} color={'green400'} />
-      <Subline1 $color="yellow100">{menuItemConfig.displayText}</Subline1>
+  if (!visible) return null
+
+  return menuItem === 'signIn' ? (
+    <StyledAuthenticatedLink logSignInEvent>
+      <Icon name={item.icon} size={1.9} color={'green400'} />
+      <Subline1 $color="yellow100">{item.displayText}</Subline1>
     </StyledAuthenticatedLink>
   ) : (
-    <StyledLink onClick={handleClick} href={menuItemConfig.path}>
-      <Icon name={menuItemConfig.icon} size={1.9} color={'green400'} />
-      <Subline1 $color="yellow100">{menuItemConfig.displayText}</Subline1>
+    <StyledLink onClick={handleClick} href={item.path}>
+      {user && menuItem == 'profile' ? (
+        <>
+          <Avatar src={user.avatarUrl} size={2.4} />
+          <Subline1 $color="yellow100">{user.name}</Subline1>
+        </>
+      ) : (
+        <>
+          <Icon name={item.icon} size={1.9} color={'green400'} />
+          <Subline1 $color="yellow100">{item.displayText}</Subline1>
+        </>
+      )}
     </StyledLink>
   )
 }

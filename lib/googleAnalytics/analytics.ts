@@ -1,5 +1,5 @@
 import { GTagEvent } from './types'
-import { MenuItemOption } from '@/utils/nav/types'
+import { MenuItemName } from '@/utils/nav/types'
 
 /**
  *
@@ -125,7 +125,7 @@ export const viewEventsEvent = (eventId?: string): void => {
 /**
  * @param menuOption - The menu option that was clicked.
  **/
-export const navBarEvent = (menuOption: MenuItemOption): void => {
+export const navBarEvent = (menuOption: MenuItemName): void => {
   event({
     action: 'nav_bar_click',
     params: {
