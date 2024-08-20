@@ -1,4 +1,3 @@
-import Icon from '@/components/core/Icon'
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { Avatar } from '../../core/Avatar'
@@ -7,10 +6,7 @@ import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { H1, Subline2 } from '../../core/Typography'
 import useEns from '@/components/hooks/useEns'
 import { ProfileHeaderButton } from './ProfileHeaderButton'
-
-import { citizenshipInfoFromStatus } from '@/utils/citizenship'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { Tooltip } from '@/components/core/Tooltip'
 import { ProfileFragment } from '@/utils/types/profile'
 
 export const ProfileHeaderSection = ({
@@ -21,8 +17,6 @@ export const ProfileHeaderSection = ({
   const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
-  const citizenship = citizenshipInfoFromStatus(profile?.citizenshipStatus)
-
   return (
     <ContentCard shadow>
       <Container>
@@ -32,14 +26,7 @@ export const ProfileHeaderSection = ({
             src={profile.avatarUrl}
           />
           <ProfileInfoContainer>
-            <CitizenContainer>
-              <H1>{profile.name}</H1>
-              {citizenship && (
-                <Tooltip tooltip={citizenship.text} animate position="top">
-                  <Icon name={citizenship.iconName} size={1.4} />
-                </Tooltip>
-              )}
-            </CitizenContainer>
+            <H1>{profile.name}</H1>
 
             {profile.wallet && (
               <BalanceAddressContainer>
@@ -81,14 +68,6 @@ const Container = styled.div`
     align-items: center;
     padding-bottom: 1.6rem;
   }
-`
-
-const CitizenContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 0.8rem;
-  align-items: center;
-  justify-content: center;
 `
 
 const BalanceAddressContainer = styled.div`

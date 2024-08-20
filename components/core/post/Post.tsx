@@ -1,11 +1,9 @@
-import { roleInfoFromType } from '@/utils/roles'
 import { formatDistance, parseISO } from 'date-fns'
 import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { Avatar } from '../Avatar'
 import IconButton from '../IconButton'
-import { ProfileIcons } from '../ProfileIcons'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
@@ -30,8 +28,6 @@ export const Post = (props: PostProps) => {
   const { activity, onLike, onUnlike, onDelete, variant = 'full' } = props
   const profile = activity.profile
 
-  const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
-  const citizenshipStatus = profile.citizenshipStatus
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
   const { user } = useProfile()
@@ -87,10 +83,6 @@ export const Post = (props: PostProps) => {
             <LeftContainer href={`/profile/${profile.externId}`} passHref>
               <Avatar src={profile.avatarUrl} size={3.2} />
               <ProfileName>{profile.name}</ProfileName>
-              <ProfileIcons
-                citizenshipStatus={citizenshipStatus}
-                roleInfos={roleInfos}
-              />
             </LeftContainer>
             {displayMoreMenu && (
               <RightContainer>

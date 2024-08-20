@@ -1,10 +1,8 @@
 import { truncate } from '@/utils/display-utils'
-import { roleInfoFromType } from '@/utils/roles'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Avatar } from './Avatar'
-import { ProfileIcons } from './ProfileIcons'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
 import { ProfileListFragment } from '@/utils/types/profile'
@@ -15,7 +13,6 @@ interface ProfileListItemProps {
 
 export const ProfileListItem = (props: ProfileListItemProps) => {
   const { profile } = props
-  const roleInfos = profile.roles.map((role) => roleInfoFromType(role.type))
   const { deviceSize } = useDeviceSize()
   const avatarSize = deviceSize === 'mobile' ? 4 : 6.4
 
@@ -26,10 +23,6 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
         <InfoContainer>
           <NameContainer>
             <H4>{profile.name}</H4>
-            <ProfileIcons
-              citizenshipStatus={profile.citizenshipStatus}
-              roleInfos={roleInfos}
-            />
           </NameContainer>
           <Caption>
             {profile.cabinTokenBalanceInt !== null && (
