@@ -60,13 +60,6 @@ export const ProfileNavMenu = ({ visible }: ProfileNavMenuProps) => {
       </ProfileLink>
       <HorizontalDivider opaque />
       <ProfileMenuItemsContainer>
-        <ProfileMenuItem
-          onClick={() => handleClick('citizenship')}
-          href="/citizenship"
-        >
-          <Icon name="citizen" size={2} color="green400" />
-          <Subline1 $color="yellow100">Citizenship</Subline1>
-        </ProfileMenuItem>
         {user.isAdmin && (
           <ProfileMenuItem onClick={() => handleClick('admin')} href="/admin">
             <Icon name="person" size={2} color="green400" />

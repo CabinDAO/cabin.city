@@ -6,7 +6,6 @@ export type MenuItemOption =
   | 'members'
   | 'activity'
   | 'profile'
-  | 'citizenship'
   | 'signOut'
   | 'signIn'
   | 'admin'
@@ -52,11 +51,6 @@ export const MenuItemsAuthenticatedMap: Record<
     displayText: 'Profile',
     iconSize: 3.2,
   },
-  citizenship: {
-    icon: 'citizen',
-    path: '/citizenship',
-    displayText: 'Citizenship',
-  },
   admin: {
     icon: 'person',
     path: '/admin',
@@ -89,7 +83,6 @@ export const MenuItemsUnauthenticatedMap: Record<
   members: null,
   activity: null,
   profile: null,
-  citizenship: null,
   admin: null,
   signOut: null,
   signIn: {
