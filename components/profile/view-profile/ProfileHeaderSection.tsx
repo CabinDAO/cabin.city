@@ -85,9 +85,6 @@ const ProfileSummary = styled.div`
   align-items: flex-start;
 
   ${({ theme }) => theme.bp.md} {
-  }
-
-  ${({ theme }) => theme.bp.lg} {
     align-items: center;
     justify-content: center;
     flex-direction: row;
