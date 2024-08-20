@@ -31,11 +31,6 @@ export const Footer = () => {
               >
                 <Name>Accelerator</Name>
               </AppLink>
-              {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
-                <AppLink external href="/invite">
-                  <Name>Invite Friends</Name>
-                </AppLink>
-              )}
               <AppLink external href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}>
                 <Name>Privacy & Terms</Name>
               </AppLink>

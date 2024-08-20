@@ -63,13 +63,6 @@ export const CitizenNFTContainer = () => {
           <CitizenshipNFTPreviewData />
         )}
       </Section>
-      {user?.citizenshipStatus == CitizenshipStatus.Verified && (
-        <Link href={'/invite'}>
-          <Button variant={'secondary'}>
-            Invite your friends to become Citizens
-          </Button>
-        </Link>
-      )}
       <HorizontalDivider />
       <Section>
         <DescriptionContainer>

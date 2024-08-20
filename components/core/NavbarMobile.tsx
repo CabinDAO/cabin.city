@@ -63,9 +63,6 @@ export const NavbarMobile = () => {
               menuItem={'citizenship'}
               profileId={user?.externId}
             />
-            {user && user.citizenshipStatus == CitizenshipStatus.Verified && (
-              <MobileMenuItem menuItem={'invite'} profileId={user?.externId} />
-            )}
             {user && user.isAdmin && (
               <MobileMenuItem menuItem={'admin'} profileId={user?.externId} />
             )}
