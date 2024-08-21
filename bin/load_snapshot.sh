@@ -41,3 +41,8 @@ PGPASSWORD="$pass" psql -U "$user" -h "$host" -p "$port" postgres \
 echo "loading snapshot"
 postgres_url_trimmed="${POSTGRES_URL%%\?*}" ## Remove options query string
 pg_dump "$POSTGRES_SNAPSHOT_SRC_URL" | psql "$postgres_url_trimmed"
+
+
+### how to load only data without db drop/create
+# npx prisma migrate reset
+# pg_dump --data-only --exclude-table _prisma_migrations "$POSTGRES_SNAPSHOT_SRC_URL" | psql "$POSTGRES_URL"
