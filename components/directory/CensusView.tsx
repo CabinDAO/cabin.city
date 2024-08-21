@@ -5,11 +5,14 @@ import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileListParamsType,
   ProfileListResponse,
+  ProfileSort,
   ProfileListFragment,
 } from '@/utils/types/profile'
+import { DIRECTORY_SORT_FIELDS } from './directory-sort'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
 import { BaseLayout } from '@/components/core/BaseLayout'
+import { Sort, SortOption } from '@/components/core/Sort'
 import { FilterContainer } from '@/components/core/Filter'
 import { List } from '@/components/core/List'
 import { ListEmptyState } from '@/components/core/ListEmptyState'
@@ -20,13 +23,19 @@ import { TitleCard } from '@/components/core/TitleCard'
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
   const [searchValue] = useDebounce(searchInput, 500)
+  const [sortType, setSortType] = useState<ProfileSort>(
+    ProfileSort.CreatedAtDesc
+  )
 
   const { useGetPaginated } = useBackend()
 
   const input = useMemo<ProfileListParamsType>(() => {
-    // Only search if there are at least 2 characters
-    return { searchQuery: searchValue.length >= 2 ? searchValue : '' }
-  }, [searchValue])
+    return {
+      // Only search if there are at least 2 characters
+      searchQuery: searchValue.length >= 2 ? searchValue : '',
+      sort: sortType,
+    }
+  }, [searchValue, sortType])
 
   const { data, next, rewind, noResults, hasMore } =
     useGetPaginated<ProfileListResponse>(
@@ -49,6 +58,11 @@ export const CensusView = () => {
     await rewind()
   }
 
+  const handleSort = async (option: SortOption<ProfileSort>) => {
+    setSortType(option.key)
+    await rewind()
+  }
+
   return (
     <BaseLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
@@ -62,7 +76,16 @@ export const CensusView = () => {
           />
         </SearchContainer>
       </FilterContainer>
-      <List total={totalProfiles}>
+      <List
+        total={totalProfiles}
+        sortComponent={
+          <Sort
+            fields={DIRECTORY_SORT_FIELDS}
+            selectedOption={sortType}
+            onSelectOption={handleSort}
+          />
+        }
+      >
         <InfiniteScroll
           hasMore={hasMore}
           dataLength={profiles.length}
