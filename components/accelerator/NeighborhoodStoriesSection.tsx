@@ -10,7 +10,7 @@ import { Body1 } from '@/components/core/Typography'
 import { AutoImage } from '@/components/core/AutoImage'
 import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
-import Kathi from '@/components/accelerator/Kathi Slide.png'
+import kathi from '@/components/accelerator/Kathi Slide.png'
 
 export function NeighborhoodStoriesSection({
   variant,
@@ -53,17 +53,24 @@ export function NeighborhoodStoriesSection({
       {deviceSize === 'mobile' ? (
         pics.map((i, n) => <AutoImage key={n} src={i.src} alt={'slide'} />)
       ) : (
-        <Slideshow key={deviceSize} loop>
-          {pics.map((i, n) => (
-            <Slide key={n} src={i.src} />
-          ))}
-        </Slideshow>
+        <SlideshowCenteringDiv>
+          <Slideshow key={deviceSize} loop>
+            {pics.map((i, n) => (
+              <Slide key={n} src={i.src} />
+            ))}
+          </Slideshow>
+        </SlideshowCenteringDiv>
       )}
     </Container>
   )
 }
 
-const pics = [Kathi, bethany, savannah]
+const pics = [kathi, bethany, savannah]
+
+const SlideshowCenteringDiv = styled.div`
+  width: fit-content;
+  max-width: 100%;
+`
 
 const Container = styled.div`
   display: flex;
