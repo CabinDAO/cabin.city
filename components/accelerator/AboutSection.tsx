@@ -1,12 +1,13 @@
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
 import { SectionTitle } from '@/components/accelerator/shared'
+import { WideContainer } from '@/components/core/WideContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import img from '@/components/accelerator/accel-imgs.jpg'
 
 export const AboutSection = () => {
   return (
-    <Container>
+    <Container maxWidth={'130rem'}>
       <Content>
         <Left>
           <TopSection>
@@ -74,16 +75,8 @@ export const AboutSection = () => {
   )
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(WideContainer)`
   gap: 4rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 130rem;
-  }
 `
 
 const Content = styled.div`

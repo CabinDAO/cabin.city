@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import theme from '@/styles/theme'
 import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
+import { WideContainer } from '@/components/core/WideContainer'
 import { Button } from '@/components/core/Button'
 import { Countdown } from '@/components/accelerator/Countdown'
 import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
@@ -96,7 +97,7 @@ const noBlocks = [
 
 export const IsItRightSection = () => {
   return (
-    <Container>
+    <Container maxWidth={'100rem'}>
       <TitleContainer>
         <SectionTitle light style={{ maxWidth: '65rem' }}>
           Is the Neighborhood Accelerator for you?
@@ -165,10 +166,7 @@ export const IsItRightSection = () => {
   )
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+const Container = styled(WideContainer)`
   gap: 4rem;
   margin-bottom: 2rem;
 
@@ -182,8 +180,6 @@ const Container = styled.div`
   }
 
   ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 100rem;
     gap: 6rem;
   }
 `

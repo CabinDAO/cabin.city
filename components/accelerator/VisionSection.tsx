@@ -7,13 +7,14 @@ import { Body1, H3 } from '@/components/core/Typography'
 import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import { AutoImage } from '@/components/core/AutoImage'
 import { Button } from '@/components/core/Button'
+import { WideContainer } from '@/components/core/WideContainer'
 import mapAndPolaroids from '@/components/accelerator/map-and-polaroids.jpg'
 import mapOnly from '@/components/accelerator/map-only.jpg'
 
 export const VisionSection = () => {
   const { deviceSize } = useDeviceSize()
   return (
-    <Container>
+    <Container maxWidth={'130rem'}>
       <Content>
         <Left>
           <StyledH3>Our Vision at Cabin</StyledH3>
@@ -59,16 +60,8 @@ export const VisionSection = () => {
   )
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(WideContainer)`
   gap: 3rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 130rem;
-  }
 `
 
 const Content = styled.div`

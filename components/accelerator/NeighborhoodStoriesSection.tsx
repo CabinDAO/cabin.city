@@ -82,7 +82,7 @@ const Container = styled.div`
   justify-content: center;
 
   ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
+    width: user={user};
   }
 `
 

@@ -1,8 +1,9 @@
 import Masonry from 'react-masonry-css'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
 import { SectionTitle } from '@/components/accelerator/shared'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { WideContainer } from '@/components/core/WideContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import polaroids from '@/components/accelerator/polaroids.jpg'
 
@@ -13,7 +14,7 @@ export const DetailsSection = () => {
     <>
       <SectionTitle>Program Details</SectionTitle>
 
-      <Content>
+      <Content maxWidth={'110rem'}>
         <Masonry
           className={'masonry'}
           columnClassName={'masonry-column'}
@@ -108,17 +109,9 @@ export const DetailsSection = () => {
   )
 }
 
-const Content = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+const Content = styled(WideContainer)`
   margin-bottom: 4rem;
   gap: 10rem;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 110rem;
-  }
 
   .masonry {
     width: 100%;

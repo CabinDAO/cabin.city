@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
+import { WideContainer } from '@/components/core/WideContainer'
 import Icon from '@/components/core/Icon'
 import { SectionTitle } from '@/components/accelerator/shared'
-import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 
 const faqs = [
   {
@@ -158,7 +159,7 @@ const faqs = [
 
 export const FaqSection = () => {
   return (
-    <Container>
+    <Container maxWidth={'80rem'}>
       <SectionTitle>FAQs</SectionTitle>
 
       {faqs.map((faq, i) => (
@@ -179,16 +180,8 @@ export const FaqSection = () => {
   )
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(WideContainer)`
   gap: 1.6rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 80rem;
-  }
 `
 
 const QuestionAnswer = ({ q, a }: { q: string; a: React.ReactNode }) => {

@@ -3,6 +3,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { GreenUnderline, SectionTitle } from '@/components/accelerator/shared'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
+import { WideContainer } from '@/components/core/WideContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import { fonts } from '@/components/core/Typography'
 import shani from '@/components/accelerator/shani-neighborhood.jpg'
@@ -55,18 +56,11 @@ const slides: { src: string; subtext: string }[] = [
   },
 ]
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+const Container = styled(WideContainer)`
   gap: 4rem;
   margin-bottom: 2rem;
   align-items: center;
   justify-content: center;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-  }
 `
 
 const Slide = ({ src, subtext }: { src: string; subtext: string }) => {

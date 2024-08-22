@@ -6,6 +6,7 @@ import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import Icon from '@/components/core/Icon'
 import { Body1, fonts } from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
+import { WideContainer } from '@/components/core/WideContainer'
 import { Countdown } from '@/components/accelerator/Countdown'
 
 const items = [
@@ -18,7 +19,7 @@ const items = [
 
 export const PriceSection = () => {
   return (
-    <Container>
+    <Container maxWidth={'80rem'}>
       <SectionTitle>Ready to transform your neighborhood?</SectionTitle>
       <Box>
         <Items>
@@ -68,17 +69,9 @@ export const PriceSection = () => {
   )
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(WideContainer)`
   align-items: center;
   gap: 4rem;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 80rem;
-  }
 `
 
 const Box = styled.div`

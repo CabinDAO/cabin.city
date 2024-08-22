@@ -1,6 +1,8 @@
 import React from 'react'
+import styled, { css } from 'styled-components'
 import { padding } from '@/styles/theme'
 import headerBg from '@/components/accelerator/accelerator-header.jpg'
+import { WideContainer } from '@/components/core/WideContainer'
 import { Body1 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -16,7 +18,6 @@ import { PriceSection } from '@/components/accelerator/PriceSection'
 import { VisionSection } from '@/components/accelerator/VisionSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
 import { ImagineSection } from '@/components/accelerator/ImagineSection'
-import styled, { css } from 'styled-components'
 
 export const subscribeSectionID = 'updates'
 
@@ -69,7 +70,7 @@ export const AcceleratorPageView = () => {
       </Section>
 
       <LandingSection variant={'default'} id={subscribeSectionID} noVertPadding>
-        <SubscribeContainer>
+        <SubscribeContainer maxWidth={'130rem'}>
           <SectionTitle>Can't join us for this round?</SectionTitle>
           <Body1>
             No worries. Be the first to know about future rounds of the program.
@@ -101,17 +102,12 @@ const Section = styled(LandingSection)`
     `}
 `
 
-const SubscribeContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const SubscribeContainer = styled(WideContainer)`
   align-items: center;
-  width: 100%;
   gap: 2.4rem;
   margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
-    width: calc(100vw - 30rem);
-    max-width: 130rem;
     margin-top: 4rem;
     margin-bottom: 10rem;
   }
