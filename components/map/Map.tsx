@@ -7,7 +7,7 @@ export const Map = dynamic(
   { ssr: false }
 )
 
-export type Marker = {
+export type MarkerData = {
   label: string
   lat: number
   lng: number

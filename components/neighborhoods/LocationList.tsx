@@ -10,7 +10,7 @@ import {
 } from '@/utils/types/location'
 import styled from 'styled-components'
 import { ListingCard } from '@/components/core/ListingCard'
-import { Map, onMoveParams } from '@/components/neighborhoods/Map'
+import { Map, onMoveParams } from '@/components/map/Map'
 
 export const LocationList = ({ type }: { type?: LocationType }) => {
   const { useGetPaginated } = useBackend()

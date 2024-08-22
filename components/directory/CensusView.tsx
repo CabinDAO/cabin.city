@@ -20,7 +20,7 @@ import { ListEmptyState } from '@/components/core/ListEmptyState'
 import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
-import { Map, onMoveParams } from '@/components/neighborhoods/Map'
+import { Map, onMoveParams } from '@/components/map/Map'
 
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -41,6 +41,7 @@ export const CensusView = () => {
             label: p.name,
             lat: p.lat,
             lng: p.lng,
+            linkUrl: `/profile/${p.externId}`,
           }
         })
 

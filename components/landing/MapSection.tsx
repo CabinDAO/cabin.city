@@ -4,15 +4,12 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { formatValue } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { h1Styles } from '@/components/core/Typography'
-import { Map, Marker, onMoveFn } from '@/components/neighborhoods/Map'
+import { Map, MarkerData, onMoveFn } from '@/components/map/Map'
 
 export type MapData = {
   members: number
-  profiles: {
-    lat: number
-    lng: number
-  }[]
-  locations: Marker[]
+  profiles: MarkerData[]
+  locations: MarkerData[]
 }
 
 export const MapSection = ({

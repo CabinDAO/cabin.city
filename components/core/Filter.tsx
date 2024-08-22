@@ -111,7 +111,6 @@ export const FilterContainer = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
-    padding-top: 2.4rem;
   }
 `
 

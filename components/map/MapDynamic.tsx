@@ -2,13 +2,11 @@ import React, { useEffect } from 'react'
 import { useGeolocation, useWindowSize } from 'react-use'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import iconRetinaUrl from '@/public/images/marker-icon-2x.png'
-import iconUrl from '@/public/images/marker-icon-2x.png'
-import shadowUrl from '@/public/images/marker-shadow.png'
 import {
   MapContainer,
   TileLayer,
   Popup,
+  Marker,
   CircleMarker,
   useMap,
   useMapEvent,
@@ -19,12 +17,10 @@ import {
 } from '@react-leaflet/core'
 import { GestureHandling } from 'leaflet-gesture-handling'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
-import 'leaflet.markercluster/dist/MarkerCluster.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
-import 'leaflet.markercluster/dist/leaflet.markercluster.js'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
-import { Marker, onMoveFn } from '@/components/neighborhoods/Map'
+import { MarkerData, onMoveFn } from '@/components/map/Map'
+import { MarkerClusterGroup, pinIcon } from '@/components/map/Cluster'
 import { AutoImage } from '@/components/core/AutoImage'
 import Link from 'next/link'
 
@@ -36,8 +32,8 @@ export const MapDynamic = ({
   initialZoom = 1.5,
 }: {
   height: string
-  locations?: Marker[]
-  profiles?: Marker[]
+  locations?: MarkerData[]
+  profiles?: MarkerData[]
   onMove?: onMoveFn
   initialZoom?: number
 }) => {
@@ -132,31 +128,25 @@ const Markers = ({
   locations = [],
   profiles = [],
 }: {
-  locations?: Marker[]
-  profiles?: Marker[]
+  locations?: MarkerData[]
+  profiles?: MarkerData[]
 }) => {
-  const map = useMap()
-
-  const pinIcon = L.icon({
-    iconRetinaUrl: iconRetinaUrl.src,
-    iconUrl: iconUrl.src,
-    shadowUrl: shadowUrl.src,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-  })
-
-  if (profiles.length) {
-    const profileMarkers = L.markerClusterGroup()
-    profiles.forEach((p) => {
-      const marker = L.marker([p.lat, p.lng], { icon: pinIcon })
-      // marker.bindPopup()
-      profileMarkers.addLayer(marker)
-    })
-    map.addLayer(profileMarkers)
-  }
-
   return (
     <>
+      {profiles.length && (
+        <MarkerClusterGroup chunkedLoading>
+          {profiles.map((p, i) => (
+            <Marker key={i} position={[p.lat, p.lng]} icon={pinIcon}>
+              <StyledPopup>
+                <MaybeLink newWindow url={p.linkUrl}>
+                  {p.label}
+                </MaybeLink>
+              </StyledPopup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+      )}
+
       {locations.map((l, i) => (
         // <Marker key={i} position={[l.lat, l.lng]} icon={neighborhoodIcon}>
         //   <StyledPopup>{l.label}</StyledPopup>
@@ -182,9 +172,11 @@ const Markers = ({
 
 const MaybeLink = ({
   url,
+  newWindow,
   children,
 }: {
   url?: string
+  newWindow?: boolean
   children: React.ReactNode
 }) => {
   return url ? (
@@ -195,6 +187,8 @@ const MaybeLink = ({
         color: theme.colors.green900,
       }}
       href={url}
+      target={newWindow ? '_blank' : undefined}
+      rel={newWindow ? 'noopener noreferrer' : undefined}
     >
       {children}
     </Link>
@@ -248,117 +242,3 @@ const neighborhoodIcon = L.divIcon({
       margin-top: -36px;
 '>icon goes here</div>`,
 })
-
-//----------------------------------------------
-//
-//       CLUSTERING react component attempt
-//
-//----------------------------------------------
-
-//webpack failing when loading leaflet marker icon
-// delete (L.Icon.Default as any).prototype._getIconUrl
-// L.Icon.Default.mergeOptions({
-//   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
-//   iconUrl: require('leaflet/dist/images/marker-icon.png').default,
-//   shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
-// })
-
-// type ClusterType = { [key in string]: any }
-//
-// type ClusterEvents = {
-//   onClick?: L.LeafletMouseEventHandlerFn
-//   onDblClick?: L.LeafletMouseEventHandlerFn
-//   onMouseDown?: L.LeafletMouseEventHandlerFn
-//   onMouseUp?: L.LeafletMouseEventHandlerFn
-//   onMouseOver?: L.LeafletMouseEventHandlerFn
-//   onMouseOut?: L.LeafletMouseEventHandlerFn
-//   onContextMenu?: L.LeafletMouseEventHandlerFn
-// }
-//
-// type MarkerClusterControl = L.MarkerClusterGroupOptions & {
-//   children: React.ReactNode
-// } & ClusterEvents
-//
-// function getPropsAndEvents(props: MarkerClusterControl) {
-//   let clusterProps: ClusterType = {}
-//   let clusterEvents: ClusterType = {}
-//   const { children, ...rest } = props
-//   // Splitting props and events to different objects
-//   Object.entries(rest).forEach(([propName, prop]) => {
-//     if (propName.startsWith('on')) {
-//       clusterEvents = { ...clusterEvents, [propName]: prop }
-//     } else {
-//       clusterProps = { ...clusterProps, [propName]: prop }
-//     }
-//   })
-//   return [clusterProps, clusterEvents]
-// }
-//
-// function createMarkerCluster(
-//   props: MarkerClusterControl,
-//   context: LeafletContextInterface
-// ) {
-//   const [clusterProps, clusterEvents] = getPropsAndEvents(props)
-//   const clusterGroup = new L.MarkerClusterGroup(clusterProps)
-//
-//   useEffect(() => {
-//     Object.entries(clusterEvents).forEach(([eventAsProp, callback]) => {
-//       const clusterEvent = `cluster${eventAsProp.substring(2).toLowerCase()}`
-//       clusterGroup.on(clusterEvent, callback)
-//     })
-//     return () => {
-//       Object.entries(clusterEvents).forEach(([eventAsProp]) => {
-//         const clusterEvent = `cluster${eventAsProp.substring(2).toLowerCase()}`
-//         clusterGroup.removeEventListener(clusterEvent)
-//       })
-//     }
-//   }, [clusterEvents, clusterGroup])
-//
-//   return {
-//     instance: clusterGroup,
-//     context: { ...context, layerContainer: clusterGroup },
-//   }
-// }
-//
-// const updateMarkerCluster = (
-//   instance: L.MarkerClusterGroup,
-//   props: MarkerClusterControl,
-//   prevProps: MarkerClusterControl
-// ) => {
-//   //TODO when prop change update instance
-//   if (props.showCoverageOnHover !== prevProps.showCoverageOnHover) {
-//   }
-// }
-//
-// // const MarkerClusterGroup = createPathComponent<
-// //   L.MarkerClusterGroup,
-// //   MarkerClusterControl
-// // >(createMarkerCluster, updateMarkerCluster)
-//
-// const MarkerForCluster = ({ lat, lng }: { lat: number; lng: number }) => {
-//   return null
-// }
-//
-// const MarkerClusterGroup = ({
-//   locations,
-//   children,
-// }: {
-//   locations: { lat: number; lng: number }[]
-//   children: React.ReactNode
-// }) => {
-//   React.Children.forEach(children, (child) => {
-//     // Ensure child is a valid React element
-//     if (React.isValidElement(child)) {
-//       // Access child props
-//       console.log(child.props)
-//     }
-//   })
-//
-//   return (
-//     <MarkerClusterGroup>
-//       {locations.map((l, i) => (
-//         <MarkerForCluster key={i} lat={l.lat} lng={l.lng} />
-//       ))}
-//     </MarkerClusterGroup>
-//   )
-// }
