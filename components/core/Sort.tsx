@@ -179,11 +179,7 @@ const RadioButton = styled.input`
 `
 
 const SortMenuPop = styled(MenuPopup)`
-  left: -21rem;
+  right: 0;
+  left: auto;
   top: calc(100% + 0.4rem);
-
-  ${({ theme }) => theme.bp.lg} {
-    left: 0rem;
-    top: calc(100% + 0.4rem);
-  }
 `

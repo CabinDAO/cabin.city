@@ -21,11 +21,11 @@ export const DIRECTORY_SORT_FIELDS = [
     options: [
       {
         key: ProfileSort.CabinBalanceAsc,
-        label: 'Ascending',
+        label: 'Least First',
       },
       {
         key: ProfileSort.CabinBalanceDesc,
-        label: 'Descending',
+        label: 'Most First',
       },
     ],
   },
@@ -35,11 +35,11 @@ export const DIRECTORY_SORT_FIELDS = [
     options: [
       {
         key: ProfileSort.BadgeCountAsc,
-        label: 'Ascending',
+        label: 'Least First',
       },
       {
         key: ProfileSort.BadgeCountDesc,
-        label: 'Descending',
+        label: 'Most First',
       },
     ],
   },
