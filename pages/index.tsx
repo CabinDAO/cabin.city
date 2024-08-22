@@ -31,7 +31,6 @@ export const getStaticProps = (async (/*context*/) => {
       mapData: {
         members: numProfiles,
         profiles: profiles.map((p) => ({
-          label: p.name,
           lat: p.address?.lat || 0,
           lng: p.address?.lng || 0,
         })),

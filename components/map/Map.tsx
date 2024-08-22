@@ -8,9 +8,9 @@ export const Map = dynamic(
 )
 
 export type MarkerData = {
-  label: string
   lat: number
   lng: number
+  label?: string
   imgUrl?: string
   linkUrl?: string
 }

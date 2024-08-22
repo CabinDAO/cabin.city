@@ -133,11 +133,13 @@ const ClusterGroup = React.memo(
       <MarkerClusterGroup chunkedLoading>
         {profiles.map((p, i) => (
           <Marker key={i} position={[p.lat, p.lng]} icon={pinIcon}>
-            <StyledPopup>
-              <MaybeLink newWindow url={p.linkUrl}>
-                {p.label}
-              </MaybeLink>
-            </StyledPopup>
+            {p.label && (
+              <StyledPopup>
+                <MaybeLink newWindow url={p.linkUrl}>
+                  {p.label}
+                </MaybeLink>
+              </StyledPopup>
+            )}
           </Marker>
         ))}
       </MarkerClusterGroup>
@@ -169,12 +171,14 @@ const Markers = ({
           color={theme.colors.green800}
           fillColor={theme.colors.green400}
         >
-          <StyledPopup>
-            <MaybeLink url={l.linkUrl}>
-              {l.imgUrl && <AutoImage src={l.imgUrl} alt={l.label} />}
-              {l.label}
-            </MaybeLink>
-          </StyledPopup>
+          {l.label && (
+            <StyledPopup>
+              <MaybeLink url={l.linkUrl}>
+                {l.imgUrl && <AutoImage src={l.imgUrl} alt={l.label} />}
+                {l.label}
+              </MaybeLink>
+            </StyledPopup>
+          )}
         </CircleMarker>
       ))}
     </>
