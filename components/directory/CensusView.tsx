@@ -81,7 +81,7 @@ export const CensusView = () => {
     await rewind()
   }
 
-  const handleSort = async (option: SortOption<ProfileSort>) => {
+  const handleSortChange = async (option: SortOption<ProfileSort>) => {
     setSortType(option.key)
     await rewind()
   }
@@ -100,7 +100,7 @@ export const CensusView = () => {
       />
       <FilterContainer>
         <SearchContainer>
-          <StyledInputText
+          <InputText
             value={searchInput}
             placeholder="Search by name or eth address"
             onChange={handleSearchInputChange}
@@ -114,7 +114,7 @@ export const CensusView = () => {
           <Sort
             fields={DIRECTORY_SORT_FIELDS}
             selectedOption={sortType}
-            onSelectOption={handleSort}
+            onSelectOption={handleSortChange}
           />
         }
       >
@@ -137,14 +137,6 @@ export const CensusView = () => {
     </BaseLayout>
   )
 }
-
-const StyledInputText = styled(InputText)`
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 50%;
-  }
-`
 
 const SearchContainer = styled.div`
   display: flex;
