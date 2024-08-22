@@ -54,12 +54,20 @@ export const useAPIGet = <Data = any>(
   return useSWR<Data>(route ? [expandRoute(route), params] : null, fetcher)
 }
 
+export type PaginationOptions = {
+  pageSize?: number
+  revalidateFirstPage?: boolean
+}
+
 export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
   route: Route,
   params: UrlParams = {},
-  pageSize: number = defaultPageSize,
-  tokenFn: () => Promise<string | null>
+  tokenFn: () => Promise<string | null>,
+  options?: PaginationOptions
 ) => {
+  const pageSize = options?.pageSize ?? defaultPageSize
+  const revalidateFirstPage = options?.revalidateFirstPage ?? true
+
   const getKey = (pageIndex: number, previousPageData: Data | null) => {
     if (
       previousPageData &&
@@ -83,7 +91,8 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
 
   const { data, error, mutate, size, setSize } = useSWRInfinite<Data>(
     getKey,
-    fetcher
+    fetcher,
+    { revalidateFirstPage }
   )
 
   const isLoadingInitialData = !data && !error

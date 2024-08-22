@@ -10,6 +10,7 @@ import {
   useAPIGet,
   useAPIMutate,
   useAPIGetPaginated,
+  PaginationOptions,
 } from '@/utils/api/backend'
 
 /*
@@ -73,12 +74,7 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
     params: UrlParams = {},
     options?: PaginationOptions
   ) => {
-    return useAPIGetPaginated<Data>(
-      route,
-      params,
-      options?.pageSize,
-      getAccessToken
-    )
+    return useAPIGetPaginated<Data>(route, params, getAccessToken, options)
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -127,8 +123,4 @@ export const useBackend = () => {
     )
   }
   return c
-}
-
-type PaginationOptions = {
-  pageSize?: number
 }
