@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -20,7 +20,7 @@ import { ListEmptyState } from '@/components/core/ListEmptyState'
 import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
-import { Map, onMoveParams } from '@/components/map/Map'
+import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
 
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -29,14 +29,14 @@ export const CensusView = () => {
     ProfileSort.CreatedAtDesc
   )
 
-  const { useGet, useGetPaginated } = useBackend()
+  const { get, useGetPaginated } = useBackend()
 
-  const { data: profilesForMapData } =
-    useGet<ProfileMappableResponse>('PROFILE_MAPPABLE')
-  const profilesForMap =
-    !profilesForMapData || 'error' in profilesForMapData
-      ? []
-      : profilesForMapData['profiles'].map((p) => {
+  const [profilesForMap, setProfilesForMap] = useState<MarkerData[]>([])
+  useEffect(() => {
+    get<ProfileMappableResponse>('PROFILE_MAPPABLE').then((res) => {
+      if (!res || 'error' in res) return
+      setProfilesForMap(
+        res['profiles'].map((p) => {
           return {
             label: p.name,
             lat: p.lat,
@@ -44,21 +44,22 @@ export const CensusView = () => {
             linkUrl: `/profile/${p.externId}`,
           }
         })
+      )
+    })
+  }, [])
 
   const [latLngBounds, setLatLngBounds] = useState<
     onMoveParams['bounds'] | undefined
   >(undefined)
 
-  const input = useMemo<ProfileListParamsType>(() => {
-    return {
-      // Only search if there are at least 2 characters
-      searchQuery: searchValue.length >= 2 ? searchValue : '',
-      sort: sortType,
-      latLngBounds: latLngBounds
-        ? `${latLngBounds.north},${latLngBounds.south},${latLngBounds.east},${latLngBounds.west}`
-        : undefined,
-    }
-  }, [searchValue, sortType, latLngBounds])
+  const input = {
+    // Only search if there are at least 2 characters
+    searchQuery: searchValue.length >= 2 ? searchValue : '',
+    sort: sortType,
+    latLngBounds: latLngBounds
+      ? `${latLngBounds.north},${latLngBounds.south},${latLngBounds.east},${latLngBounds.west}`
+      : undefined,
+  }
 
   const { data, next, rewind, noResults, hasMore } =
     useGetPaginated<ProfileListResponse>(
