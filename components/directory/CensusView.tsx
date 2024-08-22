@@ -117,7 +117,7 @@ export const CensusAuthView = () => {
     <BaseLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
       <Map
-        height="40rem"
+        height={`50vh`}
         profiles={profilesForMap}
         onMove={(params) => {
           setLatLngBounds(
