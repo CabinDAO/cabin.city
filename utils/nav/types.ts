@@ -39,7 +39,7 @@ export const MenuItems: Record<MenuItemName, Config> = {
     path: '/census',
     displayText: 'Census',
     iconSize: 2.5,
-    visibility: 'authOnly',
+    visibility: 'always',
   },
   profile: {
     icon: 'profile',

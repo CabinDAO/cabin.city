@@ -1,5 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
+import { useProfile } from '@/components/auth/useProfile'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
@@ -9,12 +10,13 @@ import {
   ProfileListFragment,
   ProfileMappableResponse,
 } from '@/utils/types/profile'
-import { DIRECTORY_SORT_FIELDS } from './directory-sort'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
+import { EmptyState } from '@/components/core/EmptyState'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { Button } from '@/components/core/Button'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { Sort, SortOption } from '@/components/core/Sort'
-import { FilterContainer } from '@/components/core/Filter'
 import { List } from '@/components/core/List'
 import { ListEmptyState } from '@/components/core/ListEmptyState'
 import { InputText } from '@/components/core/InputText'
@@ -23,6 +25,29 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
 
 export const CensusView = () => {
+  const { user } = useProfile()
+  return user ? (
+    <CensusAuthView />
+  ) : (
+    <BaseLayout>
+      <TitleCard title="Census" icon="members" />
+      <div style={{ width: '100%' }}>
+        <EmptyState
+          icon="alert"
+          title="Members only"
+          description="Only Cabin members can view the census."
+          customCta={() => (
+            <AuthenticatedLink href={'/census'}>
+              <Button variant={'secondary'}>Login or sign up</Button>
+            </AuthenticatedLink>
+          )}
+        />
+      </div>
+    </BaseLayout>
+  )
+}
+
+export const CensusAuthView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
   const [searchValue] = useDebounce(searchInput, 500)
   const [sortType, setSortType] = useState<ProfileSort>(
@@ -31,6 +56,7 @@ export const CensusView = () => {
 
   const { get, useGetPaginated } = useBackend()
 
+  // only load map profiles once
   const [profilesForMap, setProfilesForMap] = useState<MarkerData[]>([])
   useEffect(() => {
     get<ProfileMappableResponse>('PROFILE_MAPPABLE').then((res) => {
@@ -99,16 +125,14 @@ export const CensusView = () => {
           )
         }}
       />
-      <FilterContainer>
-        <SearchContainer>
-          <InputText
-            value={searchInput}
-            placeholder="Search by name or eth address"
-            onChange={handleSearchInputChange}
-            endAdornment={<Icon name="search" size={1.4} />}
-          />
-        </SearchContainer>
-      </FilterContainer>
+      <SearchContainer>
+        <InputText
+          value={searchInput}
+          placeholder="Search by name or eth address"
+          onChange={handleSearchInputChange}
+          endAdornment={<Icon name="search" size={1.4} />}
+        />
+      </SearchContainer>
       <List
         total={totalProfiles}
         sortComponent={
@@ -159,3 +183,48 @@ const SearchContainer = styled.div`
     }
   }
 `
+
+const DIRECTORY_SORT_FIELDS = [
+  {
+    key: 'join_date',
+    label: 'Join date',
+    options: [
+      {
+        key: ProfileSort.CreatedAtDesc,
+        label: 'Newest',
+      },
+      {
+        key: ProfileSort.CreatedAtAsc,
+        label: 'Oldest',
+      },
+    ],
+  },
+  {
+    key: 'cabin_balance',
+    label: '₡ABIN holdings',
+    options: [
+      {
+        key: ProfileSort.CabinBalanceAsc,
+        label: 'Least First',
+      },
+      {
+        key: ProfileSort.CabinBalanceDesc,
+        label: 'Most First',
+      },
+    ],
+  },
+  {
+    key: 'stamp_amount',
+    label: 'Stamp Amount',
+    options: [
+      {
+        key: ProfileSort.BadgeCountAsc,
+        label: 'Least First',
+      },
+      {
+        key: ProfileSort.BadgeCountDesc,
+        label: 'Most First',
+      },
+    ],
+  },
+]
