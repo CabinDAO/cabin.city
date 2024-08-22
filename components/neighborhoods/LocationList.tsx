@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import { ListingCard } from '@/components/core/ListingCard'
 import { Map, onMoveParams } from '@/components/neighborhoods/Map'
 
-export const LocationList = ({ type }: { type: LocationType | undefined }) => {
+export const LocationList = ({ type }: { type?: LocationType }) => {
   const { useGetPaginated } = useBackend()
 
   const [latLngBounds, setLatLngBounds] = useState<

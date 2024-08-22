@@ -1,19 +1,15 @@
-import { useState } from 'react'
 import { useProfile } from '../auth/useProfile'
-import { LocationType } from '@/utils/types/location'
 import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationList } from '@/components/neighborhoods/LocationList'
-import { ChipFilter, ChipFilterBar } from '@/components/core/ChipFilterBar'
 import Icon from '@/components/core/Icon'
 import { Overline } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const CityDirectoryView = () => {
   const { user } = useProfile()
-  const [type, setType] = useState<LocationType | undefined>(undefined)
 
   return (
     <BaseLayout>
@@ -30,25 +26,7 @@ export const CityDirectoryView = () => {
         }
       />
       <Content>
-        {/*<ChipFilterBar>*/}
-        {/*  <ChipFilter*/}
-        {/*    label="All"*/}
-        {/*    selected={type === undefined}*/}
-        {/*    onClick={() => setType(undefined)}*/}
-        {/*  />*/}
-        {/*  <ChipFilter*/}
-        {/*    label="Neighborhoods"*/}
-        {/*    selected={type === LocationType.Neighborhood}*/}
-        {/*    onClick={() => setType(LocationType.Neighborhood)}*/}
-        {/*  />*/}
-        {/*  <ChipFilter*/}
-        {/*    label="Outposts"*/}
-        {/*    selected={type === LocationType.Outpost}*/}
-        {/*    onClick={() => setType(LocationType.Outpost)}*/}
-        {/*  />*/}
-        {/*</ChipFilterBar>*/}
-
-        <LocationList type={type} />
+        <LocationList />
       </Content>
     </BaseLayout>
   )
