@@ -23,6 +23,7 @@ import { MarkerData, onMoveFn } from '@/components/map/Map'
 import { MarkerClusterGroup, pinIcon } from '@/components/map/Cluster'
 import { AutoImage } from '@/components/core/AutoImage'
 import Link from 'next/link'
+import equal from 'react-fast-compare'
 
 export const MapDynamic = ({
   height,
@@ -124,6 +125,28 @@ const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
   return null
 }
 
+// this is a memoized cluster group so that large numbers of profiles are not re-rendered on every render
+const ClusterGroup = React.memo(
+  ({ profiles }: { profiles: MarkerData[] }) => {
+    console.log('ClusterGroup was rendered at', new Date().toLocaleTimeString())
+    return (
+      <MarkerClusterGroup chunkedLoading>
+        {profiles.map((p, i) => (
+          <Marker key={i} position={[p.lat, p.lng]} icon={pinIcon}>
+            <StyledPopup>
+              <MaybeLink newWindow url={p.linkUrl}>
+                {p.label}
+              </MaybeLink>
+            </StyledPopup>
+          </Marker>
+        ))}
+      </MarkerClusterGroup>
+    )
+  },
+  (prevProps, nextProps) => equal(prevProps.profiles, nextProps.profiles)
+)
+ClusterGroup.displayName = 'ClusterGroup'
+
 const Markers = ({
   locations = [],
   profiles = [],
@@ -133,19 +156,7 @@ const Markers = ({
 }) => {
   return (
     <>
-      {profiles.length && (
-        <MarkerClusterGroup chunkedLoading>
-          {profiles.map((p, i) => (
-            <Marker key={i} position={[p.lat, p.lng]} icon={pinIcon}>
-              <StyledPopup>
-                <MaybeLink newWindow url={p.linkUrl}>
-                  {p.label}
-                </MaybeLink>
-              </StyledPopup>
-            </Marker>
-          ))}
-        </MarkerClusterGroup>
-      )}
+      {profiles.length && <ClusterGroup profiles={profiles} />}
 
       {locations.map((l, i) => (
         // <Marker key={i} position={[l.lat, l.lng]} icon={neighborhoodIcon}>
