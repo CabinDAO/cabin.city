@@ -5,7 +5,7 @@ type visibility = 'always' | 'authOnly' | 'unauthOnly'
 export type MenuItemName =
   | 'home'
   | 'neighborhoods'
-  | 'members'
+  | 'census'
   | 'profile'
   | 'signOut'
   | 'signIn'
@@ -34,7 +34,7 @@ export const MenuItems: Record<MenuItemName, Config> = {
     iconSize: 2,
     visibility: 'always',
   },
-  members: {
+  census: {
     icon: 'members',
     path: '/census',
     displayText: 'Census',

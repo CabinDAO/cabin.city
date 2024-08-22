@@ -46,7 +46,7 @@ export const NavbarMobile = () => {
           <InnerContainer>
             <MobileMenuItem menuItem={'home'} user={user} />
             <MobileMenuItem menuItem={'neighborhoods'} user={user} />
-            <MobileMenuItem menuItem={'members'} user={user} />
+            <MobileMenuItem menuItem={'census'} user={user} />
             <StyledDivider />
             <MobileMenuItem menuItem={'profile'} user={user} />
             <MobileMenuItem menuItem={'signOut'} user={user} />
