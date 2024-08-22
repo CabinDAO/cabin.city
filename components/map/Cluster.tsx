@@ -1,4 +1,6 @@
 /* copied from https://github.com/akursat/react-leaflet-cluster */
+// other good repos: https://github.com/YUzhva/react-leaflet-markercluster,
+//                   https://github.com/christopherpickering/react-leaflet-markercluster
 import React from 'react'
 import {
   extendContext,

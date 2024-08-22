@@ -1,5 +1,6 @@
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
+import { getProfilesForMap } from '@/utils/profile'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
@@ -12,14 +13,7 @@ export default function Home({
 
 export const getStaticProps = (async (/*context*/) => {
   const [profiles, locations, numProfiles] = await Promise.all([
-    prisma.profile.findMany({
-      select: {
-        name: true,
-        address: {
-          select: { lat: true, lng: true },
-        },
-      },
-    }),
+    getProfilesForMap(),
     prisma.location.findMany({
       select: {
         name: true,

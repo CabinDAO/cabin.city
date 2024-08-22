@@ -316,3 +316,16 @@ export async function inviteSetError(invite: Invite, error: string) {
     data: { error: error },
   })
 }
+
+export async function getProfilesForMap() {
+  return prisma.profile.findMany({
+    select: {
+      name: true,
+      externId: true,
+      address: {
+        select: { lat: true, lng: true },
+      },
+    },
+    where: { address: { lat: { not: null } } },
+  })
+}

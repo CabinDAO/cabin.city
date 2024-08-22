@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import crypto from 'crypto'
-import { prisma } from '@/lib/prisma'
 import { withAuth } from '@/utils/api/withAuth'
 import { ProfileMappableResponse } from '@/utils/types/profile'
+import { getProfilesForMap } from '@/utils/profile'
 
 export default withAuth(handler)
 
@@ -17,24 +17,7 @@ async function handler(
     return
   }
 
-  const profiles = await prisma.profile.findMany({
-    select: {
-      name: true,
-      externId: true,
-      address: {
-        select: {
-          lat: true,
-          lng: true,
-        },
-      },
-    },
-    // where: {
-    //   address: {
-    //     lat: { not: null },
-    //     lng: { not: null },
-    //   },
-    // },
-  })
+  const profiles = await getProfilesForMap()
 
   // const etag = crypto
   //   .createHash('md5')
