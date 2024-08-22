@@ -84,6 +84,8 @@ export const eventToFragment = (event: EventWithRelations): EventFragment => {
               event.location.address.admininstrativeAreaLevel1Short,
             country: event.location.address.country,
             countryShort: event.location.address.countryShort,
+            lat: event.location.address.lat,
+            lng: event.location.address.lng,
           }
         : null,
       steward: event.location.steward

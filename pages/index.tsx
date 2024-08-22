@@ -13,8 +13,11 @@ export default function Home({
 export const getStaticProps = (async (/*context*/) => {
   const [profiles, locations, numProfiles] = await Promise.all([
     prisma.profile.findMany({
-      select: { address: true },
-      where: { address: { lat: { not: null } } },
+      select: {
+        address: {
+          select: { lat: true, lng: true },
+        },
+      },
     }),
     prisma.location.findMany({
       select: {

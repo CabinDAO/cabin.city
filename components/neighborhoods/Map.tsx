@@ -27,6 +27,7 @@ export type onMoveParams = {
     west: number
   }
   zoom: number
+  minZoom: number
 }
 
 export type onMoveFn = (params: onMoveParams) => void

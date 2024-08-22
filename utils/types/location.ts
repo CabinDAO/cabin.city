@@ -39,7 +39,12 @@ export type AddressFragmentType = z.infer<typeof AddressFragment>
 
 export type ShortAddressFragmentType = Pick<
   AddressFragmentType,
-  'locality' | 'admininstrativeAreaLevel1Short' | 'country' | 'countryShort'
+  | 'locality'
+  | 'admininstrativeAreaLevel1Short'
+  | 'country'
+  | 'countryShort'
+  | 'lat'
+  | 'lng'
 >
 
 export type LocationFragment = {

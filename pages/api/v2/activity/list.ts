@@ -129,6 +129,8 @@ const toFragments = (
                   '',
                 country: activity.location.address?.country || '',
                 countryShort: activity.location.address?.countryShort || '',
+                lat: activity.location.address?.lat || null,
+                lng: activity.location.address?.lng || null,
               },
               eventCount: 0, // TODO: implement
             }
@@ -156,6 +158,8 @@ const toFragments = (
                       country: activity.offer.location.address.country || '',
                       countryShort:
                         activity.offer.location.address.countryShort || '',
+                      lat: activity.offer.location.address.lat || null,
+                      lng: activity.offer.location.address.lng || null,
                     }
                   : null,
                 steward: activity.offer.location.steward

@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import Link from 'next/link'
 import { formatShortAddress } from '@/lib/address'
 import { ProfileFragment } from '@/utils/types/profile'
 import { monthYearFormat } from '@/utils/display-utils'

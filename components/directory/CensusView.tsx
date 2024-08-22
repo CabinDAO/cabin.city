@@ -7,6 +7,7 @@ import {
   ProfileListResponse,
   ProfileSort,
   ProfileListFragment,
+  ProfileMappableResponse,
 } from '@/utils/types/profile'
 import { DIRECTORY_SORT_FIELDS } from './directory-sort'
 import styled from 'styled-components'
@@ -19,6 +20,7 @@ import { ListEmptyState } from '@/components/core/ListEmptyState'
 import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
+import { Map, onMoveParams } from '@/components/neighborhoods/Map'
 
 export const CensusView = () => {
   const [searchInput, setSearchInput] = useState<string>('')
@@ -27,15 +29,35 @@ export const CensusView = () => {
     ProfileSort.CreatedAtDesc
   )
 
-  const { useGetPaginated } = useBackend()
+  const { useGet, useGetPaginated } = useBackend()
+
+  const { data: profilesForMapData } =
+    useGet<ProfileMappableResponse>('PROFILE_MAPPABLE')
+  const profilesForMap =
+    !profilesForMapData || 'error' in profilesForMapData
+      ? []
+      : profilesForMapData['profiles'].map((p) => {
+          return {
+            label: p.name,
+            lat: p.lat,
+            lng: p.lng,
+          }
+        })
+
+  const [latLngBounds, setLatLngBounds] = useState<
+    onMoveParams['bounds'] | undefined
+  >(undefined)
 
   const input = useMemo<ProfileListParamsType>(() => {
     return {
       // Only search if there are at least 2 characters
       searchQuery: searchValue.length >= 2 ? searchValue : '',
       sort: sortType,
+      latLngBounds: latLngBounds
+        ? `${latLngBounds.north},${latLngBounds.south},${latLngBounds.east},${latLngBounds.west}`
+        : undefined,
     }
-  }, [searchValue, sortType])
+  }, [searchValue, sortType, latLngBounds])
 
   const { data, next, rewind, noResults, hasMore } =
     useGetPaginated<ProfileListResponse>(
@@ -66,6 +88,15 @@ export const CensusView = () => {
   return (
     <BaseLayout>
       <TitleCard title="Census" icon="members"></TitleCard>
+      <Map
+        height="40rem"
+        profiles={profilesForMap}
+        onMove={(params) => {
+          setLatLngBounds(
+            params.zoom == params.minZoom ? undefined : params.bounds
+          )
+        }}
+      />
       <FilterContainer>
         <SearchContainer>
           <StyledInputText

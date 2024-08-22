@@ -41,6 +41,10 @@ async function handler(
     ? await resolveAddressOrName(params.searchQuery)
     : undefined
 
+  const bounds = params.latLngBounds
+    ? params.latLngBounds.split(',').map((s) => parseFloat(s))
+    : []
+
   const profileQuery: Prisma.ProfileFindManyArgs = {
     where: {
       name:
@@ -50,8 +54,19 @@ async function handler(
               mode: 'insensitive',
             }
           : undefined,
-      location: params.withLocation == 'true' ? { not: '' } : undefined,
-      address: params.withLocation == 'true' ? { is: null } : undefined,
+      address:
+        bounds.length === 4
+          ? {
+              lat: {
+                lte: bounds[0],
+                gte: bounds[1],
+              },
+              lng: {
+                lte: bounds[2],
+                gte: bounds[3],
+              },
+            }
+          : undefined,
       roles:
         params.roleTypes?.length || params.levelTypes?.length
           ? {
@@ -173,6 +188,8 @@ const profilesToFragments = (
               profile.address.admininstrativeAreaLevel1Short,
             country: profile.address.country,
             countryShort: profile.address.countryShort,
+            lat: profile.address.lat,
+            lng: profile.address.lng,
           }
         : null,
       roles: profile.roles.map((role) => ({

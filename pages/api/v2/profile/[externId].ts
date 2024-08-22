@@ -232,6 +232,8 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
             profile.address.admininstrativeAreaLevel1Short,
           country: profile.address.country,
           countryShort: profile.address.countryShort,
+          lat: profile.address.lat,
+          lng: profile.address.lng,
         }
       : undefined,
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,

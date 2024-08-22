@@ -9,6 +9,7 @@ enum Routes {
   PROFILE_DID = `/profile/did`, // just for auth
   PROFILE_SETUP_STATE = `/profile/setup-state`, // todo: might roll into profile edit
   PROFILE_SIGNAL_INTEREST = `/profile/signal-interest`,
+  PROFILE_MAPPABLE = '/profile/mappable',
 
   LOCATION = `/location/[externId]`,
   LOCATION_NEW = `/location/new`,

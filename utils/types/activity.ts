@@ -7,7 +7,6 @@ import {
 } from '@/utils/types/profile'
 import {
   LocationFragment,
-  LocationType,
   ShortAddressFragmentType,
 } from '@/utils/types/location'
 import { EventFragment } from '@/utils/types/event'
@@ -155,6 +154,8 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             admininstrativeAreaLevel1Short: true
             country: true
             countryShort: true
+            lat: true
+            lng: true
           }
         }
         steward: {
@@ -187,6 +188,8 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
                 admininstrativeAreaLevel1Short: true
                 country: true
                 countryShort: true
+                lat: true
+                lng: true
               }
             }
             steward: {
@@ -245,6 +248,8 @@ export const ActivityQueryInclude = {
           admininstrativeAreaLevel1Short: true,
           country: true,
           countryShort: true,
+          lat: true,
+          lng: true,
         },
       },
       steward: {
@@ -277,6 +282,8 @@ export const ActivityQueryInclude = {
               admininstrativeAreaLevel1Short: true,
               country: true,
               countryShort: true,
+              lat: true,
+              lng: true,
             },
           },
           steward: {

@@ -94,7 +94,7 @@ export const ProfileListParams = z
     roleTypes: commaSeparatedArrayOf(RoleType).optional(),
     levelTypes: commaSeparatedArrayOf(RoleLevel).optional(),
     citizenshipStatuses: commaSeparatedArrayOf(CitizenshipStatus).optional(),
-    withLocation: z.union([z.literal('true'), z.literal('false')]).optional(),
+    latLngBounds: z.string().optional(), // filter by bounds
     sort: z.nativeEnum(ProfileSort).optional(),
   })
   .merge(PageParams)
@@ -106,6 +106,17 @@ export type ProfileListResponse =
       profiles: ProfileListFragment[]
       totalCount: number
     } & Paginated)
+  | APIError
+
+export type ProfileMappableResponse =
+  | {
+      profiles: {
+        name: string
+        externId: string
+        lat: number
+        lng: number
+      }[]
+    }
   | APIError
 
 export type ProfileNewResponse =

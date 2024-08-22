@@ -31,16 +31,13 @@ import Link from 'next/link'
 export const MapDynamic = ({
   height,
   locations,
-  clusteredLocations,
+  profiles,
   onMove,
   initialZoom = 1.5,
 }: {
   height: string
-  locations: Marker[]
-  clusteredLocations?: {
-    lat: number
-    lng: number
-  }[]
+  locations?: Marker[]
+  profiles?: Marker[]
   onMove?: onMoveFn
   initialZoom?: number
 }) => {
@@ -75,7 +72,7 @@ export const MapDynamic = ({
         gestureHandling={true}
       >
         <Hooks onMove={onMove} />
-        <Markers locations={locations} profiles={clusteredLocations} />
+        <Markers locations={locations} profiles={profiles} />
 
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -123,6 +120,7 @@ const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
           west: bounds.getWest(),
         },
         zoom: map.getZoom(),
+        minZoom: map.getMinZoom(),
       })
     }
   })
@@ -131,14 +129,11 @@ const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
 }
 
 const Markers = ({
-  locations,
-  profiles,
+  locations = [],
+  profiles = [],
 }: {
-  locations: Marker[]
-  profiles?: {
-    lat: number
-    lng: number
-  }[]
+  locations?: Marker[]
+  profiles?: Marker[]
 }) => {
   const map = useMap()
 
@@ -149,11 +144,12 @@ const Markers = ({
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   })
-  if (profiles) {
+
+  if (profiles.length) {
     const profileMarkers = L.markerClusterGroup()
-    profiles.forEach((l) => {
-      const marker = L.marker([l.lat, l.lng], { icon: pinIcon })
-      // marker.bindPopup('name goes here')
+    profiles.forEach((p) => {
+      const marker = L.marker([p.lat, p.lng], { icon: pinIcon })
+      // marker.bindPopup()
       profileMarkers.addLayer(marker)
     })
     map.addLayer(profileMarkers)

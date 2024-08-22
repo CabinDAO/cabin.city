@@ -37,7 +37,7 @@ export const MapSection = ({
         height="80vh"
         initialZoom={width > 1200 ? 3 : 2}
         locations={data.locations}
-        clusteredLocations={data.profiles}
+        profiles={data.profiles}
         onMove={onMove}
       />
     </>
