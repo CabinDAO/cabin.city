@@ -62,6 +62,7 @@ async function handler(
     privyDID,
     walletAddress: params.walletAddress,
     name: params.name,
+    bio: params.bio,
     email: params.email,
     address: params.address,
     avatarUrl: params.avatarUrl,

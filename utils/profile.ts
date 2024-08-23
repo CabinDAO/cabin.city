@@ -26,6 +26,7 @@ type ProfileCreateParams = {
   walletAddress?: string
   name: string
   email: string
+  bio?: string
   address?: ProfileAddressFragmentType
   avatarUrl?: string
   invite: Prisma.InviteGetPayload<null> | null
@@ -62,7 +63,7 @@ export async function createProfile(
       privyDID: params.privyDID,
       name: params.name,
       email: params.email,
-      bio: '',
+      bio: params.bio || '',
       location: '',
       inviteCode: randomInviteCode(),
       avatarUrl: params.avatarUrl || '',

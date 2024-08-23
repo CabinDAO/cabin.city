@@ -14,12 +14,14 @@ export const AvatarSetup = ({
   avatarUrl,
   onSelected,
   error = false,
+  required = false,
 }: {
   avatarUrl: ProfileEditParamsType['data']['avatarUrl']
   onSelected: (
     avatarUrl: NonNullable<ProfileEditParamsType['data']['avatarUrl']>
   ) => void
   error?: boolean
+  required?: boolean
 }) => {
   const { deviceSize } = useDeviceSize()
   const [uploading, setUploading] = useState(false)
@@ -69,7 +71,7 @@ export const AvatarSetup = ({
             variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
             isFullWidth
           >
-            Upload profile photo
+            Upload profile photo {required ? '*' : ''}
           </AvatarButton>
         </FileUpload>
       )}

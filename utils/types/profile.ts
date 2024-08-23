@@ -249,6 +249,7 @@ export const ProfileNewParams = z
   .object({
     walletAddress: WalletAddress.optional(),
     name: z.string(),
+    bio: z.string(),
     email: z.string().email(),
     address: ProfileAddressFragment,
     avatarUrl: z.string().optional(),

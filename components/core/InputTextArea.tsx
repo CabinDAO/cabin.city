@@ -45,7 +45,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   placeholder?: string
   error?: boolean
   disabled?: boolean
-  message?: string
+  errorMessage?: string
   startAdornment?: ReactNode
   endAdornment?: ReactNode
   helperText?: string
@@ -64,7 +64,7 @@ export const InputTextArea = ({
   value,
   error,
   disabled,
-  message,
+  errorMessage,
   endAdornment,
   helperText,
   textSize = 'medium',
@@ -89,7 +89,7 @@ export const InputTextArea = ({
       filled={!!value}
       error={error}
       disabled={disabled}
-      errorMessage={message}
+      errorMessage={errorMessage}
       helperText={helperText}
       endAdornment={endAdornment}
       onClick={handleOnParentClick}

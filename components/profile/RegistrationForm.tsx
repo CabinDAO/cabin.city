@@ -18,9 +18,12 @@ import {
   MAX_DISPLAY_NAME_LENGTH,
   isValidAddress,
   isValidName,
+  MAX_BIO_LENGTH,
+  isValidBio,
 } from './validations'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { ADDRESS_ERROR } from '@/utils/validate'
+import { ADDRESS_ERROR, BIO_ERROR } from '@/utils/validate'
+import { InputTextArea } from '@/components/core/InputTextArea'
 
 export function RegistrationForm({
   onSubmit,
@@ -34,10 +37,12 @@ export function RegistrationForm({
 
   const [avatarUrl, setAvatarUrl] = useState('')
   const [name, setName] = useState('')
+  const [bio, setBio] = useState('')
   const [address, setAddress] = useState<ProfileAddressFragmentType>()
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
 
   const [canShowNameError, setCanShowNameError] = useState(false)
+  const [canShowBioError, setCanShowBioError] = useState(false)
   const [canShowAddressError, setCanShowAddressError] = useState(false)
   const [canShowAvatarError, setCanShowAvatarError] = useState(false)
 
@@ -83,6 +88,11 @@ export function RegistrationForm({
     setName(e.target.value)
   }
 
+  const onBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCanShowBioError(false)
+    setBio(e.target.value)
+  }
+
   const onAddressChange = (address: ProfileAddressFragmentType) => {
     setCanShowAddressError(false)
     setAddress(address)
@@ -95,15 +105,23 @@ export function RegistrationForm({
 
   const handleSubmit = async () => {
     setCanShowNameError(true)
+    setCanShowBioError(true)
     setCanShowAddressError(true)
     setCanShowAvatarError(true)
 
-    if (isValidName(name) && address && isValidAddress(address) && avatarUrl) {
+    if (
+      isValidName(name) &&
+      isValidBio(bio) &&
+      address &&
+      isValidAddress(address) &&
+      avatarUrl
+    ) {
       if (externalUser?.email?.address) {
         setSubmitted(true)
         onSubmit({
           email: email.trim(),
           name: name.trim(),
+          bio: bio.trim(),
           address,
           avatarUrl: avatarUrl,
           subscribeToNewsletter,
@@ -120,6 +138,7 @@ export function RegistrationForm({
         onSelected={onAvatarChange}
         avatarUrl={avatarUrl}
         error={canShowAvatarError && !avatarUrl}
+        required
       />
       <InputGroup>
         <InputContainer>
@@ -135,6 +154,20 @@ export function RegistrationForm({
           />
         </InputContainer>
       </InputGroup>
+
+      <InputContainer>
+        <InputTextArea
+          label="Bio"
+          required
+          disabled={!!user || submitted}
+          value={bio}
+          onChange={onBioChange}
+          helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
+          placeholder={'What do you want your neighbors to know about you?'}
+          error={canShowBioError && !isValidBio(bio)}
+          errorMessage={BIO_ERROR}
+        />
+      </InputContainer>
 
       <InputGroup>
         <InputContainer>

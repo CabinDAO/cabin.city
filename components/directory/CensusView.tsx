@@ -35,7 +35,7 @@ export const CensusView = () => {
         <EmptyState
           icon="alert"
           title="Cabin members only"
-          description="You must be logged in to view the census."
+          description="You must log in to see the census. But hey, it's free and easy to make an account!"
           customCta={() => (
             <AuthenticatedLink href={'/census'}>
               <Button variant={'secondary'}>Login or sign up</Button>

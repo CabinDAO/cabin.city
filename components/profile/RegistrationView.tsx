@@ -22,6 +22,7 @@ import { RegistrationForm } from './RegistrationForm'
 export interface RegistrationParams {
   email: string
   name: string
+  bio: string
   address: ProfileAddressFragmentType
   avatarUrl: string
   subscribeToNewsletter: boolean
@@ -66,6 +67,7 @@ export const RegistrationView = () => {
       const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
         walletAddress: walletAddress ? (walletAddress as Address) : undefined,
         name: params.name,
+        bio: params.bio,
         email: externalUser.email?.address || params.email,
         address: params.address,
         avatarUrl: params.avatarUrl,
