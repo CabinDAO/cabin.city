@@ -1,61 +1,79 @@
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import {
   formatContactField,
   getUrlFromContactField,
 } from '@/utils/display-utils'
-import styled from 'styled-components'
-import { CopyToClipboard } from '../../core/CopyToClipboard'
-import { Caption } from '../../core/Typography'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { ProfileFragment } from '@/utils/types/profile'
+import styled from 'styled-components'
+import { fonts } from '@/components/core/Typography'
+import Icon from '@/components/core/Icon'
+import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 
-interface ProfileContactListProps {
-  contactFields: ProfileFragment['contactFields']
-}
 export const ProfileContactList = ({
   contactFields,
-}: ProfileContactListProps) => {
+  bigger,
+  onDelete,
+}: {
+  contactFields: ProfileFragment['contactFields']
+  bigger?: boolean
+  onDelete?: (index: number) => void
+}) => {
   return (
-    <ProfileListContainer count={contactFields.length}>
+    <Container count={contactFields.length}>
       {contactFields.map((field, i) => (
         <>
-          <Caption key={`caption_${i}`} style={{ flexGrow: 0 }}>
-            {field.type}
-          </Caption>
+          <LabelContainer>
+            {onDelete && (
+              <Icon
+                name="trash"
+                size={1.4}
+                style={{ opacity: '0.75', cursor: 'pointer' }}
+                onClick={() => onDelete(i)}
+              />
+            )}
+            <Label key={`caption_${i}`} bigger={bigger}>
+              {field.type}
+            </Label>
+          </LabelContainer>
           <div></div>
-          <ContactField key={`value_${i}`} field={field} />
+          <ContactField key={`value_${i}`} field={field} bigger={bigger} />
           <div></div>
         </>
       ))}
-    </ProfileListContainer>
+    </Container>
   )
 }
 
-interface ContactFieldProps {
+const ContactField = ({
+  field,
+  bigger,
+}: {
   field: ProfileFragment['contactFields'][0]
-}
-
-const ContactField = ({ field }: ContactFieldProps) => {
+  bigger?: boolean
+}) => {
   const { deviceSize } = useDeviceSize()
   const url = getUrlFromContactField(field)
 
   if (url) {
     return (
-      <a href={url} target="_blank" rel="noopener nofollow noreferrer">
-        <Caption emphasized>{formatContactField(field)}</Caption>
-      </a>
+      <ValueContainer>
+        <a href={url} target="_blank" rel="noopener nofollow noreferrer">
+          <Value bigger={bigger}>{formatContactField(field)}</Value>
+        </a>
+      </ValueContainer>
     )
   } else {
     return (
       <CopyToClipboard text={field.value}>
-        <Caption emphasized>
+        <Value bigger={bigger}>
           {formatContactField(field, deviceSize !== 'tablet')}
-        </Caption>
+        </Value>
       </CopyToClipboard>
     )
   }
 }
 
-const ProfileListContainer = styled.div<{ count: number }>`
+const Container = styled.div<{ count: number }>`
   display: grid;
   grid-template-rows: repeat(
     ${({ count }) => count},
@@ -63,10 +81,45 @@ const ProfileListContainer = styled.div<{ count: number }>`
   );
   width: 100%;
   word-break: break-word;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 
   ${({ theme }) => theme.bp.md} {
     grid-template-rows: initial;
     grid-template-columns: 10rem 1.6rem 1fr 0;
     row-gap: 1.6rem;
   }
+`
+
+const LabelContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1.6rem;
+  max-width: 100%;
+  flex-grow: 0;
+  align-items: center;
+`
+
+const Label = styled.span<{ bigger?: boolean }>`
+  font-family: ${fonts.inter};
+  font-weight: 400;
+  line-height: 1.23;
+  font-size: ${({ bigger }) => (bigger ? '1.6rem' : '1.4rem')};
+  opacity: 0.75;
+`
+
+const ValueContainer = styled.div`
+  width: min-content;
+  white-space: nowrap;
+  display: flex;
+  flex-direction: row;
+  gap: 1.6rem;
+  max-width: 100%;
+`
+
+const Value = styled.span<{ bigger?: boolean }>`
+  font-family: ${fonts.inter};
+  font-weight: 500;
+  line-height: 1.23;
+  font-size: ${({ bigger }) => (bigger ? '1.6rem' : '1.4rem')};
 `

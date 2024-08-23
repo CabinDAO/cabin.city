@@ -82,6 +82,18 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
 const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
   const [contactList, setContactList] = useState<ContactFragmentType[]>([])
 
+  const initialSelections = user.contactFields.map((cf) => ({
+    type: cf.type,
+    value: cf.value,
+  }))
+
+  useEffect(() => {
+    if (initialSelections.length) {
+      setContactList(initialSelections)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     if (contactList.length) {
       onChange({ ...profileEditParams, contactFields: contactList })
@@ -91,11 +103,7 @@ const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
 
   return (
     <UpdateSection title="Contact">
-      <ContactInput
-        profile={user}
-        contactList={contactList}
-        setContactList={setContactList}
-      />
+      <ContactInput contactList={contactList} setContactList={setContactList} />
     </UpdateSection>
   )
 }

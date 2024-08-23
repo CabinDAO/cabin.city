@@ -1,10 +1,27 @@
 import { useCallback } from 'react'
-import { usePrivy } from '@privy-io/react-auth'
+import { usePrivy, useLogin } from '@privy-io/react-auth'
 import analytics from '@/lib/googleAnalytics/analytics'
 
 export const useConfirmLoggedIn = (logAnalyticsEvent?: boolean) => {
   const { authenticated, ready } = usePrivy()
-  const { login } = usePrivy()
+  const { login } = useLogin({
+    onComplete: (
+      user,
+      isNewUser,
+      wasAlreadyAuthenticated,
+      loginMethod,
+      linkedAccount
+    ) => {
+      console.log(
+        'LOGIN',
+        user,
+        isNewUser,
+        wasAlreadyAuthenticated,
+        loginMethod,
+        linkedAccount
+      )
+    },
+  })
 
   const confirmLoggedIn = useCallback(
     (onConfirmed?: VoidFunction) => {

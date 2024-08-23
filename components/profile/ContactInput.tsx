@@ -1,9 +1,5 @@
-import {
-  ContactFieldType,
-  ContactFragmentType,
-  MeFragment,
-} from '@/utils/types/profile'
-import { SetStateAction, useEffect } from 'react'
+import { ContactFieldType, ContactFragmentType } from '@/utils/types/profile'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Dropdown } from '@/components/core/Dropdown'
@@ -11,192 +7,111 @@ import Icon from '@/components/core/Icon'
 import { InputText } from '@/components/core/InputText'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
-import {
-  contactFieldDisplayNameMapping,
-  contactFieldPlaceholderMapping,
-} from './setup-profile/step-configuration'
 import { sanitizeContactValue } from '@/components/profile/validations'
+import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
 
-const contactOptions = Object.values(ContactFieldType).map(
-  (type) =>
-    ({
-      label: type,
-      value: type,
-    } as SelectOption)
+const contactTypes = Object.values(ContactFieldType)
+const dropdownOptions = contactTypes.map(
+  (type) => ({ label: type, value: type } as SelectOption)
 )
 
-interface ContactInputProps {
-  profile: MeFragment
-  contactList: ContactFragmentType[]
-  setContactList: (contactList: SetStateAction<ContactFragmentType[]>) => void
-}
-
 export const ContactInput = ({
-  profile,
   contactList,
   setContactList,
-}: ContactInputProps) => {
+}: {
+  contactList: ContactFragmentType[]
+  setContactList: (contactList: ContactFragmentType[]) => void
+}) => {
   const { deviceSize } = useDeviceSize()
+  const [value, setValue] = useState('')
+  const [contactTypeIndex, setContactTypeIndex] = useState(0)
 
-  const initialSelections = profile?.contactFields?.map((cf) => ({
-    type: cf.type,
-    value: cf.value,
-  }))
+  const addContact = () => {
+    const { sanitizedValue, error } = sanitizeContactValue(
+      contactTypes[contactTypeIndex],
+      value
+    )
 
-  useEffect(() => {
-    if (initialSelections.length) {
-      setContactList(initialSelections)
-    } else {
-      setContactList([
-        {
-          type: contactOptions[0].label as ContactFieldType,
-          value: '',
-        },
-      ])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const handleOnSelect = (value: SelectOption, position: number) => {
-    setContactList((prev) => {
-      const newContactList = [...prev]
-      newContactList[position].type = value.label as ContactFieldType
-      return newContactList
-    })
+    setContactList([
+      ...contactList,
+      {
+        type: contactTypes[contactTypeIndex],
+        value: error ? value : sanitizedValue,
+      },
+    ])
+    setContactTypeIndex(0)
   }
 
-  const addContactList = () => {
-    setContactList((prev) => {
-      const newContactList = [...prev]
-      newContactList.push({
-        type: contactOptions[0].label as ContactFieldType,
-        value: '',
-      })
-      return newContactList
-    })
-  }
-
-  const deleteContactList = (position: number) => {
-    setContactList((prev) => {
-      const newContactList = [...prev]
-
-      newContactList.splice(position, 1)
-      return newContactList
-    })
-  }
-
-  const handleInputTextChange = (value: string, position: number) => {
-    setContactList((prev) => {
-      const newContactList = [...prev]
-      newContactList[position].value = value
-      return newContactList
-    })
-  }
-
-  const sanitizeValue = (
-    type: ContactFieldType,
-    value: string,
-    position: number
-  ) => {
-    const { sanitizedValue, error } = sanitizeContactValue(type, value)
-    if (!error) {
-      handleInputTextChange(sanitizedValue, position)
-    }
+  const deleteContact = (index: number) => {
+    const newContactList = [...contactList]
+    newContactList.splice(index, 1)
+    setContactList(newContactList)
   }
 
   return (
-    <SetupStepContainer>
-      <ContactTypeGroup>
-        {contactList.map((contact, index) => {
-          return (
-            <ContactTypeContainer key={index}>
-              <ContactTypePair>
-                <Dropdown
-                  placeholder="Select Contact Type"
-                  selectedOption={contactOptions.find(
-                    (co) => co.value === contact.type
-                  )}
-                  onSelect={(value: SelectOption) => {
-                    handleOnSelect(value, index)
-                  }}
-                  label="Contact Type"
-                  options={contactOptions}
-                />
-                <InputText
-                  label={contactFieldDisplayNameMapping[contact.type]}
-                  placeholder={contactFieldPlaceholderMapping[contact.type]}
-                  value={contact.value}
-                  type={
-                    contact.type === ContactFieldType.Email ? 'email' : 'text'
-                  }
-                  onChange={(e) => handleInputTextChange(e.target.value, index)}
-                  onBlur={(e) =>
-                    sanitizeValue(contact.type, e.target.value, index)
-                  }
-                />
-              </ContactTypePair>
-              <IconContainer onClick={() => deleteContactList(index)}>
-                {contactList.length > 1 ? (
-                  <Icon name="trash" size={1.6} />
-                ) : null}
-              </IconContainer>
-            </ContactTypeContainer>
-          )
-        })}
-      </ContactTypeGroup>
-      <ContactLinkButton
-        variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-        onClick={addContactList}
-      >
-        Add link
-      </ContactLinkButton>
-    </SetupStepContainer>
+    <Container>
+      <ProfileContactList
+        contactFields={contactList}
+        bigger
+        onDelete={deleteContact}
+      />
+      <NewContact>
+        <Inputs>
+          <Dropdown
+            placeholder="Select Contact Type"
+            selectedOption={dropdownOptions[contactTypeIndex]}
+            onSelect={(option) => {
+              setContactTypeIndex(dropdownOptions.indexOf(option))
+            }}
+            label="Contact Type"
+            options={dropdownOptions}
+          />
+          <InputText
+            label={
+              contactFieldDisplayNameMapping[contactTypes[contactTypeIndex]]
+            }
+            placeholder={
+              contactFieldPlaceholderMapping[contactTypes[contactTypeIndex]]
+            }
+            value={value}
+            type={
+              contactTypes[contactTypeIndex] === ContactFieldType.Email
+                ? 'email'
+                : 'text'
+            }
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </Inputs>
+        <Button
+          style={{ width: 'fit-content' }}
+          variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
+          onClick={addContact}
+        >
+          <Icon name={'plus'} size={1.6} />
+          Add Contact
+        </Button>
+      </NewContact>
+    </Container>
   )
 }
 
-const SetupStepContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  gap: 2.4rem;
+  gap: 3rem;
 `
 
-const ContactTypeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+const NewContact = styled.div`
   width: 100%;
-  gap: 2rem;
-`
-
-const ContactTypeGroup = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
   gap: 1.6rem;
 `
 
-const IconContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-self: flex-end;
-  justify-content: center;
-  margin-top: 2rem;
-  cursor: pointer;
-  width: 1.7rem;
-  margin-bottom: 1.9rem;
-
-  ${({ theme }) => theme.bp.md} {
-    align-items: center;
-    align-self: center;
-    margin-bottom: 0;
-  }
-`
-
-const ContactTypePair = styled.div`
+const Inputs = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -204,15 +119,31 @@ const ContactTypePair = styled.div`
 
   ${({ theme }) => theme.bp.md} {
     gap: 2.4rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    flex-direction: row;
+    align-items: flex-end;
   }
 `
 
-const ContactLinkButton = styled(Button)`
-  width: 100%;
+const contactFieldDisplayNameMapping = {
+  [ContactFieldType.Email]: 'Email',
+  [ContactFieldType.Discord]: 'Discord Username',
+  [ContactFieldType.Twitter]: 'Twitter Username',
+  [ContactFieldType.Instagram]: 'Instagram Username',
+  [ContactFieldType.LinkedIn]: 'LinkedIn URL',
+  [ContactFieldType.Telegram]: 'Telegram Username',
+  [ContactFieldType.Lens]: 'Lens Username',
+  [ContactFieldType.Website]: 'Website URL',
+  [ContactFieldType.Farcaster]: 'Farcaster Username',
+}
 
-  ${({ theme }) => theme.bp.md} {
-    width: auto;
-  }
-`
+const contactFieldPlaceholderMapping = {
+  [ContactFieldType.Email]: 'jon@cabin.city',
+  [ContactFieldType.Discord]: 'cabin',
+  [ContactFieldType.Twitter]: 'cabindotcity',
+  [ContactFieldType.Instagram]: 'cabindotcity',
+  [ContactFieldType.LinkedIn]: 'https://www.linkedin.com/in/cabin/',
+  [ContactFieldType.Telegram]: 'cabin',
+  [ContactFieldType.Lens]: 'cabin',
+  [ContactFieldType.Website]: 'https://cabin.city',
+  [ContactFieldType.Farcaster]: 'cabin',
+}
