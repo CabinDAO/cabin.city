@@ -14,6 +14,7 @@ export const FileUpload = ({
   removeEnabled = false,
   className,
   isFullWidth,
+  disabled = false,
 }: {
   onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
@@ -23,6 +24,7 @@ export const FileUpload = ({
   children: React.ReactNode
   className?: string
   isFullWidth?: boolean
+  disabled?: boolean
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { handleChange } = useFilesUpload({
@@ -32,6 +34,7 @@ export const FileUpload = ({
   })
 
   const handleButtonClick = () => {
+    if (disabled) return
     if (removeEnabled) {
       onFilesUploaded({}).then()
     } else {

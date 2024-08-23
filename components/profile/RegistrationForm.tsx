@@ -2,28 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { usePrivy } from '@privy-io/react-auth'
 import { useProfile } from '@/components/auth/useProfile'
 import { useExternalUser } from '@/components/auth/useExternalUser'
-import {
-  ProfileAddressFragmentType,
-  toFullAddress,
-  toProfileAddress,
-} from '@/utils/types/profile'
+import { ProfileAddressFragmentType } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Checkbox } from '@/components/core/Checkbox'
-import { InputText } from '@/components/core/InputText'
-import { AvatarSetup } from './AvatarSetup'
 import { RegistrationParams } from './RegistrationView'
-import {
-  INVALID_NAME_MESSAGE,
-  MAX_DISPLAY_NAME_LENGTH,
-  isValidAddress,
-  isValidName,
-  MAX_BIO_LENGTH,
-  isValidBio,
-} from './validations'
-import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
-import { ADDRESS_ERROR, BIO_ERROR } from '@/utils/validate'
-import { InputTextArea } from '@/components/core/InputTextArea'
+import { isValidAddress, isValidName, isValidBio } from './validations'
+import { AboutInput } from '@/components/profile/AboutInput'
 
 export function RegistrationForm({
   onSubmit,
@@ -41,11 +26,7 @@ export function RegistrationForm({
   const [address, setAddress] = useState<ProfileAddressFragmentType>()
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
 
-  const [canShowNameError, setCanShowNameError] = useState(false)
-  const [canShowBioError, setCanShowBioError] = useState(false)
-  const [canShowAddressError, setCanShowAddressError] = useState(false)
-  const [canShowAvatarError, setCanShowAvatarError] = useState(false)
-
+  const [canShowErrors, setCanShowErrors] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
   useEffect(() => {
@@ -83,31 +64,8 @@ export function RegistrationForm({
     // submitted,
   ])
 
-  const onNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCanShowNameError(false)
-    setName(e.target.value)
-  }
-
-  const onBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCanShowBioError(false)
-    setBio(e.target.value)
-  }
-
-  const onAddressChange = (address: ProfileAddressFragmentType) => {
-    setCanShowAddressError(false)
-    setAddress(address)
-  }
-
-  const onAvatarChange = (avatarUrl: string) => {
-    setCanShowAvatarError(false)
-    setAvatarUrl(avatarUrl)
-  }
-
   const handleSubmit = async () => {
-    setCanShowNameError(true)
-    setCanShowBioError(true)
-    setCanShowAddressError(true)
-    setCanShowAvatarError(true)
+    setCanShowErrors(true)
 
     if (
       isValidName(name) &&
@@ -134,55 +92,19 @@ export function RegistrationForm({
 
   return (
     <Container>
-      <AvatarSetup
-        onSelected={onAvatarChange}
-        avatarUrl={avatarUrl}
-        error={canShowAvatarError && !avatarUrl}
-        required
+      <AboutInput
+        values={{
+          name,
+          bio,
+          address,
+          avatarUrl,
+        }}
+        onNameChange={setName}
+        onBioChange={setBio}
+        onAddressChange={setAddress}
+        onAvatarUrlChange={setAvatarUrl}
+        canShowErrors={canShowErrors}
       />
-      <InputGroup>
-        <InputContainer>
-          <InputText
-            required
-            disabled={!!user || submitted}
-            label="Name"
-            value={name}
-            onChange={onNameChange}
-            helperText={`${name.length}/${MAX_DISPLAY_NAME_LENGTH}`}
-            error={canShowNameError && !isValidName(name)}
-            errorMessage={INVALID_NAME_MESSAGE}
-          />
-        </InputContainer>
-      </InputGroup>
-
-      <InputContainer>
-        <InputTextArea
-          label="Bio"
-          required
-          disabled={!!user || submitted}
-          value={bio}
-          onChange={onBioChange}
-          helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
-          placeholder={'What do you want your neighbors to know about you?'}
-          error={canShowBioError && !isValidBio(bio)}
-          errorMessage={BIO_ERROR}
-        />
-      </InputContainer>
-
-      <InputGroup>
-        <InputContainer>
-          <LocationAutocompleteInput
-            disabled={!!user || submitted}
-            initialValue={toFullAddress(address)}
-            onLocationChange={(address) =>
-              onAddressChange(toProfileAddress(address))
-            }
-            bottomHelpText={'What city do you spend most of your time in?'}
-            error={canShowAddressError && !isValidAddress(address)}
-            errorMessage={ADDRESS_ERROR}
-          />
-        </InputContainer>
-      </InputGroup>
 
       <InputGroup>
         <SubscribeContainer>
@@ -255,15 +177,6 @@ const SubmitButton = styled(Button)`
     right: 0;
     top: 0;
   }
-`
-
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100%;
-  gap: 0.6rem;
 `
 
 const SubscribeContainer = styled.div`

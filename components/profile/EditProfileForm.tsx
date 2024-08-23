@@ -59,10 +59,12 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   return (
     <UpdateSection title="About">
       <AboutInput
-        name={name}
-        bio={bio}
-        address={address}
-        avatarUrl={avatarUrl}
+        values={{
+          name,
+          bio,
+          address,
+          avatarUrl,
+        }}
         onNameChange={(name) => onChange({ ...profileEditParams, name })}
         onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
         onAddressChange={(address) =>
@@ -71,6 +73,7 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
         onAvatarUrlChange={(avatarUrl) =>
           onChange({ ...profileEditParams, avatarUrl })
         }
+        canShowErrors={true}
       />
     </UpdateSection>
   )

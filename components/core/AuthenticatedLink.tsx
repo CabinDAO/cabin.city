@@ -6,21 +6,19 @@ import { useProfile } from '../auth/useProfile'
 import { useRouter } from 'next/router'
 import { useExternalUser } from '../auth/useExternalUser'
 
-interface AuthenticatedLinkProps {
-  href?: string
-  children: React.ReactNode
-  className?: string
-  logSignInEvent?: boolean
-  onClick?: VoidFunction
-}
-
 export const AuthenticatedLink = ({
   href,
   children,
   className,
   logSignInEvent,
   onClick,
-}: AuthenticatedLinkProps) => {
+}: {
+  href?: string
+  children: React.ReactNode
+  className?: string
+  logSignInEvent?: boolean
+  onClick?: VoidFunction
+}) => {
   const { confirmLoggedIn } = useConfirmLoggedIn(logSignInEvent)
   const { refetchProfile } = useProfile()
   const { externalUser } = useExternalUser()

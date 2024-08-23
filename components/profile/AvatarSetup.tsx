@@ -15,6 +15,7 @@ export const AvatarSetup = ({
   onSelected,
   error = false,
   required = false,
+  disabled = false,
 }: {
   avatarUrl: ProfileEditParamsType['data']['avatarUrl']
   onSelected: (
@@ -22,12 +23,15 @@ export const AvatarSetup = ({
   ) => void
   error?: boolean
   required?: boolean
+  disabled?: boolean
 }) => {
   const { deviceSize } = useDeviceSize()
   const [uploading, setUploading] = useState(false)
   const { hideModal } = useModal()
 
   const handleStartUpload = () => {
+    if (disabled) return
+
     setUploading(true)
     hideModal()
   }
@@ -35,6 +39,8 @@ export const AvatarSetup = ({
   const handlePhotoUploaded = async (
     fileNameIpfsHashMap: FileNameIpfsHashMap
   ) => {
+    if (disabled) return
+
     const ipfsHash = Object.values(fileNameIpfsHashMap)[0]
 
     if (ipfsHash) {
@@ -44,6 +50,11 @@ export const AvatarSetup = ({
 
       hideModal()
     }
+  }
+
+  const clearSelection = () => {
+    if (disabled) return
+    onSelected('')
   }
 
   return (
@@ -56,7 +67,7 @@ export const AvatarSetup = ({
       {avatarUrl ? (
         <AvatarButton
           variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-          onClick={() => onSelected('')}
+          onClick={() => clearSelection()}
         >
           Remove photo
         </AvatarButton>
@@ -66,10 +77,12 @@ export const AvatarSetup = ({
           onStartUploading={handleStartUpload}
           onFilesUploaded={handlePhotoUploaded}
           isFullWidth={deviceSize === 'mobile'}
+          disabled={disabled}
         >
           <AvatarButton
             variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
             isFullWidth
+            disabled={disabled}
           >
             Upload profile photo {required ? '*' : ''}
           </AvatarButton>

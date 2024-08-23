@@ -54,14 +54,17 @@ export const AboutStep = ({ stepName, onBack, onNext }: StepProps) => {
   return (
     <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
       <AboutInput
-        name={name}
+        values={{
+          name,
+          bio,
+          address,
+          avatarUrl,
+        }}
         onNameChange={setName}
-        bio={bio}
         onBioChange={setBio}
-        address={address}
         onAddressChange={setAddress}
-        avatarUrl={avatarUrl}
         onAvatarUrlChange={setAvatarUrl}
+        canShowErrors={true}
       />
     </SetupStepForm>
   )

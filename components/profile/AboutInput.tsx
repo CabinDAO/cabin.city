@@ -4,13 +4,14 @@ import {
   toFullAddress,
   toProfileAddress,
 } from '@/utils/types/profile'
-import { ADDRESS_ERROR } from '@/utils/validate'
+import { ADDRESS_ERROR, BIO_ERROR } from '@/utils/validate'
 import {
   MAX_BIO_LENGTH,
   isValidAddress,
   isValidBio,
   isValidName,
   MAX_DISPLAY_NAME_LENGTH,
+  INVALID_NAME_MESSAGE,
 } from './validations'
 import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
@@ -18,27 +19,28 @@ import { InputTextArea } from '@/components/core/InputTextArea'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 
-interface AboutInputProps {
-  name: string
-  onNameChange: (bio: string) => void
-  bio: string
-  onBioChange: (bio: string) => void
-  address: ProfileAddressFragmentType | undefined
-  onAddressChange: (location: ProfileAddressFragmentType) => void
-  avatarUrl: string
-  onAvatarUrlChange: (avatarUrl: string) => void
-}
-
 export const AboutInput = ({
-  name,
-  bio,
-  address,
+  values,
   onNameChange,
   onBioChange,
   onAddressChange,
-  avatarUrl,
   onAvatarUrlChange,
-}: AboutInputProps) => {
+  canShowErrors,
+  disabled = false,
+}: {
+  values: {
+    name: string
+    bio: string
+    address: ProfileAddressFragmentType | undefined
+    avatarUrl: string
+  }
+  onNameChange: (bio: string) => void
+  onBioChange: (bio: string) => void
+  onAddressChange: (location: ProfileAddressFragmentType) => void
+  onAvatarUrlChange: (avatarUrl: string) => void
+  canShowErrors: boolean
+  disabled?: boolean
+}) => {
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onNameChange(e.target.value)
   }
@@ -47,44 +49,63 @@ export const AboutInput = ({
     onBioChange(e.target.value)
   }
 
+  const handleAddressChange = (address: ProfileAddressFragmentType) => {
+    onAddressChange(address)
+  }
+
+  const handleAvatarChange = (avatarUrl: string) => {
+    onAvatarUrlChange(avatarUrl)
+  }
+
   return (
-    <SetupStepContainer>
-      <AvatarSetup avatarUrl={avatarUrl} onSelected={onAvatarUrlChange} />
+    <Container>
+      <AvatarSetup
+        avatarUrl={values.avatarUrl}
+        onSelected={handleAvatarChange}
+        error={canShowErrors && !values.avatarUrl}
+        disabled={disabled}
+      />
+
       <InputText
         label="Name"
         required
-        value={name}
-        helperText={`${name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
+        disabled={disabled}
+        value={values.name}
+        helperText={`${values.name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
         onChange={handleNameChange}
-        error={!isValidName(name)}
+        error={canShowErrors && !isValidName(values.name)}
+        errorMessage={INVALID_NAME_MESSAGE}
       />
 
       <InputTextArea
         label="Bio"
         required
-        value={bio}
-        helperText={`${bio.length}/${MAX_BIO_LENGTH}`}
+        disabled={disabled}
+        placeholder={'What do you want your neighbors to know about you?'}
+        value={values.bio}
         onChange={handleBioChange}
-        error={!isValidBio(bio)}
+        helperText={`${values.bio.length}/${MAX_BIO_LENGTH}`}
+        error={canShowErrors && !isValidBio(values.bio)}
+        errorMessage={BIO_ERROR}
       />
 
       <LocationAutocompleteInput
-        initialValue={toFullAddress(address)}
+        disabled={disabled}
+        initialValue={toFullAddress(values.address)}
         bottomHelpText={'What city do you spend most of your time in?'}
         onLocationChange={(address) =>
-          onAddressChange(toProfileAddress(address))
+          handleAddressChange(toProfileAddress(address))
         }
-        error={!isValidAddress(address)}
+        error={canShowErrors && !isValidAddress(values.address)}
         errorMessage={ADDRESS_ERROR}
       />
-    </SetupStepContainer>
+    </Container>
   )
 }
 
-const SetupStepContainer = styled.div`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
   width: 100%;
   gap: 1.6rem;
 `
