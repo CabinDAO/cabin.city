@@ -33,12 +33,14 @@ export const BaseLayout = ({
   const { user } = useProfile()
   const hideMobileNav = landingPage && !user
 
-  const showNav = !(hideNavAndFooter || (isMobile && hideMobileNav))
+  const hideNav = hideNavAndFooter || (isMobile && hideMobileNav)
 
   const content = landingPage ? (
     children
   ) : (
-    <BaseContainer maxWidth={'default'}>{children}</BaseContainer>
+    <BaseContainer maxWidth={'default'} noNav={hideNav}>
+      {children}
+    </BaseContainer>
   )
 
   return (
@@ -46,7 +48,7 @@ export const BaseLayout = ({
       {displayLaunchBanner && <LaunchBanner />}
       <PushFooterToBottom noFooterGap={noFooterGap}>
         <NavAndContent>
-          {showNav && (isMobile ? <NavbarMobile /> : <Navbar />)}
+          {!hideNav && (isMobile ? <NavbarMobile /> : <Navbar />)}
           <MainContent noTopPadding={noTopPadding}>{content}</MainContent>
         </NavAndContent>
         {!hideNavAndFooter && <Footer />}

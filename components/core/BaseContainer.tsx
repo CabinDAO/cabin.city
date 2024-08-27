@@ -11,28 +11,15 @@ type widthType =
 
 interface BaseContainerProps extends HTMLAttributes<HTMLDivElement> {
   maxWidth: widthType | number
+  noNav?: boolean
   children?: React.ReactNode
 }
 
 const navGap = 2.4
 
-const margins: Record<DeviceSize, { right: number; left: number }> = {
-  mobile: {
-    left: 1.6,
-    right: 1.6,
-  },
-  tablet: {
-    left: LEFT_NAV_MARGIN + NAV_WIDTH_REM + navGap,
-    right: 2.4,
-  },
-  desktop: {
-    left: LEFT_NAV_MARGIN + NAV_WIDTH_REM + navGap,
-    right: 4,
-  },
-}
-
 export const BaseContainer = ({
   maxWidth,
+  noNav,
   children,
   ...props
 }: BaseContainerProps) => {
@@ -48,6 +35,21 @@ export const BaseContainer = ({
         {children}
       </Container>
     )
+  }
+
+  const margins: Record<DeviceSize, { right: number; left: number }> = {
+    mobile: {
+      left: 1.6,
+      right: 1.6,
+    },
+    tablet: {
+      left: noNav ? 2.4 : LEFT_NAV_MARGIN + NAV_WIDTH_REM + navGap,
+      right: 2.4,
+    },
+    desktop: {
+      left: noNav ? 4 : LEFT_NAV_MARGIN + NAV_WIDTH_REM + navGap,
+      right: 4,
+    },
   }
 
   const leftMargin = margins[deviceSize].left
