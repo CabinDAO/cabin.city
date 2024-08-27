@@ -47,6 +47,7 @@ export enum ProfileSort {
   BadgeCountAsc = 'BadgeCountAsc',
   BadgeCountDesc = 'BadgeCountDesc',
 }
+
 // must match prisma's $Enums.ProfileContactFieldType
 export enum ContactFieldType {
   Twitter = 'Twitter',
@@ -58,6 +59,13 @@ export enum ContactFieldType {
   Farcaster = 'Farcaster',
   Lens = 'Lens',
   LinkedIn = 'LinkedIn',
+}
+
+export enum ProfileTag {
+  steward = 'steward',
+  moveCurious = 'moveCurious',
+  nomad = 'nomad',
+  parent = 'parent',
 }
 
 export const ProfileAddressFragment = AddressFragment.omit({
@@ -234,6 +242,7 @@ export type MeFragment = {
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
   avatarUrl: string
+  tags: ProfileTag[]
   walletAddress: string | null
   voucher: {
     externId: string
@@ -267,6 +276,7 @@ export const ProfileEditParams = z
       bio: z.string().optional(),
       walletAddress: z.union([WalletAddress, z.null()]).optional(),
       address: ProfileAddressFragment.optional(),
+      tags: z.array(z.nativeEnum(ProfileTag)).optional(),
       contactFields: z.array(ContactFragment).optional(),
       avatarUrl: z.string().optional(),
     }),

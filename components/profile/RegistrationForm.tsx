@@ -122,7 +122,7 @@ export function RegistrationForm({
           onClick={handleSubmit}
           variant="primary"
         >
-          Save
+          Continue
         </SubmitButton>
       </Submission>
     </Container>

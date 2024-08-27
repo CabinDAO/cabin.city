@@ -118,6 +118,10 @@ async function handlePost(
               },
             }
           : undefined,
+        tags:
+          params.data.tags !== undefined
+            ? { set: params.data.tags }
+            : undefined,
         wallet: params.data.walletAddress
           ? {
               connectOrCreate: {

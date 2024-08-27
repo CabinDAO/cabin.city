@@ -8,7 +8,8 @@ import styled from 'styled-components'
 import { H3 } from '@/components/core/Typography'
 import { AboutInput } from '@/components/profile/AboutInput'
 import { ContactInput } from '@/components/profile/ContactInput'
-import { Identity } from './edit-profile/Identity'
+import { Identity } from '@/components/profile/edit-profile/Identity'
+import { TagsInput } from '@/components/profile/TagsInput'
 
 export interface UpdateProfileProps {
   user: MeFragment
@@ -46,6 +47,11 @@ export const EditProfileForm = ({
         profileEditParams={profileEditParams}
         onChange={onChange}
       />
+      <Tags
+        user={user}
+        profileEditParams={profileEditParams}
+        onChange={onChange}
+      />
     </InnerContainer>
   )
 }
@@ -57,7 +63,7 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   const avatarUrl = profileEditParams?.avatarUrl ?? user?.avatarUrl ?? undefined
 
   return (
-    <UpdateSection title="About">
+    <UpdateSection title="Basic Info">
       <AboutInput
         values={{
           name,
@@ -102,8 +108,22 @@ const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
   }, [contactList])
 
   return (
-    <UpdateSection title="Contact">
+    <UpdateSection title="Contact Info">
       <ContactInput contactList={contactList} setContactList={setContactList} />
+    </UpdateSection>
+  )
+}
+
+const Tags = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
+  const tags = profileEditParams?.tags ?? user?.tags ?? ''
+
+  return (
+    <UpdateSection title="About me">
+      <TagsInput
+        tags={tags}
+        onTagsChange={(tags) => onChange({ ...profileEditParams, tags })}
+        canShowErrors={true}
+      />
     </UpdateSection>
   )
 }

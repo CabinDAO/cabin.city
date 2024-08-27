@@ -118,6 +118,7 @@ model Profile {
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
   avatarUrl               String                @default("")
+  tags                    String[]              @default([])
 
   address ProfileAddress?
 

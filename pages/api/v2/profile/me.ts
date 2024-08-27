@@ -9,6 +9,7 @@ import {
   ContactFieldType,
   ProfileMeResponse,
   MeFragment,
+  ProfileTag,
 } from '@/utils/types/profile'
 import { randomInviteCode } from '@/utils/random'
 
@@ -67,6 +68,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
       ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
       : null,
     avatarUrl: profile.avatarUrl,
+    tags: profile.tags as ProfileTag[],
     isAdmin: profile.isAdmin,
     isProfileSetupFinished: profile.isProfileSetupFinished,
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
