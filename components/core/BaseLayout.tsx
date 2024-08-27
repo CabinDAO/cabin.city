@@ -6,7 +6,7 @@ import { padding } from '@/styles/theme'
 import { LaunchBanner } from '@/components/citizenship/LaunchBanner'
 import { NavbarMobile } from '@/components/nav/NavbarMobile'
 import { Navbar } from '@/components/nav/Navbar'
-import { Footer } from '@/components/navigation/Footer'
+import { Footer } from '@/components/nav/Footer'
 import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const BaseLayout = ({
