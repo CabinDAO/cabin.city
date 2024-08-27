@@ -3,7 +3,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { GreenUnderline, SectionTitle } from '@/components/accelerator/shared'
 import { Slideshow } from '@/components/core/gallery/Slideshow'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import { fonts } from '@/components/core/Typography'
 import shani from '@/components/accelerator/shani-neighborhood.jpg'
@@ -15,7 +15,7 @@ import shani2 from '@/components/accelerator/shani2-neighborhood.jpg'
 export function ImagineSection() {
   const { deviceSize } = useDeviceSize()
   return (
-    <Container>
+    <Container maxWidth={'wide'}>
       <SectionTitle light>Imagine a neighborhood where...</SectionTitle>
 
       <Slideshow key={deviceSize} loop fadeColor={'green900'}>
@@ -56,7 +56,7 @@ const slides: { src: string; subtext: string }[] = [
   },
 ]
 
-const Container = styled(WideContainer)`
+const Container = styled(BaseContainer)`
   gap: 4rem;
   margin-bottom: 2rem;
   align-items: center;

@@ -11,6 +11,7 @@ import { AutoImage } from '@/components/core/AutoImage'
 import savannah from '@/components/accelerator/SK Slide.png'
 import bethany from '@/components/accelerator/Bethany Slide.png'
 import kathi from '@/components/accelerator/Kathi Slide.png'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export function NeighborhoodStoriesSection({
   variant,
@@ -19,7 +20,7 @@ export function NeighborhoodStoriesSection({
 }) {
   const { deviceSize } = useDeviceSize()
   return (
-    <Container>
+    <Container maxWidth={'wide'}>
       {variant === 'landing' ? (
         <LandingSectionTitle>Neighborhood Stories</LandingSectionTitle>
       ) : (
@@ -72,18 +73,11 @@ const SlideshowCenteringDiv = styled.div`
   max-width: 100%;
 `
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+const Container = styled(BaseContainer)`
   gap: 4rem;
   margin-bottom: 2rem;
   align-items: center;
   justify-content: center;
-
-  ${({ theme }) => theme.bp.md} {
-    width: user={user};
-  }
 `
 
 const Subtitle = styled.div`

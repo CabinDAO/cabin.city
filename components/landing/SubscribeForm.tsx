@@ -71,10 +71,6 @@ const Form = styled.form`
   flex-direction: column;
   gap: 1.6rem;
   width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 50rem;
-  }
 `
 
 const InputGroup = styled.div`
@@ -90,7 +86,9 @@ const InputGroup = styled.div`
 `
 
 const StyledButton = styled(Button)`
-  ${({ theme }) => theme.bp.sm_max} {
-    width: 100%;
+  width: 100%;
+
+  ${({ theme }) => theme.bp.md} {
+    width: min-content;
   }
 `

@@ -9,6 +9,14 @@ import { Tooltip } from '@/components/core/Tooltip'
 import { Avatar } from '@/components/core/Avatar'
 import { MeFragment } from '@/utils/types/profile'
 
+const borderWidth = 0.1
+const containerWidth = 6.4 + 2 * borderWidth // remember, css width includes border
+const boxShadowWidth = 0.8
+export const NAV_WIDTH_REM = parseFloat(
+  (containerWidth + boxShadowWidth).toFixed(1)
+)
+export const LEFT_NAV_MARGIN = 2.4
+
 export const Navbar = () => {
   const { user } = useProfile()
 
@@ -81,16 +89,21 @@ const MenuItem = ({
 }
 
 const Container = styled.nav`
+  z-index: 5;
+  position: fixed;
+  top: 4rem;
+  left: ${LEFT_NAV_MARGIN}rem;
+
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.green800};
   justify-content: center;
   align-items: center;
-  max-width: 8rem;
-  width: min-content;
-  border: 0.1rem solid ${({ theme }) => theme.colors.green900};
+  width: ${containerWidth}rem;
+  border: ${borderWidth}rem solid ${({ theme }) => theme.colors.green900};
   border-bottom-right-radius: 2.5rem;
-  box-shadow: 0.8rem 0.8rem 0rem ${({ theme }) => theme.colors.yellow900};
+  box-shadow: ${boxShadowWidth}rem ${boxShadowWidth}rem 0rem
+    ${({ theme }) => theme.colors.yellow900};
 `
 
 const Group = styled.div`

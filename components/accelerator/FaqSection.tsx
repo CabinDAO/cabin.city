@@ -4,7 +4,7 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import Icon from '@/components/core/Icon'
 import { SectionTitle } from '@/components/accelerator/shared'
 
@@ -159,7 +159,7 @@ const faqs = [
 
 export const FaqSection = () => {
   return (
-    <Container maxWidth={'80rem'}>
+    <Container maxWidth={80}>
       <SectionTitle>FAQs</SectionTitle>
 
       {faqs.map((faq, i) => (
@@ -180,7 +180,7 @@ export const FaqSection = () => {
   )
 }
 
-const Container = styled(WideContainer)`
+const Container = styled(BaseContainer)`
   gap: 1.6rem;
 `
 

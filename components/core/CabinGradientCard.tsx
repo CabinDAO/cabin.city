@@ -1,3 +1,4 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 type Variant = 'radial' | 'right'
@@ -13,13 +14,13 @@ export const CabinGradientCard = ({
   variant = 'radial',
 }: CabinGradientCardProps) => {
   return (
-    <BaseContainer className={className} variant={variant}>
+    <Container className={className} variant={variant}>
       {children}
-    </BaseContainer>
+    </Container>
   )
 }
 
-const BaseContainer = styled.div<{ variant: Variant }>`
+const Container = styled.div<{ variant: Variant }>`
   display: flex;
   align-items: center;
   justify-content: center;

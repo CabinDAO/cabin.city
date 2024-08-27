@@ -170,8 +170,6 @@ const theme = {
   },
 }
 
-export const availableColors = Object.keys(theme.colors)
-
 export type ColorName = keyof typeof theme.colors
 
 export default theme

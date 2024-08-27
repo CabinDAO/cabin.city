@@ -3,8 +3,8 @@ import Error404 from '@/pages/404'
 import { useProfile } from '@/components/auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
+import styled from 'styled-components'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { ProfileInnerContainer } from '@/components/profile/profile.styles'
 import { ProfileHeaderSection } from '@/components/profile/view-profile/ProfileHeaderSection'
 import { ProfileSetupSection } from '@/components/profile/view-profile/ProfileSetupSection'
 import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAboutSection'
@@ -36,7 +36,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <title>{profile.name}'s Cabin Profile</title>
       </Head>
       <BaseLayout>
-        <ProfileInnerContainer>
+        <Container>
           <ProfileHeaderSection profile={profile} />
           {isOwnProfile && (
             <ProfileSetupSection profileId={profile.externId} me={user} />
@@ -45,8 +45,19 @@ export const ProfileView = ({ externId }: { externId: string }) => {
           <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />
           <ProfileActivitiesSection profile={profile} />
-        </ProfileInnerContainer>
+        </Container>
       </BaseLayout>
     </>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    gap: 4.8rem;
+  }
+`

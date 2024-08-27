@@ -4,10 +4,14 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { HorizontalList } from '@/components/landing/HorizontalList'
+import { LandingSectionTitle } from '@/components/landing/shared'
+import React from 'react'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const LearnMoreSection = () => {
   return (
-    <LearnMoreContent>
+    <Container maxWidth={'default'}>
+      <LandingSectionTitle>Want to learn more?</LandingSectionTitle>
       <Link
         href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=cabinweekpage`}
         target="_blank"
@@ -37,17 +41,13 @@ export const LearnMoreSection = () => {
           },
         ]}
       />
-    </LearnMoreContent>
+    </Container>
   )
 }
 
-const LearnMoreContent = styled.div`
-  display: flex;
-  flex-direction: column;
+const Container = styled(BaseContainer)`
   justify-content: center;
   align-items: center;
-  width: 100%;
-  gap: 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
     gap: 4.8rem;

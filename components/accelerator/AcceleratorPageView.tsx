@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 import { padding } from '@/styles/theme'
 import headerBg from '@/components/accelerator/accelerator-header.jpg'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import { Body1 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -23,9 +23,8 @@ export const subscribeSectionID = 'updates'
 
 export const AcceleratorPageView = () => {
   return (
-    <BaseLayout variant="landing">
+    <BaseLayout landingPage>
       <LandingSection
-        fullWidth
         noVertPadding
         variant={'clear'}
         style={{
@@ -70,7 +69,7 @@ export const AcceleratorPageView = () => {
       </Section>
 
       <LandingSection variant={'default'} id={subscribeSectionID} noVertPadding>
-        <SubscribeContainer maxWidth={'130rem'}>
+        <SubscribeContainer maxWidth={60}>
           <SectionTitle>Can't join us for this round?</SectionTitle>
           <Body1>
             No worries. Be the first to know about future rounds of the program.
@@ -79,7 +78,7 @@ export const AcceleratorPageView = () => {
         </SubscribeContainer>
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding>
+      <LandingSection noVertPadding>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"
@@ -102,9 +101,8 @@ const Section = styled(LandingSection)`
     `}
 `
 
-const SubscribeContainer = styled(WideContainer)`
+const SubscribeContainer = styled(BaseContainer)`
   align-items: center;
-  gap: 2.4rem;
   margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {

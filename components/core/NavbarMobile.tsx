@@ -74,10 +74,10 @@ const MobileNavContainer = styled.div<{ open: boolean }>`
   align-items: flex-start;
   top: 0;
   left: 0;
-  height: 100vw;
+  height: 100vh;
+  //height: 100%;
   width: 80vw;
   background-color: ${({ theme }) => theme.colors.green800};
-  height: 100%;
   box-shadow: 8px 8px 0px ${({ theme }) => theme.colors.green900};
   transform: ${({ open }) => (open ? 'translateX(0)' : 'translateX(-110%)')};
   transition: transform 0.3s ease-in-out;

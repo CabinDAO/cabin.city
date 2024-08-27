@@ -18,13 +18,11 @@ import { Button } from '@/components/core/Button'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import React from 'react'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
-import { LandingSectionTitle } from '@/components/landing/shared'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
-    <BaseLayout variant="landing">
+    <BaseLayout landingPage>
       <LandingSection
-        fullWidth
         noVertPadding
         variant={'clear'}
         style={{
@@ -65,7 +63,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <SubscribeSection />
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding>
+      <LandingSection noVertPadding>
         <MapSection data={mapData} />
       </LandingSection>
 
@@ -77,7 +75,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <JourneySection />
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding variant={'light'}>
+      <LandingSection noVertPadding variant={'light'}>
         <SupperClubSection />
       </LandingSection>
 
@@ -86,8 +84,6 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       </LandingSection>
 
       <LandingSection variant={'light'}>
-        <LandingSectionTitle>What people are saying</LandingSectionTitle>
-        {/*<TestimonialSection />*/}
         <TwitterSection />
       </LandingSection>
 
@@ -96,11 +92,10 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
       </LandingSection>
 
       <LandingSection precedesNoVertPadding>
-        <LandingSectionTitle>Want to learn more?</LandingSectionTitle>
         <LearnMoreSection />
       </LandingSection>
 
-      <LandingSection fullWidth noVertPadding>
+      <LandingSection noVertPadding>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"

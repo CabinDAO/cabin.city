@@ -6,7 +6,7 @@ import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import Icon from '@/components/core/Icon'
 import { Body1, fonts } from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import { Countdown } from '@/components/accelerator/Countdown'
 
 const items = [
@@ -19,7 +19,7 @@ const items = [
 
 export const PriceSection = () => {
   return (
-    <Container maxWidth={'80rem'}>
+    <Container maxWidth={80}>
       <SectionTitle>Ready to transform your neighborhood?</SectionTitle>
       <Box>
         <Items>
@@ -69,7 +69,7 @@ export const PriceSection = () => {
   )
 }
 
-const Container = styled(WideContainer)`
+const Container = styled(BaseContainer)`
   align-items: center;
   gap: 4rem;
 `

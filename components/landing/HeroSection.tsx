@@ -39,6 +39,8 @@ const Content = styled.div`
   gap: 8rem;
   margin-top: 4rem;
   margin-bottom: 10rem;
+  width: 100%;
+  padding: 0 2.4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: 50rem;
@@ -66,7 +68,7 @@ const TopWrapper = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;

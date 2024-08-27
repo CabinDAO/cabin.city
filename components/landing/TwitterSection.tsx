@@ -13,6 +13,8 @@ import bethanyPic from './bethany-tweetimg.png'
 import jacksonPic from './jackson-tweetimg.png'
 import savannahPic from './savannah-tweetimg.png'
 import { AutoImage } from '@/components/core/AutoImage'
+import { LandingSectionTitle } from '@/components/landing/shared'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const TwitterSection = () => {
   const contentRef = useRef<HTMLDivElement>(null)
@@ -64,7 +66,8 @@ export const TwitterSection = () => {
   })
 
   return (
-    <Container>
+    <Container maxWidth={'wide'}>
+      <LandingSectionTitle>What people are saying</LandingSectionTitle>
       <Slider
         ref={contentRef}
         style={{ transform: `translateX(${xOffset}px)` }}
@@ -202,19 +205,11 @@ const Item = (props: Tweet) => {
   )
 }
 
-const Container = styled.div`
+const Container = styled(BaseContainer)`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 50rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 100%;
-  }
+  gap: 4rem;
 `
 
 const Slider = styled.div`

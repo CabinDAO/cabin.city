@@ -9,6 +9,7 @@ import { body1Styles, H4 } from '@/components/core/Typography'
 import pic1 from './journey1.png'
 import pic2 from './journey2.png'
 import pic3 from './journey3.png'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const JourneySection = () => {
   const [scrollPercentage, setScrollPercentage] = useState(0)
@@ -35,7 +36,7 @@ export const JourneySection = () => {
   }, [])
 
   return (
-    <>
+    <Container maxWidth={'default'}>
       <Header>
         {/*<Icon name={'backpack-green'} size={8} />*/}
         <LandingSectionTitle>Grow your neighborhood</LandingSectionTitle>
@@ -175,9 +176,14 @@ export const JourneySection = () => {
           />
         </Content>
       </ProgressBarWrapper>
-    </>
+    </Container>
   )
 }
+
+const Container = styled(BaseContainer)`
+  gap: 4rem;
+  align-items: center;
+`
 
 const Header = styled.div`
   display: flex;
@@ -189,7 +195,7 @@ const Header = styled.div`
   margin-bottom: 4rem;
 
   ${({ theme }) => theme.bp.md} {
-    width: 40rem;
+    width: 41rem;
   }
 
   ${({ theme }) => theme.bp.lg} {

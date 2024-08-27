@@ -4,10 +4,11 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { LandingSectionTitle } from '@/components/landing/shared'
 import { Body1, H4 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const ValuesSection = () => {
   return (
-    <>
+    <Container maxWidth={'default'}>
       <LandingSectionTitle>What we believe</LandingSectionTitle>
       <Subtitle>
         Our community shares three Obvious Truths. Most people agree with these
@@ -45,9 +46,14 @@ export const ValuesSection = () => {
       <Link href={EXTERNAL_LINKS.VISION} target="_blank" rel="noreferer">
         <Button variant={'tertiary'}>More about our Network City vision</Button>
       </Link>
-    </>
+    </Container>
   )
 }
+
+const Container = styled(BaseContainer)`
+  gap: 4rem;
+  align-items: center;
+`
 
 const Subtitle = styled(Body1)`
   text-align: center;

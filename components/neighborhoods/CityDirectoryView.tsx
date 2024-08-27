@@ -25,18 +25,10 @@ export const CityDirectoryView = () => {
           ) : null
         }
       />
-      <Content>
-        <LocationList />
-      </Content>
+      <LocationList />
     </BaseLayout>
   )
 }
-
-const Content = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`
 
 const NewListingButton = styled(AuthenticatedLink)`
   display: flex;

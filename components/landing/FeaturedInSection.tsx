@@ -6,12 +6,13 @@ import Link from 'next/link'
 import ftLogo from './logos/ft.png'
 import newYorkerLogo from './logos/new-yorker.png'
 import coindeskLogo from './logos/coindesk.png'
+import { BaseContainer } from '@/components/core/BaseContainer'
 
 export const FeaturedInSection = () => {
   return (
-    <Content>
-      <H3>Featured In:</H3>
-      <div>
+    <Content maxWidth={'default'}>
+      <H3 style={{ whiteSpace: 'nowrap' }}>Featured In:</H3>
+      <Logos>
         <Link
           href={
             'https://www.ft.com/content/def2b5cb-d0e1-4005-96c5-d8fe0d1613b8'
@@ -33,41 +34,30 @@ export const FeaturedInSection = () => {
         >
           <Image src={coindeskLogo} alt={'Coindesk'} />
         </Link>
-      </div>
+      </Logos>
     </Content>
   )
 }
 
-const Content = styled.div`
+const Content = styled(BaseContainer)`
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    flex-direction: row;
+  }
+`
+
+const Logos = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 31rem;
   gap: 5rem;
 
-  > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5rem;
-  }
-
-  ${H3} {
-    white-space: nowrap;
-  }
-
   ${({ theme }) => theme.bp.md} {
-    width: 50rem;
-    > div {
-      flex-direction: row;
-      gap: 5rem;
-    }
-  }
-
-  ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
-    width: 80rem;
+    gap: 5rem;
   }
 `

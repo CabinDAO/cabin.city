@@ -1,89 +1,82 @@
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
 import { SectionTitle } from '@/components/accelerator/shared'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import img from '@/components/accelerator/accel-imgs.jpg'
 
 export const AboutSection = () => {
   return (
-    <Container maxWidth={'130rem'}>
-      <Content>
-        <Left>
-          <TopSection>
-            <Title>The Cabin Neighborhood Accelerator</Title>
-            <Subtitle>
-              A 10-week program that helps people build a sense of community in
-              their neighborhoods.
-            </Subtitle>
-            <Body1>
-              Whether you’re just starting out or want to take your community to
-              the next level, we want to help you turn your neighborhood into a
-              thriving community.
-            </Body1>
-          </TopSection>
+    <Container maxWidth={120}>
+      <Left>
+        <TopSection>
+          <Title>The Cabin Neighborhood Accelerator</Title>
+          <Subtitle>
+            A 10-week program that helps people build a sense of community in
+            their neighborhoods.
+          </Subtitle>
+          <Body1>
+            Whether you’re just starting out or want to take your community to
+            the next level, we want to help you turn your neighborhood into a
+            thriving community.
+          </Body1>
+        </TopSection>
 
-          <Boxes>
-            <Box>
-              <BoxTitle>Step-by-Step Support</BoxTitle>
-              <BoxBody>
-                You’ll receive clear, personalized guidance and hands-on support
-                every step of the way.
-              </BoxBody>
-            </Box>
-            <Box>
-              <BoxTitle>Mentorship</BoxTitle>
-              <BoxBody>
-                You’ll learn from experienced mentors who have successfully
-                built vibrant communities. They’ll share what’s worked and coach
-                you through whatever comes up.
-              </BoxBody>
-            </Box>
-            <Box>
-              <BoxTitle>Incredible Humans</BoxTitle>
-              <BoxBody>
-                Our network of neighborhood builders offers a deep sense of
-                camaraderie, encouragement, brainstorming, and cross-pollination
-                of ideas that will elevate your community-building efforts.
-                Together, we’ll navigate challenges, celebrate wins, and draw
-                inspiration from the collective wisdom of each other’s
-                experiments.
-              </BoxBody>
-            </Box>
-            <Box>
-              <BoxTitle>Accountability</BoxTitle>
-              <BoxBody>
-                You’ll be held accountable by your fellow stewards to take
-                action each week to build a neighborhood you’re proud of.
-              </BoxBody>
-            </Box>
-            <Box>
-              <BoxTitle>Funding Opportunities</BoxTitle>
-              <BoxBody>
-                We connect neighborhood stewards with grants and public goods
-                funding opportunities.
-              </BoxBody>
-            </Box>
-          </Boxes>
-        </Left>
+        <Boxes>
+          <Box>
+            <BoxTitle>Step-by-Step Support</BoxTitle>
+            <BoxBody>
+              You’ll receive clear, personalized guidance and hands-on support
+              every step of the way.
+            </BoxBody>
+          </Box>
+          <Box>
+            <BoxTitle>Mentorship</BoxTitle>
+            <BoxBody>
+              You’ll learn from experienced mentors who have successfully built
+              vibrant communities. They’ll share what’s worked and coach you
+              through whatever comes up.
+            </BoxBody>
+          </Box>
+          <Box>
+            <BoxTitle>Incredible Humans</BoxTitle>
+            <BoxBody>
+              Our network of neighborhood builders offers a deep sense of
+              camaraderie, encouragement, brainstorming, and cross-pollination
+              of ideas that will elevate your community-building efforts.
+              Together, we’ll navigate challenges, celebrate wins, and draw
+              inspiration from the collective wisdom of each other’s
+              experiments.
+            </BoxBody>
+          </Box>
+          <Box>
+            <BoxTitle>Accountability</BoxTitle>
+            <BoxBody>
+              You’ll be held accountable by your fellow stewards to take action
+              each week to build a neighborhood you’re proud of.
+            </BoxBody>
+          </Box>
+          <Box>
+            <BoxTitle>Funding Opportunities</BoxTitle>
+            <BoxBody>
+              We connect neighborhood stewards with grants and public goods
+              funding opportunities.
+            </BoxBody>
+          </Box>
+        </Boxes>
+      </Left>
 
-        <Right>
-          <AutoImage src={img.src} alt={'neighborhood polaroids'} />
-        </Right>
-      </Content>
+      <Right>
+        <AutoImage src={img.src} alt={'neighborhood polaroids'} />
+      </Right>
     </Container>
   )
 }
 
-const Container = styled(WideContainer)`
-  gap: 4rem;
-`
+const gap = 2.4
 
-const Content = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-  gap: 2.4rem;
+const Container = styled(BaseContainer)`
+  gap: ${gap}rem;
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
@@ -97,7 +90,7 @@ const Left = styled.div`
   gap: 2.4rem;
 
   ${({ theme }) => theme.bp.lg} {
-    width: 48%;
+    width: calc(50% - ${gap / 2}rem);
   }
 `
 
@@ -105,7 +98,7 @@ const Right = styled.div`
   width: 100%;
 
   ${({ theme }) => theme.bp.lg} {
-    width: 48%;
+    width: calc(50% - ${gap / 2}rem);
   }
 `
 

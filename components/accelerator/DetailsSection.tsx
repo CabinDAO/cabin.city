@@ -3,7 +3,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { Body1, H4 } from '@/components/core/Typography'
 import { SectionTitle } from '@/components/accelerator/shared'
-import { WideContainer } from '@/components/core/WideContainer'
+import { BaseContainer } from '@/components/core/BaseContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import polaroids from '@/components/accelerator/polaroids.jpg'
 
@@ -11,107 +11,107 @@ export const DetailsSection = () => {
   const { deviceSize } = useDeviceSize()
 
   return (
-    <>
+    <Container maxWidth={110}>
       <SectionTitle>Program Details</SectionTitle>
+      <Masonry
+        className={'masonry'}
+        columnClassName={'masonry-column'}
+        breakpointCols={deviceSize === 'desktop' ? 2 : 1}
+      >
+        <Box>
+          <BoxTitle>Key Dates</BoxTitle>
+          <BoxBody>
+            <strong>Program Runs</strong>: September 23 - December 1 (10 weeks)
+          </BoxBody>
+          <BoxBody>
+            <strong>Application Deadline</strong>: September 8, 11:59pm PT
+          </BoxBody>
+        </Box>
+        <Box>
+          <BoxTitle>Weekly Time Commitment</BoxTitle>
+          <BoxBody>
+            To reap the full benefits of this program, we recommend committing
+            at least <strong>4 hours per week</strong>.
+          </BoxBody>
+          <BoxBody>
+            1 hr/week for group calls and about 3 hrs/week for on-the-ground
+            neighborhood building activities like knocking on doors, flyering
+            your neighborhood, hosting events, building partnerships, spending
+            1:1 time building relationships, etc.
+          </BoxBody>
+        </Box>
+        <Box>
+          <BoxTitle>Curriculum</BoxTitle>
+          <BoxBody>
+            Each week we’ll{' '}
+            <strong>learn the best practices and patterns</strong> of
+            neighborhood building and then put them into practice in our
+            neighborhoods. We’ll cover:
+          </BoxBody>
+          <List>
+            <li>Building Meaningful Relationships with Neighbors</li>
+            <li>Helping Your Friends Move Into Your Neighborhood</li>
+            <li>Building Third Places</li>
+            <li>Hosting Events People Want to Attend</li>
+            <li>Creating a Sense of Group Ownership</li>
+            <li>Neighborhood Comms & Group Message Threads</li>
+            <li>Knocking on Doors</li>
+            <li>
+              Solving Local Problems Together: Placemaking, Tactical Urbanism &
+              Collective Action
+            </li>
+          </List>
+        </Box>
+        <Box>
+          <BoxTitle>Live Calls</BoxTitle>
+          <List>
+            <li>
+              <strong>Weekly Group Call</strong>: Learn proven
+              neighborhood-building strategies, share progress, and get feedback
+              and support from your peers.
+            </li>
+            <li>
+              <strong>Regular Mentor Calls</strong>: Mentors will share their
+              stories, offer personalized coaching, and answer questions.
+            </li>
+          </List>
+          <BoxBody>
+            Call timing will be based on participant availability.
+          </BoxBody>
+        </Box>
+        <Box>
+          <BoxTitle>How-To Guides</BoxTitle>
+          <BoxBody>
+            <strong>Step-by-step playbooks</strong>, updated regularly with{' '}
+            <strong>real-world insights</strong> and stories of successful
+            community builders in our program.
+          </BoxBody>
+        </Box>
+        <Box>
+          <BoxTitle>Telegram Groups</BoxTitle>
+          <BoxBody>
+            The async place to ask questions,{' '}
+            <strong>get support from mentors</strong> and fellow neighborhood
+            builders, see how others are doing things, and{' '}
+            <strong>celebrate each others’ wins</strong>.
+          </BoxBody>
+        </Box>
+      </Masonry>
 
-      <Content maxWidth={'110rem'}>
-        <Masonry
-          className={'masonry'}
-          columnClassName={'masonry-column'}
-          breakpointCols={deviceSize === 'desktop' ? 2 : 1}
-        >
-          <Box>
-            <BoxTitle>Key Dates</BoxTitle>
-            <BoxBody>
-              <strong>Program Runs</strong>: September 23 - December 1 (10
-              weeks)
-            </BoxBody>
-            <BoxBody>
-              <strong>Application Deadline</strong>: September 8, 11:59pm PT
-            </BoxBody>
-          </Box>
-          <Box>
-            <BoxTitle>Weekly Time Commitment</BoxTitle>
-            <BoxBody>
-              To reap the full benefits of this program, we recommend committing
-              at least <strong>4 hours per week</strong>.
-            </BoxBody>
-            <BoxBody>
-              1 hr/week for group calls and about 3 hrs/week for on-the-ground
-              neighborhood building activities like knocking on doors, flyering
-              your neighborhood, hosting events, building partnerships, spending
-              1:1 time building relationships, etc.
-            </BoxBody>
-          </Box>
-          <Box>
-            <BoxTitle>Curriculum</BoxTitle>
-            <BoxBody>
-              Each week we’ll{' '}
-              <strong>learn the best practices and patterns</strong> of
-              neighborhood building and then put them into practice in our
-              neighborhoods. We’ll cover:
-            </BoxBody>
-            <List>
-              <li>Building Meaningful Relationships with Neighbors</li>
-              <li>Helping Your Friends Move Into Your Neighborhood</li>
-              <li>Building Third Places</li>
-              <li>Hosting Events People Want to Attend</li>
-              <li>Creating a Sense of Group Ownership</li>
-              <li>Neighborhood Comms & Group Message Threads</li>
-              <li>Knocking on Doors</li>
-              <li>
-                Solving Local Problems Together: Placemaking, Tactical Urbanism
-                & Collective Action
-              </li>
-            </List>
-          </Box>
-          <Box>
-            <BoxTitle>Live Calls</BoxTitle>
-            <List>
-              <li>
-                <strong>Weekly Group Call</strong>: Learn proven
-                neighborhood-building strategies, share progress, and get
-                feedback and support from your peers.
-              </li>
-              <li>
-                <strong>Regular Mentor Calls</strong>: Mentors will share their
-                stories, offer personalized coaching, and answer questions.
-              </li>
-            </List>
-            <BoxBody>
-              Call timing will be based on participant availability.
-            </BoxBody>
-          </Box>
-          <Box>
-            <BoxTitle>How-To Guides</BoxTitle>
-            <BoxBody>
-              <strong>Step-by-step playbooks</strong>, updated regularly with{' '}
-              <strong>real-world insights</strong> and stories of successful
-              community builders in our program.
-            </BoxBody>
-          </Box>
-          <Box>
-            <BoxTitle>Telegram Groups</BoxTitle>
-            <BoxBody>
-              The async place to ask questions,{' '}
-              <strong>get support from mentors</strong> and fellow neighborhood
-              builders, see how others are doing things, and{' '}
-              <strong>celebrate each others’ wins</strong>.
-            </BoxBody>
-          </Box>
-        </Masonry>
-
-        {deviceSize === 'desktop' && (
-          <AutoImage src={polaroids.src} alt={'polaroids'} />
-        )}
-      </Content>
-    </>
+      {deviceSize === 'desktop' && (
+        <AutoImage
+          src={polaroids.src}
+          alt={'polaroids'}
+          style={{ marginTop: '10rem' }}
+        />
+      )}
+    </Container>
   )
 }
 
-const Content = styled(WideContainer)`
+const Container = styled(BaseContainer)`
   margin-bottom: 4rem;
-  gap: 10rem;
+  gap: 4rem;
 
   .masonry {
     width: 100%;
