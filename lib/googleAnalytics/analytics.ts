@@ -1,5 +1,5 @@
 import { GTagEvent } from './types'
-import { MenuItemName } from '@/utils/nav/types'
+import { MenuItemName } from '@/components/nav/types'
 
 /**
  *

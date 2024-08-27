@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useProfile } from '../auth/useProfile'
 import { useModal } from '@/components/hooks/useModal'
-import { MenuItemName, MenuItems } from '@/utils/nav/types'
+import { MenuItemName, MenuItems } from '@/components/nav/types'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
 import Icon from '@/components/core/Icon'
@@ -45,6 +45,7 @@ export const NavbarMobile = () => {
         <MobileNavContainer open={open}>
           <InnerContainer>
             <MobileMenuItem menuItem={'home'} user={user} />
+            <MobileMenuItem menuItem={'accelerator'} user={user} />
             <MobileMenuItem menuItem={'neighborhoods'} user={user} />
             <MobileMenuItem menuItem={'census'} user={user} />
             <StyledDivider />

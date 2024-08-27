@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useProfile } from '@/components/auth/useProfile'
-import { MenuItemName, MenuItems } from '@/utils/nav/types'
+import { MenuItemName, MenuItems } from '@/components/nav/types'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
@@ -27,6 +27,7 @@ export const Navbar = () => {
       </Group>
       <Divider />
       <Group>
+        <MenuItem name={'accelerator'} user={user} />
         <MenuItem name={'neighborhoods'} user={user} />
         <MenuItem name={'census'} user={user} />
       </Group>

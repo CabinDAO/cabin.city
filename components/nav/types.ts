@@ -4,6 +4,7 @@ type visibility = 'always' | 'authOnly' | 'unauthOnly'
 
 export type MenuItemName =
   | 'home'
+  | 'accelerator'
   | 'neighborhoods'
   | 'census'
   | 'profile'
@@ -25,6 +26,13 @@ export const MenuItems: Record<MenuItemName, Config> = {
     path: '/',
     displayText: 'Home',
     iconSize: 3.2,
+    visibility: 'always',
+  },
+  accelerator: {
+    icon: 'neighborhood',
+    path: '/accelerator',
+    displayText: 'Accelerator',
+    iconSize: 2.5,
     visibility: 'always',
   },
   neighborhoods: {

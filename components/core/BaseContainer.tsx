@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react'
 import { useWindowSize } from 'react-use'
 import { DeviceSize, useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
-import { LEFT_NAV_MARGIN, NAV_WIDTH_REM } from '@/components/core/Navbar'
+import { LEFT_NAV_MARGIN, NAV_WIDTH_REM } from '@/components/nav/Navbar'
 
 type widthType =
   | 'full' // totally full screen with no padding at all
