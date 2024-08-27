@@ -22,7 +22,7 @@ export const ProfileContactList = ({
     <Container count={contactFields.length}>
       {contactFields.map((field, i) => (
         <>
-          <LabelContainer>
+          <LabelContainer key={`${i}a`}>
             {onDelete && (
               <Icon
                 name="trash"
@@ -31,13 +31,11 @@ export const ProfileContactList = ({
                 onClick={() => onDelete(i)}
               />
             )}
-            <Label key={`caption_${i}`} bigger={bigger}>
-              {field.type}
-            </Label>
+            <Label bigger={bigger}>{field.type}</Label>
           </LabelContainer>
-          <div></div>
-          <ContactField key={`value_${i}`} field={field} bigger={bigger} />
-          <div></div>
+          <div key={`${i}b`}></div>
+          <ContactField key={`${i}c`} field={field} bigger={bigger} />
+          <div key={`${i}d`}></div>
         </>
       ))}
     </Container>
