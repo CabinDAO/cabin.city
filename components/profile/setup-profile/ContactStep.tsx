@@ -34,11 +34,7 @@ export const ContactStep = ({ stepName, onBack, onNext }: StepProps) => {
 
   return (
     <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
-      <ContactInput
-        profile={user}
-        contactList={contactList}
-        setContactList={setContactList}
-      />
+      <ContactInput contactList={contactList} setContactList={setContactList} />
     </SetupStepForm>
   )
 }
