@@ -86,7 +86,7 @@ const NavAndContent = styled.div`
 const MainContent = styled.main<{ noTopPadding?: boolean }>`
   height: 100%;
   width: 100%;
-  overflow-x: hidden; // so wide fixed-width elements dont make this too wide
+  //overflow-x: hidden; // so wide fixed-width elements dont make this too wide. WEIRDLY CLIPS VERTICALLY TOO???
   ${({ noTopPadding }) => !noTopPadding && padding.top('md')};
 `
 
