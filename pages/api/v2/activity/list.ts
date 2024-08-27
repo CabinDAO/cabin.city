@@ -37,6 +37,9 @@ async function handler(
   const activityQuery: Prisma.ActivityFindManyArgs = {
     where: params.profileId
       ? {
+          type: {
+            notIn: ['VouchRequested'],
+          },
           profile: {
             externId: params.profileId,
           },
