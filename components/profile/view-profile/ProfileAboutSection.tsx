@@ -82,7 +82,8 @@ const ProfileDataGroup = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 2rem;
+  column-gap: 2rem;
+  row-gap: 1rem;
 `
 
 const ProfileData = styled.div`
