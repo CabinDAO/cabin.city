@@ -1,12 +1,13 @@
-import { ReactNode } from 'react'
+import React from 'react'
 import { formatShortAddress } from '@/lib/address'
 import { ProfileFragment } from '@/utils/types/profile'
 import { monthYearFormat } from '@/utils/display-utils'
 import styled from 'styled-components'
 import Icon, { IconName } from '../../core/Icon'
 import { ContentCard } from '../../core/ContentCard'
-import { Body2, Caption, H3 } from '../../core/Typography'
+import { Body1, Body2, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
+import { HorizontalDivider } from '@/components/core/Divider'
 
 export const ProfileAboutSection = ({
   profile,
@@ -15,7 +16,7 @@ export const ProfileAboutSection = ({
 }) => (
   <ContentCard shape="notch">
     <Container>
-      <AboutSubsection>
+      <AboutSection>
         <H3>About</H3>
         <ProfileDataGroup>
           <ProfileDataText
@@ -29,16 +30,15 @@ export const ProfileAboutSection = ({
             />
           )}
         </ProfileDataGroup>
-        {profile.bio && <Body2>{profile.bio}</Body2>}
-      </AboutSubsection>
-      {profile.contactFields.length ? (
-        <ContactContainer>
-          <ContactSubsection>
-            <H3>Contact</H3>
-            <ProfileContactList contactFields={profile.contactFields} />
-          </ContactSubsection>
-        </ContactContainer>
-      ) : null}
+        {profile.bio && <Body1>{profile.bio}</Body1>}
+      </AboutSection>
+
+      {profile.contactFields.length && (
+        <ContactSection>
+          <H3>Contact</H3>
+          <ProfileContactList contactFields={profile.contactFields} />
+        </ContactSection>
+      )}
     </Container>
   </ContentCard>
 )
@@ -48,15 +48,15 @@ const ProfileDataText = ({
   captionContent,
 }: {
   iconName: IconName
-  captionContent: ReactNode
+  captionContent: React.ReactNode
 }) => {
   if (!captionContent) {
     return null
   }
   return (
     <ProfileData>
-      <Icon name={iconName} size={1.4} />
-      <Caption>{captionContent}</Caption>
+      <Icon name={iconName} size={2.4} />
+      <Body1>{captionContent}</Body1>
     </ProfileData>
   )
 }
@@ -68,14 +68,7 @@ const Container = styled.div`
   height: 100%;
   align-items: stretch;
   justify-content: space-between;
-  --children-padding: 1.6rem;
-  padding-top: 1.6rem;
-  padding-bottom: 1.6rem;
-
-  ${({ theme }) => theme.bp.md} {
-    padding: 0;
-    --children-padding: 3.2rem 2.4rem;
-  }
+  padding: 1.6rem;
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
@@ -99,54 +92,40 @@ const ProfileData = styled.div`
   gap: 0.6rem;
 `
 
-const AboutSubsection = styled.div`
+const AboutSection = styled.div`
   display: flex;
   flex-direction: column;
-  padding: var(--children-padding);
   align-items: flex-start;
   justify-content: flex-start;
   gap: 1.6rem;
   height: 100%;
   width: 100%;
+  padding: 1.6rem;
 
   ${({ theme }) => theme.bp.lg} {
     max-width: 60%;
-    padding: var(--children-padding);
   }
 `
 
-const ContactContainer = styled.div`
+const ContactSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  padding: 1.6rem 1.6rem 0;
+  gap: 1.6rem;
 
   ${({ theme }) => theme.bp.md} {
-    padding: 2.4rem;
-    padding-top: 0;
+    padding-bottom: 1.6rem;
   }
 
   ${({ theme }) => theme.bp.lg} {
+    padding-left: 0;
     min-width: 35%;
-    flex-direction: row;
-    padding: 0;
   }
 `
 
-const ContactSubsection = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 1.6rem;
-  width: 100%;
-  padding: var(--children-padding);
-
-  ${({ theme }) => theme.bp.md} {
-    padding: 1.6rem 0;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    padding: var(--children-padding);
-  }
+const StyledDivider = styled(HorizontalDivider)`
+  margin: 0 2rem;
+  width: calc(100% - 4rem);
 `

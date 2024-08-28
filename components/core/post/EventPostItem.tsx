@@ -52,6 +52,7 @@ const Container = styled(Link)`
   background-color: ${({ theme }) => theme.colors.yellow200};
   border: 0.1rem solid ${({ theme }) => theme.colors.green900}1A;
   width: 100%;
+  margin: 0 1rem;
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;

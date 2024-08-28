@@ -31,11 +31,11 @@ export const ProfileActivitiesSection = ({
 
   return (
     <StyledContentCard shape="notch">
-      <SectionTitle>
+      <Top>
         <H3>Activity</H3>
-      </SectionTitle>
-      <StyledDivider />
-      <InnerContainer>
+        {activities.length > 1 && <HorizontalDivider />}
+      </Top>
+      <Posts>
         {activities.map((a) => (
           <Post
             variant="compact"
@@ -47,7 +47,7 @@ export const ProfileActivitiesSection = ({
             onDelete={refetchActivities}
           />
         ))}
-      </InnerContainer>
+      </Posts>
     </StyledContentCard>
   )
 }
@@ -57,17 +57,14 @@ const StyledContentCard = styled(ContentCard)`
   flex-direction: column;
 `
 
-const StyledDivider = styled(HorizontalDivider)`
-  margin: 0 2rem;
-  width: calc(100% - 4rem);
-`
-
-const SectionTitle = styled.div`
+const Top = styled.div`
   display: flex;
-  padding: 2.4rem;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding: 2.4rem 2.4rem 0;
 `
 
-const InnerContainer = styled.div`
+const Posts = styled.div`
   padding: 2.4rem;
   display: flex;
   flex-direction: column;
