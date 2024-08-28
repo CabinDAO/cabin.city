@@ -36,6 +36,8 @@ enum Routes {
   CHECKOUT_CREATE_PAYMENT_INTENT = '/checkout/create-payment-intent',
   CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook', // called by Stripe
 
+  WALLET_GENERATE = '/wallet/generate',
+
   DEV = '/dev',
 }
 

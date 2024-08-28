@@ -130,12 +130,21 @@ type LinkedAccount = {
       type: 'wallet'
       address: string
       wallet_index: number
+
+      /**
+       * Whether or not this wallet was imported by the user. Will be undefined if the wallet is not an embedded wallet.
+       */
+      imported?: boolean
+
       /**
        * CAIP-2 formatted chain ID during the most recent verification.
        *
        * e.g. eip155:1, eip155:5, eip155:137, etc.
        */
       chain_id: string
+      /** @deprecated */
+      chain_type: string
+
       /**
        * The wallet client used for this wallet during the most recent verification.
        *
@@ -144,12 +153,16 @@ type LinkedAccount = {
        * Other values include but are not limited to `metamask`, `rainbow`, `coinbase_wallet`, etc.
        */
       wallet_client_type: string
+      /** @deprecated */
+      wallet_client: string
+
       /**
        * The connector type used for this wallet during the most recent verification.
        *
        * This includes but is not limited to `injected`, `wallet_connect`, `coinbase_wallet`, `embedded`.
        */
       connector_type: string
+
       /**
        * If this is a 'privy' embedded wallet, stores the recovery method:
        *
@@ -157,6 +170,17 @@ type LinkedAccount = {
        *     2. 'user-passcode': recovery protected by user-input passcode
        */
       recovery_method: 'privy' | 'user-passcode'
+
+      /**
+       * Datetime when this account was linked to the user.
+       */
+      first_verified_at: number
+      /**
+       * Datetime when this account was most recently used as a login/link method by the user.
+       */
+      latest_verified_at: number
+      /** @deprecated */
+      verified_at: number
     }
 )
 
