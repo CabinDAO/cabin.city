@@ -1,25 +1,23 @@
-import { ContentCard } from '../../core/ContentCard'
-import styled from 'styled-components'
-import { Body2, H2, Overline } from '../../core/Typography'
-import { ProgressBar } from '../../core/ProgressBar'
-import { ColorName } from '@/styles/theme'
-import Icon from '../../core/Icon'
-import { useRouter } from 'next/router'
-import { Button } from '@/components/core/Button'
-import analytics from '@/lib/googleAnalytics/analytics'
-import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
-import { useBackend } from '@/components/hooks/useBackend'
 import { useState } from 'react'
-
-interface ProfileSetupSectionProps {
-  profileId: string
-  me: MeFragment
-}
+import { useRouter } from 'next/router'
+import { useBackend } from '@/components/hooks/useBackend'
+import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
+import analytics from '@/lib/googleAnalytics/analytics'
+import styled from 'styled-components'
+import { ColorName } from '@/styles/theme'
+import Icon from '@/components/core/Icon'
+import { Button } from '@/components/core/Button'
+import { ContentCard } from '@/components/core/ContentCard'
+import { Body2, H2, Overline } from '@/components/core/Typography'
+import { ProgressBar } from '@/components/core/ProgressBar'
 
 export const ProfileSetupSection = ({
   profileId,
   me,
-}: ProfileSetupSectionProps) => {
+}: {
+  profileId: string
+  me: MeFragment
+}) => {
   const complete = me.isProfileSetupFinished
   const router = useRouter()
   const { post } = useBackend()

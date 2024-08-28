@@ -8,7 +8,7 @@ const tagLabels: Labels = {
   [ProfileTag.moveCurious]: `I'm thinking of moving to a place with stronger local community`,
   [ProfileTag.nomad]: `I live a nomadic lifestyle`,
   [ProfileTag.parent]: `I'm a parent`,
-  [ProfileTag.networkSociety]: `I'm interested in decentralized communities`,
+  [ProfileTag.networkSociety]: `I'm interested in network societies`,
   [ProfileTag.crypto]: `I have a crypto wallet`,
 }
 

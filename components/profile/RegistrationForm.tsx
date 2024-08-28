@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/core/Button'
 import styled from 'styled-components'
 import { RegistrationParams } from '@/components/profile/RegistrationView'
@@ -10,6 +10,8 @@ import {
 import { BasicInfoStep } from '@/components/profile/setup-profile/BasicInfoStep'
 import { ContactStep } from '@/components/profile/setup-profile/ContactStep'
 import { TagsStep } from '@/components/profile/setup-profile/TagsStep'
+import { ContactFieldType } from '@/utils/types/profile'
+import { useExternalUser } from '@/components/auth/useExternalUser'
 
 export type Step = (stepProps: StepProps) => JSX.Element | null
 
@@ -51,6 +53,25 @@ export const RegistrationForm = ({
     tags: [],
     contactFields: [],
   })
+
+  const [defaultContactAdded, setDefaultContactAdded] = useState(false)
+  const { externalUser } = useExternalUser()
+  useEffect(() => {
+    if (externalUser && externalUser.email?.address && !defaultContactAdded) {
+      setNewParams({
+        ...newParams,
+        ...{
+          contactFields: [
+            {
+              type: ContactFieldType.Email,
+              value: externalUser.email.address,
+            },
+          ],
+        },
+      })
+      setDefaultContactAdded(true)
+    }
+  }, [externalUser])
 
   const handleSubmit = () => {
     if (

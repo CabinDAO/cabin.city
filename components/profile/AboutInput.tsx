@@ -64,6 +64,7 @@ export const AboutInput = ({
         onSelected={handleAvatarChange}
         error={canShowErrors && !values.avatarUrl}
         disabled={disabled}
+        required
       />
 
       <InputText

@@ -20,12 +20,12 @@ export const ContactStep = ({
   const handleNext = async () => {
     if (hasUnsavedChanges) {
       showError(
-        `You have an unsaved contact. Either add it or erase it to proceed.`
+        `You have an unsaved contact method. Either add it or erase it.`
       )
       return
     }
     if (contactList.length === 0) {
-      showError('Add at least one contact field.')
+      showError('Add at least one contact method.')
       return
     }
     setData({ ...data, ...{ contactFields: contactList } })
@@ -43,12 +43,8 @@ export const ContactStep = ({
         <H2>Contact & Socials</H2>
         <div>
           <Body1 style={{ marginBottom: '0.5rem' }}>
-            Add at least one way for Cabin members to connect with you.
+            Add some ways for Cabin members to connect with you
           </Body1>
-          <Body2>
-            Your login email is private. To show it on your profile, add it
-            below.
-          </Body2>
         </div>
         <ContactInput
           contactList={contactList}

@@ -167,7 +167,7 @@ const contactFieldDisplayNameMapping = {
 }
 
 const contactFieldPlaceholderMapping = {
-  [ContactFieldType.Email]: 'jon@cabin.city',
+  [ContactFieldType.Email]: 'home@cabin.city',
   [ContactFieldType.Discord]: 'cabin',
   [ContactFieldType.Twitter]: 'cabindotcity',
   [ContactFieldType.Instagram]: 'cabindotcity',
