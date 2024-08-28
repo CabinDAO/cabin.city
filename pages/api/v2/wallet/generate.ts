@@ -44,7 +44,9 @@ async function handler(
   }
 
   if (targetProfile.wallet) {
-    res.status(400).send({ error: 'Profile already has a wallet' })
+    res.status(400).send({
+      error: `Wallet exists: ${targetProfile.wallet.address}`,
+    })
     return
   }
 
