@@ -66,6 +66,8 @@ export enum ProfileTag {
   moveCurious = 'moveCurious',
   nomad = 'nomad',
   parent = 'parent',
+  networkSociety = 'networkSociety',
+  crypto = 'crypto',
 }
 
 export const ProfileAddressFragment = AddressFragment.omit({
@@ -186,6 +188,7 @@ export type ProfileFragment = ProfileBasicFragment & {
     name: string
   } | null
   contactFields: ContactFragmentType[]
+  tags: ProfileTag[]
 }
 
 export const ContactFragment = z

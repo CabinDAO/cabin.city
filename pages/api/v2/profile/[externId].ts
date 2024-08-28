@@ -21,6 +21,7 @@ import {
   ProfileQueryInclude,
   ProfileWithRelations,
   ProfileEditResponse,
+  ProfileTag,
 } from '@/utils/types/profile'
 
 async function handler(
@@ -271,6 +272,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
       type: cf.type as ContactFieldType,
       value: cf.value,
     })),
+    tags: profile.tags as ProfileTag[],
     roles: profile.roles.map((role) => ({
       hatId: role.walletHat?.hatId || null,
       type: role.type as RoleType,

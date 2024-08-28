@@ -7,6 +7,7 @@ import Icon, { IconName } from '../../core/Icon'
 import { ContentCard } from '../../core/ContentCard'
 import { Body1, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
+import { Tags } from '@/components/profile/Tags'
 
 export const ProfileAboutSection = ({
   profile,
@@ -29,7 +30,8 @@ export const ProfileAboutSection = ({
             />
           )}
         </ProfileDataGroup>
-        {profile.bio && <Body1>{profile.bio}</Body1>}
+        {profile.bio && <Bio>{profile.bio}</Bio>}
+        <Tags tags={profile.tags}></Tags>
       </AboutSection>
 
       {profile.contactFields.length && (
@@ -96,13 +98,14 @@ const AboutSection = styled.div`
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 1.6rem;
+  gap: 1rem;
   height: 100%;
   width: 100%;
   padding: 1.6rem;
 
   ${({ theme }) => theme.bp.lg} {
     max-width: 60%;
+    padding-bottom: 0;
   }
 `
 
@@ -112,7 +115,7 @@ const ContactSection = styled.div`
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1.6rem 1.6rem 0;
-  gap: 1.6rem;
+  gap: 1rem;
 
   ${({ theme }) => theme.bp.md} {
     padding-bottom: 1.6rem;
@@ -120,6 +123,10 @@ const ContactSection = styled.div`
 
   ${({ theme }) => theme.bp.lg} {
     padding-left: 0;
+    padding-bottom: 0;
     min-width: 35%;
   }
+`
+const Bio = styled(Body1)`
+  padding: 1rem 0;
 `

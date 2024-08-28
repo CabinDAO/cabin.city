@@ -8,6 +8,17 @@ const tagLabels: Labels = {
   [ProfileTag.moveCurious]: `I'm thinking of moving to a place with stronger local community`,
   [ProfileTag.nomad]: `I live a nomadic lifestyle`,
   [ProfileTag.parent]: `I'm a parent`,
+  [ProfileTag.networkSociety]: `I'm interested in decentralized communities`,
+  [ProfileTag.crypto]: `I have a crypto wallet`,
+}
+
+export const tagPillLabels: Record<ProfileTag, string> = {
+  [ProfileTag.steward]: `organizer`,
+  [ProfileTag.moveCurious]: `might-move`,
+  [ProfileTag.nomad]: `nomad`,
+  [ProfileTag.parent]: `parent`,
+  [ProfileTag.networkSociety]: `network-society`,
+  [ProfileTag.crypto]: `crypto`,
 }
 
 export const TagsInput = ({
