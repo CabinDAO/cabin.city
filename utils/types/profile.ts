@@ -264,6 +264,8 @@ export const ProfileNewParams = z
     avatarUrl: z.string().optional(),
     subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
+    tags: z.array(z.nativeEnum(ProfileTag)).optional(),
+    contactFields: z.array(ContactFragment).optional(),
   })
   .strict()
 export type ProfileNewParamsType = z.infer<typeof ProfileNewParams>

@@ -58,7 +58,8 @@ const StyledContentCard = styled(ContentCard)`
 `
 
 const StyledDivider = styled(HorizontalDivider)`
-  opacity: 1;
+  margin: 0 2rem;
+  width: calc(100% - 4rem);
 `
 
 const SectionTitle = styled.div`

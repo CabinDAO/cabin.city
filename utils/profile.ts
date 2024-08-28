@@ -8,7 +8,11 @@ import {
   ActivityType,
   CitizenshipStatus,
 } from '@prisma/client'
-import { ProfileAddressFragmentType } from '@/utils/types/profile'
+import {
+  ContactFragmentType,
+  ProfileAddressFragmentType,
+  ProfileTag,
+} from '@/utils/types/profile'
 import { randomId, randomInviteCode } from '@/utils/random'
 import { getRoleInfoFromHat } from '@/lib/hats/hats-utils'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
@@ -30,6 +34,8 @@ type ProfileCreateParams = {
   address?: ProfileAddressFragmentType
   avatarUrl?: string
   invite: Prisma.InviteGetPayload<null> | null
+  contactFields?: ContactFragmentType[]
+  tags?: ProfileTag[]
 }
 
 // must match ProfileWithInviteQueryInclude below
@@ -91,6 +97,10 @@ export async function createProfile(
         ? { connect: { id: params.invite.inviterId } }
         : undefined,
       invite: params.invite ? { connect: { id: params.invite.id } } : undefined,
+      contactFields: params.contactFields
+        ? { createMany: { data: params.contactFields } }
+        : undefined,
+      tags: params.tags ? { set: params.tags } : undefined,
     },
     include: ProfileWithInviteQueryInclude,
   })

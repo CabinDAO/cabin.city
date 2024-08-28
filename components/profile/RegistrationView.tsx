@@ -1,32 +1,22 @@
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
 import { Address } from 'viem'
-import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '../auth/useProfile'
-import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { useExternalUser } from '../auth/useExternalUser'
+import { useRouter } from 'next/router'
+import { useProfile } from '@/components/auth/useProfile'
+import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
-import {
-  ProfileAddressFragmentType,
-  ProfileNewParamsType,
-  ProfileNewResponse,
-} from '@/utils/types/profile'
-import { ErrorModal } from '../ErrorModal'
+import { ProfileNewParamsType, ProfileNewResponse } from '@/utils/types/profile'
+import { ErrorModal } from '@/components/ErrorModal'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
-import { RegistrationForm } from './RegistrationForm'
+import { RegistrationForm } from '@/components/profile/RegistrationForm'
 
-export interface RegistrationParams {
-  email: string
-  name: string
-  bio: string
-  address: ProfileAddressFragmentType
-  avatarUrl: string
-  subscribeToNewsletter: boolean
-}
+export type RegistrationParams = Omit<
+  ProfileNewParamsType,
+  'email' | 'walletAddress'
+>
 
 export const RegistrationView = () => {
   const router = useRouter()
@@ -35,14 +25,14 @@ export const RegistrationView = () => {
   const { showError } = useError()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
-  const { linkEmail } = usePrivy()
   const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
 
-  useEffect(() => {
-    if (externalUser && !externalUser?.email?.address) {
-      linkEmail()
-    }
-  }, [externalUser]) // don't add linkEmail() to deps. it causes a bug where useEffect is called many times and the popup never shows the screen to enter the code Privy emails you
+  // const [email, setEmail] = useState('')
+  // useEffect(() => {
+  //   if (externalUser?.email?.address) {
+  //     setEmail(externalUser.email.address)
+  //   }
+  // }, [externalUser, setEmail])
 
   const handleSubmit = async (params: RegistrationParams) => {
     if (!isUserLoading && !externalUser) {
@@ -56,22 +46,25 @@ export const RegistrationView = () => {
       return
     }
 
-    const walletAddress = externalUser.wallet?.address
-
     if (!params.avatarUrl) {
       showError('Avatar required')
       return
     }
 
+    const walletAddress = externalUser.wallet?.address
+    const email = externalUser.email?.address
+    if (!email) {
+      showError('Privy email address is missing')
+      return
+    }
+
     try {
       const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
-        walletAddress: walletAddress ? (walletAddress as Address) : undefined,
-        name: params.name,
-        bio: params.bio,
-        email: externalUser.email?.address || params.email,
-        address: params.address,
-        avatarUrl: params.avatarUrl,
-        subscribeToNewsletter: params.subscribeToNewsletter,
+        ...params,
+        ...{
+          walletAddress: walletAddress ? (walletAddress as Address) : undefined,
+          email: email,
+        },
       } satisfies ProfileNewParamsType)
 
       if ('error' in resp) {

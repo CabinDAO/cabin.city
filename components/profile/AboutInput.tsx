@@ -92,7 +92,7 @@ export const AboutInput = ({
       <LocationAutocompleteInput
         disabled={disabled}
         initialValue={toFullAddress(values.address)}
-        bottomHelpText={'What city do you spend most of your time in?'}
+        placeholder={'What city do you spend most of your time in?'}
         onLocationChange={(address) =>
           handleAddressChange(toProfileAddress(address))
         }

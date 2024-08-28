@@ -1,5 +1,5 @@
 import { ContactFieldType, ContactFragmentType } from '@/utils/types/profile'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Dropdown } from '@/components/core/Dropdown'
@@ -18,15 +18,30 @@ const dropdownOptions = contactTypes.map(
 export const ContactInput = ({
   contactList,
   setContactList,
+  setHasUnsavedChanges,
 }: {
   contactList: ContactFragmentType[]
   setContactList: (contactList: ContactFragmentType[]) => void
+  setHasUnsavedChanges?: (v: boolean) => void
 }) => {
   const { deviceSize } = useDeviceSize()
   const [value, setValue] = useState('')
   const [contactTypeIndex, setContactTypeIndex] = useState(0)
+  const [showError, setShowError] = useState(false)
+
+  // track if there are unsaved changes
+  useEffect(() => {
+    if (setHasUnsavedChanges) {
+      setHasUnsavedChanges(value.trim() != '')
+    }
+  }, [setHasUnsavedChanges, value])
 
   const addContact = () => {
+    if (!value) {
+      setShowError(true)
+      return
+    }
+
     const { sanitizedValue, error } = sanitizeContactValue(
       contactTypes[contactTypeIndex],
       value
@@ -40,6 +55,8 @@ export const ContactInput = ({
       },
     ])
     setContactTypeIndex(0)
+    setValue('')
+    setShowError(false)
   }
 
   const deleteContact = (index: number) => {
@@ -57,15 +74,17 @@ export const ContactInput = ({
       />
       <NewContact>
         <Inputs>
-          <Dropdown
-            placeholder="Select Contact Type"
-            selectedOption={dropdownOptions[contactTypeIndex]}
-            onSelect={(option) => {
-              setContactTypeIndex(dropdownOptions.indexOf(option))
-            }}
-            label="Contact Type"
-            options={dropdownOptions}
-          />
+          <div style={{ flexShrink: '0' }}>
+            <Dropdown
+              placeholder="Select Contact Type"
+              selectedOption={dropdownOptions[contactTypeIndex]}
+              onSelect={(option) => {
+                setContactTypeIndex(dropdownOptions.indexOf(option))
+              }}
+              label="Contact Type"
+              options={dropdownOptions}
+            />
+          </div>
           <InputText
             label={
               contactFieldDisplayNameMapping[contactTypes[contactTypeIndex]]
@@ -79,17 +98,23 @@ export const ContactInput = ({
                 ? 'email'
                 : 'text'
             }
-            onChange={(e) => setValue(e.target.value)}
+            error={showError}
+            onChange={(e) => {
+              setShowError(false)
+              setValue(e.target.value)
+            }}
           />
+          <ButtonWrap>
+            <Button
+              style={{ width: 'fit-content' }}
+              variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
+              onClick={addContact}
+            >
+              <Icon name={'plus'} size={1.6} />
+              Add
+            </Button>
+          </ButtonWrap>
         </Inputs>
-        <Button
-          style={{ width: 'fit-content' }}
-          variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
-          onClick={addContact}
-        >
-          <Icon name={'plus'} size={1.6} />
-          Add Contact
-        </Button>
       </NewContact>
     </Container>
   )
@@ -120,8 +145,13 @@ const Inputs = styled.div`
   ${({ theme }) => theme.bp.md} {
     gap: 2.4rem;
     flex-direction: row;
-    align-items: flex-end;
   }
+`
+
+const ButtonWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 `
 
 const contactFieldDisplayNameMapping = {

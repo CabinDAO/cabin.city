@@ -1,188 +1,148 @@
-import React, { useEffect, useState } from 'react'
-import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '@/components/auth/useProfile'
-import { useExternalUser } from '@/components/auth/useExternalUser'
-import { ProfileAddressFragmentType } from '@/utils/types/profile'
-import styled from 'styled-components'
+import React, { useState } from 'react'
 import { Button } from '@/components/core/Button'
-import { Checkbox } from '@/components/core/Checkbox'
-import { RegistrationParams } from './RegistrationView'
-import { isValidAddress, isValidName, isValidBio } from './validations'
-import { AboutInput } from '@/components/profile/AboutInput'
+import styled from 'styled-components'
+import { RegistrationParams } from '@/components/profile/RegistrationView'
+import {
+  isValidAddress,
+  isValidBio,
+  isValidName,
+} from '@/components/profile/validations'
+import { BasicInfoStep } from '@/components/profile/setup-profile/BasicInfoStep'
+import { ContactStep } from '@/components/profile/setup-profile/ContactStep'
+import { TagsStep } from '@/components/profile/setup-profile/TagsStep'
 
-export function RegistrationForm({
+export type Step = (stepProps: StepProps) => JSX.Element | null
+
+const steps: Step[] = [BasicInfoStep, ContactStep, TagsStep]
+
+export type StepProps = {
+  goNext: VoidFunction
+  goBack: VoidFunction
+  isFirstStep: boolean
+  isLastStep: boolean
+  data: RegistrationParams
+  setData: (data: RegistrationParams) => void
+}
+
+export const RegistrationForm = ({
   onSubmit,
 }: {
   onSubmit: (params: RegistrationParams) => void
-}) {
-  const { linkEmail } = usePrivy()
-  const { externalUser } = useExternalUser()
-  const { user } = useProfile()
-  const [email, setEmail] = useState('')
+}) => {
+  const [currentStep, setCurrentStep] = useState(0)
+  const isFirstStep = currentStep === 0
+  const isLastStep = currentStep === steps.length - 1
 
-  const [avatarUrl, setAvatarUrl] = useState('')
-  const [name, setName] = useState('')
-  const [bio, setBio] = useState('')
-  const [address, setAddress] = useState<ProfileAddressFragmentType>()
-  const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
+  const [newParams, setNewParams] = useState<RegistrationParams>({
+    name: '',
+    bio: '',
+    address: {
+      lat: null,
+      lng: null,
+      formattedAddress: null,
+      locality: null,
+      admininstrativeAreaLevel1: null,
+      admininstrativeAreaLevel1Short: null,
+      country: null,
+      countryShort: null,
+    },
+    avatarUrl: '',
+    subscribeToNewsletter: true,
+    tags: [],
+    contactFields: [],
+  })
 
-  const [canShowErrors, setCanShowErrors] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
-
-  useEffect(() => {
-    // if (
-    //   externalUser?.email?.address &&
-    //   externalUser.email.address !== email &&
-    //   !submitted &&
-    //   isValidName(name) &&
-    //   address &&
-    //   isValidAddress(address) &&
-    //   !user
-    // ) {
-    //   onSubmit({
-    //     name: name.trim(),
-    //     email: email.trim(),
-    //     address,
-    //     avatar,
-    //   })
-    //   setSubmitted(true)
-    //   return
-    // }
-
-    if (externalUser?.email?.address) {
-      setEmail(externalUser.email.address)
-    }
-  }, [
-    externalUser,
-    setEmail,
-    // avatar,
-    // address,
-    // name,
-    // email,
-    // onSubmit,
-    // user,
-    // submitted,
-  ])
-
-  const handleSubmit = async () => {
-    setCanShowErrors(true)
-
+  const handleSubmit = () => {
     if (
-      isValidName(name) &&
-      isValidBio(bio) &&
-      address &&
-      isValidAddress(address) &&
-      avatarUrl
+      isValidName(newParams.name) &&
+      isValidBio(newParams.bio) &&
+      isValidAddress(newParams.address) &&
+      newParams.avatarUrl
     ) {
-      if (externalUser?.email?.address) {
-        setSubmitted(true)
-        onSubmit({
-          email: email.trim(),
-          name: name.trim(),
-          bio: bio.trim(),
-          address,
-          avatarUrl: avatarUrl,
-          subscribeToNewsletter,
-        })
-      } else {
-        linkEmail()
-      }
+      onSubmit(newParams)
     }
   }
 
+  const handleNext = () => {
+    if (!isLastStep) {
+      setCurrentStep(currentStep + 1)
+    } else {
+      handleSubmit()
+    }
+  }
+
+  const handleBack = () => {
+    if (!isFirstStep) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+
+  const CurrentStep = steps[currentStep]
+
   return (
     <Container>
-      <AboutInput
-        values={{
-          name,
-          bio,
-          address,
-          avatarUrl,
-        }}
-        onNameChange={setName}
-        onBioChange={setBio}
-        onAddressChange={setAddress}
-        onAvatarUrlChange={setAvatarUrl}
-        canShowErrors={canShowErrors}
+      <CurrentStep
+        goNext={handleNext}
+        goBack={handleBack}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+        data={newParams}
+        setData={setNewParams}
       />
-
-      <InputGroup>
-        <SubscribeContainer>
-          <Checkbox
-            selected={subscribeToNewsletter}
-            label={`Subscribe to Cabin's newsletter`}
-            onClick={() => setSubscribeToNewsletter(!subscribeToNewsletter)}
-          />
-        </SubscribeContainer>
-      </InputGroup>
-
-      <Submission>
-        <SubmitButton
-          disabled={!!user || submitted}
-          onClick={handleSubmit}
-          variant="primary"
-        >
-          Continue
-        </SubmitButton>
-      </Submission>
     </Container>
   )
 }
 
 const Container = styled.div`
-  margin: 1.6rem;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   width: 100%;
-  gap: 2.4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    margin: 3rem;
-  }
-`
-const InputGroup = styled.div`
-  display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  padding: 2.4rem;
+  gap: 2.4rem;
+`
+
+export const FormActions = ({
+  handleNext,
+  handleBack,
+  isFirstStep,
+  isLastStep,
+}: {
+  handleNext: VoidFunction
+  handleBack: VoidFunction
+  isFirstStep: boolean
+  isLastStep: boolean
+}) => {
+  return (
+    <ButtonGroup>
+      {!isFirstStep && (
+        <Button variant="link" onClick={handleBack}>
+          Back
+        </Button>
+      )}
+      <Button onClick={handleNext} variant="primary">
+        {isLastStep ? 'Finish' : 'Next'}
+      </Button>
+    </ButtonGroup>
+  )
+}
+
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
   gap: 1.6rem;
   width: 100%;
-`
 
-const Submission = styled.div`
-  width: 100%;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2.4rem;
-  position: relative;
-  min-height: 4.8rem;
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-    gap: 5.2rem;
+  button {
+    width: 100%;
   }
-`
-
-const SubmitButton = styled(Button)`
-  width: 100%;
 
   ${({ theme }) => theme.bp.md} {
     width: auto;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-`
 
-const SubscribeContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  align-items: center;
-  gap: 1rem;
+    button {
+      width: auto;
+    }
+  }
 `

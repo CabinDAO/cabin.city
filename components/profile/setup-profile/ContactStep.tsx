@@ -1,40 +1,74 @@
 import { useState } from 'react'
-import { SetupStepForm } from './SetupStepForm'
-import { ContactFragmentType, ProfileEditResponse } from '@/utils/types/profile'
-import { ContactInput } from '../ContactInput'
-import { useProfile } from '@/components/auth/useProfile'
-import { StepProps } from './step-configuration'
-import { useBackend } from '@/components/hooks/useBackend'
+import { FormActions, StepProps } from '@/components/profile/RegistrationForm'
+import { ContactInput } from '@/components/profile/ContactInput'
+import { Body1, Body2, H2 } from '@/components/core/Typography'
+import styled from 'styled-components'
+import { useError } from '@/components/hooks/useError'
 
-export const ContactStep = ({ stepName, onBack, onNext }: StepProps) => {
-  const { user } = useProfile()
-  const [contactList, setContactList] = useState<ContactFragmentType[]>([])
-  const { useMutate } = useBackend()
-  const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
-    user ? ['PROFILE', { externId: user.externId }] : null
-  )
+export const ContactStep = ({
+  goNext,
+  goBack,
+  isFirstStep,
+  isLastStep,
+  data,
+  setData,
+}: StepProps) => {
+  const { showError } = useError()
+  const [contactList, setContactList] = useState(data.contactFields || [])
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
 
   const handleNext = async () => {
-    const cleanUpContactList = contactList.filter(
-      (contact) => contact.value !== ''
-    )
-
-    await updateProfile({
-      data: {
-        contactFields: cleanUpContactList,
-      },
-    })
-
-    onNext()
+    if (hasUnsavedChanges) {
+      showError(
+        `You have an unsaved contact. Either add it or erase it to proceed.`
+      )
+      return
+    }
+    if (contactList.length === 0) {
+      showError('Add at least one contact field.')
+      return
+    }
+    setData({ ...data, ...{ contactFields: contactList } })
+    goNext()
   }
 
-  if (!user) {
-    return null
+  const handleBack = async () => {
+    setData({ ...data, ...{ contactFields: contactList } })
+    goBack()
   }
 
   return (
-    <SetupStepForm stepName={stepName} onNext={handleNext} onBack={onBack}>
-      <ContactInput contactList={contactList} setContactList={setContactList} />
-    </SetupStepForm>
+    <>
+      <Container>
+        <H2>Contact & Socials</H2>
+        <div>
+          <Body1 style={{ marginBottom: '0.5rem' }}>
+            Add at least one way for Cabin members to connect with you.
+          </Body1>
+          <Body2>
+            Your login email is private. To show it on your profile, add it
+            below.
+          </Body2>
+        </div>
+        <ContactInput
+          contactList={contactList}
+          setContactList={setContactList}
+          setHasUnsavedChanges={setHasUnsavedChanges}
+        />
+      </Container>
+      <FormActions
+        handleNext={handleNext}
+        handleBack={handleBack}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+      />
+    </>
   )
 }
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+`

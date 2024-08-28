@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Icon from './Icon'
 import { Tooltip } from './Tooltip'
@@ -12,7 +12,7 @@ export const CopyToClipboard = ({ text, children }: CopyToClipboardProps) => {
   const [copied, setCopied] = useState(false)
 
   const handleCopyClick = () => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text).then()
     setCopied(true)
     setTimeout(() => {
       setCopied(false)

@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import {
   formatContactField,
@@ -21,54 +22,63 @@ export const ProfileContactList = ({
   return (
     <Container count={contactFields.length}>
       {contactFields.map((field, i) => (
-        <>
-          <LabelContainer key={`${i}a`}>
-            {onDelete && (
-              <Icon
-                name="trash"
-                size={1.4}
-                style={{ opacity: '0.75', cursor: 'pointer' }}
-                onClick={() => onDelete(i)}
-              />
-            )}
-            <Label bigger={bigger}>{field.type}</Label>
-          </LabelContainer>
-          <div key={`${i}b`}></div>
-          <ContactField key={`${i}c`} field={field} bigger={bigger} />
-          <div key={`${i}d`}></div>
-        </>
+        <ContactField
+          key={i}
+          field={field}
+          index={i}
+          bigger={bigger}
+          onDelete={onDelete}
+        />
       ))}
     </Container>
   )
 }
 
 const ContactField = ({
+  index,
   field,
   bigger,
+  onDelete,
 }: {
+  index: number
   field: ProfileFragment['contactFields'][0]
   bigger?: boolean
+  onDelete?: (index: number) => void
 }) => {
   const { deviceSize } = useDeviceSize()
   const url = getUrlFromContactField(field)
 
-  if (url) {
-    return (
-      <ValueContainer>
-        <a href={url} target="_blank" rel="noopener nofollow noreferrer">
-          <Value bigger={bigger}>{formatContactField(field)}</Value>
-        </a>
+  return (
+    <>
+      <LabelContainer bigger={bigger}>
+        {onDelete && (
+          <div onClick={() => onDelete(index)} title={'Delete'}>
+            <Icon
+              name="trash"
+              size={1.3}
+              style={{ opacity: '0.75', cursor: 'pointer' }}
+            />
+          </div>
+        )}
+        <Label bigger={bigger}>{field.type}</Label>
+      </LabelContainer>
+      <div></div>
+      <ValueContainer bigger={bigger}>
+        {url ? (
+          <Link href={url} target="_blank" rel="noopener nofollow noreferrer">
+            <Value bigger={bigger}>{formatContactField(field)}</Value>
+          </Link>
+        ) : (
+          <CopyToClipboard text={field.value}>
+            <Value bigger={bigger}>
+              {formatContactField(field, deviceSize !== 'tablet')}
+            </Value>
+          </CopyToClipboard>
+        )}
       </ValueContainer>
-    )
-  } else {
-    return (
-      <CopyToClipboard text={field.value}>
-        <Value bigger={bigger}>
-          {formatContactField(field, deviceSize !== 'tablet')}
-        </Value>
-      </CopyToClipboard>
-    )
-  }
+      <div></div>
+    </>
+  )
 }
 
 const Container = styled.div<{ count: number }>`
@@ -84,17 +94,18 @@ const Container = styled.div<{ count: number }>`
 
   ${({ theme }) => theme.bp.md} {
     grid-template-rows: initial;
-    grid-template-columns: 10rem 1.6rem 1fr 0;
+    grid-template-columns: 12rem 1.6rem 1fr 0;
     row-gap: 1.6rem;
   }
 `
 
-const LabelContainer = styled.div`
+const LabelContainer = styled.div<{ bigger?: boolean }>`
   display: flex;
   flex-direction: row;
   gap: 1.6rem;
   max-width: 100%;
   flex-grow: 0;
+  ${({ bigger }) => bigger && 'height: 2.4rem'};
   align-items: center;
 `
 
@@ -102,17 +113,19 @@ const Label = styled.span<{ bigger?: boolean }>`
   font-family: ${fonts.inter};
   font-weight: 400;
   line-height: 1.23;
-  font-size: ${({ bigger }) => (bigger ? '1.6rem' : '1.4rem')};
+  font-size: ${({ bigger }) => (bigger ? '1.8rem' : '1.4rem')};
   opacity: 0.75;
 `
 
-const ValueContainer = styled.div`
+const ValueContainer = styled.div<{ bigger?: boolean }>`
   width: min-content;
   white-space: nowrap;
   display: flex;
   flex-direction: row;
   gap: 1.6rem;
   max-width: 100%;
+  ${({ bigger }) => bigger && 'height: 2.4rem'};
+  align-items: center;
 `
 
 const Value = styled.span<{ bigger?: boolean }>`
