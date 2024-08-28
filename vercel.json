@@ -4,6 +4,6 @@
     {
       "path": "/api/v2/sync/token",
       "schedule": "1/10 * * * *"
-    },
+    }
   ]
 }
