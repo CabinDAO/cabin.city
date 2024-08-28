@@ -45,30 +45,31 @@ export const ProfileStampsSection = ({
           <PassportsPage>
             {currentBadges.map((badge) => (
               <Badge
-                key={badge?.otterspaceBadgeId}
-                badgeId={badge?.otterspaceBadgeId ?? ''}
-                name={badge?.spec.name ?? ''}
-                src={badge?.spec.image ?? ''}
+                key={badge.id}
+                name={badge.spec.name}
+                specId={badge.spec.id}
               />
             ))}
           </PassportsPage>
-          <Pagination>
-            <Overline>
-              {start + 1} - {end > count ? count : end} of {count}
-            </Overline>
-            <PageTurner>
-              <IconButton
-                icon="chevron-left"
-                size={1}
-                onClick={handleClickPrev}
-              />
-              <IconButton
-                icon="chevron-right"
-                size={1}
-                onClick={handleClickNext}
-              />
-            </PageTurner>
-          </Pagination>
+          {count > PASSPORT_PAGE_SIZE && (
+            <Pagination>
+              <Overline>
+                {start + 1} - {end > count ? count : end} of {count}
+              </Overline>
+              <PageTurner>
+                <IconButton
+                  icon="chevron-left"
+                  size={1}
+                  onClick={handleClickPrev}
+                />
+                <IconButton
+                  icon="chevron-right"
+                  size={1}
+                  onClick={handleClickNext}
+                />
+              </PageTurner>
+            </Pagination>
+          )}
         </>
       ) : (
         <EmptyState

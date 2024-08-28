@@ -118,7 +118,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
         badges: {
           select: {
             id: true
-            otterspaceBadgeId: true
             spec: true
           }
         }
@@ -154,7 +153,6 @@ const MyProfileQueryInclude = {
       badges: {
         select: {
           id: true,
-          otterspaceBadgeId: true,
           spec: true,
         },
       },

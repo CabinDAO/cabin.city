@@ -1,9 +1,9 @@
-import { getImageUrl } from '@/lib/image'
 import Image from 'next/image'
 import { Body1 } from '../Typography'
 import { CompactPostImage } from './CompactPostImage'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
+import { getBadgeImageUrl } from '@/components/core/Badge'
 
 const ProfileBadgeAddedContent = (props: PostProps) => {
   const { activity } = props
@@ -26,9 +26,7 @@ const ProfileBadgeAddedMedia = (props: PostProps) => {
     return null
   }
 
-  if (!badge.spec.image) return null
-
-  const imageUrl = getImageUrl(badge.spec.image)
+  const imageUrl = getBadgeImageUrl(badge.spec.id)
 
   if (variant === 'compact') {
     return <CompactPostImage alt={badge.spec.name} imageUrl={imageUrl} />

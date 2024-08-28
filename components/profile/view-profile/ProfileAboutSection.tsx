@@ -5,9 +5,8 @@ import { monthYearFormat } from '@/utils/display-utils'
 import styled from 'styled-components'
 import Icon, { IconName } from '../../core/Icon'
 import { ContentCard } from '../../core/ContentCard'
-import { Body1, Body2, Caption, H3 } from '../../core/Typography'
+import { Body1, Caption, H3 } from '../../core/Typography'
 import { ProfileContactList } from './ProfileContactList'
-import { HorizontalDivider } from '@/components/core/Divider'
 
 export const ProfileAboutSection = ({
   profile,
@@ -19,12 +18,12 @@ export const ProfileAboutSection = ({
       <AboutSection>
         <H3>About</H3>
         <ProfileDataGroup>
-          <ProfileDataText
+          <Datum
             iconName="date"
             captionContent={`Joined ${monthYearFormat(profile.createdAt)}`}
           />
           {profile.address && (
-            <ProfileDataText
+            <Datum
               iconName="location"
               captionContent={formatShortAddress(profile.address)}
             />
@@ -43,7 +42,7 @@ export const ProfileAboutSection = ({
   </ContentCard>
 )
 
-const ProfileDataText = ({
+const Datum = ({
   iconName,
   captionContent,
 }: {
@@ -55,8 +54,8 @@ const ProfileDataText = ({
   }
   return (
     <ProfileData>
-      <Icon name={iconName} size={2.4} />
-      <Body1>{captionContent}</Body1>
+      <Icon name={iconName} size={2} />
+      <Caption>{captionContent}</Caption>
     </ProfileData>
   )
 }
@@ -123,9 +122,4 @@ const ContactSection = styled.div`
     padding-left: 0;
     min-width: 35%;
   }
-`
-
-const StyledDivider = styled(HorizontalDivider)`
-  margin: 0 2rem;
-  width: calc(100% - 4rem);
 `

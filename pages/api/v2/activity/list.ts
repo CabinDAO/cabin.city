@@ -99,11 +99,10 @@ const toFragments = (
         badge: activity.badge
           ? {
               id: activity.badge.id,
-              otterspaceBadgeId: activity.badge.otterspaceBadgeId,
               spec: {
+                id: activity.badge.spec.id,
                 name: activity.badge.spec.name,
                 description: activity.badge.spec.description,
-                image: activity.badge.spec.image,
               },
             }
           : undefined,

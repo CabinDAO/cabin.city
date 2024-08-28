@@ -133,4 +133,6 @@ const Value = styled.span<{ bigger?: boolean }>`
   font-weight: 500;
   line-height: 1.23;
   font-size: ${({ bigger }) => (bigger ? '1.6rem' : '1.4rem')};
+  text-overflow: ellipsis;
+  overflow: hidden;
 `

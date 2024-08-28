@@ -259,11 +259,10 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
           address: profile.wallet.address,
           badges: profile.wallet.badges.map((badge) => ({
             id: badge.id,
-            otterspaceBadgeId: badge.otterspaceBadgeId,
             spec: {
+              id: badge.spec.id,
               name: badge.spec.name,
               description: badge.spec.description,
-              image: badge.spec.image,
             },
           })),
         }

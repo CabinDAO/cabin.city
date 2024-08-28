@@ -132,7 +132,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
     badge: {
       select: {
         id: true
-        otterspaceBadgeId: true
         spec: true
       }
     }
@@ -226,7 +225,6 @@ export const ActivityQueryInclude = {
   badge: {
     select: {
       id: true,
-      otterspaceBadgeId: true,
       spec: true,
     },
   },

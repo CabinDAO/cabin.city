@@ -1,29 +1,21 @@
-import { getImageUrl } from '@/lib/image'
-import { getOtterSpaceOpenseaUrl } from '@/lib/opensea'
 import styled from 'styled-components'
-import Icon from './Icon'
-import { NoWrap } from './NoWrap'
 import { H6 } from './Typography'
 import { ImageFlex } from './gallery/ImageFlex'
-
-interface BadgeProps {
-  src: string
-  name: string
-  badgeId: string
-}
 
 const IMAGE_SIZE = 176
 const MOBILE_IMAGE_SIZE = 148
 const TABLET_IMAGE_SIZE = 133
 
-export const Badge = ({ name, src, badgeId }: BadgeProps) => {
-  const imageUrl = getImageUrl(src)
+export const getBadgeImageUrl = (specId: number) => {
+  return `/images/stamps/${specId}.png`
+}
 
+export const Badge = ({ name, specId }: { name: string; specId: number }) => {
   return (
     <BadgeContainer>
       <ImageContainer>
         <ImageFlex
-          src={imageUrl}
+          src={getBadgeImageUrl(specId)}
           alt={name}
           fill
           sizes={`${IMAGE_SIZE}px`}
@@ -31,16 +23,7 @@ export const Badge = ({ name, src, badgeId }: BadgeProps) => {
         />
       </ImageContainer>
       <NameContainer>
-        <NoWrap>
-          <H6>{name}</H6>
-        </NoWrap>
-        <a
-          href={getOtterSpaceOpenseaUrl(badgeId)}
-          target="_blank"
-          rel="noopener nofollow noreferrer"
-        >
-          <Icon name="up-right-arrow" color="green900" size={1.1} />
-        </a>
+        <H6>{name}</H6>
       </NameContainer>
     </BadgeContainer>
   )
@@ -50,11 +33,12 @@ const BadgeContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 0.4rem;
   background-color: ${({ theme }) => theme.colors.yellow200};
   border: 1px solid ${({ theme }) => theme.colors.green900};
   width: min-content;
+  height: 100%;
   gap: 1.2rem;
 
   ${({ theme }) => theme.bp.lg} {
@@ -86,16 +70,12 @@ const NameContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
-  text-overflow: ellipsis;
   padding-bottom: 1rem;
 
   ${H6} {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: calc(${IMAGE_SIZE}px * 0.9);
+    text-align: center;
   }
 
   ${({ theme }) => theme.bp.lg} {

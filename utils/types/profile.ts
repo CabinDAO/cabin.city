@@ -204,11 +204,10 @@ export type RoleFragment = {
 
 export type BadgeFragment = {
   id: number
-  otterspaceBadgeId: string
   spec: {
+    id: number
     name: string
     description: string
-    image: string
   }
 }
 
@@ -319,7 +318,6 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
         badges: {
           select: {
             id: true
-            otterspaceBadgeId: true
             spec: true
           }
         }
@@ -350,7 +348,6 @@ export const ProfileQueryInclude = {
       badges: {
         select: {
           id: true,
-          otterspaceBadgeId: true,
           spec: true,
         },
       },
