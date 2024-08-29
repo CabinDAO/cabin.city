@@ -23,7 +23,7 @@ const faqs = [
           >
             here
           </Link>{' '}
-          before 12:00pm MST on August 25th. Be sure to write from the heart and
+          before September 8, 11:59pm PT. Be sure to write from the heart and
           give thorough, well thought out answers in your application. We
           accepted 19% of applicants to our last program and plan to be even
           more selective this round.
