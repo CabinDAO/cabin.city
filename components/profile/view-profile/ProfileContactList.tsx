@@ -13,10 +13,12 @@ import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 export const ProfileContactList = ({
   contactFields,
   bigger,
+  onContactClick,
   onDelete,
 }: {
   contactFields: ProfileFragment['contactFields']
   bigger?: boolean
+  onContactClick?: () => void
   onDelete?: (index: number) => void
 }) => {
   return (
@@ -27,6 +29,7 @@ export const ProfileContactList = ({
           field={field}
           index={i}
           bigger={bigger}
+          onContactClick={onContactClick}
           onDelete={onDelete}
         />
       ))}
@@ -38,11 +41,13 @@ const ContactField = ({
   index,
   field,
   bigger,
+  onContactClick,
   onDelete,
 }: {
   index: number
   field: ProfileFragment['contactFields'][0]
   bigger?: boolean
+  onContactClick?: () => void
   onDelete?: (index: number) => void
 }) => {
   const { deviceSize } = useDeviceSize()
@@ -65,11 +70,16 @@ const ContactField = ({
       <div></div>
       <ValueContainer bigger={bigger}>
         {url ? (
-          <Link href={url} target="_blank" rel="noopener nofollow noreferrer">
+          <Link
+            href={url}
+            target="_blank"
+            rel="noopener nofollow noreferrer"
+            onClick={onContactClick}
+          >
             <Value bigger={bigger}>{formatContactField(field)}</Value>
           </Link>
         ) : (
-          <CopyToClipboard text={field.value}>
+          <CopyToClipboard text={field.value} onClick={onContactClick}>
             <Value bigger={bigger}>
               {formatContactField(field, deviceSize !== 'tablet')}
             </Value>

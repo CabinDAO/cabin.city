@@ -39,7 +39,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <Container>
           <ProfileHeaderSection profile={profile} />
           {isOwnProfile && <ProfileNextStepsSection me={user} />}
-          <ProfileAboutSection profile={profile} />
+          <ProfileAboutSection profile={profile} me={user} />
           <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />
           <ProfileActivitiesSection profile={profile} />

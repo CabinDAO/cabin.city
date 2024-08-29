@@ -3,12 +3,15 @@ import styled from 'styled-components'
 import Icon from './Icon'
 import { Tooltip } from './Tooltip'
 
-interface CopyToClipboardProps {
+export const CopyToClipboard = ({
+  text,
+  children,
+  onClick,
+}: {
   text: string
   children: React.ReactNode
-}
-
-export const CopyToClipboard = ({ text, children }: CopyToClipboardProps) => {
+  onClick?: () => void
+}) => {
   const [copied, setCopied] = useState(false)
 
   const handleCopyClick = () => {
@@ -17,6 +20,7 @@ export const CopyToClipboard = ({ text, children }: CopyToClipboardProps) => {
     setTimeout(() => {
       setCopied(false)
     }, 2000)
+    onClick?.()
   }
 
   return (
