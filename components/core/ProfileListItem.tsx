@@ -28,7 +28,10 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
             {profile.cabinTokenBalanceInt !== null && (
               <>{profile.cabinTokenBalanceInt} ₡ABIN &nbsp;·&nbsp; </>
             )}
-            {profile.badgeCount} stamps
+            {profile.createdAt > '2024-01-01'
+              ? profile.badgeCount + 1
+              : profile.badgeCount}{' '}
+            stamps
           </Caption>
           <StyledBody2>{truncate(profile.bio ?? '', 90)}</StyledBody2>
         </InfoContainer>
