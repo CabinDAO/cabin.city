@@ -63,7 +63,13 @@ export const SotnStampView = () => {
         <title>Get Your Stamp</title>
       </Head>
       <BaseLayout hideNavAndFooter>
-        <TitleCard title={`Cabin's State of the Network`} icon={'logo-cabin'} />
+        <TitleCard
+          title={`Cabin's State of the Network`}
+          icon={'logo-cabin'}
+          onIconClick={() => {
+            router.push('/').then()
+          }}
+        />
         <StyledContentCard shape="notch" notchSize={1.6}>
           <Container>
             <H1>Thanks for joining our State of the Network call</H1>
