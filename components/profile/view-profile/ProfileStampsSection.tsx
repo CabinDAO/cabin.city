@@ -1,10 +1,10 @@
+import { useState } from 'react'
+import { ProfileFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { H3, Overline } from '@/components/core/Typography'
 import { EmptyState } from '../../core/EmptyState'
-import { useState } from 'react'
 import { Badge } from '@/components/core/Badge'
 import IconButton from '@/components/core/IconButton'
-import { ProfileFragment } from '@/utils/types/profile'
 
 const PASSPORT_PAGE_SIZE = 8
 
@@ -15,7 +15,21 @@ export const ProfileStampsSection = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
-  const list = profile.wallet?.badges || []
+  const hackList =
+    profile.createdAt > '2024-01-01'
+      ? [
+          {
+            id: 46,
+            spec: {
+              id: 46,
+              name: 'Joined Cabin 2024',
+              description: 'Joined Cabin 2024',
+            },
+          },
+        ]
+      : []
+  const list = (profile.wallet?.badges || []).concat(hackList)
+
   const count = list.length
   const start = PASSPORT_PAGE_SIZE * currentPage
   const end = (currentPage + 1) * PASSPORT_PAGE_SIZE

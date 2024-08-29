@@ -1,12 +1,13 @@
+import { useActivityReactions } from '@/components/activity/useActivityReactions'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ActivityListResponse, ActivityType } from '@/utils/types/activity'
+import { ProfileFragment } from '@/utils/types/profile'
+import { randomId } from '@/utils/random'
+import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { Post } from '@/components/core/post/Post'
 import { H3 } from '@/components/core/Typography'
-import { useActivityReactions } from '@/components/activity/useActivityReactions'
-import styled from 'styled-components'
-import { ActivityListResponse } from '@/utils/types/activity'
-import { ProfileFragment } from '@/utils/types/profile'
-import { useBackend } from '@/components/hooks/useBackend'
 
 export const ProfileActivitiesSection = ({
   profile,
@@ -19,11 +20,40 @@ export const ProfileActivitiesSection = ({
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 
   const { data, mutate: refetchActivities } = useGet<ActivityListResponse>(
-    profile ? 'ACTIVITY_LIST' : null,
+    'ACTIVITY_LIST',
     { profileId: profile?.externId, pageSize: 10 }
   )
 
-  const activities = data && 'activities' in data ? data.activities : []
+  const stampAddedDate = new Date(profile.createdAt)
+  stampAddedDate.setSeconds(stampAddedDate.getSeconds() + 1)
+  const hackActivities =
+    profile.createdAt > '2024-01-01'
+      ? [
+          {
+            externId: randomId('activity'),
+            createdAt: stampAddedDate.toISOString(),
+            hasReactionByMe: false,
+            reactionCount: 0,
+            profile: profile,
+            type: 'BadgeAdded' as ActivityType,
+            metadata: {
+              text: 'Earned the Joined Cabin 2024 stamp',
+              badge: {
+                id: 46,
+                spec: {
+                  id: 46,
+                  name: 'Joined Cabin 2024',
+                  description: 'Joined Cabin 2024',
+                },
+              },
+            },
+          },
+        ]
+      : []
+
+  const activities = (data && 'activities' in data ? data.activities : [])
+    .concat(hackActivities)
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
   if (activities.length === 0) {
     return null
