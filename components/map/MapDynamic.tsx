@@ -27,12 +27,14 @@ import equal from 'react-fast-compare'
 
 export const MapDynamic = ({
   height,
+  mapRef,
   locations,
   profiles,
   onMove,
   initialZoom = 1.5,
 }: {
   height: string
+  mapRef?: React.Ref<L.Map>
   locations?: MarkerData[]
   profiles?: MarkerData[]
   onMove?: onMoveFn
@@ -47,7 +49,7 @@ export const MapDynamic = ({
   return (
     <MapWrapper height={height}>
       <MapContainer
-        // ref={mapRef}
+        ref={mapRef}
         center={[20, -30]}
         minZoom={1.5}
         maxZoom={15}
@@ -128,7 +130,6 @@ const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
 // this is a memoized cluster group so that large numbers of profiles are not re-rendered on every render
 const ClusterGroup = React.memo(
   ({ profiles }: { profiles: MarkerData[] }) => {
-    console.log('ClusterGroup was rendered at', new Date().toLocaleTimeString())
     return (
       <MarkerClusterGroup chunkedLoading>
         {profiles.map((p, i) => (

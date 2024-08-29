@@ -196,6 +196,19 @@ export const subscribeToNewsletterEvent = (email: string): void => {
   })
 }
 
+export const onboardingActionEvent = (
+  profileId: string,
+  action: string
+): void => {
+  event({
+    action: 'onboarding_action',
+    params: {
+      profile_id: profileId,
+      action: action,
+    },
+  })
+}
+
 /**
  * @param action - The name of the event you want to track.
  * @param params - A map of event parameters.
@@ -229,6 +242,7 @@ const analytics = {
   citizenshipShareDiscordEvent,
   subscribeToNewsletterEvent,
   acceleratorApplyClickEvent,
+  onboardingActionEvent,
 }
 
 export default analytics

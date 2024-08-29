@@ -10,7 +10,7 @@ interface ContainerProps {
   className?: string
   notchSize?: number
   notchPosition?: NotchPosition
-  maxWidth?: string
+  maxWidth?: number
 }
 
 export const ContentCard = ({

@@ -3,6 +3,7 @@ import { useWindowSize } from 'react-use'
 import { DeviceSize, useDeviceSize } from '@/components/hooks/useDeviceSize'
 import styled from 'styled-components'
 import { LEFT_NAV_MARGIN, NAV_WIDTH_REM } from '@/components/nav/Navbar'
+import { pxToRem } from '@/utils/display-utils'
 
 type widthType =
   | 'full' // totally full screen with no padding at all
@@ -27,7 +28,7 @@ export const BaseContainer = ({
   const { width: screenWidthPx } = useWindowSize()
   // const scrollbarWidth = useScrollbarWidth()
 
-  const screenWidth = screenWidthPx / 10 // convert to rem
+  const screenWidth = pxToRem(screenWidthPx)
 
   if (maxWidth === 'full') {
     return (

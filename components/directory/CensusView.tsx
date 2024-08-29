@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useProfile } from '@/components/auth/useProfile'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -23,6 +23,8 @@ import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
+import { useRouter } from 'next/router'
+import L from 'leaflet'
 
 export const CensusView = () => {
   const { user } = useProfile()
@@ -48,11 +50,21 @@ export const CensusView = () => {
 }
 
 export const CensusAuthView = () => {
+  const router = useRouter()
   const [searchInput, setSearchInput] = useState<string>('')
   const [searchValue] = useDebounce(searchInput, 500)
   const [sortType, setSortType] = useState<ProfileSort>(
     ProfileSort.CreatedAtDesc
   )
+
+  const [map, setMap] = useState<L.Map | null>(null)
+  useEffect(() => {
+    if (map && router.query.center) {
+      const [lat, lng] = (router.query.center as string).split(',').map(Number)
+      map.setView([lat, lng], 8)
+      router.replace(router.pathname, undefined, { shallow: true }).then()
+    }
+  }, [map, router, router.query])
 
   const { get, useGetPaginated } = useBackend()
 
@@ -118,6 +130,7 @@ export const CensusAuthView = () => {
       <TitleCard title="Census" icon="members"></TitleCard>
       <Map
         height={`50vh`}
+        mapRef={setMap}
         profiles={profilesForMap}
         onMove={(params) => {
           setLatLngBounds(

@@ -6,7 +6,7 @@ import { ProfileGetResponse } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { ProfileHeaderSection } from '@/components/profile/view-profile/ProfileHeaderSection'
-import { ProfileSetupSection } from '@/components/profile/view-profile/ProfileSetupSection'
+import { ProfileNextStepsSection } from '@/components/profile/view-profile/ProfileNextStepsSection'
 import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAboutSection'
 import { ProfileCitizenSection } from '@/components/profile/view-profile/ProfileCitizenSection'
 import { ProfileStampsSection } from '@/components/profile/view-profile/ProfileStampsSection'
@@ -38,9 +38,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
       <BaseLayout>
         <Container>
           <ProfileHeaderSection profile={profile} />
-          {isOwnProfile && (
-            <ProfileSetupSection profileId={profile.externId} me={user} />
-          )}
+          {isOwnProfile && <ProfileNextStepsSection me={user} />}
           <ProfileAboutSection profile={profile} />
           <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />
