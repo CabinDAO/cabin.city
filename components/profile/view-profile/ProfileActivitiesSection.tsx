@@ -50,9 +50,33 @@ export const ProfileActivitiesSection = ({
           },
         ]
       : []
+  const hackActivities2 = profile.gotSotn2024Badge
+    ? [
+        {
+          externId: randomId('activity'),
+          createdAt: profile.gotSotn2024Badge,
+          hasReactionByMe: false,
+          reactionCount: 0,
+          profile: profile,
+          type: 'BadgeAdded' as ActivityType,
+          metadata: {
+            text: 'Earned the State of the Network - August 2024 stamp',
+            badge: {
+              id: 47,
+              spec: {
+                id: 47,
+                name: 'State of the Network - August 2024',
+                description: 'State of the Network - August 2024',
+              },
+            },
+          },
+        },
+      ]
+    : []
 
   const activities = (data && 'activities' in data ? data.activities : [])
     .concat(hackActivities)
+    .concat(hackActivities2)
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
   if (activities.length === 0) {

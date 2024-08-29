@@ -11,6 +11,8 @@ import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAb
 import { ProfileCitizenSection } from '@/components/profile/view-profile/ProfileCitizenSection'
 import { ProfileStampsSection } from '@/components/profile/view-profile/ProfileStampsSection'
 import { ProfileActivitiesSection } from '@/components/profile/view-profile/ProfileActivitiesSection'
+import { Body1 } from '@/components/core/Typography'
+import Link from 'next/link'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { user } = useProfile()
@@ -39,6 +41,17 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <Container>
           <ProfileHeaderSection profile={profile} />
           {isOwnProfile && <ProfileNextStepsSection me={user} />}
+          {new Date().toISOString() < '2024-08-30' &&
+            !profile.gotSotn2024Badge && (
+              <div style={{ textAlign: 'center' }}>
+                <Body1>
+                  👉{' '}
+                  <Link href={'/sotn'} style={{ textDecoration: 'underline' }}>
+                    don't forget your State of the Network stamp
+                  </Link>
+                </Body1>
+              </div>
+            )}
           <ProfileAboutSection profile={profile} me={user} />
           <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />

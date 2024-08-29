@@ -119,6 +119,7 @@ model Profile {
   isProfileSetupDismissed Boolean               @default(false)
   avatarUrl               String                @default("")
   tags                    String[]              @default([])
+  gotSotn2024Badge        DateTime?
 
   address ProfileAddress?
 

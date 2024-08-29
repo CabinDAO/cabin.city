@@ -72,6 +72,9 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     isAdmin: profile.isAdmin,
     isProfileSetupFinished: profile.isProfileSetupFinished,
     isProfileSetupDismissed: profile.isProfileSetupDismissed,
+    gotSotn2024Badge: profile.gotSotn2024Badge
+      ? profile.gotSotn2024Badge.toISOString()
+      : null,
     mailingListOptIn: profile.mailingListOptIn,
     walletAddress: profile.wallet?.address || null,
     locationCount: profile._count.stewardedLocations,

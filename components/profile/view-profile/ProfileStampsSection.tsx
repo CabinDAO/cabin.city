@@ -28,7 +28,20 @@ export const ProfileStampsSection = ({
           },
         ]
       : []
-  const list = (profile.wallet?.badges || []).concat(hackList)
+  const hackList2 = profile.gotSotn2024Badge
+    ? [
+        {
+          id: 47,
+          spec: {
+            id: 47,
+            name: 'State of the Network - August 2024',
+            description: 'State of the Network - August 2024',
+          },
+        },
+      ]
+    : []
+
+  const list = (profile.wallet?.badges || []).concat(hackList).concat(hackList2)
 
   const count = list.length
   const start = PASSPORT_PAGE_SIZE * currentPage

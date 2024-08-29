@@ -65,8 +65,7 @@ export const ProfileAboutSection = ({
           {profile.bio && <Bio>{profile.bio}</Bio>}
           <Tags tags={profile.tags}></Tags>
         </AboutSection>
-
-        {profile.contactFields.length && (
+        {!!profile.contactFields.length && (
           <ContactSection flashing={isFlashing}>
             <H3>Contact</H3>
             <ProfileContactList

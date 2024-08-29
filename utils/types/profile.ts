@@ -179,6 +179,7 @@ export type ProfileFragment = ProfileBasicFragment & {
   address: ShortAddressFragmentType | undefined
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
+  gotSotn2024Badge: string | null
   wallet: {
     address: string
     badges: BadgeFragment[]
@@ -243,6 +244,7 @@ export type MeFragment = {
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
+  gotSotn2024Badge: string | null
   avatarUrl: string
   tags: ProfileTag[]
   walletAddress: string | null

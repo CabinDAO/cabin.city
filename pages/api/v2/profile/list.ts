@@ -174,6 +174,9 @@ const profilesToFragments = (
       bio: profile.bio,
       avatarUrl: profile.avatarUrl,
       isAdmin: profile.isAdmin,
+      gotSotn2024Badge: profile.gotSotn2024Badge
+        ? profile.gotSotn2024Badge.toISOString()
+        : null,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
       citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,

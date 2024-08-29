@@ -229,6 +229,9 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
+    gotSotn2024Badge: profile.gotSotn2024Badge
+      ? profile.gotSotn2024Badge.toISOString()
+      : null,
     avatarUrl: profile.avatarUrl,
     address: profile.address
       ? {

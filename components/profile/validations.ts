@@ -20,6 +20,9 @@ export const validateProfileInput = (
     (editProfileInput.hasOwnProperty('bio') && !isValidBio(bio)) ||
     (editProfileInput.hasOwnProperty('address') && !isValidAddress(address)) ||
     (editProfileInput.hasOwnProperty('email') && !isValidEmail(email))
+  // ||
+  // (editProfileInput.hasOwnProperty('contactFields') &&
+  //   editProfileInput.contactFields?.length == 0)
 
   return !invalid
 }
