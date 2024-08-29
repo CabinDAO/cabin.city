@@ -4,8 +4,8 @@ import { Checkbox } from '@/components/core/Checkbox'
 
 type Labels = Record<ProfileTag, string>
 const tagLabels: Labels = {
-  [ProfileTag.steward]: `I organize events in my neighborhood`,
-  [ProfileTag.moveCurious]: `I'm thinking of moving to a place with stronger local community`,
+  [ProfileTag.steward]: `I want to create a greater sense of community in my neighborhood`,
+  [ProfileTag.moveCurious]: `I'd want to move to a place with stronger local community`,
   [ProfileTag.nomad]: `I live a nomadic lifestyle`,
   [ProfileTag.parent]: `I'm a parent`,
   [ProfileTag.networkSociety]: `I'm interested in network societies`,

@@ -18,7 +18,9 @@ export const Tags = ({ tags }: { tags: ProfileTag[] }) => {
 const Container = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.8rem;
+  width: 100%;
 `
 
 const Tag = styled.div`
@@ -26,4 +28,5 @@ const Tag = styled.div`
   padding: 0.4rem 1rem;
   background-color: ${({ theme }) => theme.colors.yellow300};
   border-radius: 1rem;
+  white-space: nowrap;
 `

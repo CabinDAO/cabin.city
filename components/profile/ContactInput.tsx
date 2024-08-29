@@ -167,13 +167,13 @@ const contactFieldDisplayNameMapping = {
 }
 
 const contactFieldPlaceholderMapping = {
-  [ContactFieldType.Email]: 'home@cabin.city',
-  [ContactFieldType.Discord]: 'cabin',
-  [ContactFieldType.Twitter]: 'cabindotcity',
-  [ContactFieldType.Instagram]: 'cabindotcity',
-  [ContactFieldType.LinkedIn]: 'https://www.linkedin.com/in/cabin/',
-  [ContactFieldType.Telegram]: 'cabin',
-  [ContactFieldType.Lens]: 'cabin',
+  [ContactFieldType.Email]: 'you@example.com',
+  [ContactFieldType.Discord]: 'yourhandle42',
+  [ContactFieldType.Twitter]: 'yourhandle42',
+  [ContactFieldType.Instagram]: 'instauser42',
+  [ContactFieldType.LinkedIn]: 'https://www.linkedin.com/in/yourname/',
+  [ContactFieldType.Telegram]: 'yourhandle42',
+  [ContactFieldType.Lens]: 'yourhandle42',
   [ContactFieldType.Website]: 'https://cabin.city',
-  [ContactFieldType.Farcaster]: 'cabin',
+  [ContactFieldType.Farcaster]: 'yourhandle42',
 }
