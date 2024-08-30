@@ -21,3 +21,4 @@ out
 .vercel
 
 /prisma/generated
+.idea
