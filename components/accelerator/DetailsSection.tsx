@@ -6,6 +6,7 @@ import { SectionTitle } from '@/components/accelerator/shared'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { AutoImage } from '@/components/core/AutoImage'
 import polaroids from '@/components/accelerator/polaroids.jpg'
+import { DEADLINE } from '@/components/accelerator/Countdown'
 
 export const DetailsSection = () => {
   const { deviceSize } = useDeviceSize()
@@ -23,9 +24,11 @@ export const DetailsSection = () => {
           <BoxBody>
             <strong>Program Runs</strong>: September 23 - December 1 (10 weeks)
           </BoxBody>
-          <BoxBody>
-            <strong>Application Deadline</strong>: September 8, 11:59pm PT
-          </BoxBody>
+          {new Date() < DEADLINE && (
+            <BoxBody>
+              <strong>Application Deadline</strong>: September 8, 11:59pm PT
+            </BoxBody>
+          )}
         </Box>
         <Box>
           <BoxTitle>Weekly Time Commitment</BoxTitle>

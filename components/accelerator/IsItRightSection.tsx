@@ -5,7 +5,7 @@ import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { Button } from '@/components/core/Button'
-import { Countdown } from '@/components/accelerator/Countdown'
+import { Countdown, DEADLINE } from '@/components/accelerator/Countdown'
 import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
 import {
   ApplyButton,
@@ -119,12 +119,14 @@ export const IsItRightSection = () => {
           ))}
           <CTABlock>
             <BlockTitle>Ready to transform your neighborhood?</BlockTitle>
-            <BlockTitle>
-              Apply by{' '}
-              <span style={{ color: theme.colors.green400 }}>
-                September 8th.
-              </span>
-            </BlockTitle>
+            {new Date() < DEADLINE && (
+              <BlockTitle>
+                Apply by{' '}
+                <span style={{ color: theme.colors.green400 }}>
+                  September 8th.
+                </span>
+              </BlockTitle>
+            )}
             <Countdown light />
             <ApplyButton source={'accelerator-isitright'} />
           </CTABlock>

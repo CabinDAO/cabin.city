@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { fonts, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { ApplyButton } from '@/components/accelerator/shared'
+import { DEADLINE } from '@/components/accelerator/Countdown'
 
 export const Top = () => {
   return (
@@ -15,7 +16,9 @@ export const Top = () => {
         <Subheader>
           <SubheaderText>
             <p>Join the Cabin Neighborhood Accelerator</p>
-            <p>Application Deadline: September 8, 2024</p>
+            {new Date() < DEADLINE && (
+              <p>Application Deadline: September 8, 2024</p>
+            )}
           </SubheaderText>
           <ApplyButton
             source={'accelerator-top'}
