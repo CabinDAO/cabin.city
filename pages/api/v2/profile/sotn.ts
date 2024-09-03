@@ -15,6 +15,9 @@ async function handler(
     return
   }
 
+  res.status(400).send({ error: 'Stamp disabled' })
+  return
+
   const profile = await requireProfile(req, res, opts)
 
   await prisma.profile.update({

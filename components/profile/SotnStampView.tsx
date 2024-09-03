@@ -1,33 +1,23 @@
+import React, { useState } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useProfile } from '@/components/auth/useProfile'
 import { useBackend } from '@/components/hooks/useBackend'
-import {
-  MeFragment,
-  ProfileFragment,
-  ProfileGetResponse,
-  ProfileSetupStateParams,
-} from '@/utils/types/profile'
+import { ProfileFragment, ProfileGetResponse } from '@/utils/types/profile'
+import { formatShortAddress } from '@/lib/address'
+import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
+import { Body1, Body2, H1, H3 } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
-import { Body1, Body2, Caption, H1, H2, H3 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { Button } from '@/components/core/Button'
-import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAboutSection'
-import { monthYearFormat } from '@/utils/display-utils'
-import { formatShortAddress } from '@/lib/address'
-import { Tags } from '@/components/profile/Tags'
-import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
-import Icon, { IconName } from '@/components/core/Icon'
-import React, { useState } from 'react'
-import theme from '@/styles/theme'
 import { Avatar } from '@/components/core/Avatar'
-import Link from 'next/link'
-import analytics from '@/lib/googleAnalytics/analytics'
-import { useRouter } from 'next/router'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
-import Image from 'next/image'
+import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
 
 export const SotnStampView = () => {
   const router = useRouter()
@@ -39,6 +29,8 @@ export const SotnStampView = () => {
   )
 
   const [loading, setLoading] = useState(false)
+
+  const stampDisabled = true
 
   const handleGetStamp = async () => {
     if (!user) return
@@ -85,16 +77,16 @@ export const SotnStampView = () => {
 
             {user && profile ? (
               <>
-                {user.gotSotn2024Badge ? (
+                {stampDisabled ? (
+                  <Body1>You cannot claim this stamp anymore.</Body1>
+                ) : user.gotSotn2024Badge ? (
                   <Body1>
                     You already got this stamp. It's on your profile.
                   </Body1>
                 ) : user.createdAt > '2024-08-29' ? (
-                  <>
-                    <Button onClick={handleGetStamp}>
-                      {loading ? <LoadingSpinner /> : 'Stamp me!'}
-                    </Button>
-                  </>
+                  <Button onClick={handleGetStamp}>
+                    {loading ? <LoadingSpinner /> : 'Stamp me!'}
+                  </Button>
                 ) : (
                   <>
                     <Body1>
