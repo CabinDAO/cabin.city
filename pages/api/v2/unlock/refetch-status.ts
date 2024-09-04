@@ -1,26 +1,32 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { withAuth } from '@/utils/api/withAuth'
-import { RefetchResponse } from '@/utils/types/unlock'
+import { RefetchParams, RefetchResponse } from '@/utils/types/unlock'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
 import { randomId } from '@/utils/random'
+import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<RefetchResponse>
 ) {
-  const { method } = req
-
-  if (method !== 'GET') {
+  if (req.method !== 'GET') {
     res.setHeader('Allow', ['GET'])
-    res.status(405).end(`Method ${method} Not Allowed`)
+    res.status(405).end(`Method ${req.method} Not Allowed`)
     return
   }
 
-  const address = req.query.address as string
+  const parsed = RefetchParams.safeParse(req.query)
+  if (!parsed.success) {
+    res.status(400).send({ error: toErrorString(parsed.error) })
+    return
+  }
+  const params = parsed.data
+
+  const address = params.address
 
   if (!address) {
     res.status(401).end('Unauthorized')
@@ -68,7 +74,7 @@ const setCitizenshipStatus = async (
 ) => {
   const wallet = await prisma.wallet.findUnique({
     where: {
-      address,
+      address: address.toLowerCase(),
     },
     include: {
       profile: true,

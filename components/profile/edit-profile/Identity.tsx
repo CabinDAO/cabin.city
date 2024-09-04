@@ -19,6 +19,7 @@ import { Caption } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
+import { addressMatch } from '@/utils/address-match'
 
 // TODO: deal with creating embedded wallet
 // embedded wallets cannot be unlinked, so if you have one you should still be able to link an external wallet
@@ -63,11 +64,11 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
     // this happens when a user links their wallet to Privy
     if (
       externalUser?.wallet?.address &&
-      externalUser.wallet.address !== user.walletAddress
+      !addressMatch(externalUser.wallet.address, user.walletAddress || '')
     ) {
       updateProfile({
         data: {
-          walletAddress: externalUser.wallet.address as Address,
+          walletAddress: externalUser.wallet.address.toLowerCase() as Address,
         },
       } satisfies ProfileEditParamsType).then(() => {
         refetchProfile()
@@ -92,11 +93,16 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
           }
           const newUserValues = await unlinkWallet(user.walletAddress)
 
-          if (newUserValues.wallet?.address !== user.walletAddress) {
+          if (
+            !(
+              newUserValues.wallet &&
+              addressMatch(newUserValues.wallet.address, user.walletAddress)
+            )
+          ) {
             await updateProfile({
               data: {
                 walletAddress: newUserValues.wallet?.address
-                  ? (newUserValues.wallet.address as Address)
+                  ? (newUserValues.wallet.address.toLowerCase() as Address)
                   : null,
               },
             } satisfies ProfileEditParamsType)

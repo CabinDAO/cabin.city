@@ -12,6 +12,7 @@ import {
   ProfileTag,
 } from '@/utils/types/profile'
 import { randomInviteCode } from '@/utils/random'
+import { Address } from 'viem'
 
 async function handler(
   req: NextApiRequest,
@@ -76,7 +77,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
       ? profile.gotSotn2024Badge.toISOString()
       : null,
     mailingListOptIn: profile.mailingListOptIn,
-    walletAddress: profile.wallet?.address || null,
+    walletAddress: (profile.wallet?.address as Address) || null,
     locationCount: profile._count.stewardedLocations,
     contactFields: profile.contactFields.map((cf) => ({
       type: cf.type as ContactFieldType,

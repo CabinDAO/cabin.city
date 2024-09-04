@@ -62,7 +62,9 @@ export const RegistrationView = () => {
       const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
         ...params,
         ...{
-          walletAddress: walletAddress ? (walletAddress as Address) : undefined,
+          walletAddress: walletAddress
+            ? (walletAddress.toLowerCase() as Address)
+            : undefined,
           email: email,
         },
       } satisfies ProfileNewParamsType)

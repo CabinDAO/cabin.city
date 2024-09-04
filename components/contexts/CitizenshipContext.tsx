@@ -3,7 +3,8 @@ import { useProfile } from '../auth/useProfile'
 import { useExternalUser } from '../auth/useExternalUser'
 import { useRouter } from 'next/router'
 import { useBackend } from '@/components/hooks/useBackend'
-import { RefetchParams, RefetchResponse } from '@/utils/types/unlock'
+import { RefetchParamsType, RefetchResponse } from '@/utils/types/unlock'
+import { Address } from 'viem'
 
 export const CitizenshipContext = createContext<CitzenshipState | null>(null)
 
@@ -37,15 +38,18 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
     }
 
     const resp = await get<RefetchResponse>('UNLOCK_REFETCH_STATUS', {
-      address: externalUser?.wallet?.address,
-    } satisfies RefetchParams)
+      address: externalUser.wallet.address.toLowerCase() as Address,
+    } satisfies RefetchParamsType)
 
-    if (resp.hasOwnProperty('updated')) {
-      if (resp.updated) {
-        await refetchProfile()
-      }
-      checked.current = true
+    if (!resp || 'error' in resp) {
+      if ('error' in resp) console.log(resp.error)
+      return
     }
+
+    if (resp.updated) {
+      await refetchProfile()
+    }
+    checked.current = true
   }, [refetchProfile, externalUser, get, pathname])
 
   useEffect(() => {

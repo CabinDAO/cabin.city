@@ -46,7 +46,7 @@ async function handler(
 
   if (params.walletAddress) {
     const existingWallet = await prisma.wallet.findUnique({
-      where: { address: params.walletAddress },
+      where: { address: params.walletAddress.toLowerCase() },
       include: { profile: true },
     })
 
@@ -60,7 +60,7 @@ async function handler(
 
   const profile = await createProfile({
     privyDID,
-    walletAddress: params.walletAddress,
+    walletAddress: params.walletAddress?.toLowerCase(),
     name: params.name,
     bio: params.bio,
     email: params.email,

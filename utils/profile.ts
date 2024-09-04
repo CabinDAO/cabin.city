@@ -77,10 +77,10 @@ export async function createProfile(
         ? {
             connectOrCreate: {
               where: {
-                address: params.walletAddress,
+                address: params.walletAddress.toLowerCase(),
               },
               create: {
-                address: params.walletAddress,
+                address: params.walletAddress.toLowerCase(),
                 cabinTokenBalance: '0',
               },
             },

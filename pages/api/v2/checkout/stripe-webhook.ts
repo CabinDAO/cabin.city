@@ -203,7 +203,7 @@ async function postProcessCart(cart: CartWithRelations) {
       privyDID: privyAccount.id,
       name: name,
       email: email,
-      walletAddress: walletAddress,
+      walletAddress: walletAddress.toLowerCase(),
       invite: cart.invite,
     })
   }

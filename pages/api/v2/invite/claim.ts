@@ -78,7 +78,7 @@ async function handler(
       invite: invite,
       name: name,
       email: email,
-      walletAddress: walletAddress,
+      walletAddress: walletAddress.toLowerCase(),
     })
 
     resData.profileId = profile.externId
@@ -184,7 +184,7 @@ async function createInvite(
       email: body.newAccountParams.email,
       code: body.inviteCode,
       inviterId: inviter.id,
-      walletAddress: walletAddress || '',
+      walletAddress: walletAddress?.toLowerCase() || '',
       paymentMethod: body.paymentMethod,
     },
   })

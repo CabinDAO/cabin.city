@@ -127,10 +127,10 @@ async function handlePost(
           ? {
               connectOrCreate: {
                 where: {
-                  address: params.data.walletAddress,
+                  address: params.data.walletAddress.toLowerCase(),
                 },
                 create: {
-                  address: params.data.walletAddress,
+                  address: params.data.walletAddress.toLowerCase(),
                   cabinTokenBalance: tokenBalance,
                 },
               },

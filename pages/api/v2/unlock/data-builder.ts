@@ -66,7 +66,7 @@ async function _getCabinTokenBalance(address: string): Promise<bigint> {
 async function _hasVoucher(address: string): Promise<boolean> {
   const wallet = await prisma.wallet.findUnique({
     where: {
-      address: address,
+      address: address.toLowerCase(),
     },
     include: {
       profile: true,

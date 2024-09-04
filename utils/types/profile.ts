@@ -215,9 +215,13 @@ export type BadgeFragment = {
   }
 }
 
-const WalletAddress = z
+export const WalletAddress = z
   .string()
+  .refine((value) => value === value.toLowerCase(), {
+    message: 'wallet address must be all lowercase',
+  })
   .refine(isAddress, { message: 'invalid address' })
+type WalletAddressType = z.infer<typeof WalletAddress>
 
 export type ProfileMeResponse =
   | {
@@ -247,7 +251,7 @@ export type MeFragment = {
   gotSotn2024Badge: string | null
   avatarUrl: string
   tags: ProfileTag[]
-  walletAddress: string | null
+  walletAddress: WalletAddressType | null
   voucher: {
     externId: string
     name: string
