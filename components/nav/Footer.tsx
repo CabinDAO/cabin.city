@@ -1,6 +1,4 @@
 import React from 'react'
-import { useProfile } from '@/components/auth/useProfile'
-import { CitizenshipStatus } from '@/utils/types/profile'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
@@ -11,7 +9,6 @@ import { H1, fonts } from '@/components/core/Typography'
 import { TextContent } from '@/components/landing/TextSection'
 
 export const Footer = () => {
-  const { user } = useProfile()
   return (
     <BgAndOuterWrap>
       <InnerWrap>

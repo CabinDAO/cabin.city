@@ -18,7 +18,6 @@ import { Avatar } from '@/components/core/Avatar'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const StewardContact = ({
   steward,

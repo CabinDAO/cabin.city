@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { FormActions, StepProps } from '@/components/profile/RegistrationForm'
 import { ContactInput } from '@/components/profile/ContactInput'
-import { Body1, Body2, H2 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import styled from 'styled-components'
 import { useError } from '@/components/hooks/useError'
 

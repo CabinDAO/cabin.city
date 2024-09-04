@@ -9,14 +9,12 @@ import { Body1, H3 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { useBackend } from '@/components/hooks/useBackend'
 import { InputText } from '@/components/core/InputText'
-import { Avatar } from '@/components/core/Avatar'
 import {
   WalletGenerateParamsType,
   WalletGenerateResponse,
 } from '@/utils/types/wallet'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
-import { HorizontalDivider } from '@/components/core/Divider'
 
 export default function Page({}: InferGetServerSidePropsType<
   typeof getServerSideProps
