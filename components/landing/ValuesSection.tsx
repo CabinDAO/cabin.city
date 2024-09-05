@@ -11,13 +11,13 @@ export const ValuesSection = () => {
     <Container maxWidth={'default'}>
       <LandingSectionTitle>What we believe</LandingSectionTitle>
       <Subtitle>
-        Our community shares three Obvious Truths. Most people agree with these
+        Our community shares five Obvious Truths. Most people agree with these
         beliefs—but we don’t just talk about our ideals, we live them.
       </Subtitle>
 
       <Content>
         <Value>
-          <ValueTitle>Live Near Friends </ValueTitle>
+          <ValueTitle>Live Near Friends</ValueTitle>
           <ValueBody>
             We are our best selves when we live near people we admire. We make a
             habit of turning our neighbors into friends and our friends into
@@ -27,9 +27,17 @@ export const ValuesSection = () => {
         <Value>
           <ValueTitle>It Takes A Village</ValueTitle>
           <ValueBody>
-            It takes a village to raise kids—and it takes kids to raise a
-            village. Whether you have kids or not, we believe that
-            intergenerational neighborhoods make us all better people.
+            It takes a village to raise kids, and it takes kids to raise a
+            village. Whether you have kids or not, we believe intergenerational
+            neighborhoods make us all better people.
+          </ValueBody>
+        </Value>
+        <Value>
+          <ValueTitle>Do The Thing</ValueTitle>
+          <ValueBody>
+            We value actions over abstract ideas. We make, test, build, and
+            create things. We enjoy philosophy, but we value making positive
+            tangible changes in your environment.
           </ValueBody>
         </Value>
         <Value>
@@ -39,6 +47,14 @@ export const ValuesSection = () => {
             and being present with people and nature is good for our well being.
             Together, we grow our local communities towards a resilient,
             regenerative, abundant future.
+          </ValueBody>
+        </Value>
+        <Value>
+          <ValueTitle>Play Infinite Games</ValueTitle>
+          <ValueBody>
+            At Cabin, we practice co-creation, cooperation, and reciprocity. We
+            do this with eye towards the long-term. Rome wasn’t built in a day,
+            and Cabin won’t be finished in our lifetimes.
           </ValueBody>
         </Value>
       </Content>
