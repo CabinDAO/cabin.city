@@ -36,9 +36,11 @@ async function handler(
         gte: new Date('2024-01-01T00:00:00Z'),
       },
     },
+    include: { stamps: true },
   })
 
   for (const profile of newProfiles) {
+    if (profile.stamps.some((s) => s.id === 9)) continue
     const t = new Date(profile.createdAt.getTime() + 1000)
     await prisma.profileStamp.create({
       data: {
