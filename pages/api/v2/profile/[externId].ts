@@ -229,9 +229,6 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    gotSotn2024Badge: profile.gotSotn2024Badge
-      ? profile.gotSotn2024Badge.toISOString()
-      : null,
     avatarUrl: profile.avatarUrl,
     address: profile.address
       ? {
@@ -261,14 +258,6 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     wallet: profile.wallet
       ? {
           address: profile.wallet.address,
-          badges: profile.wallet.badges.map((badge) => ({
-            id: badge.id,
-            spec: {
-              id: badge.spec.id,
-              name: badge.spec.name,
-              description: badge.spec.description,
-            },
-          })),
         }
       : null,
     contactFields: profile.contactFields.map((cf) => ({
@@ -280,6 +269,10 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
       hatId: role.walletHat?.hatId || null,
       type: role.type as RoleType,
       level: role.level as RoleLevel,
+    })),
+    stamps: profile.stamps.map((stamp) => ({
+      id: stamp.stamp.id,
+      name: stamp.stamp.name,
     })),
   }
 }

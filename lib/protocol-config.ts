@@ -44,33 +44,6 @@ export const hatsConfig: HatsConfig = getAppConfig({
   },
 })
 
-type OtterspaceConfig = {
-  networkName: NetworkName
-  contractAddress: string
-  subgraphUrl: string
-  initialBlock: bigint
-  raftId: string
-}
-
-export const otterspaceConfig: OtterspaceConfig = getAppConfig({
-  dev: {
-    networkName: 'goerli',
-    contractAddress: '0xa6773847d3d2c8012c9cf62818b320ee278ff722',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/otterspace-xyz/badges-goerli',
-    initialBlock: BigInt('7799232'),
-    raftId: 'rafts:5', // Some random test raft on Goerli
-  },
-  prod: {
-    networkName: 'optimism',
-    contractAddress: '0x7f9279b24d1c36fa3e517041fdb4e8788dc63d25',
-    subgraphUrl:
-      'https://api.thegraph.com/subgraphs/name/otterspace-xyz/badges-optimism',
-    initialBlock: BigInt('20256100'),
-    raftId: 'rafts:50',
-  },
-})
-
 type CabinTokenConfig = {
   networkName: NetworkName
   contractAddress: string

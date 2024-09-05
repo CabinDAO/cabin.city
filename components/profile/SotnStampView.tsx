@@ -79,7 +79,7 @@ export const SotnStampView = () => {
               <>
                 {stampDisabled ? (
                   <Body1>You cannot claim this stamp anymore.</Body1>
-                ) : user.gotSotn2024Badge ? (
+                ) : /*user.gotSotn2024Badge*/ false ? (
                   <Body1>
                     You already got this stamp. It's on your profile.
                   </Body1>

@@ -1,4 +1,4 @@
-import { formatDistance, parseISO } from 'date-fns'
+import { format, formatDistance, parseISO } from 'date-fns'
 import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -192,7 +192,7 @@ const ReactionsContainer = styled.div`
 `
 
 const ActivityDate = (props: PostProps) => (
-  <Caption>
+  <Caption title={format(parseISO(props.activity.createdAt), 'yyyy-MM-dd')}>
     {formatDistance(parseISO(props.activity.createdAt), props.baseDate)}
     {' ago'}
   </Caption>

@@ -231,11 +231,11 @@ const DIRECTORY_SORT_FIELDS = [
     label: 'Stamp Amount',
     options: [
       {
-        key: ProfileSort.BadgeCountAsc,
+        key: ProfileSort.StampCountAsc,
         label: 'Least First',
       },
       {
-        key: ProfileSort.BadgeCountDesc,
+        key: ProfileSort.StampCountDesc,
         label: 'Most First',
       },
     ],

@@ -1,7 +1,7 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
 import {
-  BadgeFragment,
+  StampFragment,
   CitizenshipStatus,
   RoleFragment,
 } from '@/utils/types/profile'
@@ -19,7 +19,7 @@ export enum ActivityType {
   Text = 'Text',
   ProfileCreated = 'ProfileCreated',
   RoleAdded = 'RoleAdded',
-  BadgeAdded = 'BadgeAdded',
+  StampAdded = 'StampAdded',
   CitizenshipVerified = 'CitizenshipVerified',
   LocationPublished = 'LocationPublished',
   OfferCreated = 'OfferCreated',
@@ -33,7 +33,7 @@ export type ActivityListFragment = {
   metadata: {
     text?: string
     citizenshipTokenId?: number
-    badge?: BadgeFragment
+    stamp?: StampFragment
     role?: RoleFragment
     location?: Pick<
       LocationFragment,
@@ -129,10 +129,14 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         }
       }
     }
-    badge: {
+    profileStamp: {
       select: {
-        id: true
-        spec: true
+        stamp: {
+          select: {
+            id: true
+            name: true
+          }
+        }
       }
     }
     role: {
@@ -222,10 +226,14 @@ export const ActivityQueryInclude = {
       },
     },
   },
-  badge: {
+  profileStamp: {
     select: {
-      id: true,
-      spec: true,
+      stamp: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   },
   role: {

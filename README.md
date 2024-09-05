@@ -81,7 +81,7 @@ TODO
 
 ## Code Generation
 
-To generate GQL code for Hats and Otterspace synced data, run:
+To generate GQL code for Hats synced data, run:
 
 ```bash
 npm run codegen

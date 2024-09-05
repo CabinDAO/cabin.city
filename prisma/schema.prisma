@@ -145,6 +145,7 @@ model Profile {
   votes              LocationVote[]
   activities         Activity[]
   reactions          ActivityReaction[]
+  stamps             ProfileStamp[]
 }
 
 enum CitizenshipStatus {
@@ -193,6 +194,31 @@ model ProfileAddress {
   countryShort                   String? // e.g. CR
 
   @@id([profileId])
+}
+
+model Stamp {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String
+  // imageUrl String
+
+  profiles ProfileStamp[]
+}
+
+model ProfileStamp {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId Int
+  stamp     Stamp   @relation(fields: [stampId], references: [id], onDelete: Cascade)
+  stampId   Int
+
+  activities Activity[]
+
+  @@unique([profileId, stampId])
 }
 
 model Role {
@@ -429,15 +455,17 @@ model Activity {
   profileId Int
 
   text               String? // Text
-  badge              Badge?    @relation(fields: [badgeId], references: [id]) // BadgeAdded
+  badge              Badge?        @relation(fields: [badgeId], references: [id]) // BadgeAdded
   badgeId            Int?
-  role               Role?     @relation(fields: [roleId], references: [id]) // RoleAdded
+  profileStamp       ProfileStamp? @relation(fields: [profileStampId], references: [id]) // StampAdded
+  profileStampId     Int?
+  role               Role?         @relation(fields: [roleId], references: [id]) // RoleAdded
   roleId             Int?
   roleTransactionId  String? // RoleAdded //TODO: should this go on Badge instead of here?
   citizenshipTokenId Int? // CitizenshipVerified
-  location           Location? @relation(fields: [locationId], references: [id], onDelete: Cascade) // LocationPublished
+  location           Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade) // LocationPublished
   locationId         Int?
-  offer              Offer?    @relation(fields: [offerId], references: [id]) // OfferCreated
+  offer              Offer?        @relation(fields: [offerId], references: [id]) // OfferCreated
   offerId            Int?
   // VouchRequested  None
   // ProfileCreated  None
@@ -466,6 +494,7 @@ enum ActivityType {
   ProfileCreated
   RoleAdded
   BadgeAdded
+  StampAdded
   CitizenshipVerified
   LocationPublished
   OfferCreated

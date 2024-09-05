@@ -21,63 +21,10 @@ export const ProfileActivitiesSection = ({
 
   const { data, mutate: refetchActivities } = useGet<ActivityListResponse>(
     'ACTIVITY_LIST',
-    { profileId: profile?.externId, pageSize: 10 }
+    { profileId: profile?.externId, pageSize: 1000 }
   )
 
-  const stampAddedDate = new Date(profile.createdAt)
-  stampAddedDate.setSeconds(stampAddedDate.getSeconds() + 1)
-  const hackActivities =
-    profile.createdAt > '2024-01-01'
-      ? [
-          {
-            externId: randomId('activity'),
-            createdAt: stampAddedDate.toISOString(),
-            hasReactionByMe: false,
-            reactionCount: 0,
-            profile: profile,
-            type: 'BadgeAdded' as ActivityType,
-            metadata: {
-              text: 'Earned the Joined Cabin 2024 stamp',
-              badge: {
-                id: 46,
-                spec: {
-                  id: 46,
-                  name: 'Joined Cabin 2024',
-                  description: 'Joined Cabin 2024',
-                },
-              },
-            },
-          },
-        ]
-      : []
-  const hackActivities2 = profile.gotSotn2024Badge
-    ? [
-        {
-          externId: randomId('activity'),
-          createdAt: profile.gotSotn2024Badge,
-          hasReactionByMe: false,
-          reactionCount: 0,
-          profile: profile,
-          type: 'BadgeAdded' as ActivityType,
-          metadata: {
-            text: 'Earned the State of the Network - August 2024 stamp',
-            badge: {
-              id: 47,
-              spec: {
-                id: 47,
-                name: 'State of the Network - August 2024',
-                description: 'State of the Network - August 2024',
-              },
-            },
-          },
-        },
-      ]
-    : []
-
-  const activities = (data && 'activities' in data ? data.activities : [])
-    .concat(hackActivities)
-    .concat(hackActivities2)
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+  const activities = data && 'activities' in data ? data.activities : []
 
   if (activities.length === 0) {
     return null

@@ -96,14 +96,10 @@ const toFragments = (
       metadata: {
         text: activity.text || undefined,
         citizenshipTokenId: activity.profile.citizenshipTokenId || undefined,
-        badge: activity.badge
+        stamp: activity.profileStamp
           ? {
-              id: activity.badge.id,
-              spec: {
-                id: activity.badge.spec.id,
-                name: activity.badge.spec.name,
-                description: activity.badge.spec.description,
-              },
+              id: activity.profileStamp.stamp.id,
+              name: activity.profileStamp.stamp.name,
             }
           : undefined,
         role: activity.role

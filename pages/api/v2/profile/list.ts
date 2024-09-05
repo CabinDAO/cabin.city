@@ -133,20 +133,16 @@ const sortOrder = (
           cabinTokenBalance: 'desc',
         },
       }
-    case ProfileSort.BadgeCountAsc:
+    case ProfileSort.StampCountAsc:
       return {
-        wallet: {
-          badges: {
-            _count: 'asc',
-          },
+        stamps: {
+          _count: 'asc',
         },
       }
-    case ProfileSort.BadgeCountDesc:
+    case ProfileSort.StampCountDesc:
       return {
-        wallet: {
-          badges: {
-            _count: 'desc',
-          },
+        stamps: {
+          _count: 'desc',
         },
       }
     case ProfileSort.CreatedAtDesc:
@@ -174,9 +170,6 @@ const profilesToFragments = (
       bio: profile.bio,
       avatarUrl: profile.avatarUrl,
       isAdmin: profile.isAdmin,
-      gotSotn2024Badge: profile.gotSotn2024Badge
-        ? profile.gotSotn2024Badge.toISOString()
-        : null,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
       citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
@@ -200,7 +193,7 @@ const profilesToFragments = (
         type: role.type as RoleType,
         level: role.level as RoleLevel,
       })),
-      badgeCount: profile.wallet?._count.badges || 0,
+      stampCount: profile._count.stamps || 0,
       cabinTokenBalanceInt: profile.wallet
         ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
         : null,
@@ -212,18 +205,15 @@ const profilesToFragments = (
 type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     address: true
-    wallet: {
-      include: {
-        _count: {
-          select: {
-            badges: true
-          }
-        }
-      }
-    }
+    wallet: true
     roles: {
       include: {
         walletHat: true
+      }
+    }
+    _count: {
+      select: {
+        stamps: true
       }
     }
   }
@@ -232,18 +222,15 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
 // must match ListedProfileWithRelations  above
 const ListedProfileQueryInclude = {
   address: true,
-  wallet: {
-    include: {
-      _count: {
-        select: {
-          badges: true,
-        },
-      },
-    },
-  },
+  wallet: true,
   roles: {
     include: {
       walletHat: true,
+    },
+  },
+  _count: {
+    select: {
+      stamps: true,
     },
   },
 } satisfies Prisma.ProfileInclude

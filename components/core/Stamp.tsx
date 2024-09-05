@@ -6,16 +6,16 @@ const IMAGE_SIZE = 176
 const MOBILE_IMAGE_SIZE = 148
 const TABLET_IMAGE_SIZE = 133
 
-export const getBadgeImageUrl = (specId: number) => {
-  return `/images/stamps/${specId}.png`
+export const getStampImageUrl = (stampId: number) => {
+  return `/images/stamps/${stampId}.png`
 }
 
-export const Badge = ({ name, specId }: { name: string; specId: number }) => {
+export const Stamp = ({ name, id }: { name: string; id: number }) => {
   return (
-    <BadgeContainer>
+    <StampContainer>
       <ImageContainer>
         <ImageFlex
-          src={getBadgeImageUrl(specId)}
+          src={getStampImageUrl(id)}
           alt={name}
           fill
           sizes={`${IMAGE_SIZE}px`}
@@ -25,11 +25,11 @@ export const Badge = ({ name, specId }: { name: string; specId: number }) => {
       <NameContainer>
         <H6>{name}</H6>
       </NameContainer>
-    </BadgeContainer>
+    </StampContainer>
   )
 }
 
-const BadgeContainer = styled.div`
+const StampContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

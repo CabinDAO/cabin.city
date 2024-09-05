@@ -44,8 +44,8 @@ export enum ProfileSort {
   CreatedAtDesc = 'CreatedAtDesc',
   CabinBalanceAsc = 'CabinBalanceAsc',
   CabinBalanceDesc = 'CabinBalanceDesc',
-  BadgeCountAsc = 'BadgeCountAsc',
-  BadgeCountDesc = 'BadgeCountDesc',
+  StampCountAsc = 'StampCountAsc',
+  StampCountDesc = 'StampCountDesc',
 }
 
 // must match prisma's $Enums.ProfileContactFieldType
@@ -94,7 +94,7 @@ export type ProfileListFragment = {
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   roles: RoleFragment[]
-  badgeCount: number
+  stampCount: number
   cabinTokenBalanceInt: number | null
 }
 
@@ -179,10 +179,8 @@ export type ProfileFragment = ProfileBasicFragment & {
   address: ShortAddressFragmentType | undefined
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
-  gotSotn2024Badge: string | null
   wallet: {
     address: string
-    badges: BadgeFragment[]
   } | null
   voucher: {
     externId: string
@@ -190,6 +188,7 @@ export type ProfileFragment = ProfileBasicFragment & {
   } | null
   contactFields: ContactFragmentType[]
   tags: ProfileTag[]
+  stamps: StampFragment[]
 }
 
 export const ContactFragment = z
@@ -206,13 +205,9 @@ export type RoleFragment = {
   level: RoleLevel
 }
 
-export type BadgeFragment = {
+export type StampFragment = {
   id: number
-  spec: {
-    id: number
-    name: string
-    description: string
-  }
+  name: string
 }
 
 export const WalletAddress = z
@@ -248,7 +243,6 @@ export type MeFragment = {
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
-  gotSotn2024Badge: string | null
   avatarUrl: string
   tags: ProfileTag[]
   walletAddress: WalletAddressType | null
@@ -324,18 +318,22 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
       select: {
         address: true
         cabinTokenBalance: true
-        badges: {
-          select: {
-            id: true
-            spec: true
-          }
-        }
       }
     }
     contactFields: true
     roles: {
       include: {
         walletHat: true
+      }
+    }
+    stamps: {
+      select: {
+        stamp: {
+          select: {
+            id: true
+            name: true
+          }
+        }
       }
     }
   }
@@ -354,18 +352,22 @@ export const ProfileQueryInclude = {
     select: {
       address: true,
       cabinTokenBalance: true,
-      badges: {
-        select: {
-          id: true,
-          spec: true,
-        },
-      },
     },
   },
   contactFields: true,
   roles: {
     include: {
       walletHat: true,
+    },
+  },
+  stamps: {
+    select: {
+      stamp: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   },
 }

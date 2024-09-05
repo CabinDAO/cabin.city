@@ -1,6 +1,6 @@
 import { ActivityType } from '@/utils/types/activity'
 import { PostProps } from './Post'
-import { profileBadgeAddedSlots } from './profileBadgeAddedSlots'
+import { profileStampAddedSlots } from './profileStampAddedSlots'
 import { profileCreatedSlots } from './profileCreatedSlots'
 import { profileRoleAddedSlots } from './profileRoleAddedSlots'
 import { verifiedCitizenshipSlots } from './verifiedCitizenshipSlots'
@@ -34,8 +34,8 @@ export const getPostSlots = (props: PostProps): PostSlots => {
     return profileRoleAddedSlots
   }
 
-  if (activity.type === ActivityType.BadgeAdded) {
-    return profileBadgeAddedSlots
+  if (activity.type === ActivityType.StampAdded) {
+    return profileStampAddedSlots
   }
 
   if (activity.type === ActivityType.CitizenshipVerified) {

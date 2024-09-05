@@ -3,7 +3,7 @@ import { ProfileFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { H3, Overline } from '@/components/core/Typography'
 import { EmptyState } from '../../core/EmptyState'
-import { Badge } from '@/components/core/Badge'
+import { Stamp } from '@/components/core/Stamp'
 import IconButton from '@/components/core/IconButton'
 
 const PASSPORT_PAGE_SIZE = 8
@@ -15,38 +15,11 @@ export const ProfileStampsSection = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(0)
 
-  const hackList =
-    profile.createdAt > '2024-01-01'
-      ? [
-          {
-            id: 46,
-            spec: {
-              id: 46,
-              name: 'Joined Cabin 2024',
-              description: 'Joined Cabin 2024',
-            },
-          },
-        ]
-      : []
-  const hackList2 = profile.gotSotn2024Badge
-    ? [
-        {
-          id: 47,
-          spec: {
-            id: 47,
-            name: 'State of the Network - August 2024',
-            description: 'State of the Network - August 2024',
-          },
-        },
-      ]
-    : []
-
-  const list = (profile.wallet?.badges || []).concat(hackList).concat(hackList2)
-
+  const list = profile.stamps
   const count = list.length
   const start = PASSPORT_PAGE_SIZE * currentPage
   const end = (currentPage + 1) * PASSPORT_PAGE_SIZE
-  const currentBadges = list.slice(start, end)
+  const currentStamps = list.slice(start, end)
 
   if (count == 0) {
     return null
@@ -70,12 +43,8 @@ export const ProfileStampsSection = ({
       {count ? (
         <>
           <PassportsPage>
-            {currentBadges.map((badge) => (
-              <Badge
-                key={badge.id}
-                name={badge.spec.name}
-                specId={badge.spec.id}
-              />
+            {currentStamps.map((stamp) => (
+              <Stamp key={stamp.id} name={stamp.name} id={stamp.id} />
             ))}
           </PassportsPage>
           {count > PASSPORT_PAGE_SIZE && (
