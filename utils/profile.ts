@@ -119,9 +119,37 @@ export async function createProfile(
     update: {},
   })
 
+  if (new Date() < new Date('2025-01-01')) {
+    await addStamp(profile, 46) // 46 is the stamp id for the 2024 stamp
+  }
+
   await createHats(profile)
 
   return profile
+}
+
+async function addStamp(profile: Profile, stampId: number) {
+  return prisma.profileStamp.upsert({
+    where: {
+      profileId_stampId: {
+        profileId: profile.id,
+        stampId: stampId,
+      },
+    },
+    update: {},
+    create: {
+      profileId: profile.id,
+      stampId: stampId,
+      activities: {
+        create: {
+          externId: randomId('activity'),
+          key: `StampAdded|${profile.externId}|${stampId}`,
+          type: ActivityType.StampAdded,
+          profile: { connect: { id: profile.id } },
+        },
+      },
+    },
+  })
 }
 
 async function createHats(profile: Profile) {
