@@ -8,6 +8,8 @@ import { sanitizeContactValue } from '@/components/profile/validations'
 import { toErrorString } from '@/utils/api/error'
 import { AdminParams } from '@/utils/types/admin'
 
+export const config = { maxDuration: 300 } // let this run for up to 5 minutes
+
 export default withAuth(handler)
 
 async function handler(
