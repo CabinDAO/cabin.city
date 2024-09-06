@@ -1,52 +1,66 @@
 import React, { useState } from 'react'
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
-import styled from 'styled-components'
-import { ContentCard } from '@/components/core/ContentCard'
+import { useModal } from '@/components/hooks/useModal'
+import { useError } from '@/components/hooks/useError'
 import { profileFromApiCookies } from '@/utils/api/withAuth'
-import { BaseLayout } from '@/components/core/BaseLayout'
-import { TitleCard } from '@/components/core/TitleCard'
-import { Body1, H3 } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
 import { useBackend } from '@/components/hooks/useBackend'
-import { InputText } from '@/components/core/InputText'
+import { AdminActions, AdminParamsType } from '@/utils/types/admin'
 import {
   WalletGenerateParamsType,
   WalletGenerateResponse,
 } from '@/utils/types/wallet'
-import { useModal } from '@/components/hooks/useModal'
-import { useError } from '@/components/hooks/useError'
+import styled from 'styled-components'
+import { ContentCard } from '@/components/core/ContentCard'
+import { BaseLayout } from '@/components/core/BaseLayout'
+import { TitleCard } from '@/components/core/TitleCard'
+import { Body1 } from '@/components/core/Typography'
+import { Button } from '@/components/core/Button'
+import { InputText } from '@/components/core/InputText'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export default function Page({}: InferGetServerSidePropsType<
   typeof getServerSideProps
 >) {
-  const { post } = useBackend()
-  const [input, setInput] = useState('')
   const { showModal } = useModal()
   const { showError } = useError()
+  const { post } = useBackend()
+  const [input, setInput] = useState('')
+  const [loading, setLoading] = useState(false)
 
   return (
     <BaseLayout>
       <TitleCard title="Admin" icon="peace-sign" />
       <StyledContentCard>
-        <Body1>This page is for admin purposes only.</Body1>
-
         <Action>
-          <H3>hit the dev endpoint</H3>
           <Button
             onClick={async () => {
-              console.log('posting')
-              const res = await post('DEV', {})
-              console.log(res)
+              setLoading(true)
+              const res = await post('ADMIN', {
+                action: AdminActions.fixTokenBalances,
+              } satisfies AdminParamsType)
+              setLoading(false)
+              showModal(() => (
+                <div style={{ padding: '4rem' }}>
+                  <Body1>response: {JSON.stringify(res)}</Body1>
+                </div>
+              ))
             }}
           >
-            DEV
+            {loading ? (
+              <>
+                <LoadingSpinner />
+                &nbsp; {/* this keeps the button height from collapsing */}
+              </>
+            ) : (
+              'Fix token balances (very slow)'
+            )}
           </Button>
         </Action>
 
         <WalletGenContainer>
           <InputText
             value={input}
-            placeholder={'externId to generate wallet for'}
+            placeholder={'pr_abcd1234'}
             onChange={(e) => setInput(e.target.value)}
             label={'generate privy wallet for user'}
           />

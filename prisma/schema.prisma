@@ -35,8 +35,7 @@ model Wallet {
   address           String  @unique @db.Char(42)
   cabinTokenBalance Decimal @db.Decimal(78, 18) // uint256 in decimal has up to 78 digits. we store as whole Eth, so use 18 decimals
 
-  hats   WalletHat[]
-  badges Badge[]
+  hats WalletHat[]
 }
 
 model Hat {
@@ -64,36 +63,6 @@ model WalletHat {
   @@unique([walletId, hatId])
 }
 
-model Badge {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  otterspaceBadgeId String @unique
-
-  wallet   Wallet    @relation(fields: [walletId], references: [id], onDelete: Cascade)
-  walletId Int
-  spec     BadgeSpec @relation(fields: [specId], references: [id])
-  specId   Int
-
-  activities Activity[]
-
-  @@unique([walletId, specId])
-}
-
-model BadgeSpec {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  otterspaceSpecId String @unique
-  name             String
-  description      String
-  image            String
-
-  Badges Badge[]
-}
-
 // ---------------------------
 // LOCAL STUFF (not on-chain)
 // ---------------------------
@@ -119,7 +88,6 @@ model Profile {
   isProfileSetupDismissed Boolean               @default(false)
   avatarUrl               String                @default("")
   tags                    String[]              @default([])
-  gotSotn2024Badge        DateTime?
 
   address ProfileAddress?
 
@@ -455,13 +423,11 @@ model Activity {
   profileId Int
 
   text               String? // Text
-  badge              Badge?        @relation(fields: [badgeId], references: [id]) // BadgeAdded
-  badgeId            Int?
   profileStamp       ProfileStamp? @relation(fields: [profileStampId], references: [id]) // StampAdded
   profileStampId     Int?
   role               Role?         @relation(fields: [roleId], references: [id]) // RoleAdded
   roleId             Int?
-  roleTransactionId  String? // RoleAdded //TODO: should this go on Badge instead of here?
+  roleTransactionId  String? // RoleAdded //TODO: should this go on Hat instead of here?
   citizenshipTokenId Int? // CitizenshipVerified
   location           Location?     @relation(fields: [locationId], references: [id], onDelete: Cascade) // LocationPublished
   locationId         Int?
@@ -493,7 +459,6 @@ enum ActivityType {
   Text
   ProfileCreated
   RoleAdded
-  BadgeAdded
   StampAdded
   CitizenshipVerified
   LocationPublished

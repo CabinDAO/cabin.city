@@ -116,12 +116,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       select: {
         address: true
         cabinTokenBalance: true
-        badges: {
-          select: {
-            id: true
-            spec: true
-          }
-        }
       }
     }
     contactFields: true
@@ -151,12 +145,6 @@ const MyProfileQueryInclude = {
     select: {
       address: true,
       cabinTokenBalance: true,
-      badges: {
-        select: {
-          id: true,
-          spec: true,
-        },
-      },
     },
   },
   contactFields: true,

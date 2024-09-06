@@ -40,6 +40,7 @@ enum Routes {
   SOTN = '/profile/sotn',
 
   DEV = '/dev',
+  ADMIN = '/admin',
 }
 
 export const expandRoute = (r: Route): string => {
