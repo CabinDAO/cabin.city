@@ -328,6 +328,7 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
     }
     stamps: {
       select: {
+        createdAt: true
         stamp: {
           select: {
             id: true
@@ -362,6 +363,7 @@ export const ProfileQueryInclude = {
   },
   stamps: {
     select: {
+      createdAt: true,
       stamp: {
         select: {
           id: true,

@@ -270,10 +270,13 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
       type: role.type as RoleType,
       level: role.level as RoleLevel,
     })),
-    stamps: profile.stamps.map((stamp) => ({
-      id: stamp.stamp.id,
-      name: stamp.stamp.name,
-    })),
+    stamps: profile.stamps
+      .slice()
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map((stamp) => ({
+        id: stamp.stamp.id,
+        name: stamp.stamp.name,
+      })),
   }
 }
 
