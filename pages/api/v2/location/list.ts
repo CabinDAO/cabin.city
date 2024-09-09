@@ -50,7 +50,20 @@ async function handler(
   }
 
   const profile = await findProfile(req, res, opts)
-  const idsInOrder = await sortPrequery(profile, params, skip, take)
+  let idsInOrder: number[] = []
+
+  try {
+    idsInOrder = await sortPrequery(profile, params, skip, take)
+  } catch (error: any) {
+    console.error('Failed to sort locations:', {
+      profileId: profile?.id,
+      errorStack: error.stack,
+      skip,
+      take,
+    })
+    res.status(500).send({ error: 'Location sort failed' })
+    return
+  }
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
