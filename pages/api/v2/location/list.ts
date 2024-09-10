@@ -5,7 +5,7 @@ import {
   ProfileWithWallet,
   withAuth,
 } from '@/utils/api/withAuth'
-import { prisma } from '@/lib/prisma'
+import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import { getPageParams } from '@/utils/api/backend'
@@ -50,23 +50,8 @@ async function handler(
   }
 
   const profile = await findProfile(opts.auth)
-  let idsInOrder: number[] = []
 
-  try {
-    idsInOrder = await sortPrequery(profile, params, skip, take)
-  } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error('Failed to sort locations:', {
-        profileId: profile?.id,
-        errorStack: error.stack,
-        params,
-        skip,
-        take,
-      })
-    }
-    res.status(500).send({ error: 'Location sort failed' })
-    return
-  }
+  const idsInOrder = await sortPrequery(profile, params, skip, take)
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
@@ -175,8 +160,24 @@ const sortPrequery = async (
     OFFSET ${offset}
   `
 
+  let ids: { id: number }[] = []
+
   // console.log(formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values))
-  const ids = await prisma.$queryRaw<{ id: number }[]>(sqlQuery)
+  try {
+    ids = await prisma.$queryRaw<{ id: number }[]>(sqlQuery)
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Failed to sort locations', {
+        profileId: profile?.id,
+        query: formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values),
+        errorStack: error.stack,
+        params,
+        limit,
+        offset,
+      })
+    }
+    return []
+  }
 
   return ids.reduce((ids: number[], row) => [...ids, row.id], [])
 }
