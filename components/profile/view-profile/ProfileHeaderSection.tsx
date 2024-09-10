@@ -1,6 +1,6 @@
 import { shortenedAddress } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { Avatar } from '../../core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { ContentCard } from '../../core/ContentCard'
 import { CopyToClipboard } from '../../core/CopyToClipboard'
 import { H1, Subline2 } from '../../core/Typography'
@@ -21,10 +21,7 @@ export const ProfileHeaderSection = ({
     <ContentCard shadow>
       <Container>
         <ProfileSummary>
-          <Avatar
-            size={deviceSize === 'desktop' ? 8.8 : 6.4}
-            src={profile.avatarUrl}
-          />
+          <Avatar size={deviceSize === 'desktop' ? 8.8 : 6.4} src={profile} />
           <ProfileInfoContainer>
             <H1>{profile.name}</H1>
 

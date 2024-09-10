@@ -4,6 +4,7 @@ import { getProfilesForMap } from '@/utils/profile'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 
 export default function Home({
   mapData,
@@ -20,6 +21,7 @@ export const getStaticProps = (async (/*context*/) => {
         externId: true,
         address: true,
         bannerImageIpfsHash: true,
+        bannerImageCfId: true,
       },
       where: { address: { lat: { not: null } }, publishedAt: { not: null } },
     }),
@@ -38,7 +40,9 @@ export const getStaticProps = (async (/*context*/) => {
           label: l.name,
           lat: l.address?.lat || 0,
           lng: l.address?.lng || 0,
-          imgUrl: getImageUrlByIpfsHash(l.bannerImageIpfsHash) || '',
+          imgUrl: l.bannerImageCfId
+            ? imageUrlForId(l.bannerImageCfId)
+            : getImageUrlByIpfsHash(l.bannerImageIpfsHash) || '',
           linkUrl: `/location/${l.externId}`,
         })),
       },

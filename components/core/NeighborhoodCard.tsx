@@ -10,12 +10,13 @@ import analytics from '@/lib/googleAnalytics/analytics'
 import { LocationFragment } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { getImageUrlByIpfsHash } from '@/lib/image'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 
 type CardVariant = 'home' | 'city-directory'
 
 const bannerImageHeight = 258
 
-export const ListingCard = ({
+export const NeighborhoodCard = ({
   location,
   variant = 'city-directory',
   position,
@@ -47,7 +48,15 @@ export const ListingCard = ({
         onClick={() => analytics.viewCityDirectoryEvent(location.externId)}
       >
         <ImageContainer widthPx={cardWidth}>
-          {location.bannerImageIpfsHash ? (
+          {location.bannerImageCfId ? (
+            <ImageFlex
+              sizes={`${cardWidth}px`}
+              quality={40}
+              aspectRatio={cardWidth / bannerImageHeight}
+              src={imageUrlForId(location.bannerImageCfId)}
+              alt={name}
+            />
+          ) : location.bannerImageIpfsHash ? (
             <ImageFlex
               sizes={`${cardWidth}px`}
               quality={40}

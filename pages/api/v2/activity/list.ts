@@ -114,7 +114,8 @@ const toFragments = (
               externId: activity.location.externId,
               name: activity.location.name,
               description: activity.location.description,
-              bannerImageIpfsHash: activity.location.bannerImageIpfsHash,
+              bannerImageIpfsHash: activity.location.bannerImageIpfsHash || '',
+              bannerImageCfId: activity.location.bannerImageCfId,
               steward: activity.location.steward
                 ? {
                     externId: activity.location.steward.externId,
@@ -146,7 +147,8 @@ const toFragments = (
                 name: activity.offer.location.name,
                 type: activity.offer.location.type as LocationType,
                 bannerImageIpfsHash:
-                  activity.offer.location.bannerImageIpfsHash,
+                  activity.offer.location.bannerImageIpfsHash || '',
+                bannerImageCfId: activity.offer.location.bannerImageCfId,
                 address: activity.offer.location.address
                   ? {
                       locality: activity.offer.location.address.locality || '',

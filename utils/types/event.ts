@@ -43,6 +43,7 @@ export type EventFragment = {
     name: string
     type: LocationType
     bannerImageIpfsHash: string
+    bannerImageCfId: string
     address: ShortAddressFragmentType | null
     steward: {
       externId: string
@@ -94,7 +95,6 @@ export const EventEditParams = z
     price: z.number().optional(),
     priceInterval: z.nativeEnum(OfferPriceInterval).optional(),
     applicationUrl: z.string().optional(),
-    imageIpfsHash: z.string().optional(),
     mediaItems: z
       .array(
         z.object({

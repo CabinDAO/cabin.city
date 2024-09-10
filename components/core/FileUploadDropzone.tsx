@@ -4,18 +4,11 @@ import { ContentCard } from './ContentCard'
 import Icon, { IconName } from './Icon'
 import { Body2, Caption } from './Typography'
 import { useFilesUpload } from '../neighborhoods/useFilesUpload'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
 import {
   MAX_FILE_SIZE,
   SUPPORTED_FILE_TYPES,
-  fileTypesListString,
-} from '@/lib/file-storage/configuration'
-
-interface FileUploadDropzoneProps {
-  iconName: IconName
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
-}
+  UploadedFilesMap,
+} from '@/utils/types/image'
 
 const bytesToMegabytes = (bytes: number) => bytes / 1024 / 1024
 
@@ -23,7 +16,11 @@ export const FileUploadDropzone = ({
   iconName,
   onFilesUploaded,
   preprocessFiles,
-}: FileUploadDropzoneProps) => {
+}: {
+  iconName: IconName
+  onFilesUploaded: (files: UploadedFilesMap) => Promise<void>
+  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
+}) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { handleDrag, handleDrop, handleChange, isDragging } = useFilesUpload({
     onFilesUploaded,
@@ -33,6 +30,14 @@ export const FileUploadDropzone = ({
   const onButtonClick = () => {
     inputRef?.current?.click()
   }
+
+  const fileTypesListString = SUPPORTED_FILE_TYPES.map((type, index) => {
+    const typeWithoutPrefix = type.split('/')[1].toLocaleUpperCase()
+    if (index === SUPPORTED_FILE_TYPES.length - 1) {
+      return `or ${typeWithoutPrefix}`
+    }
+    return typeWithoutPrefix
+  }).join(', ')
 
   return (
     <StyledContentCard shape="notch-all">

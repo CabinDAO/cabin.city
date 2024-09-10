@@ -205,7 +205,8 @@ export const locationToFragment = (
           postalCode: loc.address.postalCode,
         }
       : null,
-    bannerImageIpfsHash: loc.bannerImageIpfsHash,
+    bannerImageIpfsHash: loc.bannerImageIpfsHash || '',
+    bannerImageCfId: loc.bannerImageCfId,
     steward: loc.steward
       ? {
           createdAt: loc.steward.createdAt.toISOString(),
@@ -229,7 +230,8 @@ export const locationToFragment = (
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,
-        ipfsHash: mi.ipfsHash,
+        ipfsHash: mi.ipfsHash || '',
+        cfId: mi.cfId || '',
       }
     }),
     eventCount: loc._count.offers,

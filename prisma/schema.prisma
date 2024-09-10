@@ -87,6 +87,8 @@ model Profile {
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
   avatarUrl               String                @default("")
+  // avatarImageId           String
+  // avatarFilename          String
   tags                    String[]              @default([])
 
   address ProfileAddress?
@@ -234,7 +236,8 @@ model Location {
   name                String
   description         String // Rich text
   address             Address?
-  bannerImageIpfsHash String
+  bannerImageIpfsHash String?
+  bannerImageCfId     String              @default("")
   mediaItems          LocationMediaItem[]
   publishedAt         DateTime?
 
@@ -287,13 +290,14 @@ model LocationMediaItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  ipfsHash String
+  cfId     String?
+  ipfsHash String?
   category LocationMediaCategory
 
   Location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId Int
 
-  @@unique([locationId, category, ipfsHash])
+  @@unique([locationId, category, cfId])
 }
 
 enum LocationMediaCategory {

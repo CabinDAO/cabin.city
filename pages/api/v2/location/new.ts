@@ -28,7 +28,7 @@ async function handler(
       type: $Enums.LocationType.Neighborhood,
       name: `${profile.name}'s New Neighborhood`,
       description: '',
-      bannerImageIpfsHash: '',
+      bannerImageCfId: '',
     },
   })
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { ProfileEditParamsType } from '@/utils/types/profile'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { getImageUrlByIpfsHash } from '@/lib/image'
+import { UploadedFilesMap } from '@/utils/types/image'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { Button } from '@/components/core/Button'
 import { Caption } from '@/components/core/Typography'
 import { FileUpload } from '@/components/core/FileUpload'
@@ -36,17 +36,15 @@ export const AvatarSetup = ({
     hideModal()
   }
 
-  const handlePhotoUploaded = async (
-    fileNameIpfsHashMap: FileNameIpfsHashMap
-  ) => {
+  const handlePhotoUploaded = async (files: UploadedFilesMap) => {
     if (disabled) return
 
-    const ipfsHash = Object.values(fileNameIpfsHashMap)[0]
+    const imageId = Object.values(files)[0]
 
-    if (ipfsHash) {
+    if (imageId) {
       setUploading(false)
 
-      onSelected(getImageUrlByIpfsHash(ipfsHash, true) as string)
+      onSelected(imageUrlForId(imageId))
 
       hideModal()
     }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { EventEditParamsType, EventFragment } from '@/utils/types/event'
-import { REQUIRED_FIELD_ERROR, REQUIRED_SECTION_ERROR } from '@/utils/validate'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import styled from 'styled-components'
 import { Descendant } from 'slate'
 import { SlateEditor } from '@/components/core/slate/SlateEditor'
@@ -9,7 +8,6 @@ import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
-import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
 import {
   truthyString,
   validateTitle,
@@ -33,8 +31,6 @@ export const EditEventForm = ({
   const handleEditorChange = (val: Descendant[]) => {
     onEdit({ description: JSON.stringify(val) })
   }
-  const [uploadingBanner, setUploadingBanner] = useState(false)
-
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onEdit({ title: e.target.value.slice(0, maxTitleLength) })
   }
@@ -90,36 +86,8 @@ export const EditEventForm = ({
 
   const titleValidation = validateTitle(updateEventInput.title)
 
-  const handleBannerUploaded = async (
-    fileNameIpfsHashMap: FileNameIpfsHashMap
-  ) => {
-    setUploadingBanner(false)
-    onEdit({
-      imageIpfsHash: fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
-    })
-  }
-
   return (
     <Container>
-      <GalleryUploadSection
-        onStartUploading={() => setUploadingBanner(true)}
-        ipfsHashList={
-          updateEventInput.imageIpfsHash ? [updateEventInput.imageIpfsHash] : []
-        }
-        uploading={uploadingBanner}
-        instructions="Choose a square JPG or PNG no larger than 5 MB."
-        title="Image"
-        onFilesUploaded={handleBannerUploaded}
-        onDelete={() => {
-          onEdit({ imageIpfsHash: '' })
-        }}
-        errorMessage={
-          highlightErrors && !updateEventInput.imageIpfsHash
-            ? REQUIRED_SECTION_ERROR
-            : undefined
-        }
-      />
-
       <HorizontalDivider />
 
       <Pair>

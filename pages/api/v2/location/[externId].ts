@@ -122,7 +122,7 @@ async function handlePost(
         !params.mediaItems.find(
           (newMediaItem) =>
             newMediaItem.category === mediaItem.category &&
-            newMediaItem.ipfsHash === mediaItem.ipfsHash
+            newMediaItem.cfId === mediaItem.cfId
         )
       ) {
         mediaItemsToDelete.push(mediaItem.id)
@@ -148,20 +148,20 @@ async function handlePost(
             : params.published == 'false'
             ? null
             : undefined,
-        bannerImageIpfsHash: params.bannerImageIpfsHash,
+        bannerImageCfId: params.bannerImageCfId,
         mediaItems: params.mediaItems
           ? {
               connectOrCreate: params.mediaItems.map((mediaItem) => ({
                 where: {
-                  locationId_category_ipfsHash: {
+                  locationId_category_cfId: {
                     locationId: locationToEdit.id,
                     category: mediaItem.category,
-                    ipfsHash: mediaItem.ipfsHash,
+                    cfId: mediaItem.cfId,
                   },
                 },
                 create: {
                   category: mediaItem.category,
-                  ipfsHash: mediaItem.ipfsHash,
+                  cfId: mediaItem.cfId,
                 },
               })),
             }

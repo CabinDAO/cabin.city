@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ContentCard } from '@/components/core/ContentCard'
 import { TextPostInput } from './TextPostInput'
 import styled from 'styled-components'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { useProfile } from '../auth/useProfile'
 import { Subline1 } from '@/components/core/Typography'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -39,7 +39,7 @@ export const TextPost = ({ onPost }: TextPostProps) => {
     return (
       <StyledContentCard shape="notch">
         <PostCTAContainer onClick={handleStartPost}>
-          <Avatar src={user?.avatarUrl} size={3.2} />
+          <Avatar src={user} size={3.2} />
           <Subline1>Start a post</Subline1>
         </PostCTAContainer>
       </StyledContentCard>

@@ -15,7 +15,7 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { Button } from '@/components/core/Button'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
 
@@ -135,7 +135,7 @@ const ProfileDataSection = ({ profile }: { profile: ProfileFragment }) => {
       <AboutItem>
         <H3>Photo</H3>
         {profile.avatarUrl ? (
-          <Avatar size={7} src={profile.avatarUrl} />
+          <Avatar size={7} src={profile} />
         ) : (
           <Body2>none</Body2>
         )}

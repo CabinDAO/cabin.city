@@ -8,7 +8,7 @@ import styled, { css } from 'styled-components'
 import Icon from '@/components/core/Icon'
 import ClickAway from '@/components/core/ClickAway'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { Subline1 } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { MeFragment } from '@/utils/types/profile'
@@ -149,7 +149,7 @@ const MobileMenuItem = ({
     <StyledLink onClick={handleClick} href={item.path}>
       {user && menuItem == 'profile' ? (
         <>
-          <Avatar src={user.avatarUrl} size={2.4} />
+          <Avatar src={user} size={2.4} />
           <Subline1 $color="yellow100">{user.name}</Subline1>
         </>
       ) : (

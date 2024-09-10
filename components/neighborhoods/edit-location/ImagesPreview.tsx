@@ -1,32 +1,30 @@
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { getImageUrlByIpfsHash } from '@/lib/image'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
 
-interface ImagesPreviewProps {
-  ipfsHashList: string[]
-  onDelete?: (ipfsHash: string) => void
-  uploading?: boolean
-}
-
 export const ImagesPreview = ({
-  ipfsHashList,
+  cfIds,
   onDelete,
   uploading = false,
-}: ImagesPreviewProps) => {
+}: {
+  cfIds: string[]
+  onDelete?: (cfId: string) => void
+  uploading?: boolean
+}) => {
   const { deviceSize } = useDeviceSize()
   const [loadedImages, setLoadedImages] = useState<string[]>([])
 
-  const handleImageLoaded = (ipfsHash: string) => {
-    setLoadedImages((prev) => [...prev, ipfsHash])
+  const handleImageLoaded = (cfId: string) => {
+    setLoadedImages((prev) => [...prev, cfId])
   }
 
   const imageSize = deviceSize === 'mobile' ? 95.3 : 152
 
-  if (!ipfsHashList?.length && uploading) {
+  if (!cfIds?.length && uploading) {
     return (
       <Container>
         <ImageContainer>
@@ -39,20 +37,18 @@ export const ImagesPreview = ({
 
   return (
     <Container>
-      {ipfsHashList.map((ipfsHash) => (
-        <ImageContainer key={ipfsHash}>
+      {cfIds.map((cfId) => (
+        <ImageContainer key={cfId}>
           <StyledImage
-            loaded={loadedImages.includes(ipfsHash ?? '')}
-            onLoadingComplete={() => handleImageLoaded(ipfsHash ?? '')}
-            src={getImageUrlByIpfsHash(ipfsHash, true) ?? ''}
+            loaded={loadedImages.includes(cfId)}
+            onLoadingComplete={() => handleImageLoaded(cfId)}
+            src={imageUrlForId(cfId)}
             width={imageSize}
             height={imageSize}
             alt="Media Item Preview"
           />
-          {loadedImages.includes(ipfsHash ?? '') ? null : <LoadingSpinner />}
-          <DeleteContainer
-            onClick={() => (onDelete ? onDelete(ipfsHash) : null)}
-          >
+          {loadedImages.includes(cfId ?? '') ? null : <LoadingSpinner />}
+          <DeleteContainer onClick={() => (onDelete ? onDelete(cfId) : null)}>
             <Icon
               name="trash"
               size={deviceSize === 'mobile' ? 1.6 : 1.8}

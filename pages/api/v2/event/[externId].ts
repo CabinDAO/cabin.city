@@ -122,7 +122,6 @@ async function handlePost(
         endDate: params.endDate,
         price: params.price,
         applicationUrl: params.applicationUrl,
-        imageIpfsHash: params.imageIpfsHash,
         mediaItems: params.mediaItems
           ? {
               connectOrCreate: params.mediaItems.map((mediaItem) => ({

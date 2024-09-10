@@ -1,15 +1,11 @@
 import { useRef, useState } from 'react'
-import Link from 'next/link'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { useGetUnlockNFT } from '@/components/hooks/useGetUnlockNFT'
-import { useProfile } from '@/components/auth/useProfile'
-import { CitizenshipStatus } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { capitalize, pxToRem, shortenedAddress } from '@/utils/display-utils'
 import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { Body2, H3, Overline } from '@/components/core/Typography'
-import { Button } from '@/components/core/Button'
 import { AppLink } from '@/components/core/AppLink'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -22,7 +18,6 @@ const IMAGE_SIZE_PX = 336
 const TABLET_IMAGE_SIZE_PX = 222
 
 export const CitizenNFTContainer = () => {
-  const { user } = useProfile()
   const { activeNFT } = useGetUnlockNFT()
   const [displayVideo, setDisplayVideo] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)

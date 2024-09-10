@@ -1,14 +1,16 @@
 import React, { useRef } from 'react'
 import { useFilesUpload } from '../neighborhoods/useFilesUpload'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { SUPPORTED_FILE_TYPES } from '@/lib/file-storage/configuration'
-import { emptyFunction } from '@/utils/general'
+import { SUPPORTED_FILE_TYPES, UploadedFilesMap } from '@/utils/types/image'
 import styled from 'styled-components'
+
+const doNothing = () => {
+  return
+}
 
 export const FileUpload = ({
   onFilesUploaded,
   preprocessFiles,
-  onStartUploading = emptyFunction,
+  onStartUploading = doNothing,
   children,
   multiple = false,
   removeEnabled = false,
@@ -16,7 +18,7 @@ export const FileUpload = ({
   isFullWidth,
   disabled = false,
 }: {
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+  onFilesUploaded: (files: UploadedFilesMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
   removeEnabled?: boolean
   multiple?: boolean

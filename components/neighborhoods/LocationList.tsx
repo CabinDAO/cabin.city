@@ -9,7 +9,7 @@ import {
   LocationListResponse,
 } from '@/utils/types/location'
 import styled from 'styled-components'
-import { ListingCard } from '@/components/core/ListingCard'
+import { NeighborhoodCard } from '@/components/core/NeighborhoodCard'
 import { Map, onMoveParams } from '@/components/map/Map'
 
 export const LocationList = ({ type }: { type?: LocationType }) => {
@@ -65,7 +65,7 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
         >
           {locations.map((location, index) => {
             return (
-              <ListingCard
+              <NeighborhoodCard
                 position={index + 1}
                 key={location.externId}
                 location={location}

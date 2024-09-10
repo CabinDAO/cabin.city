@@ -1,47 +1,116 @@
 import { prisma } from '../lib/prisma'
-import { getEthersAlchemyProvider } from '../lib/chains'
-import { CabinToken__factory } from '../generated/ethers'
-import { cabinTokenConfig } from '../lib/protocol-config'
-import { sanitizeContactValue } from '@/components/profile/validations'
-import { ContactFieldType } from '@/utils/types/profile'
+import { randomUploadName } from '@/utils/random'
 
 async function main() {
-  const contacts = await prisma.profileContactField.findMany({})
+  // TODO: do banners too
 
-  for (const contact of contacts) {
-    const { sanitizedValue, error } = sanitizeContactValue(
-      contact.type as ContactFieldType,
-      contact.value
-    )
-    if (error) {
-      console.error(error, contact.value, sanitizedValue, contact.id)
-    } else if (sanitizedValue !== contact.value) {
-      // await prisma.profileContactField.update({
-      //   data: { value: sanitizedValue },
-      //   where: { id: contact.id },
-      // })
+  const mediaItems = await prisma.locationMediaItem.findMany({
+    where: { locationId: 60, cfId: null },
+    include: { Location: true },
+  })
+
+  const cfIds: Record<number, string> = {}
+
+  for (const mediaItem of mediaItems) {
+    console.log(`doing media item ${mediaItem.id}`)
+
+    if (!mediaItem.ipfsHash) {
+      console.log(
+        `skipping media item ${mediaItem.id} because it has no ipfs hash`
+      )
+      continue
     }
+
+    const cfId = await upload(mediaItem.ipfsHash)
+
+    cfIds[mediaItem.id] = cfId
+
+    await prisma.locationMediaItem.update({
+      where: { id: mediaItem.id },
+      data: { cfId: cfId },
+    })
   }
 
-  return
+  console.log(cfIds)
+}
 
-  const provider = getEthersAlchemyProvider(cabinTokenConfig.networkName)
+async function upload(ipfsHash: string) {
+  try {
+    // Download from IPFS
+    const response = await fetch(
+      `https://tan-peculiar-cobra-689.mypinata.cloud/ipfs/${ipfsHash}`
+    )
+    if (!response.ok) {
+      throw new Error(`Failed to download from IPFS: ${response.statusText}`)
+    }
+    const imageBuffer = await response.arrayBuffer()
 
-  const cabinTokenContract = CabinToken__factory.connect(
-    cabinTokenConfig.contractAddress,
-    provider
-  )
+    // Get image extension based on response headers content type
+    const contentType = response.headers.get('content-type')
+    let extension = ''
+    if (contentType) {
+      switch (contentType.toLowerCase()) {
+        case 'image/jpeg':
+          extension = '.jpg'
+          break
+        case 'image/png':
+          extension = '.png'
+          break
+        case 'image/gif':
+          extension = '.gif'
+          break
+        case 'image/webp':
+          extension = '.webp'
+          break
+        case 'image/svg+xml':
+          extension = '.svg'
+          break
+        case 'image/tiff':
+          extension = '.tiff'
+          break
+        case 'image/bmp':
+          extension = '.bmp'
+          break
+        case 'image/avif':
+          extension = '.avif'
+          break
+        default:
+          console.warn(`Unknown content type: ${contentType}`)
+          extension = ''
+      }
+    }
 
-  // await cabinTokenContract.
+    // Upload to Cloudflare Images
+    const formData = new FormData()
+    formData.append(
+      'file',
+      new Blob([imageBuffer]),
+      randomUploadName(extension ? `image${extension}` : '')
+    )
 
-  const transferFilter = cabinTokenContract.filters.Transfer()
-  const transfers = await cabinTokenContract.queryFilter(
-    transferFilter,
-    0,
-    await provider.getBlockNumber()
-  )
+    const cloudflareResponse = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_IMAGES_ACCOUNT_ID}/images/v1`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_API_TOKEN}`,
+        },
+        body: formData,
+      }
+    )
 
-  console.log(transfers)
+    if (!cloudflareResponse.ok) {
+      throw new Error(
+        `Failed to upload to Cloudflare Images: ${cloudflareResponse.statusText}`
+      )
+    }
+
+    const result = await cloudflareResponse.json()
+    console.log(`Successfully uploaded image: ${result.result.id}`)
+    return result.result.id
+  } catch (error) {
+    console.error(`Error processing ${ipfsHash}:`, error)
+  }
 }
 
 main()

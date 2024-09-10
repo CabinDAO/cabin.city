@@ -20,6 +20,17 @@ export function randomInviteCode() {
   return randomString(8, 'lcOnly')
 }
 
+export function randomUploadName(oldName: string) {
+  const dotIndex = oldName.lastIndexOf('.')
+
+  const ext =
+    dotIndex > 0 && dotIndex < oldName.length - 1
+      ? oldName.substring(dotIndex).toLowerCase()
+      : ''
+
+  return randomString(8, 'mixedCase') + ext
+}
+
 function randomString(length: number, alphabet: Alphabet) {
   const characters = alphabets[alphabet]
   const charactersLength = characters.length

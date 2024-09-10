@@ -39,6 +39,8 @@ enum Routes {
   WALLET_GENERATE = '/wallet/generate',
   SOTN = '/profile/sotn',
 
+  IMAGE_NEW = '/image/new',
+
   DEV = '/dev',
   ADMIN = '/admin',
 }

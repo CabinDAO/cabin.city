@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationListResponse } from '@/utils/types/location'
 import { getImageUrlByIpfsHash } from '@/lib/image'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 import { formatShortAddress } from '@/lib/address'
 import styled from 'styled-components'
 import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
@@ -20,16 +21,15 @@ export const NeighborhoodShowcase = () => {
       <Subline1>Citizenship unlocks the City Directory</Subline1>
       <H2>Our network of connected properties</H2>
       <Neighborhoods>
-        {locations.map((location, index) => {
-          const imgURL = getImageUrlByIpfsHash(
-            location.bannerImageIpfsHash,
-            true
-          )
+        {locations.map((loc, i) => {
+          const imgURL = loc.bannerImageCfId
+            ? imageUrlForId(loc.bannerImageCfId)
+            : getImageUrlByIpfsHash(loc.bannerImageIpfsHash, true)
           return (
-            <ImageContainer key={index}>
-              <Link href={`/location/${location.externId}`}>
+            <ImageContainer key={i}>
+              <Link href={`/location/${loc.externId}`}>
                 <Image
-                  alt={location.name ?? 'A Cabin neighborhood'}
+                  alt={loc.name ?? 'A Cabin neighborhood'}
                   src={imgURL ?? 'https://fakeimg.pl/500/'}
                   fill={true}
                   sizes="100vw"
@@ -40,10 +40,10 @@ export const NeighborhoodShowcase = () => {
                 />
                 <TextContainer>
                   <BigText>
-                    <Name>{location.name}</Name>
+                    <Name>{loc.name}</Name>
                     <Icon name={'right-arrow'} size={3} color={'white'} />
                   </BigText>
-                  <SmallText>{formatShortAddress(location.address)}</SmallText>
+                  <SmallText>{formatShortAddress(loc.address)}</SmallText>
                 </TextContainer>
               </Link>
             </ImageContainer>

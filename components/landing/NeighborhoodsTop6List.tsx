@@ -7,7 +7,7 @@ import {
 } from '@/utils/types/location'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
-import { ListingCard } from '@/components/core/ListingCard'
+import { NeighborhoodCard } from '@/components/core/NeighborhoodCard'
 import analytics from '@/lib/googleAnalytics/analytics'
 
 export const NeighborhoodsTop6List = () => {
@@ -27,7 +27,7 @@ export const NeighborhoodsTop6List = () => {
       <NeighborhoodsTop6ListContainer>
         {locations.map((location, index) => {
           return (
-            <ListingCard
+            <NeighborhoodCard
               variant="home"
               key={location.externId}
               position={index + 1}

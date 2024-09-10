@@ -11,7 +11,7 @@ import ListElement from './ListElement'
 import { Menu, MenuPopup, MenuSection } from './Menu'
 import { Subline2 } from './Typography'
 import { InputText } from './InputText'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 
 const Container = styled.div`
   position: relative;

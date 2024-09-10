@@ -1,9 +1,9 @@
 import { FileUploadButton } from '@/components/core/FileUploadButton'
 import { Body2, Caption, H3 } from '@/components/core/Typography'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { UploadedFilesMap } from '@/utils/types/image'
 import styled from 'styled-components'
 import { BannerImagePreview } from '../neighborhoods/edit-location/BannerImagePreview'
-import { getImageUrlByIpfsHash } from '@/lib/image'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 import { ImagesPreview } from '../neighborhoods/edit-location/ImagesPreview'
 
 export const GalleryUploadSection = ({
@@ -14,7 +14,7 @@ export const GalleryUploadSection = ({
   uploading = false,
   isBanner = false,
   multiple = false,
-  ipfsHashList,
+  cfIds,
   onDelete,
   errorMessage,
 }: {
@@ -22,19 +22,19 @@ export const GalleryUploadSection = ({
   instructions: string
   isBanner?: boolean
   multiple?: boolean
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  ipfsHashList?: string[]
-  onDelete?: (ipfsHash: string) => void
+  onFilesUploaded: (files: UploadedFilesMap) => Promise<void>
+  cfIds?: string[]
+  onDelete?: (cfId: string) => void
   onStartUploading?: VoidFunction
   uploading?: boolean
   errorMessage?: string
 }) => {
-  if (!ipfsHashList) {
+  if (!cfIds) {
     return null
   }
 
-  const imageUrls = ipfsHashList
-    ?.map((ipfsHash) => getImageUrlByIpfsHash(ipfsHash, true))
+  const imageUrls = cfIds
+    ?.map((cfId) => imageUrlForId(cfId))
     .filter(Boolean) as string[]
   const bannerImageUrl = isBanner ? imageUrls?.[0] : null
 
@@ -66,7 +66,7 @@ export const GalleryUploadSection = ({
         <ImagesPreview
           uploading={uploading}
           onDelete={onDelete}
-          ipfsHashList={ipfsHashList}
+          cfIds={cfIds}
         />
       ) : null}
     </Container>

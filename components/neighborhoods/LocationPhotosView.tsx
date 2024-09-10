@@ -10,14 +10,13 @@ export const LocationPhotosView = ({
   location,
 }: {
   location: LocationFragment
-  gallery?: string | string[] | null | undefined
 }) => {
   const { showModal } = useModal()
   const { deviceSize } = useDeviceSize()
 
   const images = location.mediaItems.map((image) => ({
     ...image,
-    name: `${image.category}-${image.ipfsHash}`,
+    name: `${image.category}-${image.cfId}`,
   }))
 
   const handleImageClick = (image: TempImage) => {
@@ -25,7 +24,7 @@ export const LocationPhotosView = ({
       return
     }
 
-    const index = images.findIndex((img) => img.ipfsHash === image.ipfsHash)
+    const index = images.findIndex((img) => img.cfId === image.cfId)
 
     showModal(() => (
       <ImageBrowserModal images={images} initialImageIndex={index} />

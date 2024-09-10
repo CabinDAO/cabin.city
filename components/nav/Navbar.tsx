@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import Icon from '@/components/core/Icon'
 import { Tooltip } from '@/components/core/Tooltip'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { MeFragment } from '@/utils/types/profile'
 
 const borderWidth = 0.1
@@ -75,7 +75,7 @@ const MenuItem = ({
       ) : (
         <Link onClick={() => analytics.navBarEvent(name)} href={item.path}>
           {user && name == 'profile' ? (
-            <Avatar src={user.avatarUrl} size={3.2} />
+            <Avatar src={user} size={3.2} />
           ) : (
             <Icon
               name={item.icon}

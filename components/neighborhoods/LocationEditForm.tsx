@@ -11,7 +11,7 @@ import {
   LocationFragment,
   LocationMediaCategory,
 } from '@/utils/types/location'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { UploadedFilesMap } from '@/utils/types/image'
 import {
   PHOTO_REQUIRED_ERROR,
   REQUIRED_FIELD_ERROR,
@@ -72,9 +72,9 @@ export function LocationEditForm({
     name: location.name,
     description: location.description,
     published: location.publishedAt ? 'true' : 'false',
-    bannerImageIpfsHash: location.bannerImageIpfsHash,
+    bannerImageCfId: location.bannerImageCfId,
     mediaItems: location.mediaItems?.map((mi) => ({
-      ipfsHash: mi?.ipfsHash,
+      cfId: mi?.cfId,
       category: mi?.category,
     })),
   })
@@ -94,7 +94,7 @@ export function LocationEditForm({
     if (
       validateLocationInput(locationInput) &&
       !emptyDescription &&
-      !!locationInput.bannerImageIpfsHash &&
+      !!locationInput.bannerImageCfId &&
       !!locationInput.mediaItems?.length
     ) {
       await updateLocation({ ...locationInput, address })
@@ -148,13 +148,11 @@ export function LocationEditForm({
     })
   }
 
-  const handleFilesUploaded = async (
-    fileNameIpfsHashMap: FileNameIpfsHashMap
-  ) => {
+  const handleFilesUploaded = async (files: UploadedFilesMap) => {
     setUploading(false)
 
-    const newImages = Object.values(fileNameIpfsHashMap).map((ipfsHash) => ({
-      ipfsHash,
+    const newImages = Object.values(files).map((cfId) => ({
+      cfId,
       category: LocationMediaCategory.Features,
     }))
 
@@ -166,27 +164,24 @@ export function LocationEditForm({
     }))
   }
 
-  const handleBannerFileUploaded = async (
-    fileNameIpfsHashMap: FileNameIpfsHashMap
-  ) => {
+  const handleBannerFileUploaded = async (files: UploadedFilesMap) => {
     setUploadingBanner(false)
     setLocationInput((prev) => ({
       ...prev,
-      bannerImageIpfsHash:
-        fileNameIpfsHashMap[Object.keys(fileNameIpfsHashMap)[0]],
+      bannerImageCfId: Object.values(files)[0],
     }))
   }
 
-  const deleteByIpfsHash = (ipfsHash: string) => {
+  const deleteByCfId = (cfId: string) => {
     const foundCreatedMediaItem = locationInput.mediaItems?.find(
-      (mediaItem) => mediaItem?.ipfsHash === ipfsHash
+      (mediaItem) => mediaItem?.cfId === cfId
     )
 
     if (foundCreatedMediaItem) {
       setLocationInput((prev) => ({
         ...prev,
         mediaItems: prev.mediaItems?.filter(
-          (mediaItem) => mediaItem?.ipfsHash !== foundCreatedMediaItem?.ipfsHash
+          (mediaItem) => mediaItem?.cfId !== foundCreatedMediaItem?.cfId
         ),
       }))
     }
@@ -270,13 +265,13 @@ export function LocationEditForm({
           title="Neighborhood banner image"
           instructions="This picture will be your banner on the neighborhood page. It will be trimmed to a 7:3 ratio for desktop and 1:1 for mobile. Thus, it's best to put the main focus in the center to avoid unwanted trimming. Choose a JPG or PNG no larger than 5 MB."
           isBanner
-          ipfsHashList={
-            locationInput?.bannerImageIpfsHash
-              ? [locationInput.bannerImageIpfsHash]
+          cfIds={
+            locationInput?.bannerImageCfId
+              ? [locationInput.bannerImageCfId]
               : []
           }
           errorMessage={
-            highlightErrors && !locationInput?.bannerImageIpfsHash
+            highlightErrors && !locationInput?.bannerImageCfId
               ? REQUIRED_SECTION_ERROR
               : undefined
           }
@@ -287,15 +282,13 @@ export function LocationEditForm({
         <GalleryUploadSection
           onStartUploading={() => setUploading(true)}
           uploading={uploading}
-          onFilesUploaded={(fileNameIpfsHashMap) =>
-            handleFilesUploaded(fileNameIpfsHashMap)
-          }
-          onDelete={deleteByIpfsHash}
+          onFilesUploaded={handleFilesUploaded}
+          onDelete={deleteByCfId}
           title="Photos"
           instructions="Add images for the photo gallery. Choose JPG or PNG file formats no larger than 5 MB."
           multiple
-          ipfsHashList={unique<string>(
-            (locationInput.mediaItems || []).map((mi) => mi.ipfsHash)
+          cfIds={unique<string>(
+            (locationInput.mediaItems || []).map((mi) => mi.cfId)
           )}
           errorMessage={
             highlightErrors && !locationInput.mediaItems?.length

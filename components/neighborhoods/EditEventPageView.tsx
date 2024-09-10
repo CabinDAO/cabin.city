@@ -49,7 +49,6 @@ export const EditEventPageView = () => {
       setNewValues({
         title: event?.title ?? undefined,
         description: event?.description ?? undefined,
-        imageIpfsHash: event?.imageIpfsHash ?? undefined,
         startDate: event?.startDate ?? undefined,
         endDate: event?.endDate ?? undefined,
         price: event?.price ?? undefined,

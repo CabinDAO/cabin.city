@@ -14,7 +14,7 @@ import Icon from '@/components/core/Icon'
 import { Body1, Body2, Caption, H2, H4 } from './Typography'
 import { Button } from '@/components/core/Button'
 import { NoWrap } from './NoWrap'
-import { Avatar } from '@/components/core/Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
@@ -35,7 +35,7 @@ export const StewardContact = ({
       <Top>
         {steward ? (
           <Link href={`/profile/${steward.externId}`}>
-            <Avatar src={steward.avatarUrl} size={7.2} />
+            <Avatar src={steward} size={7.2} />
           </Link>
         ) : (
           <IconWarp>

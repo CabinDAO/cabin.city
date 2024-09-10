@@ -1,26 +1,44 @@
-import { ErrorModal } from '@/components/ErrorModal'
-import { useModal } from '@/components/hooks/useModal'
+import React, { useState } from 'react'
+import axios from 'axios'
 import {
   MAX_FILE_SIZE,
   SUPPORTED_FILE_TYPES,
-} from '@/lib/file-storage/configuration'
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
-import { useState } from 'react'
-import axios from 'axios'
+  UploadedFilesMap,
+} from '@/utils/types/image'
+import { ImageNewResponse } from '@/utils/types/image'
+import { useModal } from '@/components/hooks/useModal'
+import { useBackend } from '@/components/hooks/useBackend'
+import { useError } from '@/components/hooks/useError'
+import { ErrorModal } from '@/components/ErrorModal'
+import { randomUploadName } from '@/utils/random'
 
-interface UseFilesUploadProps {
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
-  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
-  onStartUploading?: VoidFunction
+type CloudflareUploadResponse = {
+  success: boolean
+  // errors: []
+  // messages: []
+  result: {
+    id: string
+    filename: string
+    uploaded: string
+    requireSignedURLs: boolean
+    variants: string[]
+  }
 }
 
 export const useFilesUpload = ({
   onFilesUploaded,
   preprocessFiles,
   onStartUploading,
-}: UseFilesUploadProps) => {
-  const [isDragging, setIsDragging] = useState(false)
+}: {
+  onFilesUploaded: (files: UploadedFilesMap) => Promise<void>
+  preprocessFiles?: (files: FileList | File[]) => FileList | File[]
+  onStartUploading?: VoidFunction
+}) => {
   const { showModal } = useModal()
+  const { showError } = useError()
+  const { post } = useBackend()
+
+  const [isDragging, setIsDragging] = useState(false)
 
   const handleDrag = (e: React.DragEvent<HTMLFormElement | HTMLDivElement>) => {
     e.preventDefault()
@@ -70,31 +88,35 @@ export const useFilesUpload = ({
       return {}
     }
 
-    const processedFiles = preprocessFiles
-      ? await preprocessFiles(files)
-      : files
+    const processedFiles = preprocessFiles ? preprocessFiles(files) : files
 
-    const mapping: FileNameIpfsHashMap = {}
+    const mapping: UploadedFilesMap = {}
 
     for (const file of processedFiles as File[]) {
+      const uploadUrl = await post<ImageNewResponse>('IMAGE_NEW', {})
+      if (!uploadUrl || 'error' in uploadUrl) {
+        showError(`Failed to upload image: ${uploadUrl?.error}`)
+        continue
+      }
+
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', file, randomUploadName(file.name))
 
-      mapping[file.name] = ''
-
-      const { data } = await axios<{ IpfsHash: string }>({
+      const { data } = await axios<CloudflareUploadResponse>({
         method: 'post',
-        url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+        url: uploadUrl.url,
         data: formData,
         headers: {
-          pinata_api_key: process.env.NEXT_PUBLIC_PINATA_API_KEY as string,
-          pinata_secret_api_key: process.env
-            .NEXT_PUBLIC_PINATA_API_SECRET as string,
-          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_API_TOKEN}`,
+          // 'Content-Type': 'multipart/form-data',
         },
       })
 
-      mapping[file.name] = data.IpfsHash
+      // mapping[file.name] = {
+      //   id: data.result.id,
+      //   name: data.result.filename,
+      // }
+      mapping[file.name] = data.result.id
     }
 
     return mapping
@@ -108,10 +130,8 @@ export const useFilesUpload = ({
     setIsDragging(false)
 
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const result = (await uploadFiles(
-        e.dataTransfer.files
-      )) as FileNameIpfsHashMap
-      onFilesUploaded(result)
+      const result = await uploadFiles(e.dataTransfer.files)
+      await onFilesUploaded(result)
     }
   }
 
@@ -120,8 +140,8 @@ export const useFilesUpload = ({
 
     if (e.target.files && e.target.files[0]) {
       onStartUploading && onStartUploading()
-      const result = (await uploadFiles(e.target.files)) as FileNameIpfsHashMap
-      onFilesUploaded(result)
+      const result = await uploadFiles(e.target.files)
+      await onFilesUploaded(result)
     }
   }
 

@@ -39,9 +39,7 @@ export const validateEventInput = (
     !validateTitle(newValues.title).valid ||
     isEmptyEditoryValue(newValues.description) ||
     (newValues.hasOwnProperty('applicationUrl') &&
-      !truthyString(newValues.applicationUrl)) ||
-    (newValues.hasOwnProperty('imageIpfsHash') &&
-      !truthyString(newValues.imageIpfsHash))
+      !truthyString(newValues.applicationUrl))
 
   return !invalid
 }

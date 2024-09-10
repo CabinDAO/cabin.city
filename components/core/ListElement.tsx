@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import Icon, { IconName } from './Icon'
 import { Subline2 } from './Typography'
 import { Checkbox } from './Checkbox'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 
 interface ContainerProps {
   active?: boolean
@@ -86,10 +86,6 @@ const Container = styled.div<ContainerProps>`
       opacity: 0.5;
     `}
 `
-
-interface ElementSet {
-  hightlight?: number
-}
 
 const ElementSet = styled.div`
   display: flex;

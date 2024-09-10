@@ -2,7 +2,7 @@ import { truncate } from '@/utils/display-utils'
 import { format } from 'date-fns'
 import styled from 'styled-components'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { Avatar } from './Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
 import { ProfileListFragment } from '@/utils/types/profile'
@@ -19,7 +19,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
   return (
     <StyledListItem href={`/profile/${profile.externId}`}>
       <AvatarContainer>
-        <Avatar src={profile.avatarUrl} size={avatarSize} />
+        <Avatar src={profile} size={avatarSize} />
         <InfoContainer>
           <NameContainer>
             <H4>{profile.name}</H4>

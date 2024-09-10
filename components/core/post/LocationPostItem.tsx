@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { getImageUrlByIpfsHash } from '@/lib/image'
 import { ActivityListFragment } from '@/utils/types/activity'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 
 export const LocationPostItem = ({
   location,
@@ -14,7 +15,14 @@ export const LocationPostItem = ({
   location: NonNullable<ActivityListFragment['metadata']['location']>
   hideVerifiedTag: boolean
 }) => {
-  const { name, bannerImageIpfsHash, address, eventCount, externId } = location
+  const {
+    name,
+    bannerImageIpfsHash,
+    bannerImageCfId,
+    address,
+    eventCount,
+    externId,
+  } = location
 
   const eventCountString = eventCount === 1 ? 'Event' : 'Events'
   const router = useRouter()
@@ -28,7 +36,14 @@ export const LocationPostItem = ({
       {!hideVerifiedTag && <ActiveBadge steward={location.steward} />}
       <Container onClick={handleOnClick}>
         <ImageContainer>
-          {bannerImageIpfsHash ? (
+          {bannerImageCfId ? (
+            <ImageFlex
+              alt={name ?? 'Location'}
+              src={imageUrlForId(bannerImageCfId)}
+              width={9.6}
+              sizes={`96px`}
+            />
+          ) : bannerImageIpfsHash ? (
             <ImageFlex
               alt={name ?? 'Location'}
               src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}

@@ -1,16 +1,14 @@
-import { FileNameIpfsHashMap } from '@/lib/file-storage/types'
+import { UploadedFilesMap } from '@/utils/types/image'
 import { Button } from './Button'
 import { FileUpload } from './FileUpload'
 
-interface FileUploadButtonProps {
-  onFilesUploaded: (fileNameIpfsHashMap: FileNameIpfsHashMap) => Promise<void>
+export const FileUploadButton = (props: {
+  onFilesUploaded: (files: UploadedFilesMap) => Promise<void>
   preprocessFiles?: (files: FileList | File[]) => FileList | File[]
   removeEnabled?: boolean
   multiple?: boolean
   onStartUploading?: VoidFunction
-}
-
-export const FileUploadButton = (props: FileUploadButtonProps) => {
+}) => {
   return (
     <FileUpload {...props}>
       <Button variant="tertiary">

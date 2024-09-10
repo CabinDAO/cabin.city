@@ -2,7 +2,7 @@ import { format, formatDistance, parseISO } from 'date-fns'
 import Link from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
-import { Avatar } from '../Avatar'
+import { Avatar } from '@/components/profile/Avatar'
 import IconButton from '../IconButton'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
@@ -81,7 +81,7 @@ export const Post = (props: PostProps) => {
         {variant === 'full' && (
           <ProfileContainer>
             <LeftContainer href={`/profile/${profile.externId}`} passHref>
-              <Avatar src={profile.avatarUrl} size={3.2} />
+              <Avatar src={profile} size={3.2} />
               <ProfileName>{profile.name}</ProfileName>
             </LeftContainer>
             {displayMoreMenu && (

@@ -23,6 +23,7 @@ import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
+import { imageUrlForId } from '@/lib/cloudflareImages'
 
 export const LocationView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
@@ -69,9 +70,13 @@ export const LocationView = ({ externId }: { externId: string }) => {
 
   return (
     <LocationContent>
-      {location.bannerImageIpfsHash && (
+      {(location.bannerImageCfId || location.bannerImageIpfsHash) && (
         <BannerHeader
-          imageUrl={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
+          imageUrl={
+            location.bannerImageCfId
+              ? imageUrlForId(location.bannerImageCfId)
+              : getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''
+          }
           reduceTopPad={1.8}
         />
       )}

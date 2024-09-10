@@ -55,11 +55,13 @@ export type LocationFragment = {
   description: string
   address: AddressFragmentType | null
   bannerImageIpfsHash: string
+  bannerImageCfId: string
   publishedAt: string | null
   steward: ProfileBasicFragment | null
   mediaItems: {
     category: LocationMediaCategory
     ipfsHash: string
+    cfId: string
   }[]
   // offers: OfferItemFragment[]
   eventCount: number
@@ -111,13 +113,13 @@ export const LocationEditParams = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   published: z.union([z.literal('true'), z.literal('false')]).optional(),
-  bannerImageIpfsHash: z.string().optional(),
   address: AddressFragment.nullable().optional(),
+  bannerImageCfId: z.string().optional(),
   mediaItems: z
     .array(
       z.object({
         category: z.nativeEnum(LocationMediaCategory),
-        ipfsHash: z.string(),
+        cfId: z.string(),
       })
     )
     .optional(),
