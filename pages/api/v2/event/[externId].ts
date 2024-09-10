@@ -93,53 +93,20 @@ async function handlePost(
     return
   }
 
-  const mediaItemsToDelete: number[] = []
-  if (params.mediaItems) {
-    for (const mediaItem of eventToEdit.mediaItems) {
-      if (
-        !params.mediaItems.find(
-          (newMediaItem) => newMediaItem.ipfsHash === mediaItem.ipfsHash
-        )
-      ) {
-        mediaItemsToDelete.push(mediaItem.id)
-      }
-    }
-  }
-
-  const [, updatedEvent] = await prisma.$transaction([
-    prisma.offerMediaItem.deleteMany({
-      where: { id: { in: mediaItemsToDelete } },
-    }),
-    prisma.offer.update({
-      where: {
-        id: eventToEdit.id,
-      },
-      include: EventQueryInclude,
-      data: {
-        title: params.title,
-        description: params.description,
-        startDate: params.startDate,
-        endDate: params.endDate,
-        price: params.price,
-        applicationUrl: params.applicationUrl,
-        mediaItems: params.mediaItems
-          ? {
-              connectOrCreate: params.mediaItems.map((mediaItem) => ({
-                where: {
-                  offerId_ipfsHash: {
-                    offerId: eventToEdit.id,
-                    ipfsHash: mediaItem.ipfsHash,
-                  },
-                },
-                create: {
-                  ipfsHash: mediaItem.ipfsHash,
-                },
-              })),
-            }
-          : undefined,
-      },
-    }),
-  ])
+  const updatedEvent = await prisma.offer.update({
+    where: {
+      id: eventToEdit.id,
+    },
+    include: EventQueryInclude,
+    data: {
+      title: params.title,
+      description: params.description,
+      startDate: params.startDate,
+      endDate: params.endDate,
+      price: params.price,
+      applicationUrl: params.applicationUrl,
+    },
+  })
 
   res.status(200).send({
     event: eventToFragment(updatedEvent as EventWithRelations),

@@ -46,13 +46,7 @@ export type ActivityListFragment = {
     }
     offer?: Pick<
       EventFragment,
-      | 'externId'
-      | 'type'
-      | 'title'
-      | 'imageIpfsHash'
-      | 'startDate'
-      | 'endDate'
-      | 'location'
+      'externId' | 'type' | 'title' | 'startDate' | 'endDate' | 'location'
     >
   }
 
@@ -176,7 +170,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         description: true
         startDate: true
         endDate: true
-        imageIpfsHash: true
         price: true
         priceInterval: true
         location: {
@@ -273,7 +266,6 @@ export const ActivityQueryInclude = {
       description: true,
       startDate: true,
       endDate: true,
-      imageIpfsHash: true,
       price: true,
       priceInterval: true,
       location: {

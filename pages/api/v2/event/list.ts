@@ -63,15 +63,9 @@ export const eventToFragment = (event: EventWithRelations): EventFragment => {
     description: event.description,
     startDate: event.startDate.toISOString(),
     endDate: event.endDate.toISOString(),
-    imageIpfsHash: event.imageIpfsHash,
     price: event.price.toNumber(),
     priceInterval: event.priceInterval as OfferPriceInterval,
     applicationUrl: event.applicationUrl,
-    mediaItems: event.mediaItems.map((mediaItem) => {
-      return {
-        ipfsHash: mediaItem.ipfsHash,
-      }
-    }),
     location: {
       externId: event.location.externId,
       name: event.location.name,

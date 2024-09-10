@@ -321,23 +321,8 @@ model Offer {
   price          Decimal            @db.Decimal(12, 2) // TODO: max price is just under 10 billion dollars
   priceInterval  OfferPriceInterval
   applicationUrl String
-  imageIpfsHash  String
-  mediaItems     OfferMediaItem[]
 
   activities Activity[]
-}
-
-model OfferMediaItem {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  Offer   Offer @relation(fields: [offerId], references: [id], onDelete: Cascade)
-  offerId Int
-
-  ipfsHash String
-
-  @@unique([offerId, ipfsHash])
 }
 
 enum OfferType {

@@ -140,7 +140,6 @@ const toFragments = (
               title: activity.offer.title,
               startDate: activity.offer.startDate.toISOString(),
               endDate: activity.offer.endDate.toISOString(),
-              imageIpfsHash: activity.offer.imageIpfsHash,
               location: {
                 externId: activity.offer.location.externId,
                 name: activity.offer.location.name,

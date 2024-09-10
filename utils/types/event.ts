@@ -22,10 +22,6 @@ export enum OfferPriceInterval {
   Monthly = 'Monthly',
 }
 
-export type EventMediaItemFragment = {
-  ipfsHash: string
-}
-
 export type EventFragment = {
   externId: string
   type: EventType
@@ -33,11 +29,9 @@ export type EventFragment = {
   description: string
   startDate: string
   endDate: string
-  imageIpfsHash: string
   price: number
   priceInterval: OfferPriceInterval
   applicationUrl: string
-  mediaItems: EventMediaItemFragment[]
   location: {
     externId: string
     name: string
@@ -94,13 +88,6 @@ export const EventEditParams = z
     price: z.number().optional(),
     priceInterval: z.nativeEnum(OfferPriceInterval).optional(),
     applicationUrl: z.string().optional(),
-    mediaItems: z
-      .array(
-        z.object({
-          ipfsHash: z.string(),
-        })
-      )
-      .optional(),
   })
   .strict()
 export type EventEditParamsType = z.infer<typeof EventEditParams>
@@ -116,7 +103,6 @@ export type EventDeleteResponse = Record<string, never> | APIError
 // must match EventQueryInclude below
 export type EventWithRelations = Prisma.OfferGetPayload<{
   include: {
-    mediaItems: true
     location: {
       include: {
         address: true
@@ -132,7 +118,6 @@ export type EventWithRelations = Prisma.OfferGetPayload<{
 
 // must match EventWithRelations type above
 export const EventQueryInclude = {
-  mediaItems: true,
   location: {
     include: {
       address: true,

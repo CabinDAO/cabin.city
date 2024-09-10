@@ -3,7 +3,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { parseISO } from 'date-fns'
 import { formatRange } from '@/utils/display-utils'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import { EventFragment } from '@/utils/types/event'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
@@ -29,15 +28,6 @@ export const EventList = ({
           active={event.endDate >= new Date().toISOString().slice(0, 10)}
         >
           <Contents>
-            {event.imageIpfsHash && (
-              <StyledImage
-                src={getImageUrlByIpfsHash(event.imageIpfsHash) ?? ''}
-                alt={event.title ?? ''}
-                width={0}
-                height={0}
-                sizes="100vw"
-              />
-            )}
             <Details>
               <NameAndDate>
                 <H5>

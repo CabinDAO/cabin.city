@@ -1,14 +1,11 @@
 import styled from 'styled-components'
-import Image from 'next/image'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY, formatRange } from '@/utils/display-utils'
 import Link from 'next/link'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
 import { ActivityListFragment } from '@/utils/types/activity'
 
 export const EventPostItem = ({
-  imageIpfsHash,
   title,
   startDate,
   endDate,
@@ -19,16 +16,6 @@ export const EventPostItem = ({
 
   return (
     <Container href={`/event/${externId}`}>
-      <ImageContainer>
-        {imageIpfsHash ? (
-          <Image
-            alt={title ?? 'Event'}
-            src={getImageUrlByIpfsHash(imageIpfsHash) ?? ''}
-            width={96}
-            height={96}
-          />
-        ) : null}
-      </ImageContainer>
       <Data>
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
@@ -67,13 +54,4 @@ const Data = styled.div`
   justify-content: center;
   gap: 0.8rem;
   overflow: hidden;
-`
-
-const ImageContainer = styled.div`
-  position: relative;
-  width: 9.6rem;
-  height: 9.6rem;
-  display: flex;
-  object-fit: cover;
-  background-color: ${({ theme }) => theme.colors.yellow300};
 `

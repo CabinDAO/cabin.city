@@ -54,7 +54,6 @@ async function handler(
       endDate: new Date(),
       price: 0,
       priceInterval: OfferPriceInterval.Weekly,
-      imageIpfsHash: '',
       applicationUrl: '',
     },
   })
