@@ -25,7 +25,7 @@ async function handler(
     return
   }
 
-  await requireProfile(req, res, opts)
+  await requireProfile(opts.auth)
 
   try {
     const form = new FormData()

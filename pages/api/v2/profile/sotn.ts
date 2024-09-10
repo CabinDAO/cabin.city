@@ -13,7 +13,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.status(400).send({ error: 'Disabled' })
   return
 
-  // const profile = await requireProfile(req, res, opts)
+  // const profile = await requireProfile(opts.auth)
   //
   // await prisma.profile.update({
   //   where: { id: profile.id },

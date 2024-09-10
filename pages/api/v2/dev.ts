@@ -8,7 +8,7 @@ async function handler(
   res: NextApiResponse,
   opts: { auth: AuthData }
 ) {
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
   if (!profile.isAdmin) {
     res.status(403).send({ error: 'Forbidden' })
     return

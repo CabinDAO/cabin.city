@@ -49,7 +49,7 @@ async function handler(
     return
   }
 
-  const profile = await findProfile(req, res, opts)
+  const profile = await findProfile(opts.auth)
   let idsInOrder: number[] = []
 
   try {
@@ -59,6 +59,7 @@ async function handler(
       console.error('Failed to sort locations:', {
         profileId: profile?.id,
         errorStack: error.stack,
+        params,
         skip,
         take,
       })

@@ -26,10 +26,10 @@ async function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      await handlePost(req, res, await requireProfile(req, res, opts))
+      await handlePost(req, res, await requireProfile(opts.auth))
       return
     case 'DELETE':
-      await handleDelete(req, res, await requireProfile(req, res, opts))
+      await handleDelete(req, res, await requireProfile(opts.auth))
       return
     case 'GET':
       await handleGet(req, res)

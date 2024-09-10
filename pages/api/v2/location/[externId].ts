@@ -31,10 +31,10 @@ async function handler(
       await handleGet(req, res, opts)
       return
     case 'POST':
-      await handlePost(req, res, await requireProfile(req, res, opts))
+      await handlePost(req, res, await requireProfile(opts.auth))
       return
     case 'DELETE':
-      await handleDelete(req, res, await requireProfile(req, res, opts))
+      await handleDelete(req, res, await requireProfile(opts.auth))
       return
     default:
       res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
@@ -70,7 +70,7 @@ async function handleGet(
   }
 
   if (!location.publishedAt) {
-    const profile = await findProfile(req, res, opts)
+    const profile = await findProfile(opts.auth)
     if (!profile || !canEditLocation(profile, location)) {
       res.status(404).send({ error: 'Location not found' })
     }

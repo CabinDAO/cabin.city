@@ -15,7 +15,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
   if (profile.citizenshipStatus !== null) {
     res.status(400).send({ error: 'Interest already signaled' })
     return

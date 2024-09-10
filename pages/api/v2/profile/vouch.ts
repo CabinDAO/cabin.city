@@ -22,7 +22,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
 
   const params: ProfileVouchParams = {
     externId: req.body.externId ? (req.body.externId as string) : '',

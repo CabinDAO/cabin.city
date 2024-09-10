@@ -14,7 +14,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
   const externId = req.query.externId as string
 
   const activityToDelete = await prisma.activity.findUnique({

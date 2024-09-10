@@ -16,7 +16,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
 
   if (!req.body.state) {
     res.status(400).send({ error: 'State var required' })

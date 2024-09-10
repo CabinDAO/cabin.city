@@ -75,16 +75,14 @@ export const requireAuth = (
 }
 
 export const findProfile = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  opts: { auth: AuthData }
+  auth: AuthData
 ): Promise<ProfileWithWallet | null> => {
-  if (!opts.auth.privyDID) {
+  if (!auth.privyDID) {
     return null
   }
 
   return prisma.profile.findUnique({
-    where: { privyDID: opts.auth.privyDID },
+    where: { privyDID: auth.privyDID },
     include: {
       wallet: true,
     },
@@ -92,11 +90,9 @@ export const findProfile = async (
 }
 
 export const requireProfile = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  opts: { auth: AuthData }
+  auth: AuthData
 ): Promise<ProfileWithWallet> => {
-  const profile = await findProfile(req, res, opts)
+  const profile = await findProfile(auth)
 
   if (!profile) {
     throw new AuthenticationError(403, 'Forbidden')

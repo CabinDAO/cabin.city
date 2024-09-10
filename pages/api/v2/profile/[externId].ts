@@ -34,7 +34,7 @@ async function handler(
       await handleGet(req, res)
       return
     case 'POST':
-      const profile = await requireProfile(req, res, opts)
+      const profile = await requireProfile(opts.auth)
       await handlePost(req, res, profile)
       return
     default:

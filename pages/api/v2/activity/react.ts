@@ -23,7 +23,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
 
   if (params.action === 'like') {
     // await Promise.all() might be even better here because its parallel, while transaction is sequential

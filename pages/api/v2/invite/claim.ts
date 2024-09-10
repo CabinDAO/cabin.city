@@ -33,7 +33,7 @@ async function handler(
 
   let profile: ProfileWithWallet | null = null
   if (opts.auth.authToken) {
-    profile = await requireProfile(req, res, opts)
+    profile = await requireProfile(opts.auth)
     if (profile.citizenshipStatus == CitizenshipStatus.Verified) {
       res.status(400).send({ error: 'Already a citizen' })
       return

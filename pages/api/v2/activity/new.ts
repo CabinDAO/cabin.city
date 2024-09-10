@@ -16,7 +16,7 @@ async function handler(
     return
   }
 
-  const proflie = await requireProfile(req, res, opts)
+  const proflie = await requireProfile(opts.auth)
   const body = req.body as ActivityNewParams
 
   const activity = await prisma.activity.create({

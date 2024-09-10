@@ -18,7 +18,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(req, res, opts)
+  const profile = await requireProfile(opts.auth)
 
   const parsed = EventNewParams.safeParse(req.body)
   if (!parsed.success) {

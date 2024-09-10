@@ -57,7 +57,7 @@ async function handler(
 
   let activtiesWithMyReactions: { [key: number]: boolean } = {}
   if (opts.auth.authToken) {
-    const profile = await requireProfile(req, res, opts)
+    const profile = await requireProfile(opts.auth)
     const myReactions = await prisma.activityReaction.findMany({
       select: { activityId: true },
       where: {

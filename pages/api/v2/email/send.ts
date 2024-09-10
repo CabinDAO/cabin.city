@@ -14,7 +14,7 @@ async function handler(
   res: NextApiResponse,
   opts: { auth: AuthData }
 ) {
-  await requireProfile(req, res, opts)
+  await requireProfile(opts.auth)
 
   const body = req.body as EmailParams
   const sendgrid = new SendgridService()
