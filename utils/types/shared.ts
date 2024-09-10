@@ -1,5 +1,4 @@
-import { EnumLike, z, ZodArray, ZodTypeAny } from 'zod'
-import { RoleLevel } from '@/utils/types/profile'
+import { EnumLike, z } from 'zod'
 
 export type Paginated = {
   count: number
@@ -17,7 +16,7 @@ export const PageParams = z.object({
 })
 export type PageParamsType = z.infer<typeof PageParams>
 
-export const commaSeparatedArrayOf = <T extends EnumLike = any>(vals: T) =>
+export const commaSeparatedArrayOf = <T extends EnumLike>(vals: T) =>
   z
     .string()
     .transform((str) => str.split(','))

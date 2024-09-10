@@ -81,15 +81,6 @@ padding.right = (size: PaddingSize) => padding.one('right', size)
 
 export { padding }
 
-type ContainerWidth = ScreenWidth | 'full'
-
-const containerWidths: { [key in ContainerWidth]: string } = {
-  narrow: '100%',
-  mid: '50rem',
-  wide: '80rem',
-  full: '100%',
-}
-
 const breakpoints: {
   [key in ScreenWidth]: number
 } = {

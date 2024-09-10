@@ -24,23 +24,19 @@ NOTES TO MYSELF:
  */
 
 type BackendState = {
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  useGet: <Data = any>(
+  useGet: <Data>(
     route: Route | null,
     params?: UrlParams
   ) => ReturnType<typeof useAPIGet<Data>>
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  useGetPaginated: <Data extends Paginated | APIError = any>(
+  useGetPaginated: <Data extends Paginated | APIError>(
     route: Route,
     params?: UrlParams,
     options?: PaginationOptions
   ) => ReturnType<typeof useAPIGetPaginated<Data>>
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  useMutate: <Data = any>(
+  useMutate: <Data>(
     route: Route | null
   ) => ReturnType<typeof useAPIMutate<Data>>
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  useDelete: <Data = any>(
+  useDelete: <Data>(
     route: Route | null
   ) => ReturnType<typeof useAPIMutate<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -63,13 +59,11 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
   const { getAccessToken } = usePrivy()
   const { mutate } = useSWRConfig()
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const useGet = <Data = any,>(route: Route | null, params: UrlParams = {}) => {
+  const useGet = <Data,>(route: Route | null, params: UrlParams = {}) => {
     return useAPIGet<Data>(route, params, getAccessToken)
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const useGetPaginated = <Data extends Paginated | APIError = any>(
+  const useGetPaginated = <Data extends Paginated | APIError>(
     route: Route,
     params: UrlParams = {},
     options?: PaginationOptions
@@ -77,13 +71,11 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
     return useAPIGetPaginated<Data>(route, params, getAccessToken, options)
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const useMutate = <Data = any,>(route: Route | null) => {
+  const useMutate = <Data,>(route: Route | null) => {
     return useAPIMutate<Data>(route, 'POST', getAccessToken)
   }
 
-  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const useDelete = <Data = any,>(route: Route | null) => {
+  const useDelete = <Data,>(route: Route | null) => {
     return useAPIMutate<Data>(route, 'DELETE', getAccessToken)
   }
 

@@ -1,5 +1,9 @@
-import { GTagEvent } from './types'
 import { MenuItemName } from '@/components/nav/types'
+
+export type GTagEvent = {
+  action: Gtag.EventNames | string
+  params: Gtag.EventParams | Gtag.CustomParams
+}
 
 /**
  *

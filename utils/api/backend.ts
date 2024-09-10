@@ -24,7 +24,7 @@ export type UrlParams =
   | string
   | URLSearchParams
 
-export const apiGet = async <Data = any>(
+export const apiGet = async <Data>(
   route: Route,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>
@@ -32,7 +32,7 @@ export const apiGet = async <Data = any>(
   return _apiGet(expandRoute(route), params, await tokenFn())
 }
 
-export const apiPost = async <Data = any>(
+export const apiPost = async <Data>(
   route: Route,
   params: object = {},
   tokenFn: () => Promise<string | null>
@@ -43,12 +43,13 @@ export const apiPost = async <Data = any>(
 // passing null as first param allows for conditional fetching
 // https://swr.vercel.app/docs/conditional-fetching#conditional
 
-export const useAPIGet = <Data = any>(
+export const useAPIGet = <Data>(
   route: Route | null,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>
 ) => {
-  const fetcher = async <Data>(args: readonly [any, ...unknown[]]) =>
+  // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+  const fetcher = async (args: readonly [any, ...unknown[]]) =>
     _apiGet(args[0] as string, params, await tokenFn())
 
   return useSWR<Data>(route ? [expandRoute(route), params] : null, fetcher)
@@ -59,7 +60,7 @@ export type PaginationOptions = {
   revalidateFirstPage?: boolean
 }
 
-export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
+export const useAPIGetPaginated = <Data extends Paginated | APIError>(
   route: Route,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>,
@@ -85,7 +86,7 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
     return url + queryString
   }
 
-  const fetcher = async <Data>(url: string) => {
+  const fetcher = async (url: string) => {
     return _apiGet(url, {}, await tokenFn())
   }
 
@@ -121,7 +122,7 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError = any>(
   }
 }
 
-export const useAPIMutate = <Data = any>(
+export const useAPIMutate = <Data>(
   route: Route | null,
   method: PostMethod = 'POST',
   tokenFn: () => Promise<string | null>
