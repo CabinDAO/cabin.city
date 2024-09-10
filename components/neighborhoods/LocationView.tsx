@@ -7,7 +7,7 @@ import {
 } from '@/utils/types/location'
 import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
-import { getImageUrlByIpfsHash, resolveImageUrl } from '@/lib/image'
+import { cloudflareImageUrl } from '@/lib/image'
 import styled from 'styled-components'
 import { EMPTY } from '@/utils/display-utils'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -23,7 +23,6 @@ import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
-import { imageUrlForId } from '@/lib/cloudflareImages'
 
 export const LocationView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
@@ -37,7 +36,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
     location && location.mediaItems.length > 0
       ? location.mediaItems
           .slice(0, 3)
-          .map((mi) => resolveImageUrl(mi, true))
+          .map((mi) => cloudflareImageUrl(mi.cfId))
           .filter((value): value is string => value !== null)
       : []
 
@@ -70,13 +69,9 @@ export const LocationView = ({ externId }: { externId: string }) => {
 
   return (
     <LocationContent>
-      {(location.bannerImageCfId || location.bannerImageIpfsHash) && (
+      {location.bannerImageCfId && (
         <BannerHeader
-          imageUrl={
-            location.bannerImageCfId
-              ? imageUrlForId(location.bannerImageCfId)
-              : getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''
-          }
+          imageUrl={cloudflareImageUrl(location.bannerImageCfId)}
           reduceTopPad={1.8}
         />
       )}

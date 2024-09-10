@@ -3,7 +3,6 @@ import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
 import { Circle } from '@/components/core/Circle'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
-import { imageUrlForId } from '@/lib/cloudflareImages'
 import defaultAvatar from '@/components/profile/default-avatar.png'
 
 type AvatarSrc =
@@ -39,7 +38,7 @@ export const Avatar = ({
     : typeof src === 'string'
     ? src
     : // : 'avatarImageId' in src
-      // ? imageForId(src.avatarImageId)
+      // ? cloudflareImageUrl(src.avatarImageId)
       src.avatarUrl
 
   return (

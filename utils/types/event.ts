@@ -42,7 +42,6 @@ export type EventFragment = {
     externId: string
     name: string
     type: LocationType
-    bannerImageIpfsHash: string
     bannerImageCfId: string
     address: ShortAddressFragmentType | null
     steward: {

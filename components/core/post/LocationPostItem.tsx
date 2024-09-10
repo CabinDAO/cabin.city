@@ -3,10 +3,10 @@ import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY } from '@/utils/display-utils'
 import { ImageFlex } from '../gallery/ImageFlex'
 import { useRouter } from 'next/router'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import { ActivityListFragment } from '@/utils/types/activity'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 
 export const LocationPostItem = ({
   location,
@@ -15,14 +15,7 @@ export const LocationPostItem = ({
   location: NonNullable<ActivityListFragment['metadata']['location']>
   hideVerifiedTag: boolean
 }) => {
-  const {
-    name,
-    bannerImageIpfsHash,
-    bannerImageCfId,
-    address,
-    eventCount,
-    externId,
-  } = location
+  const { name, bannerImageCfId, address, eventCount, externId } = location
 
   const eventCountString = eventCount === 1 ? 'Event' : 'Events'
   const router = useRouter()
@@ -39,14 +32,7 @@ export const LocationPostItem = ({
           {bannerImageCfId ? (
             <ImageFlex
               alt={name ?? 'Location'}
-              src={imageUrlForId(bannerImageCfId)}
-              width={9.6}
-              sizes={`96px`}
-            />
-          ) : bannerImageIpfsHash ? (
-            <ImageFlex
-              alt={name ?? 'Location'}
-              src={getImageUrlByIpfsHash(bannerImageIpfsHash) ?? ''}
+              src={cloudflareImageUrl(bannerImageCfId)}
               width={9.6}
               sizes={`96px`}
             />
@@ -55,7 +41,9 @@ export const LocationPostItem = ({
         <Data>
           <TruncatedH4>{name}</TruncatedH4>
           <AddressCaption>
-            {`${address ?? EMPTY} · ${eventCount} ${eventCountString}`}
+            {`${
+              address ? formatShortAddress(address) : EMPTY
+            } · ${eventCount} ${eventCountString}`}
           </AddressCaption>
         </Data>
       </Container>

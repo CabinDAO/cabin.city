@@ -54,13 +54,11 @@ export type LocationFragment = {
   name: string
   description: string
   address: AddressFragmentType | null
-  bannerImageIpfsHash: string
   bannerImageCfId: string
   publishedAt: string | null
   steward: ProfileBasicFragment | null
   mediaItems: {
     category: LocationMediaCategory
-    ipfsHash: string
     cfId: string
   }[]
   // offers: OfferItemFragment[]

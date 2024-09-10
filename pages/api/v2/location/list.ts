@@ -54,13 +54,15 @@ async function handler(
 
   try {
     idsInOrder = await sortPrequery(profile, params, skip, take)
-  } catch (error: any) {
-    console.error('Failed to sort locations:', {
-      profileId: profile?.id,
-      errorStack: error.stack,
-      skip,
-      take,
-    })
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Failed to sort locations:', {
+        profileId: profile?.id,
+        errorStack: error.stack,
+        skip,
+        take,
+      })
+    }
     res.status(500).send({ error: 'Location sort failed' })
     return
   }
@@ -205,7 +207,6 @@ export const locationToFragment = (
           postalCode: loc.address.postalCode,
         }
       : null,
-    bannerImageIpfsHash: loc.bannerImageIpfsHash || '',
     bannerImageCfId: loc.bannerImageCfId,
     steward: loc.steward
       ? {
@@ -230,7 +231,6 @@ export const locationToFragment = (
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,
-        ipfsHash: mi.ipfsHash || '',
         cfId: mi.cfId || '',
       }
     }),

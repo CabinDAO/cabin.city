@@ -9,8 +9,7 @@ import { HorizontalDivider } from './Divider'
 import analytics from '@/lib/googleAnalytics/analytics'
 import { LocationFragment } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 
 type CardVariant = 'home' | 'city-directory'
 
@@ -19,11 +18,9 @@ const bannerImageHeight = 258
 export const NeighborhoodCard = ({
   location,
   variant = 'city-directory',
-  position,
 }: {
   location: LocationFragment
   variant?: CardVariant
-  position?: number
 }) => {
   const name = location.name ?? 'New Neighborhood'
 
@@ -53,15 +50,7 @@ export const NeighborhoodCard = ({
               sizes={`${cardWidth}px`}
               quality={40}
               aspectRatio={cardWidth / bannerImageHeight}
-              src={imageUrlForId(location.bannerImageCfId)}
-              alt={name}
-            />
-          ) : location.bannerImageIpfsHash ? (
-            <ImageFlex
-              sizes={`${cardWidth}px`}
-              quality={40}
-              aspectRatio={cardWidth / bannerImageHeight}
-              src={getImageUrlByIpfsHash(location.bannerImageIpfsHash) ?? ''}
+              src={cloudflareImageUrl(location.bannerImageCfId)}
               alt={name}
             />
           ) : (

@@ -74,8 +74,12 @@ async function handler(
     })
 
     res.status(200).send({ address: newWallet.address })
-  } catch (e: any) {
-    res.status(500).send({ error: e.message })
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      res.status(500).send({ error: e.message })
+    } else {
+      res.status(500).send({ error: `${e}` })
+    }
     return
   }
 }

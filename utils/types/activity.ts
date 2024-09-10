@@ -37,11 +37,7 @@ export type ActivityListFragment = {
     role?: RoleFragment
     location?: Pick<
       LocationFragment,
-      | 'externId'
-      | 'name'
-      | 'bannerImageIpfsHash'
-      | 'bannerImageCfId'
-      | 'eventCount'
+      'externId' | 'name' | 'bannerImageCfId' | 'eventCount'
     > & {
       address: ShortAddressFragmentType
       steward: LocationFragment['steward'] extends null
@@ -154,7 +150,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         type: true
         name: true
         description: true
-        bannerImageIpfsHash: true
         bannerImageCfId: true
         address: {
           select: {
@@ -189,7 +184,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             externId: true
             name: true
             type: true
-            bannerImageIpfsHash: true
             bannerImageCfId: true
             address: {
               select: {
@@ -253,7 +247,6 @@ export const ActivityQueryInclude = {
       name: true,
       type: true,
       description: true,
-      bannerImageIpfsHash: true,
       bannerImageCfId: true,
       address: {
         select: {
@@ -288,7 +281,6 @@ export const ActivityQueryInclude = {
           externId: true,
           name: true,
           type: true,
-          bannerImageIpfsHash: true,
           bannerImageCfId: true,
           address: {
             select: {

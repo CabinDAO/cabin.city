@@ -2,8 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationListResponse } from '@/utils/types/location'
-import { getImageUrlByIpfsHash } from '@/lib/image'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
 import styled from 'styled-components'
 import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
@@ -22,15 +21,12 @@ export const NeighborhoodShowcase = () => {
       <H2>Our network of connected properties</H2>
       <Neighborhoods>
         {locations.map((loc, i) => {
-          const imgURL = loc.bannerImageCfId
-            ? imageUrlForId(loc.bannerImageCfId)
-            : getImageUrlByIpfsHash(loc.bannerImageIpfsHash, true)
           return (
             <ImageContainer key={i}>
               <Link href={`/location/${loc.externId}`}>
                 <Image
                   alt={loc.name ?? 'A Cabin neighborhood'}
-                  src={imgURL ?? 'https://fakeimg.pl/500/'}
+                  src={cloudflareImageUrl(loc.bannerImageCfId)}
                   fill={true}
                   sizes="100vw"
                   style={{

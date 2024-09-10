@@ -1,4 +1,3 @@
-import { TempImage } from '@/lib/image'
 import { useModal } from '@/components/hooks/useModal'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { LocationFragment } from '@/utils/types/location'
@@ -14,20 +13,22 @@ export const LocationPhotosView = ({
   const { showModal } = useModal()
   const { deviceSize } = useDeviceSize()
 
-  const images = location.mediaItems.map((image) => ({
-    ...image,
-    name: `${image.category}-${image.cfId}`,
-  }))
-
-  const handleImageClick = (image: TempImage) => {
+  const handleImageClick = (
+    clickedImage: LocationFragment['mediaItems'][0]
+  ) => {
     if (deviceSize === 'mobile') {
       return
     }
 
-    const index = images.findIndex((img) => img.cfId === image.cfId)
+    const index = location.mediaItems.findIndex(
+      (img) => img.cfId === clickedImage.cfId
+    )
 
     showModal(() => (
-      <ImageBrowserModal images={images} initialImageIndex={index} />
+      <ImageBrowserModal
+        images={location.mediaItems}
+        initialImageIndex={index}
+      />
     ))
   }
 
@@ -40,7 +41,7 @@ export const LocationPhotosView = ({
       />
       <ImageGallery
         title={location.name}
-        images={images}
+        images={location.mediaItems}
         onImageClickOverride={handleImageClick}
       />
     </>

@@ -76,7 +76,6 @@ export const eventToFragment = (event: EventWithRelations): EventFragment => {
       externId: event.location.externId,
       name: event.location.name,
       type: event.location.type as LocationType,
-      bannerImageIpfsHash: event.location.bannerImageIpfsHash || '',
       bannerImageCfId: event.location.bannerImageCfId,
       address: event.location.address
         ? {

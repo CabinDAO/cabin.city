@@ -1,10 +1,9 @@
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
 import { getProfilesForMap } from '@/utils/profile'
-import { getImageUrlByIpfsHash } from '@/lib/image'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 
 export default function Home({
   mapData,
@@ -20,7 +19,6 @@ export const getStaticProps = (async (/*context*/) => {
         name: true,
         externId: true,
         address: true,
-        bannerImageIpfsHash: true,
         bannerImageCfId: true,
       },
       where: { address: { lat: { not: null } }, publishedAt: { not: null } },
@@ -40,9 +38,7 @@ export const getStaticProps = (async (/*context*/) => {
           label: l.name,
           lat: l.address?.lat || 0,
           lng: l.address?.lng || 0,
-          imgUrl: l.bannerImageCfId
-            ? imageUrlForId(l.bannerImageCfId)
-            : getImageUrlByIpfsHash(l.bannerImageIpfsHash) || '',
+          imgUrl: cloudflareImageUrl(l.bannerImageCfId),
           linkUrl: `/location/${l.externId}`,
         })),
       },

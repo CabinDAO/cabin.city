@@ -1,22 +1,21 @@
-import { H2 } from '../Typography'
-import styled from 'styled-components'
 import { useEffect, useState } from 'react'
-import { useModal } from '@/components/hooks/useModal'
+import { useEvent } from 'react-use'
 import NextImage from 'next/image'
-import { TempImage, resolveImageUrl } from '@/lib/image'
+import { useModal } from '@/components/hooks/useModal'
+import { LocationFragment } from '@/utils/types/location'
+import { cloudflareImageUrl } from '@/lib/image'
+import styled from 'styled-components'
+import { H2 } from '../Typography'
 import Icon from '../Icon'
 import IconButton from '../IconButton'
-import { useEvent } from 'react-use'
-
-interface ImageBrowserModalProps {
-  images: TempImage[]
-  initialImageIndex?: number
-}
 
 export const ImageBrowserModal = ({
   images,
   initialImageIndex = 0,
-}: ImageBrowserModalProps) => {
+}: {
+  images: LocationFragment['mediaItems']
+  initialImageIndex?: number
+}) => {
   const { hideModal } = useModal()
   const imageCount = images.length
   const [currentImageIndex, setCurrentImageIndex] = useState(initialImageIndex)
@@ -47,8 +46,6 @@ export const ImageBrowserModal = ({
     }
   }
 
-  const imageUrl = resolveImageUrl(currentImage, true)
-
   useEffect(() => {
     if (preloadImages) {
       setPreloadImages(false)
@@ -75,14 +72,12 @@ export const ImageBrowserModal = ({
         <ChevronCircle onClick={handlePreviousImage}>
           <Icon name="chevron-left" color="green900" size={1.7} />
         </ChevronCircle>
-        {imageUrl ? (
-          <StyledImageNextImage
-            src={imageUrl}
-            width={1120}
-            height={805}
-            alt={currentImage?.name ?? ''}
-          />
-        ) : null}
+        <StyledImageNextImage
+          src={cloudflareImageUrl(currentImage.cfId)}
+          width={1120}
+          height={805}
+          alt={`image ${currentImageIndex + 1}`}
+        />
         <ChevronCircle onClick={handleNextImage}>
           <Icon name="chevron-right" color="green900" size={1.7} />
         </ChevronCircle>
@@ -91,21 +86,24 @@ export const ImageBrowserModal = ({
   )
 }
 
-const PreloadedImages = ({ images }: { images: TempImage[] }) => {
+const PreloadedImages = ({
+  images,
+}: {
+  images: LocationFragment['mediaItems']
+}) => {
   return (
     <div style={{ display: 'none' }}>
-      {images.map((image) => {
-        const imageUrl = resolveImageUrl(image, true)
-        return imageUrl ? (
+      {images.map((image, index) => {
+        return (
           <NextImage
-            key={imageUrl}
-            src={imageUrl}
+            key={index}
+            src={cloudflareImageUrl(image.cfId)}
             priority
             width={1120}
             height={805}
-            alt={image?.name ?? ''}
+            alt={'image'}
           />
-        ) : null
+        )
       })}
     </div>
   )

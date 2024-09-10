@@ -1,44 +1,42 @@
 import { prisma } from '../lib/prisma'
 import { randomUploadName } from '@/utils/random'
+import { cloudflareImageUrl } from '@/lib/image'
 
 async function main() {
-  // TODO: do banners too
-
-  const mediaItems = await prisma.locationMediaItem.findMany({
-    where: { locationId: 60, cfId: null },
-    include: { Location: true },
+  const records = await prisma.profile.findMany({
+    where: { avatarUrl: { contains: 'ipfs.io/ipfs' } },
+    // include: { Location: true },
   })
 
   const cfIds: Record<number, string> = {}
 
-  for (const mediaItem of mediaItems) {
-    console.log(`doing media item ${mediaItem.id}`)
+  for (const record of records) {
+    console.log(`doing ${record.id}`)
 
-    if (!mediaItem.ipfsHash) {
-      console.log(
-        `skipping media item ${mediaItem.id} because it has no ipfs hash`
-      )
+    if (!record.avatarUrl) {
+      console.log(`skipping ${record.id} because it has no ipfs hash`)
       continue
     }
 
-    const cfId = await upload(mediaItem.ipfsHash)
+    const cfId = await upload(record.avatarUrl)
 
-    cfIds[mediaItem.id] = cfId
+    cfIds[record.id] = cfId
 
-    await prisma.locationMediaItem.update({
-      where: { id: mediaItem.id },
-      data: { cfId: cfId },
+    await prisma.profile.update({
+      where: { id: record.id },
+      data: { avatarUrl: cloudflareImageUrl(cfId) },
     })
   }
 
   console.log(cfIds)
 }
 
-async function upload(ipfsHash: string) {
+async function upload(url: string) {
   try {
     // Download from IPFS
     const response = await fetch(
-      `https://tan-peculiar-cobra-689.mypinata.cloud/ipfs/${ipfsHash}`
+      url
+      // `https://tan-peculiar-cobra-689.mypinata.cloud/ipfs/${ipfsHash}`
     )
     if (!response.ok) {
       throw new Error(`Failed to download from IPFS: ${response.statusText}`)
@@ -109,7 +107,7 @@ async function upload(ipfsHash: string) {
     console.log(`Successfully uploaded image: ${result.result.id}`)
     return result.result.id
   } catch (error) {
-    console.error(`Error processing ${ipfsHash}:`, error)
+    console.error(`Error processing ${url}:`, error)
   }
 }
 

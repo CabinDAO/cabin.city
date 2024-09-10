@@ -63,13 +63,9 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
           next={next}
           loader="..."
         >
-          {locations.map((location, index) => {
+          {locations.map((location) => {
             return (
-              <NeighborhoodCard
-                position={index + 1}
-                key={location.externId}
-                location={location}
-              />
+              <NeighborhoodCard key={location.externId} location={location} />
             )
           })}
           <Link href={'/location/new'}>

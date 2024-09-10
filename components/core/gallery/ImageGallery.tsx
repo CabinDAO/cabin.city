@@ -1,17 +1,18 @@
-import styled from 'styled-components'
-import { H2 } from '../Typography'
+import { forwardRef } from 'react'
 import Image from 'next/image'
 import { useModal } from '@/components/hooks/useModal'
+import { cloudflareImageUrl } from '@/lib/image'
+import { LocationFragment } from '@/utils/types/location'
+import styled from 'styled-components'
+import { H2 } from '../Typography'
 import { ImageBrowserModal } from './ImageBrowserModal'
-import { TempImage, resolveImageUrl } from '@/lib/image'
-import { forwardRef } from 'react'
 
 interface ImageGalleryProps {
   id?: string
   title: string
-  images: TempImage[]
+  images: LocationFragment['mediaItems']
   className?: string
-  onImageClickOverride?: (image: TempImage) => void
+  onImageClickOverride?: (image: LocationFragment['mediaItems'][0]) => void
 }
 
 export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
@@ -26,9 +27,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
     forwardedRef
   ) => {
     const { showModal } = useModal()
-    const filteredImages = images.filter(
-      (image) => image.url || image.ipfsHash || image.ipfsHash
-    )
+    const filteredImages = images.filter((image) => image.cfId)
 
     const handleImageOnClick = (imageIndex: number) => {
       if (onImageClickOverride) {
@@ -49,20 +48,17 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
         {title && <H2>{title}</H2>}
         <ImageList>
           {filteredImages.map((image, index) => {
-            const imageUrl = resolveImageUrl(image, true)
-            return imageUrl ? (
-              <ImageSizeContainer
-                key={image.name || image.ipfsHash || image.ipfsHash}
-              >
+            return (
+              <ImageSizeContainer key={index}>
                 <StyledImage
                   onClick={() => handleImageOnClick(index)}
-                  alt={image.name}
-                  src={imageUrl}
+                  alt={`image ${index}`}
+                  src={cloudflareImageUrl(image.cfId)}
                   fill
                   sizes="415px"
                 />
               </ImageSizeContainer>
-            ) : null
+            )
           })}
         </ImageList>
       </Container>

@@ -232,14 +232,13 @@ model Location {
   updatedAt DateTime @updatedAt
   externId  String   @unique // for external-facing use, e.g. urls
 
-  type                LocationType
-  name                String
-  description         String // Rich text
-  address             Address?
-  bannerImageIpfsHash String?
-  bannerImageCfId     String              @default("")
-  mediaItems          LocationMediaItem[]
-  publishedAt         DateTime?
+  type            LocationType
+  name            String
+  description     String // Rich text
+  address         Address?
+  bannerImageCfId String              @default("")
+  mediaItems      LocationMediaItem[]
+  publishedAt     DateTime?
 
   steward   Profile? @relation("Steward", fields: [stewardId], references: [id])
   stewardId Int?
@@ -290,8 +289,7 @@ model LocationMediaItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  cfId     String?
-  ipfsHash String?
+  cfId     String
   category LocationMediaCategory
 
   Location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)

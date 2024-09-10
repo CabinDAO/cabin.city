@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
 import { useProfile } from '@/components/auth/useProfile'
 import InfiniteScroll from 'react-infinite-scroll-component'

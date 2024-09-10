@@ -25,12 +25,11 @@ export const NeighborhoodsTop6List = () => {
   return (
     <OuterContainer>
       <NeighborhoodsTop6ListContainer>
-        {locations.map((location, index) => {
+        {locations.map((location) => {
           return (
             <NeighborhoodCard
               variant="home"
               key={location.externId}
-              position={index + 1}
               location={location}
             />
           )

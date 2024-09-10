@@ -3,7 +3,7 @@ import { Body2, Caption, H3 } from '@/components/core/Typography'
 import { UploadedFilesMap } from '@/utils/types/image'
 import styled from 'styled-components'
 import { BannerImagePreview } from '../neighborhoods/edit-location/BannerImagePreview'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 import { ImagesPreview } from '../neighborhoods/edit-location/ImagesPreview'
 
 export const GalleryUploadSection = ({
@@ -34,7 +34,7 @@ export const GalleryUploadSection = ({
   }
 
   const imageUrls = cfIds
-    ?.map((cfId) => imageUrlForId(cfId))
+    ?.map((cfId) => cloudflareImageUrl(cfId))
     .filter(Boolean) as string[]
   const bannerImageUrl = isBanner ? imageUrls?.[0] : null
 

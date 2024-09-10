@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ProfileEditParamsType } from '@/utils/types/profile'
 import { UploadedFilesMap } from '@/utils/types/image'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
@@ -44,7 +44,7 @@ export const AvatarSetup = ({
     if (imageId) {
       setUploading(false)
 
-      onSelected(imageUrlForId(imageId))
+      onSelected(cloudflareImageUrl(imageId))
 
       hideModal()
     }

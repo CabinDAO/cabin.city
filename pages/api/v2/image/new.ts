@@ -48,12 +48,11 @@ async function handler(
 
     res.status(500).send({ error: 'Something went wrong' })
     return
-  } catch (error: any) {
-    console.log(error)
-    if (axios.isAxiosError(error)) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) || error instanceof Error) {
       res.status(500).send({ error: error.message })
     } else {
-      res.status(500).send({ error: error })
+      res.status(500).send({ error: `${error}` })
     }
   }
 }

@@ -12,7 +12,7 @@ import { AppHead } from '@/components/head'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'
-import { getImageUrlByIpfsHash } from '@/lib/image'
+import { cloudflareImageUrl } from '@/lib/image'
 
 export default function LocationPage({
   location,
@@ -31,10 +31,7 @@ export default function LocationPage({
         <AppHead
           title={location.name}
           description={'a Cabin.city neighborhood'}
-          imageUrl={
-            getImageUrlByIpfsHash(location.bannerImageIpfsHash, true) ||
-            undefined
-          }
+          imageUrl={cloudflareImageUrl(location.bannerImageCfId)}
           pathname={`/location/${location.externId}`}
         />
       )}

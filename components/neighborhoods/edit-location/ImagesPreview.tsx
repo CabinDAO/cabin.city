@@ -1,7 +1,7 @@
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { imageUrlForId } from '@/lib/cloudflareImages'
+import { cloudflareImageUrl } from '@/lib/image'
 import Image from 'next/image'
 import { useState } from 'react'
 import styled from 'styled-components'
@@ -42,7 +42,7 @@ export const ImagesPreview = ({
           <StyledImage
             loaded={loadedImages.includes(cfId)}
             onLoadingComplete={() => handleImageLoaded(cfId)}
-            src={imageUrlForId(cfId)}
+            src={cloudflareImageUrl(cfId)}
             width={imageSize}
             height={imageSize}
             alt="Media Item Preview"
