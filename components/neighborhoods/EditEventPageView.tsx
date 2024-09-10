@@ -54,7 +54,6 @@ export const EditEventPageView = () => {
         price: event?.price ?? undefined,
         priceInterval: event?.priceInterval ?? undefined,
         applicationUrl: event?.applicationUrl ?? undefined,
-        mediaItems: event?.mediaItems ?? undefined,
       })
     }
   }, [event])
