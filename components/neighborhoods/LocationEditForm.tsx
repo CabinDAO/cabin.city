@@ -54,6 +54,7 @@ export function LocationEditForm({
   const { showError } = useError()
   const { user } = useProfile()
   const { useMutate, useDelete } = useBackend()
+  const [isSaving, setIsSaving] = useState(false)
 
   const { trigger: updateLocation } = useMutate<LocationEditResponse>([
     'LOCATION',
@@ -91,6 +92,7 @@ export function LocationEditForm({
   const nameValidation = validateTitle(locationInput.name)
 
   const handleSave = async () => {
+    setIsSaving(true)
     if (
       validateLocationInput(locationInput) &&
       !emptyDescription &&
@@ -103,6 +105,7 @@ export function LocationEditForm({
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
     }
+    setIsSaving(false)
   }
 
   const handleOnChange = (
@@ -301,6 +304,7 @@ export function LocationEditForm({
         primaryButton={{
           onClick: handleSave,
           label: 'Save',
+          loading: isSaving,
         }}
         secondaryButton={{
           onClick: () => {

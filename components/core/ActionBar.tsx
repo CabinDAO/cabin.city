@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Button } from './Button'
 import Icon from '@/components/core/Icon'
 import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 const defaultButtonConfig = {
   label: 'OK',
@@ -15,6 +16,7 @@ const defaultButtonConfig = {
 export type ButtonConfig = {
   label: string
   onClick: VoidFunction
+  loading?: boolean
 }
 
 interface ActionBarProps {
@@ -51,10 +53,22 @@ export const ActionBar = ({
       <RightButtons>
         {secondaryButton.onClick && (
           <Button variant="link" onClick={secondaryButton.onClick}>
+            {secondaryButton?.loading && (
+              <>
+                <LoadingSpinner />
+                &nbsp; {/* this keeps the button height from collapsing */}
+              </>
+            )}
             {secondaryButton.label}
           </Button>
         )}
         <Button variant="primary" onClick={primaryButton.onClick}>
+          {primaryButton?.loading && (
+            <>
+              <LoadingSpinner />
+              &nbsp; {/* this keeps the button height from collapsing */}
+            </>
+          )}
           {primaryButton.label}
         </Button>
       </RightButtons>
