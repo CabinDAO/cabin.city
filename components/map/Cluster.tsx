@@ -14,24 +14,12 @@ import 'leaflet.markercluster/dist/MarkerCluster.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 // import 'leaflet.markercluster/dist/leaflet.markercluster.js'
 
-import iconRetinaUrl from '@/components/map/assets/marker-icon-2x.png'
-import iconUrl from '@/components/map/assets/marker-icon-2x.png'
-import shadowUrl from '@/components/map/assets/marker-shadow.png'
-
 // delete (L.Icon.Default as any).prototype._getIconUrl
 // L.Icon.Default.mergeOptions({
 //   iconRetinaUrl: require('./assets/marker-icon-2x.png').default,
 //   iconUrl: require('./assets/marker-icon.png').default,
 //   shadowUrl: require('./assets/marker-shadow.png').default,
 // })
-
-export const pinIcon = L.icon({
-  iconRetinaUrl: iconRetinaUrl.src,
-  iconUrl: iconUrl.src,
-  shadowUrl: shadowUrl.src,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-})
 
 type ClusterType = { [key in string]: any }
 

@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useGeolocation, useWindowSize } from 'react-use'
+import equal from 'react-fast-compare'
+import Link from 'next/link'
 import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import {
@@ -7,23 +9,19 @@ import {
   TileLayer,
   Popup,
   Marker,
-  CircleMarker,
   useMap,
   useMapEvent,
 } from 'react-leaflet'
-import {
-  createPathComponent,
-  LeafletContextInterface,
-} from '@react-leaflet/core'
 import { GestureHandling } from 'leaflet-gesture-handling'
 import 'leaflet-gesture-handling/dist/leaflet-gesture-handling.css'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import theme from '@/styles/theme'
 import { MarkerData, onMoveFn } from '@/components/map/Map'
-import { MarkerClusterGroup, pinIcon } from '@/components/map/Cluster'
+import { MarkerClusterGroup } from '@/components/map/Cluster'
 import { AutoImage } from '@/components/core/AutoImage'
-import Link from 'next/link'
-import equal from 'react-fast-compare'
+import iconRetinaUrl from '@/components/map/assets/marker-icon-2x.png'
+import iconUrl from '@/components/map/assets/marker-icon-2x.png'
+import shadowUrl from '@/components/map/assets/marker-shadow.png'
 
 export const MapDynamic = ({
   height,
@@ -40,7 +38,6 @@ export const MapDynamic = ({
   onMove?: onMoveFn
   initialZoom?: number
 }) => {
-  // const mapRef = useRef(null)
   // const { latitude, longitude, error } = useGeolocation()
   // console.log('latlng', latitude, longitude, error)
 
@@ -162,16 +159,7 @@ const Markers = ({
       {profiles.length && <ClusterGroup profiles={profiles} />}
 
       {locations.map((l, i) => (
-        // <Marker key={i} position={[l.lat, l.lng]} icon={neighborhoodIcon}>
-        //   <StyledPopup>{l.label}</StyledPopup>
-        // </Marker>
-        <CircleMarker
-          key={i}
-          center={[l.lat, l.lng]}
-          radius={12}
-          color={theme.colors.green800}
-          fillColor={theme.colors.green400}
-        >
+        <Marker key={i} position={[l.lat, l.lng]} icon={neighborhoodIcon}>
           {l.label && (
             <StyledPopup>
               <MaybeLink url={l.linkUrl}>
@@ -180,7 +168,7 @@ const Markers = ({
               </MaybeLink>
             </StyledPopup>
           )}
-        </CircleMarker>
+        </Marker>
       ))}
     </>
   )
@@ -221,6 +209,7 @@ const MapWrapper = styled.div<{ height: string }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  --icon-color: '#1D2939' !important;
 
   .leaflet-container {
     outline: 0 !important;
@@ -231,30 +220,16 @@ const StyledPopup = styled(Popup)`
   font-size: 1.6rem;
 `
 
-const neighborhoodIcon = L.divIcon({
-  className: 'dont-show-the-default-shadow',
-  html: `<div style='text-align: center;
-      font-weight: 700;
-      font-family: monospace;
-      position:absolute;
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-      border-top-left-radius: 50%;
-      border-top-right-radius: 50% 100%;
-      border-bottom-left-radius: 100% 50%;
-      border-bottom-right-radius: 0%;
-      /* rotating 45deg clockwise to get the corner bottom center */
-      transform: rotate(45deg); 
-      
-      background-color: ${theme.colors.green400}; 
-      color: ${theme.colors.green800}; 
-      border-color: ${theme.colors.green800}; 
-      border-width: 2px; 
-      border-style: solid; 
-      width: 28px; 
-      height: 28px; 
-      margin-left: -14px; 
-      margin-top: -36px;
-'>icon goes here</div>`,
+const pinIcon = L.icon({
+  iconRetinaUrl: iconRetinaUrl.src,
+  iconUrl: iconUrl.src,
+  shadowUrl: shadowUrl.src,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+})
+
+const neighborhoodIcon = new L.Icon({
+  iconUrl: '/images/map/neighborhood-icon.svg',
+  iconSize: [36, 36],
 })
