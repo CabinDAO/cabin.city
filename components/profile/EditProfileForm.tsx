@@ -158,10 +158,6 @@ const InnerContainer = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 1.6rem;
+  padding: 3.2rem 2.4rem;
   gap: 4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    padding: 2.4rem;
-  }
 `
