@@ -25,8 +25,13 @@ async function handler(
     return
   }
 
-  if (!opts.auth.authToken || !opts.auth.privyDID) {
-    res.status(200).send({ me: null })
+  if (!opts.auth.authToken) {
+    res.status(200).send({ result: 'no_auth_token', me: null })
+    return
+  }
+
+  if (!opts.auth.privyDID) {
+    res.status(200).send({ result: 'invalid_auth_token', me: null })
     return
   }
 
@@ -37,7 +42,12 @@ async function handler(
     include: MyProfileQueryInclude,
   })
 
-  if (profile && !profile.inviteCode) {
+  if (!profile) {
+    res.status(200).send({ result: 'profile_not_found', me: null })
+    return
+  }
+
+  if (!profile.inviteCode) {
     const updatedProfile = await prisma.profile.update({
       where: { id: profile.id },
       data: { inviteCode: randomInviteCode() },
@@ -45,8 +55,9 @@ async function handler(
     profile.inviteCode = updatedProfile.inviteCode
   }
 
-  res.status(profile ? 200 : 404).send({
-    me: profile ? profileToFragment(profile as MyProfileWithRelations) : null,
+  res.status(200).send({
+    result: 'success',
+    me: profileToFragment(profile as MyProfileWithRelations),
   })
 }
 

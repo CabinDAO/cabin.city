@@ -221,6 +221,11 @@ type WalletAddressType = z.infer<typeof WalletAddress>
 export type ProfileMeResponse =
   | {
       me: MeFragment | null
+      result:
+        | 'success'
+        | 'no_auth_token'
+        | 'invalid_auth_token'
+        | 'profile_not_found'
     }
   | APIError
 
