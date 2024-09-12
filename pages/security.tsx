@@ -1,17 +1,17 @@
-import { BaseLayout } from '@/components/core/BaseLayout'
-import { TitleCard } from '@/components/core/TitleCard'
+import Link from 'next/link'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
-import { Body1 } from '@/components/core/Typography'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import Link from 'next/link'
+import { Body1, fonts } from '@/components/core/Typography'
+import { BaseLayout } from '@/components/core/BaseLayout'
+import { TitleCard } from '@/components/core/TitleCard'
 
 const DebugContent = styled.div`
   width: 100%;
   background-color: ${theme.colors.red100};
   padding: 2rem;
   font-size: 1.4rem;
-  font-family: monospace;
+  font-family: ${fonts.ibmPlexMono};
   white-space: pre-wrap;
   overflow-x: auto;
   tab-width: 4;

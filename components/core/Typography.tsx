@@ -1,22 +1,49 @@
-import { Inter, IBM_Plex_Mono, Poppins } from 'next/font/google'
+import localFont from 'next/font/local'
 import styled, { css } from 'styled-components'
 import theme, { ColorName } from '@/styles/theme'
 
-const inter = Inter({
+const inter = localFont({
   display: 'swap',
-  subsets: ['latin'],
+  src: [
+    {
+      path: './fonts/Inter-VariableFont_opsz,wght.woff2',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Inter-Italic-VariableFont_opsz,wght.woff2',
+      style: 'italic',
+    },
+  ],
 })
 
-const ibmPlexMono = IBM_Plex_Mono({
-  weight: ['600'],
-  subsets: ['latin'],
+const ibmPlexMono = localFont({
+  weight: '600',
   display: 'swap',
+  src: [
+    {
+      path: './fonts/IBMPlexMono-SemiBold.woff2',
+      style: 'normal',
+    },
+    {
+      path: './fonts/IBMPlexMono-SemiBoldItalic.woff2',
+      style: 'italic',
+    },
+  ],
 })
 
-const poppins = Poppins({
-  weight: ['600'],
-  subsets: ['latin'],
+const poppins = localFont({
+  weight: '600',
   display: 'swap',
+  src: [
+    {
+      path: './fonts/Poppins-SemiBold.woff2',
+      style: 'normal',
+    },
+    {
+      path: './fonts/Poppins-SemiBoldItalic.woff2',
+      style: 'italic',
+    },
+  ],
 })
 
 interface TypographyProps {
