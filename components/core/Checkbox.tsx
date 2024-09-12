@@ -27,6 +27,7 @@ export const Checkbox = (props: CheckboxProps) => {
 
 const Container = styled.div<CheckboxProps>`
   display: flex;
+  flex-shrink: 0;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   pointer-events: ${({ disabled }) => (disabled ? 'none' : 'auto')};
   flex-direction: row;
