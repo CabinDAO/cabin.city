@@ -86,7 +86,7 @@ const breakpoints: {
 } = {
   narrow: 320,
   mid: 760,
-  wide: 1025,
+  wide: 1024,
 }
 
 export const queries = {
