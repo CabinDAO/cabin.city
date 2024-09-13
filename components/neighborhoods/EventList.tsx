@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { parseISO } from 'date-fns'
 import { formatRange } from '@/utils/display-utils'
 import { EventFragment } from '@/utils/types/event'
@@ -146,19 +145,6 @@ const NameAndDate = styled.div`
   flex-direction: column;
   gap: 0.4rem;
   width: 100%;
-`
-
-const StyledImage = styled(Image)`
-  border: solid 1px ${({ theme }) => theme.colors.green900};
-  width: 100%;
-  height: auto;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 200px;
-    height: 200px;
-    flex: 0;
-    object-fit: cover;
-  }
 `
 
 const Buttons = styled.div`
