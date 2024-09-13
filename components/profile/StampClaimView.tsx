@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
+import { subDays } from 'date-fns'
 import Link from 'next/link'
-import Image from 'next/image'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
+import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileFragment, ProfileGetResponse } from '@/utils/types/profile'
+import {
+  CURRENT_CLAIMABLE_STAMP,
+  StampClaimParamsType,
+} from '@/utils/types/stamp'
 import { formatShortAddress } from '@/lib/address'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
@@ -18,25 +23,41 @@ import { Button } from '@/components/core/Button'
 import { Avatar } from '@/components/profile/Avatar'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
+import { Stamp } from '@/components/core/Stamp'
 
-export const SotnStampView = () => {
+export const StampClaimView = () => {
   const router = useRouter()
-  const { user } = useProfile()
+  const { user } = useUser()
+  const { showError } = useError()
 
   const { useGet, post } = useBackend()
-  const { data: data } = useGet<ProfileGetResponse>(
+  const { data: data, mutate: refetchProfile } = useGet<ProfileGetResponse>(
     user ? ['PROFILE', { externId: user.externId }] : null
   )
 
   const [loading, setLoading] = useState(false)
 
-  const stampDisabled = true
+  const stampId = CURRENT_CLAIMABLE_STAMP?.id
 
   const handleGetStamp = async () => {
-    if (!user) return
+    if (!user || !stampId) return
+
     setLoading(true)
-    analytics.onboardingActionEvent(user.externId, 'stamp_claimed')
-    await post('SOTN', {})
+
+    analytics.stampClaimClickEvent(user.externId, stampId)
+
+    const res = await post('STAMP_CLAIM', {
+      id: stampId,
+    } satisfies StampClaimParamsType)
+
+    if (!res || 'error' in res) {
+      showError(!res ? 'Failed to claim stamp' : res.error)
+      setLoading(false)
+      return
+    }
+
+    await refetchProfile()
+
     await router.push('/profile')
   }
 
@@ -56,7 +77,7 @@ export const SotnStampView = () => {
       </Head>
       <BaseLayout hideNavAndFooter>
         <TitleCard
-          title={`Cabin's State of the Network`}
+          title={`Get Your Stamp`}
           icon={'logo-cabin'}
           onIconClick={() => {
             router.push('/').then()
@@ -64,26 +85,24 @@ export const SotnStampView = () => {
         />
         <StyledContentCard shape="notch" notchSize={1.6}>
           <Container>
-            <H1>Thanks for joining our State of the Network call</H1>
-            <Image
-              src={'/images/stamps/47.png'}
-              alt={'SotN stamp'}
-              width={200}
-              height={200}
-            />
-            <Body1>
-              We had an absolute blast with you and the rest of the community.
-            </Body1>
+            <H1>You saw our talk at the Network State Conference!</H1>
+
+            <Body1>We made you this stamp to commemorate the occasion.</Body1>
+
+            {CURRENT_CLAIMABLE_STAMP && (
+              <Stamp
+                id={CURRENT_CLAIMABLE_STAMP.id}
+                name={CURRENT_CLAIMABLE_STAMP.name}
+              />
+            )}
 
             {user && profile ? (
               <>
-                {stampDisabled ? (
+                {!stampId ? (
                   <Body1>You cannot claim this stamp anymore.</Body1>
-                ) : /*user.gotSotn2024Badge*/ false ? (
-                  <Body1>
-                    You already got this stamp. It's on your profile.
-                  </Body1>
-                ) : user.createdAt > '2024-08-29' ? (
+                ) : user.createdAt > subDays(new Date(), 7).toISOString() ? (
+                  // don't wanna prompt twice in case they were sent to make a
+                  // profile from this page and just came back to get the stamp
                   <Button onClick={handleGetStamp}>
                     {loading ? <LoadingSpinner /> : 'Stamp me!'}
                   </Button>
@@ -116,7 +135,7 @@ export const SotnStampView = () => {
                 )}
               </>
             ) : (
-              <AuthenticatedLink href="/sotn">
+              <AuthenticatedLink href={router.asPath}>
                 <Button variant={'secondary'}>
                   Log in or sign up to get your stamp
                 </Button>

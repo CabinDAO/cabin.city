@@ -213,6 +213,19 @@ export const onboardingActionEvent = (
   })
 }
 
+export const stampClaimClickEvent = (
+  profileId: string,
+  stampId: number
+): void => {
+  event({
+    action: 'stamp_claim_click',
+    params: {
+      profile_id: profileId,
+      stamp_id: stampId,
+    },
+  })
+}
+
 /**
  * @param action - The name of the event you want to track.
  * @param params - A map of event parameters.
@@ -247,6 +260,7 @@ const analytics = {
   subscribeToNewsletterEvent,
   acceleratorApplyClickEvent,
   onboardingActionEvent,
+  stampClaimClickEvent,
 }
 
 export default analytics

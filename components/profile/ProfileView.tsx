@@ -11,6 +11,9 @@ import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAb
 import { ProfileCitizenSection } from '@/components/profile/view-profile/ProfileCitizenSection'
 import { ProfileStampsSection } from '@/components/profile/view-profile/ProfileStampsSection'
 import { ProfileActivitiesSection } from '@/components/profile/view-profile/ProfileActivitiesSection'
+import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
+import Link from 'next/link'
+import { Body1 } from '@/components/core/Typography'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { user } = useProfile()
@@ -39,6 +42,18 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <Container>
           <ProfileHeaderSection profile={profile} />
           {isOwnProfile && <ProfileNextStepsSection me={user} />}
+          {isOwnProfile &&
+            CURRENT_CLAIMABLE_STAMP &&
+            new Date().toISOString() > '2024-09-22' && (
+              <div style={{ textAlign: 'center' }}>
+                <Body1>
+                  👉{' '}
+                  <Link href={'/ns'} style={{ textDecoration: 'underline' }}>
+                    don't forget your {CURRENT_CLAIMABLE_STAMP.name} stamp
+                  </Link>
+                </Body1>
+              </div>
+            )}
           <ProfileAboutSection profile={profile} me={user} />
           <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />

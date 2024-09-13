@@ -37,7 +37,7 @@ enum Routes {
   CHECKOUT_STRIPE_WEBHOOK = '/checkout/stripe/webhook', // called by Stripe
 
   WALLET_GENERATE = '/wallet/generate',
-  SOTN = '/profile/sotn',
+  STAMP_CLAIM = '/stamp/claim',
 
   IMAGE_NEW = '/image/new',
 
