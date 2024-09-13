@@ -13,4 +13,6 @@ export const StampClaimParams = z
   .strict()
 export type StampClaimParamsType = z.infer<typeof StampClaimParams>
 
-export type StampClaimResponse = { success: boolean } | APIError
+export type StampClaimResponse =
+  | { success: boolean; previouslyClaimed: boolean }
+  | APIError

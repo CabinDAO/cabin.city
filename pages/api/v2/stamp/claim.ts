@@ -32,7 +32,7 @@ async function handler(
 
   const claimableStamps = [CURRENT_CLAIMABLE_STAMP?.id]
   if (!claimableStamps.includes(params.id)) {
-    res.status(400).send({ error: 'Cannot claim that stamp' })
+    res.status(400).send({ error: 'Cannot claim this stamp' })
     return
   }
 
@@ -50,12 +50,12 @@ async function handler(
   })
 
   if (!stamp) {
-    res.status(400).send({ error: 'Cannot claim that stamp' })
+    res.status(400).send({ error: 'Cannot claim this stamp' })
     return
   }
 
   if (stamp.profiles.length > 0) {
-    res.status(400).send({ error: 'Already claimed' })
+    res.status(400).send({ success: true, previouslyClaimed: true })
   }
 
   await prisma.profileStamp.create({
@@ -65,5 +65,5 @@ async function handler(
     },
   })
 
-  res.status(200).send({ success: true })
+  res.status(200).send({ success: true, previouslyClaimed: false })
 }

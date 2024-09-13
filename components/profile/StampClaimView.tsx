@@ -10,6 +10,7 @@ import { ProfileFragment, ProfileGetResponse } from '@/utils/types/profile'
 import {
   CURRENT_CLAIMABLE_STAMP,
   StampClaimParamsType,
+  StampClaimResponse,
 } from '@/utils/types/stamp'
 import { formatShortAddress } from '@/lib/address'
 import analytics from '@/lib/googleAnalytics/analytics'
@@ -27,11 +28,15 @@ import { Stamp } from '@/components/core/Stamp'
 
 export const StampClaimView = () => {
   const router = useRouter()
-  const { user } = useUser()
+  const { user, isUserLoading } = useUser()
   const { showError } = useError()
 
   const { useGet, post } = useBackend()
-  const { data: data, mutate: refetchProfile } = useGet<ProfileGetResponse>(
+  const {
+    data,
+    isLoading,
+    mutate: refetchProfile,
+  } = useGet<ProfileGetResponse>(
     user ? ['PROFILE', { externId: user.externId }] : null
   )
 
@@ -46,7 +51,7 @@ export const StampClaimView = () => {
 
     analytics.stampClaimClickEvent(user.externId, stampId)
 
-    const res = await post('STAMP_CLAIM', {
+    const res = await post<StampClaimResponse>('STAMP_CLAIM', {
       id: stampId,
     } satisfies StampClaimParamsType)
 
@@ -58,7 +63,7 @@ export const StampClaimView = () => {
 
     await refetchProfile()
 
-    await router.push('/profile')
+    await router.push('/profile#stamps')
   }
 
   const profile = !data || 'error' in data ? null : data.profile
@@ -134,6 +139,8 @@ export const StampClaimView = () => {
                   </>
                 )}
               </>
+            ) : isLoading || isUserLoading ? (
+              <LoadingSpinner />
             ) : (
               <AuthenticatedLink href={router.asPath}>
                 <Button variant={'secondary'}>

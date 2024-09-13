@@ -39,7 +39,7 @@ export const ProfileStampsSection = ({
 
   return (
     <Container>
-      <H3>Passport Stamps</H3>
+      <H3 id={'stamps'}>Passport Stamps</H3>
       {count ? (
         <>
           <PassportsPage>
