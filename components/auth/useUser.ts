@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { addressMatch } from '@/utils/address-match'
-import { ProfileMeResponse } from '@/utils/types/profile'
 import { usePrivy } from '@privy-io/react-auth'
 import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileMeResponse } from '@/utils/types/profile'
+import { addressMatch } from '@/utils/address-match'
 
 /*
   This hook is used to fetch the current user from the server.
@@ -17,47 +17,42 @@ import { useBackend } from '@/components/hooks/useBackend'
   - `null` if the user is not logged in
   - `MeFragment` if the user is logged in
 */
-export const useProfile = ({
-  redirectTo = '',
-  redirectToIfFound = '',
-} = {}) => {
+export const useUser = ({ redirectTo = '', redirectToIfFound = '' } = {}) => {
   const router = useRouter()
   const { user: privyUser, ready } = usePrivy()
   const { useGet } = useBackend()
   const {
-    data: meData,
-    isLoading: isMeLoading,
-    mutate: refetchProfile,
+    data: userData,
+    isLoading: isUserLoading,
+    mutate: refetchUser,
   } = useGet<ProfileMeResponse>('PROFILE_ME')
 
-  const me =
-    (ready && !privyUser) || !meData || 'error' in meData ? null : meData.me
+  const user =
+    (ready && !privyUser) || !userData || 'error' in userData
+      ? null
+      : userData.me
 
   useEffect(() => {
     if (
-      me &&
-      me.walletAddress &&
+      user &&
+      user.walletAddress &&
       privyUser?.wallet?.address &&
-      !addressMatch(me.walletAddress, privyUser?.wallet?.address ?? '0x0')
+      !addressMatch(user.walletAddress, privyUser?.wallet?.address ?? '0x0')
     ) {
       router.push('/logout').then()
     }
 
-    if (me && !isMeLoading && !me.privyDID) {
+    if (user && !isUserLoading && !user.privyDID) {
       router.push('/registration').then()
     }
 
     // If redirectTo is set, redirect if the user was not found.
-    if (redirectTo && !isMeLoading && !me) {
+    if (redirectTo && !isUserLoading && !user) {
       router.push(redirectTo).then()
-    } else if (redirectToIfFound && me) {
+    } else if (redirectToIfFound && user) {
       router.push(redirectToIfFound).then()
     }
-  }, [redirectTo, redirectToIfFound, privyUser, me, isMeLoading, router])
+  }, [redirectTo, redirectToIfFound, privyUser, user, isUserLoading, router])
 
-  return {
-    user: me,
-    isUserLoading: isMeLoading,
-    refetchProfile,
-  }
+  return { user, isUserLoading, refetchUser }
 }

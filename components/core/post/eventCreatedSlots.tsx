@@ -2,7 +2,7 @@ import { Body1 } from '../Typography'
 import { PostProps } from './Post'
 import { PostSlots } from './post-slots'
 import { EventPostItem } from './EventPostItem'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const EventContent = (props: PostProps) => {
@@ -11,7 +11,7 @@ const EventContent = (props: PostProps) => {
 
 const EventMedia = (props: PostProps) => {
   const event = props.activity.metadata?.offer
-  const { user } = useProfile()
+  const { user } = useUser()
 
   if (event && user) {
     return <EventPostItem {...event} />

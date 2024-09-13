@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
 import { Button } from '@/components/core/Button'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const TopLogoSection = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   return (
     <Background>

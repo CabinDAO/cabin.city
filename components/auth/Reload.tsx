@@ -1,16 +1,16 @@
 import { useEffect } from 'react'
-import { useProfile } from './useProfile'
+import { useUser } from './useUser'
 import { useExternalUser } from './useExternalUser'
 
 export const Reload = () => {
-  const { refetchProfile } = useProfile()
+  const { refetchUser } = useUser()
   const { externalUser, isUserLoading } = useExternalUser()
 
   useEffect(() => {
     if (externalUser && !isUserLoading) {
-      refetchProfile()
+      refetchUser()
     }
-  }, [externalUser, isUserLoading, refetchProfile])
+  }, [externalUser, isUserLoading, refetchUser])
 
   return null
 }

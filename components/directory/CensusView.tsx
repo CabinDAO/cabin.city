@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
@@ -27,7 +27,7 @@ import { useRouter } from 'next/router'
 import L from 'leaflet'
 
 export const CensusView = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
   return user ? (
     <CensusAuthView />
   ) : (

@@ -1,4 +1,4 @@
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -9,7 +9,7 @@ import { Overline } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const CityDirectoryView = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   return (
     <BaseLayout>

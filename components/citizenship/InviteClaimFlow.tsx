@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { usePrivy } from '@privy-io/react-auth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import {
   InviteClaimParams,
   InviteClaimResponse,
@@ -48,7 +48,7 @@ export default function InviteClaimFlow({
   const { showError } = useError()
   const router = useRouter()
   const { login } = usePrivy()
-  const { user, isUserLoading } = useProfile()
+  const { user, isUserLoading } = useUser()
 
   const { useMutate } = useBackend()
   const { trigger: createClaim, isMutating } =

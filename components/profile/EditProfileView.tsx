@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -19,7 +19,7 @@ import { ActionBar } from '@/components/core/ActionBar'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useUser({ redirectTo: '/' })
   const { showError } = useError()
 
   const { useMutate } = useBackend()

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useModal } from '@/components/hooks/useModal'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -22,7 +22,7 @@ import { HorizontalDivider } from '@/components/core/Divider'
 export const NewLocationView = () => {
   const router = useRouter()
   const { showModal } = useModal()
-  const { user } = useProfile()
+  const { user } = useUser()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { sendEmail } = useEmail()
   const { post } = useBackend()

@@ -1,5 +1,5 @@
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ActivityListFragment,
@@ -17,7 +17,7 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 export const ActivityView = () => {
   const { useGetPaginated } = useBackend()
 
-  const { user } = useProfile({ redirectTo: '/logout' })
+  const { user } = useUser({ redirectTo: '/logout' })
 
   const {
     data,

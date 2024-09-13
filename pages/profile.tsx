@@ -1,8 +1,8 @@
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { ProfileView } from '@/components/profile/ProfileView'
 
 const MyProfilePage = () => {
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useUser({ redirectTo: '/' })
 
   if (!user) return null
 

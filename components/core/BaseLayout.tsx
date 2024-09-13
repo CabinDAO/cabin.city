@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { LaunchBanner } from '@/components/citizenship/LaunchBanner'
@@ -30,7 +30,7 @@ export const BaseLayout = ({
 
   // hide mobile nav on landing pages if logged out so there's room for the login button
   // TODO: not great UX, improve this
-  const { user } = useProfile()
+  const { user } = useUser()
   const hideMobileNav = landingPage && !user
 
   const hideNav = hideNavAndFooter || (isMobile && hideMobileNav)

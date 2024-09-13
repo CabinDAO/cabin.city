@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useError } from '@/components/hooks/useError'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
@@ -52,7 +52,7 @@ export function LocationEditForm({
   afterDelete: () => void
 }) {
   const { showError } = useError()
-  const { user } = useProfile()
+  const { user } = useUser()
   const { useMutate, useDelete } = useBackend()
   const [isSaving, setIsSaving] = useState(false)
 

@@ -13,7 +13,7 @@ import { ActionBar } from '@/components/core/ActionBar'
 import { TitleCard } from '@/components/core/TitleCard'
 import { EditEventForm } from '@/components/neighborhoods/EditEventForm'
 import { ContentCard } from '@/components/core/ContentCard'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { canEditLocation } from '@/lib/permissions'
 
 export const EditEventPageView = () => {
@@ -21,7 +21,7 @@ export const EditEventPageView = () => {
   const { showError } = useError()
   const { showModal } = useModal()
 
-  const { user } = useProfile()
+  const { user } = useUser()
   const { useGet } = useBackend()
 
   const { eventId } = router.query

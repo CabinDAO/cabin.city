@@ -3,7 +3,7 @@ import { Address } from 'viem'
 import { useModal } from '@/components/hooks/useModal'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import useEns from '@/components/hooks/useEns'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -27,7 +27,7 @@ import { addressMatch } from '@/utils/address-match'
 
 export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const { externalUser } = useExternalUser()
-  const { refetchProfile } = useProfile()
+  const { refetchUser } = useUser()
   const { showModal } = useModal()
 
   const email = externalUser?.email?.address ?? user?.email
@@ -71,7 +71,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
           walletAddress: externalUser.wallet.address.toLowerCase() as Address,
         },
       } satisfies ProfileEditParamsType).then(() => {
-        refetchProfile()
+        refetchUser()
       })
     }
   }, [externalUser?.wallet?.address, updateProfile, user])
@@ -107,7 +107,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
               },
             } satisfies ProfileEditParamsType)
 
-            refetchProfile()
+            refetchUser()
           }
         }}
       />

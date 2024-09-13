@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useExternalUser } from '../auth/useExternalUser'
 import { useRouter } from 'next/router'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -24,7 +24,7 @@ const allowCheckPages = [
 ]
 
 export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
-  const { refetchProfile } = useProfile()
+  const { refetchUser } = useUser()
   const { externalUser } = useExternalUser()
   const checked = useRef(false)
   const { pathname } = useRouter()
@@ -47,10 +47,10 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
     }
 
     if (resp.updated) {
-      await refetchProfile()
+      await refetchUser()
     }
     checked.current = true
-  }, [refetchProfile, externalUser, get, pathname])
+  }, [refetchUser, externalUser, get, pathname])
 
   useEffect(() => {
     if (!externalUser || checked.current) {

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { ProfileFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Button } from '../../core/Button'
@@ -9,7 +9,7 @@ export const ProfileHeaderButton = ({
 }: {
   profile: ProfileFragment
 }) => {
-  const { user } = useProfile()
+  const { user } = useUser()
   if (!user || user.externId !== profile.externId) {
     return null
   }

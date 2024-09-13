@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useEvent } from 'react-use'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useCitizenship } from '@/components/hooks/useCitizenship'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
@@ -35,7 +35,7 @@ export const loadUnlockCheckout = async (provider: any) => {
 
 // https://docs.unlock-protocol.com/tools/paywall/#user-info
 export const UnlockScript = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
   const { checkStatus } = useCitizenship()
 
   // Called when the Unlock lib emits status events

@@ -1,7 +1,7 @@
 import { UnlockNFT, YEARLY_PRICE_IN_USD } from '@/utils/citizenship'
 import { EMPTY, formatDate } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { Button } from '@/components/core/Button'
 import { H3, H1 } from '@/components/core/Typography'
 import { NFTDataList } from './NFTDataList'
@@ -12,7 +12,7 @@ interface CitizenshipNFTDataProps {
 }
 
 export const CitizenshipNFTData = ({ nft }: CitizenshipNFTDataProps) => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   if (!user || !nft) return null
 

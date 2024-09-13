@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
 import { MenuItemName, MenuItems } from '@/components/nav/types'
 import analytics from '@/lib/googleAnalytics/analytics'
@@ -14,7 +14,7 @@ import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { MeFragment } from '@/utils/types/profile'
 
 export const NavbarMobile = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   const { active } = useModal()
   useEffect(() => {

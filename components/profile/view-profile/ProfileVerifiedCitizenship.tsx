@@ -14,7 +14,7 @@ import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { getUnlockOpenseaUrl } from '@/lib/opensea'
 import Icon from '@/components/core/Icon'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { AppLink } from '@/components/core/AppLink'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
@@ -25,7 +25,7 @@ export const ProfileVerifiedCitizenship = ({
 }: {
   profile: ProfileFragment
 }) => {
-  const { user } = useProfile()
+  const { user } = useUser()
   const isOwnProfile = user?.externId === profile.externId
   const [hovered, setHovered] = useState(false)
   const router = useRouter()

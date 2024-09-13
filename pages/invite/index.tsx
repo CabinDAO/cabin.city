@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { QRCodeSVG } from 'qrcode.react'
 import { CitizenshipStatus, MeFragment } from '@/utils/types/profile'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Body1, H1, H3 } from '@/components/core/Typography'
@@ -14,7 +14,7 @@ import LoadingSpinner from '@/components/core/LoadingSpinner'
 import Icon from '@/components/core/Icon'
 
 export default function InvitePage() {
-  const { user, isUserLoading } = useProfile()
+  const { user, isUserLoading } = useUser()
 
   return (
     <>

@@ -17,7 +17,7 @@ import { stringToSlateValue } from '@/components/core/slate/slate-utils'
 import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
@@ -45,7 +45,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
   const galleryImageWidth = deviceSize === 'desktop' ? 26.8 : undefined
   const imageSizesString = '268px'
 
-  const { user, isUserLoading } = useProfile()
+  const { user, isUserLoading } = useUser()
   const isEditable = !!location && canEditLocation(user, location)
 
   if (!location || isUserLoading) {

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { MenuItemName, MenuItems } from '@/components/nav/types'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
@@ -18,7 +18,7 @@ export const NAV_WIDTH_REM = parseFloat(
 export const LEFT_NAV_MARGIN = 2.4
 
 export const Navbar = () => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   return (
     <Container>

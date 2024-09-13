@@ -1,6 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationGetResponse } from '@/utils/types/location'
 import { canEditLocation } from '@/lib/permissions'
@@ -26,7 +26,7 @@ function EditLocationView() {
   )
   const location = !data || 'error' in data ? null : data.location
 
-  const { user } = useProfile({ redirectTo: '/' })
+  const { user } = useUser({ redirectTo: '/' })
 
   if (isLoading || !location || !canEditLocation(user, location)) {
     return null

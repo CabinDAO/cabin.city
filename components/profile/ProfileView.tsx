@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Error404 from '@/pages/404'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
 import styled from 'styled-components'
@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { Body1 } from '@/components/core/Typography'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
-  const { user } = useProfile()
+  const { user } = useUser()
 
   const { useGet } = useBackend()
   const { data: data, isLoading } = useGet<ProfileGetResponse>(

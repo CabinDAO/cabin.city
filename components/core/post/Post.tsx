@@ -7,7 +7,7 @@ import IconButton from '../IconButton'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
 import { ActionConfirmationModal } from '../ActionConfirmationModal'
 import { useTextActivity } from '@/components/activity/useTextActivity'
@@ -30,7 +30,7 @@ export const Post = (props: PostProps) => {
 
   const { Content, Media } = getPostSlots(props)
   const [hovered, setHovered] = useState(false)
-  const { user } = useProfile()
+  const { user } = useUser()
   const { showModal } = useModal()
   const { handleDeleteTextActivity } = useTextActivity(
     onDelete,

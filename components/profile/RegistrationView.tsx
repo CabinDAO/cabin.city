@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 import { useRouter } from 'next/router'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
@@ -25,7 +25,7 @@ export const RegistrationView = () => {
   const { showError } = useError()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
-  const { user, refetchProfile } = useProfile({ redirectToIfFound: '/profile' })
+  const { user, refetchUser } = useUser({ redirectToIfFound: '/profile' })
 
   // const [email, setEmail] = useState('')
   // useEffect(() => {
@@ -78,7 +78,7 @@ export const RegistrationView = () => {
         ))
         return
       } else {
-        await refetchProfile()
+        await refetchUser()
       }
     } catch (e) {
       console.error(e)

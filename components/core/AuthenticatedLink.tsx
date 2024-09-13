@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { useRouter } from 'next/router'
 import { useExternalUser } from '../auth/useExternalUser'
 
@@ -20,7 +20,7 @@ export const AuthenticatedLink = ({
   onClick?: VoidFunction
 }) => {
   const { confirmLoggedIn } = useConfirmLoggedIn(logSignInEvent)
-  const { refetchProfile } = useProfile()
+  const { refetchUser } = useUser()
   const { externalUser } = useExternalUser()
   const router = useRouter()
   const path = href ?? router.asPath
@@ -28,7 +28,7 @@ export const AuthenticatedLink = ({
   const handleClick = () => {
     confirmLoggedIn(() => {
       router.push(path)
-      refetchProfile().then(() => {
+      refetchUser().then(() => {
         if (onClick) onClick()
       })
     })

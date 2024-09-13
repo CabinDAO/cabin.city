@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { useModal } from '@/components/hooks/useModal'
 import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import { LocationFragment } from '@/utils/types/location'
 import { format, parseISO } from 'date-fns'
@@ -27,7 +27,7 @@ export const StewardContact = ({
   location: locationForModal
 }) => {
   const { showModal } = useModal()
-  const { user } = useProfile()
+  const { user } = useUser()
   const { login } = usePrivy()
 
   return (

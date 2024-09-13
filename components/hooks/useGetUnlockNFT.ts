@@ -1,14 +1,14 @@
 import { DEFAULT_NFT_IMAGE, UnlockNFT } from '@/utils/citizenship'
 import { useEffect, useState } from 'react'
 import { useConfig } from 'wagmi'
-import { useProfile } from '../auth/useProfile'
+import { useUser } from '../auth/useUser'
 import { readCitizenshipContract } from '@/generated/contracts'
 import { defaultChain } from '@/lib/chains'
 
 export const useGetUnlockNFT = () => {
   const [activeNFT, setActiveNFT] = useState<UnlockNFT | null>(null)
   const [loading, setLoading] = useState(false)
-  const { user: profile } = useProfile()
+  const { user: profile } = useUser()
   const config = useConfig()
 
   useEffect(() => {

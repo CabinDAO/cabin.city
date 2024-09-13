@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { usePrivy } from '@privy-io/react-auth'
-import { useProfile } from '@/components/auth/useProfile'
+import { useUser } from '@/components/auth/useUser'
 import { useRouter } from 'next/router'
 import { ReactNode, useEffect, useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -123,7 +123,7 @@ const Progress = ({
   firstTime: boolean
 }) => {
   const { login } = usePrivy()
-  const { user } = useProfile()
+  const { user } = useUser()
   const router = useRouter()
 
   useEffect(() => {
