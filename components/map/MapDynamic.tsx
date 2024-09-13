@@ -230,6 +230,6 @@ const pinIcon = L.icon({
 })
 
 const neighborhoodIcon = new L.Icon({
-  iconUrl: '/images/map/neighborhood-icon.svg',
-  iconSize: [36, 36],
+  iconUrl: '/images/map/cabin-icon.svg',
+  iconSize: [20, 20],
 })
