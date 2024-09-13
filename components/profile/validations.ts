@@ -60,13 +60,11 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
 
   switch (type) {
     case ContactFieldType.Discord:
-      sanitizedValue = sanitizedValue.toLowerCase()
-
       if (sanitizedValue.startsWith('@')) {
         sanitizedValue = sanitizedValue.slice(1)
       }
 
-      if (!/^[a-z0-9.#_]{2,37}$/i.test(sanitizedValue)) {
+      if (!/^[a-z0-9.#_]{2,57}$/i.test(sanitizedValue)) {
         error = 'Invalid Discord handle'
       }
       break
@@ -81,7 +79,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
 
     case ContactFieldType.Farcaster:
       const wcPattern =
-        /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,15}(\.eth)?)(?:\/.*)?$/i
+        /^(?:https?:\/\/)?(?:www\.)?warpcast\.com\/([a-z0-9][a-z0-9-]{0,25}(\.eth)?)(?:\/.*)?$/i
       const wcMatch = sanitizedValue.match(wcPattern)
 
       if (wcMatch) {
@@ -92,7 +90,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
         sanitizedValue = sanitizedValue.slice(1)
       }
 
-      if (!/^[a-z0-9][a-z0-9-]{0,15}(\.eth)?$/i.test(sanitizedValue)) {
+      if (!/^[a-z0-9][a-z0-9-]{0,25}(\.eth)?$/i.test(sanitizedValue)) {
         error = 'Invalid Farcaster handle'
       }
       break
@@ -143,7 +141,7 @@ export function sanitizeContactValue(type: ContactFieldType, value: string) {
 
     case ContactFieldType.LinkedIn:
       const linkedinPattern =
-        /^(?:https?:\/\/)?(?:www\.)?linkedin\.com\/in\/([a-z0-9-]{1,100})(?:\/.*)?$/i
+        /^(?:https?:\/\/)?(?:[a-z]{2,3}\.)?linkedin\.com\/in\/([a-z0-9-]{1,100})(?:\/.*)?$/i
       const linkedinMatch = sanitizedValue.match(linkedinPattern)
 
       if (linkedinMatch) {

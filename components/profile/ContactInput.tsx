@@ -9,6 +9,7 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { SelectOption } from '@/components/hooks/useDropdownLogic'
 import { sanitizeContactValue } from '@/components/profile/validations'
 import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
+import { useError } from '@/components/hooks/useError'
 
 const contactTypes = Object.values(ContactFieldType)
 const dropdownOptions = contactTypes.map(
@@ -25,9 +26,10 @@ export const ContactInput = ({
   setHasUnsavedChanges?: (v: boolean) => void
 }) => {
   const { deviceSize } = useDeviceSize()
+  const { showError } = useError()
   const [value, setValue] = useState('')
   const [contactTypeIndex, setContactTypeIndex] = useState(0)
-  const [showError, setShowError] = useState(false)
+  const [hasError, setHasError] = useState(false)
 
   // track if there are unsaved changes
   useEffect(() => {
@@ -38,7 +40,7 @@ export const ContactInput = ({
 
   const addContact = () => {
     if (!value) {
-      setShowError(true)
+      setHasError(true)
       return
     }
 
@@ -47,16 +49,22 @@ export const ContactInput = ({
       value
     )
 
+    if (error) {
+      setHasError(true)
+      showError(error)
+      return
+    }
+
     setContactList([
       ...contactList,
       {
         type: contactTypes[contactTypeIndex],
-        value: error ? value : sanitizedValue,
+        value: sanitizedValue,
       },
     ])
     setContactTypeIndex(0)
     setValue('')
-    setShowError(false)
+    setHasError(false)
   }
 
   const deleteContact = (index: number) => {
@@ -98,9 +106,9 @@ export const ContactInput = ({
                 ? 'email'
                 : 'text'
             }
-            error={showError}
+            error={hasError}
             onChange={(e) => {
-              setShowError(false)
+              setHasError(false)
               setValue(e.target.value)
             }}
           />
