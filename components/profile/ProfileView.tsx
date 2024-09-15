@@ -55,8 +55,8 @@ export const ProfileView = ({ externId }: { externId: string }) => {
               </div>
             )}
           <ProfileAboutSection profile={profile} me={user} />
-          <ProfileCitizenSection profile={profile} />
           <ProfileStampsSection profile={profile} />
+          <ProfileCitizenSection profile={profile} />
           <ProfileActivitiesSection profile={profile} />
         </Container>
       </BaseLayout>
