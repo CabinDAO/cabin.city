@@ -25,7 +25,7 @@ async function handler(
     return
   }
 
-  await requireProfile(opts.auth)
+  // await requireProfile(opts.auth) // THIS BREAK PFP UPLOAD FOR NEW USERS
 
   try {
     const form = new FormData()
