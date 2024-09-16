@@ -13,7 +13,7 @@ const tagLabels: Labels = {
 }
 
 export const tagPillLabels: Record<ProfileTag, string> = {
-  [ProfileTag.steward]: `organizer`,
+  [ProfileTag.steward]: `neighborhood-organizer`,
   [ProfileTag.moveCurious]: `might-move`,
   [ProfileTag.nomad]: `nomad`,
   [ProfileTag.parent]: `parent`,
