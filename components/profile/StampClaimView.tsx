@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useLocalStorage } from 'react-use'
 import { subDays } from 'date-fns'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -26,6 +27,8 @@ import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
 import { Stamp } from '@/components/core/Stamp'
 
+export const STAMP_REMINDER_KEY = 'tnsConf2024StampReminder'
+
 export const StampClaimView = () => {
   const router = useRouter()
   const { user, isUserLoading } = useUser()
@@ -41,6 +44,9 @@ export const StampClaimView = () => {
   )
 
   const [loading, setLoading] = useState(false)
+
+  const [, setReminder, removeReminder] =
+    useLocalStorage<boolean>(STAMP_REMINDER_KEY)
 
   const stampId = CURRENT_CLAIMABLE_STAMP?.id
 
@@ -60,6 +66,8 @@ export const StampClaimView = () => {
       setLoading(false)
       return
     }
+
+    removeReminder()
 
     await refetchProfile()
 
@@ -119,7 +127,10 @@ export const StampClaimView = () => {
                     </Body1>
                     <ProfileDataSection profile={profile} />
                     <Buttons>
-                      <Link href={`/profile/${profile.externId}/edit`}>
+                      <Link
+                        href={`/profile/${profile.externId}/edit`}
+                        onClick={() => setReminder(true)}
+                      >
                         <Button>
                           {profileComplete
                             ? 'Edit profile'
@@ -142,7 +153,10 @@ export const StampClaimView = () => {
             ) : isLoading || isUserLoading ? (
               <LoadingSpinner />
             ) : (
-              <AuthenticatedLink href={router.asPath}>
+              <AuthenticatedLink
+                href={router.asPath}
+                onClick={() => setReminder(true)}
+              >
                 <Button variant={'secondary'}>
                   Log in or sign up to get your stamp
                 </Button>

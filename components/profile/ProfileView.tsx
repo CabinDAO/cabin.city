@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Error404 from '@/pages/404'
+import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
@@ -14,9 +15,11 @@ import { ProfileActivitiesSection } from '@/components/profile/view-profile/Prof
 import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
 import Link from 'next/link'
 import { Body1 } from '@/components/core/Typography'
+import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { user } = useUser()
+  const [hasStampReminder] = useLocalStorage<boolean>(STAMP_REMINDER_KEY)
 
   const { useGet } = useBackend()
   const { data: data, isLoading } = useGet<ProfileGetResponse>(
@@ -42,18 +45,16 @@ export const ProfileView = ({ externId }: { externId: string }) => {
         <Container>
           <ProfileHeaderSection profile={profile} />
           {isOwnProfile && <ProfileNextStepsSection me={user} />}
-          {isOwnProfile &&
-            CURRENT_CLAIMABLE_STAMP &&
-            new Date().toISOString() > '2024-09-22' && (
-              <div style={{ textAlign: 'center' }}>
-                <Body1>
-                  👉{' '}
-                  <Link href={'/ns'} style={{ textDecoration: 'underline' }}>
-                    don't forget your {CURRENT_CLAIMABLE_STAMP.name} stamp
-                  </Link>
-                </Body1>
-              </div>
-            )}
+          {isOwnProfile && CURRENT_CLAIMABLE_STAMP && hasStampReminder && (
+            <div style={{ textAlign: 'center' }}>
+              <Body1>
+                👉{' '}
+                <Link href={'/ns'} style={{ textDecoration: 'underline' }}>
+                  don't forget your {CURRENT_CLAIMABLE_STAMP.name} stamp
+                </Link>
+              </Body1>
+            </div>
+          )}
           <ProfileAboutSection profile={profile} me={user} />
           <ProfileStampsSection profile={profile} />
           <ProfileCitizenSection profile={profile} />

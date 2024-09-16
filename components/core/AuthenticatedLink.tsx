@@ -26,10 +26,11 @@ export const AuthenticatedLink = ({
   const path = href ?? router.asPath
 
   const handleClick = () => {
+    if (onClick) onClick()
     confirmLoggedIn(() => {
       router.push(path)
       refetchUser().then(() => {
-        if (onClick) onClick()
+        // if (onClick) onClick()
       })
     })
   }
