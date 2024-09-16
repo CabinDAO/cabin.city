@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY, formatRange } from '@/utils/display-utils'
-import Link from 'next/link'
 import { formatShortAddress } from '@/lib/address'
 import { ActivityListFragment } from '@/utils/types/activity'
 
@@ -10,12 +9,11 @@ export const EventPostItem = ({
   startDate,
   endDate,
   location,
-  externId,
 }: NonNullable<ActivityListFragment['metadata']['offer']>) => {
   const formattedDate = formatRange(new Date(startDate), new Date(endDate))
 
   return (
-    <Container href={`/event/${externId}`}>
+    <Container>
       <Data>
         <TruncatedCaption emphasized>{formattedDate ?? EMPTY}</TruncatedCaption>
         <H4>{title}</H4>
@@ -31,7 +29,7 @@ const TruncatedCaption = styled(Caption)`
   ${truncateStyles}
 `
 
-const Container = styled(Link)`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.8rem 0.8rem 1.9rem;
