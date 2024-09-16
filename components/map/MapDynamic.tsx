@@ -22,6 +22,7 @@ import { AutoImage } from '@/components/core/AutoImage'
 import iconRetinaUrl from '@/components/map/assets/marker-icon-2x.png'
 import iconUrl from '@/components/map/assets/marker-icon-2x.png'
 import shadowUrl from '@/components/map/assets/marker-shadow.png'
+import defaultAvatar from '@/components/profile/default-avatar.png'
 
 export const MapDynamic = ({
   height,
@@ -129,17 +130,30 @@ const ClusterGroup = React.memo(
   ({ profiles }: { profiles: MarkerData[] }) => {
     return (
       <MarkerClusterGroup chunkedLoading>
-        {profiles.map((p, i) => (
-          <Marker key={i} position={[p.lat, p.lng]} icon={pinIcon}>
-            {p.label && (
-              <StyledPopup>
-                <MaybeLink newWindow url={p.linkUrl}>
-                  {p.label}
-                </MaybeLink>
-              </StyledPopup>
-            )}
-          </Marker>
-        ))}
+        {profiles.map((p, i) => {
+          const icon = L.divIcon({
+            className: 'custom-icon', // removes default white background
+            html: `<img src="${
+              p.imgUrl || defaultAvatar.src
+            }" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${
+              theme.colors.green800
+            }; ">`,
+            iconSize: [32, 32],
+            // iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+            popupAnchor: [0, -8], // point from which the popup should open relative to the iconAnchor
+          })
+          return (
+            <Marker key={i} position={[p.lat, p.lng]} icon={icon}>
+              {p.label && (
+                <StyledPopup>
+                  <MaybeLink newWindow url={p.linkUrl}>
+                    {p.label}
+                  </MaybeLink>
+                </StyledPopup>
+              )}
+            </Marker>
+          )
+        })}
       </MarkerClusterGroup>
     )
   },

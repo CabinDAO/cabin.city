@@ -361,6 +361,7 @@ export async function getProfilesForMap() {
     select: {
       name: true,
       externId: true,
+      avatarUrl: true,
       address: {
         select: { lat: true, lng: true },
       },

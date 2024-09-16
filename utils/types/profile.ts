@@ -123,6 +123,7 @@ export type ProfileMappableResponse =
       profiles: {
         name: string
         externId: string
+        avatarUrl: string
         lat: number
         lng: number
       }[]

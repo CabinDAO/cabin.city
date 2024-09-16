@@ -33,6 +33,7 @@ export const getStaticProps = (async (/*context*/) => {
         profiles: profiles.map((p) => ({
           lat: p.address?.lat || 0,
           lng: p.address?.lng || 0,
+          imgUrl: p.avatarUrl,
         })),
         locations: locations.map((l) => ({
           label: l.name,

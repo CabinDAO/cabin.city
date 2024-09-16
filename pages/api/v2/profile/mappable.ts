@@ -41,6 +41,7 @@ async function handler(
     profiles: profiles.map((profile) => ({
       name: profile.name,
       externId: profile.externId,
+      avatarUrl: profile.avatarUrl.replace('public', 'mapAvatar'), // TODO: HACK! store cfId on profile instead of avatar url
       lat: profile.address?.lat || 0,
       lng: profile.address?.lng || 0,
     })),

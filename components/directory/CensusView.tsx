@@ -79,6 +79,7 @@ export const CensusAuthView = () => {
             label: p.name,
             lat: p.lat,
             lng: p.lng,
+            imgUrl: p.avatarUrl,
             linkUrl: `/profile/${p.externId}`,
           }
         })
