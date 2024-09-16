@@ -130,36 +130,42 @@ const ClusterGroup = React.memo(
   ({ profiles }: { profiles: MarkerData[] }) => {
     return (
       <MarkerClusterGroup chunkedLoading>
-        {profiles.map((p, i) => {
-          const icon = L.divIcon({
-            className: 'custom-icon', // removes default white background
-            html: `<img src="${
-              p.imgUrl || defaultAvatar.src
-            }" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${
-              theme.colors.green800
-            }; ">`,
-            iconSize: [32, 32],
-            // iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
-            popupAnchor: [0, -8], // point from which the popup should open relative to the iconAnchor
-          })
-          return (
-            <Marker key={i} position={[p.lat, p.lng]} icon={icon}>
-              {p.label && (
-                <StyledPopup>
-                  <MaybeLink newWindow url={p.linkUrl}>
-                    {p.label}
-                  </MaybeLink>
-                </StyledPopup>
-              )}
-            </Marker>
-          )
-        })}
+        {profiles.map((p, i) => (
+          <Marker
+            key={i}
+            title={p.label}
+            position={[p.lat, p.lng]}
+            icon={avatarIcon(p.imgUrl)}
+            eventHandlers={{ click: createClickHandler(p.linkUrl) }}
+          />
+        ))}
       </MarkerClusterGroup>
     )
   },
   (prevProps, nextProps) => equal(prevProps.profiles, nextProps.profiles)
 )
 ClusterGroup.displayName = 'ClusterGroup'
+
+const avatarIcon = (imgUrl: string | undefined) => {
+  const src = imgUrl || defaultAvatar.src
+  return L.divIcon({
+    className: 'custom-icon', // removes default white background
+    html: `<img src="${src}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid ${theme.colors.green800}; ">`,
+    iconSize: [32, 32],
+    // iconAnchor: [12, 41], // point of the icon which will correspond to marker's location
+    popupAnchor: [0, -8], // point from which the popup should open relative to the iconAnchor
+  })
+}
+
+const createClickHandler = (linkUrl: string | undefined) => {
+  return (/*event: LeafletMouseEvent*/) => {
+    if (!linkUrl) return
+    const newWindow = window.open(linkUrl, '_blank', 'noopener,noreferrer')
+    if (newWindow) {
+      newWindow.opener = null // This is an additional safety measure
+    }
+  }
+}
 
 const Markers = ({
   locations = [],
