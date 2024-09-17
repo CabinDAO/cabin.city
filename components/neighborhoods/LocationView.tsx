@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import { EMPTY } from '@/utils/display-utils'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
-import { TipTap, toContent } from '@/components/editor/TipTap'
+import { RichTextRender } from '@/components/editor/RichText'
 import Icon from '@/components/core/Icon'
 import { Button } from '@/components/core/Button'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
@@ -148,7 +148,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
           <H3>About</H3>
         </SectionHeader>
         <AboutContent>
-          <TipTap readonly initialContent={toContent(location.description)} />
+          <RichTextRender initialContent={location.description} />
           <StewardContainer>
             <StewardDetails>
               <StewardContact steward={location.steward} location={location} />

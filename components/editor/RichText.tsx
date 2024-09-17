@@ -5,26 +5,37 @@ import {
   JSONContent,
   Extensions,
 } from '@tiptap/core/dist/packages/core/src/types'
-import { useCurrentEditor, EditorProvider, BubbleMenu } from '@tiptap/react'
+import { useCurrentEditor, EditorProvider } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import Placeholder from '@tiptap/extension-placeholder'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
-import {
-  body1Styles,
-  h2Styles,
-  h3Styles,
-  Caption,
-} from '@/components/core/Typography'
+import { body1Styles, h2Styles, h3Styles } from '@/components/core/Typography'
 import { MenuBar } from '@/components/editor/Toolbar'
 import { InputBase } from '@/components/core/InputBase'
 
 export type Content = JSONContent
 
-export const TipTap = ({
-  readonly,
+export const RichTextRender = ({
+  initialContent,
+}: {
+  initialContent: Content | string
+}) => {
+  return (
+    <TipTap
+      editable={false}
+      initialContent={
+        typeof initialContent === 'string'
+          ? toContent(initialContent)
+          : initialContent
+      }
+    />
+  )
+}
+
+export const RichTextInput = ({
   initialContent,
   label,
   required,
@@ -32,12 +43,48 @@ export const TipTap = ({
   error,
   onChange,
 }: {
-  readonly?: boolean
   initialContent?: Content
   label?: string
   required?: boolean
   placeholder?: string
   error?: string | null
+  onChange?: (content: Content) => void
+}) => {
+  return (
+    <InputBase
+      // helperTextPosition={helperTextPosition}
+      // id={id}
+      label={label}
+      required={required}
+      // info={info}
+      // filled={!!value}
+      error={!!error}
+      errorMessage={error || undefined}
+      // disabled={disabled}
+      // helperText={helperText}
+      // endAdornment={endAdornment}
+      noPadding
+    >
+      <TipTap
+        editable
+        initialContent={initialContent}
+        placeholder={placeholder}
+        onChange={onChange}
+      />
+    </InputBase>
+  )
+}
+
+// https://tiptap.dev/docs/guides/performance says to isolate editor in separate component
+const TipTap = ({
+  editable,
+  initialContent,
+  placeholder,
+  onChange,
+}: {
+  editable: boolean
+  initialContent?: Content
+  placeholder?: string
   onChange?: (content: Content) => void
 }) => {
   const initContent = initialContent || {
@@ -57,6 +104,9 @@ export const TipTap = ({
         keepMarks: true,
         keepAttributes: false, // TODO : Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
       },
+      heading: {
+        levels: [2, 3],
+      },
     }),
   ]
 
@@ -68,11 +118,13 @@ export const TipTap = ({
     )
   }
 
-  const el = (
-    <div style={{ width: '100%' }}>
+  // TODO: consider further optimization https://tiptap.dev/docs/guides/performance#gain-more-control-over-rendering
+
+  return (
+    <Container editable={editable}>
       <EditorProvider
-        editable={!readonly}
-        slotBefore={!readonly && <MenuBar />}
+        editable={editable}
+        slotBefore={editable && <MenuBar />}
         extensions={extensions}
         content={initContent}
         onUpdate={(e) => {
@@ -80,37 +132,7 @@ export const TipTap = ({
           // setIsEmpty(isEditorEmpty(value))
           onChange && onChange(value)
         }}
-      >
-        {/*{!readonly && (*/}
-        {/*  <BubbleMenu editor={null}>*/}
-        {/*    <HighlightedTextMenu />*/}
-        {/*  </BubbleMenu>*/}
-        {/*)}*/}
-      </EditorProvider>
-    </div>
-  )
-
-  return (
-    <Container readonly={readonly}>
-      {readonly ? (
-        el
-      ) : (
-        <InputBase
-          // helperTextPosition={helperTextPosition}
-          // id={id}
-          label={label}
-          required={required}
-          // info={info}
-          // filled={!!value}
-          error={!!error}
-          errorMessage={error || undefined}
-          // disabled={disabled}
-          // helperText={helperText}
-          // endAdornment={endAdornment}
-        >
-          {el}
-        </InputBase>
-      )}
+      />
     </Container>
   )
 }
@@ -143,16 +165,19 @@ const HighlightedTextMenu = () => {
   )
 }
 
-const Container = styled.div<{ readonly?: boolean }>`
+const Container = styled.div<{ editable?: boolean }>`
+  width: 100%;
+
   .tiptap {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
     word-break: break-word;
     outline: 0; // no orange outline when focused
 
-    ${({ readonly }) =>
-      !readonly &&
+    ${({ editable }) =>
+      editable &&
       css`
         background-color: white;
         padding: 2rem 1.6rem;
@@ -200,11 +225,6 @@ const Container = styled.div<{ readonly?: boolean }>`
       opacity: 0.12;
     }
   }
-`
-
-const ErrorMessage = styled(Caption)`
-  color: ${({ theme }) => theme.colors.red600};
-  margin-top: 0.4rem;
 `
 
 export function trimEmptyParagraphs(doc: Content) {

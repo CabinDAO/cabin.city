@@ -28,6 +28,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   children: ReactNode
   onClick?: VoidFunction
   helperTextPosition?: HelperTextPosition
+  noPadding?: boolean
 }
 export const InputBase = ({
   id,
@@ -46,6 +47,7 @@ export const InputBase = ({
   bottomHelpText,
   errorMessage,
   helperTextPosition = 'top',
+  noPadding,
   className,
 }: InputBaseProps) => {
   return (
@@ -69,6 +71,7 @@ export const InputBase = ({
         error={error}
         disabled={disabled}
         outlined={outlined}
+        noPadding={noPadding}
       >
         <InputContent>
           {startAdornment}
@@ -155,13 +158,14 @@ interface InputOutlineProps {
   error?: boolean
   disabled?: boolean
   outlined?: boolean
+  noPadding?: boolean
 }
 
 const InputOutline = styled.div<InputOutlineProps>`
   width: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  ${(props) => !props.noPadding && `padding: 1.5rem;`}
   outline: 0;
 
   background: ${(props) => props.theme.colors.white};

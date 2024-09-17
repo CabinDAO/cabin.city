@@ -3,8 +3,8 @@ import {
   INVALID_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
 } from '@/utils/validate'
-import { isEditorEmpty } from '@/components/editor/TipTap'
-import { EventEditParamsType, EventType } from '@/utils/types/event'
+import { isEditorEmpty } from '@/components/editor/RichText'
+import { EventEditParamsType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 
 export const MAX_LOCATION_TITLE_LENGTH = 48

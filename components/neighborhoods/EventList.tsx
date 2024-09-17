@@ -6,7 +6,7 @@ import { EventFragment } from '@/utils/types/event'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Button } from '@/components/core/Button'
-import { TipTap, toContent } from '@/components/editor/TipTap'
+import { RichTextRender } from '@/components/editor/RichText'
 import ShowMoreText from '@/components/showmore/ShowMoreText'
 import { body2Styles, H2, H5 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
@@ -53,10 +53,7 @@ export const EventList = ({
                   </span>
                 }
               >
-                <TipTap
-                  readonly
-                  initialContent={toContent(event.description)}
-                />
+                <RichTextRender initialContent={event.description} />
               </Expandable>
             </Details>
             <Buttons>

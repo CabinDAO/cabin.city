@@ -2,7 +2,11 @@ import React, { useState } from 'react'
 import { EventEditParamsType, EventFragment } from '@/utils/types/event'
 import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import styled from 'styled-components'
-import { TipTap, Content, isEditorEmpty } from '@/components/editor/TipTap'
+import {
+  RichTextInput,
+  Content,
+  isEditorEmpty,
+} from '@/components/editor/RichText'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
@@ -109,7 +113,7 @@ export const EditEventForm = ({
       />
 
       <EditorContainer>
-        <TipTap
+        <RichTextInput
           label="Description"
           required
           placeholder="Describe your event"

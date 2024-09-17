@@ -26,7 +26,11 @@ import {
 } from '@/components/neighborhoods/validations'
 import { unique } from '@/utils/array'
 import styled from 'styled-components'
-import { TipTap, Content, isEditorEmpty } from '@/components/editor/TipTap'
+import {
+  RichTextInput,
+  Content,
+  isEditorEmpty,
+} from '@/components/editor/RichText'
 import { Body2 } from '@/components/core/Typography'
 import { ActionBar } from '@/components/core/ActionBar'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
@@ -220,7 +224,7 @@ export function LocationEditForm({
 
         <FullWidthInputContainer>
           <div style={{ margin: '1rem 0' }}>
-            <TipTap
+            <RichTextInput
               label={'Description'}
               required
               initialContent={initContent}
