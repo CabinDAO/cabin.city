@@ -6,8 +6,7 @@ import { EventFragment } from '@/utils/types/event'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Button } from '@/components/core/Button'
-import { stringToSlateValue } from '@/components/core/slate/slate-utils'
-import { SlateRenderer } from '@/components/core/slate/SlateRenderer'
+import { TipTap, toContent } from '@/components/editor/TipTap'
 import ShowMoreText from '@/components/showmore/ShowMoreText'
 import { body2Styles, H2, H5 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
@@ -54,7 +53,10 @@ export const EventList = ({
                   </span>
                 }
               >
-                <SlateRenderer value={stringToSlateValue(event.description)} />
+                <TipTap
+                  readonly
+                  initialContent={toContent(event.description)}
+                />
               </Expandable>
             </Details>
             <Buttons>

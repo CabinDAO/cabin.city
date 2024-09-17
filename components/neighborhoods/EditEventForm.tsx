@@ -2,9 +2,7 @@ import React, { useState } from 'react'
 import { EventEditParamsType, EventFragment } from '@/utils/types/event'
 import { REQUIRED_FIELD_ERROR } from '@/utils/validate'
 import styled from 'styled-components'
-import { Descendant } from 'slate'
-import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
+import { TipTap, Content, isEditorEmpty } from '@/components/editor/TipTap'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { InputText } from '@/components/core/InputText'
 import { Body2, H3 } from '@/components/core/Typography'
@@ -28,7 +26,7 @@ export const EditEventForm = ({
   onEdit: (updateEventInput: EventEditParamsType) => void
   highlightErrors?: boolean
 }) => {
-  const handleEditorChange = (val: Descendant[]) => {
+  const handleEditorChange = (val: Content) => {
     onEdit({ description: JSON.stringify(val) })
   }
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +80,6 @@ export const EditEventForm = ({
   }
 
   const description = updateEventInput.description || event.description
-  const slateProps = description ? { value: JSON.parse(description) } : {}
 
   const titleValidation = validateTitle(updateEventInput.title)
 
@@ -112,13 +109,14 @@ export const EditEventForm = ({
       />
 
       <EditorContainer>
-        <SlateEditor
-          label="Description *"
+        <TipTap
+          label="Description"
+          required
           placeholder="Describe your event"
           onChange={handleEditorChange}
-          {...slateProps}
+          initialContent={description ? JSON.parse(description) : undefined}
           error={
-            highlightErrors && isEmptyEditoryValue(updateEventInput.description)
+            highlightErrors && isEditorEmpty(updateEventInput.description)
               ? REQUIRED_FIELD_ERROR
               : null
           }

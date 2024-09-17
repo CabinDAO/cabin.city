@@ -3,7 +3,7 @@ import {
   INVALID_FIELD_ERROR,
   REQUIRED_FIELD_ERROR,
 } from '@/utils/validate'
-import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
+import { isEditorEmpty } from '@/components/editor/TipTap'
 import { EventEditParamsType, EventType } from '@/utils/types/event'
 import { LocationEditParamsType } from '@/utils/types/location'
 
@@ -23,21 +23,17 @@ export const validateLocationInput = (values: LocationEditParamsType) => {
 
   const invalid =
     (values.hasOwnProperty('name') && !validateTitle(name).valid) ||
-    (values.hasOwnProperty('description') &&
-      isEmptyEditoryValue(description)) ||
+    (values.hasOwnProperty('description') && isEditorEmpty(description)) ||
     (values.hasOwnProperty('address') &&
       !truthyString(address?.formattedAddress))
 
   return !invalid
 }
 
-export const validateEventInput = (
-  type: EventType,
-  newValues: EventEditParamsType
-) => {
+export const validateEventInput = (newValues: EventEditParamsType) => {
   const invalid =
     !validateTitle(newValues.title).valid ||
-    isEmptyEditoryValue(newValues.description) ||
+    isEditorEmpty(newValues.description) ||
     (newValues.hasOwnProperty('applicationUrl') &&
       !truthyString(newValues.applicationUrl))
 
