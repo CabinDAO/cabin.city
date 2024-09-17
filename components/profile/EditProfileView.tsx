@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import styled from 'styled-components'
+import { useLocalStorage } from 'react-use'
 import { useUser } from '../auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
@@ -9,26 +9,38 @@ import {
   ProfileEditParamsType,
   ProfileEditResponse,
 } from '@/utils/types/profile'
-import { sanitizeContactValue, validateProfileInput } from './validations'
-import { EditProfileForm } from './EditProfileForm'
+import {
+  sanitizeContactValue,
+  validateProfileInput,
+} from '@/components/profile/validations'
+import {
+  CURRENT_CLAIMABLE_STAMP,
+  StampClaimParamsType,
+  StampClaimResponse,
+} from '@/utils/types/stamp'
+import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
+import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { ErrorModal } from '../ErrorModal'
+import { ErrorModal } from '@/components/ErrorModal'
 import { ActionBar } from '@/components/core/ActionBar'
+import { EditProfileForm } from '@/components/profile/EditProfileForm'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user } = useUser({ redirectTo: '/' })
+  const { user, refetchUser } = useUser({ redirectTo: '/' })
   const { showError } = useError()
 
-  const { useMutate } = useBackend()
+  const { post, useMutate } = useBackend()
   const { trigger: updateUser } = useMutate<ProfileEditResponse>(
     user ? ['PROFILE', { externId: user.externId }] : null
   )
 
   const [newValues, setNewValues] = useState<ProfileEditParamsType['data']>({})
   const { showModal } = useModal()
+  const [hasStampReminder, , removeReminder] =
+    useLocalStorage<boolean>(STAMP_REMINDER_KEY)
 
   const handleSubmit = async () => {
     if (!newValues) return
@@ -49,6 +61,9 @@ export const EditProfileView = () => {
         }
         newValues.contactFields[i].value = sanitizedValue
       }
+    } else if (user && user.contactFields.length < 1) {
+      showError('At least one contact info is required')
+      return
     }
 
     if (user && validateProfileInput(newValues)) {
@@ -58,17 +73,28 @@ export const EditProfileView = () => {
 
       const error = 'error' in res ? res.error : null
 
-      if (!error) {
-        await router.push(`/profile/${user.externId}`)
+      if (error) {
+        showModal(() => (
+          <ErrorModal
+            title="Profile Submission Error"
+            description={`Error updating profile: ${error}`}
+          />
+        ))
         return
       }
 
-      showModal(() => (
-        <ErrorModal
-          title="Profile Submission Error"
-          description={`Error updating profile: ${error}`}
-        />
-      ))
+      if (CURRENT_CLAIMABLE_STAMP && hasStampReminder) {
+        const res = await post<StampClaimResponse>('STAMP_CLAIM', {
+          id: CURRENT_CLAIMABLE_STAMP.id,
+        } satisfies StampClaimParamsType)
+
+        if (res && !('error' in res) && res.success) {
+          removeReminder()
+          await updateUser({})
+        }
+      }
+
+      await router.push(`/profile/${user.externId}`)
     }
   }
 

@@ -1,5 +1,6 @@
 import { Address } from 'viem'
 import { useRouter } from 'next/router'
+import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
 import { useExternalUser } from '@/components/auth/useExternalUser'
@@ -7,6 +8,12 @@ import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileNewParamsType, ProfileNewResponse } from '@/utils/types/profile'
+import {
+  CURRENT_CLAIMABLE_STAMP,
+  StampClaimParamsType,
+  StampClaimResponse,
+} from '@/utils/types/stamp'
+import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 import { ErrorModal } from '@/components/ErrorModal'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -26,6 +33,8 @@ export const RegistrationView = () => {
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
   const { user, refetchUser } = useUser({ redirectToIfFound: '/profile' })
+  const [hasStampReminder, , removeReminder] =
+    useLocalStorage<boolean>(STAMP_REMINDER_KEY)
 
   // const [email, setEmail] = useState('')
   // useEffect(() => {
@@ -78,6 +87,16 @@ export const RegistrationView = () => {
         ))
         return
       } else {
+        if (CURRENT_CLAIMABLE_STAMP && hasStampReminder) {
+          const res = await post<StampClaimResponse>('STAMP_CLAIM', {
+            id: CURRENT_CLAIMABLE_STAMP.id,
+          } satisfies StampClaimParamsType)
+
+          if (res && !('error' in res) && res.success) {
+            removeReminder()
+          }
+        }
+
         await refetchUser()
       }
     } catch (e) {

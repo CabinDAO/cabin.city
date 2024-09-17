@@ -1,21 +1,21 @@
+import Link from 'next/link'
 import Head from 'next/head'
 import Error404 from '@/pages/404'
 import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
+import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
+import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 import styled from 'styled-components'
 import { BaseLayout } from '@/components/core/BaseLayout'
+import { Body1 } from '@/components/core/Typography'
 import { ProfileHeaderSection } from '@/components/profile/view-profile/ProfileHeaderSection'
 import { ProfileNextStepsSection } from '@/components/profile/view-profile/ProfileNextStepsSection'
 import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAboutSection'
 import { ProfileCitizenSection } from '@/components/profile/view-profile/ProfileCitizenSection'
 import { ProfileStampsSection } from '@/components/profile/view-profile/ProfileStampsSection'
 import { ProfileActivitiesSection } from '@/components/profile/view-profile/ProfileActivitiesSection'
-import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
-import Link from 'next/link'
-import { Body1 } from '@/components/core/Typography'
-import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { user } = useUser()
@@ -44,7 +44,6 @@ export const ProfileView = ({ externId }: { externId: string }) => {
       <BaseLayout>
         <Container>
           <ProfileHeaderSection profile={profile} />
-          {isOwnProfile && <ProfileNextStepsSection me={user} />}
           {isOwnProfile && CURRENT_CLAIMABLE_STAMP && hasStampReminder && (
             <div style={{ textAlign: 'center' }}>
               <Body1>
@@ -55,6 +54,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
               </Body1>
             </div>
           )}
+          {isOwnProfile && <ProfileNextStepsSection me={user} />}
           <ProfileAboutSection profile={profile} me={user} />
           <ProfileStampsSection profile={profile} />
           <ProfileCitizenSection profile={profile} />
