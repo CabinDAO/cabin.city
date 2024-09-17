@@ -7,6 +7,7 @@ import {
   StampClaimResponse,
 } from '@/utils/types/stamp'
 import { toErrorString } from '@/utils/api/error'
+import { addStamp } from '@/utils/profile'
 
 export default withAuth(handler)
 
@@ -58,12 +59,7 @@ async function handler(
     res.status(400).send({ success: true, previouslyClaimed: true })
   }
 
-  await prisma.profileStamp.create({
-    data: {
-      profileId: profile.id,
-      stampId: stamp.id,
-    },
-  })
+  await addStamp(profile, stamp.id)
 
   res.status(200).send({ success: true, previouslyClaimed: false })
 }

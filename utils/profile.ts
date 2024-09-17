@@ -128,7 +128,7 @@ export async function createProfile(
   return profile
 }
 
-async function addStamp(profile: Profile, stampId: number) {
+export async function addStamp(profile: Profile, stampId: number) {
   return prisma.profileStamp.upsert({
     where: {
       profileId_stampId: {
