@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import {
   CURRENT_CLAIMABLE_STAMP,
@@ -14,7 +14,7 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<StampClaimResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])

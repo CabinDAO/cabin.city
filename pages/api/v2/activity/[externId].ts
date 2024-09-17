@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { ActivityDeleteResponse } from '@/utils/types/activity'
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ActivityDeleteResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method !== 'DELETE') {
     res.setHeader('Allow', ['DELETE'])

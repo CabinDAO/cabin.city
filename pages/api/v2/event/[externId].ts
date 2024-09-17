@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import {
-  AuthData,
+  OptsWithAuth,
   ProfileWithWallet,
   requireProfile,
   withAuth,
@@ -22,7 +22,7 @@ import { canEditLocation } from '@/lib/permissions'
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   switch (req.method) {
     case 'POST':

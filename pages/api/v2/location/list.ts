@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {
-  AuthData,
+  OptsWithAuth,
   findProfile,
   ProfileWithWallet,
   withAuth,
@@ -26,7 +26,7 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<LocationListResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])

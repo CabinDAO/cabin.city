@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 export default withAuth(handler)
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   const profile = await requireProfile(opts.auth)
   if (!profile.isAdmin) {

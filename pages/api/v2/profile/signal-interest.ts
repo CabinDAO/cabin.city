@@ -1,13 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { randomId } from '@/utils/random'
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST'])

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import {
-  AuthData,
+  OptsWithAuth,
   ProfileWithWallet,
   findProfile,
   requireProfile,
@@ -24,7 +24,7 @@ import { canEditLocation } from '@/lib/permissions'
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   switch (req.method) {
     case 'GET':
@@ -46,7 +46,7 @@ async function handler(
 async function handleGet(
   req: NextApiRequest,
   res: NextApiResponse<LocationGetResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   const { externId, ...queryParams } = req.query
   const parsed = LocationGetParams.safeParse(queryParams)

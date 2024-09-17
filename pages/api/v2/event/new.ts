@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { EventNewParams, EventNewResponse } from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
 import { toErrorString } from '@/utils/api/error'
@@ -10,7 +10,7 @@ import { toErrorString } from '@/utils/api/error'
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<EventNewResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])

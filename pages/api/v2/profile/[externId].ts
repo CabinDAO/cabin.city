@@ -5,7 +5,7 @@ import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
 import {
-  AuthData,
+  OptsWithAuth,
   requireProfile,
   withAuth,
   ProfileWithWallet,
@@ -27,7 +27,7 @@ import {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   switch (req.method) {
     case 'GET':

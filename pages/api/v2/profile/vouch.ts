@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import {
   CitizenshipStatus,
   ProfileVouchParams,
@@ -10,7 +10,7 @@ import {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProfileVouchResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })

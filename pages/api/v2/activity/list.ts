@@ -13,13 +13,13 @@ import {
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { EventType } from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { toErrorString } from '@/utils/api/error'
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ActivityListResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })

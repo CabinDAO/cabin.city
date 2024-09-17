@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AxiosError } from 'axios'
-import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
@@ -15,7 +15,7 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProfileNewResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])
@@ -23,7 +23,7 @@ async function handler(
     return
   }
 
-  const privyDID = requireAuth(req, res, opts)
+  const privyDID = requireAuth(opts)
 
   const parsed = ProfileNewParams.safeParse(req.body)
   if (!parsed.success) {

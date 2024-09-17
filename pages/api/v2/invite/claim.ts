@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import {
-  AuthData,
+  OptsWithAuth,
   ProfileWithWallet,
   requireProfile,
   withAuth,
@@ -23,7 +23,7 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<InviteClaimResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])

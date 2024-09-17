@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
 import axios from 'axios'
 import { ImageNewResponse } from '@/utils/types/image'
 
@@ -18,14 +18,14 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ImageNewResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
-  // await requireProfile(opts.auth) // THIS BREAK PFP UPLOAD FOR NEW USERS
+  requireAuth(opts)
 
   try {
     const form = new FormData()

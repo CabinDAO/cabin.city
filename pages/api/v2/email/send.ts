@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { SendgridService } from '@/lib/mail/sendgrid-service'
 import { ResponseError } from '@sendgrid/helpers/classes'
 import { EmailType } from '@/lib/mail/types'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 export interface EmailParams {
   data: object
@@ -12,7 +12,7 @@ export interface EmailParams {
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   await requireProfile(opts.auth)
 

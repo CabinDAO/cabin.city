@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
-import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
@@ -20,14 +20,14 @@ export default withAuth(handler)
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProfileListResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
     return
   }
 
-  requireAuth(req, res, opts)
+  requireAuth(opts)
 
   const parsed = ProfileListParams.safeParse(req.query)
   if (!parsed.success) {

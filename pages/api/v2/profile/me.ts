@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { AuthData, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
@@ -17,7 +17,7 @@ import { Address } from 'viem'
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ProfileMeResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'GET') {
     res.setHeader('Allow', ['GET'])
@@ -35,7 +35,7 @@ async function handler(
     return
   }
 
-  const privyDID = requireAuth(req, res, opts)
+  const privyDID = requireAuth(opts)
 
   const profile = await prisma.profile.findUnique({
     where: { privyDID: privyDID },

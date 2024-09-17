@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 import { sendToDiscord } from '@/lib/discord'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
@@ -11,7 +11,7 @@ import { isProd } from '@/utils/dev'
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<LocationNewResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.setHeader('Allow', ['POST'])

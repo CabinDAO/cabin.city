@@ -4,12 +4,12 @@ import {
   ActivityReactParams,
   ActivityReactResponse,
 } from '@/utils/types/activity'
-import { AuthData, requireProfile, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ActivityReactResponse>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })
