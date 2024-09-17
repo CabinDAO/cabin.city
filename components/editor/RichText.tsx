@@ -1,20 +1,30 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useError } from '@/components/hooks/useError'
+import { NO_TOKEN, apiPost } from '@/utils/api/backend'
+import { uploadOneFile } from '@/components/neighborhoods/useFilesUpload'
+import { cloudflareImageUrl } from '@/lib/image'
+import { ImageNewResponse } from '@/utils/types/image'
+import { Editor } from '@tiptap/core'
+import { Node as ProsemirrorNode } from '@tiptap/pm/model'
 import {
   JSONContent,
   Extensions,
 } from '@tiptap/core/dist/packages/core/src/types'
 import { useCurrentEditor, EditorProvider } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { Color } from '@tiptap/extension-color'
-import ListItem from '@tiptap/extension-list-item'
-import Placeholder from '@tiptap/extension-placeholder'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import { body1Styles, h2Styles, h3Styles } from '@/components/core/Typography'
 import { MenuBar } from '@/components/editor/Toolbar'
 import { InputBase } from '@/components/core/InputBase'
+import StarterKit from '@tiptap/starter-kit'
+import { Color } from '@tiptap/extension-color'
+import ListItem from '@tiptap/extension-list-item'
+import Placeholder from '@tiptap/extension-placeholder'
+import UploadImage, {
+  imagePlaceholderCSS,
+} from '@/components/editor/UploadImage'
 
 export type Content = JSONContent
 
@@ -23,16 +33,7 @@ export const RichTextRender = ({
 }: {
   initialContent: Content | string
 }) => {
-  return (
-    <TipTap
-      editable={false}
-      initialContent={
-        typeof initialContent === 'string'
-          ? toContent(initialContent)
-          : initialContent
-      }
-    />
-  )
+  return <TipTap editable={false} initialContent={toContent(initialContent)} />
 }
 
 export const RichTextInput = ({
@@ -43,7 +44,7 @@ export const RichTextInput = ({
   error,
   onChange,
 }: {
-  initialContent?: Content
+  initialContent?: Content | string
   label?: string
   required?: boolean
   placeholder?: string
@@ -67,7 +68,7 @@ export const RichTextInput = ({
     >
       <TipTap
         editable
-        initialContent={initialContent}
+        initialContent={toContent(initialContent)}
         placeholder={placeholder}
         onChange={onChange}
       />
@@ -79,7 +80,7 @@ export const RichTextInput = ({
 const TipTap = ({
   editable,
   initialContent,
-  placeholder,
+  placeholder = '',
   onChange,
 }: {
   editable: boolean
@@ -87,11 +88,9 @@ const TipTap = ({
   placeholder?: string
   onChange?: (content: Content) => void
 }) => {
-  const initContent = initialContent || {
-    type: 'doc',
-    content: [{ type: 'paragraph' }],
-  }
   // const [isEmpty, setIsEmpty] = useState(isEditorEmpty(initContent))
+
+  const { showError } = useError()
 
   const extensions: Extensions = [
     Color.configure({ types: [ListItem.name] }),
@@ -107,16 +106,38 @@ const TipTap = ({
       heading: {
         levels: [2, 3],
       },
+      dropcursor: { color: theme.colors.yellow400, width: 3 },
+    }),
+    Placeholder.configure({
+      showOnlyCurrent: false, // true also works well. try em both
+      placeholder: ({
+        editor,
+        node,
+        pos,
+      }: {
+        editor: Editor
+        node: ProsemirrorNode
+        pos: number
+        hasAnchor: boolean
+      }) => {
+        if (node.type.name == 'heading') {
+          const level = node.attrs.level ? node.attrs.level - 1 : ''
+          return `Heading ${level}`
+        }
+
+        if (editor.isEmpty) {
+          return pos === 0 ? placeholder : ''
+        }
+
+        // if (node.type.name == 'blockquote') return 'Blockquote'
+        return ''
+      },
+    }),
+    UploadImage.configure({
+      inline: false,
+      uploadFn: makeUploadFn(showError),
     }),
   ]
-
-  if (placeholder) {
-    extensions.push(
-      Placeholder.configure({
-        placeholder: placeholder,
-      })
-    )
-  }
 
   // TODO: consider further optimization https://tiptap.dev/docs/guides/performance#gain-more-control-over-rendering
 
@@ -124,9 +145,10 @@ const TipTap = ({
     <Container editable={editable}>
       <EditorProvider
         editable={editable}
+        immediatelyRender={false}
         slotBefore={editable && <MenuBar />}
         extensions={extensions}
-        content={initContent}
+        content={initialContent || emptyValue}
         onUpdate={(e) => {
           const value = e.editor.getJSON()
           // setIsEmpty(isEditorEmpty(value))
@@ -135,6 +157,21 @@ const TipTap = ({
       />
     </Container>
   )
+}
+
+const makeUploadFn = (showError: (message: string) => void) => {
+  return async (file: File) => {
+    // return 'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/280f51ce-d0de-4eeb-4a34-ab2e04766d00/public'
+    const { id, error } = await uploadOneFile(file, async () =>
+      apiPost<ImageNewResponse>('IMAGE_NEW', {}, NO_TOKEN)
+    )
+    if (error !== null) {
+      showError(error)
+      return ''
+    } else {
+      return cloudflareImageUrl(id)
+    }
+  }
 }
 
 const HighlightedTextMenu = () => {
@@ -183,12 +220,24 @@ const Container = styled.div<{ editable?: boolean }>`
         padding: 2rem 1.6rem;
       `}
 
-    p.is-editor-empty:first-child::before {
-      color: ${({ theme }) => theme.colors.gray};
-      content: attr(data-placeholder);
-      float: left;
-      height: 0;
-      pointer-events: none;
+    p, h2, h3, blockquote {
+      &[data-placeholder].is-empty::before {
+        color: ${({ theme }) => theme.colors.gray};
+        content: attr(data-placeholder);
+        float: left;
+        height: 0;
+        pointer-events: none;
+        opacity: 0.75;
+      }
+    }
+
+    .ProseMirror-selectednode {
+      outline: 3px solid ${({ theme }) => theme.colors.yellow400};
+    }
+
+    // fix gapcursor not showing up in the right place
+    .ProseMirror-gapcursor {
+      position: relative;
     }
 
     h2 {
@@ -199,7 +248,11 @@ const Container = styled.div<{ editable?: boolean }>`
       ${h3Styles}
     }
 
-    p {
+    p,
+    blockquote,
+    ol,
+    ul,
+    li::marker {
       ${body1Styles}
     }
 
@@ -207,8 +260,12 @@ const Container = styled.div<{ editable?: boolean }>`
     ol {
       list-style-position: inside;
 
+      li + li {
+        margin-top: 0.5rem;
+      }
+
       li p {
-        margin: 0.25rem 0;
+        display: inline;
       }
     }
 
@@ -224,6 +281,9 @@ const Container = styled.div<{ editable?: boolean }>`
       background-color: ${({ theme }) => theme.colors.green900};
       opacity: 0.12;
     }
+
+    // image uploading blurred preview + spinner
+    ${imagePlaceholderCSS}
   }
 `
 
@@ -267,10 +327,7 @@ export function trimEmptyParagraphs(doc: Content) {
 }
 
 export function isEditorEmpty(value: Content | string | null | undefined) {
-  if (!value) return true
-
-  const node =
-    typeof value === 'string' ? (JSON.parse(value) as Content) : value
+  const node = toContent(value)
 
   // If the node has no content, it is empty
   if (
@@ -288,6 +345,11 @@ export function isEditorEmpty(value: Content | string | null | undefined) {
       return true
     }
 
+    // If its one of these, its never empty
+    if (child.type && ['uploadImage'].includes(child.type)) {
+      return false
+    }
+
     // Check if it's a block node (like a paragraph) and is empty
     if (
       child.type !== 'text' &&
@@ -301,6 +363,14 @@ export function isEditorEmpty(value: Content | string | null | undefined) {
   })
 }
 
-export function toContent(value: string | null | undefined) {
-  return value ? (JSON.parse(value) as Content) : []
+const emptyValue = { type: 'doc', content: [{ type: 'paragraph' }] }
+
+function toContent(value: Content | string | null | undefined): Content {
+  const isEmpty =
+    !value || (typeof value === 'object' && Object.keys(value).length === 0)
+  return isEmpty
+    ? JSON.parse(JSON.stringify(emptyValue))
+    : typeof value === 'string'
+    ? (JSON.parse(value) as Content)
+    : value
 }

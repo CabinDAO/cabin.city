@@ -11,7 +11,6 @@ import { useBackend } from '@/components/hooks/useBackend'
 import {
   isEditorEmpty,
   RichTextInput,
-  RichTextRender,
   trimEmptyParagraphs,
 } from '@/components/editor/RichText'
 
@@ -19,6 +18,21 @@ export default function Page() {
   const { post } = useBackend()
 
   const [content, setContent] = React.useState({})
+
+  const initialContent = {
+    type: 'doc',
+    content: [
+      { type: 'paragraph', content: [{ type: 'text', text: 'arst' }] },
+      {
+        type: 'uploadImage',
+        attrs: {
+          src: 'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/280f51ce-d0de-4eeb-4a34-ab2e04766d00/public',
+          alt: null,
+          title: null,
+        },
+      },
+    ],
+  }
 
   return (
     <BaseLayout>
@@ -28,12 +42,9 @@ export default function Page() {
 
         <div style={{ padding: '2.4rem', width: '100%' }}>
           <RichTextInput
-            onChange={(val) => {
-              console.log(val)
-              setContent(val)
-            }}
+            onChange={setContent}
             label={'Describe your thing'}
-            required
+            initialContent={initialContent}
             placeholder={'lalal la type it'}
           />
         </div>
@@ -60,12 +71,12 @@ export default function Page() {
               trimEmptyParagraphs(JSON.parse(JSON.stringify(content)))
             )}
           </pre>
+
           <Body1>
-            {' '}
             Original: {isEditorEmpty(content) ? 'Empty' : 'Not empty'}
-          </Body1>{' '}
+          </Body1>
+
           <Body1>
-            {' '}
             Trimmed:{' '}
             {isEditorEmpty(
               trimEmptyParagraphs(JSON.parse(JSON.stringify(content)))
@@ -73,11 +84,9 @@ export default function Page() {
               ? 'Empty'
               : 'Not empty'}
           </Body1>
-          <RichTextRender initialContent={content} />
         </div>
         <Action>
-          {' '}
-          <H3>hit the dev endpoint</H3>{' '}
+          <H3>hit the dev endpoint</H3>
           <Button
             onClick={async () => {
               console.log('posting')
@@ -85,11 +94,10 @@ export default function Page() {
               console.log(res)
             }}
           >
-            {' '}
-            DEV{' '}
-          </Button>{' '}
+            DEV
+          </Button>
         </Action>
-      </StyledContentCard>{' '}
+      </StyledContentCard>
     </BaseLayout>
   )
 }

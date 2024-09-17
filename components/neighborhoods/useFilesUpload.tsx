@@ -93,30 +93,14 @@ export const useFilesUpload = ({
     const mapping: UploadedFilesMap = {}
 
     for (const file of processedFiles as File[]) {
-      const uploadUrl = await post<ImageNewResponse>('IMAGE_NEW', {})
-      if (!uploadUrl || 'error' in uploadUrl) {
-        showError(`Failed to upload image: ${uploadUrl?.error}`)
-        continue
+      const { id, error } = await uploadOneFile(file, async () =>
+        post<ImageNewResponse>('IMAGE_NEW', {})
+      )
+      if (error !== null) {
+        showError(error)
+      } else {
+        mapping[file.name] = id
       }
-
-      const formData = new FormData()
-      formData.append('file', file, randomUploadName(file.name))
-
-      const { data } = await axios<CloudflareUploadResponse>({
-        method: 'post',
-        url: uploadUrl.url,
-        data: formData,
-        headers: {
-          Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_API_TOKEN}`,
-          // 'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      // mapping[file.name] = {
-      //   id: data.result.id,
-      //   name: data.result.filename,
-      // }
-      mapping[file.name] = data.result.id
     }
 
     return mapping
@@ -146,4 +130,32 @@ export const useFilesUpload = ({
   }
 
   return { uploadFiles, handleDrag, handleDrop, handleChange, isDragging }
+}
+
+export async function uploadOneFile(
+  file: File,
+  uploadUrlGetter: () => Promise<ImageNewResponse>
+): Promise<{ id: null; error: string } | { id: string; error: null }> {
+  const uploadUrl = await uploadUrlGetter()
+  if (!uploadUrl || 'error' in uploadUrl) {
+    return {
+      id: null,
+      error: `Failed to upload image: ${uploadUrl?.error}`,
+    }
+  }
+
+  const formData = new FormData()
+  formData.append('file', file, randomUploadName(file.name))
+
+  const { data } = await axios<CloudflareUploadResponse>({
+    method: 'post',
+    url: uploadUrl.url,
+    data: formData,
+    headers: {
+      Authorization: `Bearer ${process.env.CLOUDFLARE_IMAGES_API_TOKEN}`,
+      // 'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return { id: data.result.id, error: null }
 }

@@ -59,27 +59,33 @@ export const MenuBar = () => {
         isActive={editor.isActive('bulletList')}
         onClick={() => editor.chain().focus().toggleBulletList().run()}
       />
-      {/*<Divider />*/}
+      <Divider />
+      <ToolbarButton
+        type={'image'}
+        iconName={'image'}
+        isActive={editor.isActive('image')}
+        onClick={() => editor.chain().focus().addImage().run()}
+      />
       {/*<ButtonButton />*/}
       {/*<ImageButton />*/}
-      {/*<button*/}{' '}
-      {/*  onClick={() => editor.chain().focus().setParagraph().run()}*/}{' '}
-      {/*  className={editor.isActive('paragraph') ? 'is-active' : ''}*/}{' '}
+      {/*<button*/}
+      {/*  onClick={() => editor.chain().focus().setParagraph().run()}*/}
+      {/*  className={editor.isActive('paragraph') ? 'is-active' : ''}*/}
       {/*>*/} {/*  Paragraph*/} {/*</button>*/}
-      {/*<button*/}{' '}
-      {/*  onClick={() => editor.chain().focus().setHorizontalRule().run()}*/}{' '}
-      {/*>*/} {/*  Horizontal rule*/} {/*</button>*/}{' '}
-      {/*<button onClick={() => editor.chain().focus().setHardBreak().run()}>*/}{' '}
+      {/*<button*/}
+      {/*  onClick={() => editor.chain().focus().setHorizontalRule().run()}*/}
+      {/*>*/} {/*  Horizontal rule*/} {/*</button>*/}
+      {/*<button onClick={() => editor.chain().focus().setHardBreak().run()}>*/}
       {/*  Hard break*/} {/*</button>*/}
-      {/*<button onClick={() => editor.chain().focus().unsetAllMarks().run()}>*/}{' '}
-      {/*  Clear marks*/} {/*</button>*/}{' '}
-      {/*<button onClick={() => editor.chain().focus().clearNodes().run()}>*/}{' '}
+      {/*<button onClick={() => editor.chain().focus().unsetAllMarks().run()}>*/}
+      {/*  Clear marks*/} {/*</button>*/}
+      {/*<button onClick={() => editor.chain().focus().clearNodes().run()}>*/}
       {/*  Clear nodes*/} {/*</button>*/}
-      {/*<button*/} {/*  onClick={() => editor.chain().focus().undo().run()}*/}{' '}
-      {/*  disabled={!editor.can().chain().focus().undo().run()}*/} {/*>*/}{' '}
-      {/*  Undo*/} {/*</button>*/} {/*<button*/}{' '}
-      {/*  onClick={() => editor.chain().focus().redo().run()}*/}{' '}
-      {/*  disabled={!editor.can().chain().focus().redo().run()}*/} {/*>*/}{' '}
+      {/*<button*/} {/*  onClick={() => editor.chain().focus().undo().run()}*/}
+      {/*  disabled={!editor.can().chain().focus().undo().run()}*/} {/*>*/}
+      {/*  Undo*/} {/*</button>*/} {/*<button*/}
+      {/*  onClick={() => editor.chain().focus().redo().run()}*/}
+      {/*  disabled={!editor.can().chain().focus().redo().run()}*/} {/*>*/}
       {/*  Redo*/} {/*</button>*/}
       {/*<button*/}
       {/*  onClick={() => editor.chain().focus().setColor('#958df1').run()}*/}

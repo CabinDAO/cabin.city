@@ -25,7 +25,7 @@ async function handler(
     return
   }
 
-  requireAuth(opts)
+  // requireAuth(opts) // leave this off so rich text editor doesnt need to worry about privy
 
   try {
     const form = new FormData()

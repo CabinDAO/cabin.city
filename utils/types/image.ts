@@ -10,10 +10,11 @@ export type UploadedFilesMap = Record<string, string>
 
 export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 
+// this is what cloudflare supports
 export const SUPPORTED_FILE_TYPES = [
   'image/jpeg',
   'image/png',
-  // 'image/gif',
-  // 'image/tiff',
-  // 'image/bmp',
+  'image/gif',
+  'image/webp',
+  // 'image/svg+xml', // also supported, but not sure we wanna allow it
 ]
