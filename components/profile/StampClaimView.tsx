@@ -100,13 +100,16 @@ export const StampClaimView = () => {
           <Container>
             <H1>You saw our talk at the Network State Conference!</H1>
 
-            <Body1>We made you this stamp to commemorate the occasion.</Body1>
-
             {CURRENT_CLAIMABLE_STAMP && (
-              <Stamp
-                id={CURRENT_CLAIMABLE_STAMP.id}
-                name={CURRENT_CLAIMABLE_STAMP.name}
-              />
+              <>
+                <Stamp
+                  id={CURRENT_CLAIMABLE_STAMP.id}
+                  name={CURRENT_CLAIMABLE_STAMP.name}
+                />
+                <Body1>
+                  We made you this stamp to commemorate the occasion.
+                </Body1>
+              </>
             )}
 
             {user && profile ? (
@@ -153,14 +156,15 @@ export const StampClaimView = () => {
             ) : isLoading || isUserLoading ? (
               <LoadingSpinner />
             ) : (
-              <AuthenticatedLink
-                href={router.asPath}
-                onClick={() => setReminder(true)}
-              >
-                <Button variant={'secondary'}>
-                  Log in or sign up to get your stamp
-                </Button>
-              </AuthenticatedLink>
+              <>
+                <Body1>Log in or sign up to add it to your account.</Body1>
+                <AuthenticatedLink
+                  href={router.asPath}
+                  onClick={() => setReminder(true)}
+                >
+                  <Button variant={'secondary'}>Log in or sign up</Button>
+                </AuthenticatedLink>
+              </>
             )}
           </Container>
         </StyledContentCard>
