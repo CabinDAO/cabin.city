@@ -1,15 +1,10 @@
 import { createGlobalStyle } from 'styled-components'
-import { Inter } from 'next/font/google'
-
-const inter = Inter({
-  display: 'swap',
-  subsets: ['latin'],
-})
+import { fonts } from '@/components/core/Typography'
 
 export default createGlobalStyle`
   html,
   body {
-    font-family: ${inter.style.fontFamily}, sans-serif;
+    font-family: ${fonts.inter}, sans-serif;
     font-weight: 400;
     font-size: 62.5%; /* base 10px */
     overscroll-behavior: none;
