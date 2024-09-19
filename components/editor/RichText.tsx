@@ -108,6 +108,10 @@ const TipTap = ({
         levels: [2, 3],
       },
       dropcursor: { color: theme.colors.yellow400, width: 3 },
+      codeBlock: false,
+      strike: false,
+      hardBreak: false,
+      horizontalRule: false,
     }),
     Placeholder.configure({
       showOnlyCurrent: false, // true also works well. try em both
