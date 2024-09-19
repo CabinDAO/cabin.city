@@ -63,7 +63,7 @@ export const MenuBar = () => {
       <ToolbarButton
         type={'image'}
         iconName={'image'}
-        isActive={editor.isActive('image')}
+        isActive={editor.isActive('uploadImage')}
         onClick={() => editor.chain().focus().addImage().run()}
       />
       {/*<ButtonButton />*/}

@@ -15,18 +15,18 @@ interface CustomImageOptions extends ImageOptions {
   uploadFn: UploadFn
 }
 
-// declare module '@tiptap/core' {
-//   interface Commands<ReturnType> {
-//     customImage: {
-//       addImage: () => ReturnType
-//       // setImage: (options: {
-//       //   src: string
-//       //   alt?: string
-//       //   title?: string
-//       // }) => ReturnType
-//     }
-//   }
-// }
+declare module '@tiptap/core' {
+  interface Commands<ReturnType> {
+    customImage: {
+      addImage: () => ReturnType
+      // setImage: (options: {
+      //   src: string
+      //   alt?: string
+      //   title?: string
+      // }) => ReturnType
+    }
+  }
+}
 
 let uploadFn: UploadFn
 
@@ -164,6 +164,7 @@ function startImageUpload(view: EditorView, file: File, schema: Schema) {
     (e) => {
       // On failure, just clean up the placeholder
       view.dispatch(tr.setMeta(imagePlaceholderPlugin, { remove: { id } }))
+      console.log(e)
     }
   )
 }

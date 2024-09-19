@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import { useError } from '@/components/hooks/useError'
 import { NO_TOKEN, apiPost } from '@/utils/api/backend'
 import { uploadOneFile } from '@/components/neighborhoods/useFilesUpload'
@@ -12,7 +12,7 @@ import {
   JSONContent,
   Extensions,
 } from '@tiptap/core/dist/packages/core/src/types'
-import { useCurrentEditor, EditorProvider } from '@tiptap/react'
+import { EditorProvider } from '@tiptap/react'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import { body1Styles, h2Styles, h3Styles } from '@/components/core/Typography'
@@ -182,33 +182,33 @@ const makeUploadFn = (showError: (message: string) => void) => {
   }
 }
 
-const HighlightedTextMenu = () => {
-  const { editor } = useCurrentEditor()
-  if (!editor) return null
-
-  return (
-    <>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-      >
-        Heading
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-      >
-        Subheading
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'is-active' : ''}
-      >
-        Bullet list
-      </button>
-    </>
-  )
-}
+// const HighlightedTextMenu = () => {
+//   const { editor } = useCurrentEditor()
+//   if (!editor) return null
+//
+//   return (
+//     <>
+//       <button
+//         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+//         className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
+//       >
+//         Heading
+//       </button>
+//       <button
+//         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+//         className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
+//       >
+//         Subheading
+//       </button>
+//       <button
+//         onClick={() => editor.chain().focus().toggleBulletList().run()}
+//         className={editor.isActive('bulletList') ? 'is-active' : ''}
+//       >
+//         Bullet list
+//       </button>
+//     </>
+//   )
+// }
 
 const Container = styled.div<{ editable?: boolean }>`
   width: 100%;
