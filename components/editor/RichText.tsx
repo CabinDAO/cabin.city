@@ -262,7 +262,7 @@ const Container = styled.div<{ editable?: boolean }>`
     ul,
     li::marker {
       ${body1Styles}
-      ${({ editable }) => !editable && `opacity: 0.8;`}
+      ${({ editable }) => !editable && `opacity: 0.9;`}
     }
 
     a {
