@@ -22,6 +22,7 @@ import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import Placeholder from '@tiptap/extension-placeholder'
+import Link from '@tiptap/extension-link'
 import UploadImage, {
   imagePlaceholderCSS,
 } from '@/components/editor/UploadImage'
@@ -132,6 +133,9 @@ const TipTap = ({
         // if (node.type.name == 'blockquote') return 'Blockquote'
         return ''
       },
+    }),
+    Link.configure({
+      defaultProtocol: 'https',
     }),
     UploadImage.configure({
       inline: false,
@@ -254,6 +258,11 @@ const Container = styled.div<{ editable?: boolean }>`
     ul,
     li::marker {
       ${body1Styles}
+      ${({ editable }) => !editable && `opacity: 0.8;`}
+    }
+
+    a {
+      text-decoration: underline;
     }
 
     ul,
@@ -345,8 +354,8 @@ export function isEditorEmpty(value: Content | string | null | undefined) {
       return true
     }
 
-    // If its one of these, its never empty
-    if (child.type && ['uploadImage'].includes(child.type)) {
+    const neverEmptyTypes = ['uploadImage']
+    if (child.type && neverEmptyTypes.includes(child.type)) {
       return false
     }
 
