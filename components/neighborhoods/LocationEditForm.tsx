@@ -26,14 +26,15 @@ import {
 } from '@/components/neighborhoods/validations'
 import { unique } from '@/utils/array'
 import styled from 'styled-components'
-import { Descendant } from 'slate'
-import { SlateEditor } from '@/components/core/slate/SlateEditor'
-import { isEmptyEditoryValue } from '@/components/core/slate/slate-utils'
+import {
+  RichTextInput,
+  Content,
+  isEditorEmpty,
+} from '@/components/editor/RichText'
 import { Body2 } from '@/components/core/Typography'
 import { ActionBar } from '@/components/core/ActionBar'
 import { GalleryUploadSection } from '@/components/core/GalleryUploadSection'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { InputLabel } from '@/components/core/InputLabel'
 import { InputText } from '@/components/core/InputText'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { Dropdown } from '@/components/core/Dropdown'
@@ -84,11 +85,7 @@ export function LocationEditForm({
   const [uploadingBanner, setUploadingBanner] = useState(false)
   const [uploading, setUploading] = useState(false)
 
-  const emptyDescription = isEmptyEditoryValue(locationInput?.description)
-  const slateProps = locationInput?.description
-    ? { value: JSON.parse(locationInput.description) }
-    : {}
-
+  const emptyDescription = isEditorEmpty(locationInput?.description)
   const nameValidation = validateTitle(locationInput.name)
 
   const handleSave = async () => {
@@ -125,7 +122,7 @@ export function LocationEditForm({
     }
   }
 
-  const handleEditorChange = (val: Descendant[]) => {
+  const handleEditorChange = (val: Content) => {
     setLocationInput({ ...locationInput, description: JSON.stringify(val) })
   }
 
@@ -190,6 +187,13 @@ export function LocationEditForm({
     }
   }
 
+  let initContent = locationInput.description
+    ? JSON.parse(locationInput.description)
+    : undefined
+  if (initContent && initContent.type != 'doc') {
+    initContent = {}
+  }
+
   return (
     <>
       <FormContainer>
@@ -219,10 +223,11 @@ export function LocationEditForm({
         </FullWidthInputContainer>
 
         <FullWidthInputContainer>
-          <InputLabel label={'Description'} required />
           <div style={{ margin: '1rem 0' }}>
-            <SlateEditor
-              {...slateProps}
+            <RichTextInput
+              label={'Description'}
+              required
+              initialContent={initContent}
               placeholder="Share a description of your neighborhood here"
               onChange={handleEditorChange}
               error={

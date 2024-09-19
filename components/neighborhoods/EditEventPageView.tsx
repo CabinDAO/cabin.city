@@ -63,7 +63,7 @@ export const EditEventPageView = () => {
   }
 
   const handleSave = async () => {
-    if (event.type && validateEventInput(event.type, newValues)) {
+    if (event.type && validateEventInput(newValues)) {
       await updateEvent(newValues)
       router.push(`/location/${event.location.externId}`).then()
     } else {

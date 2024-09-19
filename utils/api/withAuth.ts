@@ -22,18 +22,20 @@ class AuthenticationError extends Error {
   }
 }
 
-export type AuthData = {
+type AuthData = {
   authToken: string | null
   privyDID: string | null
 }
 
+export type OptsWithAuth = { auth: AuthData }
+
 export type WithAuthApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>,
-  opts: { auth: AuthData }
+  opts: OptsWithAuth
 ) => unknown | Promise<unknown>
 
-// todo: this is a bad name because this also handles prisma errors
+// TODO: this is a bad name because this also handles prisma errors
 export const withAuth = (handler: WithAuthApiHandler) => {
   const h = async (req: NextApiRequest, res: NextApiResponse, opts = {}) => {
     try {
@@ -60,11 +62,7 @@ export const withAuth = (handler: WithAuthApiHandler) => {
   return withIronSessionApiRoute(h, ironOptions)
 }
 
-export const requireAuth = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  opts: { auth: AuthData }
-): string => {
+export const requireAuth = (opts: OptsWithAuth): string => {
   if (!opts.auth.authToken) {
     throw new AuthenticationError(401, 'Unauthenticated')
   } else if (!opts.auth.privyDID) {
