@@ -129,7 +129,7 @@ const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
 const ClusterGroup = React.memo(
   ({ profiles }: { profiles: MarkerData[] }) => {
     return (
-      <MarkerClusterGroup chunkedLoading>
+      <MarkerClusterGroup chunkedLoading maxClusterRadius={35}>
         {profiles.map((p, i) => (
           <Marker
             key={i}
