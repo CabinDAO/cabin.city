@@ -42,6 +42,7 @@ echo "loading snapshot"
 postgres_url_trimmed="${POSTGRES_URL%%\?*}" ## Remove options query string
 pg_dump "$POSTGRES_SNAPSHOT_SRC_URL" | psql "$postgres_url_trimmed"
 
+echo 'update "Profile" set "citizenshipStatus" = '"'Verified'"', "isAdmin" = true where id = 822;' | psql "$postgres_url_trimmed"
 
 ### how to load only data without db drop/create
 # npx prisma migrate reset
