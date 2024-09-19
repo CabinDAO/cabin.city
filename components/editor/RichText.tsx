@@ -16,7 +16,7 @@ import { EditorProvider } from '@tiptap/react'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import { body1Styles, h2Styles, h3Styles } from '@/components/core/Typography'
-import { MenuBar } from '@/components/editor/Toolbar'
+import { Toolbar } from '@/components/editor/Toolbar'
 import { InputBase } from '@/components/core/InputBase'
 import StarterKit from '@tiptap/starter-kit'
 import { Color } from '@tiptap/extension-color'
@@ -66,6 +66,7 @@ export const RichTextInput = ({
       // helperText={helperText}
       // endAdornment={endAdornment}
       noPadding
+      noOverflowScroll
     >
       <TipTap
         editable
@@ -154,7 +155,7 @@ const TipTap = ({
       <EditorProvider
         editable={editable}
         immediatelyRender={false}
-        slotBefore={editable && <MenuBar />}
+        slotBefore={editable && <Toolbar />}
         extensions={extensions}
         content={initialContent || emptyValue}
         onUpdate={(e) => {

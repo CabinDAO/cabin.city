@@ -4,7 +4,7 @@ import Icon, { IconName } from '@/components/core/Icon'
 import { h4Styles } from '@/components/core/Typography'
 import { useCurrentEditor } from '@tiptap/react'
 
-export const MenuBar = () => {
+export const Toolbar = () => {
   const { editor } = useCurrentEditor()
 
   if (!editor) {
@@ -106,13 +106,16 @@ const Divider = styled.div`
 `
 
 const ToolbarContainer = styled.div`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   background-color: white;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.green900};
   overflow-x: auto;
+  position: sticky;
+  top: 0;
+  z-index: 1;
 `
 
 export const ToolbarButton = ({

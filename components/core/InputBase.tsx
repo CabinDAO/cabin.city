@@ -29,6 +29,7 @@ interface InputBaseProps extends InputHTMLAttributes<HTMLInputElement> {
   onClick?: VoidFunction
   helperTextPosition?: HelperTextPosition
   noPadding?: boolean
+  noOverflowScroll?: boolean
 }
 export const InputBase = ({
   id,
@@ -48,6 +49,7 @@ export const InputBase = ({
   errorMessage,
   helperTextPosition = 'top',
   noPadding,
+  noOverflowScroll,
   className,
 }: InputBaseProps) => {
   return (
@@ -75,7 +77,9 @@ export const InputBase = ({
       >
         <InputContent>
           {startAdornment}
-          <ChildrenContainer>{children}</ChildrenContainer>
+          <ChildrenContainer noOverflowScroll={noOverflowScroll}>
+            {children}
+          </ChildrenContainer>
           {endAdornment}
         </InputContent>
         {helperTextPosition === 'inset' && helperText ? (
@@ -124,14 +128,14 @@ const Container = styled.div<ContainerProps>`
   `}
 `
 
-const ChildrenContainer = styled.div`
+const ChildrenContainer = styled.div<{ noOverflowScroll?: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
   flex: 1;
   width: 100%;
   padding: 0.2rem;
-  overflow: scroll;
+  ${(props) => !props.noOverflowScroll && `overflow: scroll;`}
   height: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
