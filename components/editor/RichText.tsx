@@ -241,7 +241,8 @@ const Container = styled.div<{ editable?: boolean }>`
     }
 
     .ProseMirror-selectednode {
-      outline: 3px solid ${({ theme }) => theme.colors.yellow400};
+      ${({ editable, theme }) =>
+        editable && `outline: 3px solid ${theme.colors.yellow400}`}
     }
 
     // fix gapcursor not showing up in the right place
