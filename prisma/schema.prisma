@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["relationJoins"]
+  previewFeatures = ["relationJoins", "tracing"]
   // previewFeatures = ["postgresqlExtensions"]
   // output   = "./generated/client" // if you do this, replace imports of '@prisma/client' with './prisma/generated/client'
 }
