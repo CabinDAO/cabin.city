@@ -2,8 +2,9 @@ import Link from 'next/link'
 import { BaseLayout } from '../components/core/BaseLayout'
 import { EmptyState } from '../components/core/EmptyState'
 import { Button } from '../components/core/Button'
+import * as Sentry from '@sentry/nextjs'
 
-function Error({ statusCode }) {
+function ErrorPage({ statusCode }) {
   return (
     <BaseLayout hideNavAndFooter>
       <EmptyState
@@ -26,9 +27,14 @@ function Error({ statusCode }) {
   )
 }
 
-Error.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.statusCode : err ? err.statusCode : 404
+ErrorPage.getInitialProps = async (contextData) => {
+  await Sentry.captureUnderscoreErrorException(contextData)
+  const statusCode = contextData.res
+    ? contextData.res.statusCode
+    : contextData.err
+    ? contextData.err.statusCode
+    : 404
   return { statusCode }
 }
 
-export default Error
+export default ErrorPage
