@@ -81,6 +81,17 @@ const UploadImage = Image.extend<CustomImageOptions>({
       },
     }
   },
+  renderHTML({ node, HTMLAttributes }) {
+    if (!this.editor?.options.editable) {
+      return [
+        'a',
+        { href: node.attrs.src, target: '_blank', class: 'uploaded-image' },
+        ['img', { ...HTMLAttributes, src: node.attrs.src }],
+      ]
+    } else {
+      return ['img', { ...HTMLAttributes, src: node.attrs.src }]
+    }
+  },
 })
 
 export default UploadImage
