@@ -42,7 +42,7 @@ const yesBlocks = [
     ),
   },
   {
-    title: 'Get After It & Grow as a Person',
+    title: 'Do the Thing',
     text: (
       <Body1>
         You’re willing to try different things, make mistakes, try something

@@ -67,7 +67,7 @@ async function handler(
 
     await prisma.wallet.create({
       data: {
-        address: newWallet.address,
+        address: newWallet.address.toLowerCase(),
         cabinTokenBalance: 0,
         profile: { connect: { id: targetProfile.id } },
       },
