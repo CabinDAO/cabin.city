@@ -26,6 +26,7 @@ import Link from '@tiptap/extension-link'
 import UploadImage, {
   imagePlaceholderCSS,
 } from '@/components/editor/UploadImage'
+import Caption from '@/components/editor/Caption'
 
 export type Content = JSONContent
 
@@ -146,6 +147,7 @@ const TipTap = ({
       inline: false,
       uploadFn: makeUploadFn(showError),
     }),
+    Caption,
   ]
 
   // TODO: consider further optimization https://tiptap.dev/docs/guides/performance#gain-more-control-over-rendering
@@ -269,6 +271,11 @@ const Container = styled.div<{ editable?: boolean }>`
 
     a {
       text-decoration: underline;
+      &.uploaded-image img {
+        // display: inline-block;
+        width: 100%;
+        // height: auto;
+      }
     }
 
     ul,
@@ -295,6 +302,14 @@ const Container = styled.div<{ editable?: boolean }>`
       height: 1px;
       background-color: ${({ theme }) => theme.colors.green900};
       opacity: 0.12;
+    }
+
+    figcaption {
+      ${body1Styles}
+      color: ${theme.colors.gray};
+      text-align: center;
+      margin-top: -0.8rem;
+      font-size: 1.4rem;
     }
 
     // image uploading blurred preview + spinner

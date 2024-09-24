@@ -41,6 +41,7 @@ import flagSvg from './svg/flag.svg'
 import flowerSvg from './svg/flower.svg'
 import formatBold from './svg/format-bold.svg'
 import formatButton from './svg/format-button.svg'
+import formatCaption from './svg/format-caption.svg'
 import formatHeader1 from './svg/format-header1.svg'
 import formatHeader2 from './svg/format-header2.svg'
 import formatItalic from './svg/format-italic.svg'
@@ -151,6 +152,7 @@ export const IconSvgs = {
   flower: flowerSvg,
   'format-bold': formatBold,
   'format-button': formatButton,
+  'format-caption': formatCaption,
   'format-header1': formatHeader1,
   'format-header2': formatHeader2,
   'format-italic': formatItalic,

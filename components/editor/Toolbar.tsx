@@ -66,6 +66,12 @@ export const Toolbar = () => {
         isActive={editor.isActive('uploadImage')}
         onClick={() => editor.chain().focus().addImage().run()}
       />
+      <ToolbarButton
+        type={'caption'}
+        iconName={'format-caption'}
+        isActive={editor.isActive('caption')}
+        onClick={() => editor.chain().focus().toggleCaption().run()}
+      />
       {/*<ButtonButton />*/}
       {/*<ImageButton />*/}
       {/*<button*/}
