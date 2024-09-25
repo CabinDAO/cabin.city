@@ -1,11 +1,14 @@
 import React from 'react'
+import { useCurrentEditor } from '@tiptap/react'
+import { useModal } from '@/components/hooks/useModal'
 import styled from 'styled-components'
 import Icon, { IconName } from '@/components/core/Icon'
 import { h4Styles } from '@/components/core/Typography'
-import { useCurrentEditor } from '@tiptap/react'
+import { LinkModal } from '@/components/editor/LinkModal'
 
 export const Toolbar = () => {
   const { editor } = useCurrentEditor()
+  const { showModal } = useModal()
 
   if (!editor) {
     return <div></div>
@@ -26,6 +29,13 @@ export const Toolbar = () => {
         isActive={editor.isActive('italic')}
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
+      />
+      <ToolbarButton
+        type={'link'}
+        iconName={'format-link'}
+        isActive={editor.isActive('link')}
+        onClick={() => showModal(() => <LinkModal editor={editor} />)}
+        // disabled={!editor.can().chain().focus().extendMarkRange('link').run()}
       />
       <Divider />
       <ToolbarButton
@@ -71,6 +81,7 @@ export const Toolbar = () => {
         iconName={'format-caption'}
         isActive={editor.isActive('caption')}
         onClick={() => editor.chain().focus().toggleCaption().run()}
+        disabled={!editor.can().chain().focus().toggleCaption().run()}
       />
       {/*<ButtonButton />*/}
       {/*<ImageButton />*/}

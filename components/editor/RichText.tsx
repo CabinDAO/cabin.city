@@ -140,8 +140,9 @@ const TipTap = ({
         return ''
       },
     }),
-    Link.configure({
+    Link.extend({ inclusive: false }).configure({
       defaultProtocol: 'https',
+      openOnClick: !editable,
     }),
     UploadImage.configure({
       inline: false,

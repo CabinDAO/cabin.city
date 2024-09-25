@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 
-export interface CaptionOptions {
+interface CaptionOptions {
   HTMLAttributes: Record<string, any>
 }
 
