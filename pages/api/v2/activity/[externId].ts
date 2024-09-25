@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { ActivityDeleteResponse } from '@/utils/types/activity'
 
 async function handler(
@@ -38,4 +42,4 @@ async function handler(
   res.status(200).send({ deleted: true })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

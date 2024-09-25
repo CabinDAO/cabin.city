@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { CartResponse, PaymentStatus } from '@/utils/types/cart'
 
 async function handler(
@@ -55,4 +55,4 @@ async function handler(
   })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

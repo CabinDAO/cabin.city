@@ -2,7 +2,11 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { EventNewParams, EventNewResponse } from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
 import { toErrorString } from '@/utils/api/error'
@@ -76,4 +80,4 @@ async function handler(
   res.status(200).send({ eventExternId: event.externId })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

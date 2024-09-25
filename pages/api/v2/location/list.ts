@@ -3,8 +3,8 @@ import {
   OptsWithAuth,
   findProfile,
   ProfileWithWallet,
-  withAuth,
-} from '@/utils/api/withAuth'
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
@@ -21,7 +21,7 @@ import {
 } from '@/utils/types/location'
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

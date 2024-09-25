@@ -3,7 +3,11 @@ import { prisma } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { sendToDiscord } from '@/lib/discord'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
@@ -41,4 +45,4 @@ async function handler(
   res.status(200).send({ locationExternId: location.externId })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

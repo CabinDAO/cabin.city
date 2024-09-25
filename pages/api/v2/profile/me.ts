@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
@@ -106,7 +106,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
   }
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 // must match MyProfileQueryInclude below
 type MyProfileWithRelations = Prisma.ProfileGetPayload<{

@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { randomId } from '@/utils/random'
 import { ActivityNewParams, ActivityNewResponse } from '@/utils/types/activity'
@@ -32,4 +36,4 @@ async function handler(
   res.status(200).send({ externId: activity.externId })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

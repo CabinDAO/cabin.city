@@ -6,8 +6,8 @@ import {
   OptsWithAuth,
   ProfileWithWallet,
   requireProfile,
-  withAuth,
-} from '@/utils/api/withAuth'
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import {
   EventDeleteResponse,
   EventEditParams,
@@ -145,4 +145,4 @@ async function handleDelete(
 
   res.status(200).send({})
 }
-export default withAuth(handler)
+export default wrapHandler(handler)

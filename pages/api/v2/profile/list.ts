@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
-import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
@@ -15,7 +15,7 @@ import {
   ProfileListFragment,
 } from '@/utils/types/profile'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

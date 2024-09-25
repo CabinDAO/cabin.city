@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { getPageParams } from '@/utils/api/backend'
@@ -91,4 +91,4 @@ export const eventToFragment = (event: EventWithRelations): EventFragment => {
   }
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

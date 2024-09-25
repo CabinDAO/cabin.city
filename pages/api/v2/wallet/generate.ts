@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { createPrivyAccount } from '@/lib/privy'
 import {
   WalletGenerateParams,
@@ -8,7 +12,7 @@ import {
 } from '@/utils/types/wallet'
 import { toErrorString } from '@/utils/api/error'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

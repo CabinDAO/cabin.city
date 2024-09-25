@@ -1,7 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

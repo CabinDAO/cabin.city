@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { getAlchemySdk } from '@/lib/chains'
 import { cabinTokenConfig } from '@/lib/protocol-config'
@@ -10,7 +14,7 @@ import { AdminParams } from '@/utils/types/admin'
 
 export const config = { maxDuration: 300 } // let this run for up to 5 minutes
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

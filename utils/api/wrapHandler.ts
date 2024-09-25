@@ -29,20 +29,19 @@ type AuthData = {
 
 export type OptsWithAuth = { auth: AuthData }
 
-export type WithAuthApiHandler<T = any> = (
+type WithAuthApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>,
   opts: OptsWithAuth
 ) => unknown | Promise<unknown>
 
-// TODO: this is a bad name because this also handles prisma errors
-export const withAuth = (handler: WithAuthApiHandler) => {
+export const wrapHandler = (handler: WithAuthApiHandler) => {
   const h = async (req: NextApiRequest, res: NextApiResponse, opts = {}) => {
     try {
       const { authToken, privyDID } = await privyDIDFromHeaders(req.headers)
       await handler(req, res, {
         ...opts,
-        auth: { authToken: authToken, privyDID },
+        auth: { authToken, privyDID },
       })
     } catch (error) {
       if (error instanceof AuthenticationError) {
@@ -99,7 +98,7 @@ export const requireProfile = async (
   return profile
 }
 
-export const privyDIDFromAuthToken = async (authToken: string) => {
+const privyDIDFromAuthToken = async (authToken: string) => {
   const spkiPublicKey = `-----BEGIN PUBLIC KEY-----
           ${process.env.NEXT_PUBLIC_PRIVY_PUBLIC_KEY}
           -----END PUBLIC KEY-----

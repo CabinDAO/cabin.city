@@ -13,7 +13,11 @@ import {
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { EventType } from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { toErrorString } from '@/utils/api/error'
 
 async function handler(
@@ -185,4 +189,4 @@ const toFragments = (
   })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

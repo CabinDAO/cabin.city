@@ -3,8 +3,8 @@ import {
   OptsWithAuth,
   ProfileWithWallet,
   requireProfile,
-  withAuth,
-} from '@/utils/api/withAuth'
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { randomId } from '@/utils/random'
 import { prisma } from '@/lib/prisma'
 import { Invite, PaymentStatus, CitizenshipStatus } from '@prisma/client'
@@ -18,7 +18,7 @@ import { resolveAddressOrName } from '@/lib/ens'
 import { createPrivyAccount, privy } from '@/lib/privy'
 import { createProfile } from '@/utils/profile'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

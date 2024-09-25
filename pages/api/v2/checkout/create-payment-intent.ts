@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import Stripe from 'stripe'
 import { $Enums } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
@@ -87,4 +87,4 @@ const handler = async (
   })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

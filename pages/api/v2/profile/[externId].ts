@@ -7,9 +7,9 @@ import { toErrorString } from '@/utils/api/error'
 import {
   OptsWithAuth,
   requireProfile,
-  withAuth,
+  wrapHandler,
   ProfileWithWallet,
-} from '@/utils/api/withAuth'
+} from '@/utils/api/wrapHandler'
 import {
   ProfileGetResponse,
   RoleLevel,
@@ -280,4 +280,4 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
   }
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

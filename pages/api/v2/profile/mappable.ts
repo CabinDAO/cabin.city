@@ -1,10 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import crypto from 'crypto'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { ProfileMappableResponse } from '@/utils/types/profile'
 import { getProfilesForMap } from '@/utils/profile'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 const cacheTime = 3600
 

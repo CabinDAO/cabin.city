@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import axios from 'axios'
 import { ImageNewResponse } from '@/utils/types/image'
 
@@ -13,7 +13,7 @@ type CloudflareUploadResponse = {
   }
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

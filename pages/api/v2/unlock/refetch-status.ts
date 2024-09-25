@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { RefetchParams, RefetchResponse } from '@/utils/types/unlock'
 import { PublicLock__factory } from '@/generated/ethers'
 import { unlockConfigForEnv } from '@/lib/protocol-config'
@@ -134,4 +134,4 @@ const setCitizenshipStatus = async (
   return true
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

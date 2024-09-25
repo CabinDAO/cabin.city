@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { withAuth } from '@/utils/api/withAuth'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { ProfileDIDParams, ProfileDIDResponse } from '@/utils/types/profile'
 import { toErrorString } from '@/utils/api/error'
@@ -28,4 +28,4 @@ async function handler(
   res.status(200).send({ externId: profile?.externId || null })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

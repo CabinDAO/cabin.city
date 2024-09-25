@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
-import { profileFromApiCookies } from '@/utils/api/withAuth'
+import { profileFromApiCookies } from '@/utils/api/wrapHandler'
 import { useBackend } from '@/components/hooks/useBackend'
 import { AdminActions, AdminParamsType } from '@/utils/types/admin'
 import {

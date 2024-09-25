@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { AxiosError } from 'axios'
-import { OptsWithAuth, requireAuth, withAuth } from '@/utils/api/withAuth'
+import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
@@ -10,7 +10,7 @@ import { toErrorString } from '@/utils/api/error'
 import { subscribe } from '@/lib/convertkit'
 import analytics from '@/lib/googleAnalytics/analytics'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,

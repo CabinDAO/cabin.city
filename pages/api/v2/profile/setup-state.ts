@@ -1,6 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import {
   ProfileSetupStateParams,
   ProfileSetupStateResponse,
@@ -42,4 +46,4 @@ async function handler(
   })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

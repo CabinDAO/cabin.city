@@ -4,7 +4,11 @@ import {
   ActivityReactParams,
   ActivityReactResponse,
 } from '@/utils/types/activity'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 
 async function handler(
   req: NextApiRequest,
@@ -64,4 +68,4 @@ async function handler(
   })
 }
 
-export default withAuth(handler)
+export default wrapHandler(handler)

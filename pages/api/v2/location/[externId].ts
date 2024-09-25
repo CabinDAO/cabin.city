@@ -7,8 +7,8 @@ import {
   ProfileWithWallet,
   findProfile,
   requireProfile,
-  withAuth,
-} from '@/utils/api/withAuth'
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import {
   LocationGetParams,
   LocationGetResponse,
@@ -215,4 +215,4 @@ async function handleDelete(
 
   res.status(200).send({})
 }
-export default withAuth(handler)
+export default wrapHandler(handler)

@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireProfile, withAuth } from '@/utils/api/withAuth'
+import {
+  OptsWithAuth,
+  requireProfile,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import {
   CURRENT_CLAIMABLE_STAMP,
@@ -9,7 +13,7 @@ import {
 import { toErrorString } from '@/utils/api/error'
 import { addStamp } from '@/utils/profile'
 
-export default withAuth(handler)
+export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,
