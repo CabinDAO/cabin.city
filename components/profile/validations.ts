@@ -13,14 +13,14 @@ export const MAX_BIO_LENGTH = 300
 export const validateProfileInput = (
   editProfileInput: ProfileEditParamsType['data']
 ) => {
-  const { name, email, bio, address, avatarUrl } = editProfileInput
+  const { name, email, bio, address, avatarCfId } = editProfileInput
 
   const invalid =
     (editProfileInput.hasOwnProperty('name') && !isValidName(name)) ||
     (editProfileInput.hasOwnProperty('bio') && !isValidBio(bio)) ||
     (editProfileInput.hasOwnProperty('address') && !isValidAddress(address)) ||
     (editProfileInput.hasOwnProperty('email') && !isValidEmail(email)) ||
-    (editProfileInput.hasOwnProperty('avatarUrl') && !avatarUrl)
+    (editProfileInput.hasOwnProperty('avatarCfId') && !avatarCfId)
   // ||
   // (editProfileInput.hasOwnProperty('contactFields') &&
   //   editProfileInput.contactFields?.length == 0)

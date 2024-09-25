@@ -55,7 +55,7 @@ export const RegistrationView = () => {
       return
     }
 
-    if (!params.avatarUrl) {
+    if (!params.avatarCfId) {
       showError('Avatar required')
       return
     }

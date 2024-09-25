@@ -60,7 +60,8 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   const name = profileEditParams?.name ?? user?.name ?? ''
   const bio = profileEditParams?.bio ?? user?.bio ?? ''
   const address = profileEditParams?.address ?? user?.address ?? undefined
-  const avatarUrl = profileEditParams?.avatarUrl ?? user?.avatarUrl ?? undefined
+  const avatarCfId =
+    profileEditParams?.avatarCfId ?? user?.avatarCfId ?? undefined
 
   return (
     <UpdateSection title="Basic Info">
@@ -69,15 +70,15 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
           name,
           bio,
           address,
-          avatarUrl,
+          avatarCfId,
         }}
         onNameChange={(name) => onChange({ ...profileEditParams, name })}
         onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
         onAddressChange={(address) =>
           onChange({ ...profileEditParams, address })
         }
-        onAvatarUrlChange={(avatarUrl) =>
-          onChange({ ...profileEditParams, avatarUrl })
+        onAvatarCfIdChange={(avatarCfId) =>
+          onChange({ ...profileEditParams, avatarCfId })
         }
         canShowErrors={true}
       />

@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
+import { avatarImageUrl } from '@/lib/image'
 import { Circle } from '@/components/core/Circle'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import defaultAvatar from '@/components/profile/default-avatar.png'
@@ -10,12 +11,8 @@ type AvatarSrc =
   | null
   | string
   | {
-      avatarUrl: string
+      avatarCfId: string
     }
-// | {
-//     avatarImageId: string
-//     avatarFilename: string
-//   }
 
 export const Avatar = ({
   src,
@@ -37,9 +34,7 @@ export const Avatar = ({
     ? null
     : typeof src === 'string'
     ? src
-    : // : 'avatarImageId' in src
-      // ? cloudflareImageUrl(src.avatarImageId)
-      src.avatarUrl
+    : avatarImageUrl(src.avatarCfId)
 
   return (
     <StyledCircle

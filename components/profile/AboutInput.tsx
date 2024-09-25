@@ -24,7 +24,7 @@ export const AboutInput = ({
   onNameChange,
   onBioChange,
   onAddressChange,
-  onAvatarUrlChange,
+  onAvatarCfIdChange,
   canShowErrors,
   disabled = false,
 }: {
@@ -32,12 +32,12 @@ export const AboutInput = ({
     name: string
     bio: string
     address: ProfileAddressFragmentType | undefined
-    avatarUrl: string
+    avatarCfId: string
   }
   onNameChange: (bio: string) => void
   onBioChange: (bio: string) => void
   onAddressChange: (location: ProfileAddressFragmentType) => void
-  onAvatarUrlChange: (avatarUrl: string) => void
+  onAvatarCfIdChange: (avatarCfId: string) => void
   canShowErrors: boolean
   disabled?: boolean
 }) => {
@@ -53,16 +53,16 @@ export const AboutInput = ({
     onAddressChange(address)
   }
 
-  const handleAvatarChange = (avatarUrl: string) => {
-    onAvatarUrlChange(avatarUrl)
+  const handleAvatarChange = (avatarCfId: string) => {
+    onAvatarCfIdChange(avatarCfId)
   }
 
   return (
     <Container>
       <AvatarSetup
-        avatarUrl={values.avatarUrl}
+        avatarCfId={values.avatarCfId}
         onSelected={handleAvatarChange}
-        error={canShowErrors && !values.avatarUrl}
+        error={canShowErrors && !values.avatarCfId}
         disabled={disabled}
         required
       />

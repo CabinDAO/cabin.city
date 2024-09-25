@@ -110,7 +110,7 @@ async function handlePost(
         name: params.data.name,
         email: params.data.email,
         bio: params.data.bio,
-        avatarUrl: params.data.avatarUrl,
+        avatarCfId: params.data.avatarCfId,
         address: params.data.address
           ? {
               upsert: {
@@ -229,7 +229,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
-    avatarUrl: profile.avatarUrl,
+    avatarCfId: profile.avatarCfId,
     address: profile.address
       ? {
           locality: profile.address.locality,

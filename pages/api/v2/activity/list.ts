@@ -177,7 +177,7 @@ const toFragments = (
           type: role.type as RoleType,
           level: role.level as RoleLevel,
         })),
-        avatarUrl: activity.profile.avatarUrl,
+        avatarCfId: activity.profile.avatarCfId,
       },
       reactionCount: activity._count.reactions,
       hasReactionByMe: activtiesWithMyReactions[activity.id] || false,

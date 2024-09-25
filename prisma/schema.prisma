@@ -86,9 +86,7 @@ model Profile {
   mailingListOptIn        Boolean?
   isProfileSetupFinished  Boolean               @default(false)
   isProfileSetupDismissed Boolean               @default(false)
-  avatarUrl               String                @default("")
-  // avatarImageId           String
-  // avatarFilename          String
+  avatarCfId              String                @default("")
   tags                    String[]              @default([])
 
   address ProfileAddress?

@@ -86,7 +86,7 @@ export type ProfileListFragment = {
   email: string
   bio: string
   address: ShortAddressFragmentType | null
-  avatarUrl: string
+  avatarCfId: string
   isAdmin: boolean
   mailingListOptIn: boolean | null
   voucherId: number | null
@@ -123,7 +123,7 @@ export type ProfileMappableResponse =
       profiles: {
         name: string
         externId: string
-        avatarUrl: string
+        avatarCfId: string
         lat: number
         lng: number
       }[]
@@ -171,7 +171,7 @@ export type ProfileBasicFragment = {
   bio: string
   citizenshipStatus: CitizenshipStatus | null
   cabinTokenBalanceInt: number | null
-  avatarUrl: string
+  avatarCfId: string
   roles: RoleFragment[]
 }
 
@@ -249,7 +249,7 @@ export type MeFragment = {
   isProfileSetupFinished: boolean
   isProfileSetupDismissed: boolean
   mailingListOptIn: boolean | null
-  avatarUrl: string
+  avatarCfId: string
   tags: ProfileTag[]
   walletAddress: WalletAddressType | null
   voucher: {
@@ -269,7 +269,7 @@ export const ProfileNewParams = z
     bio: z.string(),
     email: z.string().email(),
     address: ProfileAddressFragment,
-    avatarUrl: z.string().optional(),
+    avatarCfId: z.string().optional(),
     subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
     tags: z.array(z.nativeEnum(ProfileTag)).optional(),
@@ -288,7 +288,7 @@ export const ProfileEditParams = z
       address: ProfileAddressFragment.optional(),
       tags: z.array(z.nativeEnum(ProfileTag)).optional(),
       contactFields: z.array(ContactFragment).optional(),
-      avatarUrl: z.string().optional(),
+      avatarCfId: z.string().optional(),
     }),
     roleTypes: commaSeparatedArrayOf(RoleType).optional(),
   })

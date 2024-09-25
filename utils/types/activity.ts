@@ -55,7 +55,7 @@ export type ActivityListFragment = {
     name: string
     citizenshipStatus: CitizenshipStatus | null
     roles: RoleFragment[]
-    avatarUrl: string
+    avatarCfId: string
   }
 
   reactionCount: number
@@ -115,7 +115,7 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         name: true
         citizenshipStatus: true
         citizenshipTokenId: true
-        avatarUrl: true
+        avatarCfId: true
         roles: {
           include: {
             walletHat: true
@@ -211,7 +211,7 @@ export const ActivityQueryInclude = {
       name: true,
       citizenshipStatus: true,
       citizenshipTokenId: true,
-      avatarUrl: true,
+      avatarCfId: true,
       roles: {
         include: {
           walletHat: true,

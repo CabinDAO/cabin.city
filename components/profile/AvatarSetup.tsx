@@ -11,15 +11,15 @@ import { Caption } from '@/components/core/Typography'
 import { FileUpload } from '@/components/core/FileUpload'
 
 export const AvatarSetup = ({
-  avatarUrl,
+  avatarCfId,
   onSelected,
   error = false,
   required = false,
   disabled = false,
 }: {
-  avatarUrl: ProfileEditParamsType['data']['avatarUrl']
+  avatarCfId: ProfileEditParamsType['data']['avatarCfId']
   onSelected: (
-    avatarUrl: NonNullable<ProfileEditParamsType['data']['avatarUrl']>
+    avatarCfId: NonNullable<ProfileEditParamsType['data']['avatarCfId']>
   ) => void
   error?: boolean
   required?: boolean
@@ -44,7 +44,7 @@ export const AvatarSetup = ({
     if (imageId) {
       setUploading(false)
 
-      onSelected(cloudflareImageUrl(imageId))
+      onSelected(imageId)
 
       hideModal()
     }
@@ -60,9 +60,9 @@ export const AvatarSetup = ({
       <Avatar
         isLoading={uploading}
         size={deviceSize === 'mobile' ? 9.6 : 8.8}
-        src={avatarUrl}
+        src={{ avatarCfId: avatarCfId || '' }}
       />
-      {avatarUrl ? (
+      {avatarCfId ? (
         <AvatarButton
           variant={deviceSize === 'mobile' ? 'secondary' : 'tertiary'}
           onClick={() => clearSelection()}

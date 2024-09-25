@@ -32,7 +32,7 @@ type ProfileCreateParams = {
   email: string
   bio?: string
   address?: ProfileAddressFragmentType
-  avatarUrl?: string
+  avatarCfId?: string
   invite: Prisma.InviteGetPayload<null> | null
   contactFields?: ContactFragmentType[]
   tags?: ProfileTag[]
@@ -72,7 +72,7 @@ export async function createProfile(
       bio: params.bio || '',
       location: '',
       inviteCode: randomInviteCode(),
-      avatarUrl: params.avatarUrl || '',
+      avatarCfId: params.avatarCfId || '',
       wallet: params.walletAddress
         ? {
             connectOrCreate: {
@@ -361,7 +361,7 @@ export async function getProfilesForMap() {
     select: {
       name: true,
       externId: true,
-      avatarUrl: true,
+      avatarCfId: true,
       address: {
         select: { lat: true, lng: true },
       },

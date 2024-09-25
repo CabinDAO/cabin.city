@@ -3,32 +3,25 @@ import { randomUploadName } from '@/utils/random'
 import { cloudflareImageUrl } from '@/lib/image'
 
 async function main() {
-  const records = await prisma.profile.findMany({
-    where: { avatarUrl: { contains: 'ipfs.io/ipfs' } },
-    // include: { Location: true },
-  })
-
-  const cfIds: Record<number, string> = {}
-
-  for (const record of records) {
-    console.log(`doing ${record.id}`)
-
-    if (!record.avatarUrl) {
-      console.log(`skipping ${record.id} because it has no ipfs hash`)
-      continue
-    }
-
-    const cfId = await upload(record.avatarUrl)
-
-    cfIds[record.id] = cfId
-
-    await prisma.profile.update({
-      where: { id: record.id },
-      data: { avatarUrl: cloudflareImageUrl(cfId) },
-    })
-  }
-
-  console.log(cfIds)
+  // const records = await prisma.profile.findMany({
+  //   where: { avatarUrl: { contains: 'ipfs.io/ipfs' } },
+  //   // include: { Location: true },
+  // })
+  // const cfIds: Record<number, string> = {}
+  // for (const record of records) {
+  //   console.log(`doing ${record.id}`)
+  //   if (!record.avatarUrl) {
+  //     console.log(`skipping ${record.id} because it has no ipfs hash`)
+  //     continue
+  //   }
+  //   const cfId = await upload(record.avatarUrl)
+  //   cfIds[record.id] = cfId
+  //   await prisma.profile.update({
+  //     where: { id: record.id },
+  //     data: { avatarUrl: cloudflareImageUrl(cfId) },
+  //   })
+  // }
+  // console.log(cfIds)
 }
 
 async function upload(url: string) {

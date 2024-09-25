@@ -78,7 +78,7 @@ export const StampClaimView = () => {
 
   const profileComplete =
     profile &&
-    profile.avatarUrl &&
+    profile.avatarCfId &&
     profile.bio &&
     profile.address?.lat &&
     profile.contactFields.length >= 1
@@ -178,7 +178,7 @@ const ProfileDataSection = ({ profile }: { profile: ProfileFragment }) => {
     <AboutSection>
       <AboutItem>
         <H3>Photo</H3>
-        {profile.avatarUrl ? (
+        {profile.avatarCfId ? (
           <Avatar size={7} src={profile} />
         ) : (
           <Body2>none</Body2>

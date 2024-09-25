@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { getProfilesForMap } from '@/utils/profile'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
-import { cloudflareImageUrl } from '@/lib/image'
+import { avatarImageUrl, cloudflareImageUrl } from '@/lib/image'
 
 export default function Home({
   mapData,
@@ -34,7 +34,7 @@ export const getStaticProps = (async (/*context*/) => {
           label: p.name,
           lat: p.address?.lat || 0,
           lng: p.address?.lng || 0,
-          imgUrl: p.avatarUrl,
+          imgUrl: avatarImageUrl(p.avatarCfId, 'mapAvatar'),
           linkUrl: `/profile/${p.externId}`,
         })),
         locations: locations.map((l) => ({

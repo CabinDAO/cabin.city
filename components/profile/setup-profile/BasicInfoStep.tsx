@@ -16,7 +16,7 @@ export const BasicInfoStep = ({
   const [name, setName] = useState(data.name)
   const [bio, setBio] = useState(data.bio)
   const [address, setAddress] = useState(data.address)
-  const [avatarUrl, setAvatarUrl] = useState(data.avatarUrl || '')
+  const [avatarCfId, setavatarCfId] = useState(data.avatarCfId || '')
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
 
   const [canShowErrors, setCanShowErrors] = useState(false)
@@ -29,7 +29,7 @@ export const BasicInfoStep = ({
       isValidBio(bio) &&
       address &&
       isValidAddress(address) &&
-      avatarUrl
+      avatarCfId
     ) {
       setSubmitted(true)
       setData({
@@ -38,7 +38,7 @@ export const BasicInfoStep = ({
           name,
           bio,
           address,
-          avatarUrl,
+          avatarCfId,
           subscribeToNewsletter,
         },
       })
@@ -53,12 +53,12 @@ export const BasicInfoStep = ({
           name,
           bio,
           address,
-          avatarUrl,
+          avatarCfId,
         }}
         onNameChange={setName}
         onBioChange={setBio}
         onAddressChange={setAddress}
-        onAvatarUrlChange={setAvatarUrl}
+        onAvatarCfIdChange={setavatarCfId}
         canShowErrors={canShowErrors}
         disabled={submitted}
       />

@@ -48,7 +48,7 @@ export const RegistrationForm = ({
       country: null,
       countryShort: null,
     },
-    avatarUrl: '',
+    avatarCfId: '',
     subscribeToNewsletter: true,
     tags: [],
     contactFields: [],
@@ -78,7 +78,7 @@ export const RegistrationForm = ({
       isValidName(newParams.name) &&
       isValidBio(newParams.bio) &&
       isValidAddress(newParams.address) &&
-      newParams.avatarUrl
+      newParams.avatarCfId
     ) {
       onSubmit(newParams)
     }

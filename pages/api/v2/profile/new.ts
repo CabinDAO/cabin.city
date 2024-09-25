@@ -65,7 +65,7 @@ async function handler(
     bio: params.bio,
     email: params.email,
     address: params.address,
-    avatarUrl: params.avatarUrl,
+    avatarCfId: params.avatarCfId,
     tags: params.tags,
     contactFields: params.contactFields,
     invite,

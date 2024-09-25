@@ -79,7 +79,7 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
     cabinTokenBalanceInt: profile.wallet
       ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
       : null,
-    avatarUrl: profile.avatarUrl,
+    avatarCfId: profile.avatarCfId,
     tags: profile.tags as ProfileTag[],
     isAdmin: profile.isAdmin,
     isProfileSetupFinished: profile.isProfileSetupFinished,

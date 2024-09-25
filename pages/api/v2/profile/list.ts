@@ -168,7 +168,7 @@ const profilesToFragments = (
       name: profile.name,
       email: profile.email,
       bio: profile.bio,
-      avatarUrl: profile.avatarUrl,
+      avatarCfId: profile.avatarCfId,
       isAdmin: profile.isAdmin,
       mailingListOptIn: profile.mailingListOptIn,
       voucherId: profile.voucherId,
