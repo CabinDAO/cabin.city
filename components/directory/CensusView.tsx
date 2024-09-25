@@ -25,7 +25,7 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
 import { useRouter } from 'next/router'
 import L from 'leaflet'
-import { avatarImageUrl } from '@/lib/image'
+import { cloudflareImageUrl } from '@/lib/image'
 
 export const CensusView = () => {
   const { user } = useUser()
@@ -80,7 +80,7 @@ export const CensusAuthView = () => {
             label: p.name,
             lat: p.lat,
             lng: p.lng,
-            imgUrl: avatarImageUrl(p.avatarCfId, 'mapAvatar'),
+            imgUrl: cloudflareImageUrl(p.avatarCfId, 'mapAvatar'),
             linkUrl: `/profile/${p.externId}`,
           }
         })

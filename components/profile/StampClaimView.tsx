@@ -179,7 +179,7 @@ const ProfileDataSection = ({ profile }: { profile: ProfileFragment }) => {
       <AboutItem>
         <H3>Photo</H3>
         {profile.avatarCfId ? (
-          <Avatar size={7} src={profile} />
+          <Avatar size={7} srcCfId={profile.avatarCfId} />
         ) : (
           <Body2>none</Body2>
         )}

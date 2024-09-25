@@ -7,7 +7,7 @@ export interface SelectOption {
   value: string | number | boolean
   icon?: IconName
   disabled?: boolean
-  imageSrc?: string
+  imageCfId?: string
 }
 
 const useDropdownLogic = (

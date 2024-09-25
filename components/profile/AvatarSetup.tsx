@@ -60,7 +60,7 @@ export const AvatarSetup = ({
       <Avatar
         isLoading={uploading}
         size={deviceSize === 'mobile' ? 9.6 : 8.8}
-        src={{ avatarCfId: avatarCfId || '' }}
+        srcCfId={avatarCfId}
       />
       {avatarCfId ? (
         <AvatarButton

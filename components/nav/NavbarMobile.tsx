@@ -149,7 +149,7 @@ const MobileMenuItem = ({
     <StyledLink onClick={handleClick} href={item.path}>
       {user && menuItem == 'profile' ? (
         <>
-          <Avatar src={user} size={2.4} />
+          <Avatar srcCfId={user.avatarCfId} size={2.4} />
           <Subline1 $color="yellow100">{user.name}</Subline1>
         </>
       ) : (

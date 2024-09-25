@@ -75,7 +75,7 @@ const MenuItem = ({
       ) : (
         <Link onClick={() => analytics.navBarEvent(name)} href={item.path}>
           {user && name == 'profile' ? (
-            <Avatar src={user} size={3.2} />
+            <Avatar srcCfId={user.avatarCfId} size={3.2} />
           ) : (
             <Icon
               name={item.icon}

@@ -1,28 +1,20 @@
 import styled, { css } from 'styled-components'
 import { ColorName } from '@/styles/theme'
 import Image from 'next/image'
-import { avatarImageUrl } from '@/lib/image'
+import { cloudflareImageUrl } from '@/lib/image'
 import { Circle } from '@/components/core/Circle'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import defaultAvatar from '@/components/profile/default-avatar.png'
 
-type AvatarSrc =
-  | undefined
-  | null
-  | string
-  | {
-      avatarCfId: string
-    }
-
 export const Avatar = ({
-  src,
+  srcCfId,
   size,
   hoverShadow,
   onClick,
   color,
   isLoading = false,
 }: {
-  src: AvatarSrc
+  srcCfId: undefined | null | string
   size: number
   hoverShadow?: boolean
   onClick?: VoidFunction
@@ -30,11 +22,7 @@ export const Avatar = ({
   isLoading?: boolean
   onRendered?: VoidFunction
 }) => {
-  const srcUrl = !src
-    ? null
-    : typeof src === 'string'
-    ? src
-    : avatarImageUrl(src.avatarCfId)
+  const srcUrl = !srcCfId ? null : cloudflareImageUrl(srcCfId)
 
   return (
     <StyledCircle

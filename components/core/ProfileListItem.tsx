@@ -19,7 +19,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
   return (
     <StyledListItem href={`/profile/${profile.externId}`}>
       <AvatarContainer>
-        <Avatar src={profile} size={avatarSize} />
+        <Avatar srcCfId={profile.avatarCfId} size={avatarSize} />
         <InfoContainer>
           <NameContainer>
             <H4>{profile.name}</H4>

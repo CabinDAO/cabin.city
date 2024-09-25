@@ -39,7 +39,7 @@ export const TextPost = ({ onPost }: TextPostProps) => {
     return (
       <StyledContentCard shape="notch">
         <PostCTAContainer onClick={handleStartPost}>
-          <Avatar src={user} size={3.2} />
+          <Avatar srcCfId={user?.avatarCfId} size={3.2} />
           <Subline1>Start a post</Subline1>
         </PostCTAContainer>
       </StyledContentCard>

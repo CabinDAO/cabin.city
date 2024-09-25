@@ -84,7 +84,7 @@ export const Dropdown = ({
   ] = useState(false)
 
   useEffect(() => {
-    setDisplaySelectedOptionStartAdornment(!!selectedOption?.imageSrc)
+    setDisplaySelectedOptionStartAdornment(!!selectedOption?.imageCfId)
   }, [selectedOption])
 
   const handleOnSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -109,7 +109,7 @@ export const Dropdown = ({
             onClick={toggleOpen}
             startAdornment={
               displaySelectedOptionStartAdornment && (
-                <Avatar src={selectedOption?.imageSrc} size={3.2} />
+                <Avatar srcCfId={selectedOption?.imageCfId} size={3.2} />
               )
             }
             endAdornment={<SearchIcon name="search" size={1.4} />}
@@ -150,8 +150,8 @@ export const Dropdown = ({
                     key={idx}
                     label={opt.label}
                     leadingIcon={opt.icon}
-                    imageSrc={opt.imageSrc}
-                    showLeadingIcon={!!opt.icon || !!opt.imageSrc}
+                    imageCfId={opt.imageCfId}
+                    showLeadingIcon={!!opt.icon || !!opt.imageCfId}
                     onClick={(
                       e: React.MouseEvent<HTMLDivElement, MouseEvent>
                     ) => {

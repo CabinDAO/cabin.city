@@ -21,7 +21,10 @@ export const ProfileHeaderSection = ({
     <ContentCard shadow>
       <Container>
         <ProfileSummary>
-          <Avatar size={deviceSize === 'desktop' ? 8.8 : 6.4} src={profile} />
+          <Avatar
+            size={deviceSize === 'desktop' ? 8.8 : 6.4}
+            srcCfId={profile.avatarCfId}
+          />
           <ProfileInfoContainer>
             <H1>{profile.name}</H1>
 

@@ -96,7 +96,7 @@ const ElementSet = styled.div`
 
 interface ListElementProps {
   label: string
-  imageSrc?: string
+  imageCfId?: string
   leadingIcon?: IconName | null
   showLeadingIcon?: boolean
   trailingIcon?: IconName
@@ -117,7 +117,7 @@ const ListElement = ({
   tabIndex,
   onClick,
   showLeadingIcon,
-  imageSrc,
+  imageCfId,
 }: ListElementProps) => {
   return (
     <Container
@@ -132,7 +132,7 @@ const ListElement = ({
         {showLeadingIcon && (
           <LeadingContent
             leadingIcon={leadingIcon}
-            imageSrc={imageSrc}
+            imageCfId={imageCfId}
             active={active}
             disabled={disabled}
           />
@@ -145,21 +145,21 @@ const ListElement = ({
 
 interface LeadingContentProps {
   leadingIcon?: IconName | null
-  imageSrc?: string
+  imageCfId?: string
   active?: boolean
   disabled?: boolean
 }
 
 const LeadingContent = ({
   leadingIcon,
-  imageSrc,
+  imageCfId,
   active,
   disabled,
 }: LeadingContentProps) => {
   if (leadingIcon) {
     return <Icon name={leadingIcon} size={1.6} />
-  } else if (imageSrc) {
-    return <Avatar size={3.2} src={imageSrc} />
+  } else if (imageCfId) {
+    return <Avatar size={3.2} srcCfId={imageCfId} />
   } else {
     return <Checkbox selected={!!active} disabled={disabled} />
   }

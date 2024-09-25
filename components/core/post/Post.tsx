@@ -81,7 +81,7 @@ export const Post = (props: PostProps) => {
         {variant === 'full' && (
           <ProfileContainer>
             <LeftContainer href={`/profile/${profile.externId}`} passHref>
-              <Avatar src={profile} size={3.2} />
+              <Avatar srcCfId={profile.avatarCfId} size={3.2} />
               <ProfileName>{profile.name}</ProfileName>
             </LeftContainer>
             {displayMoreMenu && (
