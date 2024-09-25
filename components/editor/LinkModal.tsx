@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useEvent } from 'react-use'
 import { Editor } from '@tiptap/core'
 import { useModal } from '@/components/hooks/useModal'
@@ -77,7 +77,8 @@ export const LinkModal = ({ editor }: { editor: Editor }) => {
     hideModal()
   }
 
-  const urlInputRef = React.useRef<HTMLInputElement>(null)
+  const urlInputRef = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
     const { state } = editor
     const { from, to } = state.selection
