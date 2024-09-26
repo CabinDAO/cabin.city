@@ -6,7 +6,7 @@ import { Body1, fonts } from '@/components/core/Typography'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 
-const DebugContent = styled.div`
+const Content = styled.div`
   width: 100%;
   background-color: ${theme.colors.red100};
   padding: 2rem;
@@ -17,31 +17,11 @@ const DebugContent = styled.div`
   tab-width: 4;
 `
 
-// export async function getStaticProps() {
-//   if (process.env.NODE_ENV !== 'development') {
-//     return {
-//       notFound: true,
-//     }
-//   }
-//
-//   return {
-//     props: {},
-//   }
-// }
-
 const DebugPage = () => {
-  // const router = useRouter()
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV !== 'development') {
-  //     router.push('/404')
-  //     return
-  //   }
-  // })
-
   return (
     <BaseLayout>
       <TitleCard icon="info" title="How do I report a security issue?" />
-      <DebugContent>
+      <Content>
         <Body1 style={{ marginBottom: '2rem' }}>
           We take security very seriously. Send an email to{' '}
           <Link
@@ -56,7 +36,7 @@ const DebugPage = () => {
           We offer bounties for valid security reports based on information
           provided and severity.
         </Body1>
-      </DebugContent>
+      </Content>
     </BaseLayout>
   )
 }

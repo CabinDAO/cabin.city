@@ -9,7 +9,7 @@ export const useTextActivity = (
   const { useMutate, useDelete } = useBackend()
 
   const { trigger: createTextActivity } =
-    useMutate<ActivityNewResponse>('ACTIVITY_NEW')
+    useMutate<ActivityNewResponse>('api_activity_new')
 
   const handleCreateTextActivity = useCallback(
     async (text: string) => {
@@ -20,7 +20,7 @@ export const useTextActivity = (
   )
 
   const { trigger: deleteTextActivity } = useDelete(
-    activityId ? ['ACTIVITY', { externId: activityId }] : null
+    activityId ? ['api_activity_externId', { externId: activityId }] : null
   )
 
   const handleDeleteTextActivity = useCallback(async () => {

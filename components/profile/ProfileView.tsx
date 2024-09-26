@@ -23,7 +23,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
 
   const { useGet } = useBackend()
   const { data: data, isLoading } = useGet<ProfileGetResponse>(
-    externId ? ['PROFILE', { externId }] : null
+    externId ? ['api_profile_externId', { externId }] : null
   )
 
   const profile = !data || 'error' in data ? null : data.profile

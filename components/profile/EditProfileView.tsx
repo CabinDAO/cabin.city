@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useLocalStorage } from 'react-use'
 import { useUser } from '../auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
@@ -29,12 +29,12 @@ import { EditProfileForm } from '@/components/profile/EditProfileForm'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user, refetchUser } = useUser({ redirectTo: '/' })
+  const { user, refetchUser } = useUser({ redirectTo: 'home' })
   const { showError } = useError()
 
   const { post, useMutate } = useBackend()
   const { trigger: updateUser } = useMutate<ProfileEditResponse>(
-    user ? ['PROFILE', { externId: user.externId }] : null
+    user ? ['api_profile_externId', { externId: user.externId }] : null
   )
 
   const [newValues, setNewValues] = useState<ProfileEditParamsType['data']>({})
@@ -84,7 +84,7 @@ export const EditProfileView = () => {
       }
 
       if (CURRENT_CLAIMABLE_STAMP && hasStampReminder) {
-        const res = await post<StampClaimResponse>('STAMP_CLAIM', {
+        const res = await post<StampClaimResponse>('api_stamp_claim', {
           id: CURRENT_CLAIMABLE_STAMP.id,
         } satisfies StampClaimParamsType)
 
@@ -94,7 +94,7 @@ export const EditProfileView = () => {
         }
       }
 
-      await router.push(`/profile/${user.externId}`)
+      await router.push(['profile_id', { id: user.externId }])
     }
   }
 
@@ -130,7 +130,8 @@ export const EditProfileView = () => {
             }}
             secondaryButton={{
               label: 'Cancel',
-              onClick: () => router.push(`/profile/${user.externId}`).then(),
+              onClick: () =>
+                router.push(['profile_id', { id: user.externId }]).then(),
             }}
           />
         </Content>

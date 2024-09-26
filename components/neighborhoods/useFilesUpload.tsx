@@ -94,7 +94,7 @@ export const useFilesUpload = ({
 
     for (const file of processedFiles as File[]) {
       const { id, error } = await uploadOneFile(file, async () =>
-        post<ImageNewResponse>('IMAGE_NEW', {})
+        post<ImageNewResponse>('api_image_new', {})
       )
       if (error !== null) {
         showError(error)

@@ -1,5 +1,5 @@
 import React from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationGetResponse } from '@/utils/types/location'
@@ -22,11 +22,13 @@ function EditLocationView() {
     isLoading,
     mutate: refetchLocation,
   } = useGet<LocationGetResponse>(
-    locationId ? ['LOCATION', { externId: locationId as string }] : null
+    locationId
+      ? ['api_location_externId', { externId: locationId as string }]
+      : null
   )
   const location = !data || 'error' in data ? null : data.location
 
-  const { user } = useUser({ redirectTo: '/' })
+  const { user } = useUser({ redirectTo: 'home' })
 
   if (isLoading || !location || !canEditLocation(user, location)) {
     return null
@@ -44,14 +46,14 @@ function EditLocationView() {
           location={location}
           afterSave={() => {
             refetchLocation().then(() => {
-              router.push(`/location/${location.externId}`).then()
+              router.push(['location_id', { id: location.externId }]).then()
             })
           }}
           afterCancel={() => {
-            router.push(`/location/${location.externId}`).then()
+            router.push(['location_id', { id: location.externId }]).then()
           }}
           afterDelete={() => {
-            router.push(`/city-directory`).then()
+            router.push(`cityDirectory`).then()
           }}
         />
       </Contents>

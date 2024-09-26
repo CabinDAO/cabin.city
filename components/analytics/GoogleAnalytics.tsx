@@ -1,6 +1,6 @@
-import { useRouter } from 'next/router'
-import Script from 'next/script'
 import { memo, useEffect } from 'react'
+import Script from 'next/script'
+import { useRouter } from '@/components/hooks/useRouter'
 
 const TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID
 

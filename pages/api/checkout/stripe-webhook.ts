@@ -31,6 +31,7 @@ export const config = {
   },
 }
 
+// this route is called by Stripe, not by our app
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

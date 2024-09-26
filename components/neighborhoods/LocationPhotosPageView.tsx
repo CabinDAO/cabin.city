@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useEffect } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationGetResponse } from '@/utils/types/location'
@@ -11,14 +11,14 @@ export const LocationPhotosPageView = () => {
 
   const { useGet } = useBackend()
   const { data } = useGet<LocationGetResponse>(
-    id ? ['LOCATION', { externId: `${id}` }] : null
+    id ? ['api_location_externId', { externId: `${id}` }] : null
   )
 
   const location = data && !('error' in data) ? data.location : null
 
   useEffect(() => {
     if (data && !location) {
-      router.push('/404')
+      router.pushRaw('/404')
     }
   }, [data, location, router])
 

@@ -90,7 +90,7 @@ export default function Page() {
           <Button
             onClick={async () => {
               console.log('posting')
-              const res = await post('DEV', {})
+              const res = await post('api_dev', {})
               console.log(res)
             }}
           >

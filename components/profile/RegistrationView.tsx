@@ -1,5 +1,5 @@
 import { Address } from 'viem'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
@@ -32,7 +32,7 @@ export const RegistrationView = () => {
   const { showError } = useError()
   const { confirmLoggedIn } = useConfirmLoggedIn()
   const { externalUser, isUserLoading } = useExternalUser()
-  const { user, refetchUser } = useUser({ redirectToIfFound: '/profile' })
+  const { user, refetchUser } = useUser({ redirectToIfFound: 'profile' })
   const [hasStampReminder, , removeReminder] =
     useLocalStorage<boolean>(STAMP_REMINDER_KEY)
 
@@ -46,7 +46,7 @@ export const RegistrationView = () => {
   const handleSubmit = async (params: RegistrationParams) => {
     if (!isUserLoading && !externalUser) {
       confirmLoggedIn(() => {
-        router.push('/registration')
+        router.push('registration')
       })
       return
     }
@@ -68,7 +68,7 @@ export const RegistrationView = () => {
     }
 
     try {
-      const resp = await post<ProfileNewResponse>('PROFILE_NEW', {
+      const resp = await post<ProfileNewResponse>('api_profile_new', {
         ...params,
         ...{
           walletAddress: walletAddress
@@ -88,7 +88,7 @@ export const RegistrationView = () => {
         return
       } else {
         if (CURRENT_CLAIMABLE_STAMP && hasStampReminder) {
-          const res = await post<StampClaimResponse>('STAMP_CLAIM', {
+          const res = await post<StampClaimResponse>('api_stamp_claim', {
             id: CURRENT_CLAIMABLE_STAMP.id,
           } satisfies StampClaimParamsType)
 

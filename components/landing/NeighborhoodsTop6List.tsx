@@ -12,7 +12,7 @@ import analytics from '@/lib/googleAnalytics/analytics'
 
 export const NeighborhoodsTop6List = () => {
   const { useGet } = useBackend()
-  const { data } = useGet<LocationListResponse>('LOCATION_LIST', {
+  const { data } = useGet<LocationListResponse>('api_location_list', {
     locationType: LocationType.Neighborhood,
   } satisfies LocationListParamsType)
 

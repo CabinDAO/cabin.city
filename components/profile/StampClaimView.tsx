@@ -3,7 +3,7 @@ import { useLocalStorage } from 'react-use'
 import { subDays } from 'date-fns'
 import Link from 'next/link'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useUser } from '@/components/auth/useUser'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -40,7 +40,7 @@ export const StampClaimView = () => {
     isLoading,
     mutate: refetchProfile,
   } = useGet<ProfileGetResponse>(
-    user ? ['PROFILE', { externId: user.externId }] : null
+    user ? ['api_profile_externId', { externId: user.externId }] : null
   )
 
   const [loading, setLoading] = useState(false)
@@ -57,7 +57,7 @@ export const StampClaimView = () => {
 
     analytics.stampClaimClickEvent(user.externId, stampId)
 
-    const res = await post<StampClaimResponse>('STAMP_CLAIM', {
+    const res = await post<StampClaimResponse>('api_stamp_claim', {
       id: stampId,
     } satisfies StampClaimParamsType)
 
@@ -71,7 +71,7 @@ export const StampClaimView = () => {
 
     await refetchProfile()
 
-    await router.push('/profile#stamps')
+    await router.push('profile')
   }
 
   const profile = !data || 'error' in data ? null : data.profile
@@ -93,7 +93,7 @@ export const StampClaimView = () => {
           title={`Get Your Stamp`}
           icon={'logo-cabin'}
           onIconClick={() => {
-            router.push('/').then()
+            router.push('home').then()
           }}
         />
         <StyledContentCard shape="notch" notchSize={1.6}>

@@ -21,7 +21,7 @@ export const ProfileNextStepsSection = ({ me }: { me: MeFragment }) => {
   const handleDismissClick = async () => {
     setHideLinkContainer(true)
     analytics.onboardingActionEvent(me.externId, 'census_cta_dismiss')
-    return post('PROFILE_SETUP_STATE', {
+    return post('api_profile_setupState', {
       state: 'dismissed',
     } satisfies ProfileSetupStateParams)
   }

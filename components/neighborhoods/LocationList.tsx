@@ -20,7 +20,7 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
   >(undefined)
 
   const { data, next, hasMore } = useGetPaginated<LocationListResponse>(
-    'LOCATION_LIST',
+    'api_location_list',
     {
       countActiveEventsOnly: 'true',
       locationType: type,

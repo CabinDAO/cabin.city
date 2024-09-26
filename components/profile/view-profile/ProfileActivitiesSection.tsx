@@ -19,7 +19,7 @@ export const ProfileActivitiesSection = ({
   const { handleLikeActivity, handleUnlikeActivity } = useActivityReactions()
 
   const { data, mutate: refetchActivities } = useGet<ActivityListResponse>(
-    'ACTIVITY_LIST',
+    'api_activity_list',
     { profileId: profile?.externId, pageSize: 1000 }
   )
 

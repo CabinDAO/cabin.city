@@ -18,7 +18,7 @@ import {
   LocationQueryInclude,
   LocationWithRelations,
 } from '@/utils/types/location'
-import { locationToFragment } from '@/pages/api/v2/location/list'
+import { locationToFragment } from '@/pages/api/location/list'
 import { canEditLocation } from '@/lib/permissions'
 
 async function handler(

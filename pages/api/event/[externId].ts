@@ -16,7 +16,7 @@ import {
   EventQueryInclude,
   EventWithRelations,
 } from '@/utils/types/event'
-import { eventToFragment } from '@/pages/api/v2/event/list'
+import { eventToFragment } from '@/pages/api/event/list'
 import { canEditLocation } from '@/lib/permissions'
 
 async function handler(

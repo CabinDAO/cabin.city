@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { Caption, H4, truncateStyles } from '../Typography'
 import { EMPTY } from '@/utils/display-utils'
 import { ImageFlex } from '../gallery/ImageFlex'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { ActivityListFragment } from '@/utils/types/activity'
 import { ActiveBadge } from '@/components/core/ActiveBadge'
 import { cloudflareImageUrl } from '@/lib/image'
@@ -21,7 +21,7 @@ export const LocationPostItem = ({
   const router = useRouter()
 
   const handleOnClick = () => {
-    router.push(`/location/${externId}`).then()
+    router.push(['location_id', { id: externId }]).then()
   }
 
   return (

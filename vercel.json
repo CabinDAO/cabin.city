@@ -2,7 +2,7 @@
   "buildCommand": "npm run build && ([ -n \"${NEXT_PUBLIC_VERCEL}\"] && [ -n \"${POSTGRES_URL}\" ] && npx prisma migrate deploy || true)",
   "crons": [
     {
-      "path": "/api/v2/sync/token",
+      "path": "/api/sync/token",
       "schedule": "1/10 * * * *"
     }
   ]

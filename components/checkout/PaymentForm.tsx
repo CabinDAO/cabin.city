@@ -4,7 +4,7 @@ import { useBackend } from '@/components/hooks/useBackend'
 import {
   CreatePaymentIntentParams,
   CreatePaymentIntentResponse,
-} from '@/pages/api/v2/checkout/create-payment-intent'
+} from '@/pages/api/checkout/create-payment-intent'
 import { CartFragment } from '@/utils/types/cart'
 import styled from 'styled-components'
 import {
@@ -148,7 +148,7 @@ const StripeForm = ({ cart }: { cart: CartFragment }) => {
     }
 
     const intentRes = await post<CreatePaymentIntentResponse>(
-      'CHECKOUT_CREATE_PAYMENT_INTENT',
+      'api_checkout_createPaymentIntent',
       {
         cartId: cart.externId,
       } satisfies CreatePaymentIntentParams

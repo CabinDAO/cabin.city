@@ -1,7 +1,7 @@
 import { useContext, createContext, ReactNode } from 'react'
 import { useSWRConfig } from 'swr'
 import { usePrivy } from '@privy-io/react-auth'
-import { expandRoute, Route } from '@/utils/routes'
+import { expandApiRoute, ApiRoute } from '@/utils/routing'
 import { APIError, Paginated } from '@/utils/types/shared'
 import {
   UrlParams,
@@ -25,32 +25,32 @@ NOTES TO MYSELF:
 
 type BackendState = {
   useGet: <Data>(
-    route: Route | null,
+    route: ApiRoute | null,
     params?: UrlParams
   ) => ReturnType<typeof useAPIGet<Data>>
   useGetPaginated: <Data extends Paginated | APIError>(
-    route: Route,
+    route: ApiRoute,
     params?: UrlParams,
     options?: PaginationOptions
   ) => ReturnType<typeof useAPIGetPaginated<Data>>
   useMutate: <Data>(
-    route: Route | null
+    route: ApiRoute | null
   ) => ReturnType<typeof useAPIMutate<Data>>
   useDelete: <Data>(
-    route: Route | null
+    route: ApiRoute | null
   ) => ReturnType<typeof useAPIMutate<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   get: <Data = any>(
-    route: Route,
+    route: ApiRoute,
     params?: UrlParams
   ) => ReturnType<typeof apiGet<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
   post: <Data = any>(
-    route: Route,
+    route: ApiRoute,
     params: object
   ) => ReturnType<typeof apiPost<Data>>
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  revalidate: (route: Route) => Promise<any>
+  revalidate: (route: ApiRoute) => Promise<any>
 }
 
 const context = createContext<BackendState | null>(null)
@@ -59,39 +59,39 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
   const { getAccessToken } = usePrivy()
   const { mutate } = useSWRConfig()
 
-  const useGet = <Data,>(route: Route | null, params: UrlParams = {}) => {
+  const useGet = <Data,>(route: ApiRoute | null, params: UrlParams = {}) => {
     return useAPIGet<Data>(route, params, getAccessToken)
   }
 
   const useGetPaginated = <Data extends Paginated | APIError>(
-    route: Route,
+    route: ApiRoute,
     params: UrlParams = {},
     options?: PaginationOptions
   ) => {
     return useAPIGetPaginated<Data>(route, params, getAccessToken, options)
   }
 
-  const useMutate = <Data,>(route: Route | null) => {
+  const useMutate = <Data,>(route: ApiRoute | null) => {
     return useAPIMutate<Data>(route, 'POST', getAccessToken)
   }
 
-  const useDelete = <Data,>(route: Route | null) => {
+  const useDelete = <Data,>(route: ApiRoute | null) => {
     return useAPIMutate<Data>(route, 'DELETE', getAccessToken)
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const get = <Data = any,>(route: Route, params: UrlParams = {}) => {
+  const get = <Data = any,>(route: ApiRoute, params: UrlParams = {}) => {
     return apiGet<Data>(route, params, getAccessToken)
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const post = <Data = any,>(route: Route, params: object = {}) => {
+  const post = <Data = any,>(route: ApiRoute, params: object = {}) => {
     return apiPost<Data>(route, params, getAccessToken)
   }
 
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-  const revalidate = (route: Route): Promise<any> => {
-    return mutate(route ? expandRoute(route) : null)
+  const revalidate = (route: ApiRoute): Promise<any> => {
+    return mutate(route ? expandApiRoute(route) : null)
   }
 
   const state = {

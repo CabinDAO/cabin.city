@@ -17,14 +17,14 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 export const ActivityView = () => {
   const { useGetPaginated } = useBackend()
 
-  const { user } = useUser({ redirectTo: '/logout' })
+  const { user } = useUser({ redirectTo: 'logout' })
 
   const {
     data,
     next,
     hasMore,
     mutate: refetchActivities,
-  } = useGetPaginated<ActivityListResponse>('ACTIVITY_LIST')
+  } = useGetPaginated<ActivityListResponse>('api_activity_list')
 
   const activities = data
     ? data.reduce(

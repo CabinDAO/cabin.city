@@ -11,7 +11,7 @@ export const useActivityReactions = () => {
   const handleLikeActivity = async (activity: ActivityListFragment) => {
     analytics.reactToPostEvent(`${activity.externId}`, 'like')
 
-    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+    await post<ActivityReactResponse>('api_activity_react', {
       externId: activity.externId,
       action: 'like',
     })
@@ -20,7 +20,7 @@ export const useActivityReactions = () => {
   const handleUnlikeActivity = async (activity: ActivityListFragment) => {
     analytics.reactToPostEvent(`${activity.externId}`, 'like')
 
-    await post<ActivityReactResponse>('ACTIVITY_REACT', {
+    await post<ActivityReactResponse>('api_activity_react', {
       externId: activity.externId,
       action: 'unlike',
     })

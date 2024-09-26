@@ -17,7 +17,7 @@ import Icon from '@/components/core/Icon'
 import { useUser } from '@/components/auth/useUser'
 import { AppLink } from '@/components/core/AppLink'
 import React, { useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { ProfileFragment } from '@/utils/types/profile'
 
 export const ProfileVerifiedCitizenship = ({
@@ -40,7 +40,7 @@ export const ProfileVerifiedCitizenship = ({
       return
     }
 
-    router.push(`/profile/${vouchedBy.externId}`)
+    router.push(['profile_id', { id: vouchedBy.externId }])
   }
 
   if (!profile.citizenshipTokenId || !profile.citizenshipMintedAt) {

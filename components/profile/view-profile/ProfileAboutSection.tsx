@@ -40,7 +40,7 @@ export const ProfileAboutSection = ({
   const handleContactClick = async () => {
     if (!me || isOwnProfile) return
     analytics.onboardingActionEvent(me.externId, 'contact_clicked')
-    return post('PROFILE_SETUP_STATE', {
+    return post('api_profile_setupState', {
       state: 'dismissed',
     } satisfies ProfileSetupStateParams)
   }

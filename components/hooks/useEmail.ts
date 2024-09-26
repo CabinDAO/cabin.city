@@ -1,10 +1,10 @@
 import { useBackend } from '@/components/hooks/useBackend'
-import { EmailParams } from '@/pages/api/v2/email/send'
+import { EmailParams } from '@/pages/api/email/send'
 
 export const useEmail = () => {
   const { post } = useBackend()
   const sendEmail = async (input: EmailParams) => {
-    return post('EMAIL_SEND', input)
+    return post('api_email_send', input)
   }
 
   return { sendEmail }

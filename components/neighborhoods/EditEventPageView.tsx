@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter, Route } from '@/components/hooks/useRouter'
 import { useError } from '@/components/hooks/useError'
 import { useModal } from '@/components/hooks/useModal'
 import { useBackend } from '@/components/hooks/useBackend'
@@ -26,7 +26,7 @@ export const EditEventPageView = () => {
 
   const { eventId } = router.query
   const { data } = useGet<EventGetResponse>(
-    eventId ? ['EVENT', { externId: eventId as string }] : null
+    eventId ? ['api_event_externId', { externId: eventId as string }] : null
   )
   const event = data && 'event' in data ? data.event : null
 
@@ -34,10 +34,10 @@ export const EditEventPageView = () => {
 
   const { useMutate, useDelete } = useBackend()
   const { trigger: updateEvent } = useMutate(
-    event ? ['EVENT', { externId: `${event.externId}` }] : null
+    event ? ['api_event_externId', { externId: `${event.externId}` }] : null
   )
   const { trigger: deleteEvent } = useDelete(
-    event ? ['EVENT', { externId: `${event.externId}` }] : null
+    event ? ['api_event_externId', { externId: `${event.externId}` }] : null
   )
 
   const [highlightErrors, setHighlightErrors] = useState(false)
@@ -65,7 +65,7 @@ export const EditEventPageView = () => {
   const handleSave = async () => {
     if (event.type && validateEventInput(newValues)) {
       await updateEvent(newValues)
-      router.push(`/location/${event.location.externId}`).then()
+      router.push(['location_id', { id: event.location.externId }]).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
@@ -82,11 +82,11 @@ export const EditEventPageView = () => {
   }
 
   const handleBack = () => {
-    const url = `/location/${event.location.externId}`
+    const route: Route = ['location_id', { id: event.location.externId }]
     if (unsavedChanges) {
-      showModal(() => <DiscardChangesModal leaveUrl={url} />)
+      showModal(() => <DiscardChangesModal leaveRoute={route} />)
     } else {
-      router.push(url).then()
+      router.push(route).then()
     }
   }
 
@@ -114,7 +114,9 @@ export const EditEventPageView = () => {
           trashButton={{
             onClick: async () => {
               await deleteEvent({})
-              router.push(`/location/${event.location.externId}`).then()
+              router
+                .push(['location_id', { id: event.location.externId }])
+                .then()
             },
             label: 'event',
           }}

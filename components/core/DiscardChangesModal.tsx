@@ -1,21 +1,17 @@
+import { useModal } from '@/components/hooks/useModal'
+import { useRouter, Route } from '@/components/hooks/useRouter'
 import styled from 'styled-components'
 import { ModalContainer } from './modals/ModalContainer'
 import { ModalTitle } from './modals/ModalTitle'
 import { Body2, H4 } from './Typography'
 import { Button } from './Button'
-import { useModal } from '@/components/hooks/useModal'
-import { useRouter } from 'next/router'
 
-interface DiscardChangesModalProps {
-  leaveUrl: string
-}
-
-export const DiscardChangesModal = ({ leaveUrl }: DiscardChangesModalProps) => {
+export const DiscardChangesModal = ({ leaveRoute }: { leaveRoute: Route }) => {
   const { hideModal } = useModal()
   const router = useRouter()
 
   const handleLeave = () => {
-    router.push(leaveUrl)
+    router.push(leaveRoute)
     hideModal()
   }
 

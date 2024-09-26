@@ -25,7 +25,7 @@ export const MapSection = ({
   const { get } = useBackend()
   const [profilesForMap, setProfilesForMap] = useState<MarkerData[]>([])
   useEffect(() => {
-    get<ProfileMappableResponse>('PROFILE_MAPPABLE').then((res) => {
+    get<ProfileMappableResponse>('api_profile_mappable').then((res) => {
       if (!res || 'error' in res) return
       setProfilesForMap(
         res['profiles'].map((p) => {

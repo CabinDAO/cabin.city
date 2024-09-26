@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useModal } from '@/components/hooks/useModal'
 import { useUser } from '@/components/auth/useUser'
 import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
@@ -35,7 +35,7 @@ export const NewLocationView = () => {
   const handlePrimaryButtonClick = async () => {
     confirmLoggedIn(async () => {
       try {
-        const data = await post<LocationNewResponse>('LOCATION_NEW', {})
+        const data = await post<LocationNewResponse>('api_location_new', {})
         const externId = !data || 'error' in data ? null : data.locationExternId
 
         if (externId) {
@@ -45,7 +45,7 @@ export const NewLocationView = () => {
               locationId: externId,
             } as NewLocationPayload,
           })
-          router.push(`/location/${externId}/edit`).then()
+          router.push(['location_id_edit', { id: externId }]).then()
         } else {
           showModal(() => (
             <ErrorModal
@@ -67,7 +67,7 @@ export const NewLocationView = () => {
   }
 
   const handleSecondaryButtonClick = () => {
-    router.push(onCloseUrl).then()
+    router.pushRaw(onCloseUrl).then()
   }
 
   if (!canCreateListings) {

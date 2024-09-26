@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
 import { useUser } from '../auth/useUser'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useExternalUser } from '../auth/useExternalUser'
 
 export const AuthenticatedLink = ({
@@ -28,7 +28,7 @@ export const AuthenticatedLink = ({
   const handleClick = () => {
     if (onClick) onClick()
     confirmLoggedIn(() => {
-      router.push(path)
+      router.pushRaw(path)
       refetchUser().then(() => {
         // if (onClick) onClick()
       })

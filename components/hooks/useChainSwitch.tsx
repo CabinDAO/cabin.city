@@ -1,5 +1,5 @@
 import { defaultChain } from '@/lib/chains'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { useModal } from './useModal'
 import { SwitchNetworkModal } from '@/components/core/SwitchNetworkModal'
@@ -30,7 +30,7 @@ export const useChainSwitch = (afterSwitch?: VoidFunction) => {
   }
 
   const handleLeave = () => {
-    router.push('/profile').then()
+    router.push('profile').then()
     hideModal()
   }
 

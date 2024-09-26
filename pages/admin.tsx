@@ -35,7 +35,7 @@ export default function Page({}: InferGetServerSidePropsType<
           <Button
             onClick={async () => {
               setLoading(true)
-              const res = await post('ADMIN', {
+              const res = await post('api_admin', {
                 action: AdminActions.fixTokenBalances,
               } satisfies AdminParamsType)
               setLoading(false)
@@ -68,7 +68,7 @@ export default function Page({}: InferGetServerSidePropsType<
             style={{ height: 'min-content' }}
             onClick={async () => {
               const res = await post<WalletGenerateResponse>(
-                'WALLET_GENERATE',
+                'api_wallet_generate',
                 {
                   profileExternId: input,
                 } satisfies WalletGenerateParamsType

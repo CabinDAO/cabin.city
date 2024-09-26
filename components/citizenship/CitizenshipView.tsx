@@ -67,7 +67,7 @@ export const CitizenshipView = () => {
   }
 
   const { useMutate } = useBackend()
-  const { trigger: toggleSignal } = useMutate('PROFILE_SIGNAL_INTEREST')
+  const { trigger: toggleSignal } = useMutate('api_profile_signalInterest')
 
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 
 type noHistoryAction = 'goHomeIfNoHistory' | null
 
@@ -31,11 +31,11 @@ export const NavigationProvider = ({ children }: NavigationProviderProps) => {
       const updatedHistory = [...history]
       updatedHistory.pop()
 
-      router.push(lastPath).then()
+      router.pushRaw(lastPath).then()
 
       setHistory(updatedHistory)
     } else if (defaultAction === 'goHomeIfNoHistory') {
-      router.push('/').then()
+      router.push('home').then()
     }
   }
 

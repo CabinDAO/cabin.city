@@ -10,7 +10,7 @@ import { useBackend } from '@/components/hooks/useBackend'
 import {
   SubscribeParams,
   SubscribeResponse,
-} from '@/pages/api/v2/newsletter/subscribe'
+} from '@/pages/api/newsletter/subscribe'
 
 export const SubscribeForm = () => {
   const { showError } = useError()
@@ -28,7 +28,7 @@ export const SubscribeForm = () => {
     setIsLoading(true)
     analytics.subscribeToNewsletterEvent(email)
 
-    const res = await post<SubscribeResponse>('NEWSLETTER_SUBSCRIBE', {
+    const res = await post<SubscribeResponse>('api_newsletter_subscribe', {
       email: email,
     } satisfies SubscribeParams)
 

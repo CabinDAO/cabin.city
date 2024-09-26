@@ -7,7 +7,7 @@ import { unlockConfigForEnv } from '@/lib/protocol-config'
 import { Paywall } from '@unlock-protocol/paywall'
 import networks from '@unlock-protocol/networks'
 import { appDomainWithProto } from '@/utils/display-utils'
-import { expandRoute } from '@/utils/routes'
+import { expandApiRoute } from '@/utils/routing'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const loadUnlockCheckout = async (provider: any) => {
@@ -19,7 +19,9 @@ export const loadUnlockCheckout = async (provider: any) => {
       },
     },
     useDelegatedProvider: true,
-    dataBuilder: `${appDomainWithProto}${expandRoute('UNLOCK_DATA_BUILDER')}`,
+    dataBuilder: `${appDomainWithProto}${expandApiRoute(
+      'api_unlock_dataBuilder'
+    )}`,
     pessimistic: true,
     skipRecipient: true,
     title: 'Cabin Citizenship',

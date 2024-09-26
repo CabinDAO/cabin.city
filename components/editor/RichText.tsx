@@ -175,7 +175,7 @@ const makeUploadFn = (showError: (message: string) => void) => {
   return async (file: File) => {
     // return 'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/280f51ce-d0de-4eeb-4a34-ab2e04766d00/public'
     const { id, error } = await uploadOneFile(file, async () =>
-      apiPost<ImageNewResponse>('IMAGE_NEW', {}, NO_TOKEN)
+      apiPost<ImageNewResponse>('api_image_new', {}, NO_TOKEN)
     )
     if (error !== null) {
       showError(error)

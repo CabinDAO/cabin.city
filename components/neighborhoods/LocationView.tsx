@@ -27,7 +27,9 @@ export const LocationView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
 
   const { data } = useGet<LocationGetResponse>(
-    externId ? ['LOCATION', { externId: externId as string }] : null
+    externId
+      ? ['api_location_externId', { externId: externId as string }]
+      : null
   )
   const location = !data || 'error' in data ? null : data.location
 

@@ -10,7 +10,7 @@ import Icon from '@/components/core/Icon'
 
 export const NeighborhoodShowcase = () => {
   const { useGet } = useBackend()
-  const { data } = useGet<LocationListResponse>('LOCATION_LIST')
+  const { data } = useGet<LocationListResponse>('api_location_list')
 
   const locations = !data || 'error' in data ? [] : data.locations.slice(0, 4)
 

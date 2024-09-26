@@ -23,7 +23,7 @@ import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import L from 'leaflet'
 import { cloudflareImageUrl } from '@/lib/image'
 
@@ -72,7 +72,7 @@ export const CensusAuthView = () => {
   // only load map profiles once
   const [profilesForMap, setProfilesForMap] = useState<MarkerData[]>([])
   useEffect(() => {
-    get<ProfileMappableResponse>('PROFILE_MAPPABLE').then((res) => {
+    get<ProfileMappableResponse>('api_profile_mappable').then((res) => {
       if (!res || 'error' in res) return
       setProfilesForMap(
         res['profiles'].map((p) => {
@@ -103,7 +103,7 @@ export const CensusAuthView = () => {
 
   const { data, next, rewind, noResults, hasMore } =
     useGetPaginated<ProfileListResponse>(
-      'PROFILE_LIST',
+      'api_profile_list',
       input satisfies ProfileListParamsType
     )
 

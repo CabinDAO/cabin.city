@@ -1,4 +1,4 @@
-import { expandRoute, Route } from '@/utils/routes'
+import { expandApiRoute, ApiRoute } from '@/utils/routing'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import useSWRInfinite from 'swr/infinite'
@@ -25,26 +25,26 @@ export type UrlParams =
   | URLSearchParams
 
 export const apiGet = async <Data>(
-  route: Route,
+  route: ApiRoute,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>
 ): Promise<Data> => {
-  return _apiGet(expandRoute(route), params, await tokenFn())
+  return _apiGet(expandApiRoute(route), params, await tokenFn())
 }
 
 export const apiPost = async <Data>(
-  route: Route,
+  route: ApiRoute,
   params: object = {},
   tokenFn: () => Promise<string | null>
 ): Promise<Data> => {
-  return _apiPost(expandRoute(route), 'POST', params, await tokenFn())
+  return _apiPost(expandApiRoute(route), 'POST', params, await tokenFn())
 }
 
 // passing null as first param allows for conditional fetching
 // https://swr.vercel.app/docs/conditional-fetching#conditional
 
 export const useAPIGet = <Data>(
-  route: Route | null,
+  route: ApiRoute | null,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>
 ) => {
@@ -52,7 +52,7 @@ export const useAPIGet = <Data>(
   const fetcher = async (args: readonly [any, ...unknown[]]) =>
     _apiGet(args[0] as string, params, await tokenFn())
 
-  return useSWR<Data>(route ? [expandRoute(route), params] : null, fetcher)
+  return useSWR<Data>(route ? [expandApiRoute(route), params] : null, fetcher)
 }
 
 export type PaginationOptions = {
@@ -61,7 +61,7 @@ export type PaginationOptions = {
 }
 
 export const useAPIGetPaginated = <Data extends Paginated | APIError>(
-  route: Route,
+  route: ApiRoute,
   params: UrlParams = {},
   tokenFn: () => Promise<string | null>,
   options?: PaginationOptions
@@ -77,7 +77,7 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError>(
       return null
     }
 
-    const url = expandRoute(route)
+    const url = expandApiRoute(route)
     const searchParams = new URLSearchParams(cleanParams(params))
     const queryString =
       `?pageSize=${pageSize}&page=${pageIndex + 1}` +
@@ -123,14 +123,14 @@ export const useAPIGetPaginated = <Data extends Paginated | APIError>(
 }
 
 export const useAPIMutate = <Data>(
-  route: Route | null,
+  route: ApiRoute | null,
   method: PostMethod = 'POST',
   tokenFn: () => Promise<string | null>
 ) => {
   const fetcher = async (url: string, options: { arg: object }) =>
     _apiPost(url, method, options.arg, await tokenFn())
   return useSWRMutation<Data, Error, string | null, object>(
-    route ? expandRoute(route) : null,
+    route ? expandApiRoute(route) : null,
     fetcher
   )
 }

@@ -1,5 +1,5 @@
 import { ProfileView } from '@/components/profile/ProfileView'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 
 const ProfilePage = () => {
   const router = useRouter()

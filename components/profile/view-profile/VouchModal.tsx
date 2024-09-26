@@ -23,7 +23,7 @@ export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {
   const { post } = useBackend()
 
   const onVouch = async () => {
-    const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
+    const result = await post<ProfileVouchResponse>('api_profile_vouch', {
       externId: profile.externId,
       action: 'vouch',
     } satisfies ProfileVouchParams)
@@ -36,7 +36,7 @@ export const VouchModal = ({ profile, refetchProfile }: VouchModalProps) => {
   }
 
   const onUnvouch = async () => {
-    const result = await post<ProfileVouchResponse>('PROFILE_VOUCH', {
+    const result = await post<ProfileVouchResponse>('api_profile_vouch', {
       externId: profile.externId,
       action: 'unvouch',
     } satisfies ProfileVouchParams)

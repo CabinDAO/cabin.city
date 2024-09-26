@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { usePrivy } from '@privy-io/react-auth'
 import { useUser } from '@/components/auth/useUser'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { ReactNode, useEffect, useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { CartFragment, CartResponse, PaymentStatus } from '@/utils/types/cart'
@@ -23,7 +23,7 @@ const CheckoutConfirmPageView = () => {
   const [firstTime, setFirstTime] = useState(false)
   const cartId = router.query.externId
   const { data, mutate: refetchCart } = useGet<CartResponse>(
-    cartId ? ['CART', { externId: cartId as string }] : null
+    cartId ? ['api_cart_externId', { externId: cartId as string }] : null
   )
 
   const cart = !data || 'error' in data ? null : data
@@ -133,7 +133,7 @@ const Progress = ({
       user &&
       user.externId == cart.accountSetupStatus?.profileExternId
     ) {
-      router.push(`/profile/${user.externId}`).then()
+      router.push(['profile_id', { id: user.externId }]).then()
     }
   }, [
     router,

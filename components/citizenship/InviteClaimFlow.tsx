@@ -1,5 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { usePrivy } from '@privy-io/react-auth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
@@ -52,7 +52,7 @@ export default function InviteClaimFlow({
 
   const { useMutate } = useBackend()
   const { trigger: createClaim, isMutating } =
-    useMutate<InviteClaimResponse>('INVITE_CLAIM')
+    useMutate<InviteClaimResponse>('api_invite_claim')
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -95,7 +95,7 @@ export default function InviteClaimFlow({
     if (alreadyHasAccount) {
       if (sendToCitizenship) {
         setIsAboutToRedirect(true)
-        router.push(`/citizenship`).then()
+        router.push(`citizenship`).then()
       } else {
         // fix the case where you're on a step that's invisible to logged-in users
         // and then you log yourself in
@@ -166,13 +166,15 @@ export default function InviteClaimFlow({
     // if there's a cart, go to it
     if (inviteClaimRes.cartId) {
       setIsAboutToRedirect(true)
-      router.push(`/checkout/${inviteClaimRes.cartId}`).then()
+      router
+        .push(['checkout_externId', { externId: inviteClaimRes.cartId }])
+        .then()
       return
     }
 
     if (user) {
       setIsAboutToRedirect(true)
-      router.push(`/citizenship`).then()
+      router.push(`citizenship`).then()
       return
     }
 

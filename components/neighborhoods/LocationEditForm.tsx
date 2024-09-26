@@ -58,11 +58,11 @@ export function LocationEditForm({
   const [isSaving, setIsSaving] = useState(false)
 
   const { trigger: updateLocation } = useMutate<LocationEditResponse>([
-    'LOCATION',
+    'api_location_externId',
     { externId: location.externId },
   ])
   const { trigger: deleteLocation } = useDelete<LocationDeleteResponse>([
-    'LOCATION',
+    'api_location_externId',
     { externId: location.externId },
   ])
 

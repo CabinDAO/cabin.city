@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import React from 'react'
 import { prisma } from '@/lib/prisma'
 import {
@@ -7,7 +7,7 @@ import {
   LocationQueryInclude,
   LocationWithRelations,
 } from '@/utils/types/location'
-import { locationToFragment } from '@/pages/api/v2/location/list'
+import { locationToFragment } from '@/pages/api/location/list'
 import { AppHead } from '@/components/head'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import Error404 from '@/pages/404'

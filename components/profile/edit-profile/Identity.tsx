@@ -42,7 +42,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
 
   const { useMutate } = useBackend()
   const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
-    user ? ['PROFILE', { externId: user.externId }] : null
+    user ? ['api_profile_externId', { externId: user.externId }] : null
   )
 
   useEffect(() => {

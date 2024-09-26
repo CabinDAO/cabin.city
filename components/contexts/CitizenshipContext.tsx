@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
 import { useUser } from '../auth/useUser'
 import { useExternalUser } from '../auth/useExternalUser'
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useBackend } from '@/components/hooks/useBackend'
 import { RefetchParamsType, RefetchResponse } from '@/utils/types/unlock'
 import { Address } from 'viem'
@@ -37,7 +37,7 @@ export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
       return
     }
 
-    const resp = await get<RefetchResponse>('UNLOCK_REFETCH_STATUS', {
+    const resp = await get<RefetchResponse>('api_unlock_refetchStatus', {
       address: externalUser.wallet.address.toLowerCase() as Address,
     } satisfies RefetchParamsType)
 

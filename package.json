@@ -17,7 +17,8 @@
     "lint:contracts": "forge fmt --check",
     "lint:contracts:fix": "forge fmt",
     "codegen": "graphql-codegen",
-    "contract:gen": "npx typechain --target ethers-v6 --out-dir ./generated/ethers **/abi/*.json; npx wagmi generate"
+    "contract:gen": "npx typechain --target ethers-v6 --out-dir ./generated/ethers **/abi/*.json; npx wagmi generate",
+    "generate-routes": "npx tsx scripts/generate-routes.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.7.5",

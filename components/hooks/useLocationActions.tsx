@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useModal } from './useModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ActionConfirmationModal } from '@/components/core/ActionConfirmationModal'
@@ -10,7 +10,10 @@ export const useLocationActions = (
   const router = useRouter()
   const { showModal } = useModal()
   const { useDelete } = useBackend()
-  const { trigger } = useDelete(['LOCATION', { externId: locationExternId }])
+  const { trigger } = useDelete([
+    'api_location_externId',
+    { externId: locationExternId },
+  ])
 
   const deleteLocation = () => {
     showModal(() => (
@@ -27,7 +30,7 @@ export const useLocationActions = (
   }
 
   const editLocation = () => {
-    router.push(`/location/${locationExternId}/edit`)
+    router.push(['location_id_edit', { id: locationExternId }])
   }
 
   return {
