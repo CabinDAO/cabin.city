@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import { formatValue } from '@/utils/display-utils'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileMappableResponse } from '@/utils/types/profile'
+import { cloudflareImageUrl } from '@/lib/image'
 import styled from 'styled-components'
 import { h1Styles } from '@/components/core/Typography'
 import { Map, MarkerData, onMoveFn } from '@/components/map/Map'
 
 export type MapData = {
   members: number
-  profiles: MarkerData[]
   locations: MarkerData[]
 }
 
@@ -19,9 +19,27 @@ export const MapSection = ({
   data: MapData
   onMove?: onMoveFn
 }) => {
-  // const mapRef = useRef(null)
-  const { deviceSize } = useDeviceSize()
   const { width } = useWindowSize()
+
+  // only load map profiles once
+  const { get } = useBackend()
+  const [profilesForMap, setProfilesForMap] = useState<MarkerData[]>([])
+  useEffect(() => {
+    get<ProfileMappableResponse>('PROFILE_MAPPABLE').then((res) => {
+      if (!res || 'error' in res) return
+      setProfilesForMap(
+        res['profiles'].map((p) => {
+          return {
+            label: p.name,
+            lat: p.lat,
+            lng: p.lng,
+            imgUrl: cloudflareImageUrl(p.avatarCfId, 'mapAvatar'),
+            linkUrl: `/profile/${p.externId}`,
+          }
+        })
+      )
+    })
+  }, [])
 
   return (
     <>
@@ -34,7 +52,7 @@ export const MapSection = ({
         height="80vh"
         initialZoom={width > 1200 ? 3 : 2}
         locations={data.locations}
-        profiles={data.profiles}
+        profiles={profilesForMap}
         onMove={onMove}
       />
     </>

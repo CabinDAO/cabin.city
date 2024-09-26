@@ -1,6 +1,5 @@
 import type { InferGetStaticPropsType, GetStaticProps } from 'next'
 import { prisma } from '@/lib/prisma'
-import { getProfilesForMap } from '@/utils/profile'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
 import { cloudflareImageUrl } from '@/lib/image'
@@ -12,8 +11,7 @@ export default function Home({
 }
 
 export const getStaticProps = (async (/*context*/) => {
-  const [profiles, locations, numProfiles] = await Promise.all([
-    getProfilesForMap(),
+  const [locations, numProfiles] = await Promise.all([
     prisma.location.findMany({
       select: {
         name: true,
@@ -30,13 +28,6 @@ export const getStaticProps = (async (/*context*/) => {
     props: {
       mapData: {
         members: numProfiles,
-        profiles: profiles.map((p) => ({
-          label: p.name,
-          lat: p.address?.lat || 0,
-          lng: p.address?.lng || 0,
-          imgUrl: cloudflareImageUrl(p.avatarCfId, 'mapAvatar'),
-          linkUrl: `/profile/${p.externId}`,
-        })),
         locations: locations.map((l) => ({
           label: l.name,
           lat: l.address?.lat || 0,

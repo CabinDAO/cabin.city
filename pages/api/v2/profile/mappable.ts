@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import crypto from 'crypto'
 import { wrapHandler } from '@/utils/api/wrapHandler'
+import { prisma } from '@/lib/prisma'
 import { ProfileMappableResponse } from '@/utils/types/profile'
-import { getProfilesForMap } from '@/utils/profile'
 
 export default wrapHandler(handler)
 
@@ -17,13 +17,23 @@ async function handler(
     return
   }
 
-  const profiles = await getProfilesForMap()
+  const profiles = await prisma.profile.findMany({
+    select: {
+      name: true,
+      externId: true,
+      avatarCfId: true,
+      address: {
+        select: { lat: true, lng: true },
+      },
+    },
+    where: { address: { lat: { not: null } } },
+  })
 
   // const etag = crypto
   //   .createHash('md5')
   //   .update(JSON.stringify(profiles))
   //   .digest('hex')
-  //
+
   // // Check if the client's ETag matches the current one
   // if (req.headers['if-none-match'] === etag) {
   //   // Client's cache is up-to-date, no need to send the response again
