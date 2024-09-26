@@ -1,4 +1,4 @@
-const prefix = '/api/v2'
+const prefix = '/api'
 
 enum Routes {
   PROFILE = `/profile/[externId]`,
