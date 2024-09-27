@@ -4,6 +4,11 @@ import { expandRoute } from '@/utils/routing'
 
 const redirects: Record<string, string> = {
   lc_9GZFB23BYBC7HYBnhs8x: 'spy-pond',
+  lc_6qVmmTyuF5oUe5r8AfAK: 'west-beacy-bunch',
+  lc_k2CjAh6AcTo17TD8CioB: 'manhattan-75',
+  lc_9zzoUExHJD9UsVQfJeos: 'larkspur',
+  lc_dMmpZqrfzANdCfiQ7TQa: 'prospera',
+  lc_xSWNKaojNUTfybNXAYDJ: 'hadar',
 }
 
 export default function LocationPage() {}
