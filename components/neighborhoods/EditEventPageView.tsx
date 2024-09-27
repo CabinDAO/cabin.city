@@ -65,7 +65,7 @@ export const EditEventPageView = () => {
   const handleSave = async () => {
     if (event.type && validateEventInput(newValues)) {
       await updateEvent(newValues)
-      router.push(['location_id', { id: event.location.externId }]).then()
+      router.push(['n_id', { id: event.location.externId }]).then()
     } else {
       setHighlightErrors(true)
       showError(REQUIRED_FIELDS_TOAST_ERROR)
@@ -82,7 +82,7 @@ export const EditEventPageView = () => {
   }
 
   const handleBack = () => {
-    const route: Route = ['location_id', { id: event.location.externId }]
+    const route: Route = ['n_id', { id: event.location.externId }]
     if (unsavedChanges) {
       showModal(() => <DiscardChangesModal leaveRoute={route} />)
     } else {
@@ -114,9 +114,7 @@ export const EditEventPageView = () => {
           trashButton={{
             onClick: async () => {
               await deleteEvent({})
-              router
-                .push(['location_id', { id: event.location.externId }])
-                .then()
+              router.push(['n_id', { id: event.location.externId }]).then()
             },
             label: 'event',
           }}

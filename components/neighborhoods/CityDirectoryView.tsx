@@ -7,6 +7,7 @@ import { LocationList } from '@/components/neighborhoods/LocationList'
 import Icon from '@/components/core/Icon'
 import { Overline } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { expandRoute } from '@/utils/routing'
 
 export const CityDirectoryView = () => {
   const { user } = useUser()
@@ -18,7 +19,7 @@ export const CityDirectoryView = () => {
         icon="map-fold"
         end={
           canCreateListings(user) ? (
-            <NewListingButton href="/location/new">
+            <NewListingButton href={expandRoute('n_new')}>
               <Icon name="plus" size={1} />
               <Overline>List Your Neighborhood</Overline>
             </NewListingButton>

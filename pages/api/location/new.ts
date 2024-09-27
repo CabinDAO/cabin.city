@@ -11,6 +11,7 @@ import {
 import { sendToDiscord } from '@/lib/discord'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
+import { expandRoute } from '@/utils/routing'
 
 async function handler(
   req: NextApiRequest,
@@ -38,7 +39,12 @@ async function handler(
 
   if (isProd) {
     await sendToDiscord(
-      `<@202214676761804801> <@733769026009956383> <@481990685881532419> New location listed by ${profile.name}: ${appDomainWithProto}/location/${location.externId}`
+      `<@202214676761804801> <@733769026009956383> <@481990685881532419> New location listed by ${
+        profile.name
+      }: ${appDomainWithProto}${expandRoute([
+        'n_id',
+        { id: location.externId },
+      ])}`
     )
   }
 

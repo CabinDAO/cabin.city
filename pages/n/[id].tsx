@@ -13,6 +13,7 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { cloudflareImageUrl } from '@/lib/image'
+import { expandRoute } from '@/utils/routing'
 
 export default function LocationPage({
   location,
@@ -32,7 +33,7 @@ export default function LocationPage({
           title={location.name}
           description={'a Cabin.city neighborhood'}
           imageUrl={cloudflareImageUrl(location.bannerImageCfId)}
-          pathname={`/location/${location.externId}`}
+          pathname={expandRoute(['n_id', { id: location.externId }])}
         />
       )}
       <BaseLayout>

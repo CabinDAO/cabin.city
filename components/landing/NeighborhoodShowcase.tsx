@@ -7,6 +7,7 @@ import { formatShortAddress } from '@/lib/address'
 import styled from 'styled-components'
 import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
+import { expandRoute } from '@/utils/routing'
 
 export const NeighborhoodShowcase = () => {
   const { useGet } = useBackend()
@@ -23,7 +24,7 @@ export const NeighborhoodShowcase = () => {
         {locations.map((loc, i) => {
           return (
             <ImageContainer key={i}>
-              <Link href={`/location/${loc.externId}`}>
+              <Link href={expandRoute(['n_id', { id: loc.externId }])}>
                 <Image
                   alt={loc.name ?? 'A Cabin neighborhood'}
                   src={cloudflareImageUrl(loc.bannerImageCfId)}

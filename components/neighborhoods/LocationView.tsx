@@ -22,6 +22,7 @@ import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
 import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
+import { expandRoute } from '@/utils/routing'
 
 export const LocationView = ({ externId }: { externId: string }) => {
   const { useGet } = useBackend()
@@ -90,7 +91,9 @@ export const LocationView = ({ externId }: { externId: string }) => {
 
           {isEditable && (
             <EditBar>
-              <Link href={`/location/${location.externId}/edit`}>
+              <Link
+                href={expandRoute(['n_id_edit', { id: location.externId }])}
+              >
                 <Button variant={'link'}>
                   <Icon name="pencil" size={1.2} />
                   <Overline>Edit</Overline>
@@ -106,7 +109,10 @@ export const LocationView = ({ externId }: { externId: string }) => {
           <Body1>
             Only you can see this page.{' '}
             <Link
-              href={`/location/${location.externId}/edit#${VISIBILITY_FIELD_ID}`}
+              href={
+                expandRoute(['n_id_edit', { id: location.externId }]) +
+                `#${VISIBILITY_FIELD_ID}`
+              }
               style={{ textDecoration: 'underline' }}
             >
               Make it public
@@ -123,7 +129,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
               {galleryPreviewUrls.map((url, i) => (
                 <StyledLink
                   key={i}
-                  href={`/location/${location.externId}/photos`}
+                  href={expandRoute(['n_id_photos', { id: location.externId }])}
                 >
                   <ImageFlex
                     sizes={imageSizesString}
@@ -136,7 +142,9 @@ export const LocationView = ({ externId }: { externId: string }) => {
               ))}
             </GalleryPreviewListImages>
 
-            <Link href={`/location/${location.externId}/photos`}>
+            <Link
+              href={expandRoute(['n_id_photos', { id: location.externId }])}
+            >
               <GalleryPreviewButton variant="secondary">
                 <Icon name="right-arrow" size={2.4} />
               </GalleryPreviewButton>

@@ -9,6 +9,7 @@ import {
 } from './types'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { expandRoute } from '@/utils/routing'
 
 export class SendgridService {
   private client: MailService
@@ -80,7 +81,10 @@ export class SendgridService {
           to: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
           subject: 'New cabin.city Location',
           html: `<div>
-            <a href="${appDomainWithProto}/location/${d.locationId}">new location listed</a>.
+            <a href="${appDomainWithProto}${expandRoute([
+            'n_id',
+            { id: d.locationId },
+          ])}">new location listed</a>.
           </div>`,
           trackingSettings: {
             clickTracking: { enable: false },

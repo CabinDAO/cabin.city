@@ -20,6 +20,7 @@ import {
 } from '@/utils/types/location'
 import { locationToFragment } from '@/pages/api/location/list'
 import { canEditLocation } from '@/lib/permissions'
+import { expandRoute } from '@/utils/routing'
 
 async function handler(
   req: NextApiRequest,
@@ -182,7 +183,7 @@ async function handlePost(
     }),
   ])
 
-  await res.revalidate(`/location/${updatedLocation.externId}`)
+  await res.revalidate(expandRoute(['n_id', { id: updatedLocation.externId }]))
 
   res.status(200).send({
     location: locationToFragment(updatedLocation as LocationWithRelations),

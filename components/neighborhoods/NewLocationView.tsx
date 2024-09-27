@@ -45,7 +45,7 @@ export const NewLocationView = () => {
               locationId: externId,
             } as NewLocationPayload,
           })
-          router.push(['location_id_edit', { id: externId }]).then()
+          router.push(['n_id_edit', { id: externId }]).then()
         } else {
           showModal(() => (
             <ErrorModal

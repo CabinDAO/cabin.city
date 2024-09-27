@@ -18,6 +18,7 @@ import { Avatar } from '@/components/profile/Avatar'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
+import { expandRoute } from '@/utils/routing'
 
 export const StewardContact = ({
   steward,
@@ -209,7 +210,10 @@ const Modal = ({
           body={
             `I'd like to apply to steward ${location.name} because...\r\n\r\n` +
             `Helpful links for the Cabin team:\r\n` +
-            `${appDomainWithProto}/location/${location.externId}\r\n` +
+            `${appDomainWithProto}${expandRoute([
+              'n_id',
+              { id: location.externId },
+            ])}\r\n` +
             (user ? `${appDomainWithProto}/profile/${user.externId}` : '')
           }
         >

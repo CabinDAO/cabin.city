@@ -21,7 +21,7 @@ export const LocationPostItem = ({
   const router = useRouter()
 
   const handleOnClick = () => {
-    router.push(['location_id', { id: externId }]).then()
+    router.push(['n_id', { id: externId }]).then()
   }
 
   return (

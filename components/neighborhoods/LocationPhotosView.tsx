@@ -4,6 +4,7 @@ import { LocationFragment } from '@/utils/types/location'
 import { TitleCard } from '@/components/core/TitleCard'
 import { ImageGallery } from '@/components/core/gallery/ImageGallery'
 import { ImageBrowserModal } from '@/components/core/gallery/ImageBrowserModal'
+import { expandRoute } from '@/utils/routing'
 
 export const LocationPhotosView = ({
   location,
@@ -37,7 +38,7 @@ export const LocationPhotosView = ({
       <TitleCard
         title="Photo Gallery"
         icon="back-arrow"
-        iconHref={`/location/${location.externId}`}
+        iconHref={expandRoute(['n_id', { id: location.externId }])}
       />
       <ImageGallery
         title={location.name}

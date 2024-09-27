@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { MapData } from '@/components/landing/MapSection'
 import { LandingView } from '@/components/landing/LandingView'
 import { cloudflareImageUrl } from '@/lib/image'
+import { expandRoute } from '@/utils/routing'
 
 export default function Home({
   mapData,
@@ -33,7 +34,7 @@ export const getStaticProps = (async (/*context*/) => {
           lat: l.address?.lat || 0,
           lng: l.address?.lng || 0,
           imgUrl: cloudflareImageUrl(l.bannerImageCfId),
-          linkUrl: `/location/${l.externId}`,
+          linkUrl: expandRoute(['n_id', { id: l.externId }]),
         })),
       },
     },

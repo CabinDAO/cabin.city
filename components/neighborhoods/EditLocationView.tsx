@@ -9,6 +9,7 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { ContentCard } from '@/components/core/ContentCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { LocationEditForm } from '@/components/neighborhoods/LocationEditForm'
+import { expandRoute } from '@/utils/routing'
 
 export default EditLocationView
 
@@ -39,18 +40,18 @@ function EditLocationView() {
       <TitleCard
         title={`Edit Neighborhood`}
         icon="close"
-        iconHref={`/location/${location.externId}`}
+        iconHref={expandRoute(['n_id', { id: location.externId }])}
       />
       <Contents shape="notch">
         <LocationEditForm
           location={location}
           afterSave={() => {
             refetchLocation().then(() => {
-              router.push(['location_id', { id: location.externId }]).then()
+              router.push(['n_id', { id: location.externId }]).then()
             })
           }}
           afterCancel={() => {
-            router.push(['location_id', { id: location.externId }]).then()
+            router.push(['n_id', { id: location.externId }]).then()
           }}
           afterDelete={() => {
             router.push(`cityDirectory`).then()

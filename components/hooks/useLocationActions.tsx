@@ -30,7 +30,7 @@ export const useLocationActions = (
   }
 
   const editLocation = () => {
-    router.push(['location_id_edit', { id: locationExternId }])
+    router.push(['n_id_edit', { id: locationExternId }])
   }
 
   return {

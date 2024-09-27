@@ -10,6 +10,7 @@ import analytics from '@/lib/googleAnalytics/analytics'
 import { LocationFragment } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { cloudflareImageUrl } from '@/lib/image'
+import { expandRoute } from '@/utils/routing'
 
 type CardVariant = 'home' | 'city-directory'
 
@@ -39,7 +40,7 @@ export const NeighborhoodCard = ({
       style={{ opacity: location.publishedAt ? 1 : 0.5 }}
     >
       <ContainerLink
-        href={`/location/${location.externId}`}
+        href={expandRoute(['n_id', { id: location.externId }])}
         shallow
         passHref
         onClick={() => analytics.viewCityDirectoryEvent(location.externId)}

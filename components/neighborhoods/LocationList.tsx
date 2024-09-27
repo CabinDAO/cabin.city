@@ -11,6 +11,7 @@ import {
 import styled from 'styled-components'
 import { NeighborhoodCard } from '@/components/core/NeighborhoodCard'
 import { Map, onMoveParams } from '@/components/map/Map'
+import { expandRoute } from '@/utils/routing'
 
 export const LocationList = ({ type }: { type?: LocationType }) => {
   const { useGetPaginated } = useBackend()
@@ -48,7 +49,7 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
             .filter((l) => l.address)
             .map((l) => {
               return {
-                label: l.name,
+                // label: l.name,
                 lat: l.address?.lat || 0,
                 lng: l.address?.lng || 0,
               }
@@ -68,7 +69,7 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
               <NeighborhoodCard key={location.externId} location={location} />
             )
           })}
-          <Link href={'/location/new'}>
+          <Link href={expandRoute('n_new')}>
             <NewLocationButton>
               <Plus>+</Plus>
               List your neighborhood
