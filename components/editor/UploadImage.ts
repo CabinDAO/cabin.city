@@ -64,15 +64,12 @@ const UploadImage = Image.extend<CustomImageOptions>({
         const schema = this.editor.schema
 
         fileHolder.addEventListener('change', (e: Event) => {
+          const files = (<HTMLInputElement>e.target)?.files
           if (
             view.state.selection.$from.parent.inlineContent &&
-            (<HTMLInputElement>e.target)?.files?.length
+            files?.length
           ) {
-            startImageUpload(
-              view,
-              (<HTMLInputElement>e.target)?.files![0],
-              schema
-            )
+            startImageUpload(view, files[0], schema)
           }
           view.focus()
         })

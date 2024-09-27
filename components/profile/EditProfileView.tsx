@@ -29,7 +29,7 @@ import { EditProfileForm } from '@/components/profile/EditProfileForm'
 
 export const EditProfileView = () => {
   const router = useRouter()
-  const { user, refetchUser } = useUser({ redirectTo: 'home' })
+  const { user } = useUser({ redirectTo: 'home' })
   const { showError } = useError()
 
   const { post, useMutate } = useBackend()

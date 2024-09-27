@@ -13,7 +13,6 @@ export const useExternalUser = ({
   const { authenticated, user, ready } = usePrivy()
 
   useEffect(() => {
-    // If redirectTo is set, redirect if the user was not found.
     if (redirectTo && ready && !authenticated) {
       router.push(redirectTo)
     } else if (redirectToIfFound && user) {
