@@ -19,7 +19,9 @@ const redirects: Record<string, string> = {
   '364553837499908173': 'n0',
 }
 
-export default function LocationPage() {}
+export default function LocationPage() {
+  return <div></div>
+}
 
 export const getServerSideProps = (async (context) => {
   const slugOrExternId = context.params?.id ? `${context.params.id}` : null
