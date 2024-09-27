@@ -4,13 +4,11 @@ import styled from 'styled-components'
 import Icon, { IconName } from './Icon'
 import { ZoomInCard } from './ZoomInCard'
 
-interface ButtonStyledProps {
+const ButtonStyled = styled.button<{
   disabled?: boolean
   addHoverState?: boolean
   size?: number
-}
-
-const ButtonStyled = styled.button<ButtonStyledProps>`
+}>`
   cursor: pointer;
   display: flex;
   flex-direction: row;
