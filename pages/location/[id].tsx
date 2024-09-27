@@ -9,6 +9,14 @@ const redirects: Record<string, string> = {
   lc_9zzoUExHJD9UsVQfJeos: 'larkspur',
   lc_dMmpZqrfzANdCfiQ7TQa: 'prospera',
   lc_xSWNKaojNUTfybNXAYDJ: 'hadar',
+  lc_A3uoxiwXHESN53q8MoCa: 'nbp',
+  lc_92EN9fJDeKzuudqiAp7S: 'porto',
+  lc_6CjfM5UjhbyNbLt8cERH: 'ojai',
+  lc_pyycjq6mRzdM8tmnoQkn: 'piedmont-ave',
+  '364890877983719504': 'tdf',
+  '365006552451514433': 'montaia',
+  '365455154129928260': 'elkenmist',
+  '364553837499908173': 'n0',
 }
 
 export default function LocationPage() {}
