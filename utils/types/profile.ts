@@ -101,9 +101,6 @@ export type ProfileListFragment = {
 export const ProfileListParams = z
   .object({
     searchQuery: z.string().optional(),
-    roleTypes: commaSeparatedArrayOf(RoleType).optional(),
-    levelTypes: commaSeparatedArrayOf(RoleLevel).optional(),
-    citizenshipStatuses: commaSeparatedArrayOf(CitizenshipStatus).optional(),
     latLngBounds: z.string().optional(), // filter by bounds
     sort: z.nativeEnum(ProfileSort).optional(),
   })

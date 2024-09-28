@@ -1,18 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { prisma } from '@/lib/prisma'
+import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
+import { Sql } from '@prisma/client/runtime/library'
 import { toErrorString } from '@/utils/api/error'
 import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
-  RoleType,
-  RoleLevel,
   CitizenshipStatus,
   ProfileSort,
   ProfileListParams,
   ProfileListResponse,
   ProfileListFragment,
+  ProfileListParamsType,
 } from '@/utils/types/profile'
 
 export default wrapHandler(handler)
@@ -35,6 +35,49 @@ async function handler(
     return
   }
   const params = parsed.data
+
+  const { ids: idsInOrder, totalCount } = await sortPrequery(params)
+
+  const query: Prisma.ProfileFindManyArgs = {
+    where: { id: { in: idsInOrder } },
+    include: ListedProfileQueryInclude,
+  }
+
+  const profiles = await prisma.profile.findMany(query)
+
+  const sortedProfiles = profiles.sort((a, b) => {
+    return idsInOrder.indexOf(a.id) - idsInOrder.indexOf(b.id)
+  })
+
+  res.status(200).send({
+    profiles: profilesToFragments(
+      sortedProfiles as ListedProfileWithRelations[]
+    ),
+    count: profiles.length,
+    totalCount: totalCount,
+  })
+}
+
+const sortOrder = (sortParam: ProfileSort | undefined): Sql => {
+  switch (sortParam) {
+    case ProfileSort.CabinBalanceAsc:
+      return Prisma.sql`COALESCE(w."cabinTokenBalance", 0) ASC, p."createdAt" DESC`
+    case ProfileSort.CabinBalanceDesc:
+      return Prisma.sql`COALESCE(w."cabinTokenBalance", 0) DESC, p."createdAt" DESC`
+    case ProfileSort.StampCountAsc:
+      return Prisma.sql`COUNT(ps."stampId") ASC, p."createdAt" DESC`
+    case ProfileSort.StampCountDesc:
+      return Prisma.sql`COUNT(ps."stampId") DESC, p."createdAt" DESC`
+    case ProfileSort.CreatedAtAsc:
+      return Prisma.sql`p."createdAt" ASC`
+    case ProfileSort.CreatedAtDesc:
+    default:
+      return Prisma.sql`p."createdAt" DESC`
+  }
+}
+
+// get ids for profiles sorted in proper order
+const sortPrequery = async (params: ProfileListParamsType) => {
   const { skip, take } = getPageParams(params)
 
   const resolvedAddress = params.searchQuery
@@ -45,115 +88,58 @@ async function handler(
     ? params.latLngBounds.split(',').map((s) => parseFloat(s))
     : []
 
-  const profileQuery: Prisma.ProfileFindManyArgs = {
-    where: {
-      name:
-        !resolvedAddress && params.searchQuery
-          ? {
-              contains: params.searchQuery,
-              mode: 'insensitive',
-            }
-          : undefined,
-      address:
+  const sqlQuery = Prisma.sql`
+    SELECT p.id as "id"
+    FROM "Profile" p
+    LEFT JOIN "ProfileAddress" a ON p.id = a."profileId"
+    LEFT JOIN "Wallet" w ON p."walletId" = w.id
+    LEFT JOIN "ProfileStamp" ps ON p.id = ps."profileId"
+    WHERE
+      ${
+        resolvedAddress
+          ? Prisma.sql`w.address = ${resolvedAddress.toLowerCase()}`
+          : params.searchQuery
+          ? Prisma.sql`p.name ILIKE ${`%${params.searchQuery}%`}`
+          : Prisma.sql`1=1`
+      }
+      AND
+      ${
         bounds.length === 4
-          ? {
-              lat: {
-                lte: bounds[0],
-                gte: bounds[1],
-              },
-              lng: {
-                lte: bounds[2],
-                gte: bounds[3],
-              },
-            }
-          : undefined,
-      roles:
-        params.roleTypes?.length || params.levelTypes?.length
-          ? {
-              some: {
-                type: params.roleTypes?.length
-                  ? {
-                      in: params.roleTypes,
-                    }
-                  : undefined,
-                level: params.levelTypes?.length
-                  ? {
-                      in: params.levelTypes,
-                    }
-                  : undefined,
-              },
-            }
-          : undefined,
-      citizenshipStatus: params.citizenshipStatuses?.length
-        ? {
-            in: params.citizenshipStatuses,
-          }
-        : undefined,
-      wallet: resolvedAddress
-        ? {
-            address: {
-              equals: resolvedAddress,
-              mode: 'insensitive',
-            },
-          }
-        : undefined,
-    },
-    include: ListedProfileQueryInclude,
-    orderBy: sortOrder(params.sort),
-    skip: skip,
-    take: take,
-  }
+          ? Prisma.sql`a.lat <= ${bounds[0]} AND a.lat >= ${bounds[1]} AND a.lng <= ${bounds[2]} AND a.lng >= ${bounds[3]}`
+          : Prisma.sql`1=1`
+      }
+    GROUP BY p.id, p."createdAt", w."cabinTokenBalance"
+    ORDER BY ${sortOrder(params.sort)}
+  `
 
-  // todo: await Promise.all() might be even better here because its parallel, while transaction is sequential
-  const [profiles, totalCount] = await prisma.$transaction([
-    prisma.profile.findMany(profileQuery),
-    prisma.profile.count({ where: profileQuery.where }),
-  ])
+  // TODO: add sort roder and we're done
 
-  res.status(200).send({
-    profiles: profilesToFragments(profiles as ListedProfileWithRelations[]),
-    count: profiles.length,
-    totalCount,
-  })
-}
+  // console.log(formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values))
 
-const sortOrder = (
-  sortParam: ProfileSort | undefined
-): Prisma.ProfileOrderByWithRelationInput => {
-  switch (sortParam) {
-    case ProfileSort.CabinBalanceAsc:
-      return {
-        wallet: {
-          cabinTokenBalance: 'asc',
-        },
-      }
-    case ProfileSort.CabinBalanceDesc:
-      return {
-        wallet: {
-          cabinTokenBalance: 'desc',
-        },
-      }
-    case ProfileSort.StampCountAsc:
-      return {
-        stamps: {
-          _count: 'asc',
-        },
-      }
-    case ProfileSort.StampCountDesc:
-      return {
-        stamps: {
-          _count: 'desc',
-        },
-      }
-    case ProfileSort.CreatedAtDesc:
-      return {
-        createdAt: 'desc',
-      }
-    case ProfileSort.CreatedAtAsc:
-    default:
-      return {
-        createdAt: 'asc',
-      }
+  try {
+    const [ids, totalCount] = await Promise.all([
+      prisma.$queryRaw<{ id: number }[]>(
+        Prisma.sql`${sqlQuery} LIMIT ${take} OFFSET ${skip}`
+      ),
+      prisma.$queryRaw<[{ count: bigint }]>(
+        Prisma.sql`SELECT COUNT(*) as count FROM (${sqlQuery})`
+      ),
+    ])
+    return {
+      ids: ids.reduce((ids: number[], row) => [...ids, row.id], []),
+      totalCount: Number(totalCount[0].count),
+    }
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Failed to sort or count profiles', {
+        query: formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values),
+        errorStack: error.stack,
+        params,
+        take,
+        skip,
+      })
+    }
+    return { ids: [], totalCount: 0 }
   }
 }
 
@@ -188,11 +174,7 @@ const profilesToFragments = (
             lng: profile.address.lng,
           }
         : null,
-      roles: profile.roles.map((role) => ({
-        hatId: role.walletHat?.hatId || null,
-        type: role.type as RoleType,
-        level: role.level as RoleLevel,
-      })),
+      roles: [],
       stampCount: profile._count.stamps || 0,
       cabinTokenBalanceInt: profile.wallet
         ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())
@@ -206,11 +188,6 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
   include: {
     address: true
     wallet: true
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
     _count: {
       select: {
         stamps: true
@@ -223,11 +200,6 @@ type ListedProfileWithRelations = Prisma.ProfileGetPayload<{
 const ListedProfileQueryInclude = {
   address: true,
   wallet: true,
-  roles: {
-    include: {
-      walletHat: true,
-    },
-  },
   _count: {
     select: {
       stamps: true,
