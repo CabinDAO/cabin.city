@@ -23,11 +23,10 @@ const faqs = [
             rel="noopener"
           >
             here
-          </Link>{' '}
-          before September 8, 11:59pm PT. Be sure to write from the heart and
-          give thorough, well thought out answers in your application. We
-          accepted 19% of applicants to our last program and plan to be even
-          more selective this round.
+          </Link>
+          . Be sure to write from the heart and give thorough, well thought out
+          answers in your application. We accepted 19% of applicants to our last
+          program and plan to be even more selective this round.
         </Body1>
         <Body1>
           2. Our team reviews the applications and invites the strongest
