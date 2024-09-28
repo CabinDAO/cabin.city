@@ -47,7 +47,7 @@ export const ProfileHeaderSection = ({
                       profile.cabinTokenBalanceInt
                         ? Math.sqrt(profile.cabinTokenBalanceInt).toFixed(0)
                         : 0
-                    } vote power`}
+                    } votes`}
                   </Link>
                 </Subline2>
                 <Subline2>·</Subline2>
