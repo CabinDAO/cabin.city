@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useModal } from '@/components/hooks/useModal'
 import { useUser } from '@/components/auth/useUser'
-import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { useAuth } from '@/components/auth/useAuth'
 import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationNewResponse } from '@/utils/types/location'
@@ -23,7 +23,7 @@ export const NewLocationView = () => {
   const router = useRouter()
   const { showModal } = useModal()
   const { user } = useUser()
-  const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { confirmLoggedIn } = useAuth()
   const { sendEmail } = useEmail()
   const { post } = useBackend()
 

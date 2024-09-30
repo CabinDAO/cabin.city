@@ -13,7 +13,7 @@ import analytics from '@/lib/googleAnalytics/analytics'
 import { useEmail } from '@/components/hooks/useEmail'
 import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 import { useNavigation } from '@/components/hooks/useNavigation'
-import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { useAuth } from '@/components/auth/useAuth'
 import { CitizenshipStatus } from '@/utils/types/profile'
 import { useBackend } from '@/components/hooks/useBackend'
 
@@ -23,7 +23,7 @@ export const CitizenshipView = () => {
   const { wallets } = useWallets()
   const { sendEmail } = useEmail()
   const { goBack } = useNavigation()
-  const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { confirmLoggedIn } = useAuth()
 
   const performMint = async () => {
     const currentUserWallet = wallets.find((w) =>

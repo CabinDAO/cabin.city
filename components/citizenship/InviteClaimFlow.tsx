@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
 import { useRouter } from '@/components/hooks/useRouter'
-import { usePrivy } from '@privy-io/react-auth'
+import { useAuth } from '@/components/auth/useAuth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { useCheckForApplePay, useCheckForGooglePay } from '@/lib/payments'
 import { useUser } from '@/components/auth/useUser'
@@ -47,7 +47,7 @@ export default function InviteClaimFlow({
 }) {
   const { showError } = useError()
   const router = useRouter()
-  const { login } = usePrivy()
+  const { confirmLoggedIn } = useAuth()
   const { user, isUserLoading } = useUser()
 
   const { useMutate } = useBackend()
@@ -180,7 +180,7 @@ export default function InviteClaimFlow({
 
     if (inviteClaimRes.profileId) {
       setSendToCitizenship(true)
-      login()
+      confirmLoggedIn()
       return
     }
 

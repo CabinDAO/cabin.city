@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
-import { useConfirmLoggedIn } from '../auth/useConfirmLoggedIn'
+import { useAuth } from '@/components/auth/useAuth'
 import { useUser } from '../auth/useUser'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useExternalUser } from '../auth/useExternalUser'
@@ -19,7 +19,7 @@ export const AuthenticatedLink = ({
   logSignInEvent?: boolean
   onClick?: VoidFunction
 }) => {
-  const { confirmLoggedIn } = useConfirmLoggedIn(logSignInEvent)
+  const { confirmLoggedIn } = useAuth(logSignInEvent)
   const { refetchUser } = useUser()
   const { externalUser } = useExternalUser()
   const router = useRouter()

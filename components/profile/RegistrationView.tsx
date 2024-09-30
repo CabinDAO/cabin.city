@@ -2,7 +2,7 @@ import { Address } from 'viem'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
-import { useConfirmLoggedIn } from '@/components/auth/useConfirmLoggedIn'
+import { useAuth } from '@/components/auth/useAuth'
 import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
@@ -30,7 +30,7 @@ export const RegistrationView = () => {
   const { post } = useBackend()
   const { showModal } = useModal()
   const { showError } = useError()
-  const { confirmLoggedIn } = useConfirmLoggedIn()
+  const { confirmLoggedIn } = useAuth()
   const { externalUser, isUserLoading } = useExternalUser()
   const { user, refetchUser } = useUser({ redirectToIfFound: 'profile' })
   const [hasStampReminder, , removeReminder] =

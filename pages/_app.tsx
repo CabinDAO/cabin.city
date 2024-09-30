@@ -10,7 +10,6 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { ErrorProvider } from '@/components/contexts/ErrorContext'
 import { PrivyProvider } from '@privy-io/react-auth'
 import { wagmiChainConfig } from '@/lib/chains'
-import { useAuth } from '@/components/hooks/useAuth'
 import { Reload } from '@/components/auth/Reload'
 import { Analytics } from '@vercel/analytics/react'
 import { BackendProvider } from '@/components/hooks/useBackend'
@@ -36,14 +35,12 @@ export default function App(props: AppProps) {
 }
 
 const RestOfAppWithPrivyConfig = ({ Component, pageProps }: AppProps) => {
-  const { handleLogin } = useAuth()
   const queryClient = new QueryClient()
   const { privyConfig } = usePrivyConfig()
 
   return (
     <PrivyProvider
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''}
-      onSuccess={handleLogin}
       config={privyConfig}
     >
       <QueryClientProvider client={queryClient}>
