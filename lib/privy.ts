@@ -87,7 +87,10 @@ const createPrivyAccountMightWorkSomeday = async (
   walletAddress = ''
 ) => {
   const linkedAccounts: Array<
-    DistributiveOmit<LinkedAccountWithMetadata, 'verifiedAt'>
+    DistributiveOmit<
+      LinkedAccountWithMetadata,
+      'verifiedAt' | 'firstVerifiedAt' | 'latestVerifiedAt'
+    >
   > = [
     {
       type: 'email',

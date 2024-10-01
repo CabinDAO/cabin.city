@@ -220,7 +220,7 @@ export default function InviteClaimFlow({
             Do you have a Cabin.city account?
           </StepText>
           <ButtonRow>
-            <Button variant={'secondary'} onClick={login}>
+            <Button variant={'secondary'} onClick={() => confirmLoggedIn()}>
               Yes, log in
             </Button>
             <Button
