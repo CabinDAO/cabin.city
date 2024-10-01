@@ -4,18 +4,22 @@ set -euo pipefail
 #set -x
 
 DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SNAPSHOT=${1:-}  # if no snapshot path is provided, it will load directly from POSTGRES_SNAPSHOT_SRC_URL
 
 [ -f "$DIR/../.env" ] && source "$DIR/../.env"
+
+# to load into prod, set POSTGRES_URL to the prod db url and pass a snapshot file as an argument
+# to load into dev, set POSTGRES_URL to the dev db url and POSTGRES_SNAPSHOT_SRC_URL to the prod db url (or pass a snapshot file as an argument)
 
 [ -z "${POSTGRES_URL:-}" ] && echo "\$POSTGRES_URL must be set" && exit 1
 [ -z "${POSTGRES_SNAPSHOT_SRC_URL:-}" ] && echo "\$POSTGRES_SNAPSHOT_SRC_URL must be set" && exit 1
 
-if [[ $POSTGRES_URL =~ postgresql://([A-Za-z0-9]+):([^@]+)@([A-Za-z0-9.]+):([0-9]+)/([A-Za-z0-9]+) ]]; then
-    user="${BASH_REMATCH[1]}"
-    pass="${BASH_REMATCH[2]}"
-    host="${BASH_REMATCH[3]}"
-    port="${BASH_REMATCH[4]}"
-    db="${BASH_REMATCH[5]}"
+if [[ $POSTGRES_URL =~ postgres(ql)?://([A-Za-z0-9]+):([^@]+)@([A-Za-z0-9.-]+)(:([0-9]+))?/([A-Za-z0-9]+) ]]; then
+    user="${BASH_REMATCH[2]}"
+    pass="${BASH_REMATCH[3]}"
+    host="${BASH_REMATCH[4]}"
+    port="${BASH_REMATCH[6]:-5432}"
+    db="${BASH_REMATCH[7]}"
 else
   echo "POSTGRES_URL must include user, password, host, port, and db name"
   exit 1
@@ -40,9 +44,16 @@ PGPASSWORD="$pass" psql -U "$user" -h "$host" -p "$port" postgres \
 
 echo "loading snapshot"
 postgres_url_trimmed="${POSTGRES_URL%%\?*}" ## Remove options query string
-pg_dump "$POSTGRES_SNAPSHOT_SRC_URL" | psql "$postgres_url_trimmed"
+if [ -n "$SNAPSHOT" ]; then
+    cat "$SNAPSHOT" | psql "$postgres_url_trimmed"
+else
+    pg_dump "$POSTGRES_SNAPSHOT_SRC_URL" | psql "$postgres_url_trimmed"
+fi
 
-echo 'update "Profile" set "citizenshipStatus" = '"'Verified'"', "isAdmin" = true where id = 822;' | psql "$postgres_url_trimmed"
+
+if [[ $postgres_url_trimmed == *"localhost"* ]]; then
+  echo 'update "Profile" set "citizenshipStatus" = '"'Verified'"', "isAdmin" = true where id = 822;' | psql "$postgres_url_trimmed"
+fi
 
 ### how to load only data without db drop/create
 # npx prisma migrate reset
