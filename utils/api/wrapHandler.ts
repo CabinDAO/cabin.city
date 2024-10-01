@@ -1,5 +1,6 @@
 import * as jose from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
+import * as Sentry from '@sentry/nextjs'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { ironOptions } from '@/lib/next-server/iron-options'
 import { prisma } from '@/lib/prisma'
@@ -8,7 +9,6 @@ import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { IncomingHttpHeaders } from 'http'
 import { privy } from '@/lib/privy'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
-import * as Sentry from '@sentry/nextjs'
 
 export type ProfileWithWallet = Profile & {
   wallet: Wallet | null
@@ -40,6 +40,7 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
   const h = async (req: NextApiRequest, res: NextApiResponse, opts = {}) => {
     try {
       const { authToken, privyDID } = await privyDIDFromHeaders(req.headers)
+      Sentry.setUser(privyDID ? { privyDID } : null)
       await handler(req, res, {
         ...opts,
         auth: { authToken, privyDID },
