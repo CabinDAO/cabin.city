@@ -8,6 +8,7 @@ import { PrismaClientValidationError } from '@prisma/client/runtime/library'
 import { IncomingHttpHeaders } from 'http'
 import { privy } from '@/lib/privy'
 import { NextApiRequestCookies } from 'next/dist/server/api-utils'
+import * as Sentry from '@sentry/nextjs'
 
 export type ProfileWithWallet = Profile & {
   wallet: Wallet | null
@@ -47,11 +48,13 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
       if (error instanceof AuthenticationError) {
         return res.status(error.code).send({ error: error.message })
       } else if (error instanceof PrismaClientValidationError) {
+        Sentry.captureException(error)
         console.error(error) // eslint-disable-line no-console
         return res.status(400).send({
           error: `PrismaClientValidationError: ${error.message}`,
         })
       } else {
+        Sentry.captureException(error)
         console.error(error) // eslint-disable-line no-console
         return res.status(400).send({ error: 'Something went wrong' })
       }
