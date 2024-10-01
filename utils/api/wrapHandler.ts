@@ -57,7 +57,7 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
       } else {
         captureSentryError(error, req)
         console.error(error) // eslint-disable-line no-console
-        return res.status(400).send({ error: 'Something went wrong' })
+        return res.status(500).send({ error: 'Something went wrong' })
       }
     }
   }
