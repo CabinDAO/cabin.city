@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import { useBackend } from '@/components/hooks/useBackend'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {
@@ -9,20 +10,25 @@ import {
   LocationListResponse,
 } from '@/utils/types/location'
 import styled from 'styled-components'
+import { InputText } from '@/components/core/InputText'
 import { NeighborhoodCard } from '@/components/core/NeighborhoodCard'
 import { Map, onMoveParams } from '@/components/map/Map'
 import { expandRoute } from '@/utils/routing'
+import Icon from '@/components/core/Icon'
 
-export const LocationList = ({ type }: { type?: LocationType }) => {
+export const NeighborhoodList = ({ type }: { type?: LocationType }) => {
   const { useGetPaginated } = useBackend()
+  const [searchInput, setSearchInput] = useState<string>('')
+  const [searchValue] = useDebounce(searchInput, 500)
 
   const [latLngBounds, setLatLngBounds] = useState<
     onMoveParams['bounds'] | undefined
   >(undefined)
 
-  const { data, next, hasMore } = useGetPaginated<LocationListResponse>(
+  const { data, next, rewind, hasMore } = useGetPaginated<LocationListResponse>(
     'api_location_list',
     {
+      searchQuery: searchValue,
       countActiveEventsOnly: 'true',
       locationType: type,
       latLngBounds: latLngBounds
@@ -39,6 +45,11 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
         []
       )
     : []
+
+  const handleSearchInputChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value)
+    await rewind()
+  }
 
   return (
     <>
@@ -58,6 +69,15 @@ export const LocationList = ({ type }: { type?: LocationType }) => {
             setLatLngBounds(params.bounds)
           }}
         />
+        <SearchContainer>
+          <InputText
+            value={searchInput}
+            placeholder="Search by name"
+            onChange={handleSearchInputChange}
+            endAdornment={<Icon name="search" size={1.4} />}
+          />
+        </SearchContainer>
+
         <InfiniteScroll
           hasMore={hasMore}
           dataLength={locations.length}
@@ -100,6 +120,27 @@ const LocationListContainer = styled.div`
     ${({ theme }) => theme.bp.md} {
       grid-template-columns: 1fr 1fr;
       row-gap: 3.7rem;
+    }
+  }
+`
+
+const SearchContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+
+  button {
+    width: 100%;
+  }
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+
+    button {
+      width: auto;
     }
   }
 `

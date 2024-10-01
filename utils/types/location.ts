@@ -67,6 +67,7 @@ export type LocationFragment = {
 
 export const LocationListParams = z
   .object({
+    searchQuery: z.string().optional(),
     locationType: z.nativeEnum(LocationType).optional(),
     lat: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng
     lng: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng

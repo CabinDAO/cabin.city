@@ -40,7 +40,6 @@ async function handler(
     return
   }
   const params = parsed.data
-  const { skip, take } = getPageParams(params)
 
   if ((params.lat === undefined) !== (params.lng === undefined)) {
     res
@@ -51,7 +50,7 @@ async function handler(
 
   const profile = await findProfile(opts.auth)
 
-  const idsInOrder = await sortPrequery(profile, params, skip, take)
+  const idsInOrder = await sortPrequery(profile, params)
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
@@ -79,10 +78,9 @@ async function handler(
 // get ids for locations sorted in proper order
 const sortPrequery = async (
   profile: ProfileWithWallet | null,
-  params: LocationListParamsType,
-  offset: number,
-  limit: number
+  params: LocationListParamsType
 ) => {
+  const { skip, take } = getPageParams(params)
   const calculateDistance = params.lat && params.lng
   const distanceQuery = calculateDistance
     ? Prisma.sql`COALESCE(6371 * 2 * ASIN(SQRT(
@@ -109,7 +107,13 @@ const sortPrequery = async (
       LEFT JOIN "Address" a ON l.id = a."locationId"
       LEFT JOIN "Offer" o ON l.id = o."locationId"
       LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
-      WHERE 
+      WHERE
+        ${
+          params.searchQuery
+            ? Prisma.sql`l.name ILIKE ${`%${params.searchQuery}%`}`
+            : Prisma.sql`1=1`
+        }
+        AND
         ${
           params.locationType
             ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
@@ -156,8 +160,8 @@ const sortPrequery = async (
       COALESCE(SUM(CASE WHEN "endDate" >= CURRENT_DATE THEN 1 ELSE 0 END), 0) DESC, 
       name ASC, 
       "createdAt" ASC
-    LIMIT ${limit}
-    OFFSET ${offset}
+    LIMIT ${take}
+    OFFSET ${skip}
   `
 
   let ids: { id: number }[] = []
@@ -172,8 +176,8 @@ const sortPrequery = async (
         query: formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values),
         errorStack: error.stack,
         params,
-        limit,
-        offset,
+        take,
+        skip,
       })
     }
     return []

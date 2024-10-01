@@ -3,7 +3,7 @@ import { canCreateListings } from '@/lib/permissions'
 import styled from 'styled-components'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { LocationList } from '@/components/neighborhoods/LocationList'
+import { NeighborhoodList } from '@/components/neighborhoods/NeighborhoodList'
 import Icon from '@/components/core/Icon'
 import { Overline } from '@/components/core/Typography'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
@@ -26,7 +26,7 @@ export const CityDirectoryView = () => {
           ) : null
         }
       />
-      <LocationList />
+      <NeighborhoodList />
     </BaseLayout>
   )
 }
