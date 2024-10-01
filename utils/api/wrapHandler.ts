@@ -49,13 +49,13 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
       if (error instanceof AuthenticationError) {
         return res.status(error.code).send({ error: error.message })
       } else if (error instanceof PrismaClientValidationError) {
-        Sentry.captureException(error)
+        captureSentryError(error, req)
         console.error(error) // eslint-disable-line no-console
         return res.status(400).send({
           error: `PrismaClientValidationError: ${error.message}`,
         })
       } else {
-        Sentry.captureException(error)
+        captureSentryError(error, req)
         console.error(error) // eslint-disable-line no-console
         return res.status(400).send({ error: 'Something went wrong' })
       }
@@ -63,6 +63,21 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
   }
 
   return withIronSessionApiRoute(h, ironOptions)
+}
+
+const captureSentryError = (
+  error: PrismaClientValidationError | any,
+  req: NextApiRequest
+) => {
+  Sentry.withScope((scope) => {
+    scope.setContext('request', {
+      method: req.method,
+      headers: req.headers,
+      query: req.query,
+      body: req.body,
+    })
+    Sentry.captureException(error)
+  })
 }
 
 export const requireAuth = (opts: OptsWithAuth): string => {
