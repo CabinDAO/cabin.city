@@ -110,7 +110,7 @@ const sortPrequery = async (
       WHERE
         ${
           params.searchQuery
-            ? Prisma.sql`l.name ILIKE ${`%${params.searchQuery}%`}`
+            ? Prisma.sql`(l.name ILIKE ${`%${params.searchQuery}%`} OR a."formattedAddress" ILIKE ${`%${params.searchQuery}%`})`
             : Prisma.sql`1=1`
         }
         AND

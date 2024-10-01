@@ -72,7 +72,7 @@ export const NeighborhoodList = ({ type }: { type?: LocationType }) => {
         <SearchContainer>
           <InputText
             value={searchInput}
-            placeholder="Search by name"
+            placeholder="Search by name or location"
             onChange={handleSearchInputChange}
             endAdornment={<Icon name="search" size={1.4} />}
           />
