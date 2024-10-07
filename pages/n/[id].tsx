@@ -14,6 +14,7 @@ import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { cloudflareImageUrl } from '@/lib/image'
 import { expandRoute } from '@/utils/routing'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export default function LocationPage({
   location,
@@ -37,7 +38,11 @@ export default function LocationPage({
         />
       )}
       <BaseLayout>
-        {!router.isFallback && <LocationView externId={location.externId} />}
+        {router.isFallback ? (
+          <LoadingSpinner />
+        ) : (
+          <LocationView externId={location.externId} />
+        )}
       </BaseLayout>
     </>
   )
