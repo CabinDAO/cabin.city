@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import * as Sentry from '@sentry/nextjs'
 import {
   OptsWithAuth,
   findProfile,
@@ -170,6 +171,7 @@ const sortPrequery = async (
   try {
     ids = await prisma.$queryRaw<{ id: number }[]>(sqlQuery)
   } catch (error: unknown) {
+    Sentry.captureException(error)
     if (error instanceof Error) {
       console.error('Failed to sort locations', {
         profileId: profile?.id,
