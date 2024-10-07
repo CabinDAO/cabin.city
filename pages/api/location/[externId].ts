@@ -74,6 +74,7 @@ async function handleGet(
     const profile = await findProfile(opts.auth)
     if (!profile || !canEditLocation(profile, location)) {
       res.status(404).send({ error: 'Location not found' })
+      return
     }
   }
 
