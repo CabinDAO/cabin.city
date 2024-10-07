@@ -35,6 +35,7 @@ export default function LocationPage({
           description={'a Cabin.city neighborhood'}
           imageUrl={cloudflareImageUrl(location.bannerImageCfId)}
           pathname={expandRoute(['n_id', { id: location.externId }])}
+          ogType="place"
         />
       )}
       <BaseLayout>

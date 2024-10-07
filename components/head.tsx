@@ -9,11 +9,13 @@ export const AppHead = ({
   description = undefined,
   pathname = '',
   imageUrl = `${appDomainWithProto}/images/cabin_social.png`,
+  ogType,
 }: {
   title?: string
   description?: string
   pathname?: string
   imageUrl?: string
+  ogType?: string
 }) => {
   const pageTitle = title?.trim() ?? 'Cabin'
   const pageDescription =
@@ -67,6 +69,7 @@ export const AppHead = ({
         description={pageDescription}
         canonical={fullUrl}
         openGraph={{
+          type: ogType,
           url: fullUrl,
           title: pageTitle,
           description: pageDescription,
