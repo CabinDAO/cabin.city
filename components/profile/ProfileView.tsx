@@ -16,6 +16,7 @@ import { ProfileAboutSection } from '@/components/profile/view-profile/ProfileAb
 import { ProfileCitizenSection } from '@/components/profile/view-profile/ProfileCitizenSection'
 import { ProfileStampsSection } from '@/components/profile/view-profile/ProfileStampsSection'
 import { ProfileActivitiesSection } from '@/components/profile/view-profile/ProfileActivitiesSection'
+import { ProfileStewardSection } from '@/components/profile/view-profile/ProfileStewardSection'
 
 export const ProfileView = ({ externId }: { externId: string }) => {
   const { user } = useUser()
@@ -56,6 +57,7 @@ export const ProfileView = ({ externId }: { externId: string }) => {
           )}
           {isOwnProfile && <ProfileNextStepsSection me={user} />}
           <ProfileAboutSection profile={profile} me={user} />
+          <ProfileStewardSection profile={profile} />
           <ProfileStampsSection profile={profile} />
           <ProfileCitizenSection profile={profile} />
           <ProfileActivitiesSection profile={profile} />

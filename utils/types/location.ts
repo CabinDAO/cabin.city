@@ -73,6 +73,7 @@ export const LocationListParams = z
     lng: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // sort by distance from this lat/lng
     maxDist: z.number().or(z.string()).pipe(z.coerce.number()).optional(), // filter by distance from lat/lng (km)
     latLngBounds: z.string().optional(), // filter by bounds
+    stewardExternId: z.string().optional(), // filter by steward extern id
     countActiveEventsOnly: z
       .union([z.literal('true'), z.literal('false')])
       .optional(),

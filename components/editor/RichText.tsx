@@ -44,6 +44,7 @@ export const RichTextInput = ({
   required,
   placeholder,
   error,
+  helperText,
   onChange,
 }: {
   initialContent?: Content | string
@@ -51,6 +52,7 @@ export const RichTextInput = ({
   required?: boolean
   placeholder?: string
   error?: string | null
+  helperText?: string
   onChange?: (content: Content) => void
 }) => {
   return (
@@ -64,7 +66,7 @@ export const RichTextInput = ({
       error={!!error}
       errorMessage={error || undefined}
       // disabled={disabled}
-      // helperText={helperText}
+      helperText={helperText}
       // endAdornment={endAdornment}
       noPadding
       noOverflowScroll
@@ -267,6 +269,7 @@ const Container = styled.div<{ editable?: boolean }>`
     ul,
     li::marker {
       ${body1Styles}
+      ${({ editable }) => editable && `font-weight: 400;`}
       ${({ editable }) => !editable && `opacity: 0.9;`}
     }
 

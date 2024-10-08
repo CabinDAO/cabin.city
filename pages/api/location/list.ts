@@ -116,6 +116,12 @@ const sortPrequery = async (
         }
         AND
         ${
+          params.stewardExternId
+            ? Prisma.sql`steward."externId" = ${params.stewardExternId}`
+            : Prisma.sql`1=1`
+        }
+        AND
+        ${
           params.locationType
             ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
             : Prisma.sql`1=1`

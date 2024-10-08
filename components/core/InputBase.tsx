@@ -191,11 +191,7 @@ const InputOutline = styled.div<InputOutlineProps>`
   `}
 
   ${(props) =>
-    props.error &&
-    `
-    box-shadow: inset 0 0 0 2px ${props.theme.colors.red600};
-    padding: 1.5rem;
-  `}
+    props.error && `box-shadow: inset 0 0 0 2px ${props.theme.colors.red600};`}
 `
 
 InputBase.displayName = 'InputBase'
