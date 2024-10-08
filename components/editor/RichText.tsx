@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useRef, useLayoutEffect } from 'react'
 import { useError } from '@/components/hooks/useError'
 import { NO_TOKEN, apiPost } from '@/utils/api/backend'
 import { uploadOneFile } from '@/components/neighborhoods/useFilesUpload'
@@ -32,10 +32,18 @@ export type Content = JSONContent
 
 export const RichTextRender = ({
   initialContent,
+  maxHeight, // TODO: this could use lh units to let you set a max height in lines of text https://caniuse.com/?search=lh%20unit
 }: {
   initialContent: Content | string
+  maxHeight?: number
 }) => {
-  return <TipTap editable={false} initialContent={toContent(initialContent)} />
+  return (
+    <TipTap
+      editable={false}
+      initialContent={toContent(initialContent)}
+      maxHeight={maxHeight}
+    />
+  )
 }
 
 export const RichTextInput = ({
@@ -86,11 +94,13 @@ const TipTap = ({
   editable,
   initialContent,
   placeholder = '',
+  maxHeight,
   onChange,
 }: {
   editable: boolean
   initialContent?: Content
   placeholder?: string
+  maxHeight?: number
   onChange?: (content: Content) => void
 }) => {
   // const [isEmpty, setIsEmpty] = useState(isEditorEmpty(initContent))
@@ -153,10 +163,40 @@ const TipTap = ({
     Caption,
   ]
 
+  const maxHeightPx = maxHeight ? maxHeight * 10 : undefined
+  const ref = useRef<HTMLDivElement>(null)
+  const [containerHeight, setContainerHeight] = useState(0)
+  const fadeClass = maxHeightPx && containerHeight >= maxHeightPx ? 'fade' : ''
+  console.log({ containerHeight, maxHeightPx, fadeClass })
+
+  useLayoutEffect(() => {
+    if (!maxHeight || !ref.current) return
+    const { height } = ref.current.getBoundingClientRect()
+    setContainerHeight(height)
+    console.log('Measured tooltip height: ' + height)
+
+    const resizeObserver = new ResizeObserver(() => {
+      const { height } = ref.current!.getBoundingClientRect()
+      setContainerHeight(height)
+      console.log('resize Recalculated container height: ' + height)
+    })
+
+    resizeObserver.observe(ref.current)
+
+    return () => {
+      resizeObserver.disconnect()
+    }
+  }, [maxHeight, ref.current])
+
   // TODO: consider further optimization https://tiptap.dev/docs/guides/performance#gain-more-control-over-rendering
 
   return (
-    <Container editable={editable}>
+    <Container
+      ref={ref}
+      editable={editable}
+      maxHeight={maxHeight}
+      className={fadeClass}
+    >
       <EditorProvider
         editable={editable}
         immediatelyRender={false}
@@ -216,8 +256,27 @@ const makeUploadFn = (showError: (message: string) => void) => {
 //   )
 // }
 
-const Container = styled.div<{ editable?: boolean }>`
+const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
   width: 100%;
+
+  ${({ maxHeight }) =>
+    maxHeight &&
+    css`
+      max-height: ${maxHeight}rem;
+      overflow-y: hidden;
+    `}
+
+  &.fade {
+    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+  }
+
+  /* container-name: editor;
+  container-type: inline-size; */
+  /* @container editor (height < 20rem) {
+    -webkit-mask-image: none;
+    mask-image: none;
+  } */
 
   .tiptap {
     width: 100%;

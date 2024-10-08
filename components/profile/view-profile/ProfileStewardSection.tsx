@@ -14,6 +14,7 @@ import Icon from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { canEditLocation } from '@/lib/permissions'
+import { RichTextRender } from '@/components/editor/RichText'
 
 export const ProfileStewardSection = ({
   profile,
@@ -101,6 +102,10 @@ const Neighborhood = ({ neighborhood }: { neighborhood: LocationFragment }) => {
       <Description>
         <H2>{truncatedName}</H2>
         <Caption>{formatShortAddress(neighborhood.address) ?? EMPTY}</Caption>
+        <RichTextRender
+          initialContent={neighborhood.description}
+          maxHeight={10}
+        />
       </Description>
     </ContainerLink>
   )
