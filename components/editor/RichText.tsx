@@ -171,14 +171,13 @@ const TipTap = ({
 
   useLayoutEffect(() => {
     if (!maxHeight || !ref.current) return
+
     const { height } = ref.current.getBoundingClientRect()
     setContainerHeight(height)
-    console.log('Measured tooltip height: ' + height)
 
     const resizeObserver = new ResizeObserver(() => {
       const { height } = ref.current!.getBoundingClientRect()
       setContainerHeight(height)
-      console.log('resize Recalculated container height: ' + height)
     })
 
     resizeObserver.observe(ref.current)
