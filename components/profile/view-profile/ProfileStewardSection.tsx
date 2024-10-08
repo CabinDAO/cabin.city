@@ -13,6 +13,7 @@ import { Caption, H2, H3 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
+import { canEditLocation } from '@/lib/permissions'
 
 export const ProfileStewardSection = ({
   profile,
@@ -30,12 +31,11 @@ export const ProfileStewardSection = ({
     return null
   }
 
-  const stewardedNeighborhoods = data.locations
+  const stewardedNeighborhoods = data.locations.filter(
+    (n) => n.publishedAt || canEditLocation(user, n)
+  )
 
-  const showSection =
-    stewardedNeighborhoods.length > 0 &&
-    (user?.externId == profile.externId ||
-      stewardedNeighborhoods.filter((n) => n.publishedAt).length > 0)
+  const showSection = stewardedNeighborhoods.length > 0
 
   if (!showSection) {
     return null
