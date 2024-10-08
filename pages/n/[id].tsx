@@ -22,8 +22,9 @@ export default function LocationPage({
   // NOTE: location can still be null if serving a fallback version of the page
   // https://nextjs.org/docs/pages/api-reference/functions/get-static-paths#fallback-pages
   const router = useRouter()
-  if (!router.isFallback && !location) {
-    // idk why this is necessary (you'd think notFound:true would cover it), but it is
+  if (!location) {
+    // this can happen if the location was deleted after getStaticPaths was called
+    // but before this page was revalidated
     return Error404()
   }
 
@@ -69,7 +70,7 @@ export const getStaticProps = (async (context) => {
   })
 
   if (!location) {
-    return { notFound: true }
+    return { notFound: true, revalidate: 1 }
   }
 
   return {

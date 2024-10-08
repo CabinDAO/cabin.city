@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   LocationMediaCategory,
@@ -8,26 +9,29 @@ import {
 import { canEditLocation } from '@/lib/permissions'
 import { formatShortAddress } from '@/lib/address'
 import { cloudflareImageUrl } from '@/lib/image'
-import styled from 'styled-components'
+import { expandRoute } from '@/utils/routing'
 import { EMPTY } from '@/utils/display-utils'
-import { ContentCard } from '@/components/core/ContentCard'
-import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
-import { RichTextRender } from '@/components/editor/RichText'
+import styled from 'styled-components'
+import { padding } from '@/styles/theme'
 import Icon from '@/components/core/Icon'
+import { Body1, Caption, H1, H3, Overline } from '@/components/core/Typography'
+import { ContentCard } from '@/components/core/ContentCard'
+import { RichTextRender } from '@/components/editor/RichText'
 import { Button } from '@/components/core/Button'
 import { ImageFlex } from '@/components/core/gallery/ImageFlex'
-import { useUser } from '@/components/auth/useUser'
 import { BannerHeader } from '@/components/neighborhoods/BannerHeader'
 import { StewardContact } from '@/components/core/StewardContact'
 import { EmptyState } from '@/components/core/EmptyState'
-import { padding } from '@/styles/theme'
 import { VISIBILITY_FIELD_ID } from '@/components/neighborhoods/LocationEditForm'
-import { expandRoute } from '@/utils/routing'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export const LocationView = ({ externId }: { externId: string }) => {
+  const { deviceSize } = useDeviceSize()
+  const { user, isUserLoading } = useUser()
+
   const { useGet } = useBackend()
 
-  const { data } = useGet<LocationGetResponse>(
+  const { data, isLoading } = useGet<LocationGetResponse>(
     externId
       ? ['api_location_externId', { externId: externId as string }]
       : null
@@ -42,24 +46,18 @@ export const LocationView = ({ externId }: { externId: string }) => {
           .filter((value): value is string => value !== null)
       : []
 
-  const { deviceSize } = useDeviceSize()
-  const hasPhotos = galleryPreviewUrls.length > 0
-  const galleryImageWidth = deviceSize === 'desktop' ? 26.8 : undefined
-  const imageSizesString = '268px'
-
-  const { user, isUserLoading } = useUser()
   const isEditable = !!location && canEditLocation(user, location)
 
-  if (!location || isUserLoading) {
-    return null
+  if (isUserLoading || isLoading) {
+    return <LoadingSpinner />
   }
 
-  if (!location.publishedAt && !isEditable) {
+  if (!location || (!location.publishedAt && !isEditable)) {
     return (
       <EmptyState
         icon="mountain"
-        title="Oops, page not found"
-        description="This page doesn’t exist or was removed!"
+        title="Oops, neighborhood not found"
+        description="This neighborhood doesn’t exist, or it was removed, or you don't have permission to view it."
         customCta={() => (
           <Link href="/">
             <Button variant="secondary">Return home</Button>
@@ -122,7 +120,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
         </Banner>
       )}
 
-      {hasPhotos && (
+      {galleryPreviewUrls.length > 0 && (
         <GalleryPreviewContainer>
           <GalleryPreviewList>
             <GalleryPreviewListImages>
@@ -132,10 +130,10 @@ export const LocationView = ({ externId }: { externId: string }) => {
                   href={expandRoute(['n_id_photos', { id: location.externId }])}
                 >
                   <ImageFlex
-                    sizes={imageSizesString}
+                    sizes={'268px'}
                     alt={LocationMediaCategory.Features}
                     src={url}
-                    width={galleryImageWidth}
+                    width={deviceSize === 'desktop' ? 26.8 : undefined}
                     aspectRatio={1}
                   />
                 </StyledLink>
