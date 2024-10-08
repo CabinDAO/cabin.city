@@ -88,7 +88,6 @@ const Neighborhood = ({ neighborhood }: { neighborhood: LocationFragment }) => {
         {neighborhood.bannerImageCfId ? (
           <ImageFlex
             sizes={`300px`}
-            quality={40}
             aspectRatio={4 / 3}
             src={cloudflareImageUrl(neighborhood.bannerImageCfId)}
             alt={neighborhood.name}
