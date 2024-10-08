@@ -266,8 +266,8 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
     `}
 
   &.fade {
-    -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
   }
 
   /* container-name: editor;
