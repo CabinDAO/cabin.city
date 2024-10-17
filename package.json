@@ -76,8 +76,6 @@
     "react-use": "^17.4.0",
     "sharp": "^0.33.5",
     "siwe": "^2.1.4",
-    "slate": "^0.93.0",
-    "slate-react": "^0.93.0",
     "stripe": "^13.6.0",
     "stripe-event-types": "^3.0.0",
     "styled-components": "^5.3.6",
