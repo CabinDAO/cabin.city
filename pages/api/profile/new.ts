@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import * as Sentry from '@sentry/nextjs'
 import { AxiosError } from 'axios'
 import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
@@ -58,18 +59,23 @@ async function handler(
     }
   }
 
-  const profile = await createProfile({
-    privyDID,
-    walletAddress: params.walletAddress?.toLowerCase(),
-    name: params.name,
-    bio: params.bio,
-    email: params.email,
-    address: params.address,
-    avatarCfId: params.avatarCfId,
-    tags: params.tags,
-    contactFields: params.contactFields,
-    invite,
-  })
+  try {
+    const profile = await createProfile({
+      privyDID,
+      walletAddress: params.walletAddress?.toLowerCase(),
+      name: params.name,
+      bio: params.bio,
+      email: params.email,
+      address: params.address,
+      avatarCfId: params.avatarCfId,
+      tags: params.tags,
+      contactFields: params.contactFields,
+      invite,
+    })
+  } catch (e: unknown) {
+    Sentry.captureException(e, { extra: { privyDID } })
+    throw e
+  }
 
   if (isProd && params.subscribeToNewsletter) {
     try {
