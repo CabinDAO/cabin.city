@@ -1,7 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as Sentry from '@sentry/nextjs'
 import { AxiosError } from 'axios'
-import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
+import {
+  OptsWithAuth,
+  ProfileWithWallet,
+  requireAuth,
+  wrapHandler,
+} from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
@@ -59,8 +64,9 @@ async function handler(
     }
   }
 
+  let profile: ProfileWithWallet | null = null
   try {
-    const profile = await createProfile({
+    profile = await createProfile({
       privyDID,
       walletAddress: params.walletAddress?.toLowerCase(),
       name: params.name,
