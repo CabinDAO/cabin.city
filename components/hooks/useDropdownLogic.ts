@@ -1,6 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { IconName } from '@/components/core/Icon'
-import lodash from 'lodash'
 
 export interface SelectOption {
   label: string
@@ -25,6 +24,7 @@ const useDropdownLogic = (
   const [searchInput, setSearchInput] = useState<string | undefined | null>(
     null
   )
+
   const [filteredOptions, _setFilteredOptions] =
     useState<SelectOption[]>(options)
 
@@ -92,14 +92,30 @@ const useDropdownLogic = (
     }
   }
 
+  const debounce = function <T extends (...args: any[]) => any>(
+    func: T,
+    delay: number
+  ): (...args: Parameters<T>) => void {
+    let timeoutId: NodeJS.Timeout
+
+    return function (...args: Parameters<T>) {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        func(...args)
+      }, delay)
+    }
+  }
+
+  const debouncedOnSearch = onSearch ? debounce(onSearch, 500) : undefined
+
   const handleSearchInputChange = (value: string) => {
     setSearchInput(value)
 
     if (value === '') {
       setFilteredOptions(options)
     } else if (value.length > 0) {
-      if (onSearch) {
-        lodash.debounce(onSearch, 500)(value)
+      if (debouncedOnSearch) {
+        debouncedOnSearch(value)
         handleOpen(true)
       } else {
         const coincidentOptions = options.filter((opt) =>
