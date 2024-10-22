@@ -18,11 +18,13 @@ import { InputText } from '@/components/core/InputText'
 import { InputTextArea } from '@/components/core/InputTextArea'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
+import { Content, RichTextInput } from '@/components/editor/RichText'
 
 export const AboutInput = ({
   values,
   onNameChange,
   onBioChange,
+  onLongBioChange,
   onAddressChange,
   onAvatarCfIdChange,
   canShowErrors,
@@ -31,11 +33,13 @@ export const AboutInput = ({
   values: {
     name: string
     bio: string
+    longBio: string
     address: ProfileAddressFragmentType | undefined
     avatarCfId: string
   }
   onNameChange: (bio: string) => void
   onBioChange: (bio: string) => void
+  onLongBioChange: (longBio: string) => void
   onAddressChange: (location: ProfileAddressFragmentType) => void
   onAvatarCfIdChange: (avatarCfId: string) => void
   canShowErrors: boolean
@@ -45,8 +49,12 @@ export const AboutInput = ({
     onNameChange(e.target.value)
   }
 
-  const handleBioChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleBioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onBioChange(e.target.value)
+  }
+
+  const handleLongBioChange = (content: Content) => {
+    onLongBioChange(JSON.stringify(content))
   }
 
   const handleAddressChange = (address: ProfileAddressFragmentType) => {
@@ -78,16 +86,26 @@ export const AboutInput = ({
         errorMessage={INVALID_NAME_MESSAGE}
       />
 
-      <InputTextArea
-        label="Bio"
+      <InputText
+        label="Short Bio"
         required
         disabled={disabled}
-        placeholder={'What do you want your neighbors to know about you?'}
+        placeholder={'1-2 sentences about yourself'}
         value={values.bio}
         onChange={handleBioChange}
         helperText={`${values.bio.length}/${MAX_BIO_LENGTH}`}
         error={canShowErrors && !isValidBio(values.bio)}
         errorMessage={BIO_ERROR}
+      />
+
+      <RichTextInput
+        label="Extended Bio"
+        placeholder={'Tell your story. Decorate your profile. Go nuts!'}
+        bottomHelpText={
+          'What do you want your neighbors to know about you? What are you passionate about? How do you enjoy contributing to a community?'
+        }
+        initialContent={values.longBio}
+        onChange={handleLongBioChange}
       />
 
       <LocationAutocompleteInput

@@ -71,6 +71,7 @@ async function handler(
       walletAddress: params.walletAddress?.toLowerCase(),
       name: params.name,
       bio: params.bio,
+      longBio: params.longBio,
       email: params.email,
       address: params.address,
       avatarCfId: params.avatarCfId,

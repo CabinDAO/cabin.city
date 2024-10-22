@@ -6,9 +6,10 @@ import {
   useRef,
 } from 'react'
 import styled from 'styled-components'
-import { InputBase } from './InputBase'
+import { InputBase, HelperTextPosition } from './InputBase'
 import { body1Styles, subline2Styles } from './Typography'
-import { HelperTextPosition, InputTextSize } from './input.types'
+
+type InputTextSize = 'large' | 'medium'
 
 interface StyledInputTextAreaProps {
   textSize?: InputTextSize
@@ -69,7 +70,7 @@ export const InputTextArea = ({
   helperText,
   textSize = 'medium',
   onChange,
-  helperTextPosition = 'top',
+  helperTextPosition = 'right',
   rows,
   ...props
 }: InputTextProps) => {

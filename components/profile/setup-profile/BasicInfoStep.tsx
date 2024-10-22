@@ -15,6 +15,7 @@ export const BasicInfoStep = ({
 }: StepProps) => {
   const [name, setName] = useState(data.name)
   const [bio, setBio] = useState(data.bio)
+  const [longBio, setLongBio] = useState(data.longBio)
   const [address, setAddress] = useState(data.address)
   const [avatarCfId, setavatarCfId] = useState(data.avatarCfId || '')
   const [subscribeToNewsletter, setSubscribeToNewsletter] = useState(true)
@@ -37,6 +38,7 @@ export const BasicInfoStep = ({
         ...{
           name,
           bio,
+          longBio,
           address,
           avatarCfId,
           subscribeToNewsletter,
@@ -52,11 +54,13 @@ export const BasicInfoStep = ({
         values={{
           name,
           bio,
+          longBio,
           address,
           avatarCfId,
         }}
         onNameChange={setName}
         onBioChange={setBio}
+        onLongBioChange={setLongBio}
         onAddressChange={setAddress}
         onAvatarCfIdChange={setavatarCfId}
         canShowErrors={canShowErrors}

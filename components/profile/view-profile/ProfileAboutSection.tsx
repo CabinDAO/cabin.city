@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { formatShortAddress } from '@/lib/address'
+import { useBackend } from '@/components/hooks/useBackend'
 import {
   MeFragment,
   ProfileFragment,
   ProfileSetupStateParams,
 } from '@/utils/types/profile'
+import { formatShortAddress } from '@/lib/address'
 import { monthYearFormat } from '@/utils/display-utils'
-import styled from 'styled-components'
-import Icon, { IconName } from '../../core/Icon'
-import { ContentCard } from '../../core/ContentCard'
-import { Body1, Caption, H3 } from '../../core/Typography'
-import { ProfileContactList } from './ProfileContactList'
-import { Tags } from '@/components/profile/Tags'
-import theme from '@/styles/theme'
 import analytics from '@/lib/googleAnalytics/analytics'
-import { useBackend } from '@/components/hooks/useBackend'
+import styled from 'styled-components'
+import theme from '@/styles/theme'
+import { Body1, Caption, H3 } from '@/components/core/Typography'
+import Icon, { IconName } from '@/components/core/Icon'
+import { ContentCard } from '@/components/core/ContentCard'
+import { RichTextRender } from '@/components/editor/RichText'
+import { HorizontalDivider } from '@/components/core/Divider'
+import { Tags } from '@/components/profile/Tags'
+import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
 
 export const ProfileAboutSection = ({
   profile,
@@ -48,31 +50,41 @@ export const ProfileAboutSection = ({
   return (
     <ContentCard shape="notch">
       <Container>
-        <AboutSection>
-          <H3>About</H3>
-          <ProfileDataGroup>
-            <Datum
-              iconName="date"
-              captionContent={`Joined ${monthYearFormat(profile.createdAt)}`}
-            />
-            {profile.address && (
+        <Info>
+          <AboutSection>
+            <H3>About</H3>
+            <ProfileDataGroup>
               <Datum
-                iconName="location"
-                captionContent={formatShortAddress(profile.address)}
+                iconName="date"
+                captionContent={`Joined ${monthYearFormat(profile.createdAt)}`}
               />
-            )}
-          </ProfileDataGroup>
-          {profile.bio && <Bio>{profile.bio}</Bio>}
-          <Tags tags={profile.tags}></Tags>
-        </AboutSection>
-        {!!profile.contactFields.length && (
-          <ContactSection flashing={isFlashing}>
-            <H3>Contact</H3>
-            <ProfileContactList
-              contactFields={profile.contactFields}
-              onContactClick={handleContactClick}
-            />
-          </ContactSection>
+              {profile.address && (
+                <Datum
+                  iconName="location"
+                  captionContent={formatShortAddress(profile.address)}
+                />
+              )}
+            </ProfileDataGroup>
+            {profile.bio && <Bio>{profile.bio}</Bio>}
+            <Tags tags={profile.tags}></Tags>
+          </AboutSection>
+          {!!profile.contactFields.length && (
+            <ContactSection flashing={isFlashing}>
+              <H3>Contact</H3>
+              <ProfileContactList
+                contactFields={profile.contactFields}
+                onContactClick={handleContactClick}
+              />
+            </ContactSection>
+          )}
+        </Info>
+        {profile.longBio && (
+          <>
+            <StyledDivider />
+            <ExtendedBio>
+              <RichTextRender initialContent={profile.longBio} />
+            </ExtendedBio>
+          </>
         )}
       </Container>
     </ContentCard>
@@ -105,10 +117,29 @@ const Container = styled.div`
   align-items: stretch;
   justify-content: space-between;
   padding: 1.6rem;
+  gap: 1.6rem;
+`
+
+const Info = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: stretch;
+  justify-content: space-between;
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
   }
+`
+
+const StyledDivider = styled(HorizontalDivider)`
+  width: calc(100% - 3.2rem);
+  margin: 0 1.6rem;
+`
+
+const ExtendedBio = styled.div`
+  padding: 0 1.6rem;
 `
 
 const ProfileDataGroup = styled.div`

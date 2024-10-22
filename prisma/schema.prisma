@@ -80,6 +80,7 @@ model Profile {
   name                    String
   email                   String
   bio                     String
+  longBio                 String                @default("")
   contactFields           ProfileContactField[]
   location                String
   isAdmin                 Boolean               @default(false)

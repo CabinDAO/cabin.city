@@ -31,6 +31,7 @@ type ProfileCreateParams = {
   name: string
   email: string
   bio?: string
+  longBio?: string
   address?: ProfileAddressFragmentType
   avatarCfId?: string
   invite: Prisma.InviteGetPayload<null> | null
@@ -70,6 +71,7 @@ export async function createProfile(
       name: params.name,
       email: params.email,
       bio: params.bio || '',
+      longBio: params.longBio || '',
       location: '',
       inviteCode: randomInviteCode(),
       avatarCfId: params.avatarCfId || '',

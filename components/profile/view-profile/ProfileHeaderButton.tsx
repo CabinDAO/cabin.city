@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useUser } from '@/components/auth/useUser'
+import { canEditProfile } from '@/lib/permissions'
 import { ProfileFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { Button } from '../../core/Button'
@@ -10,7 +11,7 @@ export const ProfileHeaderButton = ({
   profile: ProfileFragment
 }) => {
   const { user } = useUser()
-  if (!user || user.externId !== profile.externId) {
+  if (!canEditProfile(user, profile)) {
     return null
   }
 

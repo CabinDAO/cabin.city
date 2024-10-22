@@ -30,8 +30,8 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const { refetchUser } = useUser()
   const { showModal } = useModal()
 
-  const email = externalUser?.email?.address ?? user?.email
-  const walletAddress = profileEditParams?.walletAddress ?? user?.walletAddress
+  const email = externalUser?.email?.address ?? user.email
+  const walletAddress = profileEditParams?.walletAddress ?? user.walletAddress
 
   const { ens } = useEns(walletAddress)
   const hasWallet = !!externalUser?.wallet

@@ -1,8 +1,9 @@
 import { InputHTMLAttributes, ReactNode } from 'react'
 import styled from 'styled-components'
 import { InputLabel } from './InputLabel'
-import { HelperTextPosition } from './input.types'
 import { Caption } from './Typography'
+
+export type HelperTextPosition = 'top' | 'right' | 'inset'
 
 interface ContainerProps {
   disabled?: boolean
@@ -47,7 +48,7 @@ export const InputBase = ({
   helperText,
   bottomHelpText,
   errorMessage,
-  helperTextPosition = 'top',
+  helperTextPosition = 'right',
   noPadding,
   noOverflowScroll,
   className,
@@ -64,8 +65,11 @@ export const InputBase = ({
         <InputLabel
           required={required}
           label={label}
-          helperText={helperTextPosition === 'top' ? helperText : undefined}
+          helperText={helperTextPosition === 'right' ? helperText : undefined}
         />
+      )}
+      {helperTextPosition === 'top' && helperText && (
+        <Caption>{helperText}</Caption>
       )}
       <InputOutline
         filled={filled}
