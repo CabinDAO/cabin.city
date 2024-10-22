@@ -52,7 +52,7 @@ export const RichTextInput = ({
   required,
   placeholder,
   error,
-  helperText,
+  bottomHelpText,
   onChange,
 }: {
   initialContent?: Content | string
@@ -60,12 +60,11 @@ export const RichTextInput = ({
   required?: boolean
   placeholder?: string
   error?: string | null
-  helperText?: string
+  bottomHelpText?: string
   onChange?: (content: Content) => void
 }) => {
   return (
     <InputBase
-      // helperTextPosition={helperTextPosition}
       // id={id}
       label={label}
       required={required}
@@ -74,7 +73,8 @@ export const RichTextInput = ({
       error={!!error}
       errorMessage={error || undefined}
       // disabled={disabled}
-      helperText={helperText}
+      placeholder={placeholder}
+      bottomHelpText={bottomHelpText}
       // endAdornment={endAdornment}
       noPadding
       noOverflowScroll
@@ -167,7 +167,6 @@ const TipTap = ({
   const ref = useRef<HTMLDivElement>(null)
   const [containerHeight, setContainerHeight] = useState(0)
   const fadeClass = maxHeightPx && containerHeight >= maxHeightPx ? 'fade' : ''
-  console.log({ containerHeight, maxHeightPx, fadeClass })
 
   useLayoutEffect(() => {
     if (!maxHeight || !ref.current) return

@@ -9,11 +9,7 @@ import {
 } from '@/utils/types/shared'
 import { z } from 'zod'
 import { isAddress } from 'viem'
-import {
-  AddressFragment,
-  AddressFragmentType,
-  ShortAddressFragmentType,
-} from '@/utils/types/location'
+import { AddressFragment, AddressFragmentType } from '@/utils/types/location'
 
 // must match prisma's $Enums.RoleType
 export enum RoleType {
@@ -83,17 +79,9 @@ export type ProfileListFragment = {
   externId: string
   privyDID: string
   name: string
-  email: string
   bio: string
-  address: ShortAddressFragmentType | null
+  address: ProfileAddressFragmentType | null
   avatarCfId: string
-  isAdmin: boolean
-  mailingListOptIn: boolean | null
-  voucherId: number | null
-  citizenshipStatus: CitizenshipStatus | null
-  citizenshipTokenId: number | null
-  citizenshipMintedAt: string | null
-  roles: RoleFragment[]
   stampCount: number
   cabinTokenBalanceInt: number | null
 }
@@ -174,7 +162,8 @@ export type ProfileBasicFragment = {
 
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
-  address: ShortAddressFragmentType | undefined
+  longBio: string
+  address: ProfileAddressFragmentType | undefined
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {
@@ -261,31 +250,26 @@ export type MeFragment = {
 
 export const ProfileNewParams = z
   .object({
-    walletAddress: WalletAddress.optional(),
     name: z.string(),
-    bio: z.string(),
     email: z.string().email(),
+    walletAddress: WalletAddress.nullish(),
+    bio: z.string(),
+    longBio: z.string(),
     address: ProfileAddressFragment,
-    avatarCfId: z.string().optional(),
+    tags: z.array(z.nativeEnum(ProfileTag)),
+    contactFields: z.array(ContactFragment),
+    avatarCfId: z.string(),
     subscribeToNewsletter: z.boolean().optional(),
     inviteExternId: z.string().optional(),
-    tags: z.array(z.nativeEnum(ProfileTag)).optional(),
-    contactFields: z.array(ContactFragment).optional(),
   })
   .strict()
 export type ProfileNewParamsType = z.infer<typeof ProfileNewParams>
 
 export const ProfileEditParams = z
   .object({
-    data: z.object({
-      name: z.string().optional(),
-      email: z.string().email().optional(),
-      bio: z.string().optional(),
-      walletAddress: z.union([WalletAddress, z.null()]).optional(),
-      address: ProfileAddressFragment.optional(),
-      tags: z.array(z.nativeEnum(ProfileTag)).optional(),
-      contactFields: z.array(ContactFragment).optional(),
-      avatarCfId: z.string().optional(),
+    data: ProfileNewParams.partial().omit({
+      subscribeToNewsletter: true,
+      inviteExternId: true,
     }),
     roleTypes: commaSeparatedArrayOf(RoleType).optional(),
   })

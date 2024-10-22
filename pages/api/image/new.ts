@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import axios from 'axios'
 import { ImageNewResponse } from '@/utils/types/image'
 
@@ -17,8 +17,7 @@ export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ImageNewResponse>,
-  opts: OptsWithAuth
+  res: NextApiResponse<ImageNewResponse>
 ) {
   if (req.method != 'POST') {
     res.status(405).send({ error: 'Method not allowed' })

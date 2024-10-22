@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ProfileEditParamsType,
   MeFragment,
+  ProfileFragment,
   ContactFragmentType,
 } from '@/utils/types/profile'
 import styled from 'styled-components'
@@ -13,55 +14,36 @@ import { TagsInput } from '@/components/profile/TagsInput'
 
 export interface UpdateProfileProps {
   user: MeFragment
+  profileToEdit: ProfileFragment
   profileEditParams: ProfileEditParamsType['data'] | null
   onChange: (input: ProfileEditParamsType['data']) => void
 }
 
-export const EditProfileForm = ({
-  user,
-  profileEditParams,
-  onChange,
-}: {
-  user: MeFragment
-  profileEditParams: ProfileEditParamsType['data'] | null
-  onChange: (input: ProfileEditParamsType['data']) => void
-}) => {
-  if (!user) {
-    return null
-  }
-
+export const EditProfileForm = (props: UpdateProfileProps) => {
   return (
     <InnerContainer>
-      <About
-        user={user}
-        profileEditParams={profileEditParams}
-        onChange={onChange}
-      />
-      <Identity
-        user={user}
-        profileEditParams={profileEditParams}
-        onChange={() => null}
-      />
-      <Contact
-        user={user}
-        profileEditParams={profileEditParams}
-        onChange={onChange}
-      />
-      <Tags
-        user={user}
-        profileEditParams={profileEditParams}
-        onChange={onChange}
-      />
+      <About {...props} />
+      {props.user.externId == props.profileToEdit.externId && (
+        <Identity {...props} />
+      )}
+      <Contact {...props} />
+      <Tags {...props} />
     </InnerContainer>
   )
 }
 
-const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
-  const name = profileEditParams?.name ?? user?.name ?? ''
-  const bio = profileEditParams?.bio ?? user?.bio ?? ''
-  const address = profileEditParams?.address ?? user?.address ?? undefined
+const About = ({
+  profileToEdit,
+  profileEditParams,
+  onChange,
+}: UpdateProfileProps) => {
+  const name = profileEditParams?.name ?? profileToEdit?.name ?? ''
+  const bio = profileEditParams?.bio ?? profileToEdit?.bio ?? ''
+  const longBio = profileEditParams?.longBio ?? profileToEdit?.longBio ?? ''
+  const address =
+    profileEditParams?.address ?? profileToEdit?.address ?? undefined
   const avatarCfId =
-    profileEditParams?.avatarCfId ?? user?.avatarCfId ?? undefined
+    profileEditParams?.avatarCfId ?? profileToEdit?.avatarCfId ?? undefined
 
   return (
     <UpdateSection title="Basic Info">
@@ -69,11 +51,15 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
         values={{
           name,
           bio,
+          longBio,
           address,
           avatarCfId,
         }}
         onNameChange={(name) => onChange({ ...profileEditParams, name })}
         onBioChange={(bio) => onChange({ ...profileEditParams, bio })}
+        onLongBioChange={(longBio) =>
+          onChange({ ...profileEditParams, longBio })
+        }
         onAddressChange={(address) =>
           onChange({ ...profileEditParams, address })
         }
@@ -86,10 +72,14 @@ const About = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
   )
 }
 
-const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
+const Contact = ({
+  profileEditParams,
+  onChange,
+  profileToEdit,
+}: UpdateProfileProps) => {
   const [contactList, setContactList] = useState<ContactFragmentType[]>([])
 
-  const initialSelections = user.contactFields.map((cf) => ({
+  const initialSelections = profileToEdit.contactFields.map((cf) => ({
     type: cf.type,
     value: cf.value,
   }))
@@ -115,8 +105,12 @@ const Contact = ({ profileEditParams, onChange, user }: UpdateProfileProps) => {
   )
 }
 
-const Tags = ({ user, profileEditParams, onChange }: UpdateProfileProps) => {
-  const tags = profileEditParams?.tags ?? user?.tags ?? ''
+const Tags = ({
+  profileToEdit,
+  profileEditParams,
+  onChange,
+}: UpdateProfileProps) => {
+  const tags = profileEditParams?.tags ?? profileToEdit?.tags ?? ''
 
   return (
     <UpdateSection title="About me">

@@ -4,6 +4,7 @@ import { getAlchemySdk } from '@/lib/chains'
 import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
+import { canEditProfile } from '@/lib/permissions'
 import {
   OptsWithAuth,
   requireProfile,
@@ -65,7 +66,7 @@ async function handleGet(
 async function handlePost(
   req: NextApiRequest,
   res: NextApiResponse<ProfileEditResponse>,
-  profile: ProfileWithWallet
+  user: ProfileWithWallet
 ) {
   const parsed = ProfileEditParams.safeParse(req.body)
   if (!parsed.success) {
@@ -76,7 +77,7 @@ async function handlePost(
 
   const externId = req.query.externId as string
 
-  if (externId != profile.externId && !profile.isAdmin) {
+  if (!canEditProfile(user, { externId })) {
     res.status(403).send({ error: 'Forbidden' })
     return
   }
@@ -110,6 +111,7 @@ async function handlePost(
         name: params.data.name,
         email: params.data.email,
         bio: params.data.bio,
+        longBio: params.data.longBio,
         avatarCfId: params.data.avatarCfId,
         address: params.data.address
           ? {
@@ -229,10 +231,13 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
     name: profile.name,
     email: profile.email,
     bio: profile.bio,
+    longBio: profile.longBio,
     avatarCfId: profile.avatarCfId,
     address: profile.address
       ? {
+          formattedAddress: profile.address.formattedAddress,
           locality: profile.address.locality,
+          admininstrativeAreaLevel1: profile.address.admininstrativeAreaLevel1,
           admininstrativeAreaLevel1Short:
             profile.address.admininstrativeAreaLevel1Short,
           country: profile.address.country,

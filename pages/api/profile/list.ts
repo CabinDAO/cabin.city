@@ -154,20 +154,14 @@ const profilesToFragments = (
       externId: profile.externId,
       privyDID: profile.privyDID,
       name: profile.name,
-      email: profile.email,
       bio: profile.bio,
       avatarCfId: profile.avatarCfId,
-      isAdmin: profile.isAdmin,
-      mailingListOptIn: profile.mailingListOptIn,
-      voucherId: profile.voucherId,
-      citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
-      citizenshipTokenId: profile.citizenshipTokenId,
-      citizenshipMintedAt: profile.citizenshipMintedAt
-        ? profile.citizenshipMintedAt?.toISOString()
-        : null,
       address: profile.address
         ? {
+            formattedAddress: profile.address.formattedAddress,
             locality: profile.address.locality,
+            admininstrativeAreaLevel1:
+              profile.address.admininstrativeAreaLevel1,
             admininstrativeAreaLevel1Short:
               profile.address.admininstrativeAreaLevel1Short,
             country: profile.address.country,
@@ -176,7 +170,6 @@ const profilesToFragments = (
             lng: profile.address.lng,
           }
         : null,
-      roles: [],
       stampCount: profile._count.stamps || 0,
       cabinTokenBalanceInt: profile.wallet
         ? Math.floor(profile.wallet.cabinTokenBalance.toNumber())

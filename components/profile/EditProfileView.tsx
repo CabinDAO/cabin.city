@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useLocalStorage } from 'react-use'
-import { useUser } from '../auth/useUser'
+import { useUser } from '@/components/auth/useUser'
 import { useModal } from '@/components/hooks/useModal'
 import { useError } from '@/components/hooks/useError'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
   ProfileEditParamsType,
   ProfileEditResponse,
+  ProfileGetResponse,
 } from '@/utils/types/profile'
+import { canEditProfile } from '@/lib/permissions'
 import {
   sanitizeContactValue,
   validateProfileInput,
@@ -27,14 +29,30 @@ import { ErrorModal } from '@/components/ErrorModal'
 import { ActionBar } from '@/components/core/ActionBar'
 import { EditProfileForm } from '@/components/profile/EditProfileForm'
 
-export const EditProfileView = () => {
+export const EditProfileView = ({
+  profileExternId,
+}: {
+  profileExternId: string
+}) => {
   const router = useRouter()
   const { user } = useUser({ redirectTo: 'home' })
   const { showError } = useError()
 
-  const { post, useMutate } = useBackend()
+  const { post, useGet, useMutate } = useBackend()
+
+  const { data: profileData, mutate: refetchProfile } =
+    useGet<ProfileGetResponse>(
+      profileExternId
+        ? ['api_profile_externId', { externId: profileExternId }]
+        : null
+    )
+  const profileToEdit =
+    profileData && !('error' in profileData) ? profileData.profile : null
+
   const { trigger: updateUser } = useMutate<ProfileEditResponse>(
-    user ? ['api_profile_externId', { externId: user.externId }] : null
+    profileExternId
+      ? ['api_profile_externId', { externId: profileExternId }]
+      : null
   )
 
   const [newValues, setNewValues] = useState<ProfileEditParamsType['data']>({})
@@ -61,12 +79,12 @@ export const EditProfileView = () => {
         }
         newValues.contactFields[i].value = sanitizedValue
       }
-    } else if (user && user.contactFields.length < 1) {
+    } else if (profileToEdit && profileToEdit.contactFields.length < 1) {
       showError('At least one contact info is required')
       return
     }
 
-    if (user && validateProfileInput(newValues)) {
+    if (profileToEdit && validateProfileInput(newValues)) {
       const res = await updateUser({
         data: newValues,
       } satisfies ProfileEditParamsType)
@@ -94,7 +112,8 @@ export const EditProfileView = () => {
         }
       }
 
-      await router.push(['profile_id', { id: user.externId }])
+      await refetchProfile()
+      await router.push(['profile_id', { id: profileToEdit.externId }])
     }
   }
 
@@ -105,7 +124,7 @@ export const EditProfileView = () => {
     }))
   }
 
-  if (!user) {
+  if (!user || !profileToEdit || !canEditProfile(user, profileToEdit)) {
     return null
   }
 
@@ -114,12 +133,13 @@ export const EditProfileView = () => {
       <TitleCard
         title="Edit profile"
         icon="close"
-        iconHref={`/profile/${user.externId}`}
+        iconHref={`/profile/${profileToEdit.externId}`}
       />
       <ContentCard shape="notch">
         <Content>
           <EditProfileForm
             user={user}
+            profileToEdit={profileToEdit}
             profileEditParams={newValues}
             onChange={handleChange}
           />
@@ -131,7 +151,9 @@ export const EditProfileView = () => {
             secondaryButton={{
               label: 'Cancel',
               onClick: () =>
-                router.push(['profile_id', { id: user.externId }]).then(),
+                router
+                  .push(['profile_id', { id: profileToEdit.externId }])
+                  .then(),
             }}
           />
         </Content>

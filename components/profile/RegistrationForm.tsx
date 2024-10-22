@@ -38,6 +38,7 @@ export const RegistrationForm = ({
   const [newParams, setNewParams] = useState<RegistrationParams>({
     name: '',
     bio: '',
+    longBio: '',
     address: {
       lat: null,
       lng: null,
