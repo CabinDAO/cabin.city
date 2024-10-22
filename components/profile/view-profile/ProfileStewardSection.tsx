@@ -45,7 +45,7 @@ export const ProfileStewardSection = ({
   return (
     <ContentCard shape="notch">
       <Container>
-        <H3>Neighborhood Steward</H3>
+        <H3>Neighborhood</H3>
         <Neighborhoods>
           {stewardedNeighborhoods.map((n) => (
             <Neighborhood key={n.externId} neighborhood={n} />
