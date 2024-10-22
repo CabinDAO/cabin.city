@@ -1,10 +1,12 @@
 import Link from 'next/link'
-import Head from 'next/head'
 import Error404 from '@/pages/404'
 import { useLocalStorage } from 'react-use'
+import { AppHead } from '@/components/head'
 import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileGetResponse } from '@/utils/types/profile'
+import { cloudflareImageUrl } from '@/lib/image'
+import { expandRoute } from '@/utils/routing'
 import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
 import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 import styled from 'styled-components'
@@ -39,9 +41,16 @@ export const ProfileView = ({ externId }: { externId: string }) => {
 
   return (
     <>
-      <Head>
-        <title>{profile.name}'s Cabin Profile</title>
-      </Head>
+      <AppHead
+        title={`${profile.name}'s Cabin Profile`}
+        imageUrl={
+          profile.avatarCfId
+            ? cloudflareImageUrl(profile.avatarCfId)
+            : undefined
+        }
+        pathname={expandRoute(['profile_id', { id: profile.externId }])}
+        ogType="person"
+      />
       <BaseLayout>
         <Container>
           <ProfileHeaderSection profile={profile} />
