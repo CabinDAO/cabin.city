@@ -139,7 +139,7 @@ const StyledDivider = styled(HorizontalDivider)`
 `
 
 const ExtendedBio = styled.div`
-  padding: 0 1.6rem;
+  padding: 0 1.6rem 1.6rem;
 `
 
 const ProfileDataGroup = styled.div`
