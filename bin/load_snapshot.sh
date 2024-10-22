@@ -52,7 +52,7 @@ fi
 
 
 if [[ $postgres_url_trimmed == *"localhost"* ]]; then
-  echo 'update "Profile" set "citizenshipStatus" = '"'Verified'"', "isAdmin" = true where id = 822;' | psql "$postgres_url_trimmed"
+  echo 'update "Profile" set "citizenshipStatus" = '"'Verified'"', "citizenshipTokenId" = 3, "citizenshipMintedAt" = '"'2023-04-01 12:00:00'"', "isAdmin" = true, "privyDID" = '"'did:privy:cllbg13gx00gvl308y233umlo'"' where id = 822;' | psql "$postgres_url_trimmed"
 fi
 
 ### how to load only data without db drop/create
