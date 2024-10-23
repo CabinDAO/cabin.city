@@ -11,6 +11,9 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
 import { isProd } from '@/utils/dev'
+import { sendToDiscord } from '@/lib/discord'
+import { expandRoute } from '@/utils/routing'
+import { appDomainWithProto } from '@/utils/display-utils'
 import { createProfile } from '@/utils/profile'
 import { toErrorString } from '@/utils/api/error'
 import { subscribe } from '@/lib/convertkit'
@@ -95,6 +98,15 @@ async function handler(
         console.error(e)
       }
     }
+  }
+
+  if (isProd) {
+    await sendToDiscord(
+      `New user ${profile.name}: ${appDomainWithProto}${expandRoute([
+        'profile_id',
+        { id: profile.externId },
+      ])}`
+    )
   }
 
   res.status(200).send({ externId: profile.externId })
