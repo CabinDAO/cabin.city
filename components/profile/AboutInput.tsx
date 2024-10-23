@@ -15,7 +15,6 @@ import {
 } from './validations'
 import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
-import { InputTextArea } from '@/components/core/InputTextArea'
 import { AvatarSetup } from '@/components/profile/AvatarSetup'
 import { LocationAutocompleteInput } from '@/components/core/LocationAutocompleteInput'
 import { Content, RichTextInput } from '@/components/editor/RichText'

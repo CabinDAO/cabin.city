@@ -20,28 +20,30 @@ import { ProfileContactList } from '@/components/profile/view-profile/ProfileCon
 
 export const ProfileAboutSection = ({
   profile,
-  me,
+  user,
 }: {
   profile: ProfileFragment
-  me: MeFragment | null
+  user: MeFragment | null
 }) => {
-  const isOwnProfile = me?.externId === profile.externId
+  const { post } = useBackend()
+
+  const isOwnProfile = user?.externId === profile.externId
 
   const [isFlashing, setIsFlashing] = useState(false)
   const flashBg = () => {
     setIsFlashing(true)
     setTimeout(() => setIsFlashing(false), 500) // Adjust timeout to match CSS transition
   }
+
   useEffect(() => {
-    if (!isOwnProfile && !me?.isProfileSetupDismissed) {
+    if (!isOwnProfile && !user?.isProfileSetupDismissed) {
       flashBg()
     }
-  }, [profile, me, isOwnProfile])
+  }, [profile, user, isOwnProfile])
 
-  const { post } = useBackend()
   const handleContactClick = async () => {
-    if (!me || isOwnProfile) return
-    analytics.onboardingActionEvent(me.externId, 'contact_clicked')
+    if (!user || isOwnProfile) return
+    analytics.onboardingActionEvent(user.externId, 'contact_clicked')
     return post('api_profile_setupState', {
       state: 'dismissed',
     } satisfies ProfileSetupStateParams)

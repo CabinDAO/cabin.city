@@ -1,3 +1,4 @@
+import { expandRoute } from '@/utils/routing'
 import { IconName } from '@/components/core/Icon'
 
 type visibility = 'always' | 'authOnly' | 'unauthOnly'
@@ -23,48 +24,48 @@ type Config = {
 export const MenuItems: Record<MenuItemName, Config> = {
   home: {
     icon: 'logo-cabin',
-    path: '/',
+    path: expandRoute('home'),
     displayText: 'Home',
     iconSize: 3.2,
     visibility: 'always',
   },
   accelerator: {
     icon: 'neighborhood',
-    path: '/accelerator',
+    path: expandRoute('accelerator'),
     displayText: 'Accelerator',
     iconSize: 2.5,
     visibility: 'always',
   },
   neighborhoods: {
     icon: 'map-fold',
-    path: '/city-directory',
+    path: expandRoute('cityDirectory'),
     displayText: 'City Directory',
     iconSize: 2,
     visibility: 'always',
   },
   census: {
     icon: 'members',
-    path: '/census',
+    path: expandRoute('census'),
     displayText: 'Census',
     iconSize: 2.5,
     visibility: 'always',
   },
   profile: {
     icon: 'profile',
-    path: '/profile',
+    path: expandRoute('profile'),
     displayText: 'Profile',
     iconSize: 3.2,
     visibility: 'authOnly',
   },
   admin: {
     icon: 'peace-sign',
-    path: '/admin',
+    path: expandRoute('admin'),
     displayText: 'Admin Tools',
     visibility: 'authOnly',
   },
   signOut: {
     icon: 'sign-out',
-    path: '/logout',
+    path: expandRoute('logout'),
     displayText: 'Sign Out',
     visibility: 'authOnly',
     iconSize: 2,

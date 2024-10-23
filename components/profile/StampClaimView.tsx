@@ -71,7 +71,7 @@ export const StampClaimView = () => {
 
     await refetchProfile()
 
-    await router.push('profile')
+    await router.push(['profile_id', { id: user.externId }])
   }
 
   const profile = !data || 'error' in data ? null : data.profile

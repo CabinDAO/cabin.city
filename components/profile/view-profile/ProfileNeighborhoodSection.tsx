@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
-import { ProfileFragment } from '@/utils/types/profile'
+import { MeFragment, ProfileFragment } from '@/utils/types/profile'
 import { LocationFragment, LocationListResponse } from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { cloudflareImageUrl } from '@/lib/image'
@@ -16,23 +15,27 @@ import { ImageFlex } from '@/components/core/gallery/ImageFlex'
 import { canEditLocation } from '@/lib/permissions'
 import { RichTextRender } from '@/components/editor/RichText'
 
-export const ProfileStewardSection = ({
+export const ProfileNeighborhoodSection = ({
   profile,
+  user,
 }: {
   profile: ProfileFragment
+  user: MeFragment | null
 }) => {
-  const { user } = useUser()
   const { useGet } = useBackend()
 
-  const { data } = useGet<LocationListResponse>('api_location_list', {
-    stewardExternId: profile.externId,
-  })
+  const { data: locationData } = useGet<LocationListResponse>(
+    'api_location_list',
+    {
+      stewardExternId: profile.externId,
+    }
+  )
 
-  if (!data || 'error' in data) {
+  if (!locationData || 'error' in locationData) {
     return null
   }
 
-  const stewardedNeighborhoods = data.locations.filter(
+  const stewardedNeighborhoods = locationData.locations.filter(
     (n) => n.publishedAt || canEditLocation(user, n)
   )
 

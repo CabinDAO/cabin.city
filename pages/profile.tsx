@@ -1,12 +1,13 @@
 import { useUser } from '@/components/auth/useUser'
-import { ProfileView } from '@/components/profile/ProfileView'
+import { useRouter } from '@/components/hooks/useRouter'
 
 const MyProfilePage = () => {
   const { user } = useUser({ redirectTo: 'home' })
+  const router = useRouter()
 
   if (!user) return null
 
-  return <ProfileView externId={user.externId} />
+  router.push(['profile_id', { id: user.externId }]).then()
 }
 
 export default MyProfilePage
