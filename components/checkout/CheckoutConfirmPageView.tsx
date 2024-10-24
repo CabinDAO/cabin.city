@@ -85,7 +85,7 @@ const CheckoutConfirmPageView = () => {
 
     if (replaced) {
       router
-        .replace({ pathname, query }, undefined, {
+        .replaceRaw({ pathname, query }, undefined, {
           shallow: true,
         })
         .then()
