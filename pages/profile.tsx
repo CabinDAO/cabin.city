@@ -7,7 +7,7 @@ const MyProfilePage = () => {
 
   if (!user) return null
 
-  router.push(['profile_id', { id: user.externId }]).then()
+  router.replace(['profile_id', { id: user.externId }]).then()
 }
 
 export default MyProfilePage

@@ -7,10 +7,16 @@ export type Route = RoutingRoute
 export const useRouter = () => {
   const router = useNextRouter()
 
-  // Create a memoized version of the restricted push function
+  // Create a memoized version of the restricted functions
   const pushRoute = useCallback(
     (route: Route) => {
       return router.push(expandRoute(route))
+    },
+    [router]
+  )
+  const replaceRoute = useCallback(
+    (route: Route) => {
+      return router.replace(expandRoute(route))
     },
     [router]
   )
@@ -20,8 +26,10 @@ export const useRouter = () => {
     () => ({
       ...router,
       pushRaw: router.push, // so we can still go direct
+      replaceRaw: router.replace, // so we can still go direct
       push: pushRoute,
+      replace: replaceRoute,
     }),
-    [router, pushRoute]
+    [router, pushRoute, replaceRoute]
   )
 }
