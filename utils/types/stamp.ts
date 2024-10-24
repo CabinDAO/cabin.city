@@ -1,10 +1,11 @@
 import { z } from 'zod'
 import { APIError } from '@/utils/types/shared'
 
-export const CURRENT_CLAIMABLE_STAMP: { id: number; name: string } | null = {
-  id: 48,
-  name: 'Network State Conf 2024',
-}
+export const CURRENT_CLAIMABLE_STAMP: { id: number; name: string } | null = null
+// {
+//   id: 48,
+//   name: 'Network State Conf 2024',
+// }
 
 export const StampClaimParams = z
   .object({
