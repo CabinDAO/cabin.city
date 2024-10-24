@@ -4,6 +4,7 @@ import { getAlchemySdk } from '@/lib/chains'
 import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
 import { toErrorString } from '@/utils/api/error'
+import { expandRoute } from '@/utils/routing'
 import { canEditProfile } from '@/lib/permissions'
 import {
   OptsWithAuth,
@@ -218,12 +219,18 @@ async function handlePost(
     include: ProfileQueryInclude,
   })
 
+  await res.revalidate(
+    expandRoute(['profile_id', { id: profileToEdit.externId }])
+  )
+
   res.status(200).send({
     profile: profileToFragment(newProfileValues as ProfileWithRelations),
   })
 }
 
-const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
+export const profileToFragment = (
+  profile: ProfileWithRelations
+): ProfileFragment => {
   return {
     createdAt: profile.createdAt.toISOString(),
     externId: profile.externId,
@@ -245,7 +252,7 @@ const profileToFragment = (profile: ProfileWithRelations): ProfileFragment => {
           lat: profile.address.lat,
           lng: profile.address.lng,
         }
-      : undefined,
+      : null,
     citizenshipStatus: profile.citizenshipStatus as CitizenshipStatus,
     citizenshipTokenId: profile.citizenshipTokenId,
     citizenshipMintedAt: profile.citizenshipMintedAt

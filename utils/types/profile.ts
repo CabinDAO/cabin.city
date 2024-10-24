@@ -163,7 +163,7 @@ export type ProfileBasicFragment = {
 export type ProfileFragment = ProfileBasicFragment & {
   privyDID: string
   longBio: string
-  address: ProfileAddressFragmentType | undefined
+  address: ProfileAddressFragmentType | null
   citizenshipTokenId: number | null
   citizenshipMintedAt: string | null
   wallet: {

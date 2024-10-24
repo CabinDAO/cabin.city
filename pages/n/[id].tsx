@@ -13,6 +13,7 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 import Error404 from '@/pages/404'
 import { LocationView } from '@/components/neighborhoods/LocationView'
 import { cloudflareImageUrl } from '@/lib/image'
+import { formatShortAddress } from '@/lib/address'
 import { expandRoute } from '@/utils/routing'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 
@@ -32,8 +33,8 @@ export default function LocationPage({
     <>
       {location && location.publishedAt && (
         <AppHead
-          title={location.name}
-          description={'a Cabin.city neighborhood'}
+          title={`${location.name} | Cabin.city`}
+          description={formatShortAddress(location.address)}
           imageUrl={cloudflareImageUrl(location.bannerImageCfId)}
           pathname={expandRoute(['n_id', { id: location.externId }])}
           ogType="place"
