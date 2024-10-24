@@ -63,7 +63,7 @@ export const CensusAuthView = () => {
     if (map && router.query.center) {
       const [lat, lng] = (router.query.center as string).split(',').map(Number)
       map.setView([lat, lng], 8)
-      router.replace(router.pathname, undefined, { shallow: true }).then()
+      router.replaceRaw(router.pathname, undefined, { shallow: true }).then()
     }
   }, [map, router, router.query])
 
