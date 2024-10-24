@@ -24,7 +24,7 @@ export const ProfileView = ({ profile }: { profile: ProfileFragment }) => {
   return (
     <BaseLayout>
       <Container>
-        <ProfileHeaderSection profile={profile} />
+        <ProfileHeaderSection user={user} profile={profile} />
         {isOwnProfile && CURRENT_CLAIMABLE_STAMP && hasStampReminder && (
           <div style={{ textAlign: 'center' }}>
             <Body1>

@@ -226,6 +226,42 @@ export const stampClaimClickEvent = (
   })
 }
 
+export const contactButtonClickEvent = (
+  senderId: string,
+  recipientId: string
+): void => {
+  event({
+    action: 'contact_button_click',
+    params: {
+      sender_id: senderId,
+      recipient_id: recipientId,
+    },
+  })
+}
+
+export const sendMessageButtonClickEvent = (
+  senderId: string,
+  recipientId: string
+): void => {
+  event({
+    action: 'send_message_button_click',
+    params: {
+      sender_id: senderId,
+      recipient_id: recipientId,
+    },
+  })
+}
+
+export const emailSentEvent = (senderId: string, recipientId: string): void => {
+  event({
+    action: 'email_sent',
+    params: {
+      sender_id: senderId,
+      recipient_id: recipientId,
+    },
+  })
+}
+
 /**
  * @param action - The name of the event you want to track.
  * @param params - A map of event parameters.
@@ -261,6 +297,9 @@ const analytics = {
   acceleratorApplyClickEvent,
   onboardingActionEvent,
   stampClaimClickEvent,
+  contactButtonClickEvent,
+  sendMessageButtonClickEvent,
+  emailSentEvent,
 }
 
 export default analytics

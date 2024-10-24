@@ -10,8 +10,6 @@ import { useChainSwitch } from '@/components/hooks/useChainSwitch'
 import { addressMatch } from '@/utils/address-match'
 import { useExternalUser } from '../auth/useExternalUser'
 import analytics from '@/lib/googleAnalytics/analytics'
-import { useEmail } from '@/components/hooks/useEmail'
-import { EmailType, VouchRequstedPayload } from '@/lib/mail/types'
 import { useNavigation } from '@/components/hooks/useNavigation'
 import { useAuth } from '@/components/auth/useAuth'
 import { CitizenshipStatus } from '@/utils/types/profile'
@@ -21,7 +19,6 @@ export const CitizenshipView = () => {
   const { user } = useUser()
   const { externalUser } = useExternalUser()
   const { wallets } = useWallets()
-  const { sendEmail } = useEmail()
   const { goBack } = useNavigation()
   const { confirmLoggedIn } = useAuth()
 
@@ -72,16 +69,6 @@ export const CitizenshipView = () => {
   const handleToggleSignal = () => {
     confirmLoggedIn(() => {
       analytics.signalInterestEvent(user?.externId ?? '')
-
-      sendEmail({
-        type: EmailType.VOUCH_REQUESTED,
-        data: {
-          name: user?.name,
-          email: user?.email,
-          profileId: user?.externId,
-        } as VouchRequstedPayload,
-      })
-
       toggleSignal({})
     })
   }

@@ -3,42 +3,17 @@ import {
   InputHTMLAttributes,
   MutableRefObject,
   ReactNode,
+  useEffect,
   useRef,
 } from 'react'
 import styled from 'styled-components'
 import { InputBase, HelperTextPosition } from './InputBase'
 import { body1Styles, subline2Styles } from './Typography'
+import { set } from 'date-fns'
 
 type InputTextSize = 'large' | 'medium'
 
-interface StyledInputTextAreaProps {
-  textSize?: InputTextSize
-}
-
-const StyledInputTextArea = styled.textarea<StyledInputTextAreaProps>`
-  ${({ textSize }) => (textSize === 'medium' ? subline2Styles : body1Styles)}
-  display: block;
-  width: 100%;
-  outline: none;
-  border: 0;
-  background-color: transparent;
-  -moz-appearance: textfield;
-  resize: none;
-
-  ::placeholder {
-    color: ${(props) => props.theme.colors.yellow900};
-    opacity: 0.42;
-  }
-
-  /* Chrome, Safari, Edge, Opera */
-  ::-webkit-outer-spin-button,
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-`
-
-interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
+interface InputTextareaProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   id?: string
   label?: string
   required?: boolean
@@ -50,10 +25,12 @@ interface InputTextProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   startAdornment?: ReactNode
   endAdornment?: ReactNode
   helperText?: string
-  onChange?: (_e: ChangeEvent<HTMLTextAreaElement>) => void
+  onChange?: (e: ChangeEvent<HTMLTextAreaElement>) => void
   textSize?: InputTextSize
   helperTextPosition?: HelperTextPosition
   rows?: number
+  autoFocus?: boolean
+  autoResize?: boolean
 }
 
 export const InputTextArea = ({
@@ -72,12 +49,30 @@ export const InputTextArea = ({
   onChange,
   helperTextPosition = 'right',
   rows,
+  autoFocus,
+  autoResize,
   ...props
-}: InputTextProps) => {
+}: InputTextareaProps) => {
   const inputRef = useRef() as MutableRefObject<HTMLTextAreaElement>
 
   const handleOnParentClick = () => {
     inputRef?.current.focus()
+  }
+
+  useEffect(() => {
+    if (inputRef?.current && autoFocus) {
+      setTimeout(() => {
+        inputRef.current.focus()
+      }, 0)
+    }
+  }, [inputRef?.current, autoFocus])
+
+  const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (autoResize) {
+      e.target.style.height = 'auto'
+      e.target.style.height = `${e.target.scrollHeight}px`
+    }
+    onChange?.(e)
   }
 
   return (
@@ -100,7 +95,7 @@ export const InputTextArea = ({
         id={id}
         ref={inputRef}
         type="text"
-        onChange={onChange}
+        onChange={handleOnChange}
         placeholder={placeholder}
         value={value}
         disabled={disabled}
@@ -110,5 +105,29 @@ export const InputTextArea = ({
     </InputBase>
   )
 }
-
 InputTextArea.displayName = 'InputTextArea'
+
+const StyledInputTextArea = styled.textarea<{
+  textSize?: InputTextSize
+}>`
+  ${({ textSize }) => (textSize === 'medium' ? subline2Styles : body1Styles)}
+  display: block;
+  width: 100%;
+  outline: none;
+  border: 0;
+  background-color: transparent;
+  -moz-appearance: textfield;
+  resize: none;
+
+  ::placeholder {
+    color: ${(props) => props.theme.colors.yellow900};
+    opacity: 0.42;
+  }
+
+  /* Chrome, Safari, Edge, Opera */
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`

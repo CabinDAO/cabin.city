@@ -34,6 +34,7 @@ import dashboardSvg from './svg/dashboard.svg'
 import dateSvg from './svg/date.svg'
 import discountSvg from './svg/discount.svg'
 import draftProposalSvg from './svg/draft-proposal.svg'
+import envelopeSvg from './svg/envelope.svg'
 import exclamationMarkSvg from './svg/exclamation-mark.svg'
 import externalLinkSvg from './svg/external-link.svg'
 import fileDocumentSvg from './svg/file-document.svg'
@@ -145,6 +146,7 @@ export const IconSvgs = {
   date: dateSvg,
   discount: discountSvg,
   'draft-proposal': draftProposalSvg,
+  envelope: envelopeSvg,
   'exclamation-mark': exclamationMarkSvg,
   'external-link': externalLinkSvg,
   'file-document': fileDocumentSvg,

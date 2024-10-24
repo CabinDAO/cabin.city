@@ -1,26 +1,36 @@
 import Link from 'next/link'
+import useEns from '@/components/hooks/useEns'
+import { useModal } from '@/components/hooks/useModal'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { shortenedAddress } from '@/utils/display-utils'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import useEns from '@/components/hooks/useEns'
-import { ProfileFragment } from '@/utils/types/profile'
+import { MeFragment, ProfileFragment } from '@/utils/types/profile'
+import { canEditProfile } from '@/lib/permissions'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
-import { H1, Subline2 } from '../../core/Typography'
+import { H1, Overline, Subline2 } from '@/components/core/Typography'
 import { Avatar } from '@/components/profile/Avatar'
-import { ContentCard } from '../../core/ContentCard'
-import { CopyToClipboard } from '../../core/CopyToClipboard'
-import { ProfileHeaderButton } from './ProfileHeaderButton'
+import { ContentCard } from '@/components/core/ContentCard'
+import { CopyToClipboard } from '@/components/core/CopyToClipboard'
+import { Button } from '@/components/core/Button'
+import Icon from '@/components/core/Icon'
+import { ContactModal } from '@/components/contact/ContactModal'
 
 export const ProfileHeaderSection = ({
+  user,
   profile,
 }: {
+  user: MeFragment | null
   profile: ProfileFragment
 }) => {
   const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
+  const showContactButton =
+    user && user.externId != profile.externId && user.isAdmin
+
   return (
-    <ContentCard shadow>
+    <StyledContentCard shadow>
       <Container>
         <ProfileSummary>
           <Avatar
@@ -60,9 +70,24 @@ export const ProfileHeaderSection = ({
             )}
           </ProfileInfoContainer>
         </ProfileSummary>
-        <ProfileHeaderButton profile={profile} />
+        {showContactButton && (
+          <ProfileContactButton user={user} profile={profile} />
+        )}
       </Container>
-    </ContentCard>
+
+      {canEditProfile(user, profile) && (
+        <EditBar>
+          <Link
+            href={expandRoute(['profile_id_edit', { id: profile.externId }])}
+          >
+            <Button variant={'link'}>
+              <Icon name="pencil" size={1.2} />
+              <Overline>Edit Profile</Overline>
+            </Button>
+          </Link>
+        </EditBar>
+      )}
+    </StyledContentCard>
   )
 }
 
@@ -114,4 +139,47 @@ const ProfileInfoContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 0.6rem;
+`
+
+const EditBar = styled.div`
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  width: 100%;
+  border-top: solid 1px ${({ theme }) => theme.colors.green900};
+`
+
+const StyledContentCard = styled(ContentCard)`
+  flex-direction: column;
+`
+
+const ProfileContactButton = ({
+  user,
+  profile,
+}: {
+  user: MeFragment
+  profile: ProfileFragment
+}) => {
+  const { showModal } = useModal()
+
+  const onClick = () => {
+    showModal(() => <ContactModal sender={user} recipient={profile} />)
+  }
+
+  return (
+    <StyledButton variant="tertiary" onClick={onClick}>
+      <Icon name="envelope" size={2} />
+      Contact
+    </StyledButton>
+  )
+}
+
+const StyledButton = styled(Button)`
+  ${({ theme }) => theme.bp.md} {
+    margin-top: 0.8rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    margin-top: 0;
+  }
 `

@@ -3,10 +3,8 @@ import { useRouter } from '@/components/hooks/useRouter'
 import { useModal } from '@/components/hooks/useModal'
 import { useUser } from '@/components/auth/useUser'
 import { useAuth } from '@/components/auth/useAuth'
-import { useEmail } from '@/components/hooks/useEmail'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationNewResponse } from '@/utils/types/location'
-import { EmailType, NewLocationPayload } from '@/lib/mail/types'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Body1, H3 } from '@/components/core/Typography'
@@ -24,7 +22,6 @@ export const NewLocationView = () => {
   const { showModal } = useModal()
   const { user } = useUser()
   const { confirmLoggedIn } = useAuth()
-  const { sendEmail } = useEmail()
   const { post } = useBackend()
 
   const onCloseUrl = '/city-directory'
@@ -39,12 +36,6 @@ export const NewLocationView = () => {
         const externId = !data || 'error' in data ? null : data.locationExternId
 
         if (externId) {
-          await sendEmail({
-            type: EmailType.NEW_LOCATION,
-            data: {
-              locationId: externId,
-            } as NewLocationPayload,
-          })
           router.push(['n_id_edit', { id: externId }]).then()
         } else {
           showModal(() => (

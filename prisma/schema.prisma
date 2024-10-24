@@ -115,6 +115,8 @@ model Profile {
   activities         Activity[]
   reactions          ActivityReaction[]
   stamps             ProfileStamp[]
+  messagesSent       Message[]          @relation("MessagesSent")
+  messagesReceived   Message[]          @relation("MessagesReceived")
 }
 
 enum CitizenshipStatus {
@@ -301,6 +303,19 @@ enum LocationMediaCategory {
   Sleeping
   Working
   Features
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+
+  sender   Profile @relation("MessagesSent", fields: [senderId], references: [id], onDelete: Restrict)
+  senderId Int
+
+  recipient   Profile @relation("MessagesReceived", fields: [recipientId], references: [id], onDelete: Restrict)
+  recipientId Int
+
+  text String
 }
 
 model Offer {
