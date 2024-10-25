@@ -27,8 +27,7 @@ export const ProfileHeaderSection = ({
   const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
-  const showContactButton =
-    user && user.externId != profile.externId && user.isAdmin
+  const showContactButton = user && user.externId != profile.externId
 
   return (
     <StyledContentCard shadow>
