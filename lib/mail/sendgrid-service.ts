@@ -1,12 +1,9 @@
 import { MailService, MailDataRequired } from '@sendgrid/mail'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-
-const footer = `Sent via Cabin.city Mail.\nIs this email spammy or inappropriate? Please forward it to ${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS} and we'll take care of it.`
 
 export async function sendEmail(
   recipientEmail: string,
   subject: string,
-  text: string
+  html: string
 ) {
   if (!recipientEmail) {
     throw new Error('email recipient missing')
@@ -34,7 +31,7 @@ export async function sendEmail(
       email: process.env.SENDGRID_FROM_EMAIL,
     },
     subject,
-    text: `${text}\n\n---\n${footer}`,
+    html,
   }
 
   console.log(`Sending email to ${md.to}`)
