@@ -226,12 +226,12 @@ export const stampClaimClickEvent = (
   })
 }
 
-export const contactButtonClickEvent = (
+export const openMessageModalButtonClick = (
   senderId: string,
   recipientId: string
 ): void => {
   event({
-    action: 'contact_button_click',
+    action: 'open_message_modal_button_click',
     params: {
       sender_id: senderId,
       recipient_id: recipientId,
@@ -252,9 +252,12 @@ export const sendMessageButtonClickEvent = (
   })
 }
 
-export const emailSentEvent = (senderId: string, recipientId: string): void => {
+export const messageSentEvent = (
+  senderId: string,
+  recipientId: string
+): void => {
   event({
-    action: 'email_sent',
+    action: 'message_sent',
     params: {
       sender_id: senderId,
       recipient_id: recipientId,
@@ -297,9 +300,9 @@ const analytics = {
   acceleratorApplyClickEvent,
   onboardingActionEvent,
   stampClaimClickEvent,
-  contactButtonClickEvent,
+  openMessageModalButtonClick,
   sendMessageButtonClickEvent,
-  emailSentEvent,
+  messageSentEvent,
 }
 
 export default analytics

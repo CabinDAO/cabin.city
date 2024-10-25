@@ -10,7 +10,7 @@ import { toErrorString } from '@/utils/api/error'
 import { isProd } from '@/utils/dev'
 import { sendToDiscord } from '@/lib/discord'
 import { sendEmail } from '@/lib/mail/sendgrid-service'
-import { emailSentEvent } from '@/lib/googleAnalytics/analytics'
+import { messageSentEvent } from '@/lib/googleAnalytics/analytics'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export default wrapHandler(handler)
@@ -79,7 +79,7 @@ async function handler(
     )
   }
 
-  emailSentEvent(sender.externId, recipient.externId)
+  messageSentEvent(sender.externId, recipient.externId)
 
   await sendEmail(
     recipient.email,

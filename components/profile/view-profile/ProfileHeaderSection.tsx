@@ -7,6 +7,7 @@ import { shortenedAddress } from '@/utils/display-utils'
 import { MeFragment, ProfileFragment } from '@/utils/types/profile'
 import { canEditProfile } from '@/lib/permissions'
 import { expandRoute } from '@/utils/routing'
+import { openMessageModalButtonClick } from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
 import { H1, Overline, Subline2 } from '@/components/core/Typography'
 import { Avatar } from '@/components/profile/Avatar'
@@ -163,6 +164,7 @@ const ProfileContactButton = ({
   const { showModal } = useModal()
 
   const onClick = () => {
+    openMessageModalButtonClick(user.externId, profile.externId)
     showModal(() => <ContactModal sender={user} recipient={profile} />)
   }
 
