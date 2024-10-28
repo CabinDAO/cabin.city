@@ -163,7 +163,11 @@ const ProfileContactButton = ({
   const { showModal } = useModal()
 
   const onClick = () => {
-    openMessageModalButtonClick(user.externId, profile.externId)
+    openMessageModalButtonClick(
+      user.externId,
+      profile.externId,
+      'profile-header'
+    )
     showModal(() => <ContactModal sender={user} recipient={profile} />)
   }
 

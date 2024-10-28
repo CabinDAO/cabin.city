@@ -3,7 +3,7 @@ import { useError } from '@/components/hooks/useError'
 import { useModal } from '@/components/hooks/useModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import { MessageNewParamsType, MessageNewResponse } from '@/utils/types/message'
-import { MeFragment, ProfileFragment } from '@/utils/types/profile'
+import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
@@ -19,7 +19,7 @@ export const ContactModal = ({
   recipient,
 }: {
   sender: MeFragment
-  recipient: ProfileFragment
+  recipient: ProfileBasicFragment
 }) => {
   const { post } = useBackend()
   const { hideModal } = useModal()
@@ -59,7 +59,7 @@ export const ContactModal = ({
 
   return (
     <Container>
-      <ModalTitle text={`Send message`} />
+      <ModalTitle text={`Message ${recipient.name}`} />
       <InputWrap>
         {sent ? (
           <Success>

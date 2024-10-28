@@ -19,6 +19,7 @@ import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
 import { expandRoute } from '@/utils/routing'
+import { ContactModal } from '@/components/contact/ContactModal'
 
 export const StewardContact = ({
   steward,
@@ -80,18 +81,17 @@ export const StewardContact = ({
               ? login
               : steward
               ? (e) => {
-                  // todo: contact steward via form in modal
                   e.preventDefault()
                   if (!steward) return
-                  const newWindow = window.open(
-                    `mailto:${steward.email}`,
-                    '_blank',
-                    'noopener,noreferrer'
-                  )
-                  if (newWindow) {
-                    newWindow.opener = null // This is an additional safety measure
-                  }
                   analytics.contactStewardEvent(steward.externId)
+                  analytics.openMessageModalButtonClick(
+                    user.externId,
+                    steward.externId,
+                    'neighborhood-page'
+                  )
+                  showModal(() => (
+                    <ContactModal sender={user} recipient={steward} />
+                  ))
                 }
               : () => {
                   showModal(() => <Modal user={user} location={location} />)
@@ -99,7 +99,14 @@ export const StewardContact = ({
           }
           variant="tertiary"
         >
-          {steward ? 'Contact' : 'Learn More'}
+          {steward ? (
+            <>
+              <Icon name="envelope" size={1.6} />
+              Contact
+            </>
+          ) : (
+            'Learn More'
+          )}
         </ContactButton>
       </ButtonContainer>
     </Container>

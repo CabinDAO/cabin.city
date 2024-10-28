@@ -228,13 +228,15 @@ export const stampClaimClickEvent = (
 
 export const openMessageModalButtonClick = (
   senderId: string,
-  recipientId: string
+  recipientId: string,
+  location: string
 ): void => {
   event({
     action: 'open_message_modal_button_click',
     params: {
       sender_id: senderId,
       recipient_id: recipientId,
+      location: location,
     },
   })
 }
