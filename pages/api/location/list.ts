@@ -177,7 +177,15 @@ const sortPrequery = async (
   try {
     ids = await prisma.$queryRaw<{ id: number }[]>(sqlQuery)
   } catch (error: unknown) {
-    Sentry.captureException(error, { extra: { params, bounds } })
+    Sentry.captureException(error, {
+      extra: {
+        params,
+        bounds,
+        profileExternId: profile?.externId,
+        query: sqlQuery.inspect().statement,
+        queryValues: sqlQuery.inspect().values,
+      },
+    })
     if (error instanceof Error) {
       console.error('Failed to sort locations', {
         profileId: profile?.id,
