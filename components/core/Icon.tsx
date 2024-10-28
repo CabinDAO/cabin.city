@@ -101,6 +101,7 @@ import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
 import stampSvg from './svg/stamp.svg'
 import staySvg from './svg/stay.svg'
+import tagSvg from './svg/tag.svg'
 import takeoutSvg from './svg/takeout.svg'
 import thumbUpOutlineSvg from './svg/thumb-up-outline.svg'
 import thumbUpSvg from './svg/thumb-up.svg'
@@ -214,6 +215,7 @@ export const IconSvgs = {
   stamp: stampSvg,
   stay: staySvg,
   takeout: takeoutSvg,
+  tag: tagSvg,
   'thumb-up-outline': thumbUpOutlineSvg,
   'thumb-up': thumbUpSvg,
   ticket: ticketSvg,

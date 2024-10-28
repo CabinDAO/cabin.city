@@ -15,8 +15,8 @@ import Icon, { IconName } from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
 import { RichTextRender } from '@/components/editor/RichText'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { Tags } from '@/components/profile/Tags'
 import { ProfileContactList } from '@/components/profile/view-profile/ProfileContactList'
+import { tagShortLabels } from '@/components/profile/TagsInput'
 
 export const ProfileAboutSection = ({
   profile,
@@ -66,9 +66,16 @@ export const ProfileAboutSection = ({
                   captionContent={formatShortAddress(profile.address)}
                 />
               )}
+              {profile.tags && (
+                <Datum
+                  iconName="tag"
+                  captionContent={profile.tags
+                    .map((tag) => tagShortLabels[tag])
+                    .join(', ')}
+                />
+              )}
             </ProfileDataGroup>
             {profile.bio && <Bio>{profile.bio}</Bio>}
-            <Tags tags={profile.tags}></Tags>
           </AboutSection>
           {!!profile.contactFields.length && (
             <ContactSection flashing={isFlashing}>

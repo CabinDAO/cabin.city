@@ -12,7 +12,7 @@ const tagLabels: Labels = {
   [ProfileTag.crypto]: `I have a crypto wallet`,
 }
 
-export const tagPillLabels: Record<ProfileTag, string> = {
+export const tagShortLabels: Record<ProfileTag, string> = {
   [ProfileTag.steward]: `neighborhood-organizer`,
   [ProfileTag.moveCurious]: `might-move`,
   [ProfileTag.nomad]: `nomad`,

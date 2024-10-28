@@ -1,7 +1,7 @@
 import React from 'react'
 import { ProfileTag } from '@/utils/types/profile'
 import styled from 'styled-components'
-import { tagPillLabels } from '@/components/profile/TagsInput'
+import { tagShortLabels } from '@/components/profile/TagsInput'
 
 export const Tags = ({ tags }: { tags: ProfileTag[] }) => {
   if (tags.length === 0) return null
@@ -9,7 +9,7 @@ export const Tags = ({ tags }: { tags: ProfileTag[] }) => {
   return (
     <Container>
       {tags.map((tag) => {
-        return <Tag key={tag}>#{tagPillLabels[tag]}</Tag>
+        return <Tag key={tag}>#{tagShortLabels[tag]}</Tag>
       })}
     </Container>
   )
