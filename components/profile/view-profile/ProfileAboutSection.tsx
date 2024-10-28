@@ -68,7 +68,7 @@ export const ProfileAboutSection = ({
               )}
               {profile.tags && (
                 <Datum
-                  iconName="tag"
+                  iconName="hash"
                   captionContent={profile.tags
                     .map((tag) => tagShortLabels[tag])
                     .join(', ')}
