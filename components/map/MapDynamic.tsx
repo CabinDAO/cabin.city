@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGeolocation, useWindowSize } from 'react-use'
+// import { useGeolocation, useWindowSize } from 'react-use'
 import equal from 'react-fast-compare'
 import Link from 'next/link'
 import * as L from 'leaflet'
@@ -19,9 +19,9 @@ import theme from '@/styles/theme'
 import { MarkerData, onMoveFn } from '@/components/map/Map'
 import { MarkerClusterGroup } from '@/components/map/Cluster'
 import { AutoImage } from '@/components/core/AutoImage'
-import iconRetinaUrl from '@/components/map/assets/marker-icon-2x.png'
-import iconUrl from '@/components/map/assets/marker-icon-2x.png'
-import shadowUrl from '@/components/map/assets/marker-shadow.png'
+// import iconRetinaUrl from '@/components/map/assets/marker-icon-2x.png'
+// import iconUrl from '@/components/map/assets/marker-icon-2x.png'
+// import shadowUrl from '@/components/map/assets/marker-shadow.png'
 import defaultAvatar from '@/components/profile/default-avatar.png'
 
 export const MapDynamic = ({
@@ -100,7 +100,7 @@ export const MapDynamic = ({
 
 const Hooks = ({ onMove }: { onMove?: onMoveFn }) => {
   const map = useMap()
-  useMapEvent('moveend', (e) => {
+  useMapEvent('moveend', () => {
     const center = map.getCenter()
     const bounds = map.getBounds()
 
@@ -240,14 +240,14 @@ const StyledPopup = styled(Popup)`
   font-size: 1.6rem;
 `
 
-const pinIcon = L.icon({
-  iconRetinaUrl: iconRetinaUrl.src,
-  iconUrl: iconUrl.src,
-  shadowUrl: shadowUrl.src,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-})
+// const pinIcon = L.icon({
+//   iconRetinaUrl: iconRetinaUrl.src,
+//   iconUrl: iconUrl.src,
+//   shadowUrl: shadowUrl.src,
+//   iconSize: [25, 41],
+//   iconAnchor: [12, 41],
+//   popupAnchor: [1, -34],
+// })
 
 const neighborhoodIcon = new L.Icon({
   iconUrl: '/images/map/cabin-icon.svg',

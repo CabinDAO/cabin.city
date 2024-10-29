@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Caption, H2, Subline1 } from './Typography'
+import { Caption, H2 } from './Typography'
 import Icon from './Icon'
 import { EMPTY, truncate } from '@/utils/display-utils'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
@@ -72,14 +72,14 @@ export const NeighborhoodCard = ({
   )
 }
 
-const ListingTypeTag = ({ position }: { position: number }) => {
-  return (
-    <LocationTagContainer>
-      <Icon color={'green400'} size={1.1} name={'logo-cabin'} />
-      <Caption $color="yellow100">#{position}</Caption>
-    </LocationTagContainer>
-  )
-}
+// const ListingTypeTag = ({ position }: { position: number }) => {
+//   return (
+//     <LocationTagContainer>
+//       <Icon color={'green400'} size={1.1} name={'logo-cabin'} />
+//       <Caption $color="yellow100">#{position}</Caption>
+//     </LocationTagContainer>
+//   )
+// }
 
 const EmptyImageContainer = styled.div`
   display: flex;
@@ -152,23 +152,23 @@ const NameH2 = styled(H2)`
   }
 `
 
-const TagContainer = styled.div`
-  position: absolute;
-  bottom: 0.9rem;
-  left: 0.9rem;
-  background-color: ${({ theme }) => theme.colors.yellow100};
-  padding: 0.7rem 1.2rem;
-  border-radius: 0.4rem;
-  width: max-content;
-`
+// const TagContainer = styled.div`
+//   position: absolute;
+//   bottom: 0.9rem;
+//   left: 0.9rem;
+//   background-color: ${({ theme }) => theme.colors.yellow100};
+//   padding: 0.7rem 1.2rem;
+//   border-radius: 0.4rem;
+//   width: max-content;
+// `
 
-const LocationTagContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0.4rem 1rem;
-  border-radius: 6rem;
-  background-color: ${({ theme }) => theme.colors.green900};
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-`
+// const LocationTagContainer = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   padding: 0.4rem 1rem;
+//   border-radius: 6rem;
+//   background-color: ${({ theme }) => theme.colors.green900};
+//   justify-content: center;
+//   align-items: center;
+//   gap: 0.5rem;
+// `

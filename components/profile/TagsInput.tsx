@@ -24,7 +24,7 @@ export const tagShortLabels: Record<ProfileTag, string> = {
 export const TagsInput = ({
   tags,
   onTagsChange,
-  canShowErrors,
+  // canShowErrors,
   disabled = false,
 }: {
   tags: ProfileTag[]

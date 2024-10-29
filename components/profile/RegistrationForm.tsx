@@ -59,20 +59,21 @@ export const RegistrationForm = ({
   const { externalUser } = useExternalUser()
   useEffect(() => {
     if (externalUser && externalUser.email?.address && !defaultContactAdded) {
-      setNewParams({
-        ...newParams,
+      setNewParams((prev) => ({
+        ...prev,
         ...{
           contactFields: [
             {
               type: ContactFieldType.Email,
-              value: externalUser.email.address,
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              value: externalUser.email!.address,
             },
           ],
         },
-      })
+      }))
       setDefaultContactAdded(true)
     }
-  }, [externalUser])
+  }, [externalUser, defaultContactAdded, setNewParams])
 
   const handleSubmit = () => {
     if (

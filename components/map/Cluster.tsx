@@ -21,6 +21,7 @@ import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 //   shadowUrl: require('./assets/marker-shadow.png').default,
 // })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ClusterType = { [key in string]: any }
 
 type ClusterEvents = {
@@ -40,6 +41,7 @@ type MarkerClusterControl = L.MarkerClusterGroupOptions & {
 function getPropsAndEvents(props: MarkerClusterControl) {
   let clusterProps: ClusterType = {}
   let clusterEvents: ClusterType = {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { children, ...rest } = props
   // Splitting props and events to different objects
   Object.entries(rest).forEach(([propName, prop]) => {
@@ -68,16 +70,18 @@ function createMarkerClusterGroup(
   )
 }
 
-const updateMarkerCluster = (
-  instance: L.MarkerClusterGroup,
-  props: MarkerClusterControl,
-  prevProps: MarkerClusterControl
-) => {
-  //TODO when prop change update instance
-  //   if (props. !== prevProps.center || props.size !== prevProps.size) {
-  //   instance.setBounds(getBounds(props))
-  // }
-}
+const updateMarkerCluster = () =>
+  // (
+  //   instance: L.MarkerClusterGroup,
+  //   props: MarkerClusterControl,
+  //   prevProps: MarkerClusterControl
+  // ) =>
+  {
+    //TODO when prop change update instance
+    //   if (props. !== prevProps.center || props.size !== prevProps.size) {
+    //   instance.setBounds(getBounds(props))
+    // }
+  }
 
 export const MarkerClusterGroup = createPathComponent<
   L.MarkerClusterGroup,

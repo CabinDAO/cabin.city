@@ -18,7 +18,7 @@ export const useExternalUser = ({
     } else if (redirectToIfFound && user) {
       router.push(redirectToIfFound)
     }
-  }, [ready, authenticated, user, redirectTo, redirectToIfFound])
+  }, [ready, authenticated, user, redirectTo, redirectToIfFound, router])
 
   return { externalUser: user, isUserLoading: !ready }
 }

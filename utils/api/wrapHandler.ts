@@ -30,6 +30,7 @@ type AuthData = {
 
 export type OptsWithAuth = { auth: AuthData }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type WithAuthApiHandler<T = any> = (
   req: NextApiRequest,
   res: NextApiResponse<T>,
@@ -66,6 +67,7 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
 }
 
 const captureSentryError = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: PrismaClientValidationError | any,
   req: NextApiRequest
 ) => {

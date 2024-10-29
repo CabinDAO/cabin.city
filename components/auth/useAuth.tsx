@@ -11,11 +11,11 @@ export const useAuth = (logAnalyticsEvent?: boolean) => {
   const { authenticated, ready, logout } = usePrivy()
   const { login } = useLogin({
     onComplete: async (
-      user,
-      isNewUser,
-      wasAlreadyAuthenticated,
-      loginMethod,
-      linkedAccount
+      user
+      // isNewUser,
+      // wasAlreadyAuthenticated,
+      // loginMethod,
+      // linkedAccount
     ) => {
       const privyDID = user.id
       Sentry.setUser({ privyDID })

@@ -175,7 +175,8 @@ const TipTap = ({
     setContainerHeight(height)
 
     const resizeObserver = new ResizeObserver(() => {
-      const { height } = ref.current!.getBoundingClientRect()
+      if (!ref.current) return
+      const { height } = ref.current.getBoundingClientRect()
       setContainerHeight(height)
     })
 
@@ -184,7 +185,7 @@ const TipTap = ({
     return () => {
       resizeObserver.disconnect()
     }
-  }, [maxHeight, ref.current])
+  }, [maxHeight])
 
   // TODO: consider further optimization https://tiptap.dev/docs/guides/performance#gain-more-control-over-rendering
 

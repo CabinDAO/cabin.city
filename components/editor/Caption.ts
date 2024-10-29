@@ -1,6 +1,7 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 
 interface CaptionOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   HTMLAttributes: Record<string, any>
 }
 

@@ -15,11 +15,11 @@ export const Countdown = ({ light = false }: { light?: boolean }) => {
       <BaseCountdown
         date={DEADLINE}
         renderer={({
+          // completed,
           days,
           hours,
           minutes,
           seconds,
-          completed,
         }: CountdownRenderProps) => {
           return `${days} days : ${hours} hrs : ${minutes} mins : ${seconds} sec`
         }}

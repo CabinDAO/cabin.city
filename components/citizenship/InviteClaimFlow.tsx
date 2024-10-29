@@ -102,7 +102,7 @@ export default function InviteClaimFlow({
         goToStep(step)
       }
     }
-  }, [alreadyHasAccount, step, sendToCitizenship, router, goToStep])
+  }, [alreadyHasAccount, step, sendToCitizenship, router])
 
   const proceedButtonReady = !isUserLoading && !isMutating && !isAboutToRedirect
 

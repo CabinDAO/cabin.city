@@ -37,8 +37,13 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const hasWallet = !!externalUser?.wallet
   const isEmbeddedWallet =
     hasWallet && externalUser?.wallet?.walletClient === 'privy'
-  const { updateEmail, exportWallet, linkWallet, unlinkWallet, createWallet } =
-    usePrivy()
+  const {
+    updateEmail,
+    // createWallet,
+    exportWallet,
+    linkWallet,
+    unlinkWallet,
+  } = usePrivy()
 
   const { useMutate } = useBackend()
   const { trigger: updateProfile } = useMutate<ProfileEditResponse>(
@@ -74,7 +79,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
         refetchUser()
       })
     }
-  }, [externalUser?.wallet?.address, updateProfile, user])
+  }, [externalUser?.wallet?.address, updateProfile, user, refetchUser])
 
   const handleWalletUnlink = async () => {
     if (!user.walletAddress) {

@@ -9,7 +9,6 @@ import {
 import styled from 'styled-components'
 import { InputBase, HelperTextPosition } from './InputBase'
 import { body1Styles, subline2Styles } from './Typography'
-import { set } from 'date-fns'
 
 type InputTextSize = 'large' | 'medium'
 
@@ -65,7 +64,7 @@ export const InputTextArea = ({
         inputRef.current.focus()
       }, 0)
     }
-  }, [inputRef?.current, autoFocus])
+  }, [autoFocus])
 
   const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     if (autoResize) {

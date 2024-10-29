@@ -207,18 +207,18 @@ const Subtitle = styled(H3)`
   }
 `
 
-const BottomSection = styled(Section)`
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-  }
+// const BottomSection = styled(Section)`
+//   ${({ theme }) => theme.bp.md} {
+//     flex-direction: row;
+//   }
 
-  ${Subtitle} {
-    ${({ theme }) => theme.bp.md} {
-      font-size: 2rem;
-      margin-bottom: 0;
-    }
-  }
-`
+//   ${Subtitle} {
+//     ${({ theme }) => theme.bp.md} {
+//       font-size: 2rem;
+//       margin-bottom: 0;
+//     }
+//   }
+// `
 
 const Blocks = styled.div`
   display: flex;

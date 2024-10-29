@@ -21,7 +21,7 @@ export const TagsStep = ({
       setShouldGoNext(false)
       goNext()
     }
-  }, [data])
+  }, [data, shouldGoNext, goNext])
 
   const handleNext = async () => {
     setShouldGoNext(true)

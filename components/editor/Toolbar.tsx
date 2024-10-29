@@ -139,14 +139,14 @@ export const ToolbarButton = ({
   type,
   iconName,
   isActive,
+  // disabled, // TODO: make this work
   onClick,
-  disabled, // TODO: make this work
 }: {
   type: string
   iconName: IconName
   isActive: boolean
-  onClick: () => void
   disabled?: boolean
+  onClick: () => void
 }) => {
   return (
     <ToolbarItem

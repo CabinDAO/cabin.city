@@ -8,7 +8,6 @@ import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
-  CitizenshipStatus,
   ProfileSort,
   ProfileListParams,
   ProfileListResponse,

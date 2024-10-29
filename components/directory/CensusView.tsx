@@ -86,7 +86,7 @@ export const CensusAuthView = () => {
         })
       )
     })
-  }, [])
+  }, [get])
 
   const [latLngBounds, setLatLngBounds] = useState<
     onMoveParams['bounds'] | undefined

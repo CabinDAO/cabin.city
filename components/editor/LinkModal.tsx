@@ -103,7 +103,7 @@ export const LinkModal = ({ editor }: { editor: Editor }) => {
     setTimeout(() => {
       urlInputRef.current?.focus()
     }, 100)
-  }, [])
+  }, [editor])
 
   return (
     <StyledModalContainer>

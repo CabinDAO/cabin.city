@@ -291,6 +291,6 @@ const Handle = styled(Body1)`
   opacity: 75%;
 `
 
-const Date = styled(Body2)`
-  opacity: 55%;
-`
+// const Date = styled(Body2)`
+//   opacity: 55%;
+// `

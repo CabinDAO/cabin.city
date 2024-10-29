@@ -1,5 +1,7 @@
 import fetch from 'node-fetch'
-import { PrivyClient, LinkedAccountWithMetadata } from '@privy-io/server-auth'
+import {
+  PrivyClient /*, LinkedAccountWithMetadata*/,
+} from '@privy-io/server-auth'
 
 export const privy = new PrivyClient(
   process.env.NEXT_PUBLIC_PRIVY_APP_ID || '',
@@ -82,36 +84,36 @@ export const createPrivyAccount = async (email: string, walletAddress = '') => {
 
 // this doesnt work today and the client gives an unhelpful error message so
 // its impossible to debug
-const createPrivyAccountMightWorkSomeday = async (
-  email: string,
-  walletAddress = ''
-) => {
-  const linkedAccounts: Array<
-    DistributiveOmit<
-      LinkedAccountWithMetadata,
-      'verifiedAt' | 'firstVerifiedAt' | 'latestVerifiedAt'
-    >
-  > = [
-    {
-      type: 'email',
-      address: email,
-    },
-  ]
+// const createPrivyAccountMightWorkSomeday = async (
+//   email: string,
+//   walletAddress = ''
+// ) => {
+//   const linkedAccounts: Array<
+//     DistributiveOmit<
+//       LinkedAccountWithMetadata,
+//       'verifiedAt' | 'firstVerifiedAt' | 'latestVerifiedAt'
+//     >
+//   > = [
+//     {
+//       type: 'email',
+//       address: email,
+//     },
+//   ]
 
-  if (walletAddress) {
-    linkedAccounts.push({
-      type: 'wallet',
-      address: walletAddress,
-      chainType: 'ethereum', // why is this still required???
-      chainId: 'eip155:1', // eth mainnet
-    })
-  }
+//   if (walletAddress) {
+//     linkedAccounts.push({
+//       type: 'wallet',
+//       address: walletAddress,
+//       chainType: 'ethereum', // why is this still required???
+//       chainId: 'eip155:1', // eth mainnet
+//     })
+//   }
 
-  return await privy.importUser({
-    createEmbeddedWallet: !walletAddress,
-    linkedAccounts: linkedAccounts,
-  })
-}
+//   return await privy.importUser({
+//     createEmbeddedWallet: !walletAddress,
+//     linkedAccounts: linkedAccounts,
+//   })
+// }
 
 type CreateAccountResponse = {
   id: string // did:privy:abc123
@@ -189,6 +191,6 @@ type LinkedAccount = {
 
 // copied from @privy-io/server-auth because its not exported
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type DistributiveOmit<T, K extends keyof any> = T extends any
-  ? Omit<T, K>
-  : never
+// type DistributiveOmit<T, K extends keyof any> = T extends any
+//   ? Omit<T, K>
+//   : never
