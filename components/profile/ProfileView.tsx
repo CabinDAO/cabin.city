@@ -36,7 +36,7 @@ export const ProfileView = ({ profile }: { profile: ProfileFragment }) => {
           </div>
         )}
         {isOwnProfile && <ProfileNextStepsSection me={user} />}
-        <ProfileAboutSection profile={profile} user={user} />
+        <ProfileAboutSection profile={profile} />
         <ProfileNeighborhoodSection profile={profile} user={user} />
         <ProfileStampsSection profile={profile} />
         <ProfileCitizenSection profile={profile} />

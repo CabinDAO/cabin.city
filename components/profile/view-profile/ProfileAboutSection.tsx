@@ -13,10 +13,8 @@ import { tagShortLabels } from '@/components/profile/TagsInput'
 
 export const ProfileAboutSection = ({
   profile,
-  user,
 }: {
   profile: ProfileFragment
-  user: MeFragment | null
 }) => {
   return (
     <ContentCard shape="notch">
