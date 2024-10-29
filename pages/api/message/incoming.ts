@@ -42,7 +42,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     const parsed = schema.parse(fields)
 
-    sendToDiscord(JSON.stringify(parsed))
+    sendToDiscord(
+      `Got inbound message from ${parsed.envelope[0].from} to ${parsed.envelope[0].to[0]} with subject ${parsed.subject[0]}\n\n\`\`\`\n${parsed.text[0]}\n\`\`\`\n\n---\n\n\`\`\`\n${parsed.html[0]}\n\`\`\``
+    )
 
     // envelope: [ '{"to":["nowtyfuna@mail.cabin.city"],"from":"grin@cabin.city"}' ],
     // text: [ 'oyufywuyrs\r\n' ],
