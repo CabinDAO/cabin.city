@@ -119,7 +119,7 @@ export type ProfileNewResponse =
   | {
       externId: string
     }
-  | APIError
+  | (APIError & { exists?: boolean })
 
 export type ProfileVouchParams = {
   externId: string

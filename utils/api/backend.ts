@@ -3,7 +3,6 @@ import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import useSWRInfinite from 'swr/infinite'
 import { APIError, PageParamsType, Paginated } from '@/utils/types/shared'
-// import {URL} from 'url'
 
 const defaultPageSize = 20
 

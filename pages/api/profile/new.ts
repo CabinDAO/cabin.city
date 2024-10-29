@@ -34,6 +34,16 @@ async function handler(
 
   const privyDID = requireAuth(opts)
 
+  const existingUser = await prisma.profile.findUnique({
+    where: { privyDID },
+  })
+  if (existingUser) {
+    res
+      .status(409)
+      .send({ error: 'User for this privy DID already exists', exists: true })
+    return
+  }
+
   const parsed = ProfileNewParams.safeParse(req.body)
   if (!parsed.success) {
     res.status(400).send({ error: toErrorString(parsed.error) })

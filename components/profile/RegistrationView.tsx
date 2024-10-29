@@ -55,6 +55,8 @@ export const RegistrationView = () => {
       return
     }
 
+    await refetchUser()
+
     if (!params.avatarCfId) {
       showError('Avatar required')
       return
@@ -79,12 +81,16 @@ export const RegistrationView = () => {
       } satisfies ProfileNewParamsType)
 
       if ('error' in resp) {
-        showModal(() => (
-          <ErrorModal
-            title="Profile Submission Error"
-            description={resp.error ?? 'Error submitting profile'}
-          />
-        ))
+        if (resp.exists) {
+          router.push('profile')
+        } else {
+          showModal(() => (
+            <ErrorModal
+              title="Profile Submission Error"
+              description={resp.error ?? 'Error submitting profile'}
+            />
+          ))
+        }
         return
       } else {
         if (CURRENT_CLAIMABLE_STAMP && hasStampReminder) {
