@@ -3,11 +3,7 @@ import { prisma } from '@/lib/prisma'
 import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { sendToDiscord } from '@/lib/discord'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
@@ -24,14 +20,14 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   const location = await prisma.location.create({
     data: {
-      stewardId: profile.id,
+      stewardId: user.id,
       externId: randomId('location'),
       type: $Enums.LocationType.Neighborhood,
-      name: `${profile.name}'s New Neighborhood`,
+      name: `${user.name}'s New Neighborhood`,
       description: '',
       bannerImageCfId: '',
     },
@@ -40,7 +36,7 @@ async function handler(
   if (isProd) {
     await sendToDiscord(
       `<@202214676761804801> <@733769026009956383> <@481990685881532419> New location listed by ${
-        profile.name
+        user.name
       }: ${appDomainWithProto}${expandRoute([
         'n_id',
         { id: location.externId },

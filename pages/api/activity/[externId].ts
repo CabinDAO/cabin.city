@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { ActivityDeleteResponse } from '@/utils/types/activity'
 
 async function handler(
@@ -18,7 +14,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
   const externId = req.query.externId as string
 
   const activityToDelete = await prisma.activity.findUnique({
@@ -32,7 +28,7 @@ async function handler(
     return
   }
 
-  if (activityToDelete.profileId !== profile.id && !profile.isAdmin) {
+  if (activityToDelete.profileId !== user.id && !user.isAdmin) {
     res.status(403).send({ error: 'Forbidden' })
     return
   }

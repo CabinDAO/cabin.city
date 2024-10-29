@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import {
   ProfileSetupStateParams,
   ProfileSetupStateResponse,
@@ -20,7 +16,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   if (!req.body.state) {
     res.status(400).send({ error: 'State var required' })
@@ -37,7 +33,7 @@ async function handler(
       isProfileSetupDismissed: params.state === 'dismissed' ? true : undefined,
     },
     where: {
-      id: profile.id,
+      id: user.id,
     },
   })
 

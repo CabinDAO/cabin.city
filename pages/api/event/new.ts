@@ -2,11 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { OfferType, OfferPriceInterval, ActivityType } from '@prisma/client'
 import { randomId } from '@/utils/random'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { EventNewParams, EventNewResponse } from '@/utils/types/event'
 import { canEditLocation } from '@/lib/permissions'
 import { toErrorString } from '@/utils/api/error'
@@ -22,7 +18,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   const parsed = EventNewParams.safeParse(req.body)
   if (!parsed.success) {
@@ -42,7 +38,7 @@ async function handler(
     return
   }
 
-  if (!canEditLocation(profile, location)) {
+  if (!canEditLocation(user, location)) {
     res.status(403).send({ error: 'You are not the steward of this location' })
     return
   }
@@ -71,7 +67,7 @@ async function handler(
       externId: randomId('activity'),
       key: activityKey,
       type: ActivityType.OfferCreated,
-      profileId: profile.id,
+      profileId: user.id,
       offerId: event.id,
     },
     update: {},

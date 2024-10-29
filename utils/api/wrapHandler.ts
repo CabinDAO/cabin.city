@@ -90,31 +90,37 @@ export const requireAuth = (opts: OptsWithAuth): string => {
   return opts.auth.privyDID
 }
 
-export const findProfile = async (
+export const getUser = async (
   auth: AuthData
 ): Promise<ProfileWithWallet | null> => {
   if (!auth.privyDID) {
     return null
   }
 
-  return prisma.profile.findUnique({
+  const user = await prisma.profile.findUnique({
     where: { privyDID: auth.privyDID },
     include: {
       wallet: true,
     },
   })
+
+  if (user) {
+    Sentry.setUser({ privyDID: user.privyDID })
+  }
+
+  return user
 }
 
-export const requireProfile = async (
+export const requireUser = async (
   auth: AuthData
 ): Promise<ProfileWithWallet> => {
-  const profile = await findProfile(auth)
+  const user = await getUser(auth)
 
-  if (!profile) {
+  if (!user) {
     throw new AuthenticationError(403, 'Forbidden')
   }
 
-  return profile
+  return user
 }
 
 const privyDIDFromAuthToken = async (authToken: string) => {

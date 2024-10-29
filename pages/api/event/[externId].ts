@@ -5,7 +5,7 @@ import { toErrorString } from '@/utils/api/error'
 import {
   OptsWithAuth,
   ProfileWithWallet,
-  requireProfile,
+  requireUser,
   wrapHandler,
 } from '@/utils/api/wrapHandler'
 import {
@@ -26,10 +26,10 @@ async function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      await handlePost(req, res, await requireProfile(opts.auth))
+      await handlePost(req, res, await requireUser(opts.auth))
       return
     case 'DELETE':
-      await handleDelete(req, res, await requireProfile(opts.auth))
+      await handleDelete(req, res, await requireUser(opts.auth))
       return
     case 'GET':
       await handleGet(req, res)

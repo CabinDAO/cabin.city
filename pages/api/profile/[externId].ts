@@ -8,7 +8,7 @@ import { expandRoute } from '@/utils/routing'
 import { canEditProfile } from '@/lib/permissions'
 import {
   OptsWithAuth,
-  requireProfile,
+  requireUser,
   wrapHandler,
   ProfileWithWallet,
 } from '@/utils/api/wrapHandler'
@@ -36,8 +36,8 @@ async function handler(
       await handleGet(req, res)
       return
     case 'POST':
-      const profile = await requireProfile(opts.auth)
-      await handlePost(req, res, profile)
+      const user = await requireUser(opts.auth)
+      await handlePost(req, res, user)
       return
     default:
       res.setHeader('Allow', ['GET', 'POST'])

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import * as Sentry from '@sentry/nextjs'
 import {
   OptsWithAuth,
-  findProfile,
+  getUser,
   ProfileWithWallet,
   wrapHandler,
 } from '@/utils/api/wrapHandler'
@@ -49,9 +49,9 @@ async function handler(
     return
   }
 
-  const profile = await findProfile(opts.auth)
+  const user = await getUser(opts.auth)
 
-  const idsInOrder = await sortPrequery(profile, params)
+  const idsInOrder = await sortPrequery(user, params)
 
   const query: Prisma.LocationFindManyArgs = {
     where: {
@@ -78,7 +78,7 @@ async function handler(
 
 // get ids for locations sorted in proper order
 const sortPrequery = async (
-  profile: ProfileWithWallet | null,
+  user: ProfileWithWallet | null,
   params: LocationListParamsType
 ) => {
   const { skip, take } = getPageParams(params)
@@ -134,11 +134,11 @@ const sortPrequery = async (
         }
         AND
         ${
-          profile?.isAdmin
+          user?.isAdmin
             ? Prisma.sql`1=1`
             : Prisma.sql`l."publishedAt" IS NOT NULL ${
-                profile
-                  ? Prisma.sql`OR steward."privyDID" = ${profile.privyDID}`
+                user
+                  ? Prisma.sql`OR steward."privyDID" = ${user.privyDID}`
                   : Prisma.sql``
               }`
         }
@@ -158,8 +158,8 @@ const sortPrequery = async (
     ORDER BY 
       "distanceInKM" ASC, 
       ${
-        profile
-          ? Prisma.sql`"privyDID" = ${profile.privyDID} AND "publishedAt" IS NULL DESC, "privyDID" = ${profile.privyDID} DESC,`
+        user
+          ? Prisma.sql`"privyDID" = ${user.privyDID} AND "publishedAt" IS NULL DESC, "privyDID" = ${user.privyDID} DESC,`
           : Prisma.sql``
       }
       "publishedAt" IS NULL ASC,
@@ -181,14 +181,14 @@ const sortPrequery = async (
       extra: {
         params,
         bounds,
-        profileExternId: profile?.externId,
+        profileExternId: user?.externId,
         query: sqlQuery.inspect().statement,
         queryValues: sqlQuery.inspect().values,
       },
     })
     if (error instanceof Error) {
       console.error('Failed to sort locations', {
-        profileId: profile?.id,
+        profileId: user?.id,
         query: formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values),
         errorStack: error.stack,
         params,

@@ -32,7 +32,7 @@ const handler = async (
     return
   }
 
-  // const profile = await requireProfile(opts.auth)
+  // const user = await requireUser(opts.auth)
 
   const body = req.body as CreatePaymentIntentParams
 
@@ -52,7 +52,7 @@ const handler = async (
     return
   }
 
-  // if (cart.profileId !== profile.id) {
+  // if (cart.profileId !== user.id) {
   //   res.status(403).end({ error: 'Not your cart' })
   //   return
   // }

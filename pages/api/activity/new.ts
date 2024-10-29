@@ -1,9 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { randomId } from '@/utils/random'
 import { ActivityNewParams, ActivityNewResponse } from '@/utils/types/activity'
@@ -20,7 +16,7 @@ async function handler(
     return
   }
 
-  const proflie = await requireProfile(opts.auth)
+  const proflie = await requireUser(opts.auth)
   const body = req.body as ActivityNewParams
 
   const activity = await prisma.activity.create({

@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { createPrivyAccount } from '@/lib/privy'
 import {
   WalletGenerateParams,
@@ -24,8 +20,8 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
-  if (!profile.isAdmin) {
+  const user = await requireUser(opts.auth)
+  if (!user.isAdmin) {
     res.status(403).send({ error: 'Forbidden' })
     return
   }

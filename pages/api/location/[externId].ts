@@ -5,8 +5,8 @@ import { toErrorString } from '@/utils/api/error'
 import {
   OptsWithAuth,
   ProfileWithWallet,
-  findProfile,
-  requireProfile,
+  getUser,
+  requireUser,
   wrapHandler,
 } from '@/utils/api/wrapHandler'
 import {
@@ -32,10 +32,10 @@ async function handler(
       await handleGet(req, res, opts)
       return
     case 'POST':
-      await handlePost(req, res, await requireProfile(opts.auth))
+      await handlePost(req, res, await requireUser(opts.auth))
       return
     case 'DELETE':
-      await handleDelete(req, res, await requireProfile(opts.auth))
+      await handleDelete(req, res, await requireUser(opts.auth))
       return
     default:
       res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
@@ -71,8 +71,8 @@ async function handleGet(
   }
 
   if (!location.publishedAt) {
-    const profile = await findProfile(opts.auth)
-    if (!profile || !canEditLocation(profile, location)) {
+    const user = await getUser(opts.auth)
+    if (!user || !canEditLocation(user, location)) {
       res.status(404).send({ error: 'Location not found' })
       return
     }

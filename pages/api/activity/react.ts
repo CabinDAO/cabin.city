@@ -4,11 +4,7 @@ import {
   ActivityReactParams,
   ActivityReactResponse,
 } from '@/utils/types/activity'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 
 async function handler(
   req: NextApiRequest,
@@ -27,7 +23,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   if (params.action === 'like') {
     // await Promise.all() might be even better here because its parallel, while transaction is sequential
@@ -40,7 +36,7 @@ async function handler(
         },
         profile: {
           connect: {
-            externId: profile.externId,
+            externId: user.externId,
           },
         },
       },
@@ -55,7 +51,7 @@ async function handler(
       await prisma.activityReaction.delete({
         where: {
           profileId_activityId: {
-            profileId: profile.id,
+            profileId: user.id,
             activityId: activity.id,
           },
         },

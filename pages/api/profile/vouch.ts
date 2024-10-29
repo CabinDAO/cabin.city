@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import {
   CitizenshipStatus,
   ProfileVouchParams,
@@ -26,7 +22,7 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   const params: ProfileVouchParams = {
     externId: req.body.externId ? (req.body.externId as string) : '',
@@ -35,7 +31,7 @@ async function handler(
 
   const vouchedProfile = await prisma.profile.update({
     data: {
-      voucherId: params.action === 'vouch' ? profile.id : null,
+      voucherId: params.action === 'vouch' ? user.id : null,
       citizenshipStatus:
         params.action === 'vouch'
           ? CitizenshipStatus.Vouched
@@ -43,7 +39,7 @@ async function handler(
     },
     where: {
       externId: params.externId,
-      voucherId: params.action === 'vouch' ? null : profile.id,
+      voucherId: params.action === 'vouch' ? null : user.id,
     },
     select: {
       citizenshipStatus: true,

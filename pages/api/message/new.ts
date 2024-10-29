@@ -1,10 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { MessageNewParams, MessageNewResponse } from '@/utils/types/message'
 import { toErrorString } from '@/utils/api/error'
 import { isProd } from '@/utils/dev'
@@ -27,7 +23,7 @@ async function handler(
     return
   }
 
-  const sender = await requireProfile(opts.auth)
+  const sender = await requireUser(opts.auth)
 
   const parsed = MessageNewParams.safeParse(req.body)
   if (!parsed.success) {

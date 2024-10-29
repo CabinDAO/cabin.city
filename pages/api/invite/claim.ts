@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import {
   OptsWithAuth,
   ProfileWithWallet,
-  requireProfile,
+  requireUser,
   wrapHandler,
 } from '@/utils/api/wrapHandler'
 import { randomId } from '@/utils/random'
@@ -31,10 +31,10 @@ async function handler(
     return
   }
 
-  let profile: ProfileWithWallet | null = null
+  let user: ProfileWithWallet | null = null
   if (opts.auth.authToken) {
-    profile = await requireProfile(opts.auth)
-    if (profile.citizenshipStatus == CitizenshipStatus.Verified) {
+    user = await requireUser(opts.auth)
+    if (user.citizenshipStatus == CitizenshipStatus.Verified) {
       res.status(400).send({ error: 'Already a citizen' })
       return
     }
@@ -42,14 +42,14 @@ async function handler(
 
   const body = req.body as InviteClaimParams
 
-  const invite = await createInvite(res, body, profile)
+  const invite = await createInvite(res, body, user)
   if (!invite) {
     return
   }
 
   const resData: InviteClaimResponse = { externId: invite.externId }
 
-  const hasCryptoWallet = !!(profile || invite.walletAddress)
+  const hasCryptoWallet = !!(user || invite.walletAddress)
   const checkoutThroughUnlock =
     hasCryptoWallet && body.paymentMethod === PaymentMethod.Crypto
 

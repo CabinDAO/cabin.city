@@ -1,11 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '@/lib/prisma'
 import { ActivityType, CitizenshipStatus } from '@prisma/client'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { randomId } from '@/utils/random'
 
 async function handler(
@@ -19,15 +15,15 @@ async function handler(
     return
   }
 
-  const profile = await requireProfile(opts.auth)
-  if (profile.citizenshipStatus !== null) {
+  const user = await requireUser(opts.auth)
+  if (user.citizenshipStatus !== null) {
     res.status(400).send({ error: 'Interest already signaled' })
     return
   }
 
   await prisma.profile.update({
     where: {
-      id: profile.id,
+      id: user.id,
       citizenshipStatus: null,
     },
     data: {
@@ -35,7 +31,7 @@ async function handler(
     },
   })
 
-  const activityKey = `VouchRequested|${profile.externId}`
+  const activityKey = `VouchRequested|${user.externId}`
   await prisma.activity.upsert({
     where: {
       key: activityKey,
@@ -44,7 +40,7 @@ async function handler(
       externId: randomId('activity'),
       key: activityKey,
       type: ActivityType.VouchRequested,
-      profileId: profile.id,
+      profileId: user.id,
     },
     update: {},
   })

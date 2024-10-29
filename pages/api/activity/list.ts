@@ -13,11 +13,7 @@ import {
 import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
 import { EventType } from '@/utils/types/event'
 import { LocationType } from '@/utils/types/location'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { toErrorString } from '@/utils/api/error'
 
 async function handler(
@@ -61,11 +57,11 @@ async function handler(
 
   let activtiesWithMyReactions: { [key: number]: boolean } = {}
   if (opts.auth.authToken) {
-    const profile = await requireProfile(opts.auth)
+    const user = await requireUser(opts.auth)
     const myReactions = await prisma.activityReaction.findMany({
       select: { activityId: true },
       where: {
-        profile: { id: profile.id },
+        profile: { id: user.id },
         activity: {
           id: {
             in: activities.map((a) => a.id),

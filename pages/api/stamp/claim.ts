@@ -1,9 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import {
-  OptsWithAuth,
-  requireProfile,
-  wrapHandler,
-} from '@/utils/api/wrapHandler'
+import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import {
   CURRENT_CLAIMABLE_STAMP,
@@ -33,7 +29,7 @@ async function handler(
   }
   const params = parsed.data
 
-  const profile = await requireProfile(opts.auth)
+  const user = await requireUser(opts.auth)
 
   const claimableStamps = [CURRENT_CLAIMABLE_STAMP?.id]
   if (!claimableStamps.includes(params.id)) {
@@ -48,7 +44,7 @@ async function handler(
     include: {
       profiles: {
         where: {
-          profileId: profile.id,
+          profileId: user.id,
         },
       },
     },
@@ -63,7 +59,7 @@ async function handler(
     res.status(400).send({ success: true, previouslyClaimed: true })
   }
 
-  await addStamp(profile, stamp.id)
+  await addStamp(user, stamp.id)
 
   res.status(200).send({ success: true, previouslyClaimed: false })
 }
