@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import * as Sentry from '@sentry/nextjs'
 import formidable from 'formidable'
+import { z } from 'zod'
 import { wrapHandler } from '@/utils/api/wrapHandler'
 import { sendToDiscord } from '@/lib/discord'
 
@@ -22,6 +23,32 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const [fields] = await form.parse(req)
     console.log('Fields:', fields)
+
+    const schema = z.object({
+      envelope: z.array(
+        z.string().transform((str) =>
+          z
+            .object({
+              to: z.array(z.string()),
+              from: z.string(),
+            })
+            .parse(JSON.parse(str))
+        )
+      ),
+      subject: z.array(z.string()),
+      text: z.array(z.string()),
+      html: z.array(z.string()),
+    })
+
+    const parsed = schema.parse(fields)
+
+    sendToDiscord(JSON.stringify(parsed))
+
+    // envelope: [ '{"to":["nowtyfuna@mail.cabin.city"],"from":"grin@cabin.city"}' ],
+    // text: [ 'oyufywuyrs\r\n' ],
+    // html: [ '<div dir="ltr">oyufywuyrs</div>\r\n' ],
+    // subject: [ 'thwoyau' ],
+
     res.status(200).end()
   } catch (error: any) {
     Sentry.captureException(error)
