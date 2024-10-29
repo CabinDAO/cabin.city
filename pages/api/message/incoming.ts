@@ -22,7 +22,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
     const [fields] = await form.parse(req)
-    console.log('Fields:', fields)
 
     const schema = z.object({
       envelope: z.array(
