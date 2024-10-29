@@ -1,15 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { useBackend } from '@/components/hooks/useBackend'
-import {
-  MeFragment,
-  ProfileFragment,
-  ProfileSetupStateParams,
-} from '@/utils/types/profile'
+import React from 'react'
+import { MeFragment, ProfileFragment } from '@/utils/types/profile'
 import { formatShortAddress } from '@/lib/address'
 import { monthYearFormat } from '@/utils/display-utils'
-import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
-import theme from '@/styles/theme'
 import { Body1, Caption, H3 } from '@/components/core/Typography'
 import Icon, { IconName } from '@/components/core/Icon'
 import { ContentCard } from '@/components/core/ContentCard'
@@ -25,30 +18,6 @@ export const ProfileAboutSection = ({
   profile: ProfileFragment
   user: MeFragment | null
 }) => {
-  const { post } = useBackend()
-
-  const isOwnProfile = user?.externId === profile.externId
-
-  const [isFlashing, setIsFlashing] = useState(false)
-  const flashBg = () => {
-    setIsFlashing(true)
-    setTimeout(() => setIsFlashing(false), 500) // Adjust timeout to match CSS transition
-  }
-
-  useEffect(() => {
-    if (!isOwnProfile && !user?.isProfileSetupDismissed) {
-      flashBg()
-    }
-  }, [profile, user, isOwnProfile])
-
-  const handleContactClick = async () => {
-    if (!user || isOwnProfile) return
-    analytics.onboardingActionEvent(user.externId, 'contact_clicked')
-    return post('api_profile_setupState', {
-      state: 'dismissed',
-    } satisfies ProfileSetupStateParams)
-  }
-
   return (
     <ContentCard shape="notch">
       <Container>
@@ -78,12 +47,9 @@ export const ProfileAboutSection = ({
             {profile.bio && <Bio>{profile.bio}</Bio>}
           </AboutSection>
           {!!profile.contactFields.length && (
-            <ContactSection flashing={isFlashing}>
+            <ContactSection>
               <H3>Contact</H3>
-              <ProfileContactList
-                contactFields={profile.contactFields}
-                onContactClick={handleContactClick}
-              />
+              <ProfileContactList contactFields={profile.contactFields} />
             </ContactSection>
           )}
         </Info>
@@ -185,17 +151,13 @@ const AboutSection = styled.div`
   }
 `
 
-const ContactSection = styled.div<{ flashing: boolean }>`
+const ContactSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1.6rem 1.6rem 0;
   gap: 1rem;
-
-  transition: background 0.5s ease-in-out;
-  background: ${({ flashing }) =>
-    flashing ? theme.colors.yellow400 : 'initial'};
 
   ${({ theme }) => theme.bp.md} {
     padding-bottom: 1.6rem;

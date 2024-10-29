@@ -1,13 +1,19 @@
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import useEns from '@/components/hooks/useEns'
 import { useModal } from '@/components/hooks/useModal'
 import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { useBackend } from '@/components/hooks/useBackend'
+import {
+  MeFragment,
+  ProfileFragment,
+  ProfileSetupStateParams,
+} from '@/utils/types/profile'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { shortenedAddress } from '@/utils/display-utils'
-import { MeFragment, ProfileFragment } from '@/utils/types/profile'
 import { canEditProfile } from '@/lib/permissions'
 import { expandRoute } from '@/utils/routing'
-import { openMessageModalButtonClick } from '@/lib/googleAnalytics/analytics'
+import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
 import { H1, Overline, Subline2 } from '@/components/core/Typography'
 import { Avatar } from '@/components/profile/Avatar'
@@ -28,6 +34,7 @@ export const ProfileHeaderSection = ({
   const { deviceSize } = useDeviceSize()
 
   const showContactButton = user && user.externId != profile.externId
+  const isOwnProfile = user && user.externId === profile.externId
 
   return (
     <StyledContentCard shadow>
@@ -71,7 +78,13 @@ export const ProfileHeaderSection = ({
           </ProfileInfoContainer>
         </ProfileSummary>
         {showContactButton && (
-          <ProfileContactButton user={user} profile={profile} />
+          <ProfileContactButton
+            user={user}
+            profile={profile}
+            flashOnMount={
+              user && !isOwnProfile && !user.isProfileSetupDismissed
+            }
+          />
         )}
       </Container>
 
@@ -156,30 +169,56 @@ const StyledContentCard = styled(ContentCard)`
 const ProfileContactButton = ({
   user,
   profile,
+  flashOnMount,
 }: {
   user: MeFragment
   profile: ProfileFragment
+  flashOnMount?: boolean
 }) => {
   const { showModal } = useModal()
+  const { post } = useBackend()
 
-  const onClick = () => {
-    openMessageModalButtonClick(
+  const [isFlashing, setIsFlashing] = useState(false)
+  const flashBg = () => {
+    setIsFlashing(true)
+    setTimeout(() => setIsFlashing(false), 500) // Adjust timeout to match CSS transition
+  }
+
+  useEffect(() => {
+    if (flashOnMount) {
+      flashBg()
+    }
+  }, [flashOnMount])
+
+  const onClick = async () => {
+    showModal(() => <ContactModal sender={user} recipient={profile} />)
+
+    analytics.onboardingActionEvent(user.externId, 'contact_clicked')
+
+    analytics.openMessageModalButtonClick(
       user.externId,
       profile.externId,
       'profile-header'
     )
-    showModal(() => <ContactModal sender={user} recipient={profile} />)
+
+    await post('api_profile_setupState', {
+      state: 'dismissed',
+    } satisfies ProfileSetupStateParams)
   }
 
   return (
-    <StyledButton variant="tertiary" onClick={onClick}>
+    <StyledButton variant="tertiary" flashing={isFlashing} onClick={onClick}>
       <Icon name="envelope" size={2} />
       Contact
     </StyledButton>
   )
 }
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(Button)<{ flashing?: boolean }>`
+  transition: background 0.5s ease-in-out;
+  background: ${({ theme, flashing }) =>
+    flashing ? theme.colors.yellow400 : 'initial'} !important;
+
   ${({ theme }) => theme.bp.md} {
     margin-top: 0.8rem;
   }
