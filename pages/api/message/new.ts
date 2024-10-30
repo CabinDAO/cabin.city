@@ -43,7 +43,13 @@ async function handler(
   const accountAgeDays =
     (new Date().getTime() - new Date(recipient.createdAt).getTime()) /
     (1000 * 60 * 60 * 24)
-  const messageLimitPerDay = sender.isAdmin ? 9999 : accountAgeDays < 7 ? 3 : 6
+  const messageLimitPerDay = sender.isAdmin
+    ? 9999
+    : sender.id == 93 // eileen
+    ? 100
+    : accountAgeDays < 7
+    ? 3
+    : 6
 
   const messageCount = await prisma.message.count({
     where: {
