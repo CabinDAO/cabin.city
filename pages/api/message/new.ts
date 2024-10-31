@@ -85,7 +85,7 @@ async function handler(
 
   messageSentEvent(sender.externId, recipient.externId)
 
-  const hearder = `<a href="${appDomainWithProto}${expandRoute([
+  const header = `<a href="${appDomainWithProto}${expandRoute([
     'profile_id',
     { id: sender.externId },
   ])}">${sender.name}</a> sent you a message:<br><br>`
@@ -98,7 +98,7 @@ async function handler(
   await sendEmail(
     recipient.email,
     `New message from ${sender.name}`,
-    `${hearder}${nl2br(escapeHtml(params.text))}${footer}`
+    `${header}${nl2br(escapeHtml(params.text))}${footer}`
   )
 
   res.status(200).send({ success: true })
