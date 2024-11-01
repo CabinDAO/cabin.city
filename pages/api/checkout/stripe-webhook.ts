@@ -5,7 +5,7 @@ import type { Readable } from 'node:stream'
 import { PaymentStatus, Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 import Stripe from 'stripe'
-import { sendEmail } from '@/lib/mail/sendgrid-service'
+import { sendSendgridEmail } from '@/lib/mail/sendgrid-service'
 import { createPrivyAccount } from '@/lib/privy'
 import {
   createProfile,
@@ -146,11 +146,11 @@ async function handlePaymentIntentNewStatus(
 
   if (status === PaymentStatus.Paid) {
     try {
-      await sendEmail(
-        EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
-        'Someone bought a cabin.city citizenship',
-        `This is their cart is at ${appDomainWithProto}/checkout/${cart.externId}/confirmation.`
-      )
+      await sendSendgridEmail({
+        recipient: EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS,
+        subject: 'Someone bought a cabin.city citizenship',
+        html: `This is their cart is at ${appDomainWithProto}/checkout/${cart.externId}/confirmation.`,
+      })
       // TODO: if they're minting a citizenship, send them an email with the activation link
     } catch (e: unknown) {
       console.log(`Failed to send new purchase email: ${e}`)

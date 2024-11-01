@@ -1,5 +1,5 @@
 import React from 'react'
-import { MeFragment, ProfileFragment } from '@/utils/types/profile'
+import { ProfileFragment } from '@/utils/types/profile'
 import { formatShortAddress } from '@/lib/address'
 import { monthYearFormat } from '@/utils/display-utils'
 import styled from 'styled-components'

@@ -78,7 +78,7 @@ model Profile {
   walletId Int?    @unique
 
   name                    String
-  email                   String
+  email                   String                @unique
   bio                     String
   longBio                 String                @default("")
   contactFields           ProfileContactField[]
@@ -308,7 +308,7 @@ enum LocationMediaCategory {
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  externId  String?  @unique
+  externId  String   @unique // for external-facing use, e.g. urls
 
   sender   Profile @relation("MessagesSent", fields: [senderId], references: [id], onDelete: Restrict)
   senderId Int
@@ -317,6 +317,10 @@ model Message {
   recipientId Int
 
   text String
+
+  replies     Message[] @relation("Replies")
+  inReplyTo   Message?  @relation("Replies", fields: [inReplyToId], references: [id])
+  inReplyToId Int?
 }
 
 model Offer {

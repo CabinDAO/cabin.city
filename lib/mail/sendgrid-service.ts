@@ -1,28 +1,36 @@
 import { MailService, MailDataRequired } from '@sendgrid/mail'
+import { EmailData } from '@sendgrid/helpers/classes/email-address'
 
-export async function sendEmail(
-  recipientEmail: string,
-  subject: string,
+export async function sendSendgridEmail({
+  recipient,
+  subject,
+  html,
+  replyTo,
+}: {
+  recipient: EmailData
+  subject: string
   html: string
-) {
-  if (!recipientEmail) {
-    throw new Error('email recipient missing')
+  replyTo?: EmailData
+}) {
+  const missingEmail =
+    (typeof recipient === 'string' && !recipient) ||
+    (typeof recipient === 'object' && !recipient.email)
+  if (missingEmail) {
+    throw new Error('recipient email missing')
   }
 
-  if (
-    process.env.NODE_ENV !== 'production' &&
-    !process.env.SENDGRID_DEV_EMAIL
-  ) {
-    throw new Error('process.env.SENDGRID_DEV_EMAIL is not set')
+  let to: EmailData
+  if (process.env.NODE_ENV === 'production') {
+    to = recipient
+  } else {
+    if (!process.env.SENDGRID_DEV_EMAIL) {
+      throw new Error('process.env.SENDGRID_DEV_EMAIL is not set')
+    }
+    to = process.env.SENDGRID_DEV_EMAIL
   }
 
   const client = new MailService()
   client.setApiKey(process.env.SENDGRID_API_KEY)
-
-  const to =
-    process.env.NODE_ENV !== 'production'
-      ? process.env.SENDGRID_DEV_EMAIL
-      : recipientEmail
 
   const md: MailDataRequired = {
     to,
@@ -32,6 +40,7 @@ export async function sendEmail(
     },
     subject,
     html,
+    replyTo,
   }
 
   console.log(`Sending email to ${md.to}`)

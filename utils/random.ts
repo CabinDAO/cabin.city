@@ -44,7 +44,7 @@ function randomString(length: number, alphabet: Alphabet) {
   return result
 }
 
-// some chars are removed to aid legibility
+// some chars are removed to aid legibility, as in base58
 const alphabets = {
   lcOnly: 'abcdefghijkmnopqrstuvwxyz123456789',
   mixedCase: 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789',
