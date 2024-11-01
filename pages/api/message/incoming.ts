@@ -68,7 +68,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const senderEmail = params.from[0].includes('<')
       ? params.from[0].split('<')[1].split('>')[0]
       : params.from[0]
-    const ourMessageReplyEmail = params.to[0]
+    const ourMessageReplyEmail = params.to[0].includes('<')
+      ? params.to[0].split('<')[1].split('>')[0]
+      : params.to[0]
 
     const replyParser = new EmailReplyParser()
     const replyText = replyParser.parseReply(params.text[0])
