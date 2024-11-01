@@ -65,7 +65,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     }
     const params = parsed.data
 
-    const senderEmail = params.from[0]
+    const senderEmail = params.from[0].includes('<')
+      ? params.from[0].split('<')[1].split('>')[0]
+      : params.from[0]
     const ourMessageReplyEmail = params.to[0]
 
     const replyParser = new EmailReplyParser()
@@ -83,15 +85,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     console.log(params)
 
-    // if (
-    //   !params.SPF ||
-    //   params.SPF[0] !== 'pass' ||
-    //   !params.dkim ||
-    //   !params.dkim[0].includes('pass')
-    // ) {
-    //   // await sendReplyError(senderEmail, 'spf-failed')
-    //   return
-    // }
+    if (
+      !params.SPF ||
+      params.SPF[0] !== 'pass' ||
+      !params.dkim ||
+      !params.dkim[0].includes('pass')
+    ) {
+      sendToDiscord(
+        `Security checks failed: SPF: ${params.SPF?.[0] || '(none)'}, DKIM: ${
+          params.dkim?.[0] || '(none)'
+        }`
+      )
+      // await sendReplyError(senderEmail, 'spf-failed')
+      return
+    }
 
     const sender = await prisma.profile.findUnique({
       where: { email: senderEmail },
