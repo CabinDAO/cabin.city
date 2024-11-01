@@ -81,15 +81,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     res.status(200).end() // tell Sendgrid we're done before continuing
 
-    if (
-      !params.SPF ||
-      params.SPF[0] !== 'pass' ||
-      !params.dkim ||
-      !params.dkim[0].includes('pass')
-    ) {
-      // await sendReplyError(senderEmail, 'spf-failed')
-      return
-    }
+    console.log(params)
+
+    // if (
+    //   !params.SPF ||
+    //   params.SPF[0] !== 'pass' ||
+    //   !params.dkim ||
+    //   !params.dkim[0].includes('pass')
+    // ) {
+    //   // await sendReplyError(senderEmail, 'spf-failed')
+    //   return
+    // }
 
     const sender = await prisma.profile.findUnique({
       where: { email: senderEmail },
