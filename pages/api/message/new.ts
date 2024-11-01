@@ -10,6 +10,7 @@ import { messageSentEvent } from '@/lib/googleAnalytics/analytics'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { expandRoute } from '@/utils/routing'
+import { randomId } from '@/utils/random'
 
 export default wrapHandler(handler)
 
@@ -71,6 +72,7 @@ async function handler(
 
   await prisma.message.create({
     data: {
+      externId: randomId('message'),
       sender: { connect: { externId: sender.externId } },
       recipient: { connect: { externId: params.recipientExternId } },
       text: params.text,
