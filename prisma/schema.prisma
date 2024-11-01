@@ -308,6 +308,7 @@ enum LocationMediaCategory {
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
+  externId  String?  @unique
 
   sender   Profile @relation("MessagesSent", fields: [senderId], references: [id], onDelete: Restrict)
   senderId Int
