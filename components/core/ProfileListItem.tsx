@@ -28,7 +28,7 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
             {profile.cabinTokenBalanceInt !== null && (
               <>{profile.cabinTokenBalanceInt} ₡ABIN &nbsp;·&nbsp; </>
             )}
-            {profile.stampCount} stamps
+            {profile.stampCount} stamp{profile.stampCount === 1 ? '' : 's'}
           </Caption>
           <StyledBody2>{truncate(profile.bio ?? '', 90)}</StyledBody2>
         </InfoContainer>
