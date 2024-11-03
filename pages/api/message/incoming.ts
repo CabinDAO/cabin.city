@@ -107,6 +107,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
 
     if (!sender) {
+      sendToDiscord(`Profile not found for ${senderEmail}`)
       await sendReplyError(senderEmail, 'emailNotFound')
       return
     }
@@ -120,6 +121,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     })
 
     if (!message) {
+      sendToDiscord(`Message not found for externId ${inReplyToExternId}`)
       await sendReplyError(senderEmail, 'messageNotFound')
       return
     }
