@@ -15,7 +15,14 @@ import {
 import { EditorProvider } from '@tiptap/react'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
-import { body1Styles, h2Styles, h3Styles } from '@/components/core/Typography'
+import {
+  body1Styles,
+  h2Styles,
+  h3Styles,
+  h4Styles,
+  h5Styles,
+  h6Styles,
+} from '@/components/core/Typography'
 import { Toolbar } from '@/components/editor/Toolbar'
 import { InputBase } from '@/components/core/InputBase'
 import StarterKit from '@tiptap/starter-kit'
@@ -212,6 +219,14 @@ const TipTap = ({
   )
 }
 
+export const DangerouslyRenderMarkdownHTML = ({ html }: { html: string }) => {
+  return (
+    <Container>
+      <div className="tiptap" dangerouslySetInnerHTML={{ __html: html }}></div>
+    </Container>
+  )
+}
+
 const makeUploadFn = (showError: (message: string) => void) => {
   return async (file: File) => {
     // return 'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/280f51ce-d0de-4eeb-4a34-ab2e04766d00/public'
@@ -321,6 +336,18 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
       ${h3Styles}
     }
 
+    h4 {
+      ${h4Styles}
+    }
+
+    h5 {
+      ${h5Styles}
+    }
+
+    h6 {
+      ${h6Styles}
+    }
+
     p,
     blockquote,
     ol,
@@ -350,6 +377,16 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
 
       li p {
         display: inline;
+      }
+
+      // nested lists
+      li ul,
+      li ol {
+        display: inline;
+
+        li {
+          display: inline;
+        }
       }
     }
 

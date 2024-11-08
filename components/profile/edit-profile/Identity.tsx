@@ -36,7 +36,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const { ens } = useEns(walletAddress)
   const hasWallet = !!externalUser?.wallet
   const isEmbeddedWallet =
-    hasWallet && externalUser?.wallet?.walletClient === 'privy'
+    hasWallet && externalUser?.wallet?.walletClientType === 'privy'
   const {
     updateEmail,
     // createWallet,
