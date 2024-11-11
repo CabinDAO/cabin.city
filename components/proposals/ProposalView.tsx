@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useEvent } from 'react-use'
 import Link from 'next/link'
 import { GraphQLClient } from 'graphql-request'
-import { remark } from 'remark'
-import html from 'remark-html'
+import { Remarkable } from 'remarkable'
+import { linkify } from 'remarkable/linkify'
 import { Proposal as SnapshotProposal } from '@snapshot-labs/snapshot.js/dist/src/sign/types'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
@@ -15,6 +16,14 @@ import { Body1, H1, H2 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
 import { DangerouslyRenderMarkdownHTML } from '@/components/editor/RichText'
+import { useRouter } from 'next/router'
+
+const remarkable = new Remarkable({
+  html: false,
+  breaks: true,
+  typographer: false,
+  linkTarget: '_blank',
+}).use(linkify)
 
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
@@ -39,26 +48,75 @@ export const ProposalView = () => {
   const isActive = selectedProposal?.state === 'active'
   const showVoteButton = canVote && isActive
 
+  // load proposals
   useEffect(() => {
-    const data = snapshotGraphQLClient
+    snapshotGraphQLClient
       .request<{ proposals: Proposal[] }>(proposalListQuery)
       .then((data) => {
         setProposals(data.proposals)
       })
   }, [])
 
+  const router = useRouter()
+  const propsLoaded = useRef(false)
+
+  // set selected proposal if the id is in the query
   useEffect(() => {
+    if (!router.isReady || !proposals.length) return
+    const initialPropId = `${router.query.prop}`
+    if (initialPropId) {
+      const loadedProp = proposals.find((p) => p.id === initialPropId) || null
+      setSelectedProposal(loadedProp)
+    }
+    propsLoaded.current = true
+  }, [router.isReady, proposals])
+
+  // render the proposal markdown and handle url query changes
+  useEffect(() => {
+    if (!propsLoaded.current) return
     if (selectedProposal) {
-      remark()
-        .use(html)
-        .process(selectedProposal.body)
-        .then((result) => {
-          setProposalHTML(result.toString())
-        })
+      // how snapshot does it: https://github.com/snapshot-labs/snapshot/blob/448489f3d83abebd69f7ca42f57da3b0df28ba08/src/components/BaseMarkdown.vue#L23
+
+      const replaceIpfsUrl = (match: string, p1: string) =>
+        match.replace(p1, getIPFSUrl(p1, 'ipfs.io') || p1)
+
+      const markdown = selectedProposal.body
+        // Add the ipfs gateway to markdown images that start with ipfs://
+        .replace(/!\[.*?\]\((ipfs:\/\/[a-zA-Z0-9]+?)\)/g, replaceIpfsUrl)
+        // if body contains a link that contain `_` , replace it with `\_` to escape it
+        .replace(/(http.*?)(?=_)/g, '$1\\')
+      setProposalHTML(remarkable.render(markdown))
+      router.push({
+        pathname: router.pathname,
+        query: { ...router.query, prop: selectedProposal.id },
+      })
     } else {
       setProposalHTML('')
+      const newQuery = { ...router.query }
+      delete newQuery['prop']
+      router.push({
+        pathname: router.pathname,
+        query: newQuery,
+      })
     }
   }, [selectedProposal])
+
+  // handle back button
+  useEffect(() => {
+    router.beforePopState(({ url }) => {
+      console.log(url, router.pathname)
+      if (url.startsWith(router.pathname) && url.includes('prop=')) {
+        const parsedUrl = new URL(url, window.location.origin)
+        setSelectedProposal(
+          proposals.find((p) => p.id === parsedUrl.searchParams.get('prop')) ||
+            null
+        )
+      } else {
+        setSelectedProposal(null)
+      }
+      return true
+    })
+  }, [router])
 
   return (
     <BaseLayout>
@@ -185,3 +243,21 @@ const proposalListQuery = `
     }
   }
 `
+
+function getIPFSUrl(uri: string, gateway: string) {
+  const ipfsGateway = `https://${gateway}`
+  if (!uri) return null
+  if (
+    !uri.startsWith('ipfs://') &&
+    !uri.startsWith('ipns://') &&
+    !uri.startsWith('https://') &&
+    !uri.startsWith('http://')
+  )
+    return `${ipfsGateway}/ipfs/${uri}`
+  const uriScheme = uri.split('://')[0]
+  if (uriScheme === 'ipfs')
+    return uri.replace('ipfs://', `${ipfsGateway}/ipfs/`)
+  if (uriScheme === 'ipns')
+    return uri.replace('ipns://', `${ipfsGateway}/ipns/`)
+  return uri
+}

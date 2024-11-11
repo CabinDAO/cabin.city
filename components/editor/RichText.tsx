@@ -390,6 +390,10 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
       }
     }
 
+    img {
+      max-width: 100%;
+    }
+
     blockquote {
       border-left: 3px solid ${theme.colors.green800};
       margin: 1.5rem 0;
