@@ -22,6 +22,7 @@ export const EXTERNAL_LINKS = {
   PODCAST: 'https://campfire-by-cabin.simplecast.com',
   SNAPSHOT: 'https://snapshot.org/#/cabindao.eth',
   UNLOCK_KEY_MANAGE: 'https://app.unlock-protocol.com/keychain',
+  GOVERNANCE_DOCS: 'https://forum.cabin.city/t/cabin-governance/314',
   GENERAL_CHAT_DISCORD_CHANNEL:
     'https://discord.com/channels/849304522500210709/892780693652897822',
   CALENDLY_CALL_URL: 'https://calendly.com/cabinhome/welcome',

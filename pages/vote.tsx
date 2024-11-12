@@ -5,7 +5,7 @@ export default function ProposalsPage() {
   return (
     <>
       <Head>
-        <title>Governance Proposals</title>
+        <title>Cabin DAO Governance</title>
       </Head>
       <ProposalView />
     </>

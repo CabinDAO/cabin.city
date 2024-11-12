@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { GraphQLClient } from 'graphql-request'
-import { useUser } from '@/components/auth/useUser'
-import { usePrivy } from '@privy-io/react-auth'
 import { useRouter } from 'next/router'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { isProd } from '@/utils/dev'
@@ -13,31 +11,27 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { Body1, H1 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
-import { Button } from '@/components/core/Button'
-import { ProposalRender } from '@/components/proposals/ProposalRender'
+import { ProposalRender } from '@/components/vote/ProposalRender'
+import { VoteSection } from '@/components/vote/VoteSection'
+import { HorizontalDivider } from '@/components/core/Divider'
 
-export type Proposal = SnapshotProposal & { id: string; state: string }
+export type Proposal = SnapshotProposal & {
+  id: string
+  state: string
+  space: { id: string; name: string }
+}
 
-const snapshotGqlUrl = isProd
-  ? 'https://hub.snapshot.org/graphql'
-  : 'https://testnet.hub.snapshot.org/graphql'
-const snapshotGraphQLClient = new GraphQLClient(snapshotGqlUrl)
+const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
+
+const snapshotGraphQLClient = new GraphQLClient(
+  'https://hub.snapshot.org/graphql'
+)
 
 export const ProposalView = () => {
-  const { user } = useUser()
-  const { user: privyUser } = usePrivy()
-
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
   )
-
-  const canVote =
-    privyUser &&
-    privyUser.wallet?.walletClientType === 'privy' &&
-    (user?.cabinTokenBalanceInt || 0) > 0
-  const isActive = selectedProposal?.state === 'active'
-  const showVoteButton = canVote && isActive
 
   // load proposals
   useEffect(() => {
@@ -54,15 +48,15 @@ export const ProposalView = () => {
   // set selected proposal if the id is in the query
   useEffect(() => {
     if (!router.isReady || !proposals.length) return
+    propsLoaded.current = true
     const initialPropId = `${router.query.prop}`
     if (initialPropId) {
       const loadedProp = proposals.find((p) => p.id === initialPropId) || null
       setSelectedProposal(loadedProp)
     }
-    propsLoaded.current = true
   }, [router.isReady, proposals])
 
-  // render the proposal markdown and handle url query changes
+  // handle url query changes
   useEffect(() => {
     if (!propsLoaded.current) return
     if (selectedProposal) {
@@ -80,7 +74,7 @@ export const ProposalView = () => {
     }
   }, [selectedProposal])
 
-  // handle back button
+  // handle back navigation
   useEffect(() => {
     router.beforePopState(({ url }) => {
       console.log(url, router.pathname)
@@ -112,19 +106,8 @@ export const ProposalView = () => {
             <ProposalContainer>
               <H1>{selectedProposal.title}</H1>
               <ProposalRender proposal={selectedProposal} />
-              {showVoteButton ? (
-                <Button>Voting coming soon</Button>
-              ) : (
-                <Link
-                  href={`https://snapshot.org/#/cabindao.eth/proposal/${selectedProposal.id}`}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <Button variant="secondary">
-                    {isActive ? 'Vote' : 'View'} on Snapshot
-                  </Button>
-                </Link>
-              )}
+              <HorizontalDivider />
+              <VoteSection proposal={selectedProposal} />
             </ProposalContainer>
           </>
         ) : (
@@ -179,9 +162,10 @@ const ProposalContainer = styled.div`
   gap: 1.6rem;
 `
 
-const ActivePill = styled.div`
+const ActivePill = styled.span`
   font-size: 1.4rem;
   padding: 0.4rem 1rem;
+  margin: 0 0.5rem;
   background-color: ${({ theme }) => theme.colors.yellow300};
   border-radius: 1rem;
   white-space: nowrap;
@@ -193,7 +177,7 @@ const proposalListQuery = `
       first: 5,
       skip: 0,
       where: {
-        space_in: ["cabindao.eth",],
+        space_in: ["${space}",],
       },
       orderBy: "created",
       orderDirection: desc
@@ -214,6 +198,10 @@ const proposalListQuery = `
       scores_updated
       plugins
       network
+      space {
+        id
+        name
+      }
       strategies {
         name
         network
