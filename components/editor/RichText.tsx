@@ -219,7 +219,7 @@ const TipTap = ({
   )
 }
 
-export const DangerouslyRenderMarkdownHTML = ({ html }: { html: string }) => {
+export const DangerouslyRenderFormattedHTML = ({ html }: { html: string }) => {
   return (
     <Container>
       <div className="tiptap" dangerouslySetInnerHTML={{ __html: html }}></div>

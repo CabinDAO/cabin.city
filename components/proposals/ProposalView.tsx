@@ -1,35 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
-import { useEvent } from 'react-use'
 import Link from 'next/link'
 import { GraphQLClient } from 'graphql-request'
-import { Remarkable } from 'remarkable'
-import { linkify } from 'remarkable/linkify'
-import { Proposal as SnapshotProposal } from '@snapshot-labs/snapshot.js/dist/src/sign/types'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
+import { useRouter } from 'next/router'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { isProd } from '@/utils/dev'
+import { Proposal as SnapshotProposal } from '@snapshot-labs/snapshot.js/dist/src/sign/types'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { Body1, H1, H2 } from '@/components/core/Typography'
+import { Body1, H1 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Button } from '@/components/core/Button'
-import { DangerouslyRenderMarkdownHTML } from '@/components/editor/RichText'
-import { useRouter } from 'next/router'
+import { ProposalRender } from '@/components/proposals/ProposalRender'
 
-const remarkable = new Remarkable({
-  html: false,
-  breaks: true,
-  typographer: false,
-  linkTarget: '_blank',
-}).use(linkify)
+export type Proposal = SnapshotProposal & { id: string; state: string }
 
-const snapshotGraphQLClient = new GraphQLClient(
-  'https://hub.snapshot.org/graphql'
-)
-
-type Proposal = SnapshotProposal & { id: string; state: string }
+const snapshotGqlUrl = isProd
+  ? 'https://hub.snapshot.org/graphql'
+  : 'https://testnet.hub.snapshot.org/graphql'
+const snapshotGraphQLClient = new GraphQLClient(snapshotGqlUrl)
 
 export const ProposalView = () => {
   const { user } = useUser()
@@ -39,7 +31,6 @@ export const ProposalView = () => {
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
   )
-  const [proposalHTML, setProposalHTML] = useState<string>('')
 
   const canVote =
     privyUser &&
@@ -75,23 +66,11 @@ export const ProposalView = () => {
   useEffect(() => {
     if (!propsLoaded.current) return
     if (selectedProposal) {
-      // how snapshot does it: https://github.com/snapshot-labs/snapshot/blob/448489f3d83abebd69f7ca42f57da3b0df28ba08/src/components/BaseMarkdown.vue#L23
-
-      const replaceIpfsUrl = (match: string, p1: string) =>
-        match.replace(p1, getIPFSUrl(p1, 'ipfs.io') || p1)
-
-      const markdown = selectedProposal.body
-        // Add the ipfs gateway to markdown images that start with ipfs://
-        .replace(/!\[.*?\]\((ipfs:\/\/[a-zA-Z0-9]+?)\)/g, replaceIpfsUrl)
-        // if body contains a link that contain `_` , replace it with `\_` to escape it
-        .replace(/(http.*?)(?=_)/g, '$1\\')
-      setProposalHTML(remarkable.render(markdown))
       router.push({
         pathname: router.pathname,
         query: { ...router.query, prop: selectedProposal.id },
       })
     } else {
-      setProposalHTML('')
       const newQuery = { ...router.query }
       delete newQuery['prop']
       router.push({
@@ -132,7 +111,7 @@ export const ProposalView = () => {
             </Body1>
             <ProposalContainer>
               <H1>{selectedProposal.title}</H1>
-              <DangerouslyRenderMarkdownHTML html={proposalHTML} />
+              <ProposalRender proposal={selectedProposal} />
               {showVoteButton ? (
                 <Button>Voting coming soon</Button>
               ) : (
@@ -243,21 +222,3 @@ const proposalListQuery = `
     }
   }
 `
-
-function getIPFSUrl(uri: string, gateway: string) {
-  const ipfsGateway = `https://${gateway}`
-  if (!uri) return null
-  if (
-    !uri.startsWith('ipfs://') &&
-    !uri.startsWith('ipns://') &&
-    !uri.startsWith('https://') &&
-    !uri.startsWith('http://')
-  )
-    return `${ipfsGateway}/ipfs/${uri}`
-  const uriScheme = uri.split('://')[0]
-  if (uriScheme === 'ipfs')
-    return uri.replace('ipfs://', `${ipfsGateway}/ipfs/`)
-  if (uriScheme === 'ipns')
-    return uri.replace('ipns://', `${ipfsGateway}/ipns/`)
-  return uri
-}
