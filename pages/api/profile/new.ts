@@ -11,6 +11,7 @@ import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { ProfileNewParams, ProfileNewResponse } from '@/utils/types/profile'
 import { isProd } from '@/utils/dev'
+import { formatShortAddress } from '@/lib/address'
 import { sendToDiscord } from '@/lib/discord'
 import { expandRoute } from '@/utils/routing'
 import { appDomainWithProto } from '@/utils/display-utils'
@@ -112,7 +113,9 @@ async function handler(
 
   if (isProd) {
     await sendToDiscord(
-      `New user ${profile.name}: ${appDomainWithProto}${expandRoute([
+      `New user ${profile.name} in ${formatShortAddress(
+        params.address
+      )}: ${appDomainWithProto}${expandRoute([
         'profile_id',
         { id: profile.externId },
       ])}`
