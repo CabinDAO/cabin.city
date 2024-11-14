@@ -94,20 +94,20 @@ const sortPrequery = async (params: ProfileListParamsType) => {
     LEFT JOIN "ProfileAddress" a ON p.id = a."profileId"
     LEFT JOIN "Wallet" w ON p."walletId" = w.id
     LEFT JOIN "ProfileStamp" ps ON p.id = ps."profileId"
-    WHERE
+    WHERE (
       ${
         resolvedAddress
           ? Prisma.sql`w.address = ${resolvedAddress.toLowerCase()}`
           : params.searchQuery
           ? Prisma.sql`p.name ILIKE ${`%${params.searchQuery}%`}`
           : Prisma.sql`1=1`
-      }
-      AND
+      })
+      AND (
       ${
         bounds.length === 4
           ? Prisma.sql`a.lat <= ${bounds[0]} AND a.lat >= ${bounds[1]} AND a.lng <= ${bounds[2]} AND a.lng >= ${bounds[3]}`
           : Prisma.sql`1=1`
-      }
+      })
     GROUP BY p.id, p."createdAt", w."cabinTokenBalance"
     ORDER BY ${sortOrder(params.sort)}
   `

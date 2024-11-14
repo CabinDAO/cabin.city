@@ -108,31 +108,31 @@ const sortPrequery = async (
       LEFT JOIN "Address" a ON l.id = a."locationId"
       LEFT JOIN "Offer" o ON l.id = o."locationId"
       LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
-      WHERE
+      WHERE (
         ${
           params.searchQuery
             ? Prisma.sql`(l.name ILIKE ${`%${params.searchQuery}%`} OR a."formattedAddress" ILIKE ${`%${params.searchQuery}%`})`
             : Prisma.sql`1=1`
-        }
-        AND
+        })
+        AND (
         ${
           params.stewardExternId
             ? Prisma.sql`steward."externId" = ${params.stewardExternId}`
             : Prisma.sql`1=1`
-        }
-        AND
+        })
+        AND (
         ${
           params.locationType
             ? Prisma.sql`l.type = ${params.locationType}::"LocationType"`
             : Prisma.sql`1=1`
-        }
-        AND
+        })
+        AND (
         ${
           bounds.length === 4
             ? Prisma.sql`a.lat <= ${bounds[0]} AND a.lat >= ${bounds[1]} AND a.lng <= ${bounds[2]} AND a.lng >= ${bounds[3]}`
             : Prisma.sql`1=1`
-        }
-        AND
+        })
+        AND (
         ${
           user?.isAdmin
             ? Prisma.sql`1=1`
@@ -141,7 +141,7 @@ const sortPrequery = async (
                   ? Prisma.sql`OR steward."privyDID" = ${user.privyDID}`
                   : Prisma.sql``
               }`
-        }
+        })
       GROUP BY 
         l.id, steward."privyDID", a.lat, a.lng
     )
