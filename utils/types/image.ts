@@ -8,7 +8,7 @@ export type ImageNewResponse =
 
 export type UploadedFilesMap = Record<string, string>
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+export const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB. this is the limit for cloudflare images
 
 // this is what cloudflare supports
 export const SUPPORTED_FILE_TYPES = [
