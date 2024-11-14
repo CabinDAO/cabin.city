@@ -10,6 +10,7 @@ import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { balanceToVotes } from '@/utils/display-utils'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
@@ -114,12 +115,9 @@ export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
     <Container>
       <H2>Cast your vote</H2>
       <Body1>
-        You can split your votes among one or more choices. The number of votes
-        you give each choice doesn't matter, only the percentage matters.
-      </Body1>
-      <Body1>
-        The full voting power of your {user.cabinTokenBalanceInt} ₡ABIN will be
-        split according to the percentages you choose.
+        Your {balanceToVotes(user.cabinTokenBalanceInt)} votes will be split
+        among one or more of the choices below according to the percentages you
+        choose.
       </Body1>
       <Body1>
         Use the + and - buttons to adjust your vote for each choice.
@@ -138,6 +136,11 @@ export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
 
       {proposal.choices.map((choice, i) => {
         const index = i + 1 // snapshot uses 1-based indexing for choices
+        const numerator = choices[index] || 0
+        const denominator = Object.values(choices).reduce(
+          (acc, curr) => acc + curr,
+          0
+        )
         const percent = percentForChoice(choices, index)
         return (
           <OptionRow
@@ -154,7 +157,13 @@ export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
               >
                 -
               </PlusMinusButton>
-              <Count>{choices[index] || 0}</Count>
+              <Count>
+                {choices[index] ? (
+                  <Fraction numerator={numerator} denominator={denominator} />
+                ) : (
+                  0
+                )}
+              </Count>
               <PlusMinusButton
                 variant="tertiary"
                 onClick={() => updateVoteCount(index, 'up')}
@@ -219,15 +228,16 @@ const OptionRow = styled.div<{ selected?: boolean; fillPercent?: string }>`
   }
 `
 
-const ChoiceText = styled.div`
+const ChoiceText = styled(Body1)`
   display: flex;
   flex: 1;
   z-index: 1;
+  max-height: 100%;
 `
 const RowControls = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 1.6rem;
+  gap: 1rem;
   flex: 0;
   align-items: center;
   z-index: 1;
@@ -242,12 +252,40 @@ const PlusMinusButton = styled(Button)`
   background: transparent !important;
 `
 
-const Count = styled.div`
+const Count = styled(Body1)`
   width: 2.5rem;
-  text-align: right;
+  text-align: center;
 `
 
-const Percent = styled.div`
+const Percent = styled(Body1)`
   width: 6.5rem;
   text-align: right;
+  font-weight: 700;
 `
+
+const Fraction = ({
+  numerator,
+  denominator,
+}: {
+  numerator: number
+  denominator: number
+}) => {
+  return (
+    <span style={{ display: 'inline-flex', alignItems: 'center' }}>
+      <span
+        style={{
+          fontSize: '0.8em',
+          display: 'inline-flex',
+          flexDirection: 'column',
+          textAlign: 'center',
+          lineHeight: '1.1',
+        }}
+      >
+        <span>{numerator}</span>
+        <span style={{ borderTop: '1px solid currentColor' }}>
+          {denominator}
+        </span>
+      </span>
+    </span>
+  )
+}

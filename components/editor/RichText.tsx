@@ -219,9 +219,15 @@ const TipTap = ({
   )
 }
 
-export const DangerouslyRenderFormattedHTML = ({ html }: { html: string }) => {
+export const DangerouslyRenderFormattedHTML = ({
+  html,
+  maxLines,
+}: {
+  html: string
+  maxLines?: number
+}) => {
   return (
-    <Container>
+    <Container maxLines={maxLines}>
       <div className="tiptap" dangerouslySetInnerHTML={{ __html: html }}></div>
     </Container>
   )
@@ -270,7 +276,11 @@ const makeUploadFn = (showError: (message: string) => void) => {
 //   )
 // }
 
-const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
+const Container = styled.div<{
+  editable?: boolean
+  maxHeight?: number
+  maxLines?: number
+}>`
   width: 100%;
 
   ${({ maxHeight }) =>
@@ -299,6 +309,18 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
     gap: 1.6rem;
     word-break: break-word;
     outline: 0; // no orange outline when focused
+
+    ${({ maxLines }) =>
+      maxLines &&
+      css`
+        overflow-wrap: break-word;
+        /* word-break: break-word; */
+        overflow-y: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: ${maxLines};
+      `}
 
     ${({ editable }) =>
       editable &&
@@ -329,11 +351,13 @@ const Container = styled.div<{ editable?: boolean; maxHeight?: number }>`
     }
 
     h2 {
-      ${h2Styles}
+      /* decrease header size for e.g. proposal snippet */
+      ${({ maxLines }) => (maxLines ? h4Styles : h2Styles)}
     }
 
     h3 {
-      ${h3Styles}
+      /* decrease header size for e.g. proposal snippet */
+      ${({ maxLines }) => (maxLines ? h4Styles : h3Styles)}
     }
 
     h4 {

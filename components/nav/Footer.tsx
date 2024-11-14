@@ -1,4 +1,5 @@
 import React from 'react'
+import { expandRoute } from '@/utils/routing'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
@@ -18,23 +19,26 @@ export const Footer = () => {
               <Header>Product</Header>
               <AppLink
                 onClick={() => analytics.acceleratorApplyClickEvent('footer')}
-                href="/accelerator"
+                href={expandRoute('accelerator')}
               >
                 <Name>Accelerator</Name>
               </AppLink>
               <AppLink
                 onClick={() => analytics.viewCityDirectoryEvent()}
-                href="/city-directory"
+                href={expandRoute('cityDirectory')}
               >
                 <Name>City Directory</Name>
               </AppLink>
-              <AppLink href="/census">
+              <AppLink href={expandRoute('census')}>
                 <Name>Census</Name>
+              </AppLink>
+              <AppLink href={expandRoute('vote')}>
+                <Name>Proposals</Name>
               </AppLink>
               <AppLink external href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}>
                 <Name>Privacy & Terms</Name>
               </AppLink>
-              <AppLink href="/security">
+              <AppLink href={expandRoute('security')}>
                 <Name>Security</Name>
               </AppLink>
             </Section>

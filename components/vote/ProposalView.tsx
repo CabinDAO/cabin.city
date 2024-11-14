@@ -3,25 +3,29 @@ import Link from 'next/link'
 import { GraphQLClient } from 'graphql-request'
 import { useRouter } from 'next/router'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { timeAgo } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
 import { Proposal as SnapshotProposal } from '@snapshot-labs/snapshot.js/dist/src/sign/types'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { Body1, H1 } from '@/components/core/Typography'
+import { Body1, H1, H2, H3 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ProposalRender } from '@/components/vote/ProposalRender'
-import { VoteSection } from '@/components/vote/VoteSection'
 import { HorizontalDivider } from '@/components/core/Divider'
+import { VoteSection } from '@/components/vote/VoteSection'
+import { VoteResults } from '@/components/vote/VoteResults'
 
 export type Proposal = SnapshotProposal & {
   id: string
   state: string
   space: { id: string; name: string }
+  scores: number[]
+  scores_total: number
 }
 
-const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
+const space = !isProd ? 'cabindao.eth' : 'grin.me.eth.id'
 
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
@@ -39,6 +43,7 @@ export const ProposalView = () => {
       .request<{ proposals: Proposal[] }>(proposalListQuery)
       .then((data) => {
         setProposals(data.proposals)
+        console.log(data.proposals)
       })
   }, [])
 
@@ -93,7 +98,7 @@ export const ProposalView = () => {
 
   return (
     <BaseLayout>
-      <TitleCard icon="citizen" title="Recent Proposals" />
+      <TitleCard icon="citizen" title="Recent DAO Proposals" />
       <Container>
         {selectedProposal ? (
           <>
@@ -106,24 +111,71 @@ export const ProposalView = () => {
             <ProposalContainer>
               <H1>{selectedProposal.title}</H1>
               <ProposalRender proposal={selectedProposal} />
+              {selectedProposal.discussion && (
+                <Body1>
+                  Proposal discussion:{' '}
+                  <Link
+                    href={selectedProposal.discussion}
+                    target="_blank"
+                    rel="noopener"
+                    style={{ textDecoration: 'underline' }}
+                  >
+                    {selectedProposal.discussion}
+                  </Link>
+                </Body1>
+              )}
               <HorizontalDivider />
-              <VoteSection proposal={selectedProposal} />
+              {selectedProposal.state === 'active' ? (
+                <VoteSection proposal={selectedProposal} />
+              ) : (
+                <>
+                  <Body1>Ended {timeAgo(selectedProposal.end)}</Body1>
+                  <VoteResults proposal={selectedProposal} />
+                </>
+              )}
             </ProposalContainer>
           </>
         ) : (
           <>
+            <Body1>
+              Cabin uses a form of community decisionmaking called a DAO. Cabin
+              members create and vote on proposals to make major decisions
+              together.
+            </Body1>
+            <Body1>
+              <Link
+                href={EXTERNAL_LINKS.GOVERNANCE_DOCS}
+                target="_blank"
+                rel="noopener"
+                style={{ textDecoration: 'underline' }}
+              >
+                Learn more about Cabin governance here
+              </Link>
+              .
+            </Body1>
+
             {proposals.map((proposal) => (
-              <ProposalChoice key={proposal.id}>
-                <Body1
-                  onClick={() => setSelectedProposal(proposal)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  {proposal.title}
+              <ProposalRow
+                key={proposal.id}
+                onClick={() => setSelectedProposal(proposal)}
+                style={{ cursor: 'pointer' }}
+              >
+                <Top>
+                  <H2>{proposal.title}</H2>
                   {proposal.state === 'active' && (
-                    <ActivePill>Active</ActivePill>
+                    <ActivePill>Voting in progress</ActivePill>
                   )}
-                </Body1>
-              </ProposalChoice>
+                </Top>
+                <ProposalRender
+                  proposal={proposal}
+                  maxLines={5}
+                  linkify={false}
+                />
+                {proposal.state !== 'active' && (
+                  <Body1>Ended {timeAgo(proposal.end)}</Body1>
+                )}
+                <VoteResults proposal={proposal} brief />
+              </ProposalRow>
             ))}
             <Body1>
               <Link
@@ -146,14 +198,22 @@ const Container = styled(ContentCard)`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
+  gap: 2.4rem;
   ${padding('md', 'sm')};
 `
 
-const ProposalChoice = styled.div`
+const ProposalRow = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.6rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid ${({ theme }) => theme.colors.yellow300};
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.yellow300};
+  }
 `
 
 const ProposalContainer = styled.div`
@@ -162,19 +222,30 @@ const ProposalContainer = styled.div`
   gap: 1.6rem;
 `
 
-const ActivePill = styled.span`
+const Top = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+`
+
+const ActivePill = styled.div`
   font-size: 1.4rem;
   padding: 0.4rem 1rem;
-  margin: 0 0.5rem;
-  background-color: ${({ theme }) => theme.colors.yellow300};
+  background-color: ${({ theme }) => theme.colors.yellow400};
   border-radius: 1rem;
   white-space: nowrap;
+  width: min-content;
 `
 
 const proposalListQuery = `
   query ListProposals {
     proposals(
-      first: 5,
+      first: 10,
       skip: 0,
       where: {
         space_in: ["${space}",],
@@ -183,15 +254,16 @@ const proposalListQuery = `
       orderDirection: desc
     ) {
       id
+      created
       title
       body
+      discussion
       choices
       start
       end
       snapshot
       state
       author
-      created
       scores
       scores_by_strategy
       scores_total

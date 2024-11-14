@@ -22,6 +22,7 @@ export enum Routes {
   api_location_externId = "/api/location/[externId]",
   api_location_list = "/api/location/list",
   api_location_new = "/api/location/new",
+  api_message_incoming = "/api/message/incoming",
   api_message_new = "/api/message/new",
   api_newsletter_subscribe = "/api/newsletter/subscribe",
   api_profile_externId = "/api/profile/[externId]",
@@ -60,5 +61,6 @@ export enum Routes {
   profile_id = "/profile/[id]",
   profile = "/profile",
   registration = "/registration",
-  security = "/security"
+  security = "/security",
+  vote = "/vote"
 }

@@ -1,19 +1,29 @@
 import { Remarkable } from 'remarkable'
-import { linkify } from 'remarkable/linkify'
+import { linkify as linkifyPlugin } from 'remarkable/linkify'
 import { Proposal } from '@/components/vote/ProposalView'
 import { DangerouslyRenderFormattedHTML } from '@/components/editor/RichText'
 
 // render markdown to match how Snapshot does it
 // https://github.com/snapshot-labs/snapshot/blob/448489f3d83abebd69f7ca42f57da3b0df28ba08/src/components/BaseMarkdown.vue#L23
 
-const remarkable = new Remarkable({
+const mdOptions = {
   html: false,
   breaks: true,
   typographer: false,
   linkTarget: '_blank',
-}).use(linkify)
+}
+const remarkable = new Remarkable(mdOptions)
+const remarkableWithLinkify = new Remarkable(mdOptions).use(linkifyPlugin)
 
-export const ProposalRender = ({ proposal }: { proposal: Proposal }) => {
+export const ProposalRender = ({
+  proposal,
+  maxLines,
+  linkify = true,
+}: {
+  proposal: Proposal
+  maxLines?: number
+  linkify?: boolean
+}) => {
   const replaceIpfsUrl = (match: string, p1: string) =>
     match.replace(p1, getIPFSUrl(p1, 'ipfs.io') || p1)
 
@@ -23,9 +33,11 @@ export const ProposalRender = ({ proposal }: { proposal: Proposal }) => {
     // if body contains a link that contain `_` , replace it with `\_` to escape it
     .replace(/(http.*?)(?=_)/g, '$1\\')
 
-  const html = remarkable.render(markdown)
+  const html = linkify
+    ? remarkableWithLinkify.render(markdown)
+    : remarkable.render(markdown)
 
-  return <DangerouslyRenderFormattedHTML html={html} />
+  return <DangerouslyRenderFormattedHTML html={html} maxLines={maxLines} />
 }
 
 function getIPFSUrl(uri: string, gateway: string) {

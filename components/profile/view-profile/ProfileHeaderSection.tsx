@@ -10,7 +10,7 @@ import {
   ProfileSetupStateParams,
 } from '@/utils/types/profile'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { shortenedAddress } from '@/utils/display-utils'
+import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { canEditProfile } from '@/lib/permissions'
 import { expandRoute } from '@/utils/routing'
 import analytics from '@/lib/googleAnalytics/analytics'
@@ -60,11 +60,7 @@ export const ProfileHeaderSection = ({
                     rel="noopener noreferrer"
                     title="Cabin uses quadratic voting on Snapshot"
                   >
-                    {`${
-                      profile.cabinTokenBalanceInt
-                        ? Math.sqrt(profile.cabinTokenBalanceInt).toFixed(0)
-                        : 0
-                    } votes`}
+                    {`${balanceToVotes(profile.cabinTokenBalanceInt)} votes`}
                   </Link>
                 </Subline2>
                 <Subline2>·</Subline2>
