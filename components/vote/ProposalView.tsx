@@ -25,7 +25,7 @@ export type Proposal = SnapshotProposal & {
   scores_total: number
 }
 
-const space = !isProd ? 'cabindao.eth' : 'grin.me.eth.id'
+const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
 
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
