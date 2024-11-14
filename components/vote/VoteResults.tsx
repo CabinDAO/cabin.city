@@ -1,4 +1,4 @@
-import { Proposal } from '@/components/vote/ProposalView'
+import { Proposal } from '@/components/vote/VoteView'
 import styled from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
@@ -17,6 +17,11 @@ export const VoteResults = ({
   }))
 
   const maxScore = Math.max(...Object.values(proposal.scores))
+
+  if (maxScore === 0) {
+    return null
+  }
+
   const winner =
     choices.find((choice) => choice.votes === maxScore) || choices[0]
 

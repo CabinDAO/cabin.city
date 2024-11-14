@@ -14,7 +14,7 @@ import { Body1, H1, H2, H3 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ProposalRender } from '@/components/vote/ProposalRender'
 import { HorizontalDivider } from '@/components/core/Divider'
-import { VoteSection } from '@/components/vote/VoteSection'
+import { VoteInput } from '@/components/vote/VoteInput'
 import { VoteResults } from '@/components/vote/VoteResults'
 
 export type Proposal = SnapshotProposal & {
@@ -31,7 +31,7 @@ const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
 )
 
-export const ProposalView = () => {
+export const VoteView = () => {
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
@@ -98,7 +98,7 @@ export const ProposalView = () => {
 
   return (
     <BaseLayout>
-      <TitleCard icon="citizen" title="Recent DAO Proposals" />
+      <TitleCard icon="citizen" title="Recent Proposals" />
       <Container>
         {selectedProposal ? (
           <>
@@ -126,7 +126,7 @@ export const ProposalView = () => {
               )}
               <HorizontalDivider />
               {selectedProposal.state === 'active' ? (
-                <VoteSection proposal={selectedProposal} />
+                <VoteInput proposal={selectedProposal} />
               ) : (
                 <>
                   <Body1>Ended {timeAgo(selectedProposal.end)}</Body1>
@@ -138,8 +138,7 @@ export const ProposalView = () => {
         ) : (
           <>
             <Body1>
-              Cabin uses a form of community decisionmaking called a DAO. Cabin
-              members create and vote on proposals to make major decisions
+              Cabin members create and vote on proposals to make major decisions
               together.
             </Body1>
             <Body1>

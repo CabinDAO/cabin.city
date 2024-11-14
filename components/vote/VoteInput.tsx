@@ -5,16 +5,17 @@ import { useUser } from '@/components/auth/useUser'
 import Link from 'next/link'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { isProd } from '@/utils/dev'
-import { Proposal } from '@/components/vote/ProposalView'
+import { Proposal } from '@/components/vote/VoteView'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { balanceToVotes } from '@/utils/display-utils'
+import { balanceToVotes, timeAgo } from '@/utils/display-utils'
+import { VoteResults } from '@/components/vote/VoteResults'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
-export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
+export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const { user } = useUser()
   const { user: privyUser } = usePrivy()
   const { wallets } = useWallets()
@@ -30,7 +31,7 @@ export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
     ? privyUser &&
       privyUser.wallet?.walletClientType === 'privy' &&
       (user?.cabinTokenBalanceInt || 0) > 0
-    : true
+    : !!user
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
@@ -70,21 +71,26 @@ export const VoteSection = ({ proposal }: { proposal: Proposal }) => {
     }
   }
 
-  if (!user) return null
-
   if (!canVote || !propIsActive) {
     return (
-      <Link
-        href={`https://snapshot.org/#/${proposal.space.id}/proposal/${proposal.id}`}
-        target="_blank"
-        rel="noopener"
-      >
-        <Button variant="secondary">
-          {propIsActive ? 'Vote' : 'View'} on Snapshot
-        </Button>
-      </Link>
+      <>
+        {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
+        <VoteResults proposal={proposal} />
+        <Body1>
+          <Link
+            href={`https://snapshot.org/#/${proposal.space.id}/proposal/${proposal.id}`}
+            target="_blank"
+            rel="noopener"
+            style={{ textDecoration: 'underline' }}
+          >
+            View the full proposal on Snapshot
+          </Link>
+        </Body1>
+      </>
     )
   }
+
+  if (!user) return null
 
   if (didVote) {
     return (

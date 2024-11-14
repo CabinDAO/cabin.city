@@ -55,10 +55,8 @@ export const ProfileHeaderSection = ({
                 <Subline2>·</Subline2>
                 <Subline2>
                   <Link
-                    href={EXTERNAL_LINKS.SNAPSHOT}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title="Cabin uses quadratic voting on Snapshot"
+                    href={expandRoute('vote')}
+                    style={{ textDecoration: 'underline' }}
                   >
                     {`${balanceToVotes(profile.cabinTokenBalanceInt)} votes`}
                   </Link>

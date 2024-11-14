@@ -1,13 +1,13 @@
 import Head from 'next/head'
-import { ProposalView } from '@/components/vote/ProposalView'
+import { VoteView } from '@/components/vote/VoteView'
 
-export default function ProposalsPage() {
+export default function VotePage() {
   return (
     <>
       <Head>
-        <title>Cabin DAO Governance</title>
+        <title>Cabin Governance</title>
       </Head>
-      <ProposalView />
+      <VoteView />
     </>
   )
 }
