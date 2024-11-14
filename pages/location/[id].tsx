@@ -17,6 +17,7 @@ const redirects: Record<string, string> = {
   '365006552451514433': 'montaia',
   '365455154129928260': 'elkenmist',
   '364553837499908173': 'n0',
+  lc_C8K17e4UYyYS5uG7tM14: 'brzeznica',
 }
 
 export default function LocationPage() {
