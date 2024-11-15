@@ -49,10 +49,6 @@ export const ProfileHeaderSection = ({
 
             {profile.wallet && (
               <BalanceAddressContainer>
-                <Subline2>{`${
-                  profile.cabinTokenBalanceInt ?? 0
-                } ₡ABIN`}</Subline2>
-                <Subline2>·</Subline2>
                 <Subline2>
                   <Link
                     href={expandRoute('vote')}
@@ -61,6 +57,10 @@ export const ProfileHeaderSection = ({
                     {`${balanceToVotes(profile.cabinTokenBalanceInt)} votes`}
                   </Link>
                 </Subline2>
+                <Subline2>·</Subline2>
+                <Subline2>{`${
+                  profile.cabinTokenBalanceInt ?? 0
+                } ₡ABIN`}</Subline2>
                 <Subline2>·</Subline2>
                 <CopyToClipboard text={ens ?? profile.wallet.address ?? ''}>
                   <Subline2>
