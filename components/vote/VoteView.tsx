@@ -16,6 +16,7 @@ import { ProposalRender } from '@/components/vote/ProposalRender'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { VoteInput } from '@/components/vote/VoteInput'
 import { VoteResults } from '@/components/vote/VoteResults'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export type Proposal = SnapshotProposal & {
   id: string
@@ -32,6 +33,10 @@ const snapshotGraphQLClient = new GraphQLClient(
 )
 
 export const VoteView = () => {
+  const router = useRouter()
+  const propsLoaded = useRef(false)
+
+  const [loading, setLoading] = useState(false)
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
@@ -39,16 +44,14 @@ export const VoteView = () => {
 
   // load proposals
   useEffect(() => {
+    setLoading(true)
     snapshotGraphQLClient
       .request<{ proposals: Proposal[] }>(proposalListQuery)
       .then((data) => {
         setProposals(data.proposals)
-        console.log(data.proposals)
       })
+      .finally(() => setLoading(false))
   }, [])
-
-  const router = useRouter()
-  const propsLoaded = useRef(false)
 
   // set selected proposal if the id is in the query
   useEffect(() => {
@@ -100,7 +103,9 @@ export const VoteView = () => {
     <BaseLayout>
       <TitleCard icon="citizen" title="Recent Proposals" />
       <Container>
-        {selectedProposal ? (
+        {loading ? (
+          <LoadingSpinner />
+        ) : selectedProposal ? (
           <>
             <Body1
               style={{ textDecoration: 'underline', cursor: 'pointer' }}
@@ -133,6 +138,16 @@ export const VoteView = () => {
                   <VoteResults proposal={selectedProposal} />
                 </>
               )}
+              <Body1>
+                <Link
+                  href={`https://snapshot.org/#/${selectedProposal.space.id}/proposal/${selectedProposal.id}`}
+                  target="_blank"
+                  rel="noopener"
+                  style={{ textDecoration: 'underline' }}
+                >
+                  View the full proposal on Snapshot
+                </Link>
+              </Body1>
             </ProposalContainer>
           </>
         ) : (

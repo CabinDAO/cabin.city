@@ -56,7 +56,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     const web3 = await wallet.getEthersProvider()
     const [account] = await web3.listAccounts()
     try {
-      const receipt = await snapshotClient.vote(web3, account, {
+      await snapshotClient.vote(web3, account, {
         space: proposal.space.id,
         proposal: proposal.id,
         type: 'quadratic',
@@ -64,7 +64,6 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         // reason: 'Choice 1 make lot of sense',
         app: 'cabin.city',
       })
-      console.log(receipt)
       setDidVote(true)
     } catch (e: any) {
       showError(`Error: ${e.error_description || e.message || e}`)
@@ -76,16 +75,6 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       <>
         {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
         <VoteResults proposal={proposal} />
-        <Body1>
-          <Link
-            href={`https://snapshot.org/#/${proposal.space.id}/proposal/${proposal.id}`}
-            target="_blank"
-            rel="noopener"
-            style={{ textDecoration: 'underline' }}
-          >
-            View the full proposal on Snapshot
-          </Link>
-        </Body1>
       </>
     )
   }
