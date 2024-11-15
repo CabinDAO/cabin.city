@@ -4,17 +4,22 @@ import styled from 'styled-components'
 import { ContentCard } from './ContentCard'
 import { Overline } from './Typography'
 
-interface ListProps {
+export const List = ({
+  total,
+  children,
+  sortComponent,
+  unitWords = { singular: 'Result' },
+}: {
   total: number | null | undefined
   children: ReactNode
   sortComponent?: ReactNode
-}
-
-export const List = (props: ListProps) => {
-  const { total, children, sortComponent } = props
-
+  unitWords?: { singular: string; plural?: string }
+}) => {
   const formattedTotal = formatValue(total ?? 0)
-  const pluralized = total === 1 ? 'Result' : 'Results'
+  const pluralized =
+    total === 1
+      ? unitWords.singular
+      : unitWords.plural ?? `${unitWords.singular}s`
 
   return (
     <ContentCard>

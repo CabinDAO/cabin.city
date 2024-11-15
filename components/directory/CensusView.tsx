@@ -150,6 +150,7 @@ export const CensusAuthView = () => {
       </SearchContainer>
       <List
         total={totalProfiles}
+        unitWords={{ singular: 'Neighbor' }}
         sortComponent={
           <Sort
             fields={DIRECTORY_SORT_FIELDS}
