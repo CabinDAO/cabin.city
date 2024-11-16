@@ -3,21 +3,21 @@ import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { useUser } from '@/components/auth/useUser'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
-import { LaunchBanner } from '@/components/citizenship/LaunchBanner'
+import { SitewideBanner } from '@/components/core/SitewideBanner'
 import { NavbarMobile } from '@/components/nav/NavbarMobile'
 import { Navbar } from '@/components/nav/Navbar'
 import { Footer } from '@/components/nav/Footer'
 import { BaseContainer } from '@/components/core/BaseContainer'
 
+const displaySitewideBanner = true
+
 export const BaseLayout = ({
   children,
-  displayLaunchBanner,
   className,
   hideNavAndFooter = false,
   landingPage = false,
 }: {
   children: React.ReactNode
-  displayLaunchBanner?: boolean
   className?: string
   hideNavAndFooter?: boolean
   landingPage?: boolean
@@ -45,7 +45,7 @@ export const BaseLayout = ({
 
   return (
     <OuterContainer className={className}>
-      {displayLaunchBanner && <LaunchBanner />}
+      {displaySitewideBanner && <SitewideBanner />}
       <PushFooterToBottom noFooterGap={noFooterGap}>
         <NavAndContent>
           {!hideNav && (isMobile ? <NavbarMobile /> : <Navbar />)}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { GraphQLClient } from 'graphql-request'
 import { useRouter } from 'next/router'
@@ -13,10 +13,9 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 import { Body1, H1, H2, H3 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ProposalRender } from '@/components/vote/ProposalRender'
-import { HorizontalDivider } from '@/components/core/Divider'
-import { VoteInput } from '@/components/vote/VoteInput'
 import { VoteResults } from '@/components/vote/VoteResults'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { ProposalView } from '@/components/vote/ProposalView'
 
 export type Proposal = SnapshotProposal & {
   id: string
@@ -113,42 +112,7 @@ export const VoteView = () => {
             >
               Back to list
             </Body1>
-            <ProposalContainer>
-              <H1>{selectedProposal.title}</H1>
-              <ProposalRender proposal={selectedProposal} />
-              {selectedProposal.discussion && (
-                <Body1>
-                  Proposal discussion:{' '}
-                  <Link
-                    href={selectedProposal.discussion}
-                    target="_blank"
-                    rel="noopener"
-                    style={{ textDecoration: 'underline' }}
-                  >
-                    {selectedProposal.discussion}
-                  </Link>
-                </Body1>
-              )}
-              <HorizontalDivider />
-              {selectedProposal.state === 'active' ? (
-                <VoteInput proposal={selectedProposal} />
-              ) : (
-                <>
-                  <Body1>Ended {timeAgo(selectedProposal.end)}</Body1>
-                  <VoteResults proposal={selectedProposal} />
-                </>
-              )}
-              <Body1>
-                <Link
-                  href={`https://snapshot.org/#/${selectedProposal.space.id}/proposal/${selectedProposal.id}`}
-                  target="_blank"
-                  rel="noopener"
-                  style={{ textDecoration: 'underline' }}
-                >
-                  View the full proposal on Snapshot
-                </Link>
-              </Body1>
-            </ProposalContainer>
+            <ProposalView proposal={selectedProposal} />
           </>
         ) : (
           <>
@@ -157,54 +121,40 @@ export const VoteView = () => {
               together.
             </Body1>
             <Body1>
-              <Link
-                href={EXTERNAL_LINKS.GOVERNANCE_DOCS}
-                target="_blank"
-                rel="noopener"
-                style={{ textDecoration: 'underline' }}
-              >
+              <ExternalLink href={EXTERNAL_LINKS.GOVERNANCE_DOCS}>
                 Learn more about Cabin governance here
-              </Link>
+              </ExternalLink>
               .
             </Body1>
-
-            {proposals.map((proposal) => (
-              <ProposalRow
-                key={proposal.id}
-                onClick={() => setSelectedProposal(proposal)}
-                style={{ cursor: 'pointer' }}
-              >
-                <Top>
-                  <H2>{proposal.title}</H2>
-                  {proposal.state === 'active' && (
-                    <ActivePill>Voting in progress</ActivePill>
-                  )}
-                </Top>
-                <ProposalRender
-                  proposal={proposal}
-                  maxLines={5}
-                  linkify={false}
-                />
-                {proposal.state !== 'active' && (
-                  <Body1>Ended {timeAgo(proposal.end)}</Body1>
-                )}
-                <VoteResults proposal={proposal} brief />
-              </ProposalRow>
-            ))}
+            <ProposalList proposals={proposals} onClick={setSelectedProposal} />
             <Body1>
-              <Link
-                href={EXTERNAL_LINKS.SNAPSHOT}
-                target="_blank"
-                rel="noopener"
-                style={{ textDecoration: 'underline' }}
-              >
+              <ExternalLink href={EXTERNAL_LINKS.SNAPSHOT}>
                 View all proposals on Snapshot
-              </Link>
+              </ExternalLink>
             </Body1>
           </>
         )}
       </Container>
     </BaseLayout>
+  )
+}
+
+const ExternalLink = ({
+  href,
+  children,
+}: {
+  href: string
+  children: ReactNode
+}) => {
+  return (
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener"
+      style={{ textDecoration: 'underline' }}
+    >
+      {children}
+    </Link>
   )
 }
 
@@ -215,6 +165,38 @@ const Container = styled(ContentCard)`
   gap: 2.4rem;
   ${padding('md', 'sm')};
 `
+
+const ProposalList = ({
+  proposals,
+  onClick,
+}: {
+  proposals: Proposal[]
+  onClick: (proposal: Proposal) => void
+}) => {
+  return (
+    <>
+      {proposals.map((proposal) => (
+        <ProposalRow
+          key={proposal.id}
+          onClick={() => onClick(proposal)}
+          style={{ cursor: 'pointer' }}
+        >
+          <Top>
+            <H2>{proposal.title}</H2>
+            {proposal.state === 'active' && (
+              <ActivePill>Voting in progress</ActivePill>
+            )}
+          </Top>
+          <ProposalRender proposal={proposal} maxLines={5} linkify={false} />
+          {proposal.state !== 'active' && (
+            <Body1>Ended {timeAgo(proposal.end)}</Body1>
+          )}
+          <VoteResults proposal={proposal} brief />
+        </ProposalRow>
+      ))}
+    </>
+  )
+}
 
 const ProposalRow = styled.div`
   position: relative;
@@ -228,12 +210,6 @@ const ProposalRow = styled.div`
   &:hover {
     background-color: ${({ theme }) => theme.colors.yellow300};
   }
-`
-
-const ProposalContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
 `
 
 const Top = styled.div`
