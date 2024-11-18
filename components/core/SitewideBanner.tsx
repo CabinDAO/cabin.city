@@ -7,9 +7,9 @@ import Icon from '@/components/core/Icon'
 
 export const SitewideBanner = () => {
   const router = useRouter()
-  const { hasActiveProposals } = useSnapshot()
+  const { hasActiveProposals, canVote } = useSnapshot()
 
-  if (!hasActiveProposals) return null
+  if (!hasActiveProposals || !canVote) return null
 
   return (
     <Banner onClick={() => router.push(expandRoute('vote'))}>

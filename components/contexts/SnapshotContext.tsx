@@ -7,6 +7,8 @@ import {
   useState,
 } from 'react'
 import { GraphQLClient } from 'graphql-request'
+import { useUser } from '@/components/auth/useUser'
+import { usePrivy } from '@privy-io/react-auth'
 import { isProd } from '@/utils/dev'
 
 const snapshotGraphQLClient = new GraphQLClient(
@@ -55,6 +57,7 @@ interface SnapshotState {
   proposals: Proposal[]
   loaded: boolean
   hasActiveProposals: boolean
+  canVote: boolean
   getMyVote: (proposalId: string, voterAddress: string) => Promise<Vote | null>
 }
 
@@ -71,6 +74,16 @@ export function useSnapshot() {
 }
 
 export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
+  const { user } = useUser()
+  const { user: privyUser } = usePrivy()
+
+  const canVote =
+    (isProd
+      ? privyUser &&
+        privyUser.wallet?.walletClientType === 'privy' && // TODO: is this right? maybe any wallet works via privy?
+        (user?.cabinTokenBalanceInt || 0) > 0
+      : !!user) || false
+
   const [proposals, setProposals] = useState<Proposal[]>([])
   const [loaded, setLoaded] = useState(false)
   const [hasActiveProposals, setHasActiveProposals] = useState(false)
@@ -101,6 +114,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
     proposals,
     loaded,
     hasActiveProposals,
+    canVote,
     getMyVote,
   }
 
