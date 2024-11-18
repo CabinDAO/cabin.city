@@ -1,20 +1,17 @@
-import { createContext, ReactNode, useCallback, useEffect, useRef } from 'react'
-import { useUser } from '../auth/useUser'
-import { useExternalUser } from '../auth/useExternalUser'
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+} from 'react'
+import { useUser } from '@/components/auth/useUser'
+import { useExternalUser } from '@/components/auth/useExternalUser'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useBackend } from '@/components/hooks/useBackend'
 import { RefetchParamsType, RefetchResponse } from '@/utils/types/unlock'
 import { Address } from 'viem'
-
-export const CitizenshipContext = createContext<CitzenshipState | null>(null)
-
-export interface CitzenshipState {
-  checkStatus: VoidFunction
-}
-
-interface CitzenshipProviderProps {
-  children: ReactNode
-}
 
 const allowCheckPages = [
   '/activity',
@@ -23,7 +20,23 @@ const allowCheckPages = [
   '/profile/[id]',
 ]
 
-export const CitizenshipProvider = ({ children }: CitzenshipProviderProps) => {
+interface CitzenshipState {
+  checkStatus: VoidFunction
+}
+
+const CitizenshipContext = createContext<CitzenshipState | null>(null)
+
+export function useCitizenship() {
+  const context = useContext(CitizenshipContext)
+  if (!context) {
+    throw new Error(
+      'useCitizenship must be used within CitizenshipContext. Wrap a parent component in <CitizenshipContext.Provider> to fix this error.'
+    )
+  }
+  return context
+}
+
+export const CitizenshipProvider = ({ children }: { children: ReactNode }) => {
   const { refetchUser } = useUser()
   const { externalUser } = useExternalUser()
   const checked = useRef(false)
