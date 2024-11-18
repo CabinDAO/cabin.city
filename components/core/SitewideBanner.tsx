@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { useSnapshot } from '@/components/contexts/SnapshotContext'
 import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { H4, Subline2 } from '@/components/core/Typography'
@@ -6,10 +7,14 @@ import Icon from '@/components/core/Icon'
 
 export const SitewideBanner = () => {
   const router = useRouter()
+  const { hasActiveProposals } = useSnapshot()
+
+  if (!hasActiveProposals) return null
+
   return (
     <Banner onClick={() => router.push(expandRoute('vote'))}>
       <H4>
-        There's a proposal up for a vote{' '}
+        There's a proposal up for vote{' '}
         <Icon
           name="up-right-arrow"
           size={1.2}

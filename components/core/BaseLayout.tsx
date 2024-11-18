@@ -9,8 +9,6 @@ import { Navbar } from '@/components/nav/Navbar'
 import { Footer } from '@/components/nav/Footer'
 import { BaseContainer } from '@/components/core/BaseContainer'
 
-const displaySitewideBanner = true
-
 export const BaseLayout = ({
   children,
   className,
@@ -45,12 +43,14 @@ export const BaseLayout = ({
 
   return (
     <OuterContainer className={className}>
-      {displaySitewideBanner && <SitewideBanner />}
       <PushFooterToBottom noFooterGap={noFooterGap}>
-        <NavAndContent>
-          {!hideNav && (isMobile ? <NavbarMobile /> : <Navbar />)}
-          <MainContent noTopPadding={noTopPadding}>{content}</MainContent>
-        </NavAndContent>
+        <InnerContainer>
+          <SitewideBanner />
+          <NavAndContent>
+            {!hideNav && (isMobile ? <NavbarMobile /> : <Navbar />)}
+            <MainContent noTopPadding={noTopPadding}>{content}</MainContent>
+          </NavAndContent>
+        </InnerContainer>
         {!hideNavAndFooter && <Footer />}
       </PushFooterToBottom>
     </OuterContainer>
@@ -78,6 +78,8 @@ const PushFooterToBottom = styled.div<{ noFooterGap: boolean }>`
     gap: ${({ noFooterGap }) => (noFooterGap ? '0' : '16rem')};
   }
 `
+
+const InnerContainer = styled.div``
 
 // need this extra div so PushFooterToBottom can have a gap between the content and footer
 const NavAndContent = styled.div`

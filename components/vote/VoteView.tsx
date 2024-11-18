@@ -1,11 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { GraphQLClient } from 'graphql-request'
 import { useRouter } from 'next/router'
+import { useSnapshot, Proposal } from '@/components/contexts/SnapshotContext'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { timeAgo } from '@/utils/display-utils'
-import { isProd } from '@/utils/dev'
-import { Proposal as SnapshotProposal } from '@snapshot-labs/snapshot.js/dist/src/sign/types'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -17,51 +15,26 @@ import { VoteResults } from '@/components/vote/VoteResults'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProposalView } from '@/components/vote/ProposalView'
 
-export type Proposal = SnapshotProposal & {
-  id: string
-  state: string
-  space: { id: string; name: string }
-  scores: number[]
-  scores_total: number
-}
-
-const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
-
-const snapshotGraphQLClient = new GraphQLClient(
-  'https://hub.snapshot.org/graphql'
-)
-
 export const VoteView = () => {
   const router = useRouter()
+  const { proposals, loaded } = useSnapshot()
+
   const propsLoaded = useRef(false)
 
-  const [loading, setLoading] = useState(false)
-  const [proposals, setProposals] = useState<Proposal[]>([])
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
   )
 
-  // load proposals
-  useEffect(() => {
-    setLoading(true)
-    snapshotGraphQLClient
-      .request<{ proposals: Proposal[] }>(proposalListQuery)
-      .then((data) => {
-        setProposals(data.proposals)
-      })
-      .finally(() => setLoading(false))
-  }, [])
-
   // set selected proposal if the id is in the query
   useEffect(() => {
-    if (!router.isReady || !proposals.length) return
+    if (!router.isReady || !loaded || !proposals.length) return
     propsLoaded.current = true
     const initialPropId = `${router.query.prop}`
     if (initialPropId) {
       const loadedProp = proposals.find((p) => p.id === initialPropId) || null
       setSelectedProposal(loadedProp)
     }
-  }, [router.isReady, proposals])
+  }, [router.isReady, loaded, proposals])
 
   // handle url query changes
   useEffect(() => {
@@ -102,7 +75,7 @@ export const VoteView = () => {
     <BaseLayout>
       <TitleCard icon="citizen" title="Recent Proposals" />
       <Container>
-        {loading ? (
+        {!loaded ? (
           <LoadingSpinner />
         ) : selectedProposal ? (
           <>
@@ -230,45 +203,4 @@ const ActivePill = styled.div`
   border-radius: 1rem;
   white-space: nowrap;
   width: min-content;
-`
-
-const proposalListQuery = `
-  query ListProposals {
-    proposals(
-      first: 10,
-      skip: 0,
-      where: {
-        space_in: ["${space}",],
-      },
-      orderBy: "created",
-      orderDirection: desc
-    ) {
-      id
-      created
-      title
-      body
-      discussion
-      choices
-      start
-      end
-      snapshot
-      state
-      author
-      scores
-      scores_by_strategy
-      scores_total
-      scores_updated
-      plugins
-      network
-      space {
-        id
-        name
-      }
-      strategies {
-        name
-        network
-        params
-      }
-    }
-  }
 `

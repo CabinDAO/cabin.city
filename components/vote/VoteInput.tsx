@@ -1,17 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useError } from '@/components/hooks/useError'
 import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { useUser } from '@/components/auth/useUser'
 import Link from 'next/link'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { isProd } from '@/utils/dev'
-import { Proposal } from '@/components/vote/VoteView'
+import {
+  Proposal,
+  Vote,
+  useSnapshot,
+} from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
-import { Body1, H2 } from '@/components/core/Typography'
+import { Body1, H2, H3 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { balanceToVotes, timeAgo } from '@/utils/display-utils'
 import { VoteResults } from '@/components/vote/VoteResults'
+import Icon from '@/components/core/Icon'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
@@ -20,7 +26,11 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const { user: privyUser } = usePrivy()
   const { wallets } = useWallets()
   const { showError } = useError()
-  const [didVote, setDidVote] = useState(false)
+  const { getMyVote } = useSnapshot()
+  const [votesLoaded, setVotesLoaded] = useState(false)
+  const [myLastVote, setMyLastVote] = useState<Vote | null>(null)
+  const [justVoted, setJustVoted] = useState(false)
+  const [revoting, setRevoting] = useState(false)
   const [choices, setChoices] = useState<{
     [key: string]: number
   }>({})
@@ -32,6 +42,17 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       privyUser.wallet?.walletClientType === 'privy' &&
       (user?.cabinTokenBalanceInt || 0) > 0
     : !!user
+
+  useEffect(() => {
+    if (!canVote || !user?.walletAddress) return
+    getMyVote(proposal.id, user.walletAddress).then((vote) => {
+      setVotesLoaded(true)
+      setMyLastVote(vote)
+      if (vote?.choice) {
+        setChoices(vote.choice)
+      }
+    })
+  }, [canVote, user?.walletAddress])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
@@ -64,7 +85,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         // reason: 'Choice 1 make lot of sense',
         app: 'cabin.city',
       })
-      setDidVote(true)
+      setJustVoted(true)
     } catch (e: any) {
       showError(`Error: ${e.error_description || e.message || e}`)
     }
@@ -81,24 +102,16 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   if (!user) return null
 
-  if (didVote) {
+  if (!votesLoaded) {
+    return <LoadingSpinner />
+  }
+
+  if (justVoted) {
     return (
       <Container>
         <H2>Hooray, you voted!</H2>
         <Body1>
-          See voting results on{' '}
-          <Link
-            href={`https://snapshot.org/#/${proposal.space.id}/proposal/${proposal.id}`}
-            target="_blank"
-            rel="noopener"
-            style={{ textDecoration: 'underline' }}
-          >
-            Snapshot
-          </Link>
-          .
-        </Body1>
-        <Body1>
-          <Button variant="tertiary" onClick={() => setDidVote(false)}>
+          <Button variant="tertiary" onClick={() => setJustVoted(false)}>
             Change your vote
           </Button>
         </Body1>
@@ -106,9 +119,35 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     )
   }
 
+  if (myLastVote && !revoting) {
+    return (
+      <>
+        <H2>
+          Your Vote
+          <span
+            title="Change your vote"
+            onClick={() => {
+              setRevoting(true)
+              setJustVoted(false)
+            }}
+            style={{
+              cursor: 'pointer',
+              marginLeft: '1rem',
+              // border: 'solid 1px black',
+              padding: '0 0.5rem',
+            }}
+          >
+            <Icon name="pencil" size={1.4} inline />
+          </span>
+        </H2>
+        <VoteResults proposal={proposal} overrideVotes={myLastVote.choice} />
+      </>
+    )
+  }
+
   return (
     <Container>
-      <H2>Cast your vote</H2>
+      <H2>{revoting ? 'Change' : 'Cast'} your vote</H2>
       <Body1>
         Your {balanceToVotes(user.cabinTokenBalanceInt)} votes will be split
         among one or more of the choices below according to the percentages you
@@ -129,7 +168,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         .
       </Body1>
 
-      {proposal.choices.map((choice, i) => {
+      {proposal.choices.map((choice: string, i: number) => {
         const index = i + 1 // snapshot uses 1-based indexing for choices
         const numerator = choices[index] || 0
         const denominator = Object.values(choices).reduce(

@@ -1,4 +1,4 @@
-import { Proposal } from '@/components/vote/VoteView'
+import { Proposal } from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
@@ -6,22 +6,30 @@ import Icon from '@/components/core/Icon'
 export const VoteResults = ({
   proposal,
   brief,
+  overrideVotes,
 }: {
   proposal: Proposal
   brief?: boolean
+  overrideVotes?: { [key: string]: number }
 }) => {
-  const choices = proposal.choices.map((choice, i) => ({
+  const choices = proposal.choices.map((choice: string, i: number) => ({
     key: i + 1,
     text: choice,
-    votes: proposal.scores[i],
+    votes: overrideVotes ? overrideVotes[i + 1] || 0 : proposal.scores[i] || 0,
   }))
 
-  const maxScore = Math.max(...Object.values(proposal.scores))
+  const totalVotes = Object.values(choices).reduce(
+    (acc, curr) => acc + curr.votes,
+    0
+  )
+
+  const maxScore = Math.max(...Object.values(choices).map((c) => c.votes))
 
   if (maxScore === 0) {
     return null
   }
 
+  const showWinner = proposal.state === 'closed' && !overrideVotes
   const winner =
     choices.find((choice) => choice.votes === maxScore) || choices[0]
 
@@ -36,11 +44,11 @@ export const VoteResults = ({
   return (
     <Container>
       {Object.values(choicesToShow).map((choice) => {
-        const percent = percentForChoice(choice.votes, proposal.scores_total)
+        const percent = percentForChoice(choice.votes, totalVotes)
         return (
           <Row key={choice.key} fillPercent={percent}>
             <ChoiceText>
-              {proposal.state === 'closed' && choice.key === winner.key && (
+              {showWinner && choice.key === winner.key && (
                 <Icon name="check" size={1.6} style={{ marginRight: '1rem' }} />
               )}
               {choice.text}
