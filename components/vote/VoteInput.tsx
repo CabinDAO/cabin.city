@@ -12,7 +12,7 @@ import {
 } from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
-import { Body1, H2, H3 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { balanceToVotes, timeAgo } from '@/utils/display-utils'
 import { VoteResults } from '@/components/vote/VoteResults'
@@ -53,7 +53,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         setChoices(vote.choice)
       }
     })
-  }, [canVote, user?.walletAddress])
+  }, [canVote, user?.walletAddress, getMyVote, proposal.id])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
@@ -87,6 +87,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         app: 'cabin.city',
       })
       setJustVoted(true)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       showError(`Error: ${e.error_description || e.message || e}`)
     }

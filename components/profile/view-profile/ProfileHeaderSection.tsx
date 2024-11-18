@@ -9,7 +9,6 @@ import {
   ProfileFragment,
   ProfileSetupStateParams,
 } from '@/utils/types/profile'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { canEditProfile } from '@/lib/permissions'
 import { expandRoute } from '@/utils/routing'

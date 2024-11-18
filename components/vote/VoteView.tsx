@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { Body1, H1, H2, H3 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ProposalRender } from '@/components/vote/ProposalRender'
 import { VoteResults } from '@/components/vote/VoteResults'
@@ -34,7 +34,7 @@ export const VoteView = () => {
       const loadedProp = proposals.find((p) => p.id === initialPropId) || null
       setSelectedProposal(loadedProp)
     }
-  }, [router.isReady, loaded, proposals])
+  }, [router.isReady, loaded, proposals, router.query.prop])
 
   // handle url query changes
   useEffect(() => {
@@ -52,12 +52,11 @@ export const VoteView = () => {
         query: newQuery,
       })
     }
-  }, [selectedProposal])
+  }, [selectedProposal, router])
 
   // handle back navigation
   useEffect(() => {
     router.beforePopState(({ url }) => {
-      console.log(url, router.pathname)
       if (url.startsWith(router.pathname) && url.includes('prop=')) {
         const parsedUrl = new URL(url, window.location.origin)
         setSelectedProposal(
@@ -69,7 +68,7 @@ export const VoteView = () => {
       }
       return true
     })
-  }, [router])
+  }, [router, proposals])
 
   return (
     <BaseLayout>

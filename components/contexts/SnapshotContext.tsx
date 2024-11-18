@@ -101,7 +101,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     loadProposals().then()
-  }, [])
+  }, [loadProposals])
 
   const getMyVote = async (proposalId: string, voterAddress: string) => {
     const data = await snapshotGraphQLClient.request<{ votes: Vote[] }>(

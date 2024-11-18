@@ -1,6 +1,6 @@
 import { Remarkable } from 'remarkable'
 import { linkify as linkifyPlugin } from 'remarkable/linkify'
-import { Proposal } from '@/components/vote/VoteView'
+import { Proposal } from '@/components/contexts/SnapshotContext'
 import { DangerouslyRenderFormattedHTML } from '@/components/editor/RichText'
 
 // render markdown to match how Snapshot does it

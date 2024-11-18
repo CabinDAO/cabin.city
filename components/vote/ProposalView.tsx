@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { GraphQLClient } from 'graphql-request'
-import { useRouter } from 'next/router'
 import { timeAgo } from '@/utils/display-utils'
 import styled from 'styled-components'
-import { Body1, H1, H2, H3 } from '@/components/core/Typography'
+import { Body1, H1 } from '@/components/core/Typography'
 import { ProposalRender } from '@/components/vote/ProposalRender'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { VoteInput } from '@/components/vote/VoteInput'
 import { VoteResults } from '@/components/vote/VoteResults'
-import { Proposal } from '@/components/vote/VoteView'
+import { Proposal } from '@/components/contexts/SnapshotContext'
 
 export const ProposalView = ({ proposal }: { proposal: Proposal }) => {
   return (
