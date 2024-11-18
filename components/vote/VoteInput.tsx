@@ -45,6 +45,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   useEffect(() => {
     if (!canVote || !user?.walletAddress) return
+    setVotesLoaded(false)
     getMyVote(proposal.id, user.walletAddress).then((vote) => {
       setVotesLoaded(true)
       setMyLastVote(vote)
