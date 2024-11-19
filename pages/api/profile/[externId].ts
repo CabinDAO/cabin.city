@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { cabinTokenConfig } from '@/lib/protocol-config'
+import { cabinTokenConfigForEnv } from '@/lib/protocol-config'
 import { getAlchemySdk } from '@/lib/chains'
 import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { $Enums, Prisma } from '@prisma/client'
@@ -98,9 +98,9 @@ async function handlePost(
     ? onchainAmountToDecimal(
         (
           await getAlchemySdk(
-            cabinTokenConfig.networkName
+            cabinTokenConfigForEnv.networkName
           ).core.getTokenBalances(params.data.walletAddress, [
-            cabinTokenConfig.contractAddress,
+            cabinTokenConfigForEnv.contractAddress,
           ])
         ).tokenBalances[0].tokenBalance ?? '0'
       )

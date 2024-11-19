@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
 import { onchainAmountToDecimal, prisma } from '@/lib/prisma'
 import { getAlchemySdk } from '@/lib/chains'
-import { cabinTokenConfig } from '@/lib/protocol-config'
+import { cabinTokenConfigForEnv } from '@/lib/protocol-config'
 import { ContactFieldType } from '@/utils/types/profile'
 import { sanitizeContactValue } from '@/components/profile/validations'
 import { toErrorString } from '@/utils/api/error'
@@ -76,7 +76,7 @@ async function sanitizeContacts() {
 }
 
 async function fixTokenBalances() {
-  const alchemy = getAlchemySdk(cabinTokenConfig.networkName)
+  const alchemy = getAlchemySdk(cabinTokenConfigForEnv.networkName)
 
   const take = 50
   let skip = 0
@@ -95,7 +95,7 @@ async function fixTokenBalances() {
       }
 
       const balanceRes = await alchemy.core.getTokenBalances(wallet.address, [
-        cabinTokenConfig.contractAddress,
+        cabinTokenConfigForEnv.contractAddress,
       ])
 
       const balance = onchainAmountToDecimal(

@@ -4,7 +4,10 @@ import { getEthersAlchemyProvider } from '@/lib/chains'
 import { prisma } from '@/lib/prisma'
 import { CabinToken__factory } from '@/generated/ethers'
 import { CitizenshipStatus } from '@/utils/types/profile'
-import { cabinTokenConfig, unlockConfigForEnv } from '@/lib/protocol-config'
+import {
+  cabinTokenConfigForEnv,
+  unlockConfigForEnv,
+} from '@/lib/protocol-config'
 import { MINIMUM_CABIN_BALANCE } from '@/utils/citizenship'
 
 type ResponseJson = {
@@ -57,8 +60,8 @@ export default async function handler(
 
 async function _getCabinTokenBalance(address: string): Promise<bigint> {
   const cabinTokenContract = CabinToken__factory.connect(
-    cabinTokenConfig.contractAddress,
-    getEthersAlchemyProvider(cabinTokenConfig.networkName)
+    cabinTokenConfigForEnv.contractAddress,
+    getEthersAlchemyProvider(cabinTokenConfigForEnv.networkName)
   )
   return cabinTokenContract.balanceOf(address)
 }

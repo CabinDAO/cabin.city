@@ -50,7 +50,9 @@ type CabinTokenConfig = {
   initialBlock: bigint
 }
 
-export const cabinTokenConfig: CabinTokenConfig = getAppConfig({
+export const cabinTokenConfigs: {
+  [key in 'dev' | 'prod']: CabinTokenConfig
+} = {
   dev: {
     networkName: 'sepolia',
     contractAddress: '0x331e823689314b702396b97ff299d9d2968eff47',
@@ -61,7 +63,10 @@ export const cabinTokenConfig: CabinTokenConfig = getAppConfig({
     contractAddress: '0x1934e252f840aa98dfce2b6205b3e45c41aef830',
     initialBlock: BigInt('13636062'),
   },
-})
+}
+
+export const cabinTokenConfigForEnv: CabinTokenConfig =
+  getAppConfig(cabinTokenConfigs)
 
 type UnlockConfig = {
   networkName: NetworkName

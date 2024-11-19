@@ -5,7 +5,7 @@ import { $Enums } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
 import { getEthersAlchemyProvider } from '@/lib/chains'
 import { CabinToken__factory } from 'generated/ethers'
-import { cabinTokenConfig } from '@/lib/protocol-config'
+import { cabinTokenConfigForEnv } from '@/lib/protocol-config'
 
 const BLOCK_COUNT = new Decimal(2000)
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -16,8 +16,8 @@ export default async function handler(
 ) {
   await attemptSync({
     type: $Enums.BlockSyncType.CabinToken,
-    provider: getEthersAlchemyProvider(cabinTokenConfig.networkName),
-    initialBlock: new Decimal(cabinTokenConfig.initialBlock.toString()),
+    provider: getEthersAlchemyProvider(cabinTokenConfigForEnv.networkName),
+    initialBlock: new Decimal(cabinTokenConfigForEnv.initialBlock.toString()),
     blockCount: BLOCK_COUNT,
     res,
     handler: _syncHandler,
@@ -26,7 +26,7 @@ export default async function handler(
 
 async function _syncHandler(state: SyncAttemptState): Promise<void> {
   const cabinTokenContract = CabinToken__factory.connect(
-    cabinTokenConfig.contractAddress,
+    cabinTokenConfigForEnv.contractAddress,
     state.provider
   )
 
