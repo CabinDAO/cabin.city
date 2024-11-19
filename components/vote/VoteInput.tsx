@@ -10,6 +10,7 @@ import {
   Vote,
   useSnapshot,
 } from '@/components/contexts/SnapshotContext'
+import * as Sentry from '@sentry/nextjs'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
@@ -26,9 +27,10 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const { user: privyUser } = usePrivy()
   const { wallets } = useWallets()
   const { showError } = useError()
-  const { getMyVote } = useSnapshot()
-  const [votesLoaded, setVotesLoaded] = useState(false)
+  const { userVotes, userVotesLoaded, reloadUserVotes, reloadProposals } =
+    useSnapshot()
   const [myLastVote, setMyLastVote] = useState<Vote | null>(null)
+  const [votingInProgress, setVotingInProgress] = useState(false)
   const [justVoted, setJustVoted] = useState(false)
   const [revoting, setRevoting] = useState(false)
   const [choices, setChoices] = useState<{
@@ -45,15 +47,12 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   useEffect(() => {
     if (!canVote || !user?.walletAddress) return
-    setVotesLoaded(false)
-    getMyVote(proposal.id, user.walletAddress).then((vote) => {
-      setVotesLoaded(true)
-      setMyLastVote(vote)
-      if (vote?.choice) {
-        setChoices(vote.choice)
-      }
-    })
-  }, [canVote, user?.walletAddress])
+    const vote = userVotes.find((v) => v.proposal.id === proposal.id) || null
+    setMyLastVote(vote)
+    if (vote?.choice) {
+      setChoices(vote.choice)
+    }
+  }, [userVotes])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
@@ -78,6 +77,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     const web3 = await wallet.getEthersProvider()
     const [account] = await web3.listAccounts()
     try {
+      setVotingInProgress(true)
       await snapshotClient.vote(web3, account, {
         space: proposal.space.id,
         proposal: proposal.id,
@@ -87,10 +87,20 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         app: 'cabin.city',
       })
       setJustVoted(true)
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      showError(`Error: ${e.error_description || e.message || e}`)
+      reloadUserVotes()
+      reloadProposals()
+    } catch (e: unknown) {
+      console.log(e)
+      if (typeof e === 'object' && e !== null && 'error_description' in e) {
+        showError(`Error: ${e.error_description}`)
+      } else if (e instanceof Error) {
+        Sentry.captureException(e)
+        showError(`Error: ${e.message || e}`)
+      } else {
+        Sentry.captureException(e)
+      }
     }
+    setVotingInProgress(false)
   }
 
   if (!canVote || !propIsActive) {
@@ -104,7 +114,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   if (!user) return null
 
-  if (!votesLoaded) {
+  if (!userVotesLoaded) {
     return <LoadingSpinner />
   }
 
@@ -211,7 +221,16 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
           </OptionRow>
         )
       })}
-      <Button onClick={castVote}>Vote</Button>
+      <Button onClick={castVote} disabled={votingInProgress}>
+        {votingInProgress ? (
+          <>
+            <LoadingSpinner />
+            &nbsp; {/* this keeps the button height from collapsing */}
+          </>
+        ) : (
+          'Vote'
+        )}
+      </Button>
     </Container>
   )
 }
@@ -258,7 +277,7 @@ const OptionRow = styled.div<{ selected?: boolean; fillPercent?: string }>`
     left: 0;
     width: ${({ fillPercent }) => fillPercent}%;
     height: 100%;
-    background: ${({ theme }) => theme.colors.gray}11;
+    background: ${({ theme }) => theme.colors.gray}33;
     z-index: 0;
     transition: width 0.2s ease-in-out;
   }

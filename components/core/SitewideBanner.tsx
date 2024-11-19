@@ -7,9 +7,9 @@ import Icon from '@/components/core/Icon'
 
 export const SitewideBanner = () => {
   const router = useRouter()
-  const { hasActiveProposals, canVote } = useSnapshot()
+  const { hasUserVotableProposals } = useSnapshot()
 
-  if (!hasActiveProposals || !canVote) return null
+  if (!hasUserVotableProposals) return null
 
   return (
     <Banner onClick={() => router.push(expandRoute('vote'))}>
@@ -33,7 +33,7 @@ const Banner = styled.div`
   display: flex;
   flex-direction: column;
   width: 100vw;
-  padding: 1.2rem 0;
+  padding: 1.2rem 6rem; // 6rem pad keeps text from getting cut off by mobile nav
   justify-content: center;
   align-items: center;
   gap: 0.4rem;

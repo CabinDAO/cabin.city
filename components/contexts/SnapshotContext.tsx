@@ -10,6 +10,7 @@ import { GraphQLClient } from 'graphql-request'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
 import { isProd } from '@/utils/dev'
+import { readCitizenshipContractIsApprovedForAll } from '@/generated/contracts'
 
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
@@ -55,10 +56,14 @@ export type Vote = {
 
 interface SnapshotState {
   proposals: Proposal[]
-  loaded: boolean
+  proposalsLoaded: boolean
+  reloadProposals: VoidFunction
+  userVotes: Vote[]
+  userVotesLoaded: boolean
+  reloadUserVotes: VoidFunction
   hasActiveProposals: boolean
   canVote: boolean
-  getMyVote: (proposalId: string, voterAddress: string) => Promise<Vote | null>
+  hasUserVotableProposals: boolean
 }
 
 const SnapshotContext = createContext<SnapshotState | null>(null)
@@ -85,37 +90,72 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
       : !!user) || false
 
   const [proposals, setProposals] = useState<Proposal[]>([])
-  const [loaded, setLoaded] = useState(false)
+  const [userVotes, setUserVotes] = useState<Vote[]>([])
+  const [proposalsLoaded, setProposalsLoaded] = useState(false)
+  const [userVotesLoaded, setUserVotesLoaded] = useState(false)
   const [hasActiveProposals, setHasActiveProposals] = useState(false)
+  const [hasUserVotableProposals, setHasUserVotableProposals] = useState(false)
+
+  const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
 
   const loadProposals = useCallback(async () => {
-    const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
     return snapshotGraphQLClient
       .request<{ proposals: Proposal[] }>(proposalsQuery(space))
       .then((data) => {
         setProposals(data.proposals)
         setHasActiveProposals(data.proposals.some((p) => p.state === 'active'))
       })
-      .finally(() => setLoaded(true))
+      .finally(() => setProposalsLoaded(true))
   }, [])
+
+  const reloadProposals = async () => {
+    setProposalsLoaded(false)
+    await loadProposals()
+    setProposalsLoaded(true)
+  }
+
+  const loadUserVotes = useCallback(async () => {
+    if (!user?.walletAddress) return
+    return snapshotGraphQLClient
+      .request<{ votes: Vote[] }>(userVotesQuery(space, user.walletAddress))
+      .then((data) => {
+        setUserVotes(data.votes)
+      })
+      .finally(() => setUserVotesLoaded(true))
+  }, [user])
+
+  const reloadUserVotes = async () => {
+    setUserVotesLoaded(false)
+    await loadUserVotes()
+    setUserVotesLoaded(true)
+  }
 
   useEffect(() => {
     loadProposals().then()
-  }, [loadProposals])
+    loadUserVotes().then()
+  }, [loadProposals, loadUserVotes])
 
-  const getMyVote = async (proposalId: string, voterAddress: string) => {
-    const data = await snapshotGraphQLClient.request<{ votes: Vote[] }>(
-      latestVoteByAddressQuery(proposalId, voterAddress)
+  useEffect(() => {
+    setHasUserVotableProposals(
+      canVote &&
+        proposals.some(
+          (p) =>
+            p.state === 'active' &&
+            !userVotes.some((v) => v.proposal.id === p.id)
+        )
     )
-    return data.votes.length > 0 ? data.votes[0] : null
-  }
+  }, [proposals, userVotes, canVote])
 
   const state = {
     proposals,
-    loaded,
+    proposalsLoaded,
+    reloadProposals,
+    userVotes,
+    userVotesLoaded,
+    reloadUserVotes,
     hasActiveProposals,
     canVote,
-    getMyVote,
+    hasUserVotableProposals,
   }
 
   return (
@@ -166,42 +206,13 @@ const proposalsQuery = (space: string) => `
   }
 `
 
-const votesQuery = (proposalId: string) => `
-  query VotesQuery {
+const userVotesQuery = (space: string, voterAddress: string) => `
+  query UserVotesQuery {
     votes(
       first: 1000
       skip: 0
       where: {
-        proposal: "${proposalId}"
-      }
-      orderBy: "created",
-      orderDirection: desc
-    ) {
-      id
-      voter
-      vp
-      vp_by_strategy
-      vp_state
-      created
-      proposal {
-        id
-      }
-      choice
-      space {
-        id
-      }
-    }
-  }
-`
-
-// you can vote many times. this gets your latest vote
-const latestVoteByAddressQuery = (proposalId: string, voterAddress: string) => `
-  query LatestVoteByAddressQuery {
-    votes(
-      first: 1
-      skip: 0
-      where: {
-        proposal: "${proposalId}"
+        space: "${space}"
         voter: "${voterAddress}"
       }
       orderBy: "created",

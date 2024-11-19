@@ -33,7 +33,7 @@ export const VoteResults = ({
   const winner =
     choices.find((choice) => choice.votes === maxScore) || choices[0]
 
-  if (proposal.choices.length != 2) {
+  if (proposal.choices.length != 2 && !overrideVotes) {
     choices.sort((a, b) => b.votes - a.votes)
   }
 
@@ -46,7 +46,7 @@ export const VoteResults = ({
       {Object.values(choicesToShow).map((choice) => {
         const percent = percentForChoice(choice.votes, totalVotes)
         return (
-          <Row key={choice.key} fillPercent={percent}>
+          <Row key={choice.key} fillPercent={percent} border={!!overrideVotes}>
             <ChoiceText>
               {showWinner && choice.key === winner.key && (
                 <Icon name="check" size={1.6} style={{ marginRight: '1rem' }} />
@@ -74,13 +74,17 @@ const Container = styled.div`
   font-size: 1.8rem;
 `
 
-const Row = styled.div<{ winner?: boolean; fillPercent?: string }>`
+const Row = styled.div<{
+  winner?: boolean
+  fillPercent?: string
+  border?: boolean
+}>`
   display: flex;
   flex-direction: row;
   gap: 1.6rem;
   align-items: center;
   padding: 0 1.4rem;
-  border: 1px solid ${({ theme }) => theme.colors.gray};
+  ${({ border, theme }) => border && `border: 1px solid ${theme.colors.gray}`};
   border-radius: 1rem;
   height: 4rem;
 
@@ -93,9 +97,10 @@ const Row = styled.div<{ winner?: boolean; fillPercent?: string }>`
     left: 0;
     width: ${({ fillPercent }) => fillPercent}%;
     height: 100%;
-    background: ${({ theme }) => theme.colors.gray}40;
+    background: ${({ theme }) => theme.colors.gray}33;
     z-index: 0;
     transition: width 0.2s ease-in-out;
+    border-radius: ${({ border }) => (border ? '0' : '1rem')};
   }
 `
 

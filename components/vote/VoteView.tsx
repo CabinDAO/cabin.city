@@ -17,9 +17,9 @@ import { ProposalView } from '@/components/vote/ProposalView'
 
 export const VoteView = () => {
   const router = useRouter()
-  const { proposals, loaded } = useSnapshot()
+  const { proposals, proposalsLoaded } = useSnapshot()
 
-  const propsLoaded = useRef(false)
+  const selectedPropSetFromURL = useRef(false)
 
   const [selectedProposal, setSelectedProposal] = useState<Proposal | null>(
     null
@@ -27,18 +27,18 @@ export const VoteView = () => {
 
   // set selected proposal if the id is in the query
   useEffect(() => {
-    if (!router.isReady || !loaded || !proposals.length) return
-    propsLoaded.current = true
+    if (!router.isReady || !proposalsLoaded || !proposals.length) return
+    selectedPropSetFromURL.current = true
     const initialPropId = `${router.query.prop}`
     if (initialPropId) {
       const loadedProp = proposals.find((p) => p.id === initialPropId) || null
       setSelectedProposal(loadedProp)
     }
-  }, [router.isReady, loaded, proposals, router.query.prop])
+  }, [router.isReady, proposalsLoaded, proposals, router.query.prop])
 
   // handle url query changes
   useEffect(() => {
-    if (!propsLoaded.current) return
+    if (!selectedPropSetFromURL.current) return
     if (selectedProposal) {
       router.push({
         pathname: router.pathname,
@@ -74,7 +74,7 @@ export const VoteView = () => {
     <BaseLayout>
       <TitleCard icon="citizen" title="Recent Proposals" />
       <Container>
-        {!loaded ? (
+        {!proposalsLoaded ? (
           <LoadingSpinner />
         ) : selectedProposal ? (
           <>
