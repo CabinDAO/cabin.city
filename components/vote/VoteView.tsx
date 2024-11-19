@@ -52,7 +52,7 @@ export const VoteView = () => {
         query: newQuery,
       })
     }
-  }, [selectedProposal, router])
+  }, [selectedProposal])
 
   // handle back navigation
   useEffect(() => {

@@ -53,7 +53,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         setChoices(vote.choice)
       }
     })
-  }, [canVote, user?.walletAddress, getMyVote, proposal.id])
+  }, [canVote, user?.walletAddress])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
