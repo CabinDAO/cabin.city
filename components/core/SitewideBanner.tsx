@@ -1,3 +1,4 @@
+import { useLocalStorage } from 'react-use'
 import { useRouter } from 'next/router'
 import { useSnapshot } from '@/components/contexts/SnapshotContext'
 import { expandRoute } from '@/utils/routing'
@@ -5,11 +6,16 @@ import styled from 'styled-components'
 import { H4, Subline2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 
+const BANNER_CLOSED_KEY = 'nov2024VoteBannerClosed'
+
 export const SitewideBanner = () => {
   const router = useRouter()
   const { hasUserVotableProposals } = useSnapshot()
 
-  if (!hasUserVotableProposals) return null
+  const [bannerClosed, setBannerClosed] =
+    useLocalStorage<boolean>(BANNER_CLOSED_KEY)
+
+  if (!hasUserVotableProposals || bannerClosed) return null
 
   return (
     <Banner onClick={() => router.push(expandRoute('vote'))}>
@@ -25,11 +31,15 @@ export const SitewideBanner = () => {
       <Subline2 style={{ textDecoration: 'underline' }}>
         Please take a moment to review and vote on it
       </Subline2>
+      <CloseButton onClick={() => setBannerClosed(true)}>
+        <Icon name="close" size={1.8} />
+      </CloseButton>
     </Banner>
   )
 }
 
 const Banner = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -45,5 +55,17 @@ const Banner = styled.div`
     padding: 2.1rem 0;
     gap: 1.6rem;
     align-items: baseline;
+  }
+`
+
+const CloseButton = styled.span`
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  cursor: pointer;
+
+  ${({ theme }) => theme.bp.md} {
+    left: initial;
+    right: 2rem;
   }
 `
