@@ -15,6 +15,8 @@ export const SitewideBanner = () => {
   const [bannerClosed, setBannerClosed] =
     useLocalStorage<boolean>(BANNER_CLOSED_KEY)
 
+  return null // tmp
+
   if (!hasUserVotableProposals || bannerClosed) return null
 
   return (
