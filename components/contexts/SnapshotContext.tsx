@@ -10,7 +10,6 @@ import { GraphQLClient } from 'graphql-request'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
 import { isProd } from '@/utils/dev'
-import { readCitizenshipContractIsApprovedForAll } from '@/generated/contracts'
 
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
@@ -84,8 +83,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
 
   const canVote =
     (isProd
-      ? privyUser &&
-        privyUser.wallet?.walletClientType === 'privy' && // TODO: is this right? maybe any wallet works via privy?
+      ? privyUser?.wallet && //.walletClientType === 'privy' && // TODO: is this right? maybe any wallet works via privy?
         (user?.cabinTokenBalanceInt || 0) > 0
       : !!user) || false
 
