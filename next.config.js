@@ -68,8 +68,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/supperclub',
-        destination: 'https://cabindotcity.typeform.com/to/HMM3R4hg',
+        source: '/nap',
+        destination: '/accelerator',
         permanent: false,
       },
     ]
