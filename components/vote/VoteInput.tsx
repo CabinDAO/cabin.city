@@ -4,7 +4,6 @@ import { usePrivy, useWallets } from '@privy-io/react-auth'
 import { useUser } from '@/components/auth/useUser'
 import Link from 'next/link'
 import snapshot from '@snapshot-labs/snapshot.js'
-import { isProd } from '@/utils/dev'
 import {
   Proposal,
   Vote,
@@ -24,6 +23,7 @@ const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
 export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const { user } = useUser()
+  const { connectWallet } = usePrivy()
   const { wallets } = useWallets()
   const { showError } = useError()
   const {
@@ -64,10 +64,13 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   const castVote = async () => {
     const wallet = wallets[0]
-    if (!wallet) return
+    if (!wallet) {
+      showError('No connected wallets found')
+      return
+    }
 
-    const sum = Object.values(choices).reduce((acc, curr) => acc + curr, 0)
-    if (sum <= 0) {
+    const sumVotes = Object.values(choices).reduce((acc, curr) => acc + curr, 0)
+    if (sumVotes <= 0) {
       showError('Vote for at least one choice.')
       return
     }
@@ -219,16 +222,20 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
           </OptionRow>
         )
       })}
-      <Button onClick={castVote} disabled={votingInProgress}>
-        {votingInProgress ? (
-          <>
-            <LoadingSpinner />
-            &nbsp; {/* this keeps the button height from collapsing */}
-          </>
-        ) : (
-          'Vote'
-        )}
-      </Button>
+      {wallets.length ? (
+        <Button onClick={castVote} disabled={votingInProgress}>
+          {votingInProgress ? (
+            <>
+              <LoadingSpinner />
+              &nbsp; {/* this keeps the button height from collapsing */}
+            </>
+          ) : (
+            'Vote'
+          )}
+        </Button>
+      ) : (
+        <Button onClick={connectWallet}>Connect Wallet to Vote</Button>
+      )}
     </Container>
   )
 }

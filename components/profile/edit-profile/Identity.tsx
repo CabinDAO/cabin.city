@@ -38,6 +38,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
   const isEmbeddedWallet =
     hasWallet && externalUser?.wallet?.walletClientType === 'privy'
   const {
+    linkEmail,
     updateEmail,
     // createWallet,
     exportWallet,
@@ -129,7 +130,7 @@ export const Identity = ({ user, profileEditParams }: UpdateProfileProps) => {
               fieldTitle="Email"
               fieldValue={email}
               fieldFullValue={email}
-              onClick={updateEmail}
+              onClick={externalUser?.email ? updateEmail : linkEmail}
               actionCTA={'Change Email'}
             />
             <AccountAction
