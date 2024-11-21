@@ -1,6 +1,6 @@
 # Getting the app up and running locally
 
-The app is developed on Linux, so these instructions will be best for that platform. 
+The app is developed on Linux, so these instructions will be best for that platform.
 It's also been tried on Mac but may not be up to date. If you're on Windows, you're on your own.
 
 ## Dependencies
@@ -36,6 +36,7 @@ Make sure to set the Node path in the settings and enable Prettier formatting on
 ```bash
 git clone git@github.com:CabinDAO/cabin.city.git
 cd cabin.city
+git submodule update --init --recursive
 npm install
 ```
 
@@ -49,7 +50,6 @@ GRANT ALL PRIVILEGES ON DATABASE cabin TO cabin;
 ALTER DATABASE cabin OWNER TO cabin;
 ```
 
-
 ## Env setup
 
 Copy the `.env.example` file to `.env` and fill in the values, especially the db connection info.
@@ -62,7 +62,6 @@ cp .env.example .env
 
 Follow [these instructions](https://developers.google.com/maps/documentation/places/web-service/get-api-key)
 to create an API key for the `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` env var.
-
 
 ## Run the development server
 
