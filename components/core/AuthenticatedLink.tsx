@@ -11,15 +11,20 @@ export const AuthenticatedLink = ({
   children,
   className,
   logSignInEvent,
+  disableSignup,
   onClick,
 }: {
   href?: string
   children: React.ReactNode
   className?: string
   logSignInEvent?: boolean
+  disableSignup?: boolean
   onClick?: VoidFunction
 }) => {
-  const { confirmLoggedIn } = useAuth(logSignInEvent)
+  const { confirmLoggedIn } = useAuth({
+    logAnalyticsEvent: logSignInEvent,
+    disableSignup,
+  })
   const { refetchUser } = useUser()
   const { externalUser } = useExternalUser()
   const router = useRouter()

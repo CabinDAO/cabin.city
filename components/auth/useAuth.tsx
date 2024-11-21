@@ -6,7 +6,13 @@ import { useRouter } from '@/components/hooks/useRouter'
 import { apiGet, NO_TOKEN } from '@/utils/api/backend'
 import { ProfileDIDParamsType, ProfileDIDResponse } from '@/utils/types/profile'
 
-export const useAuth = (logAnalyticsEvent?: boolean) => {
+export const useAuth = ({
+  logAnalyticsEvent,
+  disableSignup,
+}: {
+  logAnalyticsEvent?: boolean
+  disableSignup?: boolean
+} = {}) => {
   const router = useRouter()
   const { authenticated, ready, logout } = usePrivy()
   const { login } = useLogin({
@@ -50,12 +56,12 @@ export const useAuth = (logAnalyticsEvent?: boolean) => {
         if (logAnalyticsEvent) {
           analytics.signInEvent()
         }
-        login()
+        login({ disableSignup })
       } else if (authenticated) {
         onConfirmed?.()
       }
     },
-    [authenticated, ready, login, logAnalyticsEvent]
+    [authenticated, ready, login, logAnalyticsEvent, disableSignup]
   )
 
   return {

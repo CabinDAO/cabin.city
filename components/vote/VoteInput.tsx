@@ -18,6 +18,7 @@ import { balanceToVotes, timeAgo } from '@/utils/display-utils'
 import { VoteResults } from '@/components/vote/VoteResults'
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
@@ -104,16 +105,27 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     setVotingInProgress(false)
   }
 
-  if (!canVote || !propIsActive) {
-    return (
-      <>
-        {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
-        <VoteResults proposal={proposal} />
-      </>
-    )
+  const resultsOnly = (
+    <>
+      {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
+      <VoteResults proposal={proposal} />
+    </>
+  )
+
+  if (!propIsActive) {
+    return resultsOnly
   }
 
-  if (!user) return null
+  if (!user)
+    return (
+      <AuthenticatedLink disableSignup>
+        <Button>Log in to Vote</Button>
+      </AuthenticatedLink>
+    )
+
+  if (!canVote) {
+    return resultsOnly
+  }
 
   if (!userVotesLoaded) {
     return <LoadingSpinner />
