@@ -24,11 +24,15 @@ const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
 export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const { user } = useUser()
-  const { user: privyUser } = usePrivy()
   const { wallets } = useWallets()
   const { showError } = useError()
-  const { userVotes, userVotesLoaded, reloadUserVotes, reloadProposals } =
-    useSnapshot()
+  const {
+    userVotes,
+    userVotesLoaded,
+    reloadUserVotes,
+    reloadProposals,
+    canVote,
+  } = useSnapshot()
   const [myLastVote, setMyLastVote] = useState<Vote | null>(null)
   const [votingInProgress, setVotingInProgress] = useState(false)
   const [justVoted, setJustVoted] = useState(false)
@@ -38,12 +42,6 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   }>({})
 
   const propIsActive = proposal.state === 'active'
-
-  const canVote = isProd
-    ? privyUser &&
-      privyUser.wallet?.walletClientType === 'privy' &&
-      (user?.cabinTokenBalanceInt || 0) > 0
-    : !!user
 
   useEffect(() => {
     if (!canVote || !user?.walletAddress) return
