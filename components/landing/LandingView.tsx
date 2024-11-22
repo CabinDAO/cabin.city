@@ -42,13 +42,8 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
               <Link key="1" href="/city-directory">
                 <Button>Find one near you</Button>
               </Link>,
-              <Link
-                key="2"
-                href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpageheader`}
-                target="_blank"
-                rel="noopener nofollow noreferrer"
-              >
-                <Button variant={'secondary'}>Book a welcome call</Button>
+              <Link key="2" href="/accelerator">
+                <Button variant={'secondary'}>Start a neighborhood</Button>
               </Link>,
             ]}
           />
