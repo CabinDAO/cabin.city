@@ -17,7 +17,7 @@ export const EXTERNAL_LINKS = {
   FARCASTER: 'https://warpcast.com/~/channel/cabin',
   INSTAGRAM: 'https://www.instagram.com/cabindotcity',
   TWITTER: 'https://twitter.com/cabindotcity',
-  DISCORD: 'https://discord.gg/EfuE8PYuB7',
+  DISCORD: 'https://discord.gg/GF7uSuhK4B',
   BLOG: 'https://paragraph.xyz/@cabin',
   PODCAST: 'https://campfire-by-cabin.simplecast.com',
   SNAPSHOT: 'https://snapshot.org/#/cabindao.eth',
