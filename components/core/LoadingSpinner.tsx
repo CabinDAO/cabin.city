@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+// more ideas: https://jxnblk.io/loading/
+
 const LoadingSpinner = styled.div`
   position: relative;
 
