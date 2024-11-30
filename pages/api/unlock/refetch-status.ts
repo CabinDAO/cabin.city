@@ -90,6 +90,14 @@ const setCitizenshipStatus = async (
     return false
   }
 
+  // ignore citizenships expiring
+  if (
+    wallet.profile.citizenshipStatus === CitizenshipStatus.Verified &&
+    newStatus === CitizenshipStatus.Vouched
+  ) {
+    return false
+  }
+
   const currStatus = wallet.profile.citizenshipStatus
   const shouldUpdate =
     newStatus === CitizenshipStatus.Verified || // they are getting citizenship
