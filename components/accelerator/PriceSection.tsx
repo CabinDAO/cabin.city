@@ -52,7 +52,7 @@ export const PriceSection = () => {
           </Left>
           <Right>
             <Countdown />
-            <ApplyButton source={'accelerator-price'} />
+            <ApplyButton source={'accelerator-price'} jiggle />
           </Right>
         </BoxBottom>
       </Box>

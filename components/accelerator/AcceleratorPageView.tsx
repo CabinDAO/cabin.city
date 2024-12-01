@@ -18,6 +18,7 @@ import { PriceSection } from '@/components/accelerator/PriceSection'
 import { VisionSection } from '@/components/accelerator/VisionSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
 import { ImagineSection } from '@/components/accelerator/ImagineSection'
+import { TeamSection } from '@/components/accelerator/TeamSection'
 
 export const subscribeSectionID = 'updates'
 
@@ -62,6 +63,10 @@ export const AcceleratorPageView = () => {
 
       <Section variant={'orange'}>
         <FaqSection />
+      </Section>
+
+      <Section variant={'default'}>
+        <TeamSection />
       </Section>
 
       <Section variant={'default'}>

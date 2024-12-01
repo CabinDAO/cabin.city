@@ -5,7 +5,8 @@ import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
 import theme from '@/styles/theme'
 import Icon from '@/components/core/Icon'
-import { Button } from '@/components/core/Button'
+import { Button, ButtonProps } from '@/components/core/Button'
+import { JigglyButton } from '@/components/core/JigglyButton'
 import { fonts, H2 } from '@/components/core/Typography'
 import underline from '@/components/accelerator/green-underline.png'
 
@@ -52,10 +53,22 @@ export const GreenUnderline = styled.span`
 export const ApplyButton = ({
   source,
   style,
+  jiggle,
 }: {
   source: string
   style?: React.CSSProperties
+  jiggle?: boolean
 }) => {
+  const buttonProps = {
+    variant: 'primary',
+    children: 'Apply',
+    style: {
+      ...{ width: 'min-content' },
+      ...style,
+    },
+    endAdornment: <Icon name={'right-arrow'} size={2} />,
+  } satisfies ButtonProps
+
   return (
     <Link
       href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
@@ -63,16 +76,7 @@ export const ApplyButton = ({
       target="_blank"
       rel="noopener"
     >
-      <Button
-        variant={'primary'}
-        style={{
-          ...{ width: 'min-content' },
-          ...style,
-        }}
-        endAdornment={<Icon name={'right-arrow'} size={2} />}
-      >
-        Apply
-      </Button>
+      {jiggle ? <JigglyButton {...buttonProps} /> : <Button {...buttonProps} />}
     </Link>
   )
 }

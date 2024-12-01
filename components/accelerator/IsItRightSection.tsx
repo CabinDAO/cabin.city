@@ -128,7 +128,7 @@ export const IsItRightSection = () => {
               </BlockTitle>
             )}
             <Countdown light />
-            <ApplyButton source={'accelerator-isitright'} />
+            <ApplyButton source={'accelerator-isitright'} jiggle />
           </CTABlock>
         </Blocks>
       </Section>

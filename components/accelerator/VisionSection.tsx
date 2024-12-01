@@ -36,7 +36,7 @@ export const VisionSection = () => {
           <strong>If this excites you, we’d love for you to join us</strong>.
         </Body1>
         <Buttons>
-          <ApplyButton source={'accelerator-vision'} />
+          <ApplyButton source={'accelerator-vision'} jiggle />
           <Link
             href={EXTERNAL_LINKS.VISION}
             style={{ width: 'min-content' }}
