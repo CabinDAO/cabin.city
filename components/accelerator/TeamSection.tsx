@@ -62,35 +62,21 @@ type Person = {
 const team: Person[] = [
   {
     name: 'Savannah',
-    title: 'NAP Steward',
+    title: 'Steward',
     image:
       'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/4edd1213-fab8-425f-0d54-0d6e07052600/public',
     url: 'https://x.com/savkruger',
   },
   {
     name: 'Kaela',
-    title: 'Core Team',
+    title: 'Contributor',
     image:
       'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/8e5d4ff6-52e8-49d4-f944-35ccf4a4b900/public',
     url: 'https://x.com/findkaela',
   },
   {
-    name: 'Jon',
-    title: 'Core Team',
-    image:
-      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/b29a9d53-8c1d-48a7-2397-ba4270c49400/public',
-    url: 'https://jonhillis.com',
-  },
-  {
-    name: 'Grin',
-    title: 'Core Team',
-    image:
-      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/70b5c51c-5275-48b4-835e-062701427300/public',
-    url: 'https://grin.io',
-  },
-  {
     name: 'Shani',
-    title: 'Mentor',
+    title: 'Contributor',
     image:
       'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/7ac4f182-9aac-4e17-0e36-450a0dc55200/public',
     url: 'https://cabin.city/n/west-beacy-bunch',
