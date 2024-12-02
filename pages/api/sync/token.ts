@@ -101,13 +101,13 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
   for (const [address, balance] of Object.entries(newBalancesByAddress)) {
     await prisma.wallet.upsert({
       where: {
-        address: address,
+        address: address.toLowerCase(),
       },
       update: {
         cabinTokenBalance: balance,
       },
       create: {
-        address: address,
+        address: address.toLowerCase(),
         cabinTokenBalance: balance,
       },
     })
