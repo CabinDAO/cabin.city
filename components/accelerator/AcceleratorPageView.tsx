@@ -65,9 +65,9 @@ export const AcceleratorPageView = () => {
         <FaqSection />
       </Section>
 
-      {/* <Section variant={'default'}>
+      <Section variant={'light'}>
         <TeamSection />
-      </Section> */}
+      </Section>
 
       <Section variant={'default'}>
         <VisionSection />

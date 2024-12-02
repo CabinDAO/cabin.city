@@ -2,11 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import Image, { StaticImageData } from 'next/image'
 import styled from 'styled-components'
-import theme from '@/styles/theme'
-import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
+import { Body1, H3 } from '@/components/core/Typography'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { SectionTitle } from '@/components/accelerator/shared'
-import grin from '@/components/accelerator/team/grin.jpg'
 
 export const TeamSection = () => {
   return (
@@ -26,7 +24,11 @@ export const TeamSection = () => {
             <PersonContent>
               <PersonImage>
                 <Image
-                  src={person.image.src}
+                  src={
+                    typeof person.image === 'string'
+                      ? person.image
+                      : person.image.src
+                  }
                   alt={person.name}
                   width={0}
                   height={0}
@@ -36,6 +38,7 @@ export const TeamSection = () => {
                     height: 'auto',
                     // borderRadius: '10%',
                     objectFit: 'cover',
+                    aspectRatio: '1 / 1',
                   }}
                 />
               </PersonImage>
@@ -52,58 +55,108 @@ export const TeamSection = () => {
 type Person = {
   name: string
   title: string
-  image: StaticImageData
+  image: StaticImageData | string
   url: string
 }
 
 const team: Person[] = [
   {
-    name: 'Jon',
-    title: 'Founder',
-    image: grin,
-    url: 'https://jonhillis.com',
-  },
-  {
     name: 'Savannah',
     title: 'NAP Steward',
-    image: grin,
-    url: 'https://twitter.com/gptbrooke',
-  },
-  {
-    name: 'Grin',
-    title: 'Tech Lead',
-    image: grin,
-    url: 'https://grin.io',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/4edd1213-fab8-425f-0d54-0d6e07052600/public',
+    url: 'https://x.com/savkruger',
   },
   {
     name: 'Kaela',
-    title: 'Marketing & Community Growth',
-    image: grin,
+    title: 'Core Team',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/8e5d4ff6-52e8-49d4-f944-35ccf4a4b900/public',
+    url: 'https://x.com/findkaela',
+  },
+  {
+    name: 'Jon',
+    title: 'Core Team',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/b29a9d53-8c1d-48a7-2397-ba4270c49400/public',
     url: 'https://jonhillis.com',
+  },
+  {
+    name: 'Grin',
+    title: 'Core Team',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/70b5c51c-5275-48b4-835e-062701427300/public',
+    url: 'https://grin.io',
   },
   {
     name: 'Shani',
     title: 'Mentor',
-    image: grin,
-    url: 'https://twitter.com/gptbrooke',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/7ac4f182-9aac-4e17-0e36-450a0dc55200/public',
+    url: 'https://cabin.city/n/west-beacy-bunch',
+  },
+  {
+    name: 'Forest',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/01f5a055-2f13-472d-c38f-71c44c6cac00/public',
+    url: 'https://cabin.city/location/lc_cSi4Kqj6vS9gyihtYduH',
+  },
+  {
+    name: 'David',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/8a3909b6-d76a-4827-0fcc-b7aad01fda00/public',
+    url: 'https://cabin.city/location/lc_xSWNKaojNUTfybNXAYDJ',
+  },
+  {
+    name: 'Zu',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/fc73d0a5-b3ae-4a3a-062f-dbdcc9db7300/public',
+    url: 'https://supernuclear.substack.com/p/case-study-merlins-place',
+  },
+  {
+    name: 'Graham',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/1443e6dc-2971-4567-926d-7753ad8adf00/public',
+    url: 'https://warpcast.com/mcbain',
   },
   {
     name: 'Liam',
     title: 'Mentor',
-    image: grin,
-    url: 'https://twitter.com/gptbrooke',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/1a266c0d-ca0a-48ba-da6b-1ee1987c9700/public',
+    url: 'https://liamrosen.com',
+  },
+  {
+    name: 'Stephanie',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/61b72936-5b0e-42df-ddb5-d0117193fb00/public',
+    url: '',
   },
   {
     name: 'Priya',
     title: 'Mentor',
-    image: grin,
-    url: 'https://twitter.com/gptbrooke',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/947c3b26-784e-43db-4eaa-f241ac398c00/public',
+    url: 'https://x.com/prigoose',
   },
   {
     name: 'Bethany',
     title: 'Mentor',
-    image: grin,
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/2243d97d-ccaf-4e00-2314-cf3db22aa800/public',
     url: 'https://www.bethanycrystal.com',
+  },
+  {
+    name: 'Trish',
+    title: 'Mentor',
+    image:
+      'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/932b9713-c107-4ad8-d972-ad7aeaeff400/public',
+    url: 'https://x.com/trishyloulou',
   },
 ]
 
@@ -131,15 +184,12 @@ const TitleContainer = styled.div`
 
 const Section = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 8rem;
   justify-content: center;
+  align-items: center;
   gap: 4rem;
-
-  ${({ theme }) => theme.bp.md} {
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 8rem;
-  }
 `
 
 const PersonContent = styled.div`

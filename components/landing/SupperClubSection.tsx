@@ -4,7 +4,6 @@ import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
-import { JigglyButton } from '@/components/core/JigglyButton'
 import { LandingSectionTitle } from '@/components/landing/shared'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
@@ -36,7 +35,7 @@ export const SupperClubSection = () => {
             rel="noopener"
             onClick={() => acceleratorApplyClickEvent('landing-upgradesection')}
           >
-            <JigglyButton variant={'primary'}>Apply</JigglyButton>
+            <Button variant={'primary'}>Apply</Button>
           </Link>
           <Link href={'/accelerator'}>
             <Button variant={'secondary'}>Learn more</Button>
