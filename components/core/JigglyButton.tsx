@@ -5,7 +5,7 @@ import { Button } from '@/components/core/Button'
 
 export const JigglyButton = styled(Button)`
   animation-name: shake-slow;
-  animation-duration: 5s;
+  animation-duration: 20s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
   transform-origin: center center;

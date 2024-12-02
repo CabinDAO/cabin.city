@@ -135,7 +135,7 @@ const team: Person[] = [
     title: 'Mentor',
     image:
       'https://imagedelivery.net/-CAXcM8UQ9o6jIo8Ut8p9g/61b72936-5b0e-42df-ddb5-d0117193fb00/public',
-    url: '',
+    url: 'https://www.linkedin.com/in/stephanie-klebba-17325916/',
   },
   {
     name: 'Priya',
