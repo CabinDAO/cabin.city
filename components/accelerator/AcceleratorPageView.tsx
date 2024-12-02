@@ -19,12 +19,14 @@ import { VisionSection } from '@/components/accelerator/VisionSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
 import { ImagineSection } from '@/components/accelerator/ImagineSection'
 import { TeamSection } from '@/components/accelerator/TeamSection'
+import { CTAModal } from '@/components/landing/CTAModal'
 
 export const subscribeSectionID = 'updates'
 
 export const AcceleratorPageView = () => {
   return (
     <BaseLayout landingPage>
+      <CTAModal />
       <LandingSection
         noVertPadding
         variant={'clear'}

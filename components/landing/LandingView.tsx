@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useModal } from '@/components/hooks/useModal'
-import { useLocalStorage, useWindowScroll } from 'react-use'
-import { useUser } from '@/components/auth/useUser'
 import styled from 'styled-components'
 import headerBg from './header.jpg'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -20,32 +16,12 @@ import { JourneySection } from '@/components/landing/JourneySection'
 import { MapData, MapSection } from '@/components/landing/MapSection'
 import { SubscribeSection } from '@/components/landing/SubscribeSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
-import { ModalContainer } from '@/components/core/modals/ModalContainer'
-import { ModalTitle } from '@/components/core/modals/ModalTitle'
-import { Body1, H2 } from '@/components/core/Typography'
-import { SubscribeForm } from '@/components/landing/SubscribeForm'
+import { CTAModal } from '@/components/landing/CTAModal'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
-  const { user } = useUser()
-  const { showModal } = useModal()
-  const { y } = useWindowScroll()
-  const [popupLastShownAt, setPopupLastShownAt] = useLocalStorage<number>(
-    'landingPopupLastShownAt'
-  )
-
-  useEffect(() => {
-    if (
-      !user &&
-      y > 4500 &&
-      (!popupLastShownAt || Date.now() - popupLastShownAt > 1000 * 60 * 60 * 24)
-    ) {
-      setPopupLastShownAt(Date.now())
-      showModal(() => <CTAModal />)
-    }
-  }, [y, user, popupLastShownAt])
-
   return (
     <BaseLayout landingPage>
+      <CTAModal />
       <LandingSection
         noVertPadding
         variant={'clear'}
@@ -133,33 +109,4 @@ const OpaqueDiv = styled.div`
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-`
-
-const CTAModal = () => {
-  return (
-    <StyledModalContainer>
-      <ModalTitle text={'Get Our Updates'} />
-      <ModalContent>
-        <Body1>We'll help you turn your neighborhood into a community.</Body1>
-        <SubscribeForm />
-      </ModalContent>
-    </StyledModalContainer>
-  )
-}
-
-const StyledModalContainer = styled(ModalContainer)`
-  height: min-content;
-
-  ${({ theme }) => theme.bp.md} {
-    width: 55rem;
-  }
-`
-
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 4rem;
-  padding-bottom: 3.2rem;
-  gap: 3.2rem;
-  text-align: center;
 `
