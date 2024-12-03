@@ -133,12 +133,21 @@ const privyDIDFromAuthToken = async (authToken: string) => {
 
   const verificationKey = await jose.importSPKI(spkiPublicKey, 'ES256')
 
-  const response = await jose.jwtVerify(authToken, verificationKey, {
-    issuer: 'privy.io',
-    audience: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
-  })
+  try {
+    const response = await jose.jwtVerify(authToken, verificationKey, {
+      issuer: 'privy.io',
+      audience: process.env.NEXT_PUBLIC_PRIVY_APP_ID,
+    })
 
-  return response.payload.sub || null
+    return response.payload.sub || null
+  } catch (err: unknown) {
+    if (err instanceof jose.errors.JWTExpired) {
+      // https://github.com/panva/jose/blob/main/docs/util/errors/classes/JWTExpired.md
+      return null
+    }
+
+    return null
+  }
 }
 
 export const privyDIDFromHeaders = async (headers: IncomingHttpHeaders) => {
