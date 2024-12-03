@@ -5,6 +5,66 @@ import { Subline1 } from './Typography'
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 export type TooltipAlign = 'start' | 'center' | 'end'
 
+export const Tooltip = ({
+  tooltip,
+  open,
+  position = 'bottom',
+  align = 'center',
+  paragraph,
+  width,
+  hidden,
+  offset,
+  children,
+  animate = false,
+}: {
+  tooltip: string
+  open?: boolean
+  position?: TooltipPosition
+  align?: TooltipAlign
+  paragraph?: boolean
+  width?: number
+  hidden?: boolean
+  offset?: number
+  children: ReactNode
+  animate?: boolean
+}) => {
+  const [show, setShow] = useState(open)
+
+  useEffect(() => {
+    setShow(open)
+  }, [open])
+
+  const handleMouseEnter = () => {
+    setShow(true)
+  }
+
+  const handleMouseLeave = () => {
+    setShow(!!open)
+  }
+
+  return (
+    <Wrapper>
+      <ChildWrapper
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        {children}
+      </ChildWrapper>
+      <TooltipPosition
+        animate={animate}
+        show={show && !hidden}
+        position={position}
+        align={align}
+        offset={offset}
+      >
+        <TooltipContainer paragraph={paragraph} width={width}>
+          <Subline1 $color="yellow100">{tooltip}</Subline1>
+        </TooltipContainer>
+      </TooltipPosition>
+    </Wrapper>
+  )
+}
+
 const Wrapper = styled.div`
   position: relative;
   display: flex;
@@ -14,6 +74,49 @@ const Wrapper = styled.div`
 const ChildWrapper = styled.div`
   cursor: default;
   width: 100%;
+`
+
+const TooltipContainer = styled.div<{
+  paragraph?: boolean
+  width?: number
+}>`
+  background: ${({ theme }) => theme.colors.yellow900};
+  border-radius: 8px 0px;
+  color: ${({ theme }) => theme.colors.yellow100};
+  --tip-color: ${({ theme }) => theme.colors.yellow900};
+  padding: 0.7rem 1.6rem;
+  white-space: ${({ paragraph }) => (paragraph ? 'pre-line' : 'nowrap')};
+  width: ${({ paragraph, width }) =>
+    paragraph && width ? `${width}rem` : 'auto'};
+  text-align: ${({ paragraph }) => (paragraph ? 'center' : 'left')};
+`
+
+const TooltipPosition = styled.div<{
+  position: TooltipPosition
+  align: TooltipAlign
+  show?: boolean
+  offset?: number
+  animate: boolean
+}>`
+  ${(props) => !props.animate && `transition: all 300ms ease;`}
+  position: absolute;
+  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
+  ${(props) => !props.animate && `opacity: ${props.show ? 1 : 0};`}
+  ${(props) =>
+    props.animate
+      ? `animation: ${
+          props.show
+            ? `fade-in-${props.position}`
+            : `fade-out-${props.position}`
+        } 0.3s ease-in-out forwards`
+      : null};
+  ${(props) =>
+    setTooltipPosition(
+      props.position,
+      props.align,
+      props.offset,
+      props.animate
+    )}
 `
 
 const setTooltipPosition = (
@@ -136,48 +239,20 @@ const setTooltipPosition = (
   return null
 }
 
-interface PositionProps {
-  position: TooltipPosition
-  align: TooltipAlign
-  show?: boolean
-  offset?: number
-  animate: boolean
-}
-
-const TooltipPosition = styled.div<PositionProps>`
-  ${(props) => !props.animate && `transition: all 300ms ease;`}
-  position: absolute;
-  visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
-  ${(props) => !props.animate && `opacity: ${props.show ? 1 : 0};`}
-  ${(props) =>
-    props.animate
-      ? `animation: ${
-          props.show
-            ? `fade-in-${props.position}`
-            : `fade-out-${props.position}`
-        } 0.3s ease-in-out forwards`
-      : null};
-  ${(props) =>
-    setTooltipPosition(
-      props.position,
-      props.align,
-      props.offset,
-      props.animate
-    )}
-`
-
 interface Coordinate {
   xPercentage: number
   yPercentage: number
 }
 
-interface AnimationProps {
+const animation = ({
+  start,
+  end,
+  position,
+}: {
   start: Coordinate
   end: Coordinate
   position: TooltipPosition
-}
-
-const animation = ({ start, end, position }: AnimationProps) => css`
+}) => css`
   @keyframes fade-in-${position} {
     0% {
       opacity: 0;
@@ -199,82 +274,3 @@ const animation = ({ start, end, position }: AnimationProps) => css`
     }
   }
 `
-
-interface TooltipContainerProps {
-  paragraph?: boolean
-  width?: number
-}
-
-const TooltipContainer = styled.div<TooltipContainerProps>`
-  background: ${({ theme }) => theme.colors.yellow900};
-  border-radius: 8px 0px;
-  color: ${({ theme }) => theme.colors.yellow100};
-  --tip-color: ${({ theme }) => theme.colors.yellow900};
-  padding: 0.7rem 1.6rem;
-  white-space: ${({ paragraph }) => (paragraph ? 'pre-line' : 'nowrap')};
-  width: ${({ paragraph, width }) =>
-    paragraph && width ? `${width}rem` : 'auto'};
-  text-align: ${({ paragraph }) => (paragraph ? 'center' : 'left')};
-`
-
-interface TooltipProps {
-  tooltip: string
-  open?: boolean
-  position?: TooltipPosition
-  align?: TooltipAlign
-  paragraph?: boolean
-  width?: number
-  hidden?: boolean
-  offset?: number
-  children: ReactNode
-  animate?: boolean
-}
-
-export const Tooltip = ({
-  tooltip,
-  open,
-  position = 'bottom',
-  align = 'center',
-  paragraph,
-  width,
-  hidden,
-  offset,
-  children,
-  animate = false,
-}: TooltipProps) => {
-  const [show, setShow] = useState(open)
-
-  useEffect(() => {
-    setShow(open)
-  }, [open])
-
-  const handleMouseEnter = () => {
-    setShow(true)
-  }
-
-  const handleMouseLeave = () => {
-    setShow(!!open)
-  }
-
-  return (
-    <Wrapper>
-      <ChildWrapper
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
-        {children}
-      </ChildWrapper>
-      <TooltipPosition
-        animate={animate}
-        show={show && !hidden}
-        position={position}
-        align={align}
-        offset={offset}
-      >
-        <TooltipContainer paragraph={paragraph} width={width}>
-          <Subline1 $color="yellow100">{tooltip}</Subline1>
-        </TooltipContainer>
-      </TooltipPosition>
-    </Wrapper>
-  )
-}

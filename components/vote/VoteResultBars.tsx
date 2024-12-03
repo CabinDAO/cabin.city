@@ -1,16 +1,18 @@
 import { Proposal } from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
-import { Body1 } from '@/components/core/Typography'
+import { Body1, H2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 
-export const VoteResults = ({
+export const VoteResultBars = ({
   proposal,
   brief,
   overrideVotes,
+  header,
 }: {
   proposal: Proposal
   brief?: boolean
   overrideVotes?: { [key: string]: number }
+  header?: string
 }) => {
   const choices = proposal.choices.map((choice: string, i: number) => ({
     key: i + 1,
@@ -43,6 +45,7 @@ export const VoteResults = ({
 
   return (
     <Container>
+      {header && <H2>{header}</H2>}
       {Object.values(choicesToShow).map((choice) => {
         const percent = percentForChoice(choice.votes, totalVotes)
         return (
@@ -61,10 +64,8 @@ export const VoteResults = ({
   )
 }
 
-const percentForChoice = (votes: number, totalVotes: number) => {
-  return votes
-    ? ((votes / totalVotes) * 100).toFixed(1).replace(/\.0$/, '')
-    : '0'
+export const percentForChoice = (votes: number, total: number) => {
+  return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
 }
 
 const Container = styled.div`

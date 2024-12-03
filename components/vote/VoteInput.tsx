@@ -15,7 +15,7 @@ import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { balanceToVotes, timeAgo } from '@/utils/display-utils'
-import { VoteResults } from '@/components/vote/VoteResults'
+import { VoteResultBars } from '@/components/vote/VoteResultBars'
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
@@ -108,7 +108,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const resultsOnly = (
     <>
       {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
-      <VoteResults proposal={proposal} />
+      <VoteResultBars proposal={proposal} />
     </>
   )
 
@@ -165,7 +165,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
             <Icon name="pencil" size={1.4} inline />
           </span>
         </H2>
-        <VoteResults proposal={proposal} overrideVotes={myLastVote.choice} />
+        <VoteResultBars proposal={proposal} overrideVotes={myLastVote.choice} />
       </>
     )
   }

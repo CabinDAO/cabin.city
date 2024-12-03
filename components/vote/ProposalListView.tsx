@@ -12,7 +12,7 @@ import { BaseLayout } from '@/components/core/BaseLayout'
 import { Body1, H2 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import { ProposalRender } from '@/components/vote/ProposalRender'
-import { VoteResults } from '@/components/vote/VoteResults'
+import { VoteResultBars } from '@/components/vote/VoteResultBars'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export const ProposalListView = () => {
@@ -78,9 +78,7 @@ const Container = styled(ContentCard)`
 
 const ProposalList = () => {
   const router = useRouter()
-  const { proposals, proposalsLoaded, loadAllProposalVotes } = useSnapshot()
-
-  loadAllProposalVotes()
+  const { proposals, proposalsLoaded } = useSnapshot()
 
   return (
     <>
@@ -105,7 +103,7 @@ const ProposalList = () => {
             {proposal.state !== 'active' && (
               <Body1>Ended {timeAgo(proposal.end)}</Body1>
             )}
-            <VoteResults proposal={proposal} brief />
+            <VoteResultBars proposal={proposal} brief />
           </ProposalRow>
         ))
       )}

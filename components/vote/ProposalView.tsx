@@ -13,7 +13,8 @@ import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProposalRender } from '@/components/vote/ProposalRender'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { VoteInput } from '@/components/vote/VoteInput'
-import { VoteResults } from '@/components/vote/VoteResults'
+import { VoteResultBars } from '@/components/vote/VoteResultBars'
+import { VoteResultList } from '@/components/vote/VoteResultList'
 
 export const ProposalView = () => {
   const router = useRouter()
@@ -59,10 +60,11 @@ export const ProposalView = () => {
                 {proposal.state === 'active' ? (
                   <VoteInput proposal={proposal} />
                 ) : (
-                  <>
+                  <Results>
                     <Body1>Ended {timeAgo(proposal.end)}</Body1>
-                    <VoteResults proposal={proposal} />
-                  </>
+                    <VoteResultBars proposal={proposal} header="Results" />
+                    <VoteResultList proposal={proposal} />
+                  </Results>
                 )}
                 <Body1>
                   <Link
@@ -95,4 +97,11 @@ const ProposalContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+`
+
+const Results = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 `

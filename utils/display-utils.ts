@@ -177,8 +177,8 @@ export const daysBetween = (startDate?: Date | null, endDate?: Date | null) => {
   )
 }
 
-export const balanceToVotes = (balance: number | null) => {
-  return balance ? Math.sqrt(balance).toFixed(0) : 0
+export const balanceToVotes = (balance: number | null): string => {
+  return balance ? Math.sqrt(balance).toFixed(0) : '0'
 }
 
 export const timeAgo = (timestamp: number) => {
