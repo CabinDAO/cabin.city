@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { VoteView } from '@/components/vote/VoteView'
+import { ProposalListView } from '@/components/vote/ProposalListView'
 
 export default function VotePage() {
   return (
@@ -7,7 +7,7 @@ export default function VotePage() {
       <Head>
         <title>Cabin Governance</title>
       </Head>
-      <VoteView />
+      <ProposalListView />
     </>
   )
 }

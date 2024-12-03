@@ -77,6 +77,7 @@ export default function InviteClaimFlow({
     [Step.LastStep]: useRef<HTMLDivElement>(null),
   }
 
+  // this prolly needs to be wrapped in useCallback()
   const goToStep = (step: Step) => {
     const actualStep: Step =
       user && [Step.PromptLogin, Step.Wallet].includes(step)

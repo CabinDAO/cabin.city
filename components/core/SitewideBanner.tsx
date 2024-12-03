@@ -6,21 +6,25 @@ import styled from 'styled-components'
 import { H4, Subline2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 
-const BANNER_CLOSED_KEY = 'nov2024VoteBannerClosed'
-
 export const SitewideBanner = () => {
   const router = useRouter()
-  const { hasUserVotableProposals } = useSnapshot()
+  const { proposals, countUserVotableProposals } = useSnapshot()
 
-  const [bannerClosed, setBannerClosed] =
-    useLocalStorage<boolean>(BANNER_CLOSED_KEY)
+  const [bannerClosedPropId, setBannerClosedPropId] = useLocalStorage<string>(
+    'cabinVoteBannerClosedPropId'
+  )
 
-  if (!hasUserVotableProposals || bannerClosed) return null
+  const showBanner =
+    countUserVotableProposals > 0 && bannerClosedPropId !== proposals[0].id
+
+  if (!showBanner) return null
 
   return (
     <Banner onClick={() => router.push(expandRoute('vote'))}>
       <H4>
-        There's a proposal up for vote{' '}
+        {countUserVotableProposals === 1
+          ? 'A proposal is up for vote'
+          : `${countUserVotableProposals} proposals are up for vote`}{' '}
         <Icon
           name="up-right-arrow"
           size={1.2}
@@ -29,9 +33,10 @@ export const SitewideBanner = () => {
         />
       </H4>
       <Subline2 style={{ textDecoration: 'underline' }}>
-        Please take a moment to review and vote on it
+        Please take a moment to review and vote on{' '}
+        {countUserVotableProposals === 1 ? 'it' : 'them'}
       </Subline2>
-      <CloseButton onClick={() => setBannerClosed(true)}>
+      <CloseButton onClick={() => setBannerClosedPropId(proposals[0].id)}>
         <Icon name="close" size={1.8} />
       </CloseButton>
     </Banner>

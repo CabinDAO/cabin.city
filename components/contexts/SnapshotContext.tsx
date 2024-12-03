@@ -57,12 +57,14 @@ interface SnapshotState {
   proposals: Proposal[]
   proposalsLoaded: boolean
   reloadProposals: VoidFunction
+  proposalVotes: { [key: string]: Vote[] }
+  loadAllProposalVotes: VoidFunction
   userVotes: Vote[]
   userVotesLoaded: boolean
   reloadUserVotes: VoidFunction
-  hasActiveProposals: boolean
+  countActiveProposals: number
+  countUserVotableProposals: number
   canVote: boolean
-  hasUserVotableProposals: boolean
 }
 
 const SnapshotContext = createContext<SnapshotState | null>(null)
@@ -81,66 +83,89 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser()
   const { user: privyUser } = usePrivy()
 
-  const canVote =
-    (isProd
-      ? privyUser?.wallet && //.walletClientType === 'privy' && // TODO: is this right? maybe any wallet works via privy?
-        (user?.cabinTokenBalanceInt || 0) > 0
-      : !!user) || false
+  const canVote: boolean = isProd
+    ? !!privyUser?.wallet && (user?.cabinTokenBalanceInt || 0) > 0
+    : !!user
 
   const [proposals, setProposals] = useState<Proposal[]>([])
-  const [userVotes, setUserVotes] = useState<Vote[]>([])
   const [proposalsLoaded, setProposalsLoaded] = useState(false)
+  const [proposalVotes, setProposalVotes] = useState<{ [key: string]: Vote[] }>(
+    {}
+  )
+  const [userVotes, setUserVotes] = useState<Vote[]>([])
   const [userVotesLoaded, setUserVotesLoaded] = useState(false)
-  const [hasActiveProposals, setHasActiveProposals] = useState(false)
-  const [hasUserVotableProposals, setHasUserVotableProposals] = useState(false)
+
+  const [countActiveProposals, setCountActiveProposals] = useState(0)
+  const [countUserVotableProposals, setCountUserVotableProposals] = useState(0)
+
+  const [keepAllProposalVotesLoaded, setKeepAllProposalVotesLoaded] =
+    useState(false)
+
+  const loadAllProposalVotes = useCallback(() => {
+    setKeepAllProposalVotesLoaded(true)
+  }, [])
 
   const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
 
-  const loadProposals = useCallback(async () => {
-    return snapshotGraphQLClient
-      .request<{ proposals: Proposal[] }>(proposalsQuery(space))
-      .then((data) => {
-        setProposals(data.proposals)
-        setHasActiveProposals(data.proposals.some((p) => p.state === 'active'))
-      })
-      .finally(() => setProposalsLoaded(true))
-  }, [])
-
-  const reloadProposals = async () => {
+  const reloadProposals = useCallback(async () => {
     setProposalsLoaded(false)
-    await loadProposals()
+
+    // should this be done via try/finally?
+
+    const data = await snapshotGraphQLClient.request<{ proposals: Proposal[] }>(
+      proposalsQuery(space)
+    )
+    setProposals(data.proposals)
+    setCountActiveProposals(
+      data.proposals.filter((p) => p.state === 'active').length
+    )
+
+    if (keepAllProposalVotesLoaded) {
+      //if proposal votes have already been loaded, reload them
+      const votesData = await snapshotGraphQLClient.request<{ votes: Vote[] }>(
+        votesForProposalsQuery(data.proposals.map((p) => p.id))
+      )
+
+      // Bucket votes by proposal ID
+      const votesByProposal = votesData.votes.reduce((acc, vote) => {
+        const proposalId = vote.proposal.id
+        if (!acc[proposalId]) {
+          acc[proposalId] = []
+        }
+        acc[proposalId].push(vote)
+        return acc
+      }, {} as { [key: string]: Vote[] })
+
+      setProposalVotes(votesByProposal)
+    }
     setProposalsLoaded(true)
-  }
+  }, [space, keepAllProposalVotesLoaded])
 
-  const loadUserVotes = useCallback(async () => {
+  const reloadUserVotes = useCallback(async () => {
+    console.log('reloadUserVotes')
     if (!user?.walletAddress) return
-    return snapshotGraphQLClient
-      .request<{ votes: Vote[] }>(userVotesQuery(space, user.walletAddress))
-      .then((data) => {
-        setUserVotes(data.votes)
-      })
-      .finally(() => setUserVotesLoaded(true))
-  }, [user])
-
-  const reloadUserVotes = async () => {
     setUserVotesLoaded(false)
-    await loadUserVotes()
+    const data = await snapshotGraphQLClient.request<{ votes: Vote[] }>(
+      userVotesQuery(space, user.walletAddress)
+    )
+    setUserVotes(data.votes)
     setUserVotesLoaded(true)
-  }
+  }, [user, space])
 
   useEffect(() => {
-    loadProposals().then()
-    loadUserVotes().then()
-  }, [loadProposals, loadUserVotes])
+    reloadProposals()
+    reloadUserVotes()
+  }, [reloadProposals, reloadUserVotes])
 
   useEffect(() => {
-    setHasUserVotableProposals(
-      canVote &&
-        proposals.some(
-          (p) =>
-            p.state === 'active' &&
-            !userVotes.some((v) => v.proposal.id === p.id)
-        )
+    setCountUserVotableProposals(
+      canVote
+        ? proposals.filter(
+            (p) =>
+              p.state === 'active' &&
+              !userVotes.some((v) => v.proposal.id === p.id)
+          ).length
+        : 0
     )
   }, [proposals, userVotes, canVote])
 
@@ -151,9 +176,11 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
     userVotes,
     userVotesLoaded,
     reloadUserVotes,
-    hasActiveProposals,
+    proposalVotes,
+    loadAllProposalVotes,
+    countActiveProposals,
+    countUserVotableProposals,
     canVote,
-    hasUserVotableProposals,
   }
 
   return (
@@ -169,7 +196,7 @@ const proposalsQuery = (space: string) => `
       first: 10,
       skip: 0,
       where: {
-        space_in: ["${space}",],
+        space: "${space}",
       },
       orderBy: "created",
       orderDirection: desc
@@ -212,6 +239,33 @@ const userVotesQuery = (space: string, voterAddress: string) => `
       where: {
         space: "${space}"
         voter: "${voterAddress}"
+      }
+      orderBy: "created",
+      orderDirection: desc
+    ) {
+      id
+      voter
+      vp
+      vp_by_strategy
+      vp_state
+      created
+      proposal {
+        id
+      }
+      choice
+      space {
+        id
+      }
+    }
+  }
+`
+
+const votesForProposalsQuery = (proposalIds: string[]) => `
+  query VotesForProposalsQuery {
+    votes(
+      first: 1000
+      where: {
+        proposal_in: [${proposalIds.map((id) => `"${id}"`).join(',')}]
       }
       orderBy: "created",
       orderDirection: desc

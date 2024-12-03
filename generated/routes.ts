@@ -35,7 +35,6 @@ export enum Routes {
   api_profile_signalInterest = "/api/profile/signal-interest",
   api_profile_vouch = "/api/profile/vouch",
   api_stamp_claim = "/api/stamp/claim",
-  api_sync_hats = "/api/sync/hats",
   api_sync_token = "/api/sync/token",
   api_unlock_dataBuilder = "/api/unlock/data-builder",
   api_unlock_refetchStatus = "/api/unlock/refetch-status",
@@ -62,5 +61,7 @@ export enum Routes {
   profile = "/profile",
   registration = "/registration",
   security = "/security",
-  vote = "/vote"
+  vote_id = "/vote/[id]",
+  vote = "/vote",
+  walletlogin = "/walletlogin"
 }

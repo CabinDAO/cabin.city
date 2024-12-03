@@ -51,7 +51,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     if (vote?.choice) {
       setChoices(vote.choice)
     }
-  }, [userVotes])
+  }, [userVotes, canVote, user?.walletAddress, proposal.id])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0

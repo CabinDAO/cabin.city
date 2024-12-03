@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useModal } from '@/components/hooks/useModal'
 import { useLocalStorage, useWindowScroll } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
@@ -25,7 +25,7 @@ export const CTAModal = () => {
       setPopupLastShownAt(Date.now())
       showModal(() => <Modal />)
     }
-  }, [y, user, popupLastShownAt])
+  }, [y, user, popupLastShownAt, setPopupLastShownAt, showModal])
 
   return null
 }
