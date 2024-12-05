@@ -47,7 +47,7 @@ const Banner = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  width: 100%;
   padding: 1.2rem 6rem; // 6rem pad keeps text from getting cut off by mobile nav
   justify-content: center;
   align-items: center;
