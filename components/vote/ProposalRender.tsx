@@ -19,10 +19,12 @@ export const ProposalRender = ({
   proposal,
   maxLines,
   linkify = true,
+  expandable = false,
 }: {
   proposal: Proposal
   maxLines?: number
   linkify?: boolean
+  expandable?: boolean
 }) => {
   const replaceIpfsUrl = (match: string, p1: string) =>
     match.replace(p1, getIPFSUrl(p1, 'ipfs.io') || p1)
@@ -37,7 +39,13 @@ export const ProposalRender = ({
     ? remarkableWithLinkify.render(markdown)
     : remarkable.render(markdown)
 
-  return <DangerouslyRenderFormattedHTML html={html} maxLines={maxLines} />
+  return (
+    <DangerouslyRenderFormattedHTML
+      html={html}
+      maxLines={maxLines}
+      expandable={expandable}
+    />
+  )
 }
 
 function getIPFSUrl(uri: string, gateway: string) {

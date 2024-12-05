@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useLayoutEffect } from 'react'
+import React, { useState, useRef, useLayoutEffect, useEffect } from 'react'
 import { useError } from '@/components/hooks/useError'
 import { NO_TOKEN, apiPost } from '@/utils/api/backend'
 import { uploadOneFile } from '@/components/neighborhoods/useFilesUpload'
@@ -34,6 +34,8 @@ import UploadImage, {
   imagePlaceholderCSS,
 } from '@/components/editor/UploadImage'
 import Caption from '@/components/editor/Caption'
+import { Button } from '@/components/core/Button'
+import Icon from '@/components/core/Icon'
 
 export type Content = JSONContent
 
@@ -173,7 +175,6 @@ const TipTap = ({
   const maxHeightPx = maxHeight ? maxHeight * 10 : undefined
   const ref = useRef<HTMLDivElement>(null)
   const [containerHeight, setContainerHeight] = useState(0)
-  const fadeClass = maxHeightPx && containerHeight >= maxHeightPx ? 'fade' : ''
 
   useLayoutEffect(() => {
     if (!maxHeight || !ref.current) return
@@ -201,7 +202,7 @@ const TipTap = ({
       ref={ref}
       editable={editable}
       maxHeight={maxHeight}
-      className={fadeClass}
+      fadeForMaxHeight={!!maxHeightPx && containerHeight >= maxHeightPx}
     >
       <EditorProvider
         editable={editable}
@@ -222,13 +223,54 @@ const TipTap = ({
 export const DangerouslyRenderFormattedHTML = ({
   html,
   maxLines,
+  expandable,
 }: {
   html: string
   maxLines?: number
+  expandable?: boolean
 }) => {
+  const tiptapRef = useRef<HTMLDivElement>(null)
+  const [clampingDetected, setClampingDetected] = useState(false)
+  const [expandButtonClicked, setExpandButtonClicked] = useState(false)
+
+  const showExpandButton =
+    expandable && clampingDetected && !expandButtonClicked
+  const clampedLines = expandButtonClicked ? undefined : maxLines
+
+  useEffect(() => {
+    if (tiptapRef.current && expandable) {
+      const isOverflowing =
+        tiptapRef.current.offsetHeight < tiptapRef.current.scrollHeight
+      if (isOverflowing) {
+        setClampingDetected(true)
+      }
+    }
+  }, [expandable])
+
   return (
-    <Container maxLines={maxLines}>
-      <div className="tiptap" dangerouslySetInnerHTML={{ __html: html }}></div>
+    <Container maxLines={clampedLines} fadeForExpand={showExpandButton}>
+      <div
+        ref={tiptapRef}
+        className="tiptap"
+        dangerouslySetInnerHTML={{ __html: html }}
+      ></div>
+      {showExpandButton && (
+        <ShowMoreButtonContainer>
+          <Button
+            variant="tertiary"
+            onClick={() => setExpandButtonClicked(true)}
+            endAdornment={
+              <Icon
+                name="chevron-down"
+                size={1.6}
+                style={{ marginLeft: '0.5rem' }}
+              />
+            }
+          >
+            View more
+          </Button>
+        </ShowMoreButtonContainer>
+      )}
     </Container>
   )
 }
@@ -276,12 +318,24 @@ const makeUploadFn = (showError: (message: string) => void) => {
 //   )
 // }
 
+const ShowMoreButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: min(4%, 2rem);
+  left: 0;
+  right: 0;
+`
+
 const Container = styled.div<{
   editable?: boolean
   maxHeight?: number
   maxLines?: number
+  fadeForExpand?: boolean
+  fadeForMaxHeight?: boolean
 }>`
   width: 100%;
+  position: relative;
 
   ${({ maxHeight }) =>
     maxHeight &&
@@ -290,10 +344,16 @@ const Container = styled.div<{
       overflow-y: hidden;
     `}
 
-  &.fade {
-    -webkit-mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
-    mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
-  }
+  ${({ fadeForMaxHeight }) =>
+    fadeForMaxHeight &&
+    css`
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        black 30%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+    `}
 
   /* container-name: editor;
   container-type: inline-size; */
@@ -309,6 +369,17 @@ const Container = styled.div<{
     gap: 1.6rem;
     word-break: break-word;
     outline: 0; // no orange outline when focused
+
+    ${({ fadeForExpand }) =>
+      fadeForExpand &&
+      css`
+        -webkit-mask-image: linear-gradient(
+          to bottom,
+          black 30%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(to bottom, black 30%, transparent 100%);
+      `}
 
     ${({ maxLines }) =>
       maxLines &&

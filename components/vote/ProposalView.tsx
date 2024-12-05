@@ -42,7 +42,7 @@ export const ProposalView = () => {
             ) : (
               <ProposalContainer>
                 <H1>{proposal.title}</H1>
-                <ProposalRender proposal={proposal} />
+                <ProposalRender proposal={proposal} maxLines={20} expandable />
                 {proposal.discussion && (
                   <Body1>
                     Proposal discussion:{' '}
