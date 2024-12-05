@@ -33,8 +33,10 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     reloadUserVotes,
     reloadProposals,
     canVote,
+    getVotingPower,
   } = useSnapshot()
   const [myLastVote, setMyLastVote] = useState<Vote | null>(null)
+  const [votingPower, setVotingPower] = useState(0)
   const [votingInProgress, setVotingInProgress] = useState(false)
   const [justVoted, setJustVoted] = useState(false)
   const [revoting, setRevoting] = useState(false)
@@ -52,6 +54,13 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       setChoices(vote.choice)
     }
   }, [userVotes, canVote, user?.walletAddress, proposal.id])
+
+  useEffect(() => {
+    if (!canVote || !user?.walletAddress) return
+    getVotingPower(proposal.id, user.walletAddress).then((vp) => {
+      setVotingPower(vp)
+    })
+  }, [canVote, user?.walletAddress, proposal.id, getVotingPower])
 
   const updateVoteCount = (choiceIndex: number, direction: 'up' | 'down') => {
     const currentCount = choices[choiceIndex] || 0
@@ -174,9 +183,9 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     <Container>
       <H2>{revoting ? 'Change' : 'Cast'} your vote</H2>
       <Body1>
-        Your {balanceToVotes(user.cabinTokenBalanceInt)} votes will be split
-        among one or more of the choices below according to the percentages you
-        choose.
+        Your {balanceToVotes(votingPower)}{' '}
+        {votingPower === 1 ? 'vote' : 'votes'} will be split among one or more
+        of the choices below according to the percentages you choose.
       </Body1>
       <Body1>
         Use the + and - buttons to adjust your vote for each choice.

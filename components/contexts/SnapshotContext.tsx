@@ -53,6 +53,12 @@ export type Vote = {
   vp_state: string
 }
 
+export type VotingPower = {
+  vp: number
+  vp_by_strategy: number[]
+  vp_state: string
+}
+
 interface SnapshotState {
   proposals: Proposal[]
   proposalsLoaded: boolean
@@ -64,6 +70,7 @@ interface SnapshotState {
   countUserVotableProposals: number
   canVote: boolean
   getVotesForProposal: (proposalId: string) => Promise<Vote[]>
+  getVotingPower: (proposalId: string, voterAddress: string) => Promise<number>
 }
 
 const SnapshotContext = createContext<SnapshotState | null>(null)
@@ -150,6 +157,17 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
     return votes
   }, [])
 
+  const getVotingPower = useCallback(
+    async (proposalId: string, voterAddress: string) => {
+      const vpData = await snapshotGraphQLClient.request<{ vp: VotingPower }>(
+        votingPowerQuery(space, proposalId, voterAddress)
+      )
+
+      return vpData.vp.vp
+    },
+    [space]
+  )
+
   const state = {
     proposals,
     proposalsLoaded,
@@ -161,6 +179,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
     countUserVotableProposals,
     canVote,
     getVotesForProposal,
+    getVotingPower,
   }
 
   return (
@@ -263,6 +282,23 @@ const votesForProposalQuery = (proposalId: string) => `
       space {
         id
       }
+    }
+  }
+`
+const votingPowerQuery = (
+  space: string,
+  proposalId: string,
+  voterAddress: string
+) => `
+  query VotingPowerQuery {
+    vp (
+      space: "${space}"
+      proposal: "${proposalId}"
+      voter: "${voterAddress}"
+    ) {
+      vp
+      vp_by_strategy
+      vp_state
     }
   }
 `
