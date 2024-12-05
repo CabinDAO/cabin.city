@@ -143,4 +143,5 @@ const ActivePill = styled.div`
   border-radius: 1rem;
   white-space: nowrap;
   width: min-content;
+  height: min-content;
 `
