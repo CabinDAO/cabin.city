@@ -71,7 +71,9 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
                   <ChoiceText>{choiceText}</ChoiceText>
                 </Tooltip>
               </ChoiceContainer>
-              <VoteCount>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</VoteCount>
+              <VoteCount title={`${vote.vp} ₡ABIN`}>
+                {`${vp} ${vp === '1' ? 'vote' : 'votes'}`}
+              </VoteCount>
             </Row>
           )
         })}
