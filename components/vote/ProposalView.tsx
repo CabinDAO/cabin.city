@@ -57,15 +57,17 @@ export const ProposalView = () => {
                   </Body1>
                 )}
                 <HorizontalDivider />
-                {proposal.state === 'active' ? (
-                  <VoteInput proposal={proposal} />
-                ) : (
-                  <Results>
-                    <Body1>Ended {timeAgo(proposal.end)}</Body1>
-                    <VoteResultBars proposal={proposal} header="Results" />
-                    <VoteResultList proposal={proposal} />
-                  </Results>
-                )}
+                <Results>
+                  {proposal.state === 'active' ? (
+                    <VoteInput proposal={proposal} />
+                  ) : (
+                    <>
+                      <Body1>Ended {timeAgo(proposal.end)}</Body1>
+                      <VoteResultBars proposal={proposal} header="Results" />
+                    </>
+                  )}
+                  <VoteResultList proposal={proposal} />
+                </Results>
                 <Body1>
                   <Link
                     href={`https://snapshot.org/#/${proposal.space.id}/proposal/${proposal.id}`}
