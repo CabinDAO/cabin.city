@@ -97,7 +97,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         choice: Object.fromEntries(
           Object.entries(choices).filter(([_, value]) => value > 0)
         ),
-        reason,
+        reason: reason.trim() || undefined,
         app: 'cabin.city',
       })
       setJustVoted(true)
@@ -243,7 +243,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       <InputTextArea
         value={reason}
         onChange={(e) => setReason(e.target.value)}
-        placeholder="Reason for your vote (optional)"
+        placeholder="Share your reason (optional)"
       />
 
       {wallets.length ? (

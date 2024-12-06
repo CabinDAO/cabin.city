@@ -11,7 +11,7 @@ import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
 import { isProd } from '@/utils/dev'
 
-const testingAgainstLiveSpace = true
+const testingAgainstLiveSpace = false
 const useLiveCabindaoSpace = isProd ? true : testingAgainstLiveSpace // prevents mistakes
 
 const snapshotGraphQLClient = new GraphQLClient(
