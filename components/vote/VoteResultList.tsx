@@ -76,10 +76,12 @@ export const voteToText = ({
   vote: Vote
   proposal: Proposal
 }) => {
-  const chosen = Object.entries(vote.choice).map(([choice, vp]) => ({
-    text: proposal.choices[parseInt(choice) - 1],
-    vp: vp,
-  }))
+  const chosen = Object.entries(vote.choice)
+    .map(([choice, vp]) => ({
+      text: proposal.choices[parseInt(choice) - 1],
+      vp: vp,
+    }))
+    .filter(({ vp }) => vp > 0)
 
   chosen.sort((a, b) => b.vp - a.vp)
 

@@ -91,7 +91,9 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         space: proposal.space.id,
         proposal: proposal.id,
         type: 'quadratic',
-        choice: choices,
+        choice: Object.fromEntries(
+          Object.entries(choices).filter(([_, value]) => value > 0)
+        ),
         // reason: 'Choice 1 make lot of sense',
         app: 'cabin.city',
       })
