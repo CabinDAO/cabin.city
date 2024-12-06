@@ -6,7 +6,6 @@ import {
 } from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
 import { Body1, H2 } from '@/components/core/Typography'
-import { percentForChoice } from '@/components/vote/VoteResultBars'
 import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import useEns from '@/components/hooks/useEns'
@@ -14,13 +13,6 @@ import { Tooltip } from '@/components/core/Tooltip'
 
 export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
   const { getVotesForProposal } = useSnapshot()
-
-  const choices = proposal.choices.map((choice: string, i: number) => ({
-    key: i + 1,
-    text: choice,
-    votes: proposal.scores[i] || 0,
-  }))
-
   const [votes, setVotes] = useState<Vote[]>([])
 
   useEffect(() => {
@@ -37,25 +29,8 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
       <H2>Votes</H2>
       <Votes>
         {votes.map((vote) => {
-          const choiceOrder = Object.values(choices)
-            .sort((a, b) => vote.choice[b.key] || 0 - vote.choice[a.key] || 0)
-            .filter((c) => vote.choice[c.key] > 0)
-          const totalVotes = Object.values(vote.choice).reduce(
-            (acc, curr) => acc + curr,
-            0
-          )
-          const choiceText = choiceOrder
-            .map(
-              (choice) =>
-                `${percentForChoice(
-                  vote.choice[choice.key],
-                  totalVotes
-                )}% for ${choice.text}`
-            )
-            .join(', ')
-
+          const choiceText = voteToText({ vote, proposal })
           const vp = balanceToVotes(vote.vp)
-
           return (
             <Row key={vote.id}>
               <StyledVoter>
@@ -90,6 +65,34 @@ const Voter = ({ address }: { address: string }) => {
     </CopyToClipboard>
   )
 }
+
+export const voteToText = ({
+  vote,
+  proposal,
+}: {
+  vote: Vote
+  proposal: Proposal
+}) => {
+  const chosen = Object.entries(vote.choice).map(([choice, vp]) => ({
+    text: proposal.choices[parseInt(choice) - 1],
+    vp: vp,
+  }))
+
+  chosen.sort((a, b) => b.vp - a.vp)
+
+  const totalVp = chosen.reduce((acc, c) => acc + c.vp, 0)
+
+  return chosen
+    .map(
+      (choice) => `${percentForChoice(choice.vp, totalVp)}% for ${choice.text}`
+    )
+    .join(', ')
+}
+
+export const percentForChoice = (votes: number, total: number) => {
+  return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
+}
+
 
 const Container = styled.div`
   display: flex;

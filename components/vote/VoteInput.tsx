@@ -15,10 +15,10 @@ import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { balanceToVotes, timeAgo } from '@/utils/display-utils'
-import { VoteResultBars } from '@/components/vote/VoteResultBars'
 import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
+import { voteToText } from '@/components/vote/VoteResultList'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
@@ -43,8 +43,6 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const [choices, setChoices] = useState<{
     [key: string]: number
   }>({})
-
-  const propIsActive = proposal.state === 'active'
 
   useEffect(() => {
     if (!canVote || !user?.walletAddress) return
@@ -114,15 +112,8 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     setVotingInProgress(false)
   }
 
-  const resultsOnly = (
-    <>
-      {!propIsActive && <Body1>Ended {timeAgo(proposal.end)}</Body1>}
-      <VoteResultBars proposal={proposal} />
-    </>
-  )
-
-  if (!propIsActive) {
-    return resultsOnly
+  if (proposal.state !== 'active') {
+    return null
   }
 
   if (!user)
@@ -133,7 +124,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     )
 
   if (!canVote) {
-    return resultsOnly
+    return null
   }
 
   if (!userVotesLoaded) {
@@ -174,7 +165,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
             <Icon name="pencil" size={1.4} inline />
           </span>
         </H2>
-        <VoteResultBars proposal={proposal} overrideVotes={myLastVote.choice} />
+        <Body1>{voteToText({ vote: myLastVote, proposal })}</Body1>
       </>
     )
   }
@@ -244,16 +235,23 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         )
       })}
       {wallets.length ? (
-        <Button onClick={castVote} disabled={votingInProgress}>
-          {votingInProgress ? (
-            <>
-              <LoadingSpinner />
-              &nbsp; {/* this keeps the button height from collapsing */}
-            </>
-          ) : (
-            'Vote'
+        <>
+          <Button onClick={castVote} disabled={votingInProgress}>
+            {votingInProgress ? (
+              <>
+                <LoadingSpinner />
+                &nbsp; {/* this keeps the button height from collapsing */}
+              </>
+            ) : (
+              'Vote'
+            )}
+          </Button>
+          {revoting && (
+            <Button variant="tertiary" onClick={() => setRevoting(false)}>
+              Cancel
+            </Button>
           )}
-        </Button>
+        </>
       ) : (
         <Button onClick={connectWallet}>Connect Wallet to Vote</Button>
       )}

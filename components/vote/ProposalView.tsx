@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
 import { BaseLayout } from '@/components/core/BaseLayout'
-import { Body1, H1 } from '@/components/core/Typography'
+import { Body1, H1, H2 } from '@/components/core/Typography'
 import { ContentCard } from '@/components/core/ContentCard'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { ProposalRender } from '@/components/vote/ProposalRender'
@@ -58,14 +58,18 @@ export const ProposalView = () => {
                 )}
                 <HorizontalDivider />
                 <Results>
-                  {proposal.state === 'active' ? (
+                  {proposal.state === 'active' && (
                     <VoteInput proposal={proposal} />
+                  )}
+                  {proposal.state === 'active' ? (
+                    <H2>Current results</H2>
                   ) : (
                     <>
+                      <H2>Results</H2>
                       <Body1>Ended {timeAgo(proposal.end)}</Body1>
-                      <VoteResultBars proposal={proposal} header="Results" />
                     </>
                   )}
+                  <VoteResultBars proposal={proposal} />
                   <VoteResultList proposal={proposal} />
                 </Results>
                 <Body1>

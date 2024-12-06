@@ -1,23 +1,20 @@
 import { Proposal } from '@/components/contexts/SnapshotContext'
 import styled from 'styled-components'
-import { Body1, H2 } from '@/components/core/Typography'
+import { Body1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
+import { percentForChoice } from '@/components/vote/VoteResultList'
 
 export const VoteResultBars = ({
   proposal,
   brief,
-  overrideVotes,
-  header,
 }: {
   proposal: Proposal
   brief?: boolean
-  overrideVotes?: { [key: string]: number }
-  header?: string
 }) => {
   const choices = proposal.choices.map((choice: string, i: number) => ({
     key: i + 1,
     text: choice,
-    votes: overrideVotes ? overrideVotes[i + 1] || 0 : proposal.scores[i] || 0,
+    votes: proposal.scores[i] || 0,
   }))
 
   const totalVotes = Object.values(choices).reduce(
@@ -31,11 +28,11 @@ export const VoteResultBars = ({
     return null
   }
 
-  const showWinner = proposal.state === 'closed' && !overrideVotes
+  const showWinner = proposal.state === 'closed'
   const winner =
     choices.find((choice) => choice.votes === maxScore) || choices[0]
 
-  if (proposal.choices.length != 2 && !overrideVotes) {
+  if (proposal.choices.length != 2) {
     choices.sort((a, b) => b.votes - a.votes)
   }
 
@@ -45,11 +42,10 @@ export const VoteResultBars = ({
 
   return (
     <Container>
-      {header && <H2>{header}</H2>}
       {Object.values(choicesToShow).map((choice) => {
         const percent = percentForChoice(choice.votes, totalVotes)
         return (
-          <Row key={choice.key} fillPercent={percent} border={!!overrideVotes}>
+          <Row key={choice.key} fillPercent={percent}>
             <ChoiceText>
               {showWinner && choice.key === winner.key && (
                 <Icon name="check" size={1.6} style={{ marginRight: '1rem' }} />
@@ -62,10 +58,6 @@ export const VoteResultBars = ({
       })}
     </Container>
   )
-}
-
-export const percentForChoice = (votes: number, total: number) => {
-  return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
 }
 
 const Container = styled.div`
