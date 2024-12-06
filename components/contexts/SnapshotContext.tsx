@@ -54,6 +54,7 @@ export type Vote = {
   vp: number
   vp_by_strategy: number[]
   vp_state: string
+  reason: string
 }
 
 export type VotingPower = {
@@ -233,6 +234,23 @@ const proposalsQuery = (space: string) => `
   }
 `
 
+const voteFields = `
+  id
+  voter
+  vp
+  vp_by_strategy
+  vp_state
+  created
+  proposal {
+    id
+  }
+  choice
+  reason
+  space {
+    id
+  }
+`
+
 const userVotesQuery = (space: string, voterAddress: string) => `
   query UserVotesQuery {
     votes(
@@ -244,21 +262,7 @@ const userVotesQuery = (space: string, voterAddress: string) => `
       }
       orderBy: "created",
       orderDirection: desc
-    ) {
-      id
-      voter
-      vp
-      vp_by_strategy
-      vp_state
-      created
-      proposal {
-        id
-      }
-      choice
-      space {
-        id
-      }
-    }
+    ) { ${voteFields} }
   }
 `
 
@@ -271,21 +275,7 @@ const votesForProposalQuery = (proposalId: string) => `
       }
       orderBy: "created",
       orderDirection: desc
-    ) {
-      id
-      voter
-      vp
-      vp_by_strategy
-      vp_state
-      created
-      proposal {
-        id
-      }
-      choice
-      space {
-        id
-      }
-    }
+    ) { ${voteFields} }
   }
 `
 const votingPowerQuery = (

@@ -100,6 +100,7 @@ import shirtSvg from './svg/shirt.svg'
 import silhouette from './svg/silhouette.svg'
 import signOutSvg from './svg/sign-out.svg'
 import sleepSvg from './svg/sleep.svg'
+import snapshotReasonSvg from './svg/snapshot-reason.svg'
 import stampSvg from './svg/stamp.svg'
 import staySvg from './svg/stay.svg'
 import tagSvg from './svg/tag.svg'
@@ -212,6 +213,7 @@ export const IconSvgs = {
   shield: shieldSvg,
   shirt: shirtSvg,
   silhouette: silhouette,
+  'snapshot-reason': snapshotReasonSvg,
   'sign-out': signOutSvg,
   sleep: sleepSvg,
   stamp: stampSvg,

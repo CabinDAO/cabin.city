@@ -19,6 +19,7 @@ import Icon from '@/components/core/Icon'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { voteToText } from '@/components/vote/VoteResultList'
+import { InputTextArea } from '@/components/core/InputTextArea'
 
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
@@ -35,6 +36,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
     canVote,
     getVotingPower,
   } = useSnapshot()
+
   const [myLastVote, setMyLastVote] = useState<Vote | null>(null)
   const [votingPower, setVotingPower] = useState(0)
   const [votingInProgress, setVotingInProgress] = useState(false)
@@ -43,6 +45,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
   const [choices, setChoices] = useState<{
     [key: string]: number
   }>({})
+  const [reason, setReason] = useState('')
 
   useEffect(() => {
     if (!canVote || !user?.walletAddress) return
@@ -94,7 +97,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
         choice: Object.fromEntries(
           Object.entries(choices).filter(([_, value]) => value > 0)
         ),
-        // reason: 'Choice 1 make lot of sense',
+        reason,
         app: 'cabin.city',
       })
       setJustVoted(true)
@@ -236,6 +239,13 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
           </OptionRow>
         )
       })}
+
+      <InputTextArea
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        placeholder="Reason for your vote (optional)"
+      />
+
       {wallets.length ? (
         <>
           <Button onClick={castVote} disabled={votingInProgress}>

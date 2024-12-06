@@ -4,13 +4,13 @@ import {
   useSnapshot,
   Vote,
 } from '@/components/contexts/SnapshotContext'
-import styled from 'styled-components'
-import { Body1, H2 } from '@/components/core/Typography'
-import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
-import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import useEns from '@/components/hooks/useEns'
+import styled from 'styled-components'
+import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
+import { Body1, H2 } from '@/components/core/Typography'
+import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import { Tooltip } from '@/components/core/Tooltip'
-import theme from '@/styles/theme'
+import Icon from '@/components/core/Icon'
 
 export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
   const { getVotesForProposal } = useSnapshot()
@@ -33,11 +33,11 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
           const choiceText = voteToText({ vote, proposal })
           const vp = balanceToVotes(vote.vp)
           return (
-            <Row key={vote.id}>
-              <VoteResult>
-                <StyledVoter>
-                  <Voter address={vote.voter} />
-                </StyledVoter>
+            <>
+              <Voter key={`${vote.id}-voter`}>
+                <VoterInfo address={vote.voter} />
+              </Voter>
+              <ChoiceAndReason key={`${vote.id}-choice`}>
                 <ChoiceContainer>
                   <Tooltip
                     tooltip={choiceText}
@@ -48,11 +48,30 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
                     <ChoiceText>{choiceText}</ChoiceText>
                   </Tooltip>
                 </ChoiceContainer>
-              </VoteResult>
-              <VoteCount title={`${vote.vp} ₡ABIN`}>
-                <Body1>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</Body1>
-              </VoteCount>
-            </Row>
+                {vote.reason && (
+                  <Reason>
+                    <Tooltip
+                      tooltip={`Reason: ${vote.reason}`}
+                      position="top"
+                      open={false}
+                      paragraph
+                    >
+                      <Icon name="snapshot-reason" size={2.4} />
+                    </Tooltip>
+                  </Reason>
+                )}
+              </ChoiceAndReason>
+              <NumVotes key={`${vote.id}-votes`}>
+                <Tooltip
+                  tooltip={`${vote.vp} ₡ABIN`}
+                  position="top"
+                  open={false}
+                  paragraph
+                >
+                  <Body1>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</Body1>
+                </Tooltip>
+              </NumVotes>
+            </>
           )
         })}
       </Votes>
@@ -60,7 +79,7 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
   )
 }
 
-const Voter = ({ address }: { address: string }) => {
+const VoterInfo = ({ address }: { address: string }) => {
   const { ens } = useEns(address)
   return (
     <CopyToClipboard text={ens || address || ''}>
@@ -98,72 +117,56 @@ export const percentForChoice = (votes: number, total: number) => {
   return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
 }
 
-const breakpoint = '500px'
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
 `
+
 const Votes = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: max-content auto max-content;
+  /* grid-template-areas:
+    'voter result votes'
+    'full full full'; */
+  row-gap: 2rem;
+  column-gap: 1.6rem;
 `
 
-const Row = styled.div`
-  width: 100%;
+const NumVotes = styled.div`
+  text-align: right;
+  white-space: nowrap;
+  /* grid-area: votes; */
+`
+
+const Voter = styled.div`
+  white-space: nowrap;
+  /* grid-area: voter; */
+`
+
+const ChoiceAndReason = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: flex-start;
-  align-items: flex-start;
-  padding: 0 1.4rem;
-  border-radius: 1rem;
-
-  @media only screen and (min-width: ${breakpoint}) {
-    align-items: center;
-  }
+  gap: 1rem;
 `
 
-const VoteResult = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  justify-content: flex-start;
-  width: calc(100% - 8rem);
-
-  @media only screen and (min-width: ${breakpoint}) {
-    flex-direction: row;
-    align-items: baseline;
-    flex: 50;
-    gap: 2rem;
-  }
-
-  ${({ theme }) => theme.bp.lg} {
-    gap: 4rem;
-  }
-`
-
-const StyledVoter = styled.div`
+const Reason = styled.div`
   flex-shrink: 0;
-  width: 12rem;
+  width: 2rem;
 `
 
 const ChoiceContainer = styled.div`
-  width: 100%;
-  @media only screen and (min-width: ${breakpoint}) {
-    width: calc(100% - 14rem);
-  }
+  width: 0;
+  flex: 1;
+  max-width: fit-content;
 `
 
 const ChoiceText = styled(Body1)`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-`
-
-const VoteCount = styled.div`
-  flex-shrink: 0;
-  width: 8rem;
-  text-align: right;
+  max-width: fit-content;
 `
