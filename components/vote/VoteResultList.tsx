@@ -10,6 +10,7 @@ import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import useEns from '@/components/hooks/useEns'
 import { Tooltip } from '@/components/core/Tooltip'
+import theme from '@/styles/theme'
 
 export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
   const { getVotesForProposal } = useSnapshot()
@@ -33,21 +34,23 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
           const vp = balanceToVotes(vote.vp)
           return (
             <Row key={vote.id}>
-              <StyledVoter>
-                <Voter address={vote.voter} />
-              </StyledVoter>
-              <ChoiceContainer>
-                <Tooltip
-                  tooltip={choiceText}
-                  position="top"
-                  open={false}
-                  paragraph
-                >
-                  <ChoiceText>{choiceText}</ChoiceText>
-                </Tooltip>
-              </ChoiceContainer>
+              <VoteResult>
+                <StyledVoter>
+                  <Voter address={vote.voter} />
+                </StyledVoter>
+                <ChoiceContainer>
+                  <Tooltip
+                    tooltip={choiceText}
+                    position="top"
+                    open={false}
+                    paragraph
+                  >
+                    <ChoiceText>{choiceText}</ChoiceText>
+                  </Tooltip>
+                </ChoiceContainer>
+              </VoteResult>
               <VoteCount title={`${vote.vp} ₡ABIN`}>
-                {`${vp} ${vp === '1' ? 'vote' : 'votes'}`}
+                <Body1>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</Body1>
               </VoteCount>
             </Row>
           )
@@ -93,6 +96,7 @@ export const percentForChoice = (votes: number, total: number) => {
   return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
 }
 
+const breakpoint = '500px'
 
 const Container = styled.div`
   display: flex;
@@ -109,11 +113,33 @@ const Row = styled.div`
   width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 4rem;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 1.4rem;
   border-radius: 1rem;
+
+  @media only screen and (min-width: ${breakpoint}) {
+    align-items: center;
+  }
+`
+
+const VoteResult = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+  width: calc(100% - 8rem);
+
+  @media only screen and (min-width: ${breakpoint}) {
+    flex-direction: row;
+    align-items: baseline;
+    flex: 50;
+    gap: 2rem;
+  }
+
+  ${({ theme }) => theme.bp.lg} {
+    gap: 4rem;
+  }
 `
 
 const StyledVoter = styled.div`
@@ -122,8 +148,10 @@ const StyledVoter = styled.div`
 `
 
 const ChoiceContainer = styled.div`
-  flex: 50;
-  width: 15%;
+  width: 100%;
+  @media only screen and (min-width: ${breakpoint}) {
+    width: calc(100% - 14rem);
+  }
 `
 
 const ChoiceText = styled(Body1)`
@@ -132,9 +160,8 @@ const ChoiceText = styled(Body1)`
   white-space: nowrap;
 `
 
-const VoteCount = styled(Body1)`
-  flex-grow: 1;
-  flex-shrink: 1;
+const VoteCount = styled.div`
+  flex-shrink: 0;
   width: 8rem;
   text-align: right;
 `

@@ -11,6 +11,9 @@ import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
 import { isProd } from '@/utils/dev'
 
+const testingAgainstLiveSpace = true
+const useLiveCabindaoSpace = isProd ? true : testingAgainstLiveSpace // prevents mistakes
+
 const snapshotGraphQLClient = new GraphQLClient(
   'https://hub.snapshot.org/graphql'
 )
@@ -89,7 +92,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser()
   const { user: privyUser } = usePrivy()
 
-  const canVote: boolean = isProd
+  const canVote: boolean = useLiveCabindaoSpace
     ? !!privyUser?.wallet && (user?.cabinTokenBalanceInt || 0) > 0
     : !!user
 
@@ -101,7 +104,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
   const [countActiveProposals, setCountActiveProposals] = useState(0)
   const [countUserVotableProposals, setCountUserVotableProposals] = useState(0)
 
-  const space = isProd ? 'cabindao.eth' : 'grin.me.eth.id'
+  const space = useLiveCabindaoSpace ? 'cabindao.eth' : 'grin.me.eth.id'
 
   const reloadProposals = useCallback(async () => {
     setProposalsLoaded(false)
