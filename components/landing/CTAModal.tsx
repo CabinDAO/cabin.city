@@ -18,7 +18,7 @@ export const CTAModal = () => {
 
   useEffect(() => {
     if (
-      // !user &&
+      !user &&
       y > 4500 &&
       (!popupLastShownAt || Date.now() - popupLastShownAt > 1000 * 60 * 60 * 24)
     ) {
