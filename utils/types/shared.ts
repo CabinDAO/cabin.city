@@ -16,6 +16,11 @@ export const PageParams = z.object({
 })
 export type PageParamsType = z.infer<typeof PageParams>
 
+export const commaSeparatedStrings = z
+  .string()
+  .transform((str) => str.split(','))
+  .pipe(z.array(z.string()))
+
 export const commaSeparatedArrayOf = <T extends EnumLike>(vals: T) =>
   z
     .string()

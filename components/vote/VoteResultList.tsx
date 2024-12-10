@@ -1,24 +1,37 @@
 import { useEffect, useState } from 'react'
 import { useWindowSize } from 'react-use'
+import Link from 'next/link'
 import {
   Proposal,
   useSnapshot,
   Vote,
 } from '@/components/contexts/SnapshotContext'
 import useEns from '@/components/hooks/useEns'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileVotersResponse } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { Body1, H2 } from '@/components/core/Typography'
 import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import { Tooltip } from '@/components/core/Tooltip'
 import Icon from '@/components/core/Icon'
+import { Avatar } from '@/components/profile/Avatar'
 
 const breakpoint = 500
 
 export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
+  const { useGet } = useBackend()
   const { width } = useWindowSize()
   const { getVotesForProposal } = useSnapshot()
   const [votes, setVotes] = useState<Vote[]>([])
+
+  const { data } = useGet<ProfileVotersResponse>(
+    votes.length ? 'api_profile_voters' : null,
+    {
+      addresses: votes.map((vote) => vote.voter.toLowerCase()).join(','),
+    }
+  )
+  const voterProfiles = !data || 'error' in data ? {} : data.profiles
 
   useEffect(() => {
     getVotesForProposal(proposal.id).then((votes) => {
@@ -34,12 +47,21 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
       <H2>Votes</H2>
       <Votes>
         {votes.map((vote) => {
+          const voterAddress = vote.voter.toLowerCase()
           const choiceText = voteToText({ vote, proposal })
           const vp = balanceToVotes(vote.vp)
 
           const voter = (
             <Voter key={`${vote.id}-voter`}>
-              <VoterInfo address={vote.voter} />
+              {voterProfiles[voterAddress] ? (
+                <CabinVoter
+                  name={voterProfiles[voterAddress].name}
+                  externId={voterProfiles[voterAddress].externId}
+                  avatarCfId={voterProfiles[voterAddress].avatarCfId}
+                />
+              ) : (
+                <VoterInfo address={vote.voter} />
+              )}
             </Voter>
           )
           const choiceAndReason = (
@@ -125,6 +147,29 @@ const ResultRowTop = styled.div`
   flex-direction: row;
   justify-content: space-between;
   gap: 1rem;
+`
+
+const CabinVoter = ({
+  name,
+  externId,
+  avatarCfId,
+}: {
+  name: string
+  externId: string
+  avatarCfId: string
+}) => {
+  return (
+    <VoterLink href={`/profile/${externId}`}>
+      <Avatar srcCfId={avatarCfId} size={2} />
+      <Body1>{name}</Body1>
+    </VoterLink>
+  )
+}
+
+const VoterLink = styled(Link)`
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
 `
 
 const VoterInfo = ({ address }: { address: string }) => {

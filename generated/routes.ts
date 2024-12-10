@@ -33,6 +33,7 @@ export enum Routes {
   api_profile_new = "/api/profile/new",
   api_profile_setupState = "/api/profile/setup-state",
   api_profile_signalInterest = "/api/profile/signal-interest",
+  api_profile_voters = "/api/profile/voters",
   api_profile_vouch = "/api/profile/vouch",
   api_stamp_claim = "/api/stamp/claim",
   api_sync_token = "/api/sync/token",

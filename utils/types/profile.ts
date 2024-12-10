@@ -4,6 +4,7 @@ import { Prisma } from '@prisma/client'
 import {
   APIError,
   commaSeparatedArrayOf,
+  commaSeparatedStrings,
   PageParams,
   Paginated,
 } from '@/utils/types/shared'
@@ -101,6 +102,26 @@ export type ProfileListResponse =
       profiles: ProfileListFragment[]
       totalCount: number
     } & Paginated)
+  | APIError
+
+export const ProfileVotersParams = z
+  .object({
+    addresses: commaSeparatedStrings,
+  })
+  .strict()
+export type ProfileVotersParamsType = z.infer<typeof ProfileVotersParams>
+
+export type ProfileVotersResponse =
+  | {
+      profiles: Record<
+        string, // address
+        {
+          name: string
+          externId: string
+          avatarCfId: string
+        }
+      >
+    }
   | APIError
 
 export type ProfileMappableResponse =
