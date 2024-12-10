@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useWindowSize } from 'react-use'
 import {
   Proposal,
   useSnapshot,
@@ -12,7 +13,10 @@ import { CopyToClipboard } from '@/components/core/CopyToClipboard'
 import { Tooltip } from '@/components/core/Tooltip'
 import Icon from '@/components/core/Icon'
 
+const breakpoint = 500
+
 export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
+  const { width } = useWindowSize()
   const { getVotesForProposal } = useSnapshot()
   const [votes, setVotes] = useState<Vote[]>([])
 
@@ -32,45 +36,75 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
         {votes.map((vote) => {
           const choiceText = voteToText({ vote, proposal })
           const vp = balanceToVotes(vote.vp)
-          return (
-            <>
-              <Voter key={`${vote.id}-voter`}>
-                <VoterInfo address={vote.voter} />
-              </Voter>
-              <ChoiceAndReason key={`${vote.id}-choice`}>
-                <ChoiceContainer>
-                  <Tooltip
-                    tooltip={choiceText}
-                    position="top"
-                    open={false}
-                    paragraph
-                  >
-                    <ChoiceText>{choiceText}</ChoiceText>
-                  </Tooltip>
-                </ChoiceContainer>
-                {vote.reason && (
-                  <Reason>
-                    <Tooltip
-                      tooltip={`Reason: ${vote.reason}`}
-                      position="top"
-                      open={false}
-                      paragraph
-                    >
-                      <Icon name="snapshot-reason" size={2.4} />
-                    </Tooltip>
-                  </Reason>
-                )}
-              </ChoiceAndReason>
-              <NumVotes key={`${vote.id}-votes`}>
+
+          const voter = (
+            <Voter key={`${vote.id}-voter`}>
+              <VoterInfo address={vote.voter} />
+            </Voter>
+          )
+          const choiceAndReason = (
+            <ChoiceAndReason key={`${vote.id}-choice`}>
+              <ChoiceContainer>
                 <Tooltip
-                  tooltip={`${vote.vp} ₡ABIN`}
+                  tooltip={choiceText}
                   position="top"
                   open={false}
                   paragraph
+                  width={width > breakpoint ? `35rem` : 'auto'}
                 >
-                  <Body1>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</Body1>
+                  <ChoiceText>{choiceText}</ChoiceText>
                 </Tooltip>
-              </NumVotes>
+              </ChoiceContainer>
+              {vote.reason && (
+                <Reason>
+                  <Tooltip
+                    tooltip={`Reason: ${vote.reason}`}
+                    position="top"
+                    open={false}
+                    paragraph
+                    width={
+                      width > breakpoint
+                        ? 'min(50rem, 70vw)'
+                        : 'min(30rem, 80vw)'
+                    }
+                    align={'start'}
+                  >
+                    <Icon name="snapshot-reason" size={2.4} />
+                  </Tooltip>
+                </Reason>
+              )}
+            </ChoiceAndReason>
+          )
+          const numVotes = (
+            <NumVotes key={`${vote.id}-votes`}>
+              <Tooltip
+                tooltip={`${vote.vp} ₡ABIN`}
+                position="top"
+                open={false}
+                paragraph
+              >
+                <Body1>{`${vp} ${vp === '1' ? 'vote' : 'votes'}`}</Body1>
+              </Tooltip>
+            </NumVotes>
+          )
+
+          return (
+            <>
+              {width < breakpoint ? (
+                <ResultRow>
+                  <ResultRowTop>
+                    {voter}
+                    {numVotes}
+                  </ResultRowTop>
+                  {choiceAndReason}
+                </ResultRow>
+              ) : (
+                <>
+                  {voter}
+                  {choiceAndReason}
+                  {numVotes}
+                </>
+              )}
             </>
           )
         })}
@@ -78,6 +112,20 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
     </Container>
   )
 }
+
+const ResultRow = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`
+const ResultRowTop = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+`
 
 const VoterInfo = ({ address }: { address: string }) => {
   const { ens } = useEns(address)
@@ -124,13 +172,16 @@ const Container = styled.div`
 `
 
 const Votes = styled.div`
-  display: grid;
-  grid-template-columns: max-content auto max-content;
-  /* grid-template-areas:
-    'voter result votes'
-    'full full full'; */
-  row-gap: 2rem;
-  column-gap: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  @media screen and (min-width: ${breakpoint}px) {
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    row-gap: 2rem;
+    column-gap: 1.6rem;
+  }
 `
 
 const NumVotes = styled.div`

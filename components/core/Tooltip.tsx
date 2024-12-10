@@ -22,7 +22,7 @@ export const Tooltip = ({
   position?: TooltipPosition
   align?: TooltipAlign
   paragraph?: boolean
-  width?: number
+  width?: string
   hidden?: boolean
   offset?: number
   children: ReactNode
@@ -86,8 +86,7 @@ const TooltipContainer = styled.div<{
   --tip-color: ${({ theme }) => theme.colors.yellow900};
   padding: 0.7rem 1.6rem;
   white-space: ${({ paragraph }) => (paragraph ? 'pre-line' : 'nowrap')};
-  width: ${({ paragraph, width }) =>
-    paragraph && width ? `${width}rem` : 'auto'};
+  width: ${({ paragraph, width }) => (paragraph && width ? width : 'auto')};
   text-align: ${({ paragraph }) => (paragraph ? 'center' : 'left')};
 `
 

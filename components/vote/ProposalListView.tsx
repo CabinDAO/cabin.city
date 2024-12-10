@@ -81,7 +81,7 @@ const ProposalList = () => {
   const { proposals, proposalsLoaded } = useSnapshot()
 
   return (
-    <>
+    <ProposalListContainer>
       {!proposalsLoaded ? (
         <LoadingSpinner />
       ) : (
@@ -107,9 +107,15 @@ const ProposalList = () => {
           </ProposalRow>
         ))
       )}
-    </>
+    </ProposalListContainer>
   )
 }
+
+const ProposalListContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+`
 
 const ProposalRow = styled.div`
   position: relative;
