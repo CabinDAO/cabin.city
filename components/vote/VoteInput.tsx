@@ -21,6 +21,8 @@ import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 import { voteToText } from '@/components/vote/VoteResultList'
 import { InputTextArea } from '@/components/core/InputTextArea'
 
+const MAX_REASON_LENGTH = 300
+
 const snapshotClient = new snapshot.Client712('https://hub.snapshot.org')
 
 export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
@@ -241,9 +243,16 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       })}
 
       <InputTextArea
+        label="Reason"
         value={reason}
-        onChange={(e) => setReason(e.target.value)}
+        onChange={(e) => {
+          const text = e.target.value
+          if (text.length <= MAX_REASON_LENGTH && text.length >= 0) {
+            setReason(text)
+          }
+        }}
         placeholder="Share your reason (optional)"
+        helperText={`${reason.length}/${MAX_REASON_LENGTH}`}
       />
 
       {wallets.length ? (
