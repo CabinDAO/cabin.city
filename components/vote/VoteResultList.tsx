@@ -72,7 +72,7 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
                   position="top"
                   open={false}
                   paragraph
-                  width={width > breakpoint ? `35rem` : 'auto'}
+                  width={width > breakpoint ? `min(35rem, auto)` : 'auto'}
                 >
                   <ChoiceText>{choiceText}</ChoiceText>
                 </Tooltip>
@@ -86,7 +86,7 @@ export const VoteResultList = ({ proposal }: { proposal: Proposal }) => {
                     paragraph
                     width={
                       width > breakpoint
-                        ? 'min(50rem, 70vw)'
+                        ? 'min(50rem, 60vw)'
                         : 'min(30rem, 80vw)'
                     }
                     align={'start'}

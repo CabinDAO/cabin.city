@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useSnapshot } from '@/components/contexts/SnapshotContext'
+import { useBackend } from '@/components/hooks/useBackend'
+import { ProfileVotersResponse } from '@/utils/types/profile'
 import { timeAgo } from '@/utils/display-utils'
 import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
@@ -15,28 +17,42 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { VoteInput } from '@/components/vote/VoteInput'
 import { VoteResultBars } from '@/components/vote/VoteResultBars'
 import { VoteResultList } from '@/components/vote/VoteResultList'
+import { Avatar } from '@/components/profile/Avatar'
 
 export const ProposalView = () => {
   const router = useRouter()
+  const { useGet } = useBackend()
   const { proposals, proposalsLoaded } = useSnapshot()
   const proposal = proposals.find(
     (p) => p.id.toLowerCase() === router.query.id?.toString().toLowerCase()
   )
 
+  const { data } = useGet<ProfileVotersResponse>(
+    proposal ? 'api_profile_voters' : null,
+    { addresses: proposal?.author }
+  )
+  const authorProfile =
+    !proposal || !data || 'error' in data
+      ? null
+      : data.profiles[proposal.author.toLocaleLowerCase()]
+
   return (
     <BaseLayout>
-      <TitleCard icon="citizen" title="Recent Proposals" />
+      <TitleCard
+        icon="back-arrow"
+        title={authorProfile ? `${authorProfile?.name}'s Proposal` : 'Proposal'}
+        start={
+          authorProfile ? (
+            <Avatar srcCfId={authorProfile?.avatarCfId} size={2.5} />
+          ) : null
+        }
+        iconHref={expandRoute('vote')}
+      />
       <Container>
         {!proposalsLoaded ? (
           <LoadingSpinner />
         ) : (
           <>
-            <Body1
-              style={{ textDecoration: 'underline', cursor: 'pointer' }}
-              onClick={() => router.push(expandRoute('vote'))}
-            >
-              Back to list
-            </Body1>
             {!proposal ? (
               <Body1>Proposal not found</Body1>
             ) : (

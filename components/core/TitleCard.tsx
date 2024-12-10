@@ -5,23 +5,23 @@ import Icon, { IconName } from './Icon'
 import { ZoomInCard } from './ZoomInCard'
 import { H1 } from './Typography'
 
-interface TitleCardProps {
-  title: string
-  icon: IconName
-  iconHref?: string
-  onIconClick?: VoidFunction
-  end?: ReactNode | null
-  marginTop?: number
-}
-
 export const TitleCard = ({
   title,
   icon,
   iconHref,
   onIconClick,
+  start,
   end,
   marginTop,
-}: TitleCardProps) => {
+}: {
+  title: string
+  icon: IconName
+  iconHref?: string
+  onIconClick?: VoidFunction
+  start?: ReactNode | null
+  end?: ReactNode | null
+  marginTop?: number
+}) => {
   const [hovered, setHovered] = useState(false)
 
   return (
@@ -43,7 +43,10 @@ export const TitleCard = ({
       )}
 
       <ContentContainer>
-        <H1 $color="green900">{title}</H1>
+        <LeftContent>
+          {start}
+          <H1 $color="green900">{title}</H1>
+        </LeftContent>
         {end}
       </ContentContainer>
     </Container>
@@ -95,4 +98,10 @@ const ContentContainer = styled.div`
   padding: 1.2rem;
   width: 100%;
   text-align: left;
+`
+
+const LeftContent = styled.div`
+  display: flex;
+  gap: 1.6rem;
+  align-items: center;
 `
