@@ -78,7 +78,7 @@ const ChildWrapper = styled.div`
 
 const TooltipContainer = styled.div<{
   paragraph?: boolean
-  width?: number
+  width?: string
 }>`
   background: ${({ theme }) => theme.colors.yellow900};
   border-radius: 8px 0px;
