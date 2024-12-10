@@ -219,7 +219,7 @@ const Container = styled.div`
 const Votes = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.4rem;
 
   @media screen and (min-width: ${breakpoint}px) {
     display: grid;
