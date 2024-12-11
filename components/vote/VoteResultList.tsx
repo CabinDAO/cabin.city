@@ -207,6 +207,7 @@ export const voteToText = ({
 }
 
 export const percentForChoice = (votes: number, total: number) => {
+  console.log(votes, total, (votes / total) * 100)
   return votes ? ((votes / total) * 100).toFixed(1).replace(/\.0$/, '') : '0'
 }
 

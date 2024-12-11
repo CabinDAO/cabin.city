@@ -1,40 +1,125 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { attemptSync, SyncAttemptState } from '@/lib/sync/attemptSync'
-import { prisma, onchainAmountToDecimal } from '@/lib/prisma'
-import { $Enums } from '@prisma/client'
-import { Decimal } from '@prisma/client/runtime/library'
-import { getEthersAlchemyProvider } from '@/lib/chains'
+import { Provider } from 'ethers'
 import { CabinToken__factory } from 'generated/ethers'
+import { getEthersAlchemyProvider } from '@/lib/chains'
 import { cabinTokenConfigForEnv } from '@/lib/protocol-config'
+import { prisma, onchainAmountToDecimal } from '@/lib/prisma'
+import {
+  BlockSyncType,
+  BlockSyncStatus,
+  BlockSyncAttempt,
+} from '@prisma/client'
+import { Decimal } from '@prisma/client/runtime/library'
 
 const BLOCK_COUNT = new Decimal(2000)
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+const SAFE_BLOCK_THRESHOLD = 30
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  await attemptSync({
-    type: $Enums.BlockSyncType.CabinToken,
-    provider: getEthersAlchemyProvider(cabinTokenConfigForEnv.networkName),
-    initialBlock: new Decimal(cabinTokenConfigForEnv.initialBlock.toString()),
-    blockCount: BLOCK_COUNT,
-    res,
-    handler: _syncHandler,
-  })
+  const provider = getEthersAlchemyProvider(cabinTokenConfigForEnv.networkName)
+
+  const { sync: syncAttempt, message } = await getSyncToWorkOn(provider)
+  if (!syncAttempt) {
+    console.log(message ?? 'No sync attempt to work on, skipping')
+    res.status(200).send(
+      JSON.stringify({
+        message: message ?? 'No sync attempt to work on, skipping',
+      })
+    )
+    return
+  }
+
+  try {
+    const blocksTillLatest = new Decimal(await provider.getBlockNumber()).sub(
+      syncAttempt.endBlock
+    )
+
+    const result = await syncTokenBalances(
+      provider,
+      syncAttempt.startBlock,
+      syncAttempt.endBlock
+    )
+
+    if (syncAttempt.status == BlockSyncStatus.Successful) {
+      console.error(`sync attempt ${syncAttempt.id} already completed`)
+    } else {
+      await prisma.blockSyncAttempt.update({
+        where: {
+          id: syncAttempt.id,
+          status: syncAttempt.status,
+        },
+        data: {
+          status: BlockSyncStatus.Successful,
+        },
+      })
+    }
+
+    res.status(200).send(
+      JSON.stringify(
+        {
+          id: syncAttempt.id,
+          startBlock: syncAttempt.startBlock.toNumber(),
+          endBlock: syncAttempt.endBlock.toNumber(),
+          blocksTillLatest: blocksTillLatest.toNumber(),
+          result,
+        },
+        null,
+        2
+      )
+    )
+  } catch (error) {
+    console.error(error)
+    try {
+      if (syncAttempt.status == BlockSyncStatus.Failed) {
+        console.error(`sync attempt ${syncAttempt.id} already failed`)
+      } else {
+        await prisma.blockSyncAttempt.update({
+          where: {
+            id: syncAttempt.id,
+            status: syncAttempt.status,
+          },
+          data: {
+            status: BlockSyncStatus.Failed,
+          },
+        })
+      }
+
+      res
+        .status(400)
+        .send(
+          JSON.stringify(
+            { error: 'Sync attempt failed. Will attempt to retry.' },
+            null,
+            2
+          )
+        )
+    } catch (error) {
+      console.error(error)
+      res
+        .status(400)
+        .send(JSON.stringify({ error: 'Sync attempt failed.' }, null, 2))
+    }
+  }
 }
 
-async function _syncHandler(state: SyncAttemptState): Promise<void> {
+async function syncTokenBalances(
+  provider: Provider,
+  startBlock: Decimal,
+  endBlock: Decimal
+): Promise<void> {
   const cabinTokenContract = CabinToken__factory.connect(
     cabinTokenConfigForEnv.contractAddress,
-    state.provider
+    provider
   )
 
   const transferFilter = cabinTokenContract.filters.Transfer()
   const transfers = await cabinTokenContract.queryFilter(
     transferFilter,
-    state.startBlock.toNumber(),
-    state.endBlock.toNumber()
+    startBlock.toNumber(),
+    endBlock.toNumber()
   )
 
   const uniqueAddresses = new Set<string>()
@@ -65,15 +150,8 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
   })
 
   const cabinTokenBalances = await prisma.wallet.findMany({
-    where: {
-      address: {
-        in: Array.from(uniqueAddresses),
-      },
-    },
-    select: {
-      address: true,
-      cabinTokenBalance: true,
-    },
+    select: { address: true, cabinTokenBalance: true },
+    where: { address: { in: Array.from(uniqueAddresses) } },
   })
 
   const cabinTokenBalancesByAddress = cabinTokenBalances.reduce((acc, curr) => {
@@ -81,35 +159,88 @@ async function _syncHandler(state: SyncAttemptState): Promise<void> {
     return acc
   }, {} as Record<string, Decimal>)
 
-  const newBalancesByAddress = adjustments.reduce((acc, curr) => {
-    // If acc[curr.address] is defined below, it means that the address has multiple adjustments in this batch
-    // If it's not defined, we can use the balance from the DB
-    // Otherwise, we use 0
+  const updates: Record<string, Decimal> = {}
+  for (const adj of adjustments) {
     const currentBalance =
-      acc[curr.address] ??
-      cabinTokenBalancesByAddress[curr.address] ??
+      updates[adj.address] ??
+      cabinTokenBalancesByAddress[adj.address] ??
       new Decimal(0)
 
     const newBalance =
-      curr.type === 'ADD'
-        ? currentBalance.add(curr.amount)
-        : currentBalance.sub(curr.amount)
-    acc[curr.address] = newBalance
-    return acc
-  }, {} as Record<string, Decimal>)
+      adj.type === 'ADD'
+        ? currentBalance.add(adj.amount)
+        : currentBalance.sub(adj.amount)
+    updates[adj.address] = newBalance
+  }
 
-  for (const [address, balance] of Object.entries(newBalancesByAddress)) {
+  // TODO: this should be a single transaction so it can be atomic
+  for (const [address, balance] of Object.entries(updates)) {
     await prisma.wallet.upsert({
-      where: {
-        address: address.toLowerCase(),
-      },
-      update: {
-        cabinTokenBalance: balance,
-      },
-      create: {
-        address: address.toLowerCase(),
-        cabinTokenBalance: balance,
-      },
+      where: { address: address.toLowerCase() },
+      update: { cabinTokenBalance: balance },
+      create: { address: address.toLowerCase(), cabinTokenBalance: balance },
     })
   }
+}
+
+async function getSyncToWorkOn(
+  provider: Provider
+): Promise<{ sync: BlockSyncAttempt | null; message: string | null }> {
+  const initialBlock = new Decimal(
+    cabinTokenConfigForEnv.initialBlock.toString()
+  )
+
+  const latestSyncs = await prisma.blockSyncAttempt.findMany({
+    where: { type: BlockSyncType.CabinToken },
+    distinct: ['status'],
+    orderBy: { createdAt: 'desc' },
+  })
+
+  const latestPendingSync = latestSyncs.find((a) => a.status === 'Pending')
+  if (latestPendingSync) {
+    console.log(`token sync already in progress`)
+    return {
+      sync: null,
+      message: `token sync already in progress`,
+    }
+  }
+
+  const latestFailedSync = latestSyncs.find((a) => a.status === 'Failed')
+  if (latestFailedSync) {
+    return { sync: latestFailedSync, message: null }
+  }
+
+  const latestSuccessfulSync = latestSyncs.find(
+    (a) => a.status === 'Successful'
+  )
+
+  const latestBlockNumber = await provider.getBlockNumber()
+
+  // Find the latest safe block number
+  const maxSafeBlock = latestBlockNumber - SAFE_BLOCK_THRESHOLD
+
+  // If we're already up to date, there is nothing to attempt
+  if (latestSuccessfulSync?.endBlock.eq(maxSafeBlock)) {
+    return { sync: null, message: null }
+  }
+
+  const startBlock = latestSuccessfulSync
+    ? latestSuccessfulSync.endBlock.add(1)
+    : initialBlock
+
+  // Find the end block (don't exceed the max safe block)
+  const endBlock = startBlock.add(BLOCK_COUNT).gt(maxSafeBlock)
+    ? new Decimal(maxSafeBlock)
+    : startBlock.add(BLOCK_COUNT)
+
+  // Create a new sync attempt for the next N blocks in pending state
+  const sync = await prisma.blockSyncAttempt.create({
+    data: {
+      type: BlockSyncType.CabinToken,
+      status: BlockSyncStatus.Pending,
+      startBlock: startBlock,
+      endBlock: endBlock,
+    },
+  })
+  return { sync, message: null }
 }
