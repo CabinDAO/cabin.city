@@ -52,9 +52,9 @@ async function handler(
     profiles: profiles.reduce(
       (acc, profile) => ({
         ...acc,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- because query requires wallet address
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         [profile.wallet!.address]: {
-          // ↑ wallet is not nullable because query requires wallet address
+          // ↑ wallet is never null because query requires wallet address
           name: profile.name,
           externId: profile.externId,
           avatarCfId: profile.avatarCfId,
