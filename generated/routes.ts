@@ -36,6 +36,8 @@ export enum Routes {
   api_profile_voters = "/api/profile/voters",
   api_profile_vouch = "/api/profile/vouch",
   api_stamp_claim = "/api/stamp/claim",
+  api_stamp_grant = "/api/stamp/grant",
+  api_stamp_list = "/api/stamp/list",
   api_sync_token = "/api/sync/token",
   api_unlock_dataBuilder = "/api/unlock/data-builder",
   api_unlock_refetchStatus = "/api/unlock/refetch-status",

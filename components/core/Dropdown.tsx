@@ -13,39 +13,6 @@ import { Subline2 } from './Typography'
 import { InputText } from './InputText'
 import { Avatar } from '@/components/profile/Avatar'
 
-const Container = styled.div`
-  position: relative;
-`
-
-const StyledSelect = styled.div`
-  width: 100%;
-  height: 100%;
-  outline: none;
-  height: 1.6rem;
-  display: block;
-`
-
-interface DropdownProps {
-  id?: string
-  label?: string
-  required?: boolean
-  info?: string
-  placeholder?: string
-  selectedOption?: SelectOption
-  error?: boolean
-  disabled?: boolean
-  onSelect: (_opt: SelectOption) => void
-  onRemove?: (_opt: SelectOption) => void
-  options: SelectOption[]
-  multiple?: boolean
-  variant?: 'primary' | 'secondary'
-  message?: string
-  menuMaxHeight?: number
-  className?: string
-  enableSearch?: boolean
-  onSearch?: (value: string) => void
-}
-
 export const Dropdown = ({
   id,
   label,
@@ -62,7 +29,25 @@ export const Dropdown = ({
   enableSearch,
   className,
   onSearch,
-}: DropdownProps) => {
+}: {
+  id?: string
+  label?: string
+  required?: boolean
+  info?: string
+  placeholder?: string
+  selectedOption?: SelectOption
+  error?: boolean
+  disabled?: boolean
+  onSelect: (_opt: SelectOption) => void
+  options: SelectOption[]
+  multiple?: boolean
+  variant?: 'primary' | 'secondary'
+  message?: string
+  menuMaxHeight?: string
+  className?: string
+  enableSearch?: boolean
+  onSearch?: (value: string) => void
+}) => {
   const {
     selectionRef,
     active,
@@ -173,7 +158,19 @@ export const Dropdown = ({
     </ClickAway>
   )
 }
+Dropdown.displayName = 'Dropdown'
 
+const Container = styled.div`
+  position: relative;
+`
+
+const StyledSelect = styled.div`
+  width: 100%;
+  height: 100%;
+  outline: none;
+  height: 1.6rem;
+  display: block;
+`
 const OpaqueSubline2 = styled(Subline2)`
   opacity: 0.42;
 `
@@ -181,5 +178,3 @@ const OpaqueSubline2 = styled(Subline2)`
 const SearchIcon = styled(Icon)`
   cursor: pointer;
 `
-
-Dropdown.displayName = 'Dropdown'

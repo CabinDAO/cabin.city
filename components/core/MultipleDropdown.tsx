@@ -10,37 +10,6 @@ import ListElement from './ListElement'
 import { Menu, MenuPopup, MenuSection } from './Menu'
 import { Subline2 } from './Typography'
 
-const Container = styled.div`
-  position: relative;
-`
-
-const StyledSelect = styled.div`
-  width: 100%;
-  height: 100%;
-  outline: none;
-  height: 1.6rem;
-  display: block;
-`
-
-interface MultipleDropdownOptions {
-  id?: string
-  label?: string
-  required?: boolean
-  info?: string
-  placeholder?: string
-  selectedOptions?: SelectOption[]
-  error?: boolean
-  disabled?: boolean
-  onSelect: (_opt: SelectOption) => void
-  onRemove?: (_opt: SelectOption) => void
-  options: SelectOption[]
-  multiple?: boolean
-  variant?: 'primary' | 'secondary'
-  message?: string
-  menuMaxHeight?: number
-  className?: string
-}
-
 export const MultipleDropdown = ({
   id,
   label,
@@ -56,7 +25,23 @@ export const MultipleDropdown = ({
   message,
   menuMaxHeight,
   className,
-}: MultipleDropdownOptions) => {
+}: {
+  id?: string
+  label?: string
+  required?: boolean
+  info?: string
+  placeholder?: string
+  selectedOptions?: SelectOption[]
+  error?: boolean
+  disabled?: boolean
+  onSelect: (_opt: SelectOption) => void
+  options: SelectOption[]
+  multiple?: boolean
+  variant?: 'primary' | 'secondary'
+  message?: string
+  menuMaxHeight?: string
+  className?: string
+}) => {
   const {
     selectionRef,
     active,
@@ -130,8 +115,20 @@ export const MultipleDropdown = ({
   )
 }
 
+MultipleDropdown.displayName = 'MultipleDropdown'
+
+const Container = styled.div`
+  position: relative;
+`
+
+const StyledSelect = styled.div`
+  width: 100%;
+  height: 100%;
+  outline: none;
+  height: 1.6rem;
+  display: block;
+`
+
 const OpaqueSubline2 = styled(Subline2)`
   opacity: 0.42;
 `
-
-MultipleDropdown.displayName = 'MultipleDropdown'

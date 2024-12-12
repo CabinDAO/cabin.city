@@ -17,3 +17,24 @@ export type StampClaimParamsType = z.infer<typeof StampClaimParams>
 export type StampClaimResponse =
   | { success: boolean; previouslyClaimed: boolean }
   | APIError
+
+export type StampListResponse =
+  | {
+      stamps: {
+        id: number
+        name: string
+      }[]
+    }
+  | APIError
+
+export const StampGrantParams = z
+  .object({
+    id: z.number(),
+    profileExternId: z.string(),
+  })
+  .strict()
+export type StampGrantParamsType = z.infer<typeof StampGrantParams>
+
+export type StampGrantResponse =
+  | { success: boolean; previouslyClaimed: boolean }
+  | APIError

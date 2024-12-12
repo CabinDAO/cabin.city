@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Caption } from './Typography'
 
 const Container = styled.div<{
-  maxHeight?: number
+  maxHeight?: string
   backgroundColor: ColorName
 }>`
   display: flex;
@@ -14,8 +14,10 @@ const Container = styled.div<{
   gap: 1.2rem;
   background: ${(props) => props.theme.colors[props.backgroundColor]};
   border: 1px solid ${(props) => props.theme.colors.yellow900};
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: ${(props) => (props.maxHeight ? 'auto' : 'hidden')};
   height: 100%;
+  ${(props) => props.maxHeight && `max-height: ${props.maxHeight};`}
   width: 100%;
 `
 
@@ -59,7 +61,7 @@ export const MenuPopup = styled.div<MenuPopupProps>`
 
 interface MenuProps {
   children: ReactNode
-  maxHeight?: number
+  maxHeight?: string
   backgroundColor?: ColorName
 }
 
