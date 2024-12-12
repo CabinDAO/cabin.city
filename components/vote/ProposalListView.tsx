@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { expandRoute } from '@/utils/routing'
 import { useSnapshot } from '@/components/contexts/SnapshotContext'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { timeAgo } from '@/utils/display-utils'
+import { humanTimeDiff } from '@/utils/display-utils'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -101,7 +101,7 @@ const ProposalList = () => {
             </Top>
             <ProposalRender proposal={proposal} maxLines={5} linkify={false} />
             {proposal.state !== 'active' && (
-              <Body1>Ended {timeAgo(proposal.end)}</Body1>
+              <Body1>Ended {humanTimeDiff(proposal.end)} ago</Body1>
             )}
             <VoteResultBars proposal={proposal} brief />
           </ProposalRow>

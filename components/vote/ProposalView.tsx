@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useSnapshot } from '@/components/contexts/SnapshotContext'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileVotersResponse } from '@/utils/types/profile'
-import { timeAgo } from '@/utils/display-utils'
+import { humanTimeDiff } from '@/utils/display-utils'
 import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
@@ -82,10 +82,13 @@ export const ProposalView = () => {
                   ) : (
                     <>
                       <H2>Results</H2>
-                      <Body1>Ended {timeAgo(proposal.end)}</Body1>
+                      <Body1>Ended {humanTimeDiff(proposal.end)} ago</Body1>
                     </>
                   )}
                   <VoteResultBars proposal={proposal} />
+                  {proposal.state === 'active' && (
+                    <Body1>Voting ends in {humanTimeDiff(proposal.end)}</Body1>
+                  )}
                   <VoteResultList proposal={proposal} />
                 </Results>
                 <Body1>

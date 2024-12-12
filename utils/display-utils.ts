@@ -181,9 +181,10 @@ export const balanceToVotes = (balance: number | null): string => {
   return balance ? Math.sqrt(balance).toFixed(0) : '0'
 }
 
-export const timeAgo = (timestamp: number) => {
+export const humanTimeDiff = (timestamp: number) => {
   const now = Date.now() / 1000
-  const diff = now - timestamp
+  const diff = Math.abs(now - timestamp)
+
   const seconds = Math.floor(diff)
   const minutes = Math.floor(diff / 60)
   const hours = Math.floor(minutes / 60)
@@ -192,12 +193,12 @@ export const timeAgo = (timestamp: number) => {
   const months = Math.floor(days / 30)
   const years = Math.floor(days / 365)
 
-  if (years > 0) return `${years} year${years === 1 ? '' : 's'} ago`
-  if (months > 0) return `${months} month${months === 1 ? '' : 's'} ago`
-  if (weeks > 0) return `${weeks} week${weeks === 1 ? '' : 's'} ago`
-  if (days > 0) return `${days} day${days === 1 ? '' : 's'} ago`
-  if (hours > 0) return `${hours} hour${hours === 1 ? '' : 's'} ago`
-  if (minutes > 0) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`
-  if (seconds > 0) return `${seconds} second${seconds === 1 ? '' : 's'} ago`
-  return 'just now'
+  if (years > 0) return `${years} year${years === 1 ? '' : 's'}`
+  if (months > 0) return `${months} month${months === 1 ? '' : 's'}`
+  if (weeks > 0) return `${weeks} week${weeks === 1 ? '' : 's'}`
+  if (days > 0) return `${days} day${days === 1 ? '' : 's'}`
+  if (hours > 0) return `${hours} hour${hours === 1 ? '' : 's'}`
+  if (minutes > 0) return `${minutes} minute${minutes === 1 ? '' : 's'}`
+  if (seconds > 0) return `${seconds} second${seconds === 1 ? '' : 's'}`
+  return 'less than a second'
 }
