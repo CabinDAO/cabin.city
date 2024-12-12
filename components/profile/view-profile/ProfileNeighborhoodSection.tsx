@@ -1,7 +1,11 @@
 import Link from 'next/link'
 import { useBackend } from '@/components/hooks/useBackend'
 import { MeFragment, ProfileFragment } from '@/utils/types/profile'
-import { LocationFragment, LocationListResponse } from '@/utils/types/location'
+import {
+  LocationFragment,
+  LocationListParamsType,
+  LocationListResponse,
+} from '@/utils/types/location'
 import { formatShortAddress } from '@/lib/address'
 import { cloudflareImageUrl } from '@/lib/image'
 import { expandRoute } from '@/utils/routing'
@@ -28,7 +32,7 @@ export const ProfileNeighborhoodSection = ({
     'api_location_list',
     {
       stewardExternId: profile.externId,
-    }
+    } satisfies LocationListParamsType
   )
 
   if (!locationData || 'error' in locationData) {

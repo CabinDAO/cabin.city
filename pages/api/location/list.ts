@@ -97,6 +97,10 @@ const sortPrequery = async (
 
   // NOTE: if we ever drop maxDist, we can drop the WITH clause and merge back down to a single SELECT
 
+  // NOTE: there can be multiple stewards per location, which may lead to multiple rows for
+  // the same location. this is ok because we're only getting ids and then querying for
+  // locations later, but its still a gotcha if things change in the future
+
   const sqlQuery = Prisma.sql`
     WITH with_distance AS (
       SELECT 
