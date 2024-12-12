@@ -10,6 +10,7 @@ import {
   BlockSyncAttempt,
 } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
+import { sendToDiscord } from '@/lib/discord'
 
 const BLOCK_COUNT = new Decimal(2000)
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -131,6 +132,8 @@ async function syncTokenBalances(
   transfers.forEach((t) => {
     const { from, to, value } = t.args
 
+    sendToDiscord(`${from} sent ${value} tokens to ${to}`)
+
     if (from != ZERO_ADDRESS) {
       uniqueAddresses.add(from)
       adjustments.push({
@@ -175,6 +178,7 @@ async function syncTokenBalances(
 
   // TODO: this should be a single transaction so it can be atomic
   for (const [address, balance] of Object.entries(updates)) {
+    sendToDiscord(`setting ${address} balance to ${balance}`)
     await prisma.wallet.upsert({
       where: { address: address.toLowerCase() },
       update: { cabinTokenBalance: balance },
