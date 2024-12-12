@@ -115,11 +115,12 @@ const toFragments = (
               name: activity.location.name,
               description: activity.location.description,
               bannerImageCfId: activity.location.bannerImageCfId,
-              steward: activity.location.steward
-                ? {
-                    externId: activity.location.steward.externId,
-                  }
-                : null,
+              stewards:
+                activity.location.stewards?.length > 0
+                  ? activity.location.stewards.map((s) => ({
+                      externId: s.profile.externId,
+                    }))
+                  : [],
               address: {
                 locality: activity.location.address?.locality || '',
                 admininstrativeAreaLevel1Short:
@@ -158,11 +159,12 @@ const toFragments = (
                       lng: activity.offer.location.address.lng || null,
                     }
                   : null,
-                steward: activity.offer.location.steward
-                  ? {
-                      externId: activity.offer.location.steward.externId,
-                    }
-                  : null,
+                stewards:
+                  activity.offer.location.stewards?.length > 0
+                    ? activity.offer.location.stewards.map((s) => ({
+                        externId: s.profile.externId,
+                      }))
+                    : [],
               },
             }
           : undefined,
@@ -172,11 +174,6 @@ const toFragments = (
         name: activity.profile.name,
         citizenshipStatus: activity.profile
           .citizenshipStatus as CitizenshipStatus,
-        roles: activity.profile.roles.map((role) => ({
-          hatId: role.walletHat?.hatId || null,
-          type: role.type as RoleType,
-          level: role.level as RoleLevel,
-        })),
         avatarCfId: activity.profile.avatarCfId,
       },
       reactionCount: activity._count.reactions,

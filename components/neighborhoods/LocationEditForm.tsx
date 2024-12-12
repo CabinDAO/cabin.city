@@ -257,8 +257,10 @@ export function LocationEditForm({
           />
           {user?.isAdmin && (
             <InputText
-              placeholder={location.steward?.name ?? 'no steward'}
-              label="Steward"
+              placeholder={
+                location.stewards.map((s) => s.name).join(', ') ?? 'no stewards'
+              }
+              label="Stewards"
               disabled
             />
           )}

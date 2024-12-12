@@ -3,8 +3,6 @@ import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import {
-  RoleLevel,
-  RoleType,
   CitizenshipStatus,
   ContactFieldType,
   ProfileMeResponse,
@@ -97,12 +95,6 @@ const profileToFragment = (profile: MyProfileWithRelations): MeFragment => {
           name: profile.voucher.name,
         }
       : null,
-
-    roles: profile.roles.map((role) => ({
-      hatId: role.walletHat?.hatId || null,
-      type: role.type as RoleType,
-      level: role.level as RoleLevel,
-    })),
   }
 }
 
@@ -130,11 +122,6 @@ type MyProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     contactFields: true
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
   }
 }>
 
@@ -159,9 +146,4 @@ const MyProfileQueryInclude = {
     },
   },
   contactFields: true,
-  roles: {
-    include: {
-      walletHat: true,
-    },
-  },
 }

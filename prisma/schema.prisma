@@ -110,7 +110,7 @@ model Profile {
   invitees   Invite[] @relation("Invitees")
 
   roles              Role[]
-  stewardedLocations Location[]         @relation("Steward")
+  stewardedLocations LocationSteward[]
   votes              LocationVote[]
   activities         Activity[]
   reactions          ActivityReaction[]
@@ -241,12 +241,10 @@ model Location {
   mediaItems      LocationMediaItem[]
   publishedAt     DateTime?
 
-  steward   Profile? @relation("Steward", fields: [stewardId], references: [id])
-  stewardId Int?
-
   offers     Offer[]
   votes      LocationVote[]
   activities Activity[]
+  stewards   LocationSteward[]
 }
 
 enum LocationType {
@@ -303,6 +301,19 @@ enum LocationMediaCategory {
   Sleeping
   Working
   Features
+}
+
+model LocationSteward {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  locationId Int
+  profile    Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId  Int
+
+  @@unique([locationId, profileId])
 }
 
 model Message {

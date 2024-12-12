@@ -24,7 +24,11 @@ async function handler(
 
   const location = await prisma.location.create({
     data: {
-      stewardId: user.id,
+      stewards: {
+        connect: {
+          id: user.id,
+        },
+      },
       externId: randomId('location'),
       type: $Enums.LocationType.Neighborhood,
       name: `${user.name}'s New Neighborhood`,

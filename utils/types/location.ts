@@ -56,7 +56,7 @@ export type LocationFragment = {
   address: AddressFragmentType | null
   bannerImageCfId: string
   publishedAt: string | null
-  steward: ProfileBasicFragment | null
+  stewards: ProfileBasicFragment[]
   mediaItems: {
     category: LocationMediaCategory
     cfId: string
@@ -138,16 +138,15 @@ export type LocationDeleteResponse = Record<string, never> | APIError
 export type LocationWithRelations = Prisma.LocationGetPayload<{
   include: {
     address: true
-    steward: {
+    stewards: {
       include: {
-        wallet: {
-          select: {
-            cabinTokenBalance: true
-          }
-        }
-        roles: {
+        profile: {
           include: {
-            walletHat: true
+            wallet: {
+              select: {
+                cabinTokenBalance: true // TODO: still needed? can we drop it?
+              }
+            }
           }
         }
       }
@@ -169,16 +168,15 @@ export const LocationQueryInclude = (
 ) => {
   return {
     address: true,
-    steward: {
+    stewards: {
       include: {
-        wallet: {
-          select: {
-            cabinTokenBalance: true,
-          },
-        },
-        roles: {
+        profile: {
           include: {
-            walletHat: true,
+            wallet: {
+              select: {
+                cabinTokenBalance: true,
+              },
+            },
           },
         },
       },

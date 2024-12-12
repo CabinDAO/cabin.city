@@ -6,6 +6,7 @@ import { useUser } from '@/components/auth/useUser'
 import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import { LocationFragment } from '@/utils/types/location'
 import { format, parseISO } from 'date-fns'
+import { expandRoute } from '@/utils/routing'
 import { appDomainWithProto } from '@/utils/display-utils'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled, { css } from 'styled-components'
@@ -18,7 +19,6 @@ import { Avatar } from '@/components/profile/Avatar'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ContactUsLink } from '@/components/core/ContactUsLink'
-import { expandRoute } from '@/utils/routing'
 import { ContactModal } from '@/components/contact/ContactModal'
 
 export const StewardContact = ({
@@ -35,44 +35,46 @@ export const StewardContact = ({
   return (
     <Container>
       <Top>
-        {steward ? (
-          <Link href={`/profile/${steward.externId}`}>
-            <Avatar srcCfId={steward.avatarCfId} size={7.2} />
-          </Link>
-        ) : (
-          <IconWarp>
-            <Icon name={'silhouette'} size={4} />
-          </IconWarp>
-        )}
         <Info>
-          <Name>
-            <NoWrap>
-              <H4>{steward ? steward.name : 'No Steward (yet)'}</H4>
-            </NoWrap>
-          </Name>
-          <Caption>
-            {steward ? (
-              <>
-                {steward.cabinTokenBalanceInt !== null && (
-                  <>
-                    {steward.cabinTokenBalanceInt.toLocaleString('en-US')}{' '}
-                    ₡ABIN&nbsp;·&nbsp;
-                  </>
-                )}
-                Joined {format(parseISO(steward.createdAt), 'yyyy')}
-              </>
-            ) : (
-              'Maybe you?'
-            )}
-          </Caption>
+          {steward ? (
+            <Link href={`/profile/${steward.externId}`}>
+              <Avatar srcCfId={steward.avatarCfId} size={7.2} />
+            </Link>
+          ) : (
+            <IconWarp>
+              <Icon name={'silhouette'} size={4} />
+            </IconWarp>
+          )}
+          <NameAndDetails>
+            <Name>
+              <NoWrap>
+                <H4>{steward ? steward.name : 'No Steward (yet)'}</H4>
+              </NoWrap>
+            </Name>
+            <Caption>
+              {steward ? (
+                <>
+                  {steward.cabinTokenBalanceInt !== null && (
+                    <>
+                      {steward.cabinTokenBalanceInt.toLocaleString('en-US')}{' '}
+                      ₡ABIN&nbsp;·&nbsp;
+                    </>
+                  )}
+                  Joined {format(parseISO(steward.createdAt), 'yyyy')}
+                </>
+              ) : (
+                'Maybe you?'
+              )}
+            </Caption>
+          </NameAndDetails>
         </Info>
-      </Top>
 
-      <Body1>
-        {steward
-          ? steward.bio
-          : 'You can apply to steward this neighborhood and help it grow'}
-      </Body1>
+        <Body1>
+          {steward
+            ? steward.bio
+            : 'You can apply to steward this neighborhood and help it grow'}
+        </Body1>
+      </Top>
 
       <ButtonContainer>
         <ContactButton
@@ -117,7 +119,9 @@ const Container = styled.div`
   display: flex;
   flex-flow: column;
   width: 100%;
+  height: 100%;
   gap: 1.6rem;
+  justify-content: space-between;
 
   ${Body1} {
     opacity: 0.75;
@@ -125,6 +129,13 @@ const Container = styled.div`
 `
 
 const Top = styled.div`
+  display: flex;
+  flex-flow: column;
+  width: 100%;
+  gap: 1.6rem;
+`
+
+const Info = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -145,7 +156,7 @@ const IconWarp = styled.div`
   align-items: center;
 `
 
-const Info = styled.div`
+const NameAndDetails = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

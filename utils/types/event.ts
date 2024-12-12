@@ -38,9 +38,9 @@ export type EventFragment = {
     type: LocationType
     bannerImageCfId: string
     address: ShortAddressFragmentType | null
-    steward: {
+    stewards: {
       externId: string
-    } | null
+    }[]
   }
 }
 
@@ -106,9 +106,13 @@ export type EventWithRelations = Prisma.OfferGetPayload<{
     location: {
       include: {
         address: true
-        steward: {
+        stewards: {
           select: {
-            externId: true
+            profile: {
+              select: {
+                externId: true
+              }
+            }
           }
         }
       }
@@ -121,9 +125,13 @@ export const EventQueryInclude = {
   location: {
     include: {
       address: true,
-      steward: {
+      stewards: {
         select: {
-          externId: true,
+          profile: {
+            select: {
+              externId: true,
+            },
+          },
         },
       },
     },

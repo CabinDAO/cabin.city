@@ -14,8 +14,6 @@ import {
 } from '@/utils/api/wrapHandler'
 import {
   ProfileGetResponse,
-  RoleLevel,
-  RoleType,
   CitizenshipStatus,
   ProfileFragment,
   ContactFieldType,
@@ -277,11 +275,6 @@ export const profileToFragment = (
       value: cf.value,
     })),
     tags: profile.tags as ProfileTag[],
-    roles: profile.roles.map((role) => ({
-      hatId: role.walletHat?.hatId || null,
-      type: role.type as RoleType,
-      level: role.level as RoleLevel,
-    })),
     stamps: profile.stamps
       .slice()
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())

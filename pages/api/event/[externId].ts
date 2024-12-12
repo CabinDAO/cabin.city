@@ -123,11 +123,7 @@ async function handleDelete(
   const offerToDelete = await prisma.offer.findUnique({
     where: { externId },
     include: {
-      location: {
-        include: {
-          steward: true,
-        },
-      },
+      location: { include: { stewards: { include: { profile: true } } } },
     },
   })
 

@@ -3,18 +3,19 @@ import { Subline1 } from '@/components/core/Typography'
 import styled from 'styled-components'
 
 export function ActiveBadge({
-  steward,
+  stewards,
 }: {
-  steward: { externId: string } | null
+  stewards: { externId: string }[]
 }) {
+  const isActive = stewards.length > 0
   return (
     <Container>
       <Icon
         name="logo-cabin"
-        color={steward ? 'green400' : 'yellow100'}
+        color={isActive ? 'green400' : 'yellow100'}
         size={1.6}
       />
-      {steward ? (
+      {isActive ? (
         <Subline1 $color={'green400'}>Active</Subline1>
       ) : (
         <Subline1 $color={'yellow100'}>Inactive</Subline1>

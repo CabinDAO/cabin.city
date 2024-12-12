@@ -82,11 +82,9 @@ export const eventToFragment = (event: EventWithRelations): EventFragment => {
             lng: event.location.address.lng,
           }
         : null,
-      steward: event.location.steward
-        ? {
-            externId: event.location.steward.externId,
-          }
-        : null,
+      stewards: event.location.stewards.map((s) => ({
+        externId: s.profile.externId,
+      })),
     },
   }
 }

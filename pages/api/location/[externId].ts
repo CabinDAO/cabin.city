@@ -72,7 +72,7 @@ async function handleGet(
 
   if (!location.publishedAt) {
     const user = await getUser(opts.auth)
-    if (!user || !canEditLocation(user, location)) {
+    if (!user || !canEditLocation(user, location as LocationWithRelations)) {
       res.status(404).send({ error: 'Location not found' })
       return
     }
@@ -95,7 +95,7 @@ async function handlePost(
       externId: externId,
     },
     include: {
-      steward: true,
+      stewards: { include: { profile: true } },
       mediaItems: true,
     },
   })
@@ -200,7 +200,7 @@ async function handleDelete(
 
   const locationToDelete = await prisma.location.findUnique({
     where: { externId },
-    include: { steward: true },
+    include: { stewards: { include: { profile: true } } },
   })
 
   if (!locationToDelete) {

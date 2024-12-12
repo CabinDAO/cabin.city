@@ -158,9 +158,11 @@ export const LocationView = ({ externId }: { externId: string }) => {
         <AboutContent>
           <RichTextRender initialContent={location.description} />
           <StewardContainer>
-            <StewardDetails>
-              <StewardContact steward={location.steward} location={location} />
-            </StewardDetails>
+            {location.stewards.map((s) => (
+              <StewardDetails key={s.externId}>
+                <StewardContact steward={s} location={location} />
+              </StewardDetails>
+            ))}
           </StewardContainer>
         </AboutContent>
       </Section>
@@ -195,6 +197,13 @@ const StewardContainer = styled.div`
   width: 100%;
   padding-top: 2.4rem;
   border-top: 1px solid ${({ theme }) => theme.colors.green900}1e;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+
+  ${({ theme }) => theme.bp.md} {
+    flex-direction: row;
+  }
 `
 
 const StewardDetails = styled.div`

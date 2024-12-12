@@ -40,9 +40,10 @@ export type ActivityListFragment = {
       'externId' | 'name' | 'bannerImageCfId' | 'eventCount'
     > & {
       address: ShortAddressFragmentType
-      steward: LocationFragment['steward'] extends null
-        ? null
-        : Pick<NonNullable<LocationFragment['steward']>, 'externId'> | null
+      stewards: Pick<
+        NonNullable<LocationFragment['stewards']>[number],
+        'externId'
+      >[]
     }
     offer?: Pick<
       EventFragment,
@@ -54,7 +55,6 @@ export type ActivityListFragment = {
     externId: string
     name: string
     citizenshipStatus: CitizenshipStatus | null
-    roles: RoleFragment[]
     avatarCfId: string
   }
 
@@ -116,11 +116,6 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
         citizenshipStatus: true
         citizenshipTokenId: true
         avatarCfId: true
-        roles: {
-          include: {
-            walletHat: true
-          }
-        }
       }
     }
     profileStamp: {
@@ -155,9 +150,13 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
             lng: true
           }
         }
-        steward: {
+        stewards: {
           select: {
-            externId: true
+            profile: {
+              select: {
+                externId: true
+              }
+            }
           }
         }
       }
@@ -188,9 +187,13 @@ export type ActivityWithRelations = Prisma.ActivityGetPayload<{
                 lng: true
               }
             }
-            steward: {
+            stewards: {
               select: {
-                externId: true
+                profile: {
+                  select: {
+                    externId: true
+                  }
+                }
               }
             }
           }
@@ -212,11 +215,6 @@ export const ActivityQueryInclude = {
       citizenshipStatus: true,
       citizenshipTokenId: true,
       avatarCfId: true,
-      roles: {
-        include: {
-          walletHat: true,
-        },
-      },
     },
   },
   profileStamp: {
@@ -251,9 +249,13 @@ export const ActivityQueryInclude = {
           lng: true,
         },
       },
-      steward: {
+      stewards: {
         select: {
-          externId: true,
+          profile: {
+            select: {
+              externId: true,
+            },
+          },
         },
       },
     },
@@ -284,9 +286,13 @@ export const ActivityQueryInclude = {
               lng: true,
             },
           },
-          steward: {
+          stewards: {
             select: {
-              externId: true,
+              profile: {
+                select: {
+                  externId: true,
+                },
+              },
             },
           },
         },

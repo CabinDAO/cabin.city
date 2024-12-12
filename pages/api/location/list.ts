@@ -20,7 +20,7 @@ import {
   LocationType,
   LocationWithRelations,
 } from '@/utils/types/location'
-import { CitizenshipStatus, RoleLevel, RoleType } from '@/utils/types/profile'
+import { CitizenshipStatus } from '@/utils/types/profile'
 
 export default wrapHandler(handler)
 
@@ -230,26 +230,19 @@ export const locationToFragment = (
         }
       : null,
     bannerImageCfId: loc.bannerImageCfId,
-    steward: loc.steward
-      ? {
-          createdAt: loc.steward.createdAt.toISOString(),
-          externId: loc.steward.externId,
-          name: loc.steward.name,
-          email: loc.steward.email,
-          bio: loc.steward.bio,
-          citizenshipStatus: loc.steward
-            .citizenshipStatus as CitizenshipStatus | null,
-          cabinTokenBalanceInt: loc.steward.wallet
-            ? loc.steward.wallet.cabinTokenBalance.toNumber()
-            : null,
-          avatarCfId: loc.steward.avatarCfId,
-          roles: loc.steward.roles.map((role) => ({
-            hatId: role.walletHat?.hatId || null,
-            type: role.type as RoleType,
-            level: role.level as RoleLevel,
-          })),
-        }
-      : null,
+    stewards: loc.stewards.map((s) => ({
+      createdAt: s.profile.createdAt.toISOString(),
+      externId: s.profile.externId,
+      name: s.profile.name,
+      email: s.profile.email,
+      bio: s.profile.bio,
+      citizenshipStatus: s.profile
+        .citizenshipStatus as CitizenshipStatus | null,
+      cabinTokenBalanceInt: s.profile.wallet
+        ? s.profile.wallet.cabinTokenBalance.toNumber()
+        : null,
+      avatarCfId: s.profile.avatarCfId,
+    })),
     mediaItems: loc.mediaItems.map((mi) => {
       return {
         category: mi.category as LocationMediaCategory,

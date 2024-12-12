@@ -31,6 +31,7 @@ async function handler(
     where: {
       externId: params.locationExternId,
     },
+    include: { stewards: { include: { profile: true } } },
   })
 
   if (!location) {

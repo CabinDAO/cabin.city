@@ -178,7 +178,6 @@ export type ProfileBasicFragment = {
   citizenshipStatus: CitizenshipStatus | null
   cabinTokenBalanceInt: number | null
   avatarCfId: string
-  roles: RoleFragment[]
 }
 
 export type ProfileFragment = ProfileBasicFragment & {
@@ -265,7 +264,6 @@ export type MeFragment = {
   } | null
 
   contactFields: ContactFragmentType[]
-  roles: RoleFragment[]
   locationCount: number
 }
 
@@ -329,11 +327,6 @@ export type ProfileWithRelations = Prisma.ProfileGetPayload<{
       }
     }
     contactFields: true
-    roles: {
-      include: {
-        walletHat: true
-      }
-    }
     stamps: {
       select: {
         createdAt: true
@@ -364,11 +357,6 @@ export const ProfileQueryInclude = {
     },
   },
   contactFields: true,
-  roles: {
-    include: {
-      walletHat: true,
-    },
-  },
   stamps: {
     select: {
       createdAt: true,

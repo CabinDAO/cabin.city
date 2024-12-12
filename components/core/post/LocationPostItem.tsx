@@ -26,7 +26,7 @@ export const LocationPostItem = ({
 
   return (
     <OuterContainer>
-      {!hideVerifiedTag && <ActiveBadge steward={location.steward} />}
+      {!hideVerifiedTag && <ActiveBadge stewards={location.stewards} />}
       <Container onClick={handleOnClick}>
         <ImageContainer>
           {bannerImageCfId ? (
