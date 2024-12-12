@@ -6,6 +6,7 @@ import {
   useEffect,
   useState,
 } from 'react'
+import * as Sentry from '@sentry/nextjs'
 import { GraphQLClient } from 'graphql-request'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
@@ -109,14 +110,19 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
 
   const reloadProposals = useCallback(async () => {
     setProposalsLoaded(false)
-    // should this be done via try/finally?
-    const data = await snapshotGraphQLClient.request<{ proposals: Proposal[] }>(
-      proposalsQuery(space)
-    )
-    setProposals(data.proposals)
-    setCountActiveProposals(
-      data.proposals.filter((p) => p.state === 'active').length
-    )
+
+    try {
+      const data = await snapshotGraphQLClient.request<{
+        proposals: Proposal[]
+      }>(proposalsQuery(space))
+      setProposals(data.proposals)
+      setCountActiveProposals(
+        data.proposals.filter((p) => p.state === 'active').length
+      )
+    } catch (error: unknown) {
+      Sentry.captureException(error, { extra: { space } })
+    }
+
     setProposalsLoaded(true)
   }, [space])
 
