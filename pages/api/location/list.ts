@@ -107,7 +107,8 @@ const sortPrequery = async (
       FROM "Location" l
       LEFT JOIN "Address" a ON l.id = a."locationId"
       LEFT JOIN "Offer" o ON l.id = o."locationId"
-      LEFT JOIN "Profile" steward ON l."stewardId" = steward.id
+      LEFT JOIN "LocationSteward" sl ON l.id = sl."locationId"
+      LEFT JOIN "Profile" steward ON sl."profileId" = steward.id
       WHERE (
         ${
           params.searchQuery
