@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import * as Sentry from '@sentry/nextjs'
 import { Provider } from 'ethers'
 import { CabinToken__factory } from 'generated/ethers'
 import { getEthersAlchemyProvider } from '@/lib/chains'
@@ -10,7 +11,7 @@ import {
   BlockSyncAttempt,
 } from '@prisma/client'
 import { Decimal } from '@prisma/client/runtime/library'
-import { sendToDiscord } from '@/lib/discord'
+import { sendToDiscord, TEAM_MENTION } from '@/lib/discord'
 
 const BLOCK_COUNT = new Decimal(2000)
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
@@ -25,11 +26,9 @@ export default async function handler(
   const { sync: syncAttempt, message } = await getSyncToWorkOn(provider)
   if (!syncAttempt) {
     console.log(message ?? 'No sync attempt to work on, skipping')
-    res.status(200).send(
-      JSON.stringify({
-        message: message ?? 'No sync attempt to work on, skipping',
-      })
-    )
+    res.status(200).send({
+      message: message ?? 'No sync attempt to work on, skipping',
+    })
     return
   }
 
@@ -38,71 +37,46 @@ export default async function handler(
       syncAttempt.endBlock
     )
 
-    const result = await syncTokenBalances(
+    await syncTokenBalances(
       provider,
       syncAttempt.startBlock,
       syncAttempt.endBlock
     )
 
-    if (syncAttempt.status == BlockSyncStatus.Successful) {
-      console.error(`sync attempt ${syncAttempt.id} already completed`)
-    } else {
-      await prisma.blockSyncAttempt.update({
-        where: {
-          id: syncAttempt.id,
-          status: syncAttempt.status,
-        },
-        data: {
-          status: BlockSyncStatus.Successful,
-        },
-      })
-    }
+    await prisma.blockSyncAttempt.update({
+      where: { id: syncAttempt.id, status: syncAttempt.status },
+      data: { status: BlockSyncStatus.Successful },
+    })
 
-    res.status(200).send(
-      JSON.stringify(
-        {
-          id: syncAttempt.id,
-          startBlock: syncAttempt.startBlock.toNumber(),
-          endBlock: syncAttempt.endBlock.toNumber(),
-          blocksTillLatest: blocksTillLatest.toNumber(),
-          result,
-        },
-        null,
-        2
-      )
-    )
-  } catch (error) {
-    console.error(error)
-    try {
-      if (syncAttempt.status == BlockSyncStatus.Failed) {
-        console.error(`sync attempt ${syncAttempt.id} already failed`)
-      } else {
-        await prisma.blockSyncAttempt.update({
-          where: {
-            id: syncAttempt.id,
-            status: syncAttempt.status,
-          },
-          data: {
-            status: BlockSyncStatus.Failed,
-          },
-        })
-      }
-
-      res
-        .status(400)
-        .send(
-          JSON.stringify(
-            { error: 'Sync attempt failed. Will attempt to retry.' },
-            null,
-            2
-          )
-        )
-    } catch (error) {
+    res.status(200).send({
+      id: syncAttempt.id,
+      startBlock: syncAttempt.startBlock.toNumber(),
+      endBlock: syncAttempt.endBlock.toNumber(),
+      blocksTillLatest: blocksTillLatest.toNumber(),
+    })
+  } catch (error: unknown) {
+    Sentry.captureException(error, {
+      extra: { syncAttemptId: syncAttempt.id },
+    })
+    if (error instanceof Error) {
       console.error(error)
-      res
-        .status(400)
-        .send(JSON.stringify({ error: 'Sync attempt failed.' }, null, 2))
     }
+
+    try {
+      await prisma.blockSyncAttempt.update({
+        where: { id: syncAttempt.id, status: syncAttempt.status },
+        data: { status: BlockSyncStatus.Failed },
+      })
+    } catch (err2: unknown) {
+      Sentry.captureException(err2, {
+        extra: { syncAttemptId: syncAttempt.id },
+      })
+      console.error(err2)
+    }
+
+    res
+      .status(400)
+      .send({ error: 'Sync attempt failed. Will attempt to retry.' })
   }
 }
 
@@ -116,9 +90,8 @@ async function syncTokenBalances(
     provider
   )
 
-  const transferFilter = cabinTokenContract.filters.Transfer()
   const transfers = await cabinTokenContract.queryFilter(
-    transferFilter,
+    cabinTokenContract.filters.Transfer(),
     startBlock.toNumber(),
     endBlock.toNumber()
   )
@@ -129,6 +102,7 @@ async function syncTokenBalances(
     type: 'ADD' | 'SUBTRACT'
     amount: Decimal
   }[] = []
+
   transfers.forEach((t) => {
     const { from, to, value } = t.args
 
@@ -203,6 +177,13 @@ async function getSyncToWorkOn(
   const latestPendingSync = latestSyncs.find((a) => a.status === 'Pending')
   if (latestPendingSync) {
     console.log(`token sync already in progress`)
+    if (
+      latestPendingSync.createdAt < new Date(Date.now() - 6 * 60 * 60 * 1000)
+    ) {
+      await sendToDiscord(
+        `${TEAM_MENTION} Token sync ${latestPendingSync.id} has been pending for over 6 hours`
+      )
+    }
     return {
       sync: null,
       message: `token sync already in progress`,

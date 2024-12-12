@@ -4,7 +4,7 @@ import { $Enums } from '@prisma/client'
 import { randomId } from '@/utils/random'
 import { LocationNewResponse } from '@/utils/types/location'
 import { OptsWithAuth, requireUser, wrapHandler } from '@/utils/api/wrapHandler'
-import { sendToDiscord } from '@/lib/discord'
+import { sendToDiscord, TEAM_MENTION } from '@/lib/discord'
 import { appDomainWithProto } from '@/utils/display-utils'
 import { isProd } from '@/utils/dev'
 import { expandRoute } from '@/utils/routing'
@@ -35,7 +35,7 @@ async function handler(
 
   if (isProd) {
     await sendToDiscord(
-      `<@&1306981462473703465> New location listed by ${
+      `${TEAM_MENTION} New location listed by ${
         user.name
       }: ${appDomainWithProto}${expandRoute([
         'n_id',
