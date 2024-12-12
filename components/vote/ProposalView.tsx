@@ -78,7 +78,12 @@ export const ProposalView = () => {
                     <VoteInput proposal={proposal} />
                   )}
                   {proposal.state === 'active' ? (
-                    <H2>Current results</H2>
+                    <>
+                      <H2>Current results</H2>
+                      <Body1>
+                        Voting ends in {humanTimeDiff(proposal.end)}
+                      </Body1>
+                    </>
                   ) : (
                     <>
                       <H2>Results</H2>
@@ -86,9 +91,6 @@ export const ProposalView = () => {
                     </>
                   )}
                   <VoteResultBars proposal={proposal} />
-                  {proposal.state === 'active' && (
-                    <Body1>Voting ends in {humanTimeDiff(proposal.end)}</Body1>
-                  )}
                   <VoteResultList proposal={proposal} />
                 </Results>
                 <Body1>
