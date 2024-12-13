@@ -30,7 +30,7 @@ const faqs = [
         </Body1>
         <Body1>
           2. Our team reviews the applications and invites the strongest
-          applicants to a 1:1 interview the following week. This is a 2-way
+          applicants to a 1:1 interview shortly thereafter. This is a 2-way
           interview in that we’re both assessing if it’s a mutual good fit for
           you to join the program. If we’re both a yes, then you’re in the
           program!
@@ -43,7 +43,7 @@ const faqs = [
     a: (
       <>
         <Body1>
-          We recommend blocking out about 4 hours per week to fully participate
+          We recommend blocking out about 5 hours per week to fully participate
           in the program. This time is spent on mostly on-the-ground,
           neighborhood building activities like knocking on doors, making
           flyers, hosting events, and building genuine relationships with
@@ -144,14 +144,38 @@ const faqs = [
   {
     q: 'When are the weekly calls?',
     a: (
-      <Body1>
-        We hold a weekly group call and mentor calls fairly often throughout the
-        program. Once we’ve decided who’s in the program, we look through
-        everyone’s weekly availability and choose times for the calls that
-        people can make. So, we don’t have a clear time for when the calls will
-        be, but will do everything we can to make sure they happen at times that
-        work for you.{' '}
-      </Body1>
+      <>
+        <Body1>
+          We hold a Pod Call once a week + workshops throughout the program.
+        </Body1>
+        <Body1>Here are the current options for weekly Pod Call times: </Body1>
+        <Body1>
+          <strong>EU/AU Pod</strong>: Mondays at 11-12:15pm CET / 6pm-7:15pm
+          AWST
+        </Body1>
+        <Body1>
+          <strong>US/AU Pod</strong>: Wednesdays 5-6:15pm PST / 8-9:15pm EST /
+          Thursdays at 9-10:15am AWST / 12-1:15pm AEST
+        </Body1>
+        <Body1>
+          <strong>US/EU Pod</strong>: Fridays 9-10:15am PST / 12-1:15pm ET /
+          6-7:15pm CET
+        </Body1>
+        <Body1>
+          Here's a{' '}
+          <Link
+            href="https://www.timeanddate.com/worldclock/timezone/utc"
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            style={{ textDecoration: 'underline' }}
+          >
+            timezone converter
+          </Link>{' '}
+          to help you pick which weekly call time works best for you. When you
+          apply you’ll get to select which is the best time for you to have your
+          weekly Pod Call.
+        </Body1>
+      </>
     ),
   },
 ]

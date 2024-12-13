@@ -12,8 +12,8 @@ export const AboutSection = () => {
         <TopSection>
           <Title>The Cabin Neighborhood Accelerator</Title>
           <Subtitle>
-            A 10-week program that helps people build a sense of community in
-            their neighborhoods.
+            A 10-week program that helps you build a sense of community in your
+            neighborhood.
           </Subtitle>
           <Body1>
             Whether you’re just starting out or want to take your community to

@@ -17,7 +17,14 @@ export const Top = () => {
           <SubheaderText>
             <p>Join the Cabin Neighborhood Accelerator</p>
             {new Date() < DEADLINE && (
-              <p>Application Deadline: September 8, 2024</p>
+              <p>
+                Application Deadline:{' '}
+                {DEADLINE.toLocaleDateString('en-US', {
+                  month: 'long',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
+              </p>
             )}
           </SubheaderText>
           <ApplyButton

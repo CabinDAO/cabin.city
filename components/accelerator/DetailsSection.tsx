@@ -22,7 +22,7 @@ export const DetailsSection = () => {
         <Box>
           <BoxTitle>Key Dates</BoxTitle>
           <BoxBody>
-            <strong>Program Runs</strong>: September 23 - December 1 (10 weeks)
+            <strong>Program Runs</strong>: February 17 - April 30 (10 weeks)
           </BoxBody>
           {new Date() < DEADLINE && (
             <BoxBody>
@@ -33,15 +33,19 @@ export const DetailsSection = () => {
         <Box>
           <BoxTitle>Weekly Time Commitment</BoxTitle>
           <BoxBody>
-            To reap the full benefits of this program, we recommend committing
-            at least <strong>4 hours per week</strong>.
+            In this program you will be expected to commit{' '}
+            <strong>at least 5 hours a week</strong> to participating fully in
+            the program and building your neighborhood.
           </BoxBody>
-          <BoxBody>
-            1 hr/week for group calls and about 3 hrs/week for on-the-ground
-            neighborhood building activities like knocking on doors, flyering
-            your neighborhood, hosting events, building partnerships, spending
-            1:1 time building relationships, etc.
-          </BoxBody>
+          <List>
+            <li>2 hrs per week for group calls</li>
+            <li>
+              3 hrs per week for on-the-ground neighborhood building activities
+              like knocking on doors, flyering your neighborhood, hosting
+              events, building partnerships, spending 1:1 time building
+              relationships, and more.
+            </li>
+          </List>
         </Box>
         <Box>
           <BoxTitle>Curriculum</BoxTitle>
@@ -69,13 +73,14 @@ export const DetailsSection = () => {
           <BoxTitle>Live Calls</BoxTitle>
           <List>
             <li>
-              <strong>Weekly Group Call</strong>: Learn proven
-              neighborhood-building strategies, share progress, and get feedback
-              and support from your peers.
+              <strong>Weekly 75 min Pod Call</strong>: Learn proven
+              neighborhood-building strategies, share progress, be held
+              accountable to taking action each week, and get support from your
+              peers.
             </li>
             <li>
-              <strong>Regular Mentor Calls</strong>: Mentors will share their
-              stories, offer personalized coaching, and answer questions.
+              <strong>Workshops</strong>: Mentors and experts will lead highly
+              interactive sessions on relevant topics.
             </li>
           </List>
           <BoxBody>

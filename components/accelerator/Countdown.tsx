@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import BaseCountdown, { CountdownRenderProps } from 'react-countdown'
 import { fonts } from '@/components/core/Typography'
 
-export const DEADLINE = new Date('2024-09-09T07:00:00Z')
+export const DEADLINE = new Date('2025-02-01T07:00:00Z')
 
 export const Countdown = ({ light = false }: { light?: boolean }) => {
   const deadlinePassed = new Date() > DEADLINE
