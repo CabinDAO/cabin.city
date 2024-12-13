@@ -4,11 +4,11 @@ import { H2, HHero } from '@/components/core/Typography'
 
 export const HeroSection = ({
   headerText,
-  subheaderText,
+  subheader,
   buttons = [],
 }: {
   headerText: string
-  subheaderText?: string
+  subheader?: React.ReactNode
   buttons?: React.ReactNode[]
 }) => {
   return (
@@ -16,7 +16,7 @@ export const HeroSection = ({
       <TopWrapper>
         <Header>
           <HeaderText>{headerText}</HeaderText>
-          {subheaderText && <SubheaderText>{subheaderText}</SubheaderText>}
+          {subheader && <Subheader>{subheader}</Subheader>}
         </Header>
         <ButtonWrapper>
           <Buttons>{buttons.map((button) => button)}</Buttons>
@@ -138,8 +138,8 @@ const HeaderText = styled(HHero)`
   }
 `
 
-const SubheaderText = styled(H2)`
-  width: 48.8rem;
+const Subheader = styled(H2)`
+  width: min-content;
   text-align: center;
   color: ${({ theme }) => theme.colors.white};
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9), 2px 2px 4px rgba(0, 0, 0, 0.7),

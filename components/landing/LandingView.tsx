@@ -37,7 +37,12 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
             headerText={
               'A network of neighborhoods where you’d want to grow up'
             }
-            subheaderText={`${mapData.members} neighbors | ${mapData.locations.length} neighborhoods`}
+            subheader={
+              <>
+                <NoWrap>{mapData.members} neighbors</NoWrap> |{' '}
+                <NoWrap>{mapData.locations.length} neighborhoods</NoWrap>
+              </>
+            }
             buttons={[
               <Link key="1" href="/city-directory">
                 <Button>Find one near you</Button>
@@ -109,4 +114,8 @@ const OpaqueDiv = styled.div`
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+`
+
+const NoWrap = styled.span`
+  white-space: nowrap;
 `
