@@ -24,39 +24,38 @@ async function handler(
   }
 
   const user = await requireUser(opts.auth)
+  const activity = await prisma.activity.findUnique({
+    select: { id: true },
+    where: { externId: params.externId },
+  })
+  if (!activity) {
+    res.status(400).send({ error: 'Activity not found' })
+    return
+  }
 
   if (params.action === 'like') {
-    // await Promise.all() might be even better here because its parallel, while transaction is sequential
-    await prisma.activityReaction.create({
-      data: {
-        activity: {
-          connect: {
-            externId: params.externId,
-          },
-        },
-        profile: {
-          connect: {
-            externId: user.externId,
-          },
+    await prisma.activityReaction.upsert({
+      where: {
+        profileId_activityId: {
+          profileId: user.id,
+          activityId: activity.id,
         },
       },
+      create: {
+        activity: { connect: { id: activity.id } },
+        profile: { connect: { id: user.id } },
+      },
+      update: {},
     })
   } else {
-    const activity = await prisma.activity.findUnique({
+    await prisma.activityReaction.delete({
       where: {
-        externId: params.externId,
+        profileId_activityId: {
+          profileId: user.id,
+          activityId: activity.id,
+        },
       },
     })
-    if (activity) {
-      await prisma.activityReaction.delete({
-        where: {
-          profileId_activityId: {
-            profileId: user.id,
-            activityId: activity.id,
-          },
-        },
-      })
-    }
   }
 
   res.status(200).send({
