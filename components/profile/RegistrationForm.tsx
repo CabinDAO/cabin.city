@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Button } from '@/components/core/Button'
+import React, { useState } from 'react'
+import Link from 'next/link'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
+import { Button } from '@/components/core/Button'
+import Icon from '@/components/core/Icon'
 import { RegistrationParams } from '@/components/profile/RegistrationView'
 import {
   isValidAddress,
@@ -10,8 +13,6 @@ import {
 import { BasicInfoStep } from '@/components/profile/setup-profile/BasicInfoStep'
 import { ContactStep } from '@/components/profile/setup-profile/ContactStep'
 import { TagsStep } from '@/components/profile/setup-profile/TagsStep'
-import { ContactFieldType } from '@/utils/types/profile'
-import { useExternalUser } from '@/components/auth/useExternalUser'
 
 export type Step = (stepProps: StepProps) => JSX.Element | null
 
@@ -119,7 +120,14 @@ export const FormActions = ({
 }) => {
   return (
     <ButtonGroup>
-      {!isFirstStep && (
+      {isFirstStep ? (
+        <Link href={expandRoute('logout')}>
+          <Button variant="link">
+            <Icon name="sign-out" size={2} />
+            Log Out
+          </Button>
+        </Link>
+      ) : (
         <Button variant="link" onClick={handleBack}>
           Back
         </Button>
