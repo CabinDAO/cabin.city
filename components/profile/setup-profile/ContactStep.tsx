@@ -24,10 +24,6 @@ export const ContactStep = ({
       )
       return
     }
-    if (contactList.length === 0) {
-      showError('Add at least one contact method.')
-      return
-    }
     setData({ ...data, ...{ contactFields: contactList } })
     goNext()
   }

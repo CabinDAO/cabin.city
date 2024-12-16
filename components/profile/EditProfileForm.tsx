@@ -92,9 +92,7 @@ const Contact = ({
   }, [])
 
   useEffect(() => {
-    if (contactList.length) {
-      onChange({ ...profileEditParams, contactFields: contactList })
-    }
+    onChange({ ...profileEditParams, contactFields: contactList })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contactList])
 
