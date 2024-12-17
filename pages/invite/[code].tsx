@@ -22,7 +22,7 @@ import CitizenshipBenefits from '@/components/citizenship/CitizenshipBenefits'
 export default function Page({
   inviter,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [hideBenefits, setHideBenefits] = useState(false)
+  // const [hideBenefits, setHideBenefits] = useState(false)
   return (
     <>
       <BaseLayout>
@@ -45,11 +45,11 @@ export default function Page({
                 </Top>
                 <InviteClaimFlow
                   inviter={inviter}
-                  onStart={() => {
-                    setHideBenefits(true)
-                  }}
+                  // onStart={() => {
+                  //   setHideBenefits(true)
+                  // }}
                 />
-                <CitizenshipBenefits suggestHide={hideBenefits} />
+                {/* <CitizenshipBenefits suggestHide={hideBenefits} /> */}
               </Content>
             </>
           ) : (
