@@ -40,6 +40,10 @@ export const useAuth = ({
         router.push('registration').then()
       }
     },
+    onError: (error) => {
+      Sentry.captureException(error)
+      console.log('error logging in', error)
+    },
   })
 
   const handleLogout = async () => {
