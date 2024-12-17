@@ -106,7 +106,9 @@ async function syncTokenBalances(
   transfers.forEach((t) => {
     const { from, to, value } = t.args
 
-    sendToDiscord(`${from} sent ${value} tokens to ${to}`)
+    sendToDiscord(
+      `${from} sent ${onchainAmountToDecimal(value.toString())} tokens to ${to}`
+    )
 
     if (from != ZERO_ADDRESS) {
       uniqueAddresses.add(from)
@@ -152,10 +154,10 @@ async function syncTokenBalances(
 
   // TODO: this should be a single transaction so it can be atomic
   for (const [address, balance] of Object.entries(updates)) {
-    sendToDiscord(`setting ${address} balance to ${balance}`)
+    sendToDiscord(`incrementing ${address} balance by ${balance}`)
     await prisma.wallet.upsert({
       where: { address: address.toLowerCase() },
-      update: { cabinTokenBalance: balance },
+      update: { cabinTokenBalance: { increment: balance } },
       create: { address: address.toLowerCase(), cabinTokenBalance: balance },
     })
   }

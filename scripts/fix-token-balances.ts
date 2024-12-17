@@ -31,7 +31,7 @@ async function main() {
 
   while (true) {
     const walletsWithTokens = await prisma.wallet.findMany({
-      where: { cabinTokenBalance: { gt: 0 } },
+      where: { cabinTokenBalance: { not: 0 } },
       skip: skip,
       take: take,
     })
@@ -102,7 +102,7 @@ async function main() {
     console.log(`Processing ${holders.length} holders`)
 
     for (const holder of holders) {
-      const address = holder.owner_address
+      const address = holder.owner_address.toLowerCase()
 
       if (addressesDone.has(address)) {
         continue
