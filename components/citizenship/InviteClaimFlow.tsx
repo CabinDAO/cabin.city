@@ -43,7 +43,7 @@ export default function InviteClaimFlow({
   onStart,
 }: {
   inviter: Inviter
-  onStart: VoidFunction
+  onStart?: VoidFunction
 }) {
   const { showError } = useError()
   const router = useRouter()
@@ -209,7 +209,7 @@ export default function InviteClaimFlow({
       <Button
         disabled={step > Step.NotStarted}
         onClick={() => {
-          onStart()
+          onStart?.()
           goToStep(Step.PromptLogin)
         }}
       >
