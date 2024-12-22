@@ -25,13 +25,14 @@ const defaultConfig: PrivyClientConfig = {
       ? `${appDomainWithProto}/images/cabin-auth.png`
       : `${appDomainWithProto}/images/cabin-auth-dev.png`,
     showWalletLoginFirst: false,
-    // walletList: [
-    //   'detected_wallets',
-    //   'metamask',
-    //   'coinbase_wallet',
-    //   'rainbow',
-    //   'wallet_connect',
-    // ],
+    walletList: [
+      'detected_wallets',
+      'metamask',
+      'coinbase_wallet',
+      'rainbow',
+      'phantom',
+      'wallet_connect',
+    ],
   },
 
   // mfa: {
