@@ -100,7 +100,7 @@ export const ProposalView = () => {
                     rel="noopener"
                     style={{ textDecoration: 'underline' }}
                   >
-                    View the full proposal on Snapshot
+                    View this proposal on Snapshot
                   </Link>
                 </Body1>
               </ProposalContainer>
