@@ -5,6 +5,7 @@ import { useUser } from '@/components/auth/useUser'
 import { useAuth } from '@/components/auth/useAuth'
 import { useBackend } from '@/components/hooks/useBackend'
 import { LocationNewResponse } from '@/utils/types/location'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Body1, H3 } from '@/components/core/Typography'
@@ -75,7 +76,7 @@ export const NewLocationView = () => {
             title="Citizens only"
             description="Only citizens can create new neighborhoods."
             customCta={() => (
-              <Link href={'/citizenship'}>
+              <Link href={expandRoute('citizenship')}>
                 <Button variant={'secondary'}>Become a citizen</Button>
               </Link>
             )}
@@ -99,6 +100,10 @@ export const NewLocationView = () => {
               Cabin’s City Directory connects local neighborhoods with aligned
               people around the world.
             </Body1>
+            <Body1>
+              A neighborhood is a place-based, values-aligned community with an
+              active relationship to Cabin and a regular gathering.
+            </Body1>
             <H3>Make New Friends</H3>
             <Body1>Invite friendly visitors to join your next gathering.</Body1>
             <H3>Find New Neighbors</H3>
@@ -120,7 +125,7 @@ export const NewLocationView = () => {
                 style={{ textDecoration: 'underline' }}
                 target="_blank"
                 rel="noopener nofollow noreferrer"
-                href={'/accelerator'}
+                href={expandRoute('accelerator')}
               >
                 Neighborhood Accelerator Program
               </Link>
