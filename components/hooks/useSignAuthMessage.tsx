@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { SiweMessage } from 'siwe'
 import { useAccount, useSignMessage } from 'wagmi'
+import { expandRoute } from '@/utils/routing'
 
 interface UseSignAuthMessageProps {
   prefetchNonce?: boolean
@@ -15,7 +16,7 @@ export function useSignAuthMessage(props: UseSignAuthMessageProps = {}) {
   const { signMessageAsync } = useSignMessage()
 
   const fetchNonce = useCallback(async () => {
-    const nonceRes = await fetch('/api/auth/nonce')
+    const nonceRes = await fetch(expandRoute('api_auth_nonce'))
     return nonceRes.text()
   }, [])
 
