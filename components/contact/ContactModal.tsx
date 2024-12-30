@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import { useLocalStorage } from 'react-use'
 import { useError } from '@/components/hooks/useError'
 import { useModal } from '@/components/hooks/useModal'
-import { useUser } from '@/components/auth/useUser'
 import { useBackend } from '@/components/hooks/useBackend'
 import { MessageNewParamsType, MessageNewResponse } from '@/utils/types/message'
 import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
@@ -31,13 +29,6 @@ export const ContactModal = ({
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
 
-  const today = new Date().toISOString().split('T')[0]
-  const { user } = useUser()
-  const [messageCount, setMessageCount] = useLocalStorage('messageCount', {
-    date: today,
-    count: 0,
-  })
-
   const handleSend = async () => {
     if (!text) {
       showError('Write something first')
@@ -58,17 +49,6 @@ export const ContactModal = ({
     if (!res || 'error' in res) {
       showError(res.error || 'Something went wrong')
       return
-    }
-
-    if (user?.externId == 'pr_AVgu24quUQBP72gbHTXX') {
-      const countToday = messageCount?.date == today ? messageCount.count : 0
-      if (countToday > 6) {
-        showError(
-          `You've reached your message limit for the day. Try again tomorrow.`
-        )
-        return
-      }
-      setMessageCount({ date: today, count: countToday + 1 })
     }
 
     setSent(true)
