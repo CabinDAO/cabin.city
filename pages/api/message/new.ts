@@ -36,7 +36,7 @@ async function handler(
     return
   }
 
-  if (sender.id == 1702) {
+  if (sender.id == 1702 || sender.id == 1689) {
     await sendToDiscord(
       `${sender.name} (${sender.externId}) tried to message ${recipient.name} (${recipient.externId}).`
     )
