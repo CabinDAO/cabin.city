@@ -14,6 +14,7 @@ import {
   StampClaimResponse,
 } from '@/utils/types/stamp'
 import { formatShortAddress } from '@/lib/address'
+import { expandRoute } from '@/utils/routing'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
 import { Body1, Body2, H1, H3 } from '@/components/core/Typography'
@@ -131,7 +132,10 @@ export const StampClaimView = () => {
                     <ProfileDataSection profile={profile} />
                     <Buttons>
                       <Link
-                        href={`/profile/${profile.externId}/edit`}
+                        href={expandRoute([
+                          'profile_id_edit',
+                          { id: profile.externId },
+                        ])}
                         onClick={() => setReminder(true)}
                       >
                         <Button>

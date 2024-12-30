@@ -1,16 +1,17 @@
-import { format, formatDistance, parseISO } from 'date-fns'
-import Link from 'next/link'
 import { useState } from 'react'
+import Link from 'next/link'
+import { useUser } from '@/components/auth/useUser'
+import { useModal } from '@/components/hooks/useModal'
+import { useTextActivity } from '@/components/activity/useTextActivity'
+import { format, formatDistance, parseISO } from 'date-fns'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { Avatar } from '@/components/profile/Avatar'
 import IconButton from '../IconButton'
 import { Caption, H4 } from '../Typography'
 import { getPostSlots } from './post-slots'
 import { MoreMenu } from '../MoreMenu'
-import { useUser } from '@/components/auth/useUser'
-import { useModal } from '@/components/hooks/useModal'
 import { ActionConfirmationModal } from '../ActionConfirmationModal'
-import { useTextActivity } from '@/components/activity/useTextActivity'
 import { ActivityListFragment, ActivityType } from '@/utils/types/activity'
 
 type PostVariant = 'full' | 'compact'
@@ -80,7 +81,10 @@ export const Post = (props: PostProps) => {
       <ContentContainer>
         {variant === 'full' && (
           <ProfileContainer>
-            <LeftContainer href={`/profile/${profile.externId}`} passHref>
+            <LeftContainer
+              href={expandRoute(['profile_id', { id: profile.externId }])}
+              passHref
+            >
               <Avatar srcCfId={profile.avatarCfId} size={3.2} />
               <ProfileName>{profile.name}</ProfileName>
             </LeftContainer>

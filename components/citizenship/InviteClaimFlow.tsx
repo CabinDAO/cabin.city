@@ -1,4 +1,5 @@
 import React, { RefObject, useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useAuth } from '@/components/auth/useAuth'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
@@ -9,6 +10,7 @@ import {
   InviteClaimResponse,
   PaymentMethod,
 } from '@/utils/types/invite'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
@@ -23,7 +25,6 @@ import {
   isValidName,
 } from '@/components/profile/validations'
 import { CitizenshipStatus } from '@/utils/types/profile'
-import Link from 'next/link'
 
 export type Inviter = {
   name: string
@@ -194,7 +195,7 @@ export default function InviteClaimFlow({
     return (
       <CitizenMessage>
         You are already a citizen.{' '}
-        <UnderlinedLink href={'/citizenship'}>
+        <UnderlinedLink href={expandRoute('citizenship')}>
           View or extend your citizenship here
         </UnderlinedLink>
         .

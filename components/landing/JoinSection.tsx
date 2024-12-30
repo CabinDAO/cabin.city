@@ -1,10 +1,11 @@
+import Image from 'next/image'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { Body1, fonts } from '@/components/core/Typography'
 import { LandingSectionContent } from './styles'
-import Image from 'next/image'
 import { Button } from '@/components/core/Button'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
 
 export const JoinSection = () => {
   return (
@@ -37,7 +38,7 @@ export const JoinSection = () => {
             height={43}
           />
           <h3>Become a Member</h3>
-          <AuthenticatedLink href="/activity">
+          <AuthenticatedLink href={expandRoute('activity')}>
             <Button variant="secondary">Sign Up</Button>
           </AuthenticatedLink>
           <Body>

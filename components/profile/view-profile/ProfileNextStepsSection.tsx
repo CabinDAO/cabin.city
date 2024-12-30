@@ -1,15 +1,16 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import { useBackend } from '@/components/hooks/useBackend'
 import { MeFragment, ProfileSetupStateParams } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
 import analytics from '@/lib/googleAnalytics/analytics'
 import styled from 'styled-components'
+import { ColorName } from '@/styles/theme'
 import { ContentCard } from '@/components/core/ContentCard'
 import { Body1, H2, Overline } from '@/components/core/Typography'
-import Link from 'next/link'
-import mapPinPic from '@/components/map/mapPinPic.png'
 import { AutoImage } from '@/components/core/AutoImage'
-import { ColorName } from '@/styles/theme'
 import Icon from '@/components/core/Icon'
+import mapPinPic from '@/components/map/mapPinPic.png'
 
 export const ProfileNextStepsSection = ({ me }: { me: MeFragment }) => {
   const { post } = useBackend()
@@ -61,7 +62,7 @@ export const ProfileNextStepsSection = ({ me }: { me: MeFragment }) => {
             <Body1 $color="yellow100">
               Next, head over to the{' '}
               <Link
-                href={`/census${queryString}`}
+                href={expandRoute('census') + queryString}
                 style={{ textDecoration: 'underline' }}
                 onClick={handleCensusLinkCTAClick}
               >
@@ -76,7 +77,7 @@ export const ProfileNextStepsSection = ({ me }: { me: MeFragment }) => {
           </Instructions>
           <Pic>
             <Link
-              href={`/census${queryString}`}
+              href={expandRoute('census') + queryString}
               style={{ textDecoration: 'underline' }}
               onClick={handleCensusImageCTAClick}
             >

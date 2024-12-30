@@ -1,29 +1,25 @@
+import Link from 'next/link'
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
+import { ProfileFragment } from '@/utils/types/profile'
+import { citizenshipInfoFromStatus } from '@/utils/citizenship'
+import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { expandRoute } from '@/utils/routing'
+import styled from 'styled-components'
 import { AppLink } from '@/components/core/AppLink'
 import { Button } from '@/components/core/Button'
 import Icon from '@/components/core/Icon'
 import { Body2, H2, Overline } from '@/components/core/Typography'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
-import {
-  citizenshipInfoFromStatus,
-  DEFAULT_CTA_TEXT,
-} from '@/utils/citizenship'
-import { EXTERNAL_LINKS } from '@/utils/external-links'
-import Link from 'next/link'
-import styled from 'styled-components'
-import { ProfileFragment } from '@/utils/types/profile'
-
-interface ProfileUnverifiedCitizenshipProps {
-  profile: ProfileFragment
-}
 
 export const ProfileUnverifiedCitizenship = ({
   profile,
-}: ProfileUnverifiedCitizenshipProps) => {
+}: {
+  profile: ProfileFragment
+}) => {
   const { deviceSize } = useDeviceSize()
 
   const citizenCTAText =
     citizenshipInfoFromStatus(profile.citizenshipStatus)?.profileCTAText ??
-    DEFAULT_CTA_TEXT
+    'Get started'
 
   return (
     <InnerContainer>
@@ -46,7 +42,7 @@ export const ProfileUnverifiedCitizenship = ({
           </AppLink>
         </DescriptionContainer>
       </InformationContainer>
-      <StyledLink href={'/citizenship'}>
+      <StyledLink href={expandRoute('citizenship')}>
         <CitizenCTAButton variant="primary">{citizenCTAText}</CitizenCTAButton>
       </StyledLink>
     </InnerContainer>

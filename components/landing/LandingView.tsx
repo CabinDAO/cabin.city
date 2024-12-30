@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import headerBg from './header.jpg'
 import { BaseLayout } from '@/components/core/BaseLayout'
@@ -44,10 +45,10 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
               </>
             }
             buttons={[
-              <Link key="1" href="/city-directory">
+              <Link key="1" href={expandRoute('cityDirectory')}>
                 <Button>Find one near you</Button>
               </Link>,
-              <Link key="2" href="/accelerator">
+              <Link key="2" href={expandRoute('accelerator')}>
                 <Button variant={'secondary'}>Start a neighborhood</Button>
               </Link>,
             ]}

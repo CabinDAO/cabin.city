@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
+import { useRouter } from '@/components/hooks/useRouter'
 import { useDebounce } from 'use-debounce'
 import { useUser } from '@/components/auth/useUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -10,6 +11,9 @@ import {
   ProfileListFragment,
   ProfileMappableResponse,
 } from '@/utils/types/profile'
+import L from 'leaflet'
+import { cloudflareImageUrl } from '@/lib/image'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
 import { EmptyState } from '@/components/core/EmptyState'
@@ -23,9 +27,6 @@ import { InputText } from '@/components/core/InputText'
 import { ProfileListItem } from '@/components/core/ProfileListItem'
 import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
-import { useRouter } from '@/components/hooks/useRouter'
-import L from 'leaflet'
-import { cloudflareImageUrl } from '@/lib/image'
 
 export const CensusView = () => {
   const { user } = useUser()
@@ -40,7 +41,7 @@ export const CensusView = () => {
           title="Cabin members only"
           description="You must log in to see the census. But hey, it's free and easy to make an account!"
           customCta={() => (
-            <AuthenticatedLink href={'/census'}>
+            <AuthenticatedLink href={expandRoute('census')}>
               <Button variant={'secondary'}>Login or sign up</Button>
             </AuthenticatedLink>
           )}

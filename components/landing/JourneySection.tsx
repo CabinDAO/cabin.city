@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { LandingSectionTitle } from '@/components/landing/shared'
 import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
@@ -107,12 +108,12 @@ export const JourneySection = () => {
               local area and participating online.
               <ul>
                 <li>
-                  <AuthenticatedLink href={'/city-directory'}>
+                  <AuthenticatedLink href={expandRoute('cityDirectory')}>
                     Sign in & find people near you
                   </AuthenticatedLink>
                 </li>
                 <li>
-                  <Link href={'/city-directory'}>
+                  <Link href={expandRoute('cityDirectory')}>
                     Find neighborhoods to live in
                   </Link>
                 </li>
@@ -149,12 +150,12 @@ export const JourneySection = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href={'/accelerator'}>
+                  <Link href={expandRoute('accelerator')}>
                     Join the Neighborhood Accelerator
                   </Link>
                 </li>
                 <li>
-                  <AuthenticatedLink href={'/city-directory'}>
+                  <AuthenticatedLink href={expandRoute('cityDirectory')}>
                     List your neighborhood
                   </AuthenticatedLink>
                 </li>

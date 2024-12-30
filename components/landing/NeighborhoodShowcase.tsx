@@ -4,10 +4,10 @@ import { useBackend } from '@/components/hooks/useBackend'
 import { LocationListResponse } from '@/utils/types/location'
 import { cloudflareImageUrl } from '@/lib/image'
 import { formatShortAddress } from '@/lib/address'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { fonts, H4, H2, Subline1 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import { expandRoute } from '@/utils/routing'
 
 export const NeighborhoodShowcase = () => {
   const { useGet } = useBackend()
@@ -48,7 +48,7 @@ export const NeighborhoodShowcase = () => {
         })}
       </Neighborhoods>
       <H4>
-        <Link href={'/city-directory'}>
+        <Link href={expandRoute('cityDirectory')}>
           View more properties{' '}
           <Icon
             name={'right-arrow'}

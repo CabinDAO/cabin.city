@@ -1,3 +1,16 @@
+import React, { useState } from 'react'
+import Image from 'next/image'
+import { useRouter } from '@/components/hooks/useRouter'
+import { useUser } from '@/components/auth/useUser'
+import { format } from 'date-fns'
+import { enUS } from 'date-fns/locale'
+import { unlockConfigForEnv } from '@/lib/protocol-config'
+import { getUnlockOpenseaUrl } from '@/lib/opensea'
+import { ProfileFragment } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
+import { shortenedAddress } from '@/utils/display-utils'
+import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
+import styled from 'styled-components'
 import {
   Caption,
   H1,
@@ -5,20 +18,8 @@ import {
   Overline,
   Subline2,
 } from '@/components/core/Typography'
-import Image from 'next/image'
-import styled from 'styled-components'
-import { shortenedAddress } from '@/utils/display-utils'
-import { format } from 'date-fns'
-import { enUS } from 'date-fns/locale'
-import { DEFAULT_NFT_IMAGE } from '@/utils/citizenship'
-import { unlockConfigForEnv } from '@/lib/protocol-config'
-import { getUnlockOpenseaUrl } from '@/lib/opensea'
 import Icon from '@/components/core/Icon'
-import { useUser } from '@/components/auth/useUser'
 import { AppLink } from '@/components/core/AppLink'
-import React, { useState } from 'react'
-import { useRouter } from '@/components/hooks/useRouter'
-import { ProfileFragment } from '@/utils/types/profile'
 
 export const ProfileVerifiedCitizenship = ({
   profile,
@@ -55,7 +56,7 @@ export const ProfileVerifiedCitizenship = ({
           <ManageCTA
             iconSize={0.8}
             iconName="chevron-right"
-            href="/citizenship"
+            href={expandRoute('citizenship')}
           >
             <Overline>Manage</Overline>
           </ManageCTA>

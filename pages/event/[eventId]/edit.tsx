@@ -1,6 +1,7 @@
 import { EmptyState } from '@/components/core/EmptyState'
 import Link from 'next/link'
 import { Button } from '@/components/core/Button'
+import { expandRoute } from '@/utils/routing'
 
 const EditEventPage = () => {
   return (
@@ -9,7 +10,7 @@ const EditEventPage = () => {
       title="Oops, page not found"
       description="Event editing is disabled."
       customCta={() => (
-        <Link href="/">
+        <Link href={expandRoute('home')}>
           <Button variant="secondary">Return home</Button>
         </Link>
       )}

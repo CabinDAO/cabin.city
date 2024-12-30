@@ -5,6 +5,7 @@ import {
   LocationListResponse,
   LocationType,
 } from '@/utils/types/location'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { NeighborhoodCard } from '@/components/core/NeighborhoodCard'
@@ -37,7 +38,7 @@ export const NeighborhoodsTop6List = () => {
       </NeighborhoodsTop6ListContainer>
       <Link
         onClick={() => analytics.viewCityDirectoryEvent()}
-        href="/city-directory"
+        href={expandRoute('cityDirectory')}
       >
         <Button variant="secondary" isFullWidth>
           See all locations

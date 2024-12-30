@@ -2,6 +2,7 @@ import { Button } from '@/components/core/Button'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { EmptyState } from '@/components/core/EmptyState'
 import Link from 'next/link'
+import { expandRoute } from '@/utils/routing'
 
 export default function Error404() {
   return (
@@ -18,7 +19,7 @@ export default function Error404() {
 
 const CustomCTA = () => {
   return (
-    <Link href="/">
+    <Link href={expandRoute('home')}>
       <Button variant="secondary">Return home</Button>
     </Link>
   )

@@ -9,6 +9,7 @@ import {
 import useEns from '@/components/hooks/useEns'
 import { useBackend } from '@/components/hooks/useBackend'
 import { ProfileVotersResponse } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { balanceToVotes, shortenedAddress } from '@/utils/display-utils'
 import { Body1, H2 } from '@/components/core/Typography'
@@ -159,7 +160,7 @@ const CabinVoter = ({
   avatarCfId: string
 }) => {
   return (
-    <VoterLink href={`/profile/${externId}`}>
+    <VoterLink href={expandRoute(['profile_id', { id: externId }])}>
       <Avatar srcCfId={avatarCfId} size={2} />
       <Body1>{name}</Body1>
     </VoterLink>

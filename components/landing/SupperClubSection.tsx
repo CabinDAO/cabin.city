@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { Body1 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
@@ -37,7 +38,7 @@ export const SupperClubSection = () => {
           >
             <Button variant={'primary'}>Apply</Button>
           </Link>
-          <Link href={'/accelerator'}>
+          <Link href={expandRoute('accelerator')}>
             <Button variant={'secondary'}>Learn more</Button>
           </Link>
         </Buttons>

@@ -1,7 +1,6 @@
 import { IconName } from '@/components/core/Icon'
 import { CitizenshipStatus } from '@/utils/types/profile'
 
-export const DEFAULT_CTA_TEXT = 'Get started'
 export const YEARLY_PRICE_IN_USD = 420
 export const MINIMUM_CABIN_BALANCE = 1000
 

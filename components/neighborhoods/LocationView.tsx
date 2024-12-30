@@ -59,7 +59,7 @@ export const LocationView = ({ externId }: { externId: string }) => {
         title="Oops, neighborhood not found"
         description="This neighborhood doesn’t exist, or it was removed, or you don't have permission to view it."
         customCta={() => (
-          <Link href="/">
+          <Link href={expandRoute('home')}>
             <Button variant="secondary">Return home</Button>
           </Link>
         )}

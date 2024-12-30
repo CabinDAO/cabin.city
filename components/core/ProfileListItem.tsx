@@ -1,11 +1,12 @@
+import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { truncate } from '@/utils/display-utils'
 import { format } from 'date-fns'
+import { ProfileListFragment } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
-import { useDeviceSize } from '@/components/hooks/useDeviceSize'
 import { Avatar } from '@/components/profile/Avatar'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
-import { ProfileListFragment } from '@/utils/types/profile'
 
 interface ProfileListItemProps {
   profile: ProfileListFragment
@@ -17,7 +18,9 @@ export const ProfileListItem = (props: ProfileListItemProps) => {
   const avatarSize = deviceSize === 'mobile' ? 4 : 6.4
 
   return (
-    <StyledListItem href={`/profile/${profile.externId}`}>
+    <StyledListItem
+      href={expandRoute(['profile_id', { id: profile.externId }])}
+    >
       <AvatarContainer>
         <Avatar srcCfId={profile.avatarCfId} size={avatarSize} />
         <InfoContainer>

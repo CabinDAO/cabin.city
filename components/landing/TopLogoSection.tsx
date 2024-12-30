@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useUser } from '@/components/auth/useUser'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import theme from '@/styles/theme'
 import { Button } from '@/components/core/Button'
@@ -12,7 +13,7 @@ export const TopLogoSection = () => {
   return (
     <Background>
       <Content>
-        <Logo href="/">
+        <Logo href={expandRoute('home')}>
           <Image
             id={'cabin-logo'}
             src="/images/cabin.png"
@@ -29,7 +30,7 @@ export const TopLogoSection = () => {
                 '2px 2px 4px rgba(0, 0, 0, 1), 4px 4px 8px rgba(0, 0, 0, 0.8), 6px 6px 12px rgba(0, 0, 0, 0.7), 8px 8px 16px rgba(0, 0, 0, 0.5)',
             }}
           >
-            <AuthenticatedLink href="/city-directory">
+            <AuthenticatedLink href={expandRoute('cityDirectory')}>
               <Button variant={'link-inverted'}>Log in &bull; Sign up</Button>
             </AuthenticatedLink>
           </span>

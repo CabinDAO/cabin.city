@@ -1,12 +1,13 @@
+import React from 'react'
+import Link from 'next/link'
+import { useModal } from '@/components/hooks/useModal'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
+import { Body2, H2 } from '@/components/core/Typography'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
-import { Body2, H2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
-import React from 'react'
 import { Button } from '@/components/core/Button'
-import { useModal } from '@/components/hooks/useModal'
-import Link from 'next/link'
 
 export const CitizenshipRequiredModal = () => {
   const { hideModal } = useModal()
@@ -20,7 +21,7 @@ export const CitizenshipRequiredModal = () => {
           Cabin’s annual membership that gives you access to our community’s
           global adventures.
         </Body2>
-        <StyledLink href={'/citizenship'} onClick={hideModal}>
+        <StyledLink href={expandRoute('citizenship')} onClick={hideModal}>
           <StyledButton isFullWidth variant={'tertiary'}>
             Join Now
           </StyledButton>

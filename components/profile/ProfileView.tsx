@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useLocalStorage } from 'react-use'
 import { useUser } from '@/components/auth/useUser'
 import { ProfileFragment } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
 import { CURRENT_CLAIMABLE_STAMP } from '@/utils/types/stamp'
 import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
 import styled from 'styled-components'
@@ -29,7 +30,10 @@ export const ProfileView = ({ profile }: { profile: ProfileFragment }) => {
           <div style={{ textAlign: 'center' }}>
             <Body1>
               👉{' '}
-              <Link href={'/ns'} style={{ textDecoration: 'underline' }}>
+              <Link
+                href={expandRoute('ns')}
+                style={{ textDecoration: 'underline' }}
+              >
                 don't forget your {CURRENT_CLAIMABLE_STAMP.name} stamp
               </Link>
             </Body1>

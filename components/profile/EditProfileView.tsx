@@ -21,6 +21,7 @@ import {
   StampClaimResponse,
 } from '@/utils/types/stamp'
 import { STAMP_REMINDER_KEY } from '@/components/profile/StampClaimView'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { ContentCard } from '@/components/core/ContentCard'
 import { TitleCard } from '@/components/core/TitleCard'
@@ -133,7 +134,7 @@ export const EditProfileView = ({
       <TitleCard
         title="Edit profile"
         icon="close"
-        iconHref={`/profile/${profileToEdit.externId}`}
+        iconHref={expandRoute(['profile_id', { id: profileToEdit.externId }])}
       />
       <ContentCard shape="notch">
         <Content>

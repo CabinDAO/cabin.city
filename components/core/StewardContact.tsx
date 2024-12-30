@@ -37,7 +37,7 @@ export const StewardContact = ({
       <Top>
         <Info>
           {steward ? (
-            <Link href={`/profile/${steward.externId}`}>
+            <Link href={expandRoute(['profile_id', { id: steward.externId }])}>
               <Avatar srcCfId={steward.avatarCfId} size={7.2} />
             </Link>
           ) : (
@@ -217,7 +217,7 @@ const Modal = ({
             style={{ textDecoration: 'underline' }}
             target="_blank"
             rel="noopener nofollow noreferrer"
-            href={'/accelerator'}
+            href={expandRoute('accelerator')}
           >
             Neighborhood Accelerator Program
           </Link>

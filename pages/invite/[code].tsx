@@ -1,6 +1,6 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { prisma } from '@/lib/prisma'
-import React, { useState } from 'react'
+import React from 'react'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { TitleCard } from '@/components/core/TitleCard'
 import {
@@ -17,7 +17,6 @@ import { AutoImage } from '@/components/core/AutoImage'
 import InviteClaimFlow, {
   Inviter,
 } from '@/components/citizenship/InviteClaimFlow'
-import CitizenshipBenefits from '@/components/citizenship/CitizenshipBenefits'
 
 export default function Page({
   inviter,

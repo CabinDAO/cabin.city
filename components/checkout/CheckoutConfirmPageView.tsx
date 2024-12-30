@@ -5,6 +5,7 @@ import { useRouter } from '@/components/hooks/useRouter'
 import { ReactNode, useEffect, useState } from 'react'
 import { useBackend } from '@/components/hooks/useBackend'
 import { CartFragment, CartResponse, PaymentStatus } from '@/utils/types/cart'
+import { expandRoute } from '@/utils/routing'
 import styled, { css } from 'styled-components'
 import { padding } from '@/styles/theme'
 import { Body1, H2 } from '@/components/core/Typography'
@@ -212,7 +213,7 @@ const Progress = ({
               Done!
             </Step>
             {user ? (
-              <Link href={'/citizenship'}>
+              <Link href={expandRoute('citizenship')}>
                 <Button>Go to your citizenship page</Button>
               </Link>
             ) : (
@@ -287,7 +288,12 @@ const Step = ({
             <Body1>Error: {error}</Body1>
           </Error>
           {step == 1 ? (
-            <Link href={`/checkout/${cart.externId}`}>
+            <Link
+              href={expandRoute([
+                'checkout_externId',
+                { externId: cart.externId },
+              ])}
+            >
               <Button>Back to payment selection</Button>
             </Link>
           ) : (

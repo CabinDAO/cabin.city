@@ -3,7 +3,7 @@ import { BaseLayout } from '../components/core/BaseLayout'
 import { EmptyState } from '../components/core/EmptyState'
 import { Button } from '../components/core/Button'
 import * as Sentry from '@sentry/nextjs'
-
+import { expandRoute } from '@/utils/routing'
 function ErrorPage({ statusCode }) {
   return (
     <BaseLayout hideNavAndFooter>
@@ -17,7 +17,7 @@ function ErrorPage({ statusCode }) {
         }
         customCta={() => {
           return (
-            <Link href="/">
+            <Link href={expandRoute('home')}>
               <Button variant="secondary">Return home</Button>
             </Link>
           )
