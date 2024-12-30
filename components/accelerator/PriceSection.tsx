@@ -1,68 +1,144 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import styled from 'styled-components'
 import { ApplyButton, SectionTitle } from '@/components/accelerator/shared'
 import Icon from '@/components/core/Icon'
-import { Body1, fonts } from '@/components/core/Typography'
+import {
+  Body1,
+  fonts,
+  H3,
+  ListItem,
+  UnorderedList,
+} from '@/components/core/Typography'
 import { HorizontalDivider } from '@/components/core/Divider'
 import { BaseContainer } from '@/components/core/BaseContainer'
-import { Countdown } from '@/components/accelerator/Countdown'
+import { Countdown, deadlineToString } from '@/components/accelerator/Countdown'
 
-const items = [
-  'Build a thriving, connected community in your neighborhood',
-  'Create lasting, meaningful relationships with your neighbors',
-  'Live within walking distance of friends + family and make hanging out effortless',
-  'Solve local problems and build things with a group of engaged friends & neighbors',
-  'Foster a shared sense of ownership and pride in your area',
+const priceOptions = [
+  {
+    name: 'Full Scholarship',
+    price: 0,
+    details: (
+      <>
+        <Body1>We offer full scholarships to</Body1>
+        <UnorderedList>
+          <ListItem>individuals earning under $30k annually</ListItem>
+          <ListItem>students and recent graduates</ListItem>
+        </UnorderedList>
+        <Body1>No one will be turned away for lack of funds.</Body1>
+        <Body1>
+          Includes a commitment to provide weekly feedback to help us improve
+          the program.
+        </Body1>
+      </>
+    ),
+  },
+  {
+    name: 'Accessible Rate',
+    price: 350,
+    details: (
+      <>
+        <Body1>This tier is for</Body1>
+        <UnorderedList>
+          <ListItem>individuals earning $30k-$100k annually</ListItem>
+          <ListItem>early-career professionals</ListItem>
+          <ListItem>part-time workers</ListItem>
+        </UnorderedList>
+        <Body1>
+          Includes a commitment to provide weekly feedback to help us improve
+          the program.
+        </Body1>
+      </>
+    ),
+  },
+  {
+    name: 'Standard Rate',
+    price: 650,
+    details: (
+      <>
+        <Body1>This tier is for</Body1>
+        <UnorderedList>
+          <ListItem>individuals earning $100k+ annually</ListItem>
+        </UnorderedList>
+      </>
+    ),
+  },
+  {
+    name: 'Sponsored Rate',
+    price: 1000,
+    details: (
+      <>
+        <Body1>This tier is for</Body1>
+        <UnorderedList>
+          <ListItem>
+            folks utilizing Professional Development funding from their place of
+            work
+          </ListItem>
+          <ListItem>
+            organizations generously sponsoring seats in the program
+          </ListItem>
+        </UnorderedList>
+      </>
+    ),
+  },
 ]
 
 export const PriceSection = () => {
   return (
-    <Container maxWidth={80}>
+    <Container maxWidth={110}>
       <SectionTitle>Ready to transform your neighborhood?</SectionTitle>
       <Box>
-        <Items>
-          {items.map((item, index) => (
-            <Item key={index}>
-              <Checkmark>
-                <Icon name={'check'} size={3} color={'green700'} />
-              </Checkmark>
-              <Body1>{item}</Body1>
-            </Item>
+        <Prices>
+          {priceOptions.map(({ name, price, details }) => (
+            <PriceOption
+              key={name}
+              name={name}
+              price={price}
+              details={details}
+            />
           ))}
-        </Items>
-        <HorizontalDivider />
-        <BoxBottom>
-          <Left>
-            <Price>$400</Price>
-            <Body1>
-              Scholarships are available. If money is preventing you from
-              applying, please{' '}
-              <Link
-                href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}
-                style={{ textDecoration: 'underline' }}
-                target="_blank"
-                rel="noopener nofollow noreferrer"
-              >
-                email us
-              </Link>
-              .
+        </Prices>
+        <Bottom>
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem' }}
+          >
+            <Body1 style={{ fontWeight: 700, fontSize: '2rem' }}>
+              Application deadline: {deadlineToString()}
             </Body1>
-          </Left>
-          <Right>
             <Countdown />
-            <ApplyButton source={'accelerator-price'} jiggle />
-          </Right>
-        </BoxBottom>
+          </div>
+          <ApplyButton source={'accelerator-price'} jiggle />
+        </Bottom>
       </Box>
       <RefundBox>
-        <CheckCircle>
-          <Icon name={'check-star'} size={2.4} color={'green900'} />
-        </CheckCircle>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '1.6rem',
+            alignItems: 'center',
+          }}
+        >
+          <CheckCircle>
+            <Icon name={'check-star'} size={2.4} color={'green900'} />
+          </CheckCircle>
+          <Body1>
+            If you’re not 100% satisfied within the first 14 days, you can
+            request a full refund.
+          </Body1>
+        </div>
         <Body1>
-          If you’re not 100% satisfied within the first 14 days, you can request
-          a full refund.
+          Have additional questions?{' '}
+          <Link
+            href={`mailto:${EXTERNAL_LINKS.ACCELERATOR_EMAIL}`}
+            style={{ textDecoration: 'underline', whiteSpace: 'nowrap' }}
+            target="_blank"
+            rel="noopener nofollow noreferrer"
+          >
+            Email us
+          </Link>
+          .
         </Body1>
       </RefundBox>
     </Container>
@@ -82,85 +158,43 @@ const Box = styled.div`
   background-color: white;
   border: solid 1px #000;
   box-shadow: 4px 4px 0px 0px #000;
-  padding: 3.5rem;
 `
 
-const Items = styled.div`
+const Prices = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-  gap: 2.8rem;
-
-  ${({ theme }) => theme.bp.lg} {
-    flex-flow: row wrap;
-  }
-`
-
-const Item = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 1.4rem;
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 45%;
-  }
-`
-
-const BoxBottom = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 100%;
-  gap: 2.5rem;
 
   ${({ theme }) => theme.bp.lg} {
     flex-direction: row;
   }
 `
 
-const Left = styled.div`
+const Bottom = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2.5rem;
+  padding: 3.5rem;
 
   ${({ theme }) => theme.bp.lg} {
-    width: 50%;
-    flex-shrink: 0;
-  }
-`
-
-const Right = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 40%;
-    flex-shrink: 0;
-    align-items: flex-end;
-    justify-content: center;
+    flex-direction: row;
   }
 `
 
 const RefundBox = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
-  gap: 1.6rem;
+  gap: 6rem;
   padding: 1rem;
   opacity: 80%;
   align-items: center;
   justify-content: center;
-`
 
-const Checkmark = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 3rem;
-  height: 3rem;
-  flex-shrink: 0;
+  ${({ theme }) => theme.bp.lg} {
+    justify-content: space-between;
+  }
 `
 
 const CheckCircle = styled.div`
@@ -179,4 +213,38 @@ const Price = styled.span`
   font-size: 3.6rem;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.green900};
+`
+
+const PriceOption = ({
+  name,
+  price,
+  details,
+}: {
+  name: string
+  price: number
+  details: ReactNode
+}) => {
+  return (
+    <StyledPriceOption>
+      <H3>{name}</H3>
+      <Price>${price}</Price>
+      <HorizontalDivider />
+      {details}
+    </StyledPriceOption>
+  )
+}
+
+const StyledPriceOption = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
+  padding: 3.5rem;
+
+  ${({ theme }) => theme.bp.lg} {
+    width: 25%;
+    &:not(:last-child) {
+      border-right: solid 1px ${({ theme }) => theme.colors.green900};
+    }
+  }
 `

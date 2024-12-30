@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { fonts, HHero } from '@/components/core/Typography'
 import { TopLogoSection } from '@/components/landing/TopLogoSection'
 import { ApplyButton } from '@/components/accelerator/shared'
-import { DEADLINE } from '@/components/accelerator/Countdown'
+import { DEADLINE, deadlineToString } from '@/components/accelerator/Countdown'
 
 export const Top = () => {
   return (
@@ -17,14 +17,7 @@ export const Top = () => {
           <SubheaderText>
             <p>Join the Cabin Neighborhood Accelerator</p>
             {new Date() < DEADLINE && (
-              <p>
-                Application Deadline:{' '}
-                {DEADLINE.toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
-              </p>
+              <p>Application Deadline: {deadlineToString()}</p>
             )}
           </SubheaderText>
           <ApplyButton

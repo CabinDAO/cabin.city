@@ -5,7 +5,11 @@ import { Body1, fonts, H3, H4 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { Button } from '@/components/core/Button'
-import { Countdown, DEADLINE } from '@/components/accelerator/Countdown'
+import {
+  Countdown,
+  DEADLINE,
+  deadlineToString,
+} from '@/components/accelerator/Countdown'
 import { subscribeSectionID } from '@/components/accelerator/AcceleratorPageView'
 import {
   ApplyButton,
@@ -123,19 +127,9 @@ export const IsItRightSection = () => {
               <BlockTitle>
                 Apply by{' '}
                 <span style={{ color: theme.colors.green400 }}>
-                  {DEADLINE.toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                  {(() => {
-                    const day = DEADLINE.getDate()
-                    if (day % 10 === 1 && day !== 11) return 'st'
-                    if (day % 10 === 2 && day !== 12) return 'nd'
-                    if (day % 10 === 3 && day !== 13) return 'rd'
-                    return 'th'
-                  })()}
-                  .
+                  {deadlineToString()}
                 </span>
+                .
               </BlockTitle>
             )}
             <Countdown light />

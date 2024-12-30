@@ -28,8 +28,8 @@ export function NeighborhoodStoriesSection({
       )}
       <Subtitle>
         <Body1>
-          Real moments + stories from the incredible folks in our program. Read
-          more stories in our{' '}
+          Real moments + stories from the incredible folks in the Neighborhood
+          Accelerator Program. Read more stories in our{' '}
           <Link
             href={EXTERNAL_LINKS.NEIGHBORHOOD_MONTH_ONE_UPDATE}
             style={{ textDecoration: 'underline' }}
