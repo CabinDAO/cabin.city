@@ -80,14 +80,26 @@ export const ProposalView = () => {
                   {proposal.state === 'active' ? (
                     <>
                       <H2>Current results</H2>
-                      <Body1>
+                      <Body1
+                        title={new Date(proposal.end * 1000)
+                          .toISOString()
+                          .replace('T', ' ')
+                          .replace('Z', '')}
+                      >
                         Voting ends in {humanTimeDiff(proposal.end)}
                       </Body1>
                     </>
                   ) : (
                     <>
                       <H2>Results</H2>
-                      <Body1>Ended {humanTimeDiff(proposal.end)} ago</Body1>
+                      <Body1
+                        title={new Date(proposal.end * 1000)
+                          .toISOString()
+                          .replace('T', ' ')
+                          .replace('Z', '')}
+                      >
+                        Ended {humanTimeDiff(proposal.end)} ago
+                      </Body1>
                     </>
                   )}
                   <VoteResultBars proposal={proposal} />

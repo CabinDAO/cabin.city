@@ -101,7 +101,14 @@ const ProposalList = () => {
             </Top>
             <ProposalRender proposal={proposal} maxLines={5} linkify={false} />
             {proposal.state !== 'active' && (
-              <Body1>Ended {humanTimeDiff(proposal.end)} ago</Body1>
+              <Body1
+                title={new Date(proposal.end * 1000)
+                  .toISOString()
+                  .replace('T', ' ')
+                  .replace('Z', '')}
+              >
+                Ended {humanTimeDiff(proposal.end)} ago
+              </Body1>
             )}
             <VoteResultBars proposal={proposal} brief />
           </ProposalRow>
