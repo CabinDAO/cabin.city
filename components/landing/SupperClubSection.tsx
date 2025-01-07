@@ -3,11 +3,10 @@ import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
 import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
-import { Body1 } from '@/components/core/Typography'
+import { Body1, H3 } from '@/components/core/Typography'
 import { Button } from '@/components/core/Button'
 import { LandingSectionTitle } from '@/components/landing/shared'
 import { BaseContainer } from '@/components/core/BaseContainer'
-import { acceleratorApplyClickEvent } from '@/lib/googleAnalytics/analytics'
 import pic from './supperclub.jpg'
 
 export const SupperClubSection = () => {
@@ -23,25 +22,32 @@ export const SupperClubSection = () => {
       />
 
       <Text>
-        <Title>Join the Neighborhood Accelerator</Title>
-        <Body>
-          Make friends with your neighbors and make neighbors out of your
-          friends. Our Neighborhood Accelerator Program can guide you every step
-          of the way.
-        </Body>
-        <Buttons>
-          <Link
-            href={EXTERNAL_LINKS.NEIGHBORHOOD_COHORT_APPLICATION_FORM}
-            target="_blank"
-            rel="noopener"
-            onClick={() => acceleratorApplyClickEvent('landing-upgradesection')}
-          >
-            <Button variant={'primary'}>Apply</Button>
-          </Link>
-          <Link href={expandRoute('accelerator')}>
-            <Button variant={'secondary'}>Learn more</Button>
-          </Link>
-        </Buttons>
+        <TextChunk>
+          <Title>Join the Neighborhood Accelerator Program</Title>
+          <Body>
+            Make friends with your neighbors and make neighbors out of your
+            friends. Our Neighborhood Accelerator Program can guide you every
+            step of the way.
+          </Body>
+          <Buttons>
+            <Link href={expandRoute('accelerator')}>
+              <Button variant={'primary'}>Learn More</Button>
+            </Link>
+          </Buttons>
+        </TextChunk>
+        <TextChunk>
+          <H3>Join Our Next Community Call:</H3>
+          <Title>The Neighborhood Story Circle</Title>
+          <Body>
+            4th Thursday of Each Month <br />
+            at 9am PST / 11am ET / 6pm CET
+          </Body>
+          <Buttons>
+            <Link href={EXTERNAL_LINKS.LUMA} target="_blank" rel="noopener">
+              <Button variant={'secondary'}>RSVP</Button>
+            </Link>
+          </Buttons>
+        </TextChunk>
       </Text>
     </Container>
   )
@@ -76,13 +82,21 @@ const Text = styled.div`
   align-items: flex-start;
   justify-content: center;
   width: 100%;
-  gap: 2.4rem;
+  gap: 6rem;
   padding: 6.4rem 4rem;
 
   ${({ theme }) => theme.bp.md} {
     width: calc(50% - 2.4rem);
     padding-left: 0;
   }
+`
+
+const TextChunk = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.5rem;
 `
 
 const Title = styled(LandingSectionTitle)`
