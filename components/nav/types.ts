@@ -5,7 +5,7 @@ type visibility = 'always' | 'authOnly' | 'unauthOnly'
 
 export type MenuItemName =
   | 'home'
-  | 'accelerator'
+  | 'nap'
   | 'neighborhoods'
   | 'census'
   | 'profile'
@@ -29,10 +29,10 @@ export const MenuItems: Record<MenuItemName, Config> = {
     iconSize: 3.2,
     visibility: 'always',
   },
-  accelerator: {
+  nap: {
     icon: 'neighborhood',
-    path: expandRoute('accelerator'),
-    displayText: 'Accelerator',
+    path: expandRoute('nap'),
+    displayText: 'NAP',
     iconSize: 2.5,
     visibility: 'always',
   },

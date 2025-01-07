@@ -27,7 +27,7 @@ export const Navbar = () => {
       </Group>
       <Divider />
       <Group>
-        <MenuItem name={'accelerator'} user={user} />
+        <MenuItem name={'nap'} user={user} />
         <MenuItem name={'neighborhoods'} user={user} />
         <MenuItem name={'census'} user={user} />
       </Group>

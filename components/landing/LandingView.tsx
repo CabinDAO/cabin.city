@@ -35,12 +35,10 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <OpaqueDiv>
           <TopLogoSection />
           <HeroSection
-            headerText={
-              'A network of neighborhoods where you’d want to grow up'
-            }
+            headerText={'Covering the World in Community'}
             subheader={
               <>
-                <NoWrap>{mapData.members} neighbors</NoWrap> |{' '}
+                <NoWrap>{mapData.members} community members</NoWrap> |{' '}
                 <NoWrap>{mapData.locations.length} neighborhoods</NoWrap>
               </>
             }
@@ -48,7 +46,7 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
               <Link key="1" href={expandRoute('cityDirectory')}>
                 <Button>Find one near you</Button>
               </Link>,
-              <Link key="2" href={expandRoute('accelerator')}>
+              <Link key="2" href={expandRoute('nap')}>
                 <Button variant={'secondary'}>Start a neighborhood</Button>
               </Link>,
             ]}

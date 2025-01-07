@@ -10,9 +10,7 @@ export const Top = () => {
     <OpaqueDiv>
       <TopLogoSection />
       <Content>
-        <HeaderText>
-          Turn your neighborhood into a thriving community
-        </HeaderText>
+        <HeaderText>Turning Neighborhoods into Communities</HeaderText>
         <Subheader>
           <SubheaderText>
             <p>Join the Cabin Neighborhood Accelerator</p>

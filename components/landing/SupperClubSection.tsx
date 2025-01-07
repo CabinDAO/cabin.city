@@ -30,7 +30,7 @@ export const SupperClubSection = () => {
             step of the way.
           </Body>
           <Buttons>
-            <Link href={expandRoute('accelerator')}>
+            <Link href={expandRoute('nap')}>
               <Button variant={'primary'}>Learn More</Button>
             </Link>
           </Buttons>

@@ -19,7 +19,7 @@ export const Footer = () => {
               <Header>Product</Header>
               <AppLink
                 onClick={() => analytics.acceleratorApplyClickEvent('footer')}
-                href={expandRoute('accelerator')}
+                href={expandRoute('nap')}
               >
                 <Name>Accelerator</Name>
               </AppLink>

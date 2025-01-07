@@ -217,7 +217,7 @@ const Modal = ({
             style={{ textDecoration: 'underline' }}
             target="_blank"
             rel="noopener nofollow noreferrer"
-            href={expandRoute('accelerator')}
+            href={expandRoute('nap')}
           >
             Neighborhood Accelerator Program
           </Link>

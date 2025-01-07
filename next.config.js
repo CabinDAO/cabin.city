@@ -68,8 +68,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/nap',
-        destination: '/accelerator',
+        source: '/accelerator',
+        destination: '/nap',
         permanent: false,
       },
     ]

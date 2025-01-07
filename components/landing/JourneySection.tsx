@@ -150,7 +150,7 @@ export const JourneySection = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link href={expandRoute('accelerator')}>
+                  <Link href={expandRoute('nap')}>
                     Join the Neighborhood Accelerator
                   </Link>
                 </li>

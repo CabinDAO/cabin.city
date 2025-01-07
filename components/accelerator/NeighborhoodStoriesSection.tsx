@@ -16,7 +16,7 @@ import { BaseContainer } from '@/components/core/BaseContainer'
 export function NeighborhoodStoriesSection({
   variant,
 }: {
-  variant?: 'accelerator' | 'landing'
+  variant?: 'nap' | 'landing'
 }) {
   const { deviceSize } = useDeviceSize()
   return (
