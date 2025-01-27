@@ -12,18 +12,6 @@ export const LearnMoreSection = () => {
   return (
     <Container maxWidth={'default'}>
       <LandingSectionTitle>Want to learn more?</LandingSectionTitle>
-      <Link
-        href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=cabinweekpage`}
-        target="_blank"
-        rel="noopener nofollow noreferrer"
-      >
-        <Button
-          variant={'tertiary'}
-          endAdornment={<Icon name={'right-arrow'} size={1.6} />}
-        >
-          Book a call
-        </Button>
-      </Link>
 
       <HorizontalList
         items={[
