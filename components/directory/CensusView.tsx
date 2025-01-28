@@ -1,7 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useDebounce } from 'use-debounce'
-import { useUser } from '@/components/auth/useUser'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useBackend } from '@/components/hooks/useBackend'
 import {
@@ -13,12 +12,8 @@ import {
 } from '@/utils/types/profile'
 import L from 'leaflet'
 import { cloudflareImageUrl } from '@/lib/image'
-import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import Icon from '@/components/core/Icon'
-import { EmptyState } from '@/components/core/EmptyState'
-import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
-import { Button } from '@/components/core/Button'
 import { BaseLayout } from '@/components/core/BaseLayout'
 import { Sort, SortOption } from '@/components/core/Sort'
 import { List } from '@/components/core/List'
@@ -29,26 +24,28 @@ import { TitleCard } from '@/components/core/TitleCard'
 import { Map, MarkerData, onMoveParams } from '@/components/map/Map'
 
 export const CensusView = () => {
-  const { user } = useUser()
-  return user ? (
-    <CensusAuthView />
-  ) : (
-    <BaseLayout>
-      <TitleCard title="Census" icon="members" />
-      <div style={{ width: '100%' }}>
-        <EmptyState
-          icon="alert"
-          title="Cabin members only"
-          description="You must log in to see the census. But hey, it's free and easy to make an account!"
-          customCta={() => (
-            <AuthenticatedLink href={expandRoute('census')}>
-              <Button variant={'secondary'}>Login or sign up</Button>
-            </AuthenticatedLink>
-          )}
-        />
-      </div>
-    </BaseLayout>
-  )
+  return <CensusAuthView />
+
+  // const { user } = useUser()
+  // return user ? (
+  //   <CensusAuthView />
+  // ) : (
+  //   <BaseLayout>
+  //     <TitleCard title="Census" icon="members" />
+  //     <div style={{ width: '100%' }}>
+  //       <EmptyState
+  //         icon="alert"
+  //         title="Cabin members only"
+  //         description="You must log in to see the census. But hey, it's free and easy to make an account!"
+  //         customCta={() => (
+  //           <AuthenticatedLink href={expandRoute('census')}>
+  //             <Button variant={'secondary'}>Login or sign up</Button>
+  //           </AuthenticatedLink>
+  //         )}
+  //       />
+  //     </div>
+  //   </BaseLayout>
+  // )
 }
 
 export const CensusAuthView = () => {
@@ -64,6 +61,13 @@ export const CensusAuthView = () => {
     if (map && router.query.center) {
       const [lat, lng] = (router.query.center as string).split(',').map(Number)
       map.setView([lat, lng], 8)
+      router.replaceRaw(router.pathname, undefined, { shallow: true }).then()
+    } else if (map && router.query.nearby) {
+      navigator.geolocation.getCurrentPosition(
+        (event: { coords: { latitude: number; longitude: number } }) => {
+          map.setView([event.coords.latitude, event.coords.longitude], 8)
+        }
+      )
       router.replaceRaw(router.pathname, undefined, { shallow: true }).then()
     }
   }, [map, router, router.query])

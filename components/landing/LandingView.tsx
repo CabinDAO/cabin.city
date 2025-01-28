@@ -43,11 +43,13 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
               </>
             }
             buttons={[
-              <Link key="1" href={expandRoute('cityDirectory')}>
-                <Button>Find one near you</Button>
+              <Link key="1" href={`${expandRoute('census')}?nearby=1`}>
+                <Button>See who's nearby</Button>
               </Link>,
               <Link key="2" href={expandRoute('nap')}>
-                <Button variant={'secondary'}>Start a neighborhood</Button>
+                <Button variant={'secondary'}>
+                  Jumpstart your neighborhood
+                </Button>
               </Link>,
             ]}
           />

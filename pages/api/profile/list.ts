@@ -4,7 +4,7 @@ import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Sql } from '@prisma/client/runtime/library'
 import { toErrorString } from '@/utils/api/error'
-import { OptsWithAuth, requireAuth, wrapHandler } from '@/utils/api/wrapHandler'
+import { OptsWithAuth, wrapHandler } from '@/utils/api/wrapHandler'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
@@ -27,7 +27,7 @@ async function handler(
     return
   }
 
-  requireAuth(opts)
+  // requireAuth(opts)
 
   const parsed = ProfileListParams.safeParse(req.query)
   if (!parsed.success) {
