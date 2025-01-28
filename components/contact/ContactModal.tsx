@@ -4,6 +4,7 @@ import { useModal } from '@/components/hooks/useModal'
 import { useBackend } from '@/components/hooks/useBackend'
 import { MessageNewParamsType, MessageNewResponse } from '@/utils/types/message'
 import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
+import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { ModalContainer } from '@/components/core/modals/ModalContainer'
 import { ModalTitle } from '@/components/core/modals/ModalTitle'
@@ -13,12 +14,13 @@ import { Body1 } from '@/components/core/Typography'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import { sendMessageButtonClickEvent } from '@/lib/googleAnalytics/analytics'
 import Icon from '@/components/core/Icon'
+import { AuthenticatedLink } from '@/components/core/AuthenticatedLink'
 
 export const ContactModal = ({
   sender,
   recipient,
 }: {
-  sender: MeFragment
+  sender: MeFragment | null
   recipient: ProfileBasicFragment
 }) => {
   const { post } = useBackend()
@@ -28,6 +30,22 @@ export const ContactModal = ({
   const [text, setText] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+
+  if (!sender) {
+    return (
+      <Container>
+        <ModalTitle text={`Message ${recipient.name}`} />
+        <InputWrap>
+          <Body1>You must be logged in to send messages</Body1>
+          <AuthenticatedLink
+            href={expandRoute(['profile_id', { id: recipient.externId }])}
+          >
+            <Button variant={'primary'}>Log in or Sign up</Button>
+          </AuthenticatedLink>
+        </InputWrap>
+      </Container>
+    )
+  }
 
   const handleSend = async () => {
     if (!text) {

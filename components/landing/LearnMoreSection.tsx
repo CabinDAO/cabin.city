@@ -1,8 +1,5 @@
 import styled from 'styled-components'
-import Link from 'next/link'
 import { EXTERNAL_LINKS } from '@/utils/external-links'
-import { Button } from '@/components/core/Button'
-import Icon from '@/components/core/Icon'
 import { HorizontalList } from '@/components/landing/HorizontalList'
 import { LandingSectionTitle } from '@/components/landing/shared'
 import React from 'react'

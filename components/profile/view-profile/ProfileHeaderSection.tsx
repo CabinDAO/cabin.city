@@ -32,7 +32,7 @@ export const ProfileHeaderSection = ({
   const { ens } = useEns(profile.wallet?.address)
   const { deviceSize } = useDeviceSize()
 
-  const showContactButton = user && user.externId != profile.externId
+  const showContactButton = !user || user.externId != profile.externId
   const isOwnProfile = user && user.externId === profile.externId
 
   return (
@@ -75,7 +75,7 @@ export const ProfileHeaderSection = ({
             user={user}
             profile={profile}
             flashOnMount={
-              user && !isOwnProfile && !user.isProfileSetupDismissed
+              !!user && !isOwnProfile && !user.isProfileSetupDismissed
             }
           />
         )}
@@ -164,7 +164,7 @@ const ProfileContactButton = ({
   profile,
   flashOnMount,
 }: {
-  user: MeFragment
+  user: MeFragment | null
   profile: ProfileFragment
   flashOnMount?: boolean
 }) => {
@@ -185,6 +185,10 @@ const ProfileContactButton = ({
 
   const onClick = async () => {
     showModal(() => <ContactModal sender={user} recipient={profile} />)
+
+    if (!user) {
+      return
+    }
 
     analytics.onboardingActionEvent(user.externId, 'contact_clicked')
 

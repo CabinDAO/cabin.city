@@ -79,21 +79,18 @@ export const StewardContact = ({
       <ButtonContainer>
         <ContactButton
           onClick={
-            !user
-              ? login
-              : steward
-              ? (e) => {
-                  e.preventDefault()
-                  if (!steward) return
+            steward
+              ? () => {
+                  showModal(() => (
+                    <ContactModal sender={user} recipient={steward} />
+                  ))
+                  if (!user) return
                   analytics.contactStewardEvent(steward.externId)
                   analytics.openMessageModalButtonClick(
                     user.externId,
                     steward.externId,
                     'neighborhood-page'
                   )
-                  showModal(() => (
-                    <ContactModal sender={user} recipient={steward} />
-                  ))
                 }
               : () => {
                   showModal(() => <Modal user={user} location={location} />)

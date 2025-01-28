@@ -4,7 +4,7 @@ import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Sql } from '@prisma/client/runtime/library'
 import { toErrorString } from '@/utils/api/error'
-import { OptsWithAuth, wrapHandler } from '@/utils/api/wrapHandler'
+import { wrapHandler } from '@/utils/api/wrapHandler'
 import { resolveAddressOrName } from '@/lib/ens'
 import { getPageParams } from '@/utils/api/backend'
 import {
@@ -19,8 +19,7 @@ export default wrapHandler(handler)
 
 async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ProfileListResponse>,
-  opts: OptsWithAuth
+  res: NextApiResponse<ProfileListResponse>
 ) {
   if (req.method != 'GET') {
     res.status(405).send({ error: 'Method not allowed' })
