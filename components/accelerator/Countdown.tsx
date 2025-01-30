@@ -2,10 +2,21 @@ import styled from 'styled-components'
 import BaseCountdown, { CountdownRenderProps } from 'react-countdown'
 import { fonts } from '@/components/core/Typography'
 
-export const DEADLINE = new Date('2025-02-01T07:00:00Z')
+const timezone = 'America/Los_Angeles'
+const utcToPstOffset = new Date()
+  .toLocaleString('en-US', { timeZone: timezone })
+  .includes('PDT')
+  ? 7
+  : 8
+
+// midnight in pst
+export const DEADLINE = new Date(`2025-02-02T0${utcToPstOffset - 1}:59:59Z`)
 
 export const deadlineToString = () => {
-  const day = DEADLINE.getDate()
+  // get the day of the month in pst so it says the right date no matter what timezone the user is in
+  const day = new Date(
+    DEADLINE.toLocaleString('en-US', { timeZone: timezone })
+  ).getDate()
   const suffix =
     day % 10 === 1 && day !== 11
       ? 'st'
@@ -18,6 +29,7 @@ export const deadlineToString = () => {
     DEADLINE.toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
+      timeZone: timezone,
     }) + suffix
   )
 }
