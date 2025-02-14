@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Address } from 'viem'
 import { useRouter } from '@/components/hooks/useRouter'
 import { useLocalStorage } from 'react-use'
@@ -35,6 +36,7 @@ export const RegistrationView = () => {
   const { user, refetchUser } = useUser({ redirectToIfFound: 'profile' })
   const [hasStampReminder, , removeReminder] =
     useLocalStorage<boolean>(STAMP_REMINDER_KEY)
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false)
 
   // const [email, setEmail] = useState('')
   // useEffect(() => {
@@ -70,6 +72,7 @@ export const RegistrationView = () => {
     }
 
     try {
+      setIsFormSubmitting(true)
       const resp = await post<ProfileNewResponse>('api_profile_new', {
         ...params,
         ...{
@@ -79,6 +82,7 @@ export const RegistrationView = () => {
           email: email,
         },
       } satisfies ProfileNewParamsType)
+      setIsFormSubmitting(false)
 
       if ('error' in resp) {
         if (resp.exists) {
@@ -118,7 +122,10 @@ export const RegistrationView = () => {
     <BaseLayout hideNavAndFooter>
       <TitleCard title="Welcome to Cabin" icon="logo-cabin" />
       <ContentCard shape="notch">
-        <RegistrationForm onSubmit={handleSubmit} />
+        <RegistrationForm
+          onSubmit={handleSubmit}
+          isSubmitting={isFormSubmitting}
+        />
       </ContentCard>
     </BaseLayout>
   )

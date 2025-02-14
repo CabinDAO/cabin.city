@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { FormActions, StepProps } from '@/components/profile/RegistrationForm'
 import { TagsInput } from '@/components/profile/TagsInput'
 import { Body1, H2 } from '@/components/core/Typography'
-import styled from 'styled-components'
 
 export const TagsStep = ({
   goNext,
   goBack,
-  isFirstStep,
-  isLastStep,
+  actionProps,
   data,
   setData,
 }: StepProps) => {
@@ -43,8 +42,7 @@ export const TagsStep = ({
       <FormActions
         handleNext={handleNext}
         handleBack={handleBack}
-        isFirstStep={isFirstStep}
-        isLastStep={isLastStep}
+        actionProps={actionProps}
       />
     </>
   )

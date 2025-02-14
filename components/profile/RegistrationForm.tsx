@@ -13,24 +13,32 @@ import {
 import { BasicInfoStep } from '@/components/profile/setup-profile/BasicInfoStep'
 import { ContactStep } from '@/components/profile/setup-profile/ContactStep'
 import { TagsStep } from '@/components/profile/setup-profile/TagsStep'
+import LoadingSpinner from '@/components/core/LoadingSpinner'
 
 export type Step = (stepProps: StepProps) => JSX.Element | null
 
 const steps: Step[] = [BasicInfoStep, ContactStep, TagsStep]
 
+type ActionProps = {
+  isFirstStep: boolean
+  isLastStep: boolean
+  isSubmitting: boolean
+}
+
 export type StepProps = {
   goNext: VoidFunction
   goBack: VoidFunction
-  isFirstStep: boolean
-  isLastStep: boolean
+  actionProps: ActionProps
   data: RegistrationParams
   setData: (data: RegistrationParams) => void
 }
 
 export const RegistrationForm = ({
   onSubmit,
+  isSubmitting,
 }: {
   onSubmit: (params: RegistrationParams) => void
+  isSubmitting: boolean
 }) => {
   const [currentStep, setCurrentStep] = useState(0)
   const isFirstStep = currentStep === 0
@@ -88,8 +96,7 @@ export const RegistrationForm = ({
       <CurrentStep
         goNext={handleNext}
         goBack={handleBack}
-        isFirstStep={isFirstStep}
-        isLastStep={isLastStep}
+        actionProps={{ isFirstStep, isLastStep, isSubmitting }}
         data={newParams}
         setData={setNewParams}
       />
@@ -110,13 +117,11 @@ const Container = styled.div`
 export const FormActions = ({
   handleNext,
   handleBack,
-  isFirstStep,
-  isLastStep,
+  actionProps: { isFirstStep, isLastStep, isSubmitting },
 }: {
   handleNext: VoidFunction
   handleBack: VoidFunction
-  isFirstStep: boolean
-  isLastStep: boolean
+  actionProps: ActionProps
 }) => {
   return (
     <ButtonGroup>
@@ -133,7 +138,16 @@ export const FormActions = ({
         </Button>
       )}
       <Button onClick={handleNext} variant="primary">
-        {isLastStep ? 'Finish' : 'Next'}
+        {isSubmitting ? (
+          <>
+            <LoadingSpinner />
+            &nbsp; {/* this keeps the button height from collapsing */}
+          </>
+        ) : isLastStep ? (
+          'Finish'
+        ) : (
+          'Next'
+        )}
       </Button>
     </ButtonGroup>
   )

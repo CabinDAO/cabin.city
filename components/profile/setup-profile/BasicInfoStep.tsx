@@ -8,8 +8,7 @@ import { Checkbox } from '@/components/core/Checkbox'
 export const BasicInfoStep = ({
   goNext,
   goBack,
-  isFirstStep,
-  isLastStep,
+  actionProps,
   data,
   setData,
 }: StepProps) => {
@@ -78,8 +77,7 @@ export const BasicInfoStep = ({
       <FormActions
         handleNext={handleNext}
         handleBack={goBack}
-        isFirstStep={isFirstStep}
-        isLastStep={isLastStep}
+        actionProps={actionProps}
       />
     </>
   )
