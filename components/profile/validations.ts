@@ -3,35 +3,29 @@ import { EMAIL_VALID_REGEX } from '@/utils/validate'
 import {
   ContactFieldType,
   ProfileAddressFragmentType,
-  ProfileEditParamsType,
 } from '@/utils/types/profile'
 import { AddressFragmentType } from '@/utils/types/location'
 
-export const MAX_DISPLAY_NAME_LENGTH = 48
-export const MAX_BIO_LENGTH = 300
-
-export const validateProfileInput = (
-  editProfileInput: ProfileEditParamsType['data']
-) => {
-  const { name, email, bio, address, avatarCfId } = editProfileInput
-
-  const invalid =
-    (editProfileInput.hasOwnProperty('name') && !isValidName(name)) ||
-    (editProfileInput.hasOwnProperty('bio') && !isValidBio(bio)) ||
-    (editProfileInput.hasOwnProperty('address') && !isValidAddress(address)) ||
-    (editProfileInput.hasOwnProperty('email') && !isValidEmail(email)) ||
-    (editProfileInput.hasOwnProperty('avatarCfId') && !avatarCfId)
-  // ||
-  // (editProfileInput.hasOwnProperty('contactFields') &&
-  //   editProfileInput.contactFields?.length == 0)
-
-  return !invalid
-}
-
 type ConditionalString = string | undefined | null
 
+export const MAX_DISPLAY_NAME_LENGTH = 48
+
 export const isValidName = (name: ConditionalString) => {
-  return name !== '' && (name?.length ?? 0) <= MAX_DISPLAY_NAME_LENGTH
+  return errorInName(name) === null
+}
+
+export const errorInName = (rawName: ConditionalString): string | null => {
+  const name = rawName?.trim()
+  if (!name || name.length === 0) return 'Name required'
+
+  if (name.length > MAX_DISPLAY_NAME_LENGTH)
+    return `Name cannot tbe longer than ${MAX_DISPLAY_NAME_LENGTH} characters`
+
+  if (!/^[\p{L}0-9 .,()'_$~-]+$/u.test(name)) {
+    return 'Name contains an invalid character'
+  }
+
+  return null
 }
 
 export const isValidAddress = (
@@ -40,7 +34,7 @@ export const isValidAddress = (
   return !!(address && address.admininstrativeAreaLevel1)
 }
 
-export const INVALID_NAME_MESSAGE = `Name required and must be at most ${MAX_DISPLAY_NAME_LENGTH} characters`
+export const MAX_BIO_LENGTH = 300
 
 export const isValidBio = (bio: ConditionalString) => {
   return bio !== '' && (bio?.length ?? 0) <= MAX_BIO_LENGTH

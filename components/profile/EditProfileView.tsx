@@ -13,7 +13,10 @@ import {
 import { canEditProfile } from '@/lib/permissions'
 import {
   sanitizeContactValue,
-  validateProfileInput,
+  isValidName,
+  isValidEmail,
+  isValidBio,
+  isValidAddress,
 } from '@/components/profile/validations'
 import {
   CURRENT_CLAIMABLE_STAMP,
@@ -168,3 +171,21 @@ const Content = styled.div`
   flex-direction: column;
   width: 100%;
 `
+
+const validateProfileInput = (
+  editProfileInput: ProfileEditParamsType['data']
+) => {
+  const { name, email, bio, address, avatarCfId } = editProfileInput
+
+  const invalid =
+    (editProfileInput.hasOwnProperty('name') && !isValidName(name)) ||
+    (editProfileInput.hasOwnProperty('bio') && !isValidBio(bio)) ||
+    (editProfileInput.hasOwnProperty('address') && !isValidAddress(address)) ||
+    (editProfileInput.hasOwnProperty('email') && !isValidEmail(email)) ||
+    (editProfileInput.hasOwnProperty('avatarCfId') && !avatarCfId)
+  // ||
+  // (editProfileInput.hasOwnProperty('contactFields') &&
+  //   editProfileInput.contactFields?.length == 0)
+
+  return !invalid
+}

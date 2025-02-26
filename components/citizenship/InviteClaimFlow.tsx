@@ -19,10 +19,9 @@ import { useError } from '@/components/hooks/useError'
 import { InputText } from '@/components/core/InputText'
 import LoadingSpinner from '@/components/core/LoadingSpinner'
 import {
-  INVALID_NAME_MESSAGE,
+  errorInName,
   isValidAddressOrENSFormat,
   isValidEmail,
-  isValidName,
 } from '@/components/profile/validations'
 import { CitizenshipStatus } from '@/utils/types/profile'
 
@@ -132,8 +131,9 @@ export default function InviteClaimFlow({
         return
       }
 
-      if (!isValidName(name)) {
-        showError(INVALID_NAME_MESSAGE)
+      const nameError = errorInName(name)
+      if (nameError !== null) {
+        showError(nameError)
         return
       }
 

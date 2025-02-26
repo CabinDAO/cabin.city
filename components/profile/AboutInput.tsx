@@ -9,9 +9,8 @@ import {
   MAX_BIO_LENGTH,
   isValidAddress,
   isValidBio,
-  isValidName,
   MAX_DISPLAY_NAME_LENGTH,
-  INVALID_NAME_MESSAGE,
+  errorInName,
 } from './validations'
 import styled from 'styled-components'
 import { InputText } from '@/components/core/InputText'
@@ -64,6 +63,8 @@ export const AboutInput = ({
     onAvatarCfIdChange(avatarCfId)
   }
 
+  const nameError = errorInName(values.name)
+
   return (
     <Container>
       <AvatarSetup
@@ -81,8 +82,8 @@ export const AboutInput = ({
         value={values.name}
         helperText={`${values.name.length ?? 0}/${MAX_DISPLAY_NAME_LENGTH}`}
         onChange={handleNameChange}
-        error={canShowErrors && !isValidName(values.name)}
-        errorMessage={INVALID_NAME_MESSAGE}
+        error={canShowErrors && nameError !== null}
+        errorMessage={nameError || undefined}
       />
 
       <InputText
