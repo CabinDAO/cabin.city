@@ -17,12 +17,10 @@ import { JourneySection } from '@/components/landing/JourneySection'
 import { MapData, MapSection } from '@/components/landing/MapSection'
 import { SubscribeSection } from '@/components/landing/SubscribeSection'
 import { NeighborhoodStoriesSection } from '@/components/accelerator/NeighborhoodStoriesSection'
-import { CTAModal } from '@/components/landing/CTAModal'
 
 export const LandingView = ({ mapData }: { mapData: MapData }) => {
   return (
     <BaseLayout landingPage>
-      <CTAModal />
       <LandingSection
         noVertPadding
         variant={'clear'}
@@ -55,10 +53,6 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
           />
         </OpaqueDiv>
       </LandingSection>
-
-      {/*<LandingSection fullWidth noVertPadding>*/}
-      {/*  <HeroVideo />*/}
-      {/*</LandingSection>*/}
 
       <LandingSection precedesNoVertPadding>
         <SubscribeSection />
