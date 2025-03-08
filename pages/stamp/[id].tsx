@@ -33,14 +33,14 @@ export default function StampPage({
 }
 
 export const getStaticPaths = (async () => {
-  const profiles = await prisma.profile.findMany({
+  const stamps = await prisma.stamp.findMany({
     orderBy: { updatedAt: 'desc' },
     take: 100,
   })
 
   return {
-    paths: profiles.map((p) => ({
-      params: { id: p.externId },
+    paths: stamps.map((p) => ({
+      params: { id: p.id.toString() },
     })),
     fallback: 'blocking', // true or false or "blocking"
   }
