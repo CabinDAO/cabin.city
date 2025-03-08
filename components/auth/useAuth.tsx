@@ -35,7 +35,7 @@ export const useAuth = ({
       if ('error' in data) {
         console.log('error calling api_profile_did route', data.error)
       } else if (data.externId) {
-        router.pushRaw(router.asPath).then()
+        router.pushRaw(router.asPath, undefined, { scroll: false }).then()
       } else {
         router.push('registration').then()
       }
