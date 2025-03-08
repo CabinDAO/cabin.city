@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import Link from 'next/link'
+import { expandRoute } from '@/utils/routing'
 import { ProfileFragment } from '@/utils/types/profile'
 import styled from 'styled-components'
 import { H3, Overline } from '@/components/core/Typography'
@@ -44,7 +46,12 @@ export const ProfileStampsSection = ({
         <>
           <PassportsPage>
             {currentStamps.map((stamp) => (
-              <Stamp key={stamp.id} name={stamp.name} id={stamp.id} />
+              <Link
+                key={stamp.id}
+                href={expandRoute(['stamp_id', { id: stamp.id.toString() }])}
+              >
+                <Stamp name={stamp.name} id={stamp.id} />
+              </Link>
             ))}
           </PassportsPage>
           {count > PASSPORT_PAGE_SIZE && (

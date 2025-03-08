@@ -1,15 +1,12 @@
 // need these types in a separate file because prisma cant be imported in the frontend
 
-import {
-  StampFragment,
-  CitizenshipStatus,
-  RoleFragment,
-} from '@/utils/types/profile'
+import { CitizenshipStatus, RoleFragment } from '@/utils/types/profile'
 import {
   LocationFragment,
   ShortAddressFragmentType,
 } from '@/utils/types/location'
 import { EventFragment } from '@/utils/types/event'
+import { StampFragment } from '@/utils/types/stamp'
 import { Prisma } from '@prisma/client'
 import { APIError, PageParams, Paginated } from '@/utils/types/shared'
 import { z } from 'zod'

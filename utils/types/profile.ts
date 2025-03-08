@@ -11,6 +11,7 @@ import {
 import { z } from 'zod'
 import { isAddress } from 'viem'
 import { AddressFragment, AddressFragmentType } from '@/utils/types/location'
+import { StampFragment } from '@/utils/types/stamp'
 
 // must match prisma's $Enums.RoleType
 export enum RoleType {
@@ -210,11 +211,6 @@ export type RoleFragment = {
   hatId: number | null
   type: RoleType
   level: RoleLevel
-}
-
-export type StampFragment = {
-  id: number
-  name: string
 }
 
 export const WalletAddress = z

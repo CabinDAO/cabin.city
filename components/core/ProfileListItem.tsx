@@ -8,11 +8,7 @@ import { Avatar } from '@/components/profile/Avatar'
 import { Body2, Caption, H4 } from './Typography'
 import { ListItem } from './ListItem'
 
-interface ProfileListItemProps {
-  profile: ProfileListFragment
-}
-
-export const ProfileListItem = (props: ProfileListItemProps) => {
+export const ProfileListItem = (props: { profile: ProfileListFragment }) => {
   const { profile } = props
   const { deviceSize } = useDeviceSize()
   const avatarSize = deviceSize === 'mobile' ? 4 : 6.4

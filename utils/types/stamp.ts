@@ -1,11 +1,21 @@
 import { z } from 'zod'
 import { APIError } from '@/utils/types/shared'
+import { ProfileFragment } from '@/utils/types/profile'
 
 export const CURRENT_CLAIMABLE_STAMP: { id: number; name: string } | null = null
 // {
 //   id: 48,
 //   name: 'Network State Conf 2024',
 // }
+
+export type StampFragment = {
+  id: number
+  name: string
+}
+
+export type StampWithRecipientsFragment = StampFragment & {
+  recipients: ProfileFragment[]
+}
 
 export const StampClaimParams = z
   .object({
