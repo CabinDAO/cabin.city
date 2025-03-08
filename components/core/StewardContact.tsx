@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { useModal } from '@/components/hooks/useModal'
-import { usePrivy } from '@privy-io/react-auth'
 import { useUser } from '@/components/auth/useUser'
 import { MeFragment, ProfileBasicFragment } from '@/utils/types/profile'
 import { LocationFragment } from '@/utils/types/location'
@@ -30,7 +29,6 @@ export const StewardContact = ({
 }) => {
   const { showModal } = useModal()
   const { user } = useUser()
-  const { login } = usePrivy()
 
   return (
     <Container>
