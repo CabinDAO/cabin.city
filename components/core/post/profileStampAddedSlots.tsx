@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import Link from 'next/link'
+import { expandRoute } from '@/utils/routing'
 import { Body1 } from '../Typography'
 import { CompactPostImage } from './CompactPostImage'
 import { PostProps } from './Post'
@@ -27,11 +29,20 @@ const ProfileStampAddedMedia = (props: PostProps) => {
   }
 
   const imageUrl = getStampImageUrl(stamp.id)
+  const linkUrl = expandRoute(['stamp_id', { id: stamp.id.toString() }])
 
   if (variant === 'compact') {
-    return <CompactPostImage alt={stamp.name} imageUrl={imageUrl} />
+    return (
+      <Link href={linkUrl}>
+        <CompactPostImage alt={stamp.name} imageUrl={imageUrl} />
+      </Link>
+    )
   } else {
-    return <Image alt={stamp.name} src={imageUrl} width={100} height={100} />
+    return (
+      <Link href={linkUrl}>
+        <Image alt={stamp.name} src={imageUrl} width={100} height={100} />
+      </Link>
+    )
   }
 }
 
