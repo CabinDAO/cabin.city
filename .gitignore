@@ -22,3 +22,7 @@ out
 
 /prisma/generated
 .idea
+
+# Andrew added bun because it's a better package manager
+bun.lock
+
