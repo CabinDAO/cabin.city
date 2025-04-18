@@ -10,7 +10,7 @@ const utcToPstOffset = new Date()
   : 8
 
 // midnight in pst
-export const DEADLINE = new Date(`2025-02-02T0${utcToPstOffset - 1}:59:59Z`)
+export const DEADLINE = new Date(`2025-05-23T0${utcToPstOffset - 1}:59:59Z`)
 
 export const deadlineToString = () => {
   // get the day of the month in pst so it says the right date no matter what timezone the user is in

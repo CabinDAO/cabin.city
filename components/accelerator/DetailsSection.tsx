@@ -22,7 +22,7 @@ export const DetailsSection = () => {
         <Box>
           <BoxTitle>Key Dates</BoxTitle>
           <BoxBody>
-            <strong>Program Runs</strong>: February 17 - April 30 (10 weeks)
+            <strong>Program Runs</strong>: June 9 - August 20 (10 weeks)
           </BoxBody>
           {new Date() < DEADLINE && (
             <BoxBody>
@@ -33,17 +33,22 @@ export const DetailsSection = () => {
         <Box>
           <BoxTitle>Weekly Time Commitment</BoxTitle>
           <BoxBody>
-            In this program you will be expected to commit{' '}
-            <strong>at least 5 hours a week</strong> to participating fully in
-            the program and building your neighborhood.
+            We recommend a minimum time commitment of{' '}
+            <strong>4 hours a week</strong> to make the most of the program.
+            This time will be spent:
           </BoxBody>
           <List>
-            <li>2 hrs per week for group calls</li>
             <li>
-              3 hrs per week for on-the-ground neighborhood building activities
-              like knocking on doors, flyering your neighborhood, hosting
-              events, building partnerships, spending 1:1 time building
-              relationships, and more.
+              "Doing the thing" in your neighborhood (knocking on doors,
+              flyering your neighborhood, hosting events, building partnerships,
+              spending 1:1 time building relationships, and more)
+            </li>
+            <li>
+              Attending the 75 minute weekly session (in-person or online)
+            </li>
+            <li>
+              Optional online workshops as well as chances to learn from mentors
+              1:1
             </li>
           </List>
         </Box>

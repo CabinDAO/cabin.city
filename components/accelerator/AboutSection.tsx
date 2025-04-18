@@ -56,13 +56,6 @@ export const AboutSection = () => {
               each week to build a neighborhood you’re proud of.
             </BoxBody>
           </Box>
-          <Box>
-            <BoxTitle>Funding Opportunities</BoxTitle>
-            <BoxBody>
-              We connect neighborhood stewards with grants and public goods
-              funding opportunities.
-            </BoxBody>
-          </Box>
         </Boxes>
       </Left>
 

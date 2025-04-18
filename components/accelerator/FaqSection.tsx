@@ -43,11 +43,11 @@ const faqs = [
     a: (
       <>
         <Body1>
-          We recommend blocking out about 5 hours per week to fully participate
-          in the program. This time is spent on mostly on-the-ground,
-          neighborhood building activities like knocking on doors, making
-          flyers, hosting events, and building genuine relationships with
-          neighbors.
+          We recommend blocking out about <strong>4 hours per week</strong> to
+          fully participate in the program. This time is spent on mostly
+          on-the-ground, neighborhood building activities like knocking on
+          doors, making flyers, hosting events, and building genuine
+          relationships with neighbors.
         </Body1>
         <Body1>
           Most participants find that the time they invest pays off
@@ -137,43 +137,6 @@ const faqs = [
           neighborhoods as you are, and tools that can supercharge your existing
           efforts. Many folks in the Accelerator find that the program helps
           them achieve in months what might have taken years on their own.
-        </Body1>
-      </>
-    ),
-  },
-  {
-    q: 'When are the weekly calls?',
-    a: (
-      <>
-        <Body1>
-          We hold a Pod Call once a week + workshops throughout the program.
-        </Body1>
-        <Body1>Here are the current options for weekly Pod Call times: </Body1>
-        <Body1>
-          <strong>EU/AU Pod</strong>: Mondays at 11-12:15pm CET / 6pm-7:15pm
-          AWST
-        </Body1>
-        <Body1>
-          <strong>US/AU Pod</strong>: Wednesdays 5-6:15pm PST / 8-9:15pm EST /
-          Thursdays at 9-10:15am AWST / 12-1:15pm AEST
-        </Body1>
-        <Body1>
-          <strong>US/EU Pod</strong>: Fridays 9-10:15am PST / 12-1:15pm ET /
-          6-7:15pm CET
-        </Body1>
-        <Body1>
-          Here's a{' '}
-          <Link
-            href="https://www.timeanddate.com/worldclock/timezone/utc"
-            target="_blank"
-            rel="noopener noreferrer nofollow"
-            style={{ textDecoration: 'underline' }}
-          >
-            timezone converter
-          </Link>{' '}
-          to help you pick which weekly call time works best for you. When you
-          apply you’ll get to select which is the best time for you to have your
-          weekly Pod Call.
         </Body1>
       </>
     ),
