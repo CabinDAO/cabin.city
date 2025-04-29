@@ -15,90 +15,16 @@ import { HorizontalDivider } from '@/components/core/Divider'
 import { BaseContainer } from '@/components/core/BaseContainer'
 import { Countdown, deadlineToString } from '@/components/accelerator/Countdown'
 
-const priceOptions = [
-  {
-    name: 'Full Scholarship',
-    price: 0,
-    details: (
-      <>
-        <Body1>We offer full scholarships to</Body1>
-        <UnorderedList>
-          <ListItem>individuals earning under $30k annually</ListItem>
-          <ListItem>students and recent graduates</ListItem>
-        </UnorderedList>
-        <Body1>No one will be turned away for lack of funds.</Body1>
-        <Body1>
-          Includes a commitment to provide weekly feedback to help us improve
-          the program.
-        </Body1>
-      </>
-    ),
-  },
-  {
-    name: 'Accessible Rate',
-    price: 350,
-    details: (
-      <>
-        <Body1>This tier is for</Body1>
-        <UnorderedList>
-          <ListItem>individuals earning $30k-$100k annually</ListItem>
-          <ListItem>early-career professionals</ListItem>
-          <ListItem>part-time workers</ListItem>
-        </UnorderedList>
-        <Body1>
-          Includes a commitment to provide weekly feedback to help us improve
-          the program.
-        </Body1>
-      </>
-    ),
-  },
-  {
-    name: 'Standard Rate',
-    price: 650,
-    details: (
-      <>
-        <Body1>This tier is for</Body1>
-        <UnorderedList>
-          <ListItem>individuals earning $100k+ annually</ListItem>
-        </UnorderedList>
-      </>
-    ),
-  },
-  {
-    name: 'Sponsored Rate',
-    price: 1000,
-    details: (
-      <>
-        <Body1>This tier is for</Body1>
-        <UnorderedList>
-          <ListItem>
-            folks utilizing Professional Development funding from their place of
-            work
-          </ListItem>
-          <ListItem>
-            organizations generously sponsoring seats in the program
-          </ListItem>
-        </UnorderedList>
-      </>
-    ),
-  },
-]
-
 export const PriceSection = () => {
   return (
-    <Container maxWidth={110}>
+    <Container maxWidth={70}>
       <SectionTitle>Ready to transform your neighborhood?</SectionTitle>
       <Box>
-        <Prices>
-          {priceOptions.map(({ name, price, details }) => (
-            <PriceOption
-              key={name}
-              name={name}
-              price={price}
-              details={details}
-            />
-          ))}
-        </Prices>
+        <StyledPriceOption>
+          <Price>$500</Price>
+          <Body1>Sliding scale pricing and scholarships are available. </Body1>
+          <Body1>No one will be turned away for lack of funds.</Body1>
+        </StyledPriceOption>
         <Bottom>
           <div
             style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem' }}
@@ -215,36 +141,10 @@ const Price = styled.span`
   color: ${({ theme }) => theme.colors.green900};
 `
 
-const PriceOption = ({
-  name,
-  price,
-  details,
-}: {
-  name: string
-  price: number
-  details: ReactNode
-}) => {
-  return (
-    <StyledPriceOption>
-      <H3>{name}</H3>
-      <Price>${price}</Price>
-      <HorizontalDivider />
-      {details}
-    </StyledPriceOption>
-  )
-}
-
 const StyledPriceOption = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
   border-bottom: solid 1px ${({ theme }) => theme.colors.green900};
   padding: 3.5rem;
-
-  ${({ theme }) => theme.bp.lg} {
-    width: 25%;
-    &:not(:last-child) {
-      border-right: solid 1px ${({ theme }) => theme.colors.green900};
-    }
-  }
 `
