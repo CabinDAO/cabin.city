@@ -39,7 +39,7 @@ export const CensusView = () => {
   //         description="You must log in to see the census. But hey, it's free and easy to make an account!"
   //         customCta={() => (
   //           <AuthenticatedLink href={expandRoute('census')}>
-  //             <Button variant={'secondary'}>Login or sign up</Button>
+  //             <Button variant={'secondary'}>Login</Button>
   //           </AuthenticatedLink>
   //         )}
   //       />

@@ -161,12 +161,12 @@ export const StampClaimView = () => {
               <LoadingSpinner />
             ) : (
               <>
-                <Body1>Log in or sign up to add it to your account.</Body1>
+                <Body1>Log in to add it to your account.</Body1>
                 <AuthenticatedLink
                   href={router.asPath}
                   onClick={() => setReminder(true)}
                 >
-                  <Button variant={'secondary'}>Log in or sign up</Button>
+                  <Button variant={'secondary'}>Log in</Button>
                 </AuthenticatedLink>
               </>
             )}

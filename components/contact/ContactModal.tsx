@@ -40,7 +40,7 @@ export const ContactModal = ({
           <AuthenticatedLink
             href={expandRoute(['profile_id', { id: recipient.externId }])}
           >
-            <Button variant={'primary'}>Log in or Sign up</Button>
+            <Button variant={'primary'}>Log in</Button>
           </AuthenticatedLink>
         </InputWrap>
       </Container>

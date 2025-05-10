@@ -8,10 +8,8 @@ import { ProfileDIDParamsType, ProfileDIDResponse } from '@/utils/types/profile'
 
 export const useAuth = ({
   logAnalyticsEvent,
-  disableSignup,
 }: {
   logAnalyticsEvent?: boolean
-  disableSignup?: boolean
 } = {}) => {
   const router = useRouter()
   const { authenticated, ready, logout } = usePrivy()
@@ -60,12 +58,12 @@ export const useAuth = ({
         if (logAnalyticsEvent) {
           analytics.signInEvent()
         }
-        login({ disableSignup })
+        login({ disableSignup: true })
       } else if (authenticated) {
         onConfirmed?.()
       }
     },
-    [authenticated, ready, login, logAnalyticsEvent, disableSignup]
+    [authenticated, ready, login, logAnalyticsEvent]
   )
 
   return {

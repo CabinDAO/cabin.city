@@ -125,7 +125,7 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
 
   if (!user)
     return (
-      <AuthenticatedLink disableSignup>
+      <AuthenticatedLink>
         <Button>Log in to Vote</Button>
       </AuthenticatedLink>
     )

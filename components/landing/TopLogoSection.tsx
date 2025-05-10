@@ -31,7 +31,7 @@ export const TopLogoSection = () => {
             }}
           >
             <AuthenticatedLink href={expandRoute('cityDirectory')}>
-              <Button variant={'link-inverted'}>Log in &bull; Sign up</Button>
+              <Button variant={'link-inverted'}>Log in</Button>
             </AuthenticatedLink>
           </span>
         )}

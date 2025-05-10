@@ -20,7 +20,11 @@ export default function Page() {
             Log out first before logging in with an external wallet.
           </Body1>
         ) : (
-          <Button onClick={() => login({ loginMethods: ['wallet'] })}>
+          <Button
+            onClick={() =>
+              login({ loginMethods: ['wallet'], disableSignup: true })
+            }
+          >
             Login with Wallet
           </Button>
         )}
