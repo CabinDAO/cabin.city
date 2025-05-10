@@ -35,7 +35,7 @@ export const SupperClubSection = () => {
             </Link>
           </Buttons>
         </TextChunk>
-        <TextChunk>
+        {/* <TextChunk>
           <H3>Join Our Next Community Call:</H3>
           <Title>The Neighborhood Story Circle</Title>
           <Body>
@@ -47,7 +47,7 @@ export const SupperClubSection = () => {
               <Button variant={'secondary'}>RSVP</Button>
             </Link>
           </Buttons>
-        </TextChunk>
+        </TextChunk> */}
       </Text>
     </Container>
   )

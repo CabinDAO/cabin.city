@@ -66,9 +66,9 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <NeighborhoodStoriesSection variant={'landing'} />
       </LandingSection>
 
-      <LandingSection>
+      {/* <LandingSection>
         <JourneySection />
-      </LandingSection>
+      </LandingSection> */}
 
       <LandingSection noVertPadding variant={'light'}>
         <SupperClubSection />
@@ -82,15 +82,11 @@ export const LandingView = ({ mapData }: { mapData: MapData }) => {
         <TwitterSection />
       </LandingSection>
 
-      <LandingSection variant={'light'}>
+      <LandingSection variant={'light'} precedesNoVertPadding>
         <FeaturedInSection />
       </LandingSection>
 
-      <LandingSection precedesNoVertPadding>
-        <LearnMoreSection />
-      </LandingSection>
-
-      <LandingSection noVertPadding>
+      <LandingSection noVertPadding variant={'light'}>
         <ImageFlex
           alt="forest-network"
           src="/images/landing-forest-network.svg"

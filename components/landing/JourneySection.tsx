@@ -141,15 +141,6 @@ export const JourneySection = () => {
               a global network city.
               <ul>
                 <li>
-                  <Link
-                    href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=landingpagetimeline`}
-                    target="_blank"
-                    rel="noopener nofollow"
-                  >
-                    Book a call to get started
-                  </Link>
-                </li>
-                <li>
                   <Link href={expandRoute('nap')}>
                     Join the Neighborhood Accelerator
                   </Link>

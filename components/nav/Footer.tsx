@@ -38,9 +38,6 @@ export const Footer = () => {
               <AppLink external href={EXTERNAL_LINKS.PRIVACY_AND_TERMS}>
                 <Name>Privacy & Terms</Name>
               </AppLink>
-              <AppLink href={expandRoute('security')}>
-                <Name>Security</Name>
-              </AppLink>
             </Section>
 
             <Section>
@@ -57,22 +54,13 @@ export const Footer = () => {
               <AppLink external href={EXTERNAL_LINKS.STORE}>
                 <Name>Store</Name>
               </AppLink>
-              <AppLink
-                external
-                href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
-              >
-                <Name>Contact Us</Name>
+              <AppLink href={expandRoute('security')}>
+                <Name>Security</Name>
               </AppLink>
             </Section>
 
             <Section>
               <Header>Social</Header>
-              <AppLink external href={EXTERNAL_LINKS.DISCORD}>
-                <Name>Discord</Name>
-              </AppLink>
-              <AppLink external href={EXTERNAL_LINKS.FORUM}>
-                <Name>Forum</Name>
-              </AppLink>
               <AppLink external href={EXTERNAL_LINKS.TWITTER}>
                 <Name>Twitter</Name>
               </AppLink>
@@ -81,6 +69,12 @@ export const Footer = () => {
               </AppLink>
               <AppLink external href={EXTERNAL_LINKS.FARCASTER}>
                 <Name>Farcaster</Name>
+              </AppLink>
+              <AppLink
+                external
+                href={`mailto:${EXTERNAL_LINKS.GENERAL_EMAIL_ADDRESS}`}
+              >
+                <Name>Contact Us</Name>
               </AppLink>
             </Section>
           </Links>

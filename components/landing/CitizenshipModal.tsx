@@ -25,17 +25,6 @@ export const CitizenshipModal = () => {
         <Body2>
           2. You can buy Citizenship IF an existing Citizen has vouched for you.
         </Body2>
-        <Body2>
-          Questions?{' '}
-          <StyledLink
-            href={`${EXTERNAL_LINKS.CALENDLY_CALL_URL}?utm_source=cabin.city&utm_content=citizenshipmodal`}
-            target="_blank"
-            rel="noopener nofollow"
-          >
-            Let's chat
-          </StyledLink>
-          .
-        </Body2>
       </CitizenshipModalContent>
     </CitizenshipModalContainer>
   )
