@@ -57,7 +57,6 @@ export enum Routes {
   n_id_photos = "/n/[id]/photos",
   n_id = "/n/[id]",
   n_new = "/n/new",
-  nap = "/nap",
   ns = "/ns",
   profile_id_edit = "/profile/[id]/edit",
   profile_id = "/profile/[id]",

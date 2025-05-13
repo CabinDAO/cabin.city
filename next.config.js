@@ -69,7 +69,12 @@ const nextConfig = {
     return [
       {
         source: '/accelerator',
-        destination: '/nap',
+        destination: 'https://nap.community',
+        permanent: false,
+      },
+      {
+        source: '/nap',
+        destination: 'https://nap.community',
         permanent: false,
       },
     ]

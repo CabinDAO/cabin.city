@@ -31,7 +31,7 @@ export const MenuItems: Record<MenuItemName, Config> = {
   },
   nap: {
     icon: 'neighborhood',
-    path: expandRoute('nap'),
+    path: 'https://nap.community',
     displayText: 'NAP',
     iconSize: 2.5,
     visibility: 'always',

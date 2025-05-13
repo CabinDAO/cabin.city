@@ -124,8 +124,8 @@ export const NewLocationView = () => {
               <Link
                 style={{ textDecoration: 'underline' }}
                 target="_blank"
-                rel="noopener nofollow noreferrer"
-                href={expandRoute('nap')}
+                rel="noopener"
+                href="https://nap.community"
               >
                 Neighborhood Accelerator Program
               </Link>

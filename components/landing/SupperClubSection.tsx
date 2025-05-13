@@ -30,7 +30,7 @@ export const SupperClubSection = () => {
             step of the way.
           </Body>
           <Buttons>
-            <Link href={expandRoute('nap')}>
+            <Link href="https://nap.community" target="_blank" rel="noopener">
               <Button variant={'primary'}>Learn More</Button>
             </Link>
           </Buttons>

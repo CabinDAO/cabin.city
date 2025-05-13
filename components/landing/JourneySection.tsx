@@ -141,7 +141,11 @@ export const JourneySection = () => {
               a global network city.
               <ul>
                 <li>
-                  <Link href={expandRoute('nap')}>
+                  <Link
+                    target="_blank"
+                    rel="noopener nofollow"
+                    href="https://nap.community"
+                  >
                     Join the Neighborhood Accelerator
                   </Link>
                 </li>
