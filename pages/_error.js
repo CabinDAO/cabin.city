@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { BaseLayout } from '../components/core/BaseLayout'
 import { EmptyState } from '../components/core/EmptyState'
 import { Button } from '../components/core/Button'
-import * as Sentry from '@sentry/nextjs'
 import { expandRoute } from '@/utils/routing'
 function ErrorPage({ statusCode }) {
   return (
@@ -28,7 +27,6 @@ function ErrorPage({ statusCode }) {
 }
 
 ErrorPage.getInitialProps = async (contextData) => {
-  await Sentry.captureUnderscoreErrorException(contextData)
   const statusCode = contextData.res
     ? contextData.res.statusCode
     : contextData.err

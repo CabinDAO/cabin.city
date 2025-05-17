@@ -9,7 +9,6 @@ import {
   Vote,
   useSnapshot,
 } from '@/components/contexts/SnapshotContext'
-import * as Sentry from '@sentry/nextjs'
 import styled from 'styled-components'
 import { Button } from '@/components/core/Button'
 import { Body1, H2 } from '@/components/core/Typography'
@@ -110,10 +109,9 @@ export const VoteInput = ({ proposal }: { proposal: Proposal }) => {
       if (typeof e === 'object' && e !== null && 'error_description' in e) {
         showError(`Error: ${e.error_description}`)
       } else if (e instanceof Error) {
-        Sentry.captureException(e)
         showError(`Error: ${e.message || e}`)
       } else {
-        Sentry.captureException(e)
+        console.error(e)
       }
     }
     setVotingInProgress(false)

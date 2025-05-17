@@ -1,6 +1,5 @@
 import * as jose from 'jose'
 import { NextApiRequest, NextApiResponse } from 'next'
-import * as Sentry from '@sentry/nextjs'
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { ironOptions } from '@/lib/next-server/iron-options'
 import { prisma } from '@/lib/prisma'
@@ -41,7 +40,6 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
   const h = async (req: NextApiRequest, res: NextApiResponse, opts = {}) => {
     try {
       const { authToken, privyDID } = await privyDIDFromHeaders(req.headers)
-      Sentry.setUser(privyDID ? { privyDID } : null)
       await handler(req, res, {
         ...opts,
         auth: { authToken, privyDID },
@@ -50,13 +48,11 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
       if (error instanceof AuthenticationError) {
         return res.status(error.code).send({ error: error.message })
       } else if (error instanceof PrismaClientValidationError) {
-        captureSentryError(error, req)
         console.error(error) // eslint-disable-line no-console
         return res.status(400).send({
           error: `PrismaClientValidationError: ${error.message}`,
         })
       } else {
-        captureSentryError(error, req)
         console.error(error) // eslint-disable-line no-console
         return res.status(500).send({ error: 'Something went wrong' })
       }
@@ -64,22 +60,6 @@ export const wrapHandler = (handler: WithAuthApiHandler) => {
   }
 
   return withIronSessionApiRoute(h, ironOptions)
-}
-
-const captureSentryError = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: PrismaClientValidationError | any,
-  req: NextApiRequest
-) => {
-  Sentry.withScope((scope) => {
-    scope.setContext('request', {
-      method: req.method,
-      headers: req.headers,
-      query: req.query,
-      body: req.body,
-    })
-    Sentry.captureException(error)
-  })
 }
 
 export const requireAuth = (opts: OptsWithAuth): string => {
@@ -105,10 +85,6 @@ export const getUser = async (
       wallet: true,
     },
   })
-
-  if (user) {
-    Sentry.setUser({ privyDID: user.privyDID })
-  }
 
   return user
 }

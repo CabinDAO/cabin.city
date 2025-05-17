@@ -28,7 +28,6 @@
     "@privy-io/server-auth": "^1.13.1",
     "@privy-io/wagmi": "^0.2.12",
     "@sendgrid/mail": "^8.1.1",
-    "@sentry/nextjs": "^8.31.0",
     "@snapshot-labs/snapshot.js": "^0.12.28",
     "@stripe/react-stripe-js": "^2.3.0",
     "@stripe/stripe-js": "^2.1.6",

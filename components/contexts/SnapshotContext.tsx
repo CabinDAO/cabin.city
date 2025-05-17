@@ -6,7 +6,6 @@ import {
   useEffect,
   useState,
 } from 'react'
-import * as Sentry from '@sentry/nextjs'
 import { GraphQLClient } from 'graphql-request'
 import { useUser } from '@/components/auth/useUser'
 import { usePrivy } from '@privy-io/react-auth'
@@ -120,7 +119,7 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
         data.proposals.filter((p) => p.state === 'active').length
       )
     } catch (error: unknown) {
-      Sentry.captureException(error, { extra: { space } })
+      console.error(error)
     }
 
     setProposalsLoaded(true)

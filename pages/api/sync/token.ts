@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import * as Sentry from '@sentry/nextjs'
 import { Provider } from 'ethers'
 import { CabinToken__factory } from 'generated/ethers'
 import { getEthersAlchemyProvider } from '@/lib/chains'
@@ -55,9 +54,6 @@ export default async function handler(
       blocksTillLatest: blocksTillLatest.toNumber(),
     })
   } catch (error: unknown) {
-    Sentry.captureException(error, {
-      extra: { syncAttemptId: syncAttempt.id },
-    })
     if (error instanceof Error) {
       console.error(error)
     }
@@ -68,9 +64,6 @@ export default async function handler(
         data: { status: BlockSyncStatus.Failed },
       })
     } catch (err2: unknown) {
-      Sentry.captureException(err2, {
-        extra: { syncAttemptId: syncAttempt.id },
-      })
       console.error(err2)
     }
 

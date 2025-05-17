@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import * as Sentry from '@sentry/nextjs'
 import formidable from 'formidable'
 import EmailReplyParser from 'email-reply-parser'
 import { z } from 'zod'
@@ -133,7 +132,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       text: replyText,
     })
   } catch (error: unknown) {
-    Sentry.captureException(error)
     console.error(error)
     res.status(500).send({ error: 'Error parsing form data' })
   }

@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import * as Sentry from '@sentry/nextjs'
 import { AxiosError } from 'axios'
 import {
   OptsWithAuth,
@@ -94,7 +93,6 @@ async function handler(
       invite,
     })
   } catch (e: unknown) {
-    Sentry.captureException(e, { extra: { privyDID } })
     throw e
   }
 

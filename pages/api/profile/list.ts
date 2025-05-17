@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import * as Sentry from '@sentry/nextjs'
 import { formatQuery, prisma } from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { Sql } from '@prisma/client/runtime/library'
@@ -129,7 +128,6 @@ const sortPrequery = async (params: ProfileListParamsType) => {
       totalCount: Number(totalCount[0].count),
     }
   } catch (error: unknown) {
-    Sentry.captureException(error)
     if (error instanceof Error) {
       console.error('Failed to sort or count profiles', {
         query: formatQuery(sqlQuery.inspect().sql, sqlQuery.inspect().values),

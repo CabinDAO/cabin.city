@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import * as Sentry from '@sentry/nextjs'
 import { usePrivy, useLogin } from '@privy-io/react-auth'
 import analytics from '@/lib/googleAnalytics/analytics'
 import { useRouter } from '@/components/hooks/useRouter'
@@ -22,7 +21,6 @@ export const useAuth = ({
       // linkedAccount
     ) => {
       const privyDID = user.id
-      Sentry.setUser({ privyDID })
       // todo: security issue? this call lets anyone know we have an account for a did
       const data = await apiGet<ProfileDIDResponse>(
         'api_profile_did',
@@ -39,14 +37,12 @@ export const useAuth = ({
       }
     },
     onError: (error) => {
-      Sentry.captureException(error)
       console.log('error logging in', error)
     },
   })
 
   const handleLogout = async () => {
     await logout()
-    Sentry.setUser(null)
 
     // Force reload to clear apollo cache and prevent weird state updates
     ;(window as Window).location = '/'
