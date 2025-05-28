@@ -5,22 +5,52 @@ import { expandRoute } from '@/utils/routing'
 import styled from 'styled-components'
 import { H4, Subline2 } from '@/components/core/Typography'
 import Icon from '@/components/core/Icon'
+import { usePrivy } from '@privy-io/react-auth'
+import { useExternalUser } from '@/components/auth/useExternalUser'
+import { Button } from '@/components/core/Button'
+import Link from 'next/link'
 
 export const SitewideBanner = () => {
   const router = useRouter()
   const { proposals, countUserVotableProposals } = useSnapshot()
+  const { externalUser } = useExternalUser()
+  const { exportWallet } = usePrivy()
+
+  // TODO: enable in a few months
+  const isEmbeddedWallet =
+    false && externalUser?.wallet?.walletClientType === 'privy'
 
   const [bannerClosedPropId, setBannerClosedPropId] = useLocalStorage<string>(
     'cabinVoteBannerClosedPropId'
   )
+  const [bannerClosedWalletExport, setBannerClosedWalletExport] =
+    useLocalStorage<boolean>('cabinWalletExportBannerClosedd')
 
   const showBanner =
-    countUserVotableProposals > 0 && bannerClosedPropId !== proposals[0].id
+    (isEmbeddedWallet && !bannerClosedWalletExport) ||
+    (countUserVotableProposals > 0 && bannerClosedPropId !== proposals[0].id)
 
   if (!showBanner) return null
 
+  if (isEmbeddedWallet) {
+    return (
+      <Banner>
+        <H4>Cabin is winding down. Export your embedded wallet.</H4>
+        <Button variant="secondary" onClick={exportWallet}>
+          Export Wallet
+        </Button>
+        <Link href={expandRoute('walletExport')}>
+          <Button variant="link">Learn More</Button>
+        </Link>
+        <CloseButton onClick={() => setBannerClosedWalletExport(true)}>
+          <Icon name="close" size={1.8} />
+        </CloseButton>
+      </Banner>
+    )
+  }
+
   return (
-    <Banner onClick={() => router.push(expandRoute('vote'))}>
+    <Banner pointer onClick={() => router.push(expandRoute('vote'))}>
       <H4>
         {countUserVotableProposals === 1
           ? 'A proposal is up for vote'
@@ -43,7 +73,7 @@ export const SitewideBanner = () => {
   )
 }
 
-const Banner = styled.div`
+const Banner = styled.div<{ pointer?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -53,7 +83,7 @@ const Banner = styled.div`
   align-items: center;
   gap: 0.4rem;
   background: ${({ theme }) => theme.colors.yellow300};
-  cursor: pointer;
+  cursor: ${({ pointer }) => (pointer ? 'pointer' : 'default')};
 
   ${({ theme }) => theme.bp.md} {
     flex-direction: row;

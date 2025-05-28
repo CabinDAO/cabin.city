@@ -66,5 +66,6 @@ export enum Routes {
   stamp_id = "/stamp/[id]",
   vote_id = "/vote/[id]",
   vote = "/vote",
+  walletExport = "/wallet-export",
   walletlogin = "/walletlogin"
 }
